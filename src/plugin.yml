@@ -1,0 +1,90 @@
+name: SimplePets
+main: simplepets.brainsynder.PetCore
+version: 3.7
+depends: [SimpleAPI]
+softdepend: [WorldGuard, Vault]
+loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared011]
+authors: [brainsynder]
+commands:
+    pet:
+        description: Main SimplePets command
+        aliases: [pets, simplepets, simplepet]
+permissions:
+    Pet.*:
+        default: false
+        children:
+            Pet.types.*: true
+            Pet.name.*: true
+            Pet.PetToMount: true
+            Pet.PetToHat: true
+            Pet.reload: true
+    Pet.commands.*:
+        default: false
+        children:
+            Pet.summon.other: true
+            Pet.help: true
+            Pet.list: true
+    Pet.types.*:
+        default: false
+        children:
+            Pet.passive: true
+            Pet.hostile: true
+    Pet.name.*:
+        default: false
+        children:
+            Pet.name: true
+            Pet.name.color: true
+            Pet.name.magic: true
+    Pet.passive:
+        default: false
+        children:
+            Pet.bat: true
+            Pet.chicken: true
+            Pet.cow: true
+            Pet.giant: true
+            Pet.horse: true
+            Pet.irongolem: true
+            Pet.mooshroom: true
+            Pet.ocelot: true
+            Pet.pig: true
+            Pet.rabbit: true
+            Pet.sheep: true
+            Pet.snowman: true
+            Pet.villager: true
+            Pet.wolf: true
+            Pet.squid: true
+            Pet.polarbear: true
+            Pet.llama: true
+            Pet.zombiehorse: true
+            Pet.skeletonhorse: true
+            Pet.armorstand: true
+            Pet.parrot: true
+            Pet.mule: true
+    Pet.hostile:
+        default: false
+        children:
+            Pet.blaze: true
+            Pet.creeper: true
+            Pet.enderman: true
+            Pet.pigman: true
+            Pet.silverfish: true
+            Pet.skeleton: true
+            Pet.spider: true
+            Pet.zombie: true
+            Pet.ghast: true
+            Pet.endermite: true
+            Pet.wither: true
+            Pet.witch: true
+            Pet.guardian: true
+            Pet.elderguardian: true
+            Pet.slime: true
+            Pet.stray: true
+            Pet.vex: true
+            Pet.evoker: true
+            Pet.vindicator: true
+            Pet.husk: true
+            Pet.magmacube: true
+            Pet.witherskeleton: true
+            Pet.shulker: true
+            Pet.cavespider: true
+            Pet.illusioner: true

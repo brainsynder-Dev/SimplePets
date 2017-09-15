@@ -1,0 +1,18 @@
+Q: What is the "SimplePets Information Application".
+A: Well the "SimplePets Information Application" is a little computer application that
+   I coded that shows all the needed information for SimplePets.
+
+Q: What information does the "SimplePets Information Application" show exactly?
+A: The "SimplePets Information Application" shows the following:
+   - SimplePets Permissions
+   - Contains copies of the Default Files
+   - Contains the JavaDocs for the SimplePets API
+   - Contains ways to contact me and get support
+
+Q: How can I open/get the "SimplePets Information Application"?
+A: Well... You already have it. The "SimplePets Information Application" is apart of the SimplePets.jar
+   Simply Left Click the SimplePets.jar and the Application will run.
+
+Q: It says that it could not connect to the database... What does that mean?
+A: It means that you either dont have Internet connection or the Application could not
+   connect to the database at that point in time.
