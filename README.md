@@ -1,4 +1,5 @@
 # SimplePets
+Hit Counter: [![ghit.me](https://ghit.me/badge.svg?repo=brainsynder-Dev/SimplePets)](https://ghit.me/repo/brainsynder-Dev/SimplePets)
 Github Build Status: ![Build Status](https://travis-ci.org/brainsynder-Dev/SimplePets.svg?branch=master "Build Status")
 ![SimplePets Logo](http://brainsynder.us/assets/SimplePets.jpg "SimplePets Logo")
 # Requirements:
