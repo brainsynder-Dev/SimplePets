@@ -94,7 +94,6 @@ public enum PetType {
     private String cfgName;
     private EntityWrapper type;
     private ServerVersion maxVer;
-    private Class<? extends IPet> entClass;
     private Class<? extends IEntityPet> mainEnt;
     private PetData pData = null;
     @Getter

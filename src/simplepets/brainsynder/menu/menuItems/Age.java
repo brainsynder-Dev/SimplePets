@@ -1,8 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.menu.MenuItemAbstract;
 import simplepets.brainsynder.nms.entities.type.main.IAgeablePet;
@@ -14,13 +12,6 @@ public class Age extends MenuItemAbstract {
 
     public Age(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
-    }
-
-    public static JSONObject toJSON() {
-        JSONObject json = MenuItemAbstract.toJSON();
-        json.putIfAbsent("Baby-Name", "&6Baby: &e{value}");
-        json.putIfAbsent("Baby-Lore", new JSONArray());
-        return json;
     }
 
     @Override

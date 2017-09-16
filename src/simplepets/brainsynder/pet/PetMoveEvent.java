@@ -16,6 +16,7 @@ public class PetMoveEvent extends SimplePetEvent {
     public PetMoveEvent(IEntityPet entity, Cause cause, boolean async) {
         super(PetEventType.MOVE, async);
         this.entity = entity;
+        this.cause = cause;
         if (cause == Cause.RIDE) {
             this.targetLocation = entity.getEntity().getLocation();
         } else {

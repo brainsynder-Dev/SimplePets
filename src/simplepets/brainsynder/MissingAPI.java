@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class MissingAPI extends BukkitRunnable {
     private Plugin plugin;
 
-    public MissingAPI(Plugin plugin) {
+    MissingAPI(Plugin plugin) {
         this.plugin = plugin;
     }
 

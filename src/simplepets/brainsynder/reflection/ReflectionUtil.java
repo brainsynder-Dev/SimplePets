@@ -1,7 +1,6 @@
 package simplepets.brainsynder.reflection;
 
 import org.bukkit.Bukkit;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simple.brainsynder.utils.Reflection;
@@ -47,15 +46,6 @@ public class ReflectionUtil {
         } catch (Exception var9) {
             var9.printStackTrace();
         }
-
-    }
-
-    public static <T> T initiateClass(Class<?> clazz) {
-        try {
-            return (T) clazz.newInstance();
-        } catch (Exception e) {
-        }
-        return null;
     }
 
     public static <T> T initiateClass(Constructor<?> constructor, Object... args) {
@@ -96,9 +86,6 @@ public class ReflectionUtil {
         return Bukkit.getServer().getClass().getPackage().getName().substring(23);
     }
 
-    public static boolean isVersion(String version) {
-        return Bukkit.getServer().getClass().getPackage().getName().substring(23).equals(version);
-    }
 
     public static Object getEntityHandle(Entity entity) {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
@@ -115,38 +102,6 @@ public class ReflectionUtil {
             e.printStackTrace();
         }
         return o;
-    }
-
-    public static Object getPrivateStatic(Class<?> clazz, String f) throws Exception {
-        Field field = clazz.getDeclaredField(f);
-        field.setAccessible(true);
-        return field.get(null);
-    }
-
-    public static Object getFieldValue(Field field, Object instance) {
-        try {
-            return field.get(instance);
-        } catch (IllegalAccessException var3) {
-            var3.printStackTrace();
-            return null;
-        }
-    }
-
-    public static Object invoke(Method method, Object instance, Object... parameters) {
-        if (method == null) {
-            return null;
-        } else {
-            try {
-                return method.invoke(instance, parameters);
-            } catch (InvocationTargetException | IllegalAccessException var4) {
-                var4.printStackTrace();
-                return null;
-            }
-        }
-    }
-
-    public static <T> T getWorldHandle(World world) {
-        return invokeMethod(getMethod(getCBCClass("CraftWorld"), "getHandle"), world);
     }
 
     public static Class getClass(String name) {

@@ -2,13 +2,7 @@ package simplepets.brainsynder.reflection;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import simple.brainsynder.nms.IAnvilGUI;
-import simple.brainsynder.utils.AnvilSlot;
-import simple.brainsynder.utils.IAnvilClickEvent;
-import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -72,26 +66,6 @@ public class PerVersion {
             con.newInstance(ent);
         } catch (Exception e) {
             e.printStackTrace();
-        }
-    }
-
-    public static class AnvilGUI {
-        private static IAnvilGUI gui;
-
-        public AnvilGUI(Player player, IAnvilClickEvent handler) {
-            handleAnvil(player, handler);
-        }
-
-        private static void handleAnvil(Player player, IAnvilClickEvent handler) {
-            gui = Reflection.getAnvilMaker(PetCore.get(), player, handler);
-        }
-
-        public void setSlot(AnvilSlot slot, ItemStack item) {
-            gui.setSlot(slot, item);
-        }
-
-        public void open() {
-            gui.open();
         }
     }
 }

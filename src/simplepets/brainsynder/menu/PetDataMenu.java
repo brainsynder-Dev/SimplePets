@@ -17,11 +17,9 @@ import static simplepets.brainsynder.utils.LoaderRetriever.*;
 
 public class PetDataMenu {
     private Inventory inv;
-    private IPet pet;
     private List<Integer> clearSlots = Arrays.asList(19, 20, 21, 22, 23, 24, 25);
 
     public PetDataMenu(IPet pet) {
-        this.pet = pet;
         inv = Bukkit.createInventory(new PetDataHolder(), 54, PetCore.get().getMessages().getString("Data-Menu.PetCore-Name", true));
         setItems(pet);
     }

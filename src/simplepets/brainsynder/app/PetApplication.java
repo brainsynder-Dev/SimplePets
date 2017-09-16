@@ -49,8 +49,6 @@ public class PetApplication extends Application {
         final WebEngine webEngine = browser.getEngine();
         browser.setContextMenuEnabled(false);
         createContextMenu(browser);
-        //browser.setContextMenuEnabled(false);
-
         BorderPane pane = new BorderPane();
         Worker<Void> worker = webEngine.getLoadWorker();
         progressBar.progressProperty().bind(worker.progressProperty());

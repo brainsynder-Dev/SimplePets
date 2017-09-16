@@ -24,25 +24,18 @@ import simplepets.brainsynder.files.*;
 import simplepets.brainsynder.links.IProtectionLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
 import simplepets.brainsynder.menu.ItemStorageMenu;
-import simplepets.brainsynder.menu.MenuItem;
 import simplepets.brainsynder.nms.VersionNMS;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.SpawnUtil;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.LoaderRetriever;
 
 import javax.sql.DataSource;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class PetCore extends JavaPlugin {
@@ -114,6 +107,7 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onEnable() {
+        long start = System.currentTimeMillis();
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
             System.out.println("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin");
@@ -179,7 +173,7 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnHurtPet(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
-        getServer().getPluginManager().registerEvents(new PetEventListeners(this), this);
+        getServer().getPluginManager().registerEvents(new PetEventListeners(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new OnPetSpawn(), this);
         getServer().getPluginManager().registerEvents(new PetSelectionMenu(), this);
@@ -210,34 +204,14 @@ public class PetCore extends JavaPlugin {
             size++;
         }
 
-        //String permFile = "DataPermissions.yml";
         List<PetType> types = new ArrayList<>();
-        //StringBuilder builder = new StringBuilder();
         for (PetType type : PetType.values()) {
-            /*builder.append(type.getConfigName()).append(':').append('\n');
-            builder.append("  - Flight Permission (If Fly is set to true in the PetTranslator.yml):").append('\n');
-            builder.append("     - ").append(type.getPermission()).append(".fly").append('\n');
-            builder.append("  - Hat Permission (If Hat is set to true in the PetTranslator.yml):").append('\n');
-            builder.append("     - ").append(type.getPermission()).append(".hat").append('\n');
-            builder.append("  - Mount Permission (If Mount is set to true in the PetTranslator.yml):").append('\n');
-            builder.append("     - ").append(type.getPermission()).append(".mount").append('\n');
-
-            if (type.getPetData() != null) {
-                builder.append("  - Data Permissions (For When you R-Click your Pet):").append('\n');
-                builder.append("    - ").append(type.getPermission()).append(".*").append('\n');
-                for (Class<? extends MenuItem> clazz : type.getPetData().getItemClasses()) {
-                    MenuItem item = getItem(type, clazz);
-                    builder.append("    - ").append(item.getPermission()).append('\n');
-                }
-            }*/
-
             if (type.isSupported()) {
                 if (type.isEnabled()) {
                     types.add(type);
                 }
             }
         }
-        //printOut(false, permFile, builder.toString());
         petTypes = new ObjectPager<>(size, types);
         worldGuardLink = new WorldGuardLink();
         if (configuration.isSet("MySQL.Enabled")) {
@@ -246,34 +220,7 @@ public class PetCore extends JavaPlugin {
                 createTable();
             }
         }
-    }
-
-    private MenuItem getItem(PetType type, Class<? extends MenuItem> clazz) {
-        try {
-            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetType.class, IEntityPet.class), type, null);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    public void printOut(boolean date, String filename, String message) {
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-        Calendar calendar = Calendar.getInstance();
-        StringBuilder builder = new StringBuilder();
-        if (date) {
-            builder.append('[').append(format.format(calendar.getTime())).append("] ");
-        }
-        builder.append(message);
-        try {
-            File saveTo = new File(getDataFolder(), filename);
-            FileWriter fw = new FileWriter(saveTo, true);
-            PrintWriter pw = new PrintWriter(fw);
-            pw.println(builder.toString());
-            pw.flush();
-            pw.close();
-        } catch (IOException var7) {
-            System.out.println("Unable to save '" + filename + "' contents");
-        }
+        debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
 
     public ISpawner getSpawner() {

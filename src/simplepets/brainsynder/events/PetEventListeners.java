@@ -21,12 +21,10 @@ import simplepets.brainsynder.utils.LinkRetriever;
 
 public class PetEventListeners implements Listener {
     private EconomyFile economyFile;
-    private PetCore core;
 
-    public PetEventListeners(PetCore core) {
+    public PetEventListeners() {
         economyFile = new EconomyFile();
         economyFile.loadDefaults();
-        this.core = core;
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
