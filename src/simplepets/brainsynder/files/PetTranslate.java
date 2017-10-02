@@ -155,7 +155,7 @@ public class PetTranslate {
         return (T) con.get("Pets." + type.getConfigName() + '.' + key);
     }
 
-    public static String translate(String msg) {
+    private static String translate(String msg) {
         return msg.replace("&", "§");
     }
 

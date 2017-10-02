@@ -9,19 +9,17 @@ import simple.brainsynder.nbt.NBTException;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.errors.SimplePetsException;
+import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.files.PlayerFile;
 import simplepets.brainsynder.pet.PetType;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class OwnerFile {
     private static final String SELECT_PETS = "SELECT * FROM `SimplePets` WHERE `UUID`=?";
     private static final String UPDATE = "UPDATE `SimplePets` SET `UnlockedPets`=?, `PetName`=?, `NeedsRespawn`=? WHERE `UUID`=?";
-    private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`) VALUES(?,?,?,?)";
+    private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`) VALUES(?,?,?,?,?)";
     private PetOwner owner;
     private StorageTagCompound tagCompound = null;
     private PetType needsRespawn = null;
@@ -34,17 +32,21 @@ public class OwnerFile {
         String needsRespawn = ((!owner.hasPet()) ? "null" : Base64Wrapper.encodeString(owner.pet.getEntity().asCompound().toString()));
         final Player p = owner.getPlayer();
         PetOwner.ownerMap.remove(p.getUniqueId());
-        if (PetCore.get().getConfiguration().isSet("MySQL.Enabled")) {
-            if (PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
-                if (PetCore.get().isDisabling()) {
-                    PetCore.get().debug("Could not save " + p.getName() + "'s Pet information because they did not log out before the plugin disabled...");
-                    return;
-                }
-                try {
-                    new Thread(() -> {
-                        Connection connection = null;
-                        try {
-                            connection = PetCore.get().getDataSource().getConnection();
+        if (PetCore.get().getConfiguration().isSet("MySQL.Enabled") && PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
+            if (PetCore.get().isDisabling()) {
+                PetCore.get().debug("Could not save " + p.getName() + "'s Pet information because they did not log out before the plugin disabled...");
+                return;
+            }
+            try {
+                new Thread(() -> {
+                    String host = PetCore.get().getConfiguration().getString("MySQL.Host", false);
+                    String port = PetCore.get().getConfiguration().getString("MySQL.Port", false);
+                    String databaseName = PetCore.get().getConfiguration().getString("MySQL.DatabaseName", false);
+                    String username = PetCore.get().getConfiguration().getString("MySQL.Login.Username", false);
+                    String password = PetCore.get().getConfiguration().getString("MySQL.Login.Password", false);
+                    MySQL sql = new MySQL(host, port, databaseName, username, password);
+                    try {
+                        sql.connectAutoClose(connection -> {
                             PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                             select.setString(1, p.getUniqueId().toString());
                             ResultSet result = select.executeQuery();
@@ -70,20 +72,17 @@ public class OwnerFile {
                                 insert.execute();
                                 insert.close();
                             }
-                        } catch (Exception e) {
-                            try {
-                                connection.rollback();
-                            } catch (SQLException e1) {
-                                throw new SimplePetsException("Could not Rollback the Connection Cause:" + e1.getMessage(), e1);
-                            }
-                        }
-                    }).run();
-                } catch (Exception e) {
-                    PetCore.get().debug("Unable to save " + p.getName() + "'s Pet data.");
-                }
-                return;
+                        });
+                    } catch (Exception e) {
+                        PetCore.get().debug("Unable to save " + p.getName() + "'s Pet data.");
+                    }
+                }).run();
+            } catch (Exception e) {
+                PetCore.get().debug("Unable to save " + p.getName() + "'s Pet data.");
             }
+            return;
         }
+
         boolean canSave = false;
         PlayerFile file = PetCore.get().getPlayerFile(p);
         if (!owner.getOwnedPets().isEmpty()) {
@@ -107,17 +106,21 @@ public class OwnerFile {
 
     void reload() {
         final Player p = owner.getPlayer();
-        if (PetCore.get().getConfiguration().isSet("MySQL.Enabled")) {
-            if (PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
-                if (PetCore.get().isDisabling()) {
-                    PetCore.get().debug("Could not reload " + p.getName() + "'s Pet information because the plugin is disabling...");
-                    return;
-                }
-                try {
-                    new Thread(() -> {
-                        Connection connection = null;
-                        try {
-                            connection = PetCore.get().getDataSource().getConnection();
+        if (PetCore.get().getConfiguration().isSet("MySQL.Enabled") && PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
+            if (PetCore.get().isDisabling()) {
+                PetCore.get().debug("Could not reload " + p.getName() + "'s Pet information because the plugin is disabling...");
+                return;
+            }
+            try {
+                new Thread(() -> {
+                    String host = PetCore.get().getConfiguration().getString("MySQL.Host", false);
+                    String port = PetCore.get().getConfiguration().getString("MySQL.Port", false);
+                    String databaseName = PetCore.get().getConfiguration().getString("MySQL.DatabaseName", false);
+                    String username = PetCore.get().getConfiguration().getString("MySQL.Login.Username", false);
+                    String password = PetCore.get().getConfiguration().getString("MySQL.Login.Password", false);
+                    MySQL sql = new MySQL(host, port, databaseName, username, password);
+                    try {
+                        sql.connectAutoClose(connection -> {
                             PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                             select.setString(1, p.getUniqueId().toString());
                             ResultSet result = select.executeQuery();
@@ -130,21 +133,17 @@ public class OwnerFile {
                                 owner.setRawPetName(name);
                                 handle(result.getString("NeedsRespawn"));
                             }
-                            result.close();
-                        } catch (Exception ignored) {
-                            try {
-                                connection.rollback();
-                            } catch (SQLException e1) {
-                                throw new SimplePetsException("Could not Rollback the Connection Cause:" + e1.getMessage(), e1);
-                            }
-                        }
-                    }).run();
-                } catch (Exception e) {
-                    PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
-                }
-                return;
+                        });
+                    } catch (Exception e) {
+                        PetCore.get().debug("Unable to save " + p.getName() + "'s Pet data.");
+                    }
+                }).run();
+            } catch (Exception e) {
+                PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
             }
+            return;
         }
+
         PlayerFile file = PetCore.get().getPlayerFile(p);
         try {
             owner.setRawOwned(file.getArray("PurchasedPets"));

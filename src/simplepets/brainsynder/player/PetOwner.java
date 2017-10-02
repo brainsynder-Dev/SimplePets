@@ -1,6 +1,7 @@
 package simplepets.brainsynder.player;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,9 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import simple.brainsynder.api.ParticleMaker;
 import simple.brainsynder.sound.SoundMaker;
-import simple.brainsynder.utils.AnvilGUI;
-import simple.brainsynder.utils.AnvilSlot;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.nms.anvil.AnvilGUI;
+import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.nms.entities.type.main.ITameable;
 import simplepets.brainsynder.pet.IPet;
@@ -31,28 +32,27 @@ public class PetOwner {
     /**
      * JSONArray contains all the pets the player has owned while Vault was Enabled.
      */
-    @Getter()
-    JSONArray ownedPets = new JSONArray();
+    @Getter() JSONArray ownedPets = new JSONArray();
     /**
      * Players Pet name, Will return null if empty.
      */
-    @Getter
-    String petName = null;
+    @Getter String petName = null;
     /**
      * Will return the players active pet, Will return null if there is no pet.
      */
-    @Getter
-    IPet pet = null;
+    @Getter IPet pet = null;
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    @Getter
-    Player player = null;
+    @Getter Player player = null;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
-    @Getter
-    OwnerFile file = null;
+    @Getter OwnerFile file = null;
+    /**
+     * This little boolean is for checking if a player is renaming their pet via chat.
+     */
+    @Getter @Setter boolean renaming = false;
 
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
@@ -109,8 +109,17 @@ public class PetOwner {
      * @param name Pets New name
      */
     public void setPetName(String name) {
+        boolean hasLimit = PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.Limit-Number-Of-Characters");
         boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
         boolean k = PetCore.get().getConfiguration().getBoolean("Use&k");
+
+        if (hasLimit && (!player.hasPermission("Pet.name.bypassLimit"))) {
+            int limit = PetCore.get().getConfiguration().getInt("PetToggles.Rename.CharacterLimit");
+            if (name.length() > limit) {
+                name = name.substring(0, limit);
+            }
+        }
+
         PetNameChangeEvent event = new PetNameChangeEvent(player, name, color, k);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -201,20 +210,30 @@ public class PetOwner {
      * Opens a Anvil GUI which allows the owner to rename their pet.
      */
     public void renamePet() {
-        AnvilGUI gui = new AnvilGUI(PetCore.get(), player, event -> {
-            if (event.getSlot() != AnvilSlot.OUTPUT) {
-                event.setWillClose(false);
-                event.setWillDestroy(false);
+        if (PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.ViaAnvil")) {
+            AnvilGUI gui = new AnvilGUI(PetCore.get(), player, event -> {
+                if (event.getSlot() != AnvilSlot.OUTPUT) {
+                    event.setWillClose(false);
+                    event.setWillDestroy(false);
+                    event.setCanceled(true);
+                    return;
+                }
                 event.setCanceled(true);
-                return;
-            }
-            event.setCanceled(true);
-            event.setWillClose(true);
-            event.setWillDestroy(true);
-            setPetName(event.getName());
-        });
-        gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
-        gui.open();
+                event.setWillClose(true);
+                event.setWillDestroy(true);
+                setPetName(event.getName());
+            });
+            gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
+            gui.open();
+            player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaAnvil", true));
+            return;
+        }
+        if (renaming) {
+            renaming = false;
+            return;
+        }
+        renaming = true;
+        player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat", true));
     }
 
     void play(Location location, ParticleMaker.Particle effect, float offsetX, float offsetY, float offsetZ) {

@@ -69,63 +69,16 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>2.7.1</version>
-        </dependency>
-        <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>LATEST</version>
+            <version>3.6</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/resources/SimpleAPI.jar</systemPath>
         </dependency>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.12-R0.1-SNAPSHOT0</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.12-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.11.2-R0.1-SNAPSHOT0</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.11.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.10.2-R0.1-SNAPSHOT</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.10.2-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.9.4-R0.1-SNAPSHOT</artifactId>
-            <version>1.9.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.9.4-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.9-R0.1-SNAPSHOT</artifactId>
-            <version>1.9-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.9-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit-1.8.8-R0.1-SNAPSHOT</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/craftbukkit-1.8.8-R0.1-SNAPSHOT.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>com.intellectualcrafters</groupId>
             <artifactId>PlotSquared-Bukkit</artifactId>
-            <version>LATEST</version>
+            <version>3.5.0-SNAPSHOT-95f8aaa</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/resources/PlotSquared-Bukkit.jar</systemPath>
         </dependency>

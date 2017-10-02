@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import simple.brainsynder.storage.ExpireHashMap;
+import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
@@ -30,7 +30,6 @@ public class PetSelectionMenu implements Listener {
     private static final Pattern COMPILE = Pattern.compile("%pet%", Pattern.LITERAL);
     private static PetMap<String, IStorage<PetTypeStorage>> petMap = new PetMap<>();
     private static Map<String, Integer> pageSave = new HashMap<>();
-    private static Map<String, ExpireHashMap<Integer, IStorage<PetTypeStorage>>> pageDataSave = new HashMap<>();
 
     public static void openMenu(Player p, int page) {
         IStorage<Integer> slots = PetCore.get().getAvailableSlots().copy();
@@ -66,8 +65,7 @@ public class PetSelectionMenu implements Listener {
         }
         PetInventoryOpenEvent event = new PetInventoryOpenEvent(petTypes, p);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return;
+        if (event.isCancelled()) return;
         IStorage<ItemStack> types = event.getItems().copy();
         while (types.hasNext()) {
             inv.addItem(types.next());
@@ -78,10 +76,8 @@ public class PetSelectionMenu implements Listener {
 
     @EventHandler
     public void onClick(InventoryClickEvent e) {
-        if (e.getInventory().getHolder() == null)
-            return;
-        if (!(e.getInventory().getHolder() instanceof PetHolder))
-            return;
+        if (e.getInventory().getHolder() == null) return;
+        if (!(e.getInventory().getHolder() instanceof PetHolder)) return;
 
         if ((e.getWhoClicked() instanceof Player)) {
             e.setCancelled(true);
@@ -106,8 +102,7 @@ public class PetSelectionMenu implements Listener {
                     e.setCancelled(true);
                     return;
                 }
-                if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-                    return;
+                if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts")) return;
                 if (!petOwner.getPet().getPetType().canMount(p)) {
                     e.setCancelled(true);
                     return;
@@ -116,14 +111,9 @@ public class PetSelectionMenu implements Listener {
                 p.closeInventory();
                 petOwner.getPet().ridePet();
             } else if (e.getSlot() == LoaderRetriever.hatLoader.getSlot()) {
-                if (!petOwner.hasPet()) {
-                    return;
-                }
-                if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-                    return;
-                if (!petOwner.getPet().getPetType().canHat(p)) {
-                    return;
-                }
+                if (!petOwner.hasPet()) return;
+                if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats")) return;
+                if (!petOwner.getPet().getPetType().canHat(p)) return;
                 e.setCancelled(true);
                 p.closeInventory();
                 petOwner.getPet().hatPet();
@@ -132,30 +122,27 @@ public class PetSelectionMenu implements Listener {
             } else if (e.getSlot() == LoaderRetriever.nextPageLoader.getSlot()) {
                 if (PetCore.get().petTypes.totalPages() > currentPage) openMenu(p, (currentPage + 1));
             } else {
-                if (e.getCurrentItem() == null) {
-                    return;
-                }
+                if (e.getCurrentItem() == null) return;
                 final List<PetType> types = PetCore.get().petTypes.getPage(currentPage);
-                if (types == null) {
-                    return;
-                }
-                if (!petMap.containsKey(p.getName()))
-                    return;
+                if (types == null) return;
+                if (!petMap.containsKey(p.getName())) return;
                 IStorage<PetTypeStorage> storage = petMap.getKey(p.getName()).copy();
                 while (storage.hasNext()) {
                     final PetTypeStorage type = storage.next();
                     if (type.getItem().isSimilar(e.getCurrentItem())) {
-                        if (!type.getType().hasPermission(p)) {
-                            return;
-                        }
+                        if (!type.getType().hasPermission(p)) return;
                         PetInventorySelectTypeEvent event = new PetInventorySelectTypeEvent(type.getType(), p);
                         Bukkit.getServer().getPluginManager().callEvent(event);
-                        if (event.isCancelled())
-                            return;
+                        if (event.isCancelled()) return;
                         p.closeInventory();
                         p.sendMessage(COMPILE.matcher(PetCore.get().getMessages().getString("Select-Pet", true))
                                 .replaceAll(Matcher.quoteReplacement(type.getType().getNoColorName())));
-                        new Thread(() -> type.getType().setPet(p)).run();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                type.getType().setPet(p);
+                            }
+                        }.runTask(PetCore.get());
                         break;
                     }
                 }

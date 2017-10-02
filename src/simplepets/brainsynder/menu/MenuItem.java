@@ -35,16 +35,12 @@ public abstract class MenuItem {
     public abstract ItemMaker getItem();
 
     public String getPermission() {
-        return (
-                type.getPermission() + '.' + getClass().getSimpleName().toLowerCase()
-        );
+        return (type.getPermission() + '.' + getClass().getSimpleName().toLowerCase());
     }
 
     public boolean hasPermission(Player player) {
         if (!PetCore.get().getConfiguration().getBoolean("Needs-Permission")) return true;
         if (!PetCore.get().getConfiguration().getBoolean("Needs-Data-Permissions")) return true;
-        if (player.hasPermission(type.getPermission() + ".*"))
-            return true;
-        return (player.hasPermission(getPermission()));
+        return player.hasPermission(type.getPermission() + ".*") || (player.hasPermission(getPermission()));
     }
 }

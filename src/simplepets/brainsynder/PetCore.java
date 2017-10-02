@@ -1,7 +1,5 @@
 package simplepets.brainsynder;
 
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -18,7 +16,6 @@ import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.CMD_Pet;
-import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.events.*;
 import simplepets.brainsynder.files.*;
 import simplepets.brainsynder.links.IProtectionLink;
@@ -31,11 +28,7 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.LoaderRetriever;
 
-import javax.sql.DataSource;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.*;
 
 public class PetCore extends JavaPlugin {
@@ -50,7 +43,6 @@ public class PetCore extends JavaPlugin {
     );
     public boolean forceSpawn;
     public ObjectPager<PetType> petTypes;
-    private DataSource datasource;
     @Getter
     private boolean disabling = false;
     @Getter
@@ -76,34 +68,6 @@ public class PetCore extends JavaPlugin {
             }
         }
         return true;
-    }
-
-    public DataSource getDataSource() {
-        if (datasource == null) {
-            if (configuration.isSet("MySQL.Enabled")) {
-                if (configuration.getBoolean("MySQL.Enabled")) {
-                    debug("Loading MySQL support... (This is in beta still)");
-                    String host = configuration.getString("MySQL.Host", false);
-                    String port = configuration.getString("MySQL.Port", false);
-                    String databaseName = configuration.getString("MySQL.DatabaseName", false);
-                    String username = configuration.getString("MySQL.Login.Username", false);
-                    String password = configuration.getString("MySQL.Login.Password", false);
-
-                    HikariConfig config = new HikariConfig();
-                    config.setJdbcUrl(host + ':' + port + '/' + databaseName);
-                    config.setUsername(username);
-                    config.setPassword(password);
-                    config.setMaximumPoolSize(10);
-                    config.setAutoCommit(false);
-                    config.addDataSourceProperty("cachePrepStmts", "true");
-                    config.addDataSourceProperty("prepStmtCacheSize", "250");
-                    config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-                    datasource = new HikariDataSource(config);
-                    createTable();
-                }
-            }
-        }
-        return datasource;
     }
 
     public void onEnable() {
@@ -170,7 +134,7 @@ public class PetCore extends JavaPlugin {
         PetType.initiate();
         debug("Registering Listeners...");
         getCommand("pet").setExecutor(new CMD_Pet());
-        getServer().getPluginManager().registerEvents(new OnHurtPet(), this);
+        getServer().getPluginManager().registerEvents(new MainListeners(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
         getServer().getPluginManager().registerEvents(new PetEventListeners(), this);
@@ -214,12 +178,6 @@ public class PetCore extends JavaPlugin {
         }
         petTypes = new ObjectPager<>(size, types);
         worldGuardLink = new WorldGuardLink();
-        if (configuration.isSet("MySQL.Enabled")) {
-            if (configuration.getBoolean("MySQL.Enabled")) {
-                debug("Loading MySQL support... (This is in beta still)");
-                createTable();
-            }
-        }
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
 
@@ -263,22 +221,6 @@ public class PetCore extends JavaPlugin {
         }
     }
 
-    private void createTable() {
-        Connection connection = null;
-        try {
-            connection = getDataSource().getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets`(`UUID` varchar(36), `name` varchar(16), `UnlockedPets` text, `PetName` varchar(150), `NeedsRespawn` varchar(255))");
-        } catch (Exception e) {
-            try {
-                connection.rollback();
-            } catch (SQLException e1) {
-                throw new SimplePetsException("Could not Rollback the Connection Cause:" + e1.getMessage(), e1);
-            }
-            throw new SimplePetsException("Could not check the SimplePets Table Cause:" + e.getMessage(), e);
-        }
-    }
-
     public String getDefaultPetName(PetType petType, Player player) {
         String name = petType.getDefaultName();
         return translateName(name).replace("%player%", player.getName());
@@ -308,13 +250,16 @@ public class PetCore extends JavaPlugin {
     public PlayerPetInv getPetInvByName(String name) {
         File folder = new File(getDataFolder().toString() + "/PetInventories/");
         if (folder.isDirectory()) {
-            if (folder.listFiles().length != 0) {
-                for (File file : folder.listFiles()) {
-                    if (file.getName().contains(".storage")) {
-                        FileConfiguration con = YamlConfiguration.loadConfiguration(file);
-                        if (con.get("Username") != null) {
-                            if (con.getString("Username").equalsIgnoreCase(name)) {
-                                return new PlayerPetInv(file.getName());
+            File[] files = folder.listFiles();
+            if (files != null) {
+                if (files.length != 0) {
+                    for (File file : files) {
+                        if (file.getName().contains(".storage")) {
+                            FileConfiguration con = YamlConfiguration.loadConfiguration(file);
+                            if (con.get("Username") != null) {
+                                if (con.getString("Username").equalsIgnoreCase(name)) {
+                                    return new PlayerPetInv(file.getName());
+                                }
                             }
                         }
                     }
@@ -325,11 +270,13 @@ public class PetCore extends JavaPlugin {
     }
 
     private void loadConfig() {
+        debug("Loading Config.yml...");
         configuration = new Config(this, "Config.yml");
         configuration.loadDefaults();
-        debug("Loading Config values");
+        debug("Loading Messages.yml...");
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
+        debug("Loading PetTranslator.yml... (Longest Task)");
         PetTranslate.loadDefaults();
     }
 
@@ -355,6 +302,32 @@ public class PetCore extends JavaPlugin {
 
     public void debug(int level, String message) {
         if (level >= 3) level = 2;
+        if (configuration == null) {
+            ChatColor color = ChatColor.WHITE;
+            switch (level) {
+                case 1:
+                    color = ChatColor.YELLOW;
+                    break;
+                case 2:
+                    color = ChatColor.RED;
+                    break;
+            }
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            return;
+        }
+        if (!configuration.isSet("Debug.Enabled")) {
+            ChatColor color = ChatColor.WHITE;
+            switch (level) {
+                case 1:
+                    color = ChatColor.YELLOW;
+                    break;
+                case 2:
+                    color = ChatColor.RED;
+                    break;
+            }
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            return;
+        }
         if (!configuration.getBoolean("Debug.Enabled")) return;
         if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
         ChatColor color = ChatColor.WHITE;

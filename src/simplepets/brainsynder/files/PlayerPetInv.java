@@ -1,7 +1,6 @@
 package simplepets.brainsynder.files;
 
 import lombok.Getter;
-import simple.brainsynder.files.FileMaker;
 import simplepets.brainsynder.PetCore;
 
 import java.io.File;

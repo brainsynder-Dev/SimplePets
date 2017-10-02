@@ -1,13 +1,14 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1;
 
+import com.google.common.collect.Maps;
 import net.minecraft.server.v1_12_R1.*;
+import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
@@ -16,17 +17,23 @@ import simplepets.brainsynder.nms.entities.type.IEntityHorsePet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
-import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.pet.PetMoveEvent;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.EntityWrapper;
+
+import java.util.Map;
 
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     private IPet pet;
-    private double upSpeed, floatSpeed, walkSpeed, rideSpeed;
-    private boolean floatDown;
+    private double upSpeed = 0.5,
+            floatSpeed = 0.5,
+            walkSpeed = 0.6000000238418579,
+            rideSpeed = 0.4000000238418579;
+    private boolean floatDown = true, canGlow = true, isGlowing = false, autoRemove = true;
+    private int standTime = 0,blockX=0,blockZ=0,blockY=0,tickDelay = 10000;
     private FieldAccessor<Boolean> fieldAccessor;
 
     public EntityPet(World world, IPet pet) {
@@ -44,6 +51,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(20.0D);
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
+        tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
+        autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
+        canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
         if (pet.getPetType().canFlyDefault()) {
             floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
             upSpeed = PetTranslate.getDouble(pet.getPetType(), "Float-Down");
@@ -70,9 +80,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     }
 
     @Override
-    public void applyCompound(StorageTagCompound object) {
-
-    }
+    public void applyCompound(StorageTagCompound object) {}
 
     public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
         try {
@@ -98,13 +106,10 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         }
     }
 
-    protected void registerDatawatchers() {
-    }
+    protected void registerDatawatchers() {}
 
     @Override
-    public void f(double x, double y, double z) {
-
-    }
+    public void f(double x, double y, double z) {}
 
     @Override
     protected void i() {
@@ -136,19 +141,71 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         return block.getType().isSolid();
     }
 
-    @Override
-    public boolean isCollidable() {
+    @Override public boolean isCollidable() {
         return false;
     }
 
-    public void setVelocity(Vector vel) {
-        this.motX = vel.getX();
-        this.motY = vel.getY();
-        this.motZ = vel.getZ();
-        this.velocityChanged = true;
+    private void glowHandler(boolean glow) {
+        try {
+            EntityPet pet = this;
+            if (this instanceof IEntityControllerPet) {
+                pet = (EntityPet) ((IEntityControllerPet) this).getVisibleEntity().getEntity();
+            }
+            DataWatcher toCloneDataWatcher = pet.getDataWatcher();
+            DataWatcher newDataWatcher = new DataWatcher(pet);
+
+            Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
+            Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
+
+            for (Integer integer : currentMap.keySet()) {
+                newMap.put(integer, currentMap.get(integer).d());
+            }
+
+            DataWatcher.Item item = newMap.get(0);
+            byte initialBitMask = (Byte) item.b();
+            byte bitMaskIndex = (byte) 6;
+            isGlowing = glow;
+            if (glow) {
+                item.a((byte) (initialBitMask | 1 << bitMaskIndex));
+            } else {
+                item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+            }
+            FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
+
+            PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
+
+            ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public void repeatTask() {
+        // This section handles the Auto-removal of pets after (tickDelay) Ticks of being stationary...
+        if (autoRemove && (bukkitEntity != null)) {
+            Location location = bukkitEntity.getLocation();
+            if ((blockX != location.getBlockX())
+                    || (blockY != location.getBlockY())
+                    || (blockZ != location.getBlockZ())) {
+                blockX = location.getBlockX();
+                blockY = location.getBlockY();
+                blockZ = location.getBlockZ();
+                if (standTime != 0) standTime = 0;
+            }else{
+                if (standTime == tickDelay) {
+                    if (pet != null) {
+                        if (pet.getOwner() != null) {
+                            PetOwner.getPetOwner(pet.getOwner()).removePet();
+                        }
+                    }else{
+                        bukkitEntity.remove();
+                    }
+                }
+                standTime++;
+            }
+        }
+
+        // Handles all other Pet Tasks...
         if (pet == null) {
             if (bukkitEntity != null)
                 bukkitEntity.remove();
@@ -163,23 +220,17 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 }
             }
         }
+
         if (pet.getOwner() != null) {
             Player p = pet.getOwner();
-            if (((CraftPlayer) p).getHandle().isInvisible() != this.isInvisible()) {
+            boolean ownerVanish = ((CraftPlayer) p).getHandle().isInvisible();
+            if (ownerVanish != this.isInvisible()) {
+                if (isGlowing && (!ownerVanish)) glowHandler(false);
                 this.setInvisible(!this.isInvisible());
-                if (isInvisible()) {
-                    if (this instanceof IEntityControllerPet) {
-                        ((EntityControllerPet) this).getVisibleEntity().getEntity().setGlowing(true);
-                    } else {
-                        glowing = true;
-                    }
-                } else {
-                    if (this instanceof IEntityControllerPet) {
-                        ((EntityControllerPet) this).getVisibleEntity().getEntity().setGlowing(false);
-                    } else {
-                        glowing = false;
-                    }
-                }
+            } else {
+                if (ownerVanish && canGlow)
+                    if (((CraftPlayer) p).getHandle().isInvisible())
+                        glowHandler(true);
             }
 
             if (pet.isHat()) {
@@ -233,6 +284,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         return false;
     }
 
+    /**
+     * This method handles the Pet riding
+     */
     public void a(float f, float f1, float f2) {
         if (passengers.isEmpty()) {
             this.P = (float) 0.5;
@@ -259,7 +313,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                             this.motY = 0.5;
                         } else {
                             if (pet.getPetType().canFly(pet.getOwner())) {
-                                this.motY = 0.5;
+                                this.motY = upSpeed;
                             }
                         }
                     }

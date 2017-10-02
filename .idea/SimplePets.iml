@@ -42,10 +42,8 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.md-5:bungeecord-chat:1.12-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.12.1-R0.1-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.projectlombok:lombok:1.16.18" level="project" />
-    <orderEntry type="library" name="Maven: com.zaxxer:HikariCP:2.7.1" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.25" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: simple.brainsynder:SimpleAPI:LATEST">
+      <library name="Maven: simple.brainsynder:SimpleAPI:3.6">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/resources/SimpleAPI.jar!/" />
         </CLASSES>
@@ -54,61 +52,7 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.12-R0.1-SNAPSHOT0:1.12-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.12-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.11.2-R0.1-SNAPSHOT0:1.11.2-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.11.2-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.10.2-R0.1-SNAPSHOT:1.10.2-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.10.2-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.9.4-R0.1-SNAPSHOT:1.9.4-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.9.4-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.9-R0.1-SNAPSHOT:1.9-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.9-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: org.bukkit:craftbukkit-1.8.8-R0.1-SNAPSHOT:1.8.8-R0.1-SNAPSHOT">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/resources/craftbukkit-1.8.8-R0.1-SNAPSHOT.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="Maven: com.intellectualcrafters:PlotSquared-Bukkit:LATEST">
+      <library name="Maven: com.intellectualcrafters:PlotSquared-Bukkit:3.5.0-SNAPSHOT-95f8aaa">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/resources/PlotSquared-Bukkit.jar!/" />
         </CLASSES>
@@ -116,5 +60,11 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="craftbukkit-1.10.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.11.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.12.2-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.8.8-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.9-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="craftbukkit-1.9.4-R0.1-SNAPSHOT" level="project" />
   </component>
 </module>

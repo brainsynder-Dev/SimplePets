@@ -13,6 +13,14 @@ import simplepets.brainsynder.pet.IPet;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * This never worked when i made it sooo.......
+ *
+ * To be honest... I wont code this pet... if someone else wants to... by all mean go ahead xD
+ *
+ * Its just too complicated and its a pain to update.
+ */
+@Deprecated
 public class EntityEnderDragonPet extends EntityNoClipPet implements IComplex, IEntityEnderDragonPet {
     public static final DataWatcherObject<Integer> PHASE;
 

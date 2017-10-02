@@ -166,6 +166,7 @@ public enum PetType {
     }
 
     public static void initiate() {
+        PetCore.get().debug("Loading PetType Items/Defaults...");
         for (PetType type : values()) {
             if (!storage.containsKey(type)) {
                 TypeStorage typeStorage = new TypeStorage();

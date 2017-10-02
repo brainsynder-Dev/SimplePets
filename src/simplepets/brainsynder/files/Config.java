@@ -1,7 +1,6 @@
 package simplepets.brainsynder.files;
 
 import org.bukkit.plugin.java.JavaPlugin;
-import simple.brainsynder.files.FileMaker;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -57,7 +56,8 @@ public class Config extends FileMaker {
             set("Allow-Pets-Being-Hats", true, "Does the pet hat item show in the menu?");
         if (!isSet("Respawn-Last-Pet-On-Login"))
             set("Respawn-Last-Pet-On-Login", true, "If the player had a pet when they logged out", "Should that pet be re-spawned on Login");
-        if (!isSet("WorldGuard.Spawning.Always-Allowed")) set("WorldGuard.Spawning.Always-Allowed", true,
+        if (!isSet("WorldGuard.Spawning.Always-Allowed"))
+            set("WorldGuard.Spawning.Always-Allowed", true,
                 "Spawning Always-Allowed = Should pets always be allowed", " to spawn in regions",
                 "O__O",
                 "Spawning Allowed-Regions = List the WorldGuard regions", " that allow the pets to spawn in",
@@ -65,7 +65,7 @@ public class Config extends FileMaker {
                 "Pet-Entering Always-Allowed = Should pets be allowed", " to enter certain regions?",
                 "O__O",
                 "Pet-Entering Allowed-Regions = List the WorldGuard regions", " that allow pets to enter"
-        );
+            );
         if (!isSet("WorldGuard.Spawning.Blocked-Regions"))
             set("WorldGuard.Spawning.Blocked-Regions", Collections.singletonList("pvp"));
         if (!isSet("WorldGuard.Pet-Entering.Always-Allowed")) set("WorldGuard.Pet-Entering.Always-Allowed", true);
@@ -101,12 +101,25 @@ public class Config extends FileMaker {
                     "The Levels are as follows ->", "0 = Regular", "1 = Warning", "2 = CRITICAL");
         if (!isSet("Debug.Levels"))
             set("Debug.Levels", Arrays.asList("0", "1", "2"));
+
+        if (!isSet("PetToggles.GlowWhenVanished"))
+            set("PetToggles.GlowWhenVanished", true);
+        if (!isSet("PetToggles.AutoRemove.Enabled"))
+            set("PetToggles.AutoRemove.Enabled", true);
+        if (!isSet("PetToggles.AutoRemove.TickDelay"))
+            set("PetToggles.AutoRemove.TickDelay", 10000);
+        if (!isSet("PetToggles.Rename.ViaAnvil"))
+            set("PetToggles.Rename.ViaAnvil", true);
+        if (!isSet("PetToggles.Rename.Limit-Number-Of-Characters"))
+            set("PetToggles.Rename.Limit-Number-Of-Characters", false);
+        if (!isSet("PetToggles.Rename.CharacterLimit"))
+            set("PetToggles.Rename.CharacterLimit", 10);
     }
 
     @Override
     public void set(String tag, Object data, String... comments) {
         try {
-            super.set(tag, data, comments);
+            super.set(tag, data);
         } catch (Exception e) {
             super.set(tag, data);
         }

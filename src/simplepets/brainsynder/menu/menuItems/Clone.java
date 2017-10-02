@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
-import simple.brainsynder.api.SkullMaker;
 import simplepets.brainsynder.menu.MenuItemAbstract;
 import simplepets.brainsynder.nms.entities.type.IEntityArmorStandPet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.pet.PetType;
 
 public class Clone extends MenuItemAbstract {
-    private SkullMaker item = new SkullMaker().setOwner("Steve").setSkullOwner("Steve");
+    private ItemMaker item = new ItemMaker(Material.SKULL_ITEM, (byte) 3);
 
     public Clone(PetType type, IEntityPet entityPet) {
         super(type, entityPet);

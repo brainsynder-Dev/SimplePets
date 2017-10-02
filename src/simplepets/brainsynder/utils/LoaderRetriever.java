@@ -21,6 +21,7 @@ public class LoaderRetriever {
     private static List<ItemLoader> loaders = new ArrayList<>();
 
     public static void initiate() {
+        PetCore.get().debug("Loading MenuItems...");
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
         PetCore.get().debug("Loading Customizable Items");
         File folder = new File(plugin.getDataFolder().toString() + "/MenuItems/");

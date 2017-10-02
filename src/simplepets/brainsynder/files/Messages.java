@@ -1,7 +1,6 @@
 package simplepets.brainsynder.files;
 
 import org.bukkit.plugin.Plugin;
-import simple.brainsynder.files.FileMaker;
 
 public class Messages extends FileMaker {
     public Messages(Plugin plugin, String fileName) {
@@ -54,6 +53,10 @@ public class Messages extends FileMaker {
             set("No-Spawning", "&eSimplePets &6>> &cPets are not allowed to be spawned in this region.", "Message sent to the player when they", "Try to spawn a pet in a WorldGuard region", "That is not added to the region list");
         if (!isSet("Pet-No-Enter"))
             set("Pet-No-Enter", "&eSimplePets &6>> &cPets are not allowed in this region.", "Message sent to the player when their", "pet tries to enter a WorldGuard region", "That is not added to the region list");
+        if (!isSet("Pet-RenameViaChat"))
+            set("Pet-RenameViaChat", "&eSimplePets &6>> &7Type your pets new name in chat:");
+        if (!isSet("Pet-RenameViaAnvil"))
+            set("Pet-RenameViaAnvil", "&eSimplePets &6>> &7Type your pets new name in the anvil, then click the item on the right when complete.");
     }
 
     @Override

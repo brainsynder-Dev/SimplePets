@@ -1,6 +1,5 @@
 package simplepets.brainsynder.files;
 
-import simple.brainsynder.files.FileMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.pet.PetType;
 

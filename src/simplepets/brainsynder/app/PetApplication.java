@@ -70,30 +70,30 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://pluginwiki.tk/app/");
+        webEngine.load("http://app.pluginwiki.tk/?version=3.7");
     }
 
     private void createContextMenu(WebView webView) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem copy = new MenuItem("Copy");
-        String text = String.valueOf(webView.getEngine().executeScript("(function getSelectionText() {\n"
-                + "    var text = \"\";\n"
-                + "    if (window.getSelection) {\n"
-                + "        text = window.getSelection().toString();\n"
-                + "    } else if (document.selection && document.selection.type != \"Control\") {\n"
-                + "        text = document.selection.createRange().text;\n"
-                + "    }\n"
-                + "    return text;\n"
-                + "})()"));
         copy.setOnAction(e -> {
+            String text = String.valueOf(webView.getEngine().executeScript("(function getSelectionText() {\n"
+                    + "    var text = \"\";\n"
+                    + "    if (window.getSelection) {\n"
+                    + "        text = window.getSelection().toString();\n"
+                    + "    } else if (document.selection && document.selection.type != \"Control\") {\n"
+                    + "        text = document.selection.createRange().text;\n"
+                    + "    }\n"
+                    + "    return text;\n"
+                    + "})()"));
             if ((text == null) || text.isEmpty()) {
                 webView.getEngine().executeScript("Materialize.toast('Could not find text to copy.', 1000, 'rounded');");
                 return;
             }
 
             try {
-                final Clipboard clipboard = Clipboard.getSystemClipboard();
-                final ClipboardContent content = new ClipboardContent();
+                Clipboard clipboard = Clipboard.getSystemClipboard();
+                ClipboardContent content = new ClipboardContent();
                 content.putString(text);
                 clipboard.setContent(content);
                 webView.getEngine().executeScript("Materialize.toast('Successfully copied text.', 1000, 'rounded');");
