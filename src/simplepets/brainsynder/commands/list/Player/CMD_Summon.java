@@ -12,11 +12,11 @@ import simplepets.brainsynder.pet.PetType;
 @CommandName(name = "summon")
 @CommandUsage(usage = "<pet> [player]")
 @CommandDescription(description = "Spawns a pet for the player or selected player.")
-public class CMD_Summon extends PetCommand {
+public class CMD_Summon extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         if (args.length == 0) {
-            p.sendMessage("§eSimplePets §6>> §7/pet summon <pet> [player]");
+            sendUsage(p);
         } else {
             PetType type = PetType.getByName(args[0]);
             if (type == null) {
@@ -36,7 +36,7 @@ public class CMD_Summon extends PetCommand {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
                 }
-                p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
+                p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getNoColorName()));
                 type.setPet(p);
             } else {
                 if (!p.hasPermission("Pet.summon.other")) {
@@ -50,7 +50,7 @@ public class CMD_Summon extends PetCommand {
                 }
                 if (tp.getName().equals(p.getName())) {
                     type.setPet(p);
-                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
+                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getNoColorName()));
                     return;
                 }
                 if (!type.hasPermission(tp)) {
@@ -58,10 +58,10 @@ public class CMD_Summon extends PetCommand {
                     return;
                 }
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Sender", true)
-                        .replace("%pet%", type.getDisplayName())
+                        .replace("%pet%", type.getNoColorName())
                         .replace("%player%", tp.getName()));
                 tp.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Other", true)
-                        .replace("%pet%", type.getDisplayName())
+                        .replace("%pet%", type.getNoColorName())
                         .replace("%player%", p.getName()));
                 type.setPet(tp);
             }

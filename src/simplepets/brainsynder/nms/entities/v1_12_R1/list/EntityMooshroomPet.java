@@ -9,7 +9,6 @@ public class EntityMooshroomPet extends AgeableEntityPet implements IEntityMoosh
     public EntityMooshroomPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityMooshroomPet(World world) {
         super(world);
     }

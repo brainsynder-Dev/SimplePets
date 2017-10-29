@@ -2,6 +2,7 @@ package simplepets.brainsynder.events;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -81,10 +82,15 @@ public class PetSelectionMenu implements Listener {
 
         if ((e.getWhoClicked() instanceof Player)) {
             e.setCancelled(true);
+            e.setResult(Event.Result.DENY);
             final Player p = (Player) e.getWhoClicked();
             PetOwner petOwner = PetOwner.getPetOwner(p);
             if (e.getCurrentItem() == null)
                 return;
+            if (e.getClick().isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
             int currentPage = 1;
             if (pageSave.containsKey(p.getName())) currentPage = pageSave.get(p.getName());
             if (e.getSlot() == LoaderRetriever.removeLoader.getSlot()) {

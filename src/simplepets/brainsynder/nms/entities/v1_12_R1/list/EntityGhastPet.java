@@ -13,15 +13,9 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
         IFlyablePet {
     private static final DataWatcherObject<Boolean> a;
 
-    static {
-        a = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
-    }
-
-
     public EntityGhastPet(World world) {
         super(world);
     }
-
     public EntityGhastPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -30,5 +24,9 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(a, Boolean.FALSE);
+    }
+
+    static {
+        a = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
     }
 }

@@ -35,14 +35,14 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
     public StorageTagCompound asCompound() {
         System.out.println("asCompound");
         StorageTagCompound json = super.asCompound();
-        json.setInteger("Spell", spell.getId());
+        json.setString("spell", spell.name());
         return json;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Spell")) {
-            WizardSpell var1 = WizardSpell.fromID(object.getInteger("Spell"));
+        if (object.hasKey("spell")) {
+            WizardSpell var1 = WizardSpell.getByName(object.getString("spell"));
             this.spell = var1;
             this.datawatcher.set(c, (byte) var1.getId());
         }
@@ -58,7 +58,6 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
     }
 
     public void setSpell(WizardSpell var1) {
-        System.out.println("Spell: " + var1.toString());
         if (var1 == WizardSpell.WOLOLO) {
             getEntity().getWorld().playSound(getEntity().getLocation(), Sound.ENTITY_EVOCATION_ILLAGER_PREPARE_WOLOLO, 1.0F, 1.0F);
         } else {

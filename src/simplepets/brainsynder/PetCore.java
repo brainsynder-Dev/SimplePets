@@ -79,7 +79,7 @@ public class PetCore extends JavaPlugin {
             return;
         }
         double ver = Double.parseDouble(plugin.getDescription().getVersion());
-        if (ver < 3.6) {
+        if (ver < 3.7) {
             System.out.println("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/");
             System.out.println("Disabling SimplePets...");
             setEnabled(false);
@@ -87,7 +87,7 @@ public class PetCore extends JavaPlugin {
         }
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
-        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", "3.7")) {
+        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", "3.8")) {
             setEnabled(false);
             return;
         }

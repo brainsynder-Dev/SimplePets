@@ -13,7 +13,6 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     public EntityVindicatorPet(World world) {
         super(world);
     }
-
     public EntityVindicatorPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -21,13 +20,13 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Johnny", johhny);
+        object.setBoolean("johnny", johhny);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Johnny")) setJohnny(object.getBoolean("Johnny"));
+        if (object.hasKey("johnny")) setJohnny(object.getBoolean("johnny"));
         super.applyCompound(object);
     }
 
@@ -39,11 +38,10 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     @Override
     public void setJohnny(boolean var) {
         johhny = var;
+        a(1, var);
         if (var) {
-            a(1, var);
             ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.IRON_AXE));
         } else {
-            a(1, var);
             ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.AIR));
         }
     }

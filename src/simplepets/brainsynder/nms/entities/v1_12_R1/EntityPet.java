@@ -17,6 +17,8 @@ import simplepets.brainsynder.nms.entities.type.IEntityHorsePet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
+import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityArmorStandPet;
+import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.pet.PetMoveEvent;
 import simplepets.brainsynder.player.PetOwner;
@@ -32,8 +34,17 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             floatSpeed = 0.5,
             walkSpeed = 0.6000000238418579,
             rideSpeed = 0.4000000238418579;
-    private boolean floatDown = true, canGlow = true, isGlowing = false, autoRemove = true;
-    private int standTime = 0,blockX=0,blockZ=0,blockY=0,tickDelay = 10000;
+    private boolean floatDown = true,
+            canGlow = true,
+            isGlowing = false,
+            autoRemove = true,
+            hideName = true,
+            silent = false;
+    private int standTime = 0,
+            blockX = 0,
+            blockZ = 0,
+            blockY = 0,
+            tickDelay = 10000;
     private FieldAccessor<Boolean> fieldAccessor;
 
     public EntityPet(World world, IPet pet) {
@@ -51,14 +62,13 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(20.0D);
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
+        hideName = PetCore.get().getConfiguration().getBoolean("PetToggles.HideNameOnShift");
         tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
         autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
-        if (pet.getPetType().canFlyDefault()) {
-            floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
-            upSpeed = PetTranslate.getDouble(pet.getPetType(), "Float-Down");
-            floatSpeed = PetTranslate.getDouble(pet.getPetType(), "Up-Speed");
-        }
+        floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
+        floatSpeed = PetTranslate.getDouble(pet.getPetType(), "Float-Speed");
+        upSpeed = PetTranslate.getDouble(pet.getPetType(), "Up-Speed");
     }
 
     public EntityPet(World world) {
@@ -71,6 +81,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", pet.getPetType().name());
+        PetOwner owner = PetOwner.getPetOwner(getOwner());
+        object.setString("name", owner.getPetName().replace('§', '&'));
+        object.setBoolean("silent", silent);
         return object;
     }
 
@@ -80,36 +93,15 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     }
 
     @Override
-    public void applyCompound(StorageTagCompound object) {}
-
-    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        try {
-            ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
-            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-            if (entity instanceof Player) {
-                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-            }
-        } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("name")) {
+            String name = object.getString("name");
+            PetOwner owner = PetOwner.getPetOwner(getOwner());
+            if (!owner.getPetName().equals(name)) owner.setPetName(name, true);
         }
+
+        if (object.hasKey("silent")) silent = object.getBoolean("silent");
     }
-
-    public void removePassenger(org.bukkit.entity.Entity entity) {
-        try {
-            ((CraftEntity) entity).getHandle().passengers.clear();
-            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-            if (entity instanceof Player) {
-                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-            }
-        } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
-        }
-    }
-
-    protected void registerDatawatchers() {}
-
-    @Override
-    public void f(double x, double y, double z) {}
 
     @Override
     protected void i() {
@@ -141,40 +133,97 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         return block.getType().isSolid();
     }
 
-    @Override public boolean isCollidable() {
+    @Override
+    public boolean isCollidable() {
         return false;
     }
 
     private void glowHandler(boolean glow) {
         try {
-            EntityPet pet = this;
             if (this instanceof IEntityControllerPet) {
-                pet = (EntityPet) ((IEntityControllerPet) this).getVisibleEntity().getEntity();
+                org.bukkit.entity.Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
+                Entity handle = ((CraftEntity) ent).getHandle();
+                if (handle instanceof EntityArmorStandPet) {
+                    EntityArmorStandPet pet = (EntityArmorStandPet) handle;
+                    DataWatcher toCloneDataWatcher = pet.getDataWatcher();
+                    DataWatcher newDataWatcher = new DataWatcher(pet);
+
+                    Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
+                    Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
+
+                    for (Integer integer : currentMap.keySet()) {
+                        newMap.put(integer, currentMap.get(integer).d());
+                    }
+
+                    DataWatcher.Item item = newMap.get(0);
+                    byte initialBitMask = (Byte) item.b();
+                    byte bitMaskIndex = (byte) 6;
+                    isGlowing = glow;
+                    if (glow) {
+                        item.a((byte) (initialBitMask | 1 << bitMaskIndex));
+                    } else {
+                        item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+                    }
+                    FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
+
+                    PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
+
+                    ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
+                } else if (handle instanceof EntityShulkerPet) {
+                    EntityShulkerPet pet = (EntityShulkerPet) handle;
+
+                    DataWatcher toCloneDataWatcher = pet.getDataWatcher();
+                    DataWatcher newDataWatcher = new DataWatcher(pet);
+
+                    Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
+                    Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
+
+                    for (Integer integer : currentMap.keySet()) {
+                        newMap.put(integer, currentMap.get(integer).d());
+                    }
+
+                    DataWatcher.Item item = newMap.get(0);
+                    byte initialBitMask = (Byte) item.b();
+                    byte bitMaskIndex = (byte) 6;
+                    isGlowing = glow;
+                    if (glow) {
+                        item.a((byte) (initialBitMask | 1 << bitMaskIndex));
+                    } else {
+                        item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+                    }
+                    FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
+
+                    PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
+
+                    ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
+                } else {
+                    EntityPet pet = this;
+                    DataWatcher toCloneDataWatcher = pet.getDataWatcher();
+                    DataWatcher newDataWatcher = new DataWatcher(pet);
+
+                    Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
+                    Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
+
+                    for (Integer integer : currentMap.keySet()) {
+                        newMap.put(integer, currentMap.get(integer).d());
+                    }
+
+                    DataWatcher.Item item = newMap.get(0);
+                    byte initialBitMask = (Byte) item.b();
+                    byte bitMaskIndex = (byte) 6;
+                    isGlowing = glow;
+                    if (glow) {
+                        item.a((byte) (initialBitMask | 1 << bitMaskIndex));
+                    } else {
+                        item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+                    }
+                    FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
+
+                    PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
+
+                    ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
+                }
             }
-            DataWatcher toCloneDataWatcher = pet.getDataWatcher();
-            DataWatcher newDataWatcher = new DataWatcher(pet);
-
-            Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
-            Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
-
-            for (Integer integer : currentMap.keySet()) {
-                newMap.put(integer, currentMap.get(integer).d());
-            }
-
-            DataWatcher.Item item = newMap.get(0);
-            byte initialBitMask = (Byte) item.b();
-            byte bitMaskIndex = (byte) 6;
-            isGlowing = glow;
-            if (glow) {
-                item.a((byte) (initialBitMask | 1 << bitMaskIndex));
-            } else {
-                item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
-            }
-            FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
-
-            PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
-
-            ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -191,13 +240,13 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 blockY = location.getBlockY();
                 blockZ = location.getBlockZ();
                 if (standTime != 0) standTime = 0;
-            }else{
+            } else {
                 if (standTime == tickDelay) {
                     if (pet != null) {
                         if (pet.getOwner() != null) {
                             PetOwner.getPetOwner(pet.getOwner()).removePet();
                         }
-                    }else{
+                    } else {
                         bukkitEntity.remove();
                     }
                 }
@@ -211,18 +260,20 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 bukkitEntity.remove();
             return;
         }
-        if (this instanceof IFlyablePet) {
-            if (pet.isVehicle()) {
-                if (floatDown) {
-                    if (!this.onGround && this.motY < 0.0D) {
-                        this.motY *= floatSpeed;
-                    }
+
+        if (pet.isVehicle()) {
+            if (floatDown) {
+                if (!isOnGround(this)) {
+                    motY *= 0.4;
                 }
             }
         }
 
         if (pet.getOwner() != null) {
             Player p = pet.getOwner();
+            boolean shifting = p.isSneaking();
+            if (hideName) pet.getVisableEntity().getEntity().setCustomNameVisible((!shifting));
+
             boolean ownerVanish = ((CraftPlayer) p).getHandle().isInvisible();
             if (ownerVanish != this.isInvisible()) {
                 if (isGlowing && (!ownerVanish)) glowHandler(false);
@@ -249,21 +300,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     }
 
     @Override
-    public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
-        PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        super.move(enummovetype, d0, d1, d2);
-    }
-
-    @Override
-    public void n() {
-        super.n();
-        if (pet == null) return;
-        repeatTask();
-    }
-
     protected SoundEffect F() {
         if (pet == null) return null;
+        if (silent) return null;
         SoundMaker sound = pet.getPetType().getAmbientSound();
         if (sound != null)
             sound.playSound(getEntity());
@@ -287,6 +326,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     /**
      * This method handles the Pet riding
      */
+    @Override
     public void a(float f, float f1, float f2) {
         if (passengers.isEmpty()) {
             this.P = (float) 0.5;
@@ -313,7 +353,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                             this.motY = 0.5;
                         } else {
                             if (pet.getPetType().canFly(pet.getOwner())) {
-                                this.motY = upSpeed;
+                                this.motY = 0.3;
                             }
                         }
                     }
@@ -331,8 +371,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 f2 *= 0.25;
             }
 
-            if (!(this instanceof IEntityHorsePet))
-                f *= 0.75;
+            if (!(this instanceof IEntityHorsePet)) f *= 0.75;
             this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             if (!world.isClientSide) {
                 super.a(f, f1, f2);
@@ -362,5 +401,54 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
             Bukkit.getServer().getPluginManager().callEvent(event);
         }
+    }
+
+    @Override
+    public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
+        PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.WALK);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        super.move(enummovetype, d0, d1, d2);
+    }
+
+    @Override
+    public void Y() {
+        super.Y();
+        if (pet == null) {
+            if (bukkitEntity != null)
+                bukkitEntity.remove();
+            return;
+        }
+        repeatTask();
+    }
+
+    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
+        try {
+            ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
+            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
+            if (entity instanceof Player) {
+                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
+            }
+        } catch (Exception e) {
+            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
+        }
+    }
+
+    public void removePassenger(org.bukkit.entity.Entity entity) {
+        try {
+            ((CraftEntity) entity).getHandle().passengers.clear();
+            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
+            if (entity instanceof Player) {
+                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
+            }
+        } catch (Exception e) {
+            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
+        }
+    }
+
+    protected void registerDatawatchers() {
+    }
+
+    @Override
+    public void f(double x, double y, double z) {
     }
 }

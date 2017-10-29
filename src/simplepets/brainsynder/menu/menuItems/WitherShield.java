@@ -26,11 +26,11 @@ public class WitherShield extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityWitherPet) {
-            IEntityWitherPet age = (IEntityWitherPet) entityPet;
-            if (age.isShielded()) {
-                age.setShielded(false);
+            IEntityWitherPet pet = (IEntityWitherPet) entityPet;
+            if (pet.isShielded()) {
+                pet.setShielded(false);
             } else {
-                age.setShielded(true);
+                pet.setShielded(true);
             }
         }
     }

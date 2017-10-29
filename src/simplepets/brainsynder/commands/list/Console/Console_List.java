@@ -13,7 +13,7 @@ import simplepets.brainsynder.pet.PetType;
 @CommandDescription(description = "Shows a list of pets that are in the plugin.")
 public class Console_List extends PetCommand {
     @Override
-    public void onConsoleCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         StringBuilder builder = new StringBuilder();
         builder.append("§ePet list §6(§7").append(PetType.values().length).append("§6)§e: ");
         int i = 1;

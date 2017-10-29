@@ -9,7 +9,6 @@ public class EntityIllusionerPet extends EntityIllagerWizardPet implements IEnti
     public EntityIllusionerPet(World world) {
         super(world);
     }
-
     public EntityIllusionerPet(World world, IPet pet) {
         super(world, pet);
     }

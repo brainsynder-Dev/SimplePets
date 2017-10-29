@@ -56,8 +56,8 @@ public class SpawnUtil implements ISpawner {
                     stand.setPassenger(shulker);
                     ((IEntityControllerPet) customEntity).setDisplayEntity(stand);
                 }
-
             }
+
             return customEntity;
         } catch (Exception e) {
             e.printStackTrace();

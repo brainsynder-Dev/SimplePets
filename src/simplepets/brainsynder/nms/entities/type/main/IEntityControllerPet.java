@@ -14,6 +14,8 @@ public interface IEntityControllerPet extends IEntityPet {
 
     boolean isMoving();
 
+    default void updateName () {}
+
     void onStopWalking(IStandMethod standMethod);
 
     void onStartWalking(IStandMethod standMethod);

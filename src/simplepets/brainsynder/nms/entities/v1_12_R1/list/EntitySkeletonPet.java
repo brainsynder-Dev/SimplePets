@@ -6,11 +6,9 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntitySkeletonAbstrac
 import simplepets.brainsynder.pet.IPet;
 
 public class EntitySkeletonPet extends EntitySkeletonAbstractPet implements IEntitySkeletonPet {
-
     public EntitySkeletonPet(World world) {
         super(world);
     }
-
     public EntitySkeletonPet(World world, IPet pet) {
         super(world, pet);
     }

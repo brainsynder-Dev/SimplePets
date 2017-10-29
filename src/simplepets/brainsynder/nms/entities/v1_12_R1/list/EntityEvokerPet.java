@@ -9,7 +9,6 @@ public class EntityEvokerPet extends EntityIllagerWizardPet implements IEntityEv
     public EntityEvokerPet(World world) {
         super(world);
     }
-
     public EntityEvokerPet(World world, IPet pet) {
         super(world, pet);
     }

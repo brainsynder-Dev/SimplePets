@@ -104,6 +104,8 @@ public class Config extends FileMaker {
 
         if (!isSet("PetToggles.GlowWhenVanished"))
             set("PetToggles.GlowWhenVanished", true);
+        if (!isSet("PetToggles.HideNameOnShift"))
+            set("PetToggles.HideNameOnShift", true);
         if (!isSet("PetToggles.AutoRemove.Enabled"))
             set("PetToggles.AutoRemove.Enabled", true);
         if (!isSet("PetToggles.AutoRemove.TickDelay"))

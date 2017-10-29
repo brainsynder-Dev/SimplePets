@@ -15,9 +15,9 @@ import simplepets.brainsynder.pet.PetType;
 @CommandDescription(description = "Spawns a pet for the selected player.")
 public class Console_Summon extends PetCommand {
     @Override
-    public void onConsoleCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSimplePets §6>> §7pet summon <pet> <player>");
+            sendUsage(sender);
         } else {
             PetType type = PetType.getByName(args[0]);
             if (type == null) {
@@ -33,12 +33,12 @@ public class Console_Summon extends PetCommand {
                 return;
             }
             if (args.length == 1) {
-                sender.sendMessage("§eSimplePets §6>> §7pet summon " + args[0] + " <player>");
+                sendUsage(sender);
             } else {
                 Player tp = Bukkit.getPlayer(args[1]);
                 if (tp == null) {
                     sender.sendMessage(PetCore.get().getMessages().getString("Player-Not-Found", true)
-                            .replace("%player%", tp.getName()));
+                            .replace("%player%", args[1]));
                     return;
                 }
                 sender.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Sender", true)

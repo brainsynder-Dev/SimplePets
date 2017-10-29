@@ -6,7 +6,8 @@ import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
 public interface IEntityHorsePet extends IHorseAbstract {
-    void setVariant(HorseColorType var1);
+    @Deprecated
+    default void setVariant(HorseColorType var1){}
 
     HorseArmorType getArmor();
 

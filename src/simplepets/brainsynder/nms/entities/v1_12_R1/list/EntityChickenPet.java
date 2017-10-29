@@ -9,7 +9,6 @@ public class EntityChickenPet extends AgeableEntityPet implements IEntityChicken
     public EntityChickenPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityChickenPet(World world) {
         super(world);
     }

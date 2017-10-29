@@ -3,6 +3,7 @@ package simplepets.brainsynder.wrapper;
 
 import org.bukkit.entity.Horse.Variant;
 
+@Deprecated
 public enum HorseType {
     NORMAL(Variant.HORSE, 0),
     DONKEY(Variant.DONKEY, 1),
@@ -16,6 +17,13 @@ public enum HorseType {
     HorseType(Variant bukkitVariant, int id) {
         this.bukkitVariant = bukkitVariant;
         this.id = id;
+    }
+
+    public static HorseType getByName (String name) {
+        for (HorseType wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return NORMAL;
     }
 
     public static HorseType getForBukkitVariant(Variant variant) {

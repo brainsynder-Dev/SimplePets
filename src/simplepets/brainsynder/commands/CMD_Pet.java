@@ -6,10 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.annotations.*;
-import simplepets.brainsynder.commands.list.Console.Console_Help;
-import simplepets.brainsynder.commands.list.Console.Console_List;
-import simplepets.brainsynder.commands.list.Console.Console_Remove;
-import simplepets.brainsynder.commands.list.Console.Console_Summon;
+import simplepets.brainsynder.commands.list.Console.*;
 import simplepets.brainsynder.commands.list.Player.*;
 import simplepets.brainsynder.events.PetSelectionMenu;
 import simplepets.brainsynder.pet.PetType;
@@ -22,22 +19,25 @@ public class CMD_Pet implements CommandExecutor {
 
     public CMD_Pet() {
         commands = new ArrayList<>();
-        commands.add(new CMD_Menu());
-        commands.add(new CMD_Help());
-        commands.add(new CMD_Remove());
-        commands.add(new CMD_Summon());
         commands.add(new Console_Help());
         commands.add(new Console_Remove());
         commands.add(new Console_Summon());
         commands.add(new Console_List());
+        commands.add(new Console_Modify());
+        commands.add(new Console_Info());
+
+        commands.add(new CMD_Menu());
+        commands.add(new CMD_Help());
+        commands.add(new CMD_Remove());
+        commands.add(new CMD_Summon());
         commands.add(new CMD_List());
         commands.add(new CMD_Hat());
         commands.add(new CMD_Ride());
         commands.add(new CMD_Reload());
         commands.add(new CMD_Name());
-        commands.add(new CMD_Register());
-        if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
-            commands.add(new CMD_Inv());
+        commands.add(new CMD_Modify());
+        commands.add(new CMD_Info());
+        if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable")) commands.add(new CMD_Inv());
     }
 
     @Override
@@ -51,10 +51,10 @@ public class CMD_Pet implements CommandExecutor {
                             name = gcmd.getClass().getAnnotation(CommandName.class).name();
                         }
                         if (gcmd.getClass().isAnnotationPresent(CommandUsage.class)) {
-                            description = gcmd.getClass().getAnnotation(CommandUsage.class).usage();
+                            usage = gcmd.getClass().getAnnotation(CommandUsage.class).usage();
                         }
                         if (gcmd.getClass().isAnnotationPresent(CommandDescription.class)) {
-                            usage = gcmd.getClass().getAnnotation(CommandDescription.class).description();
+                            description = gcmd.getClass().getAnnotation(CommandDescription.class).description();
                         }
                         if (gcmd.getClass().isAnnotationPresent(Console.class)) {
                             commandSender.sendMessage("§6-§e pet " + name + ' ' + usage + " - §7" + description);
@@ -85,7 +85,7 @@ public class CMD_Pet implements CommandExecutor {
                     newArgs.remove(0);
                     args = newArgs.toArray(new String[newArgs.size()]);
 
-                    base.onConsoleCommand(commandSender, args);
+                    base.onCommand(commandSender, args);
 
                 }
                 return true;
@@ -116,7 +116,7 @@ public class CMD_Pet implements CommandExecutor {
                             p.sendMessage(PetCore.get().getMessages().getString("Unknown-commands", true));
                             return true;
                         }
-                        p.performCommand("pet summon " + args[0] + ' ' + p.getName());
+                        p.performCommand("pet summon " + args[0]);
                         return true;
                     }
 
@@ -131,7 +131,7 @@ public class CMD_Pet implements CommandExecutor {
                     newArgs.remove(0);
                     args = newArgs.toArray(new String[newArgs.size()]);
 
-                    base.onPlayerCommand(p, args);
+                    base.onCommand(p, args);
 
                 }
             }

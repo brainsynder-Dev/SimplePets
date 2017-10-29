@@ -1,6 +1,6 @@
 package simplepets.brainsynder.commands.list.Console;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simple.brainsynder.utils.ObjectPager;
@@ -20,7 +20,7 @@ import java.util.List;
 @CommandDescription(description = "Reloads the Settings that cant AutoReload.")
 public class Console_Reload extends PetCommand {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         IStorage<Integer> slots = new StorageList<>();
         List<String> _allowed_ = PetCore.get().getConfiguration().getStringList("AvailableSlots");
         int size = 1;
@@ -52,6 +52,6 @@ public class Console_Reload extends PetCommand {
         }
         PetCore.get().petTypes = new ObjectPager<>(size, types);
         LoaderRetriever.reloadLoaders();
-        p.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));
+        sender.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));
     }
 }

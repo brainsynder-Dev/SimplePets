@@ -9,9 +9,9 @@ import simplepets.brainsynder.player.PetOwner;
 
 @CommandName(name = "hat")
 @CommandDescription(description = "Set your pet on/off your head.")
-public class CMD_Hat extends PetCommand {
+public class CMD_Hat extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         PetOwner petOwner = PetOwner.getPetOwner(p);
         if (petOwner.hasPet()) {
             IPet pet = petOwner.getPet();

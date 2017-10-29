@@ -7,11 +7,9 @@ import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntitySkeletonHorsePet extends EntityHorseChestedAbstractPet implements IEntitySkeletonHorsePet {
-
     public EntitySkeletonHorsePet(World world) {
         super(world);
     }
-
     public EntitySkeletonHorsePet(World world, IPet pet) {
         super(world, pet);
     }

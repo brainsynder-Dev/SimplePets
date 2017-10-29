@@ -8,7 +8,6 @@ public class EntityPigmanPet extends EntityZombiePet implements IEntityPigmanPet
     public EntityPigmanPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityPigmanPet(World world) {
         super(world);
     }

@@ -9,8 +9,6 @@ public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     public EntitySpiderPet(World world, IPet pet) {
         super(world, pet);
     }
-
-
     public EntitySpiderPet(World world) {
         super(world);
     }

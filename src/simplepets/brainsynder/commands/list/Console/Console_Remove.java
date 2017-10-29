@@ -15,9 +15,9 @@ import simplepets.brainsynder.player.PetOwner;
 @CommandDescription(description = "Remove the selected players' pet.")
 public class Console_Remove extends PetCommand {
     @Override
-    public void onConsoleCommand(CommandSender sender, String[] args) {
+    public void onCommand(CommandSender sender, String[] args) {
         if (args.length == 0) {
-            sender.sendMessage("§eSimplePets §6>> §7pet remove <player>");
+            sendUsage(sender);
         } else {
             Player tp = Bukkit.getPlayerExact(args[0]);
             if (tp == null) {

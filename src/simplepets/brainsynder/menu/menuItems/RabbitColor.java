@@ -6,6 +6,7 @@ import simplepets.brainsynder.menu.MenuItemAbstract;
 import simplepets.brainsynder.nms.entities.type.IEntityRabbitPet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.wrapper.RabbitType;
 
 public class RabbitColor extends MenuItemAbstract {
     public RabbitColor(PetType type, IEntityPet entityPet) {
@@ -17,7 +18,7 @@ public class RabbitColor extends MenuItemAbstract {
         ItemMaker item = null;
         if (entityPet instanceof IEntityRabbitPet) {
             IEntityRabbitPet var = (IEntityRabbitPet) entityPet;
-            simplepets.brainsynder.wrapper.RabbitColor typeID = simplepets.brainsynder.wrapper.RabbitColor.WHITE;
+            RabbitType typeID = RabbitType.WHITE;
             if (var.getRabbitType() != null) {
                 typeID = var.getRabbitType();
             }
@@ -70,7 +71,7 @@ public class RabbitColor extends MenuItemAbstract {
             } else {
                 typeID++;
             }
-            var.setRabbitType(simplepets.brainsynder.wrapper.RabbitColor.getByID(typeID));
+            var.setRabbitType(RabbitType.getByID(typeID));
         }
     }
 
@@ -89,7 +90,7 @@ public class RabbitColor extends MenuItemAbstract {
             } else {
                 typeID--;
             }
-            var.setRabbitType(simplepets.brainsynder.wrapper.RabbitColor.getByID(typeID));
+            var.setRabbitType(RabbitType.getByID(typeID));
         }
     }
 }

@@ -11,41 +11,33 @@ import simplepets.brainsynder.pet.IPet;
 
 public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;
-    private static int jumpDelay;
-
-    static {
-        SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherRegistry.b);
-    }
+    private int jumpDelay;
 
     public EntitySlimePet(World world) {
         super(world);
     }
-
     public EntitySlimePet(World world, IPet pet) {
         super(world, pet);
-        setSize(2);
         jumpDelay = random.nextInt(15) + 10;
-    }
-
-    @Override
-    public StorageTagCompound asCompound() {
-        StorageTagCompound object = super.asCompound();
-        object.setInteger("Size", getSize());
-        return object;
-    }
-
-    @Override
-    public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Size")) {
-            setSize(object.getInteger("Size"));
-        }
-        super.applyCompound(object);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(SIZE, 2);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setInteger("size", getSize());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("size")) setSize(object.getInteger("size"));
+        super.applyCompound(object);
     }
 
     public int getSize() {
@@ -67,5 +59,9 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
             jumpDelay = this.random.nextInt(15) + 10;
             this.getControllerJump().a();
         }
+    }
+
+    static {
+        SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherRegistry.b);
     }
 }

@@ -12,29 +12,29 @@ import simplepets.brainsynder.pet.IPet;
 public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
     private static final DataWatcherObject<Boolean> SADDLE;
 
-    static {
-        SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherRegistry.h);
-    }
-
     public EntityPigPet(World world) {
         super(world);
     }
-
     public EntityPigPet(World world, IPet pet) {
         super(world, pet);
     }
 
     @Override
+    protected void registerDatawatchers() {
+        datawatcher.register(SADDLE, false);
+        super.registerDatawatchers();
+    }
+
+    @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Saddled", hasSaddle());
+        object.setBoolean("saddled", hasSaddle());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Saddled"))
-            setSaddled(object.getBoolean("Saddled"));
+        if (object.hasKey("saddled")) setSaddled(object.getBoolean("saddled"));
         super.applyCompound(object);
     }
 
@@ -43,15 +43,10 @@ public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
     }
 
     public void setSaddled(boolean flag) {
-        try {
-            datawatcher.set(SADDLE, flag);
-        } catch (Exception e) {
-        }
+        datawatcher.set(SADDLE, flag);
     }
 
-    @Override
-    protected void registerDatawatchers() {
-        datawatcher.register(SADDLE, false);
-        super.registerDatawatchers();
+    static {
+        SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherRegistry.h);
     }
 }

@@ -25,13 +25,10 @@ public interface IPet {
 
     IEntityPet getVisableEntity();
 
+    @Deprecated
     Entity getDisplayEntity();
 
     IStorage<MenuItem> getItems();
-
-    boolean isHidden();
-
-    void setHidden(boolean isHidden);
 
     boolean isHat();
 

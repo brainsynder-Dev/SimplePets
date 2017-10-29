@@ -26,11 +26,11 @@ public class Burning extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityBlazePet) {
-            IEntityBlazePet age = (IEntityBlazePet) entityPet;
-            if (age.isBurning()) {
-                age.setBurning(false);
+            IEntityBlazePet pet = (IEntityBlazePet) entityPet;
+            if (pet.isBurning()) {
+                pet.setBurning(false);
             } else {
-                age.setBurning(true);
+                pet.setBurning(true);
             }
         }
     }

@@ -8,9 +8,7 @@ public class EntityCaveSpiderPet extends EntitySpiderPet implements IEntityCaveS
     public EntityCaveSpiderPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityCaveSpiderPet(World world) {
         super(world);
     }
-
 }

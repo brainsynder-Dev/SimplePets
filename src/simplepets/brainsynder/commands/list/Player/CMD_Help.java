@@ -9,9 +9,9 @@ import simplepets.brainsynder.commands.annotations.*;
 @CommandUsage(usage = "<pet> [player]")
 @CommandPermission(permission = "help")
 @CommandDescription(description = "Show help on plugin commands.")
-public class CMD_Help extends PetCommand {
+public class CMD_Help extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         for (PetCommand gcmd : CMD_Pet.commands) {
             if (gcmd instanceof CMD_Register) continue;
             String name = "", description = "", usage = "";
@@ -19,10 +19,10 @@ public class CMD_Help extends PetCommand {
                 name = gcmd.getClass().getAnnotation(CommandName.class).name();
             }
             if (gcmd.getClass().isAnnotationPresent(CommandUsage.class)) {
-                description = ' ' + gcmd.getClass().getAnnotation(CommandUsage.class).usage();
+                usage = ' ' + gcmd.getClass().getAnnotation(CommandUsage.class).usage();
             }
             if (gcmd.getClass().isAnnotationPresent(CommandDescription.class)) {
-                usage = " - " + gcmd.getClass().getAnnotation(CommandDescription.class).description();
+                description = " - " + gcmd.getClass().getAnnotation(CommandDescription.class).description();
             }
             if (!gcmd.getClass().isAnnotationPresent(Console.class)) {
                 if (gcmd.getClass().isAnnotationPresent(CommandPermission.class)) {

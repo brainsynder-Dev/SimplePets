@@ -36,6 +36,7 @@ public class PetMoveEvent extends SimplePetEvent {
 
     public enum Cause {
         RIDE,
+        WALK,
         FOLLOW
     }
 }

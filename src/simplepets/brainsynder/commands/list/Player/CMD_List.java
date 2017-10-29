@@ -13,9 +13,9 @@ import simplepets.brainsynder.pet.PetType;
 @CommandName(name = "list")
 @CommandPermission(permission = "list")
 @CommandDescription(description = "Shows a list of pets that are in the plugin.")
-public class CMD_List extends PetCommand {
+public class CMD_List extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         ITellraw tellraw = Reflection.getTellraw("§ePet list §6(§7" + PetType.values().length + "§6)§e: ");
         int i = 1;
         for (PetType type : PetType.values()) {

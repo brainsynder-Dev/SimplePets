@@ -12,9 +12,9 @@ import simplepets.brainsynder.player.PetOwner;
 @CommandName(name = "remove")
 @CommandUsage(usage = "[player]")
 @CommandDescription(description = "Remove your pet or another players.")
-public class CMD_Remove extends PetCommand {
+public class CMD_Remove extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         if (args.length == 0) {
             PetOwner petOwner = PetOwner.getPetOwner(p);
             if (petOwner.hasPet()) {

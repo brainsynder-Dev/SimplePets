@@ -9,9 +9,7 @@ public class EntitySquidPet extends EntityPet implements IEntitySquidPet {
     public EntitySquidPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntitySquidPet(World world) {
         super(world);
     }
-
 }

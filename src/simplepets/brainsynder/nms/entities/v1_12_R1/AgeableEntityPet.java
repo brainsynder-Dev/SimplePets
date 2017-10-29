@@ -6,15 +6,11 @@ import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.main.IAgeablePet;
+import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.pet.IPet;
 
 public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet {
     private static final DataWatcherObject<Boolean> BABY;
-
-    static {
-        BABY = DataWatcher.a(AgeableEntityPet.class, DataWatcherRegistry.h);
-    }
-
     protected int age;
     private boolean ageLocked = true;
 
@@ -26,70 +22,24 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
     }
 
     @Override
+    protected void registerDatawatchers() {
+        super.registerDatawatchers();
+        this.datawatcher.register(BABY, Boolean.FALSE);
+    }
+
+    @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Baby", isBaby());
+        if (!(this instanceof IEntityControllerPet))
+        object.setBoolean("baby", isBaby());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         super.applyCompound(object);
-        if (object.hasKey("Baby")) {
-            setBaby(object.getBoolean("Baby"));
-        }
-    }
-
-    public int getAge() {
-        return this.datawatcher.get(BABY) ? -1 : this.age;
-    }
-
-    public void setAge(int i) {
-        this.setAge(i, false);
-    }
-
-    private void setAge(int i, boolean flag) {
-        int j = this.getAge();
-        j += i * 20;
-        if (j > 0) {
-            j = 0;
-        }
-
-        this.setAgeRaw(j);
-    }
-
-    private void setAgeRaw(int i) {
-        this.datawatcher.set(BABY, i < 0);
-        this.age = i;
-    }
-
-    public boolean isAgeLocked() {
-        return this.ageLocked;
-    }
-
-    public void setAgeLocked(boolean ageLocked) {
-        this.ageLocked = ageLocked;
-    }
-
-    @Override
-    protected void registerDatawatchers() {
-        super.registerDatawatchers();
-        this.datawatcher.register(BABY, Boolean.FALSE);
-    }
-
-    public void Y() {
-        super.Y();
-        if (!this.world.isClientSide && !this.ageLocked) {
-            int i = this.getAge();
-            if (i < 0) {
-                ++i;
-                this.setAge(i);
-            } else if (i > 0) {
-                --i;
-                this.setAge(i);
-            }
-        }
-
+        if (!(this instanceof IEntityControllerPet))
+        if (object.hasKey("baby")) setBaby(object.getBoolean("baby"));
     }
 
     public boolean isBaby() {
@@ -100,4 +50,7 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
         this.datawatcher.set(BABY, flag);
     }
 
+    static {
+        BABY = DataWatcher.a(AgeableEntityPet.class, DataWatcherRegistry.h);
+    }
 }

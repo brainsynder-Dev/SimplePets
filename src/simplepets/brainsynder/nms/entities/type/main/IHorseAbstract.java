@@ -8,7 +8,9 @@ public interface IHorseAbstract extends IAgeablePet {
 
     void setSaddled(boolean var1);
 
+    @Deprecated
     void setVariant(HorseColorType var1);
 
+    @Deprecated
     void setVariant(HorseColorType var1, HorseStyleType var2);
 }

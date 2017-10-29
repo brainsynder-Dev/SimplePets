@@ -15,43 +15,32 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
     protected static final DataWatcherObject<Byte> TAME_SIT;
     protected static final DataWatcherObject<Optional<UUID>> OWNER;
 
-    static {
-        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
-        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.m);
-    }
-
-
     public EntityTameablePet(World world) {
         super(world);
     }
-
     public EntityTameablePet(World world, IPet pet) {
         super(world, pet);
-    }
-
-    @Override
-    public StorageTagCompound asCompound() {
-        StorageTagCompound object = super.asCompound();
-        object.setBoolean("Tamed", isTamed());
-        object.setBoolean("Sitting", isSitting());
-        return object;
-    }
-
-    @Override
-    public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Tamed")) {
-            setTamed(object.getBoolean("Tamed"));
-        }
-        if (object.hasKey("Sitting")) {
-            setSitting(object.getBoolean("Sitting"));
-        }
-        super.applyCompound(object);
     }
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(TAME_SIT, (byte) 0);
         this.datawatcher.register(OWNER, Optional.absent());
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("tamed", isTamed());
+        object.setBoolean("sitting", isSitting());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("tamed")) setTamed(object.getBoolean("tamed"));
+        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
+        super.applyCompound(object);
     }
 
     public boolean isTamed() {
@@ -82,11 +71,8 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
 
     }
 
-    public UUID getOwnerUUID() {
-        return (UUID) ((Optional) this.datawatcher.get(OWNER)).orNull();
-    }
-
-    public void setOwnerUUID(UUID paramUUID) {
-        this.datawatcher.set(OWNER, Optional.fromNullable(paramUUID));
+    static {
+        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
+        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.m);
     }
 }

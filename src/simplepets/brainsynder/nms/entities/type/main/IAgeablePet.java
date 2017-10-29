@@ -1,7 +1,9 @@
 package simplepets.brainsynder.nms.entities.type.main;
 
 public interface IAgeablePet extends IEntityPet {
-    boolean isBaby();
+    default boolean isBaby(){
+        return false;
+    }
 
-    void setBaby(boolean flag);
+    default void setBaby(boolean flag){}
 }

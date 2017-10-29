@@ -39,15 +39,15 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Saddled", isSaddled());
+        object.setBoolean("saddled", isSaddled());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         super.applyCompound(object);
-        if (object.hasKey("Saddled")) {
-            setSaddled(object.getBoolean("Saddled"));
+        if (object.hasKey("saddled")) {
+            setSaddled(object.getBoolean("saddled"));
         }
     }
 
@@ -83,7 +83,6 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
         } else {
             this.datawatcher.set(VISUAL, (byte) (b0 & ~i));
         }
-
     }
 
     public void setVariant(HorseColorType variant) {

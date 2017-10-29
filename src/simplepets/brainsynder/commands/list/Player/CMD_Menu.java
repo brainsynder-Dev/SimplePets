@@ -8,9 +8,9 @@ import simplepets.brainsynder.events.PetSelectionMenu;
 
 @CommandName(name = "menu")
 @CommandDescription(description = "Opens the pet selection menu.")
-public class CMD_Menu extends PetCommand {
+public class CMD_Menu extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         PetSelectionMenu.openMenu(p, 1);
     }
 }

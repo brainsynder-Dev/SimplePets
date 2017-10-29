@@ -9,9 +9,7 @@ public class EntityIronGolemPet extends EntityPet implements IEntityIronGolemPet
     public EntityIronGolemPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityIronGolemPet(World world) {
         super(world);
     }
-
 }

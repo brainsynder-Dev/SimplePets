@@ -24,6 +24,13 @@ public enum HorseStyleType {
         this.id = id;
     }
 
+    public static HorseStyleType getByName (String name) {
+        for (HorseStyleType wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return NONE;
+    }
+
     public static HorseStyleType getForBukkitStyle(Horse.Style style) {
         HorseStyleType[] arr$ = values();
         int len$ = arr$.length;

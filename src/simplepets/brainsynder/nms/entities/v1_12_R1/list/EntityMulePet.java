@@ -10,7 +10,6 @@ public class EntityMulePet extends EntityHorseChestedAbstractPet implements IEnt
     public EntityMulePet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityMulePet(World world) {
         super(world);
     }

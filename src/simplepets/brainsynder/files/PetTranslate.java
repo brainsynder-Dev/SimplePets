@@ -9,6 +9,7 @@ import simplepets.brainsynder.pet.PetType;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -37,10 +38,10 @@ public class PetTranslate {
         return con.getInt("Pets." + type.getConfigName() + '.' + tag);
     }
 
-    public static double getDouble(PetType type, String tag) {
+    public static long getDouble(PetType type, String tag) {
         File f = new File(PetCore.get().getDataFolder(), "PetTranslator.yml");
         FileConfiguration con = YamlConfiguration.loadConfiguration(f);
-        return con.getDouble("Pets." + type.getConfigName() + '.' + tag);
+        return con.getLong("Pets." + type.getConfigName() + '.' + tag);
     }
 
     public static Boolean getBoolean(PetType type, String tag) {
@@ -126,8 +127,8 @@ public class PetTranslate {
             set(type.getConfigName() + ".DisableItemLore", false);
             set(type.getConfigName() + ".ItemData.MaterialWrapper", type.getMaterial().toString());
             set(type.getConfigName() + ".ItemData.Durability", (int) type.getData());
-            set(type.getConfigName() + ".WalkSpeed", 0.6000000238418579);
-            set(type.getConfigName() + ".RideSpeed", 0.4000000238418579);
+            set(type.getConfigName() + ".WalkSpeed", 0.6000000238418579D);
+            set(type.getConfigName() + ".RideSpeed", 0.4000000238418579D);
             set(type.getConfigName() + ".DefaultName", "&a&l%player%'s " + name + " Pet");
             set(type.getConfigName() + ".DisplayName", "&f&l%name% Pet");
             set(type.getConfigName() + ".NoColorName", name);
@@ -141,11 +142,12 @@ public class PetTranslate {
                 set(type.getConfigName() + ".AmbientSound", "off");
             }
             set(type.getConfigName() + ".Description", Arrays.asList("Click here to select", "The " + name + " pet."));
-            if (type.canFlyDefault()) {
-                set(type.getConfigName() + ".Float-Down", true);
-                set(type.getConfigName() + ".Up-Speed", 0.5);
-                set(type.getConfigName() + ".Float-Speed", 0.5);
-            }
+            set(type.getConfigName() + ".On-Summon", new ArrayList<> ());
+
+            //TODO: These values are temp. disabled till a fix arises.
+            //set(type.getConfigName() + ".Float-Down", true);
+            //set(type.getConfigName() + ".Up-Speed", 0.5D);
+            //set(type.getConfigName() + ".Float-Speed", 0.6000004238418579D);
         }
     }
 

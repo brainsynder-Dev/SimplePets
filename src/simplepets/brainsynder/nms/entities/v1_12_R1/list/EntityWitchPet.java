@@ -6,13 +6,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
 public class EntityWitchPet extends EntityPet implements IEntityWitchPet {
-
     public EntityWitchPet(World world) {
         super(world);
     }
-
     public EntityWitchPet(World world, IPet pet) {
         super(world, pet);
     }
-
 }

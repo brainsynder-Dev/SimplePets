@@ -8,7 +8,6 @@ public class EntityMagmaCubePet extends EntitySlimePet implements IEntityMagmaCu
     public EntityMagmaCubePet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityMagmaCubePet(World world) {
         super(world);
     }

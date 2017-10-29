@@ -37,8 +37,8 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
     }
 
     @Override
-    public void n() {
-        super.n();
+    public void Y() {
+        super.Y();
         if (isSpecial) {
             this.motX = 0;
             this.motY = 0;

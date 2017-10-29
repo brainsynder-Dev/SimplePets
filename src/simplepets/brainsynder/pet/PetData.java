@@ -27,7 +27,7 @@ public enum PetData {
     POLAR_BEAR(Stand.class, Age.class),
     POWERED(Powered.class),
     SHULKER(ShulkerColor.class, ShulkerClosed.class),
-    WOLF(Color.class, Age.class, Tame.class, Sitting.class),
+    WOLF(Color.class, Age.class, Tame.class, Sitting.class, Tilt.class, Angry.class),
     HORSE(Saddle.class, Age.class, HorseArmor.class, HorseColor.class, HorseStyle.class),
     MULE(Saddle.class, Age.class, Chested.class),
     HORSE_OTHER(Saddle.class, Age.class),
@@ -35,7 +35,8 @@ public enum PetData {
     SHEEP(Color.class, Age.class, Shear.class),
     PARROT(ParrotColor.class, Sitting.class),
     WIZARD(Spell.class),
-    JOHNNY(Johnny.class);
+    JOHNNY(Johnny.class),
+    ZOMBIE_VILLAGER(Age.class);
 
     private List<Class<? extends MenuItem>> items = new ArrayList<>();
 

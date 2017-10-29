@@ -76,39 +76,6 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
             }
         }
     }
-    
-    /*@EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSpawn(EntitySpawnEvent event) {
-        Object handle = ReflectionUtil.getEntityHandle(event.getEntity());
-        if (event.isCancelled()) {
-            if (handle instanceof IImpossaPet) {
-                if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")) {
-                    event.setCancelled(false);
-                    return;
-                }
-                
-                if (LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())) {
-                    event.setCancelled(false);
-                }
-            }
-        }
-    }
-    
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onSpawn(CreatureSpawnEvent event) {
-        Object handle = ReflectionUtil.getEntityHandle(event.getEntity());
-        if (event.isCancelled()) {
-            if (handle instanceof IImpossaPet) {
-                if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")) {
-                    event.setCancelled(false);
-                    return;
-                }
-                if (LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())) {
-                    event.setCancelled(false);
-                }
-            }
-        }
-    }*/
 
     @EventHandler
     public void onMove(PlayerMoveEvent e) {

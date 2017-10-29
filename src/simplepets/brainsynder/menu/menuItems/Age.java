@@ -26,11 +26,11 @@ public class Age extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IAgeablePet) {
-            IAgeablePet age = (IAgeablePet) entityPet;
-            if (age.isBaby()) {
-                age.setBaby(false);
+            IAgeablePet pet = (IAgeablePet) entityPet;
+            if (pet.isBaby()) {
+                pet.setBaby(false);
             } else {
-                age.setBaby(true);
+                pet.setBaby(true);
             }
         }
     }

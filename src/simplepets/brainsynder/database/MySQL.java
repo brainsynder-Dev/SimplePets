@@ -29,12 +29,6 @@ public class MySQL extends Database {
 		}
 	}
 
-	/**
-	 * Once the
-	 *
-	 * @param connector
-	 * @throws Exception
-	 */
 	public void connectAutoClose(Connector connector) throws Exception {
         if (!checkConnection()) {
             String u = "jdbc:mysql://" + this.host + ":" + this.port;

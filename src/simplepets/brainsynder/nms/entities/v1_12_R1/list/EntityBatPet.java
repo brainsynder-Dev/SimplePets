@@ -11,37 +11,30 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
         IFlyablePet {
     private static final DataWatcherObject<Byte> byteWatcher;
 
-    static {
-        byteWatcher = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
-    }
-
     public EntityBatPet(World world) {
         super(world);
     }
-
     public EntityBatPet(World world, IPet pet) {
         super(world, pet);
-    }
-
-    @Override
-    public StorageTagCompound asCompound() {
-        StorageTagCompound object = super.asCompound();
-        object.setBoolean("Hanging", isHanging());
-        return object;
-    }
-
-    @Override
-    public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Hanging")) {
-            setHanging(object.getBoolean("Hanging"));
-        }
-        super.applyCompound(object);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(byteWatcher, (byte) 0);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("hanging", isHanging());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("hanging")) setHanging(object.getBoolean("hanging"));
+        super.applyCompound(object);
     }
 
     @Override
@@ -68,5 +61,9 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
         } else {
             this.datawatcher.set(byteWatcher, (byte) (var2 & -2));
         }
+    }
+
+    static {
+        byteWatcher = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
     }
 }

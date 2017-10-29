@@ -12,38 +12,30 @@ import simplepets.brainsynder.pet.IPet;
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     private static final DataWatcherObject<Byte> ANGERED;
 
-    static {
-        ANGERED = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
-    }
-
-
     public EntityBlazePet(World world) {
         super(world);
     }
-
     public EntityBlazePet(World world, IPet pet) {
         super(world, pet);
-    }
-
-    @Override
-    public StorageTagCompound asCompound() {
-        StorageTagCompound object = super.asCompound();
-        object.setBoolean("Burning", isBurning());
-        return object;
-    }
-
-    @Override
-    public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Burning")) {
-            setBurning(object.getBoolean("Burning"));
-        }
-        super.applyCompound(object);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(ANGERED, (byte) 0);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("burning", isBurning());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("burning")) setBurning(object.getBoolean("burning"));
+        super.applyCompound(object);
     }
 
     @Override
@@ -61,5 +53,9 @@ public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
         }
 
         this.datawatcher.set(ANGERED, b1);
+    }
+
+    static {
+        ANGERED = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
     }
 }

@@ -114,8 +114,8 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     @Override
-    public void n() {
-        super.n();
+    public void Y() {
+        super.Y();
         if (isSpecial) {
             if (walking == null)
                 walking = new AnimationCycle(AnimationManager.walk);
@@ -187,16 +187,17 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     @Override
     public StorageTagCompound asCompound() {
-        StorageTagCompound object = new StorageTagCompound();
-        object.setBoolean("Small", isSmall());
-        object.setBoolean("MiniMe", isOwner());
+        StorageTagCompound object = pet.asCompound();
+        object.setBoolean("small", isSmall());
+        object.setBoolean("clone", isOwner());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Small")) setSmall(object.getBoolean("Small"));
-        if (object.hasKey("MiniMe")) setOwner(object.getBoolean("MiniMe"));
+        if (object.hasKey("small")) setSmall(object.getBoolean("small"));
+        if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
+        pet.applyCompound(object);
     }
 
     @Override

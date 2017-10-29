@@ -13,17 +13,9 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
     private static final DataWatcherObject<Boolean> bz;
     private static final DataWatcherObject<Boolean> bA;
 
-    static {
-        by = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.b);
-        bz = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
-        bA = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
-    }
-
-
     public EntityZombiePet(World world) {
         super(world);
     }
-
     public EntityZombiePet(World world, IPet pet) {
         super(world, pet);
     }
@@ -36,8 +28,9 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
         this.getDataWatcher().register(bA, false);
     }
 
-    @Override
-    public void setVillager(boolean flag) {
-
+    static {
+        by = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.b);
+        bz = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
+        bA = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
     }
 }

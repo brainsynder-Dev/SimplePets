@@ -33,6 +33,13 @@ public enum DyeColorWrapper {
         this.chatChar = chatChar;
     }
 
+    public static DyeColorWrapper getByName (String name) {
+        for (DyeColorWrapper wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return WHITE;
+    }
+
     public static DyeColorWrapper getPrevious(DyeColorWrapper current) {
         int original = current.ordinal();
         if (original == 0) {

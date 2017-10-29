@@ -41,9 +41,6 @@ public class DataListener implements Listener {
                         p.closeInventory();
                         petOwner.renamePet();
                     }
-                } else if (e.getSlot() == LoaderRetriever.previousPageLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.previousPageLoader.getItem())) return;
-                    PetSelectionMenu.openMenu(p, 1);
                 } else if (e.getSlot() == LoaderRetriever.storageLoader.getSlot()) {
                     if (!e.getCurrentItem().isSimilar(LoaderRetriever.storageLoader.getItem())) return;
                     if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))

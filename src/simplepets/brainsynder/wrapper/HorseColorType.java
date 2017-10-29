@@ -21,6 +21,13 @@ public enum HorseColorType {
         this.id = id;
     }
 
+    public static HorseColorType getByName (String name) {
+        for (HorseColorType wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return WHITE;
+    }
+
     public static HorseColorType getByID(int id) {
         for (HorseColorType v : values()) {
             if (v.getId() == id) {

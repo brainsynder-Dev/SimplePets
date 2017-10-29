@@ -14,29 +14,27 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 @SuppressWarnings("ALL")
-public class OnJoin extends EventCore implements Listener {
+public class OnJoin implements Listener {
     @EventHandler
     public void onKick(PlayerKickEvent e) {
         Player player = e.getPlayer();
-        PetOwner petOwner = PetOwner.getPetOwner(player);
-        if (petTypeMap.containsKey(player.getUniqueId()))
-            petTypeMap.remove(player.getUniqueId());
-        petOwner.getFile().save();
-        if (petOwner.hasPet()) {
-            petOwner.removePet();
-        }
+        PetOwner owner = PetOwner.getPetOwner(player);
+        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
+        owner.getFile().save();
+        if (owner.hasPet()) owner.removePet();
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        PetOwner petOwner = PetOwner.getPetOwner(player);
-        petOwner.reloadData();
+        PetOwner owner = PetOwner.getPetOwner(player);
+        owner.reloadData();
+        if (!owner.hasPetToRespawn()) return;
         if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    petOwner.getFile().respawnPet();
+                    owner.respawnPet();
                 }
             }.runTaskLater(PetCore.get(), 10);
         }
@@ -45,29 +43,24 @@ public class OnJoin extends EventCore implements Listener {
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
         Player player = e.getPlayer();
-        PetOwner petOwner = PetOwner.getPetOwner(player);
-        if (petTypeMap.containsKey(player.getUniqueId()))
-            petTypeMap.remove(player.getUniqueId());
-        petOwner.getFile().save();
-        if (petOwner.hasPet()) {
-            petOwner.removePet();
-        }
+        PetOwner owner = PetOwner.getPetOwner(player);
+        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
+        owner.getFile().save();
+        if (owner.hasPet()) owner.removePet();
     }
 
     @EventHandler
     public void onPortal(EntityPortalEnterEvent e) {
         if (e.getEntity() instanceof Player) {
             Player player = (Player) e.getEntity();
-            PetOwner petOwner = PetOwner.getPetOwner(player);
-            if (petOwner.hasPet()) {
-                petOwner.removePet();
-            }
+            PetOwner owner = PetOwner.getPetOwner(player);
+            if (owner.hasPet()) owner.removePet();
         } else {
             if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
                 IEntityPet pet = (IEntityPet) ReflectionUtil.getEntityHandle(e.getEntity());
-                PetOwner petOwner = PetOwner.getPetOwner(pet.getOwner());
-                if (petOwner.hasPet()) {
-                    petOwner.removePet();
+                PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
+                if (owner.hasPet()) {
+                    owner.removePet();
                     return;
                 }
             }

@@ -147,6 +147,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
     public static class AnvilContainer extends ContainerAnvil {
         AnvilContainer(EntityHuman entity) {
             super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
+            checkReachable = false;
         }
 
         @Override

@@ -10,6 +10,7 @@ import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.files.PetTranslate;
 import simplepets.brainsynder.menu.MenuItem;
 import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
@@ -21,6 +22,7 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.LinkRetriever;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+import java.util.List;
 import java.util.UUID;
 
 public class Pet implements IPet {
@@ -44,13 +46,8 @@ public class Pet implements IPet {
             return;
         }
         PetOwner petOwner = PetOwner.getPetOwner(this.owner);
-        PetSpawnEvent event = new PetSpawnEvent(owner, owner.getLocation(), type);
+        PetPreSpawnEvent event = new PetPreSpawnEvent(owner, null, type);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
-            PetCore.get().debug(2, "Pet was prevented from spawning in due to the PetSpawnEvent being canceled.");
-            return;
-        }
         PetCore.get().forceSpawn = true;
         Location spawnLoc = owner.getLocation();
         if (petOwner.hasPet()) {
@@ -92,6 +89,15 @@ public class Pet implements IPet {
         }
         this.items = items;
         petOwner.setPet(this);
+
+        List<String> commands = PetTranslate.getList (getPetType().getConfigName() + ".On-Summon");
+        if (!commands.isEmpty()) {
+            commands.forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command
+                    .replace ("{player}", getOwner().getName())
+                    .replace ("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
+                    .replace ("{type}", getPetType().name())
+            ));
+        }
     }
 
     private MenuItem getItem(Class<? extends MenuItem> clazz) {

@@ -5,22 +5,16 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityRabbitPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
-import simplepets.brainsynder.wrapper.RabbitColor;
+import simplepets.brainsynder.wrapper.RabbitType;
 
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> TYPE;
-
-    static {
-        TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
-    }
-
     private boolean onGroundLastTick = false;
     private int delay = 0;
 
     public EntityRabbitPet(World world) {
         super(world);
     }
-
     public EntityRabbitPet(World world, IPet pet) {
         super(world, pet);
         g = new ControllerJumpRabbit(this);
@@ -34,23 +28,23 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("RabbitColor"))
-            setRabbitType(RabbitColor.valueOf(object.getString("RabbitColor")));
+        if (object.hasKey("type"))
+            setRabbitType(RabbitType.getByName(object.getString("type")));
         super.applyCompound(object);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("RabbitColor", getRabbitType().name());
+        object.setString("type", getRabbitType().name());
         return object;
     }
 
-    public RabbitColor getRabbitType() {
-        return RabbitColor.getByID(this.datawatcher.get(TYPE));
+    public RabbitType getRabbitType() {
+        return RabbitType.getByID(this.datawatcher.get(TYPE));
     }
 
-    public void setRabbitType(RabbitColor type) {
+    public void setRabbitType(RabbitType type) {
         this.datawatcher.set(TYPE, type.getId());
     }
 
@@ -70,7 +64,6 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         } else {
             this.delay = 1;
         }
-
     }
 
 
@@ -106,7 +99,6 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         if (this.delay > 0) {
             --this.delay;
         }
-
     }
 
     public void reseter() {
@@ -141,5 +133,9 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
             }
 
         }
+    }
+
+    static {
+        TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
     }
 }

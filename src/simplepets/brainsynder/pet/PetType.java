@@ -73,7 +73,8 @@ public enum PetType {
     ARMOR_STAND(SoundMaker.ENTITY_ARMORSTAND_FALL, v1_11_R1, MaterialWrapper.ARMOR_STAND, (byte) 0, "Pet_ArmorStand", EntityWrapper.ARMOR_STAND, IEntityControllerPet.class, PetData.ARMOR_STAND),
     SHULKER(SoundMaker.ENTITY_SHULKER_AMBIENT, v1_11_R1, PURPLE_SHULKER_BOX, (byte) 0, "Pet_Shulker", EntityWrapper.SHULKER, IEntityControllerPet.class, PetData.SHULKER),
     PARROT(SoundMaker.ENTITY_PARROT_STEP, v1_12_R1, FEATHER, (byte) 0, "Pet_Parrot", EntityWrapper.PARROT, IEntityParrotPet.class, PetData.PARROT),
-    ILLUSIONER(SoundMaker.ENTITY_ILLUSION_ILLAGER_AMBIENT, v1_12_R1, ENDER_PORTAL_FRAME, (byte) 0, "Pet_Illusioner", EntityWrapper.ILLUSIONER, IEntityIllusionerPet.class, PetData.WIZARD);
+    ILLUSIONER(SoundMaker.ENTITY_ILLUSION_ILLAGER_AMBIENT, v1_12_R1, ENDER_PORTAL_FRAME, (byte) 0, "Pet_Illusioner", EntityWrapper.ILLUSIONER, IEntityIllusionerPet.class, PetData.WIZARD),
+    ZOMBIE_VILLAGER(SoundMaker.ENTITY_ZOMBIE_VILLAGER_AMBIENT, v1_12_R1, ROTTEN_FLESH, (byte) 0, "Pet_ZombieVillager", EntityWrapper.ZOMBIE_VILLAGER, IEntityZombieVillagerPet.class, PetData.ZOMBIE_VILLAGER);
 
     public static final List<PetType> flyable = new ArrayList<>();
     private static Map<PetType, TypeStorage> storage = new HashMap<>();

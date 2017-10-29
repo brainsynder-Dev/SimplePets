@@ -12,15 +12,9 @@ import simplepets.brainsynder.pet.IPet;
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     protected static final DataWatcherObject<Byte> DATA;
 
-    static {
-        DATA = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
-    }
-
-
     public EntityVexPet(World world) {
         super(world);
     }
-
     public EntityVexPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -33,40 +27,33 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Powered", isPowered());
+        object.setBoolean("powered", isPowered());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Powered")) {
-            setPowered(object.getBoolean("Powered"));
-        }
+        if (object.hasKey("powered")) setPowered(object.getBoolean("powered"));
         super.applyCompound(object);
     }
 
-    private void setData(int i, boolean flag) {
+    public boolean isPowered() {
+        return (datawatcher.get(DATA) & 1) != 0;
+    }
+
+    public void setPowered(boolean flag) {
         byte b0 = this.datawatcher.get(DATA);
         int j;
         if (flag) {
-            j = b0 | i;
+            j = b0 | 1;
         } else {
-            j = b0 & ~i;
+            j = b0 & ~1;
         }
 
         this.datawatcher.set(DATA, (byte) (j & 255));
     }
 
-    public boolean isPowered() {
-        return this.getData(1);
-    }
-
-    public void setPowered(boolean flag) {
-        this.setData(1, flag);
-    }
-
-    private boolean getData(int i) {
-        byte b0 = this.datawatcher.get(DATA);
-        return (b0 & i) != 0;
+    static {
+        DATA = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
     }
 }

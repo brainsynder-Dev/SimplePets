@@ -14,37 +14,11 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     protected static final DataWatcherObject<Boolean> POWERED;
     protected static final DataWatcherObject<Boolean> IGNITED;
 
-    static {
-        a = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
-        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
-        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
-    }
-
     public EntityCreeperPet(World world) {
         super(world);
     }
-
     public EntityCreeperPet(World world, IPet pet) {
         super(world, pet);
-    }
-
-    @Override
-    public StorageTagCompound asCompound() {
-        StorageTagCompound object = super.asCompound();
-        object.setBoolean("Powered", isPowered());
-        return object;
-    }
-
-    @Override
-    public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Powered")) {
-            setPowered(object.getBoolean("Powered"));
-        }
-        super.applyCompound(object);
-    }
-
-    public void setIgnited(boolean flag) {
-        this.datawatcher.set(IGNITED, flag);
     }
 
     @Override
@@ -56,6 +30,29 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     }
 
     @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("powered", isPowered());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("powered")) setPowered(object.getBoolean("powered"));
+        super.applyCompound(object);
+    }
+
+    @Override
+    public boolean isIgnited() {
+        return datawatcher.get(IGNITED);
+    }
+
+    @Override
+    public void setIgnited(boolean flag) {
+        this.datawatcher.set(IGNITED, flag);
+    }
+
+    @Override
     public boolean isPowered() {
         return datawatcher.get(POWERED);
     }
@@ -63,6 +60,11 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     @Override
     public void setPowered(boolean flag) {
         this.datawatcher.set(POWERED, flag);
+    }
 
+    static {
+        a = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
+        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
+        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
     }
 }

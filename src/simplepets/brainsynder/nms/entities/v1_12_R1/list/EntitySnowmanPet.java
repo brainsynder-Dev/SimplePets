@@ -10,17 +10,11 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
-
     private static final DataWatcherObject<Byte> PUMPKIN;
-
-    static {
-        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherRegistry.a);
-    }
 
     public EntitySnowmanPet(World world) {
         super(world);
     }
-
     public EntitySnowmanPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -33,15 +27,13 @@ public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Pumpkin", hasPumpkin());
+        object.setBoolean("pumpkin", hasPumpkin());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Pumpkin")) {
-            setHasPumpkin(object.getBoolean("Pumpkin"));
-        }
+        if (object.hasKey("pumpkin")) setHasPumpkin(object.getBoolean("pumpkin"));
         super.applyCompound(object);
     }
 
@@ -56,5 +48,9 @@ public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
         } else {
             this.datawatcher.set(PUMPKIN, (byte) (b0 & -17));
         }
+    }
+
+    static {
+        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherRegistry.a);
     }
 }

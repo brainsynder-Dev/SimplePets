@@ -2,7 +2,7 @@ package simplepets.brainsynder.wrapper;
 
 import lombok.Getter;
 
-public enum RabbitColor {
+public enum RabbitType {
     BROWN(0),
     WHITE(1),
     BLACK(2),
@@ -14,16 +14,23 @@ public enum RabbitColor {
     @Getter
     private int id;
 
-    RabbitColor(int id) {
+    RabbitType(int id) {
         this.id = id;
     }
 
-    public static RabbitColor getByID(int id) {
-        for (RabbitColor v : values()) {
+    public static RabbitType getByID(int id) {
+        for (RabbitType v : values()) {
             if (v.getId() == id) {
                 return v;
             }
         }
         return null;
+    }
+
+    public static RabbitType getByName (String name) {
+        for (RabbitType wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return BROWN;
     }
 }

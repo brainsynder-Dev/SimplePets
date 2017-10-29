@@ -18,9 +18,9 @@ import java.util.List;
 @CommandName(name = "reload")
 @CommandPermission(permission = "reload")
 @CommandDescription(description = "Reloads the Settings that cant AutoReload.")
-public class CMD_Reload extends PetCommand {
+public class CMD_Reload extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         IStorage<Integer> slots = new StorageList<>();
         List<String> _allowed_ = PetCore.get().getConfiguration().getStringList("AvailableSlots");
         int size = 1;

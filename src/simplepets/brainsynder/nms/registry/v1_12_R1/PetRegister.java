@@ -52,7 +52,8 @@ public enum PetRegister implements IEntityRegistry<Entity> {
     CAVE_SPIDER(NMSUtils.Type.CAVE_SPIDER, EntityWrapper.CAVE_SPIDER, EntityCaveSpiderPet.class, EntityCaveSpider.class),
     SHULKER(NMSUtils.Type.SHULKER, EntityWrapper.SHULKER, EntityShulkerPet.class, EntityShulker.class),
     PARROT(NMSUtils.Type.PARROT, EntityWrapper.PARROT, EntityParrotPet.class, EntityParrot.class),
-    ILLUSIONER(NMSUtils.Type.ILLUSIONER, EntityWrapper.ILLUSIONER, EntityIllusionerPet.class, EntityIllagerIllusioner.class);
+    ILLUSIONER(NMSUtils.Type.ILLUSIONER, EntityWrapper.ILLUSIONER, EntityIllusionerPet.class, EntityIllagerIllusioner.class),
+    ZOMBIE_VILLAGER(NMSUtils.Type.ZOMBIE_VILLAGER, EntityWrapper.ZOMBIE_VILLAGER, EntityZombieVillagerPet.class, EntityZombieVillager.class);
 
 
     private Class<? extends EntityLiving> nms;

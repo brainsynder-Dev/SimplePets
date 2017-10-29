@@ -12,9 +12,9 @@ import simplepets.brainsynder.menu.ItemStorageMenu;
 @CommandName(name = "inv")
 @CommandUsage(usage = "[player]")
 @CommandDescription(description = "Opens the Pet Item Inventory Storage.")
-public class CMD_Inv extends PetCommand {
+public class CMD_Inv extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable")) {
             if (args.length == 0) {
                 if (!ItemStorageMenu.loadFromPlayer(p)) {

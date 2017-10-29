@@ -12,6 +12,13 @@ public enum HorseArmorType {
         this.id = id;
     }
 
+    public static HorseArmorType getByName (String name) {
+        for (HorseArmorType wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return NONE;
+    }
+
     public static HorseArmorType fromId(int id) {
         for (HorseArmorType armor : values()) {
             if (armor.getId() == id)

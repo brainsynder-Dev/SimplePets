@@ -8,7 +8,6 @@ import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.holders.PetDataHolder;
 import simplepets.brainsynder.pet.IPet;
-import simplepets.brainsynder.utils.LoaderRetriever;
 
 import java.util.Arrays;
 import java.util.List;
@@ -27,7 +26,6 @@ public class PetDataMenu {
     public void showTo(Player p) {
         if (!PetCore.get().getConfiguration().getBoolean("PetDataMenu-Enabled"))
             return;
-        inv.setItem(LoaderRetriever.previousPageLoader.getSlot(), LoaderRetriever.previousPageLoader.getItem());
         if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
             inv.setItem(storageLoader.getSlot(), storageLoader.getItem());
         if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))

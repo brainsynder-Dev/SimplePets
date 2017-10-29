@@ -3,7 +3,7 @@ package simplepets.brainsynder.nms.entities.type;
 import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 
 public interface IEntityGuardianPet extends IEntityPet {
-    boolean isElder();
+    default boolean isElder() { return false; }
 
-    void setElder(boolean var1);
+    default void setElder(boolean var1) {}
 }

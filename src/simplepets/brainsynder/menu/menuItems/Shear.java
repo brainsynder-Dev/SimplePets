@@ -26,11 +26,11 @@ public class Shear extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntitySheepPet) {
-            IEntitySheepPet age = (IEntitySheepPet) entityPet;
-            if (age.isSheared()) {
-                age.setSheared(false);
+            IEntitySheepPet pet = (IEntitySheepPet) entityPet;
+            if (pet.isSheared()) {
+                pet.setSheared(false);
             } else {
-                age.setSheared(true);
+                pet.setSheared(true);
             }
         }
     }

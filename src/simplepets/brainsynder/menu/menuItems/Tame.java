@@ -26,11 +26,11 @@ public class Tame extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof ITameable) {
-            ITameable age = (ITameable) entityPet;
-            if (age.isTamed()) {
-                age.setTamed(false);
+            ITameable pet = (ITameable) entityPet;
+            if (pet.isTamed()) {
+                pet.setTamed(false);
             } else {
-                age.setTamed(true);
+                pet.setTamed(true);
             }
         }
     }

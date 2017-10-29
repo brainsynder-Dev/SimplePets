@@ -9,7 +9,6 @@ public class EntityStrayPet extends EntitySkeletonAbstractPet implements IEntity
     public EntityStrayPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityStrayPet(World world) {
         super(world);
     }

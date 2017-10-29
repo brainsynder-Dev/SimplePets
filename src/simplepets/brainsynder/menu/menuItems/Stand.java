@@ -31,18 +31,18 @@ public class Stand extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityArmorStandPet) {
-            IEntityArmorStandPet age = (IEntityArmorStandPet) entityPet;
-            if (age.isSmall()) {
-                age.setSmall(false);
+            IEntityArmorStandPet pet = (IEntityArmorStandPet) entityPet;
+            if (pet.isSmall()) {
+                pet.setSmall(false);
             } else {
-                age.setSmall(true);
+                pet.setSmall(true);
             }
         } else if (entityPet instanceof IEntityPolarBearPet) {
-            IEntityPolarBearPet age = (IEntityPolarBearPet) entityPet;
-            if (age.isStanding()) {
-                age.setStandingUp(false);
+            IEntityPolarBearPet pet = (IEntityPolarBearPet) entityPet;
+            if (pet.isStanding()) {
+                pet.setStandingUp(false);
             } else {
-                age.setStandingUp(true);
+                pet.setStandingUp(true);
             }
         }
     }

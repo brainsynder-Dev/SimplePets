@@ -25,13 +25,11 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private List<Entity> entities = new ArrayList<>();
     private Entity displayEntity;
     private Location previus;
-    @Getter
-    private boolean moving = false;
+    @Getter private boolean moving = false;
 
     public EntityControllerPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityControllerPet(World world) {
         super(world);
     }
@@ -44,12 +42,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public StorageTagCompound asCompound() {
-        return getVisibleEntity().asCompound();
+        return super.asCompound();
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        getVisibleEntity().applyCompound(object);
+        super.applyCompound(object);
     }
 
     @Override
@@ -59,18 +57,13 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             this.setInvisible(true);
         if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() == PetType.SHULKER));
         Player p = getPet().getOwner();
-        if (hasCustomName()) {
-            setCustomNameVisible(false);
-            if (displayEntity.getPassenger() != null) {
-                this.displayEntity.getPassenger().setCustomName(getCustomName());
-                this.displayEntity.getPassenger().setCustomNameVisible(true);
-            } else {
-                this.displayEntity.setCustomName(getCustomName());
-                this.displayEntity.setCustomNameVisible(true);
-            }
-        }
         if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {
+                if (displayEntity.getPassenger() != null) {
+                    this.displayEntity.getPassenger().setCustomName(getCustomName());
+                } else {
+                    this.displayEntity.setCustomName(getCustomName());
+                }
                 if (displayEntity.getPassenger() == null) {
                     reloadLocation();
                     net.minecraft.server.v1_12_R1.Entity displayEntity = ((CraftEntity) this.displayEntity).getHandle();
@@ -85,6 +78,17 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                         displayEntity.setInvisible(!displayEntity.isInvisible());
                     }
                 }
+            }
+        }
+    }
+
+    public void updateName () {
+        if (hasCustomName()) {
+            setCustomNameVisible(false);
+            if (displayEntity.getPassenger() != null) {
+                this.displayEntity.getPassenger().setCustomName(getCustomName());
+            } else {
+                this.displayEntity.setCustomName(getCustomName());
             }
         }
     }

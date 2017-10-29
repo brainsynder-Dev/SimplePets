@@ -2,7 +2,9 @@
   <dictionary name="starw">
     <words>
       <w>datawatchers</w>
+      <w>respawning</w>
       <w>spawner</w>
+      <w>teleports</w>
     </words>
   </dictionary>
 </component>

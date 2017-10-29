@@ -5,11 +5,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityWitherSkeletonPet;
 import simplepets.brainsynder.pet.IPet;
 
 public class EntityWitherSkeletonPet extends EntitySkeletonPet implements IEntityWitherSkeletonPet {
-
     public EntityWitherSkeletonPet(World world) {
         super(world);
     }
-
     public EntityWitherSkeletonPet(World world, IPet pet) {
         super(world, pet);
     }

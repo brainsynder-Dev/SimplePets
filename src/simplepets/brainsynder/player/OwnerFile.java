@@ -11,7 +11,6 @@ import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.files.PlayerFile;
-import simplepets.brainsynder.pet.PetType;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,8 +20,6 @@ public class OwnerFile {
     private static final String UPDATE = "UPDATE `SimplePets` SET `UnlockedPets`=?, `PetName`=?, `NeedsRespawn`=? WHERE `UUID`=?";
     private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`) VALUES(?,?,?,?,?)";
     private PetOwner owner;
-    private StorageTagCompound tagCompound = null;
-    private PetType needsRespawn = null;
 
     OwnerFile(PetOwner owner) {
         this.owner = owner;
@@ -165,24 +162,8 @@ public class OwnerFile {
                 e.printStackTrace();
             }
             if (compound.hasKey("PetType")) {
-                String name = String.valueOf(compound.getString("PetType"));
-                needsRespawn = PetType.valueOf(name);
-                this.tagCompound = compound;
+                owner.setPetToRespawn(compound);
             }
-        }
-    }
-
-    public void respawnPet() {
-        try {
-            if (needsRespawn != null) {
-                PlayerFile file = PetCore.get().getPlayerFile(owner.player);
-                file.set("NeedsRespawn", "null");
-                needsRespawn.setPet(owner.player);
-                owner.getPet().getVisableEntity().applyCompound(tagCompound);
-                needsRespawn = null;
-                tagCompound = null;
-            }
-        } catch (Exception ignored) {
         }
     }
 }

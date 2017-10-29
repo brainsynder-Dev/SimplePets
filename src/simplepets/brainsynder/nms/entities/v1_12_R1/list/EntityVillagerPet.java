@@ -12,21 +12,19 @@ import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
-
     private static final DataWatcherObject<Integer> PROFESSION;
-
-    static {
-        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherRegistry.b);
-    }
-
-    private ProfessionWrapper profession;
 
     public EntityVillagerPet(World world) {
         super(world);
     }
-
     public EntityVillagerPet(World world, IPet pet) {
         super(world, pet);
+    }
+
+    @Override
+    protected void registerDatawatchers() {
+        super.registerDatawatchers();
+        this.datawatcher.register(PROFESSION, 0);
     }
 
     public int getProfessionInt() {
@@ -34,33 +32,23 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
     }
 
     @Override
-    protected void registerDatawatchers() {
-        super.registerDatawatchers();
-        profession = ProfessionWrapper.FARMER;
-        this.datawatcher.register(PROFESSION, profession.getId());
-    }
-
-    @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setInteger("Profession", profession.ordinal());
+        object.setString("profession", getProfession().name());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Profession")) {
-            setProfession(ProfessionWrapper.values()[object.getInteger("Profession")]);
-        }
+        if (object.hasKey("profession")) setProfession(ProfessionWrapper.getProfession(object.getString("profession")));
         super.applyCompound(object);
     }
 
     public ProfessionWrapper getProfession() {
-        return profession;
+        return ProfessionWrapper.getById(getProfessionInt());
     }
 
     public void setProfession(ProfessionWrapper wrapper) {
-        profession = wrapper;
         this.datawatcher.set(PROFESSION, wrapper.getId());
         if (wrapper == ProfessionWrapper.NITWIT) {
             SoundMaker.ENTITY_VILLAGER_NO.playSound(getEntity());
@@ -71,4 +59,7 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
         }
     }
 
+    static {
+        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherRegistry.b);
+    }
 }

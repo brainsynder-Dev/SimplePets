@@ -26,11 +26,11 @@ public class Johnny extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityVindicatorPet) {
-            IEntityVindicatorPet age = (IEntityVindicatorPet) entityPet;
-            if (age.isJohnny()) {
-                age.setJohnny(false);
+            IEntityVindicatorPet pet = (IEntityVindicatorPet) entityPet;
+            if (pet.isJohnny()) {
+                pet.setJohnny(false);
             } else {
-                age.setJohnny(true);
+                pet.setJohnny(true);
             }
         }
     }

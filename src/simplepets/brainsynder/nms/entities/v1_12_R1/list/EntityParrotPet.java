@@ -14,11 +14,6 @@ import simplepets.brainsynder.wrapper.ParrotVariant;
 
 public class EntityParrotPet extends EntityTameablePet implements IEntityParrotPet {
     private static final DataWatcherObject<Integer> TYPE;
-
-    static {
-        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherRegistry.b);
-    }
-
     private boolean rainbow = false;
     private int toggle = 0;
     private int r = 0;
@@ -28,11 +23,16 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     public EntityParrotPet(World world) {
         super(world);
     }
-
     public EntityParrotPet(World world, IPet pet) {
         super(world, pet);
         moveController = new CustomMoveFlying(this);
         this.setSize(0.5F, 0.9F);
+    }
+
+    @Override
+    protected void registerDatawatchers() {
+        super.registerDatawatchers();
+        this.datawatcher.register(TYPE, 0);
     }
 
     @Override
@@ -127,23 +127,19 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
 
     @Override
-    protected void registerDatawatchers() {
-        super.registerDatawatchers();
-        this.datawatcher.register(TYPE, 0);
-    }
-
-    @Override
     public void applyCompound(StorageTagCompound object) {
-        setVariant(ParrotVariant.valueOf(String.valueOf(object.getString("ParrotColor"))));
-        rainbow = Boolean.parseBoolean((String.valueOf(object.getBoolean("Rainbow"))));
+        if (object.hasKey("parrotcolor"))
+        setVariant(ParrotVariant.getByName("parrotcolor"));
+        if (object.hasKey("rainbow"))
+        rainbow = object.getBoolean("rainbow");
         super.applyCompound(object);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("ParrotColor", getVariant().name());
-        object.setBoolean("Rainbow", rainbow);
+        object.setString("parrotcolor", getVariant().name());
+        object.setBoolean("rainbow", rainbow);
         return object;
     }
 
@@ -155,5 +151,9 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     public void setVariant(ParrotVariant variant) {
         this.datawatcher.set(TYPE, variant.ordinal());
+    }
+
+    static {
+        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherRegistry.b);
     }
 }

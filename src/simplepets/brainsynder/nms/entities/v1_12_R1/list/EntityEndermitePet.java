@@ -9,8 +9,6 @@ public class EntityEndermitePet extends EntityPet implements IEntityEndermitePet
     public EntityEndermitePet(World world, IPet pet) {
         super(world, pet);
     }
-
-
     public EntityEndermitePet(World world) {
         super(world);
     }

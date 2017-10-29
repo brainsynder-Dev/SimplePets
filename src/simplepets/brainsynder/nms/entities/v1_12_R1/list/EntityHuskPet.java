@@ -8,7 +8,6 @@ public class EntityHuskPet extends EntityZombiePet implements IEntityHuskPet {
     public EntityHuskPet(World world, IPet pet) {
         super(world, pet);
     }
-
     public EntityHuskPet(World world) {
         super(world);
     }

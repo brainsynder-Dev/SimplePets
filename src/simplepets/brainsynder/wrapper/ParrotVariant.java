@@ -23,6 +23,13 @@ public enum ParrotVariant {
         return null;
     }
 
+    public static ParrotVariant getByName (String name) {
+        for (ParrotVariant wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return RED;
+    }
+
 
     public static ParrotVariant getPrevious(ParrotVariant current) {
         int original = current.id;

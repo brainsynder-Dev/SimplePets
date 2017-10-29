@@ -25,11 +25,11 @@ public class WitherSize extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityWitherPet) {
-            IEntityWitherPet age = (IEntityWitherPet) entityPet;
-            if (age.isSmall()) {
-                age.setSmall(false);
+            IEntityWitherPet pet = (IEntityWitherPet) entityPet;
+            if (pet.isSmall()) {
+                pet.setSmall(false);
             } else {
-                age.setSmall(true);
+                pet.setSmall(true);
             }
         }
     }

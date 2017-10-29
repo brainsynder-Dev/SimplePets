@@ -22,11 +22,10 @@ import simplepets.brainsynder.nms.entities.type.main.IImpossaPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.utils.PetRespawner;
 
 import java.util.UUID;
 
-public class MainListeners extends EventCore implements Listener {
+public class MainListeners implements Listener {
     @EventHandler
     public void onhurt(EntityDamageEvent e) {
         if (e.getEntity().hasMetadata("NO_DAMAGE")) {
@@ -152,8 +151,8 @@ public class MainListeners extends EventCore implements Listener {
         PetOwner owner = PetOwner.getPetOwner(p);
         if (owner.hasPet()) {
             if (owner.getPet().getVisableEntity() == null) return;
-            if (!petTypeMap.containsKey(p.getUniqueId())) {
-                petTypeMap.put(p.getUniqueId(), new PetRespawner(owner.getPet().getVisableEntity()));
+            if (!owner.hasPetToRespawn()) {
+                owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
             }
             owner.removePet();
         }
@@ -163,21 +162,12 @@ public class MainListeners extends EventCore implements Listener {
     public void onRespawn(PlayerRespawnEvent e) {
         final Player p = e.getPlayer();
         if (p == null) return;
-        final PetOwner petOwner = PetOwner.getPetOwner(p);
-        if (petTypeMap.containsKey(p.getUniqueId())) {
+        final PetOwner owner = PetOwner.getPetOwner(p);
+        if (owner.hasPetToRespawn()) {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (petTypeMap.containsKey(p.getUniqueId())) {
-                        if (!p.isOnline()) {
-                            petTypeMap.remove(p.getUniqueId());
-                            return;
-                        }
-                        PetRespawner respawner = petTypeMap.getKey(p.getUniqueId());
-                        respawner.getPetType().setPet(p);
-                        petOwner.getPet().getVisableEntity().applyCompound(respawner.getEntityData());
-                        petTypeMap.remove(p.getUniqueId());
-                    }
+                    owner.respawnPet();
                 }
             }.runTaskLater(PetCore.get(), 40);
         }
@@ -186,32 +176,28 @@ public class MainListeners extends EventCore implements Listener {
     @EventHandler
     public void onTeleport(final PlayerTeleportEvent e) {
         final Player p = e.getPlayer();
-        final PetOwner petOwner = PetOwner.getPetOwner(p);
-        if (petOwner.hasPet()) {
+        final PetOwner owner = PetOwner.getPetOwner(p);
+        if (owner.hasPet()) {
             if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN) {
                 if (p.getPassenger() != null) {
                     e.setCancelled(true);
                     return;
                 }
                 UUID uuid = p.getUniqueId();
-                IPet pet = petOwner.getPet();
+                IPet pet = owner.getPet();
                 if (pet.getVisableEntity() == null) return;
-                if (!petTypeMap.containsKey(uuid)) {
-                    petTypeMap.put(uuid, new PetRespawner(pet.getVisableEntity()));
-                    petOwner.removePet();
+                if (!owner.hasPetToRespawn()) {
+                    owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                    owner.removePet();
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            if (petTypeMap.containsKey(p.getUniqueId())) {
+                            if (owner.hasPetToRespawn()) {
                                 if (!p.isOnline()) {
-                                    petTypeMap.remove(uuid);
+                                    owner.setPetToRespawn(null);
                                     return;
                                 }
-                                PetRespawner respawner = petTypeMap.getKey(p.getUniqueId());
-                                respawner.getPetType().setPet(p);
-                                IPet pet = petOwner.getPet();
-                                pet.getVisableEntity().applyCompound(respawner.getEntityData());
-                                petTypeMap.remove(uuid);
+                                owner.respawnPet();
                             }
                         }
                     }.runTaskLater(PetCore.get(), 40);
@@ -234,30 +220,27 @@ public class MainListeners extends EventCore implements Listener {
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
         final Player p = e.getPlayer();
-        final PetOwner petOwner = PetOwner.getPetOwner(p);
-        if (petOwner.hasPet()) {
+        final PetOwner owner = PetOwner.getPetOwner(p);
+        if (owner.hasPet()) {
             if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
-                petOwner.removePet();
+                owner.removePet();
             } else {
                 final UUID uuid = p.getUniqueId();
-                final IPet pet = petOwner.getPet();
-                if (petOwner.hasPet()) {
+                final IPet pet = owner.getPet();
+                if (owner.hasPet()) {
                     if (pet.getVisableEntity() == null) return;
-                    if (!petTypeMap.containsKey(uuid)) {
-                        petTypeMap.put(uuid, new PetRespawner(pet.getVisableEntity()));
-                        petOwner.removePet();
+                    if (!owner.hasPetToRespawn()) {
+                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                        owner.removePet();
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (petTypeMap.containsKey(p.getUniqueId())) {
+                                if (owner.hasPetToRespawn()) {
                                     if (!p.isOnline()) {
-                                        petTypeMap.remove(uuid);
+                                        owner.setPetToRespawn(null);
                                         return;
                                     }
-                                    PetRespawner respawner = petTypeMap.getKey(p.getUniqueId());
-                                    respawner.getPetType().setPet(p);
-                                    pet.getVisableEntity().applyCompound(respawner.getEntityData());
-                                    petTypeMap.remove(uuid);
+                                    owner.respawnPet();
                                 }
                             }
                         }.runTaskLater(PetCore.get(), 40);

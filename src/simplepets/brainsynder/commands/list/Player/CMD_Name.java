@@ -8,9 +8,9 @@ import simplepets.brainsynder.player.PetOwner;
 
 @CommandName(name = "name")
 @CommandDescription(description = "Change your pets name.")
-public class CMD_Name extends PetCommand {
+public class CMD_Name extends PetCommand<Player> {
     @Override
-    public void onPlayerCommand(Player p, String[] args) {
+    public void onCommand(Player p, String[] args) {
         PetOwner petOwner = PetOwner.getPetOwner(p);
         petOwner.renamePet();
     }

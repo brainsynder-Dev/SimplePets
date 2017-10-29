@@ -8,6 +8,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+@Deprecated
 public class PetRegistry {
     public static String getVersion() {
         return Bukkit.getServer().getClass().getPackage().getName().substring(23);

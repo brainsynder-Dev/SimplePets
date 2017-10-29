@@ -23,4 +23,11 @@ public enum LlamaColor {
         }
         return null;
     }
+
+    public static LlamaColor getByName (String name) {
+        for (LlamaColor wrapper : values()) {
+            if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
+        }
+        return CREAMY;
+    }
 }

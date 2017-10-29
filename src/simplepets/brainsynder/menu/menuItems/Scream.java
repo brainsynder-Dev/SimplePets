@@ -26,11 +26,11 @@ public class Scream extends MenuItemAbstract {
     @Override
     public void onLeftClick() {
         if (entityPet instanceof IEntityEndermanPet) {
-            IEntityEndermanPet age = (IEntityEndermanPet) entityPet;
-            if (age.isScreaming()) {
-                age.setScreaming(false);
+            IEntityEndermanPet pet = (IEntityEndermanPet) entityPet;
+            if (pet.isScreaming()) {
+                pet.setScreaming(false);
             } else {
-                age.setScreaming(true);
+                pet.setScreaming(true);
             }
         }
     }

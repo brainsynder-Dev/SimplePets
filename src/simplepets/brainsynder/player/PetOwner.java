@@ -8,18 +8,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import simple.brainsynder.api.ParticleMaker;
+import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
 import simplepets.brainsynder.nms.entities.type.main.ITameable;
-import simplepets.brainsynder.pet.IPet;
-import simplepets.brainsynder.pet.Pet;
-import simplepets.brainsynder.pet.PetNameChangeEvent;
-import simplepets.brainsynder.pet.PetRemoveEvent;
+import simplepets.brainsynder.pet.*;
 import simplepets.brainsynder.reflection.PerVersion;
 import simplepets.brainsynder.utils.Valid;
 
@@ -53,6 +52,10 @@ public class PetOwner {
      * This little boolean is for checking if a player is renaming their pet via chat.
      */
     @Getter @Setter boolean renaming = false;
+    /**
+     * Handles Pet respawning when the player teleports, dies, etc...
+     */
+    @Setter StorageTagCompound petToRespawn = null;
 
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
@@ -83,8 +86,7 @@ public class PetOwner {
             return ownerMap.get(player.getUniqueId());
         }
         PetOwner owner = new PetOwner(player);
-        ownerMap.put(player.getUniqueId(), owner);
-        return ownerMap.get(player.getUniqueId());
+        return ownerMap.put(player.getUniqueId(), owner);
     }
 
     /**
@@ -109,35 +111,43 @@ public class PetOwner {
      * @param name Pets New name
      */
     public void setPetName(String name) {
+        setPetName(name, false);
+    }
+    public void setPetName(String name, boolean override) {
         boolean hasLimit = PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.Limit-Number-Of-Characters");
         boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
         boolean k = PetCore.get().getConfiguration().getBoolean("Use&k");
+        name = name.replace("~", " ");
 
-        if (hasLimit && (!player.hasPermission("Pet.name.bypassLimit"))) {
-            int limit = PetCore.get().getConfiguration().getInt("PetToggles.Rename.CharacterLimit");
-            if (name.length() > limit) {
-                name = name.substring(0, limit);
+        if (!override) {
+            if (hasLimit && (!player.hasPermission("Pet.name.bypassLimit"))) {
+                int limit = PetCore.get().getConfiguration().getInt("PetToggles.Rename.CharacterLimit");
+                if (name.length() > limit) {
+                    name = name.substring(0, limit);
+                }
             }
-        }
 
-        PetNameChangeEvent event = new PetNameChangeEvent(player, name, color, k);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
-            return;
+            PetNameChangeEvent event = new PetNameChangeEvent(player, name, color, k);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
+                SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
+                return;
+            }
+            name = event.getNewName();
+            if (event.canUseColor()) {
+                name = ChatColor.translateAlternateColorCodes('&', event.canUseMagic() ? name : name.replace("&k", "k"));
+            }
+            player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
+        }else{
+            name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
         }
-        name = event.getNewName();
         petName = name;
-        if (event.canUseColor()) {
-            name = ChatColor.translateAlternateColorCodes('&', event.canUseMagic() ? name : name.replace("&k", "k"));
-        }
-        player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
         if (!hasPet()) {
             return;
         }
         pet.getEntity().getEntity().setCustomName(name.replace("%player%", player.getName()));
-        if (PetCore.get().getConfiguration().getBoolean("ShowParticles")) {
+        if (PetCore.get().getConfiguration().getBoolean("ShowParticles") && (!override)) {
             play(pet.getEntity().getEntity().getLocation(), ParticleMaker.Particle.VILLAGER_HAPPY, 1.0F, 1.0F, 1.0F);
         }
     }
@@ -234,6 +244,29 @@ public class PetOwner {
         }
         renaming = true;
         player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat", true));
+    }
+
+    public void respawnPet () {
+        if (hasPet()) return;
+        if (!hasPetToRespawn()) return;
+        if (!petToRespawn.hasKey("PetType")) return;
+
+        PetType type = PetType.getByName(petToRespawn.getString("PetType"));
+        type.setPet(player);
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (hasPet()) {
+                    getPet().getVisableEntity().applyCompound(petToRespawn);
+                    petToRespawn = null;
+                }
+            }
+        }.runTaskLater(PetCore.get(), 2);
+    }
+
+    public boolean hasPetToRespawn () {
+        return (petToRespawn != null) && (pet == null);
     }
 
     void play(Location location, ParticleMaker.Particle effect, float offsetX, float offsetY, float offsetZ) {

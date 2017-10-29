@@ -1,10 +1,10 @@
 package simplepets.brainsynder.nms.entities.type;
 
 import simplepets.brainsynder.nms.entities.type.main.IAgeablePet;
-import simplepets.brainsynder.wrapper.RabbitColor;
+import simplepets.brainsynder.wrapper.RabbitType;
 
 public interface IEntityRabbitPet extends IAgeablePet {
-    RabbitColor getRabbitType();
+    RabbitType getRabbitType();
 
-    void setRabbitType(RabbitColor type);
+    void setRabbitType(RabbitType type);
 }

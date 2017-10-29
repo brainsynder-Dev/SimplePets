@@ -15,18 +15,9 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     private static final DataWatcherObject<Integer> c;
     private static final DataWatcherObject<Integer> SHIELDED;
 
-    static {
-        a = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        b = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        c = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        SHIELDED = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-    }
-
-
     public EntityWitherPet(World world) {
         super(world);
     }
-
     public EntityWitherPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -43,15 +34,15 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Shielded", isShielded());
+        object.setBoolean("shielded", isShielded());
+        object.setBoolean("small", isSmall());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Shielded")) {
-            setShielded(object.getBoolean("Shielded"));
-        }
+        if (object.hasKey("shielded")) setShielded(object.getBoolean("shielded"));
+        if (object.hasKey("small")) setSmall(object.getBoolean("small"));
         super.applyCompound(object);
     }
 
@@ -74,5 +65,12 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     public void setShielded(boolean flag) {
         this.datawatcher.set(SHIELDED, flag ? 1 : 0);
         this.setHealth((float) (flag ? 150 : 300));
+    }
+
+    static {
+        a = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        b = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        c = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        SHIELDED = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
     }
 }
