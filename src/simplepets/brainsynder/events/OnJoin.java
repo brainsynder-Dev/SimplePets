@@ -27,17 +27,19 @@ public class OnJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        PetOwner owner = PetOwner.getPetOwner(player);
-        owner.reloadData();
-        if (!owner.hasPetToRespawn()) return;
-        if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    owner.respawnPet();
-                }
-            }.runTaskLater(PetCore.get(), 10);
-        }
+        try {
+            PetOwner owner = PetOwner.getPetOwner(player);
+            owner.reloadData();
+            if (!owner.hasPetToRespawn()) return;
+            if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        owner.respawnPet();
+                    }
+                }.runTaskLater(PetCore.get(), 10);
+            }
+        }catch (Exception ignored) {}
     }
 
     @EventHandler
