@@ -177,8 +177,8 @@ public class MainListeners implements Listener {
     public void onTeleport(final PlayerTeleportEvent e) {
         final Player p = e.getPlayer();
         final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner.hasPet()) {
-            try {
+        try{
+            if (owner.hasPet()) {
                 if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN) {
                     if (p.getPassenger() != null) {
                         e.setCancelled(true);
@@ -203,8 +203,8 @@ public class MainListeners implements Listener {
                         }.runTaskLater(PetCore.get(), 40);
                     }
                 }
-            } catch (Exception ignored) {
             }
+        } catch (Exception ignored) {
         }
     }
 
