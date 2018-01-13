@@ -2,9 +2,9 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import simple.brainsynder.api.ItemMaker;
+import simplepets.brainsynder.api.entity.IColorable;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.MenuItemAbstract;
-import simplepets.brainsynder.nms.entities.type.main.IColorable;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;

@@ -1,9 +1,9 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
 import net.minecraft.server.v1_12_R1.World;
-import simplepets.brainsynder.nms.entities.type.IEntityMulePet;
+import simplepets.brainsynder.api.entity.passive.IEntityMulePet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityHorseChestedAbstractPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 

@@ -1,21 +1,14 @@
 package simplepets.brainsynder.utils;
 
-import lombok.Getter;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
 
 public class AnimationFrame {
-    @Getter
     private EulerAngle head;
-    @Getter
     private EulerAngle body;
-    @Getter
     private EulerAngle leftHand;
-    @Getter
     private EulerAngle rightHand;
-    @Getter
     private EulerAngle leftLeg;
-    @Getter
     private EulerAngle rightLeg;
 
     public AnimationFrame setHead(EulerAngle head) {

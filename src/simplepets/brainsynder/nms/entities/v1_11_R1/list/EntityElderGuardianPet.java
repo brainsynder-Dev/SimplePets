@@ -1,8 +1,8 @@
 package simplepets.brainsynder.nms.entities.v1_11_R1.list;
 
 import net.minecraft.server.v1_11_R1.World;
-import simplepets.brainsynder.nms.entities.type.IEntityElderGuardianPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityElderGuardianPet;
+import simplepets.brainsynder.api.pet.IPet;
 
 public class EntityElderGuardianPet extends EntityGuardianPet implements IEntityElderGuardianPet {
 

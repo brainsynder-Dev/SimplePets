@@ -8,11 +8,11 @@ import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.IFlyablePet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.PetDataMenu;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
-import simplepets.brainsynder.pet.IPet;
-import simplepets.brainsynder.pet.PetMoveEvent;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.lang.reflect.Field;

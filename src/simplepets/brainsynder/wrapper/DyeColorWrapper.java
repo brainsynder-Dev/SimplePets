@@ -1,7 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.Getter;
-
 public enum DyeColorWrapper {
     WHITE(0, 15, 'f'),
     ORANGE(1, 14, '6'),
@@ -20,11 +18,8 @@ public enum DyeColorWrapper {
     RED(14, 1, 'c'),
     BLACK(15, 0, '0');
 
-    @Getter
     private byte woolData;
-    @Getter
     private byte dyeData;
-    @Getter
     private char chatChar;
 
     DyeColorWrapper(int woolData, int dyeData, char chatChar) {
@@ -71,4 +66,10 @@ public enum DyeColorWrapper {
         }
         return null;
     }
+
+    public byte getWoolData() {return this.woolData;}
+
+    public byte getDyeData() {return this.dyeData;}
+
+    public char getChatChar() {return this.chatChar;}
 }

@@ -9,7 +9,7 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 

@@ -1,6 +1,5 @@
 package simplepets.brainsynder.pet;
 
-import lombok.Getter;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,10 +9,11 @@ import simple.brainsynder.api.ItemMaker;
 import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.hostile.*;
+import simplepets.brainsynder.api.entity.passive.*;
 import simplepets.brainsynder.files.PetTranslate;
-import simplepets.brainsynder.nms.entities.type.*;
-import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.utils.TypeStorage;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
@@ -97,7 +97,6 @@ public enum PetType {
     private ServerVersion maxVer;
     private Class<? extends IEntityPet> mainEnt;
     private PetData pData = null;
-    @Getter
     private SoundMaker ambientSound = null;
 
     PetType(SoundMaker defSound, ServerVersion maxVer
@@ -382,4 +381,6 @@ public enum PetType {
         );
         return maker.create();
     }
+
+    public SoundMaker getAmbientSound() {return this.ambientSound;}
 }

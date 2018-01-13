@@ -1,11 +1,10 @@
 package simplepets.brainsynder.nms.entities.v1_11_R1.list;
 
-import lombok.Getter;
 import net.minecraft.server.v1_11_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityLlamaPet;
+import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.branch.EntityHorseChestedAbstractPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.LlamaColor;
 
@@ -20,7 +19,6 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
         VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
     }
 
-    @Getter
     private DyeColorWrapper color;
 
     public EntityLlamaPet(World world) {
@@ -71,4 +69,6 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
         color = i;
         datawatcher.set(COLOR, EnumColor.fromColorIndex(i.getWoolData()).getColorIndex());
     }
+
+    public DyeColorWrapper getColor() {return this.color;}
 }

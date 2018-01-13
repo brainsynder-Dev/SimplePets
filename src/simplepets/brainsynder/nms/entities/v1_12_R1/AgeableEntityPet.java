@@ -5,9 +5,9 @@ import net.minecraft.server.v1_12_R1.DataWatcherObject;
 import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.main.IAgeablePet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.IAgeablePet;
+import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.pet.IPet;
 
 public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet {
     private static final DataWatcherObject<Boolean> BABY;

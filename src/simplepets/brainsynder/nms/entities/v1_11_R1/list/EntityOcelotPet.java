@@ -5,9 +5,9 @@ import net.minecraft.server.v1_11_R1.DataWatcherObject;
 import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_11_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityOcelotPet;
+import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.EntityTameablePet;
-import simplepets.brainsynder.pet.IPet;
 
 public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotPet {
     private static final DataWatcherObject<Integer> TYPE;

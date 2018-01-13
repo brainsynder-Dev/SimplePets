@@ -1,7 +1,5 @@
 package simplepets.brainsynder.nms.entities.v1_11_R1.impossamobs;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,18 +15,16 @@ import simple.brainsynder.api.ItemMaker;
 import simple.brainsynder.api.SkullMaker;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.PetDataMenu;
-import simplepets.brainsynder.nms.entities.type.IEntityArmorStandPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.utils.IStandMethod;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
-    @Getter
-    @Setter
     private boolean isSpecial = false;
     private EntityControllerPet pet;
     private Location previus;
@@ -240,4 +236,8 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setBoots(new ItemMaker(Material.GOLD_BOOTS).create());
         }
     }
+
+    public boolean isSpecial() {return this.isSpecial;}
+
+    public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
 }

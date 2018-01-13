@@ -1,8 +1,5 @@
 package simplepets.brainsynder;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -30,6 +27,7 @@ import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.LoaderRetriever;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 import java.sql.Connection;
@@ -47,31 +45,15 @@ public class PetCore extends JavaPlugin {
     );
     public boolean forceSpawn;
     public ObjectPager<PetType> petTypes;
-    @Getter private boolean disabling = false;
-    @Getter private Config configuration;
-    @Getter private Messages messages;
-    @Getter @Setter(value = AccessLevel.PRIVATE) private MySQL mySQL = null;
-    @Getter private IProtectionLink worldGuardLink;
+    private boolean disabling = false;
+    private Config configuration;
+    private Messages messages;
+    private MySQL mySQL = null;
+    private IProtectionLink worldGuardLink;
     private ISpawner spawner;
-    @Getter @Setter private IStorage<Integer> availableSlots = new StorageList<>();
+    private IStorage<Integer> availableSlots = new StorageList<>();
     private Map<UUID, PlayerFile> fileStorage = new HashMap<>();
-
-    public static PetCore get() {
-        return instance;
-    }
-
-    public static boolean hasPerm(Player p, String perm) {
-        if (get().configuration.getBoolean("Needs-Permission")) {
-            if (!p.hasPermission(perm)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static String getPluginVersion() {
-        return "3.9";
-    }
+    private Utilities utilities = null;
 
     public void onEnable() {
         long start = System.currentTimeMillis();
@@ -120,6 +102,7 @@ public class PetCore extends JavaPlugin {
         }
 
         instance = this;
+        utilities = new Utilities(this);
         saveResource("SimplePets-Info-App.txt", true);
         if (!supportedVersions.contains(Reflection.getVersion())) {
             System.out.println("-------------------------------------------");
@@ -191,24 +174,6 @@ public class PetCore extends JavaPlugin {
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
 
-    public ISpawner getSpawner() {
-        if (spawner == null) {
-            reloadSpawner();
-        }
-        return spawner;
-    }
-
-    private double getJavaVersion() {
-        try {
-            String version = System.getProperty("java.version");
-            int pos = version.indexOf('.');
-            pos = version.indexOf('.', pos + 1);
-            return Double.parseDouble(version.substring(0, pos));
-        } catch (Throwable t) {
-            return 0.0;
-        }
-    }
-
     private void handleSQL() {
         if (getConfiguration().isSet("MySQL.Enabled")) {
             String host = getConfiguration().getString("MySQL.Host", false);
@@ -260,54 +225,6 @@ public class PetCore extends JavaPlugin {
             spawner = null;
             debug("Could not link to a SpawnUtil Class... Possible Wrong version?");
         }
-    }
-
-    public String getDefaultPetName(PetType petType, Player player) {
-        String name = petType.getDefaultName();
-        return translateName(name).replace("%player%", player.getName());
-    }
-
-    public String translateName(String name) {
-        boolean color = get().configuration.getBoolean("ColorCodes");
-        boolean k = get().configuration.getBoolean("Use&k");
-        if (color)
-            name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
-
-        return name;
-    }
-
-    public PlayerFile getPlayerFile(Player player) {
-        if (fileStorage.containsKey(player.getUniqueId()))
-            return fileStorage.get(player.getUniqueId());
-        PlayerFile file = new PlayerFile(player);
-        fileStorage.put(player.getUniqueId(), file);
-        return fileStorage.get(player.getUniqueId());
-    }
-
-    public PlayerPetInv getPlayerPetInv(Player player) {
-        return new PlayerPetInv(player.getUniqueId() + ".storage");
-    }
-
-    public PlayerPetInv getPetInvByName(String name) {
-        File folder = new File(getDataFolder().toString() + "/PetInventories/");
-        if (folder.isDirectory()) {
-            File[] files = folder.listFiles();
-            if (files != null) {
-                if (files.length != 0) {
-                    for (File file : files) {
-                        if (file.getName().contains(".storage")) {
-                            FileConfiguration con = YamlConfiguration.loadConfiguration(file);
-                            if (con.get("Username") != null) {
-                                if (con.getString("Username").equalsIgnoreCase(name)) {
-                                    return new PlayerPetInv(file.getName());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
     }
 
     private void loadConfig() {
@@ -413,5 +330,118 @@ public class PetCore extends JavaPlugin {
             thread.setDaemon(false);
             thread.start();
         }
+    }
+
+
+
+    // GETTERS
+
+    public boolean isDisabling() {return this.disabling;}
+
+    public Config getConfiguration() {return this.configuration;}
+
+    public Messages getMessages() {return this.messages;}
+
+    public MySQL getMySQL() {return this.mySQL;}
+
+    public IProtectionLink getWorldGuardLink() {return this.worldGuardLink;}
+
+    public IStorage<Integer> getAvailableSlots() {return this.availableSlots;}
+
+    public String getDefaultPetName(PetType petType, Player player) {
+        String name = petType.getDefaultName();
+        return translateName(name).replace("%player%", player.getName());
+    }
+
+    public String translateName(String name) {
+        boolean color = get().configuration.getBoolean("ColorCodes");
+        boolean k = get().configuration.getBoolean("Use&k");
+        if (color)
+            name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
+
+        return name;
+    }
+
+    public PlayerFile getPlayerFile(Player player) {
+        if (fileStorage.containsKey(player.getUniqueId()))
+            return fileStorage.get(player.getUniqueId());
+        PlayerFile file = new PlayerFile(player);
+        fileStorage.put(player.getUniqueId(), file);
+        return fileStorage.get(player.getUniqueId());
+    }
+
+    public PlayerPetInv getPlayerPetInv(Player player) {
+        return new PlayerPetInv(player.getUniqueId() + ".storage");
+    }
+
+    public PlayerPetInv getPetInvByName(String name) {
+        File folder = new File(getDataFolder().toString() + "/PetInventories/");
+        if (folder.isDirectory()) {
+            File[] files = folder.listFiles();
+            if (files != null) {
+                if (files.length != 0) {
+                    for (File file : files) {
+                        if (file.getName().contains(".storage")) {
+                            FileConfiguration con = YamlConfiguration.loadConfiguration(file);
+                            if (con.get("Username") != null) {
+                                if (con.getString("Username").equalsIgnoreCase(name)) {
+                                    return new PlayerPetInv(file.getName());
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public ISpawner getSpawner() {
+        if (spawner == null) {
+            reloadSpawner();
+        }
+        return spawner;
+    }
+
+    private double getJavaVersion() {
+        try {
+            String version = System.getProperty("java.version");
+            int pos = version.indexOf('.');
+            pos = version.indexOf('.', pos + 1);
+            return Double.parseDouble(version.substring(0, pos));
+        } catch (Throwable t) {
+            return 0.0;
+        }
+    }
+
+    public Utilities getUtilities() {
+        return utilities;
+    }
+
+    // SETTERS
+
+    private void setMySQL(MySQL mySQL) {this.mySQL = mySQL; }
+
+    public void setAvailableSlots(IStorage<Integer> availableSlots) {this.availableSlots = availableSlots; }
+
+
+
+    // STATIC
+
+    public static PetCore get() {
+        return instance;
+    }
+
+    public static boolean hasPerm(Player p, String perm) {
+        if (get().configuration.getBoolean("Needs-Permission")) {
+            if (!p.hasPermission(perm)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static String getPluginVersion() {
+        return "3.9";
     }
 }

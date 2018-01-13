@@ -1,6 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.Getter;
 import org.bukkit.entity.Horse.Color;
 
 public enum HorseColorType {
@@ -12,7 +11,6 @@ public enum HorseColorType {
     GRAY(5, Color.GRAY),
     DARKBROWN(6, Color.DARK_BROWN);
 
-    @Getter
     private int id;
     private Color bukkitColour;
 
@@ -49,4 +47,6 @@ public enum HorseColorType {
     public Color getBukkitColour() {
         return this.bukkitColour;
     }
+
+    public int getId() {return this.id;}
 }

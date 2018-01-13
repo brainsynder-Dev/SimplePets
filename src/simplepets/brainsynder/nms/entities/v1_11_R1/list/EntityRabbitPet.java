@@ -2,9 +2,9 @@ package simplepets.brainsynder.nms.entities.v1_11_R1.list;
 
 import net.minecraft.server.v1_11_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityRabbitPet;
+import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.AgeableEntityPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.RabbitType;
 
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {

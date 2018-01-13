@@ -6,8 +6,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.holders.PetDataHolder;
-import simplepets.brainsynder.pet.IPet;
 
 import java.util.Arrays;
 import java.util.List;

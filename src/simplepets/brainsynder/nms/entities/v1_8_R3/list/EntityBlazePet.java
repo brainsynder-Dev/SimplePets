@@ -2,9 +2,9 @@ package simplepets.brainsynder.nms.entities.v1_8_R3.list;
 
 import net.minecraft.server.v1_8_R3.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityBlazePet;
+import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 
 /**
  * @Deprecated Will be removed when MC version 1.13 is released

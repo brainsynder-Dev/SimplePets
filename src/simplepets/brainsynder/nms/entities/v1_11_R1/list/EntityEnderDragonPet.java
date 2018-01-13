@@ -6,9 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.util.Vector;
 import simple.brainsynder.sound.SoundMaker;
-import simplepets.brainsynder.nms.entities.type.IEntityEnderDragonPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityEnderDragonPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.EntityNoClipPet;
-import simplepets.brainsynder.pet.IPet;
 
 import java.util.ArrayList;
 import java.util.Iterator;

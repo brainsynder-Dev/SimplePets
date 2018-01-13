@@ -1,7 +1,5 @@
 package simplepets.brainsynder.nms.entities.v1_11_R1.impossamobs;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
@@ -14,10 +12,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.PetDataMenu;
-import simplepets.brainsynder.nms.entities.type.IEntityShulkerPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -25,8 +23,6 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
  * This is a beta mob, Simply because this does not work like the other mobs.
  */
 public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet {
-    @Getter
-    @Setter
     private boolean isCustom = false;
     private boolean rainbow = false;
     private int toggle = 0;
@@ -244,4 +240,8 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public EntityWrapper getEntityType() {
         return pet.getEntityType();
     }
+
+    public boolean isCustom() {return this.isCustom;}
+
+    public void setCustom(boolean isCustom) {this.isCustom = isCustom; }
 }

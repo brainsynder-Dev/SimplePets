@@ -5,11 +5,11 @@ import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.PetDataMenu;
-import simplepets.brainsynder.nms.entities.type.IEntityParrotPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.CustomMoveFlying;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 

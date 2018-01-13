@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.anvil;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import simplepets.brainsynder.event.SimplePetEvent;
+import simplepets.brainsynder.api.event.SimplePetEvent;
 
 public class AnvilClickEvent extends SimplePetEvent {
     private AnvilSlot slot;

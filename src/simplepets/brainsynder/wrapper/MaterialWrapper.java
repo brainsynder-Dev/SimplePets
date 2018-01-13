@@ -507,7 +507,8 @@ public enum MaterialWrapper {
 
     public static MaterialWrapper fromMaterial(Material material) {
         try {
-            return MaterialWrapper.valueOf(material.name());
+            for (MaterialWrapper wrapper : forServerVersion())
+                if (wrapper.name().equalsIgnoreCase(material.name())) return wrapper;
         } catch (Exception ignored) {
         }
         return NOT_SUPPORTED;

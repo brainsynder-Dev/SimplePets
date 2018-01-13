@@ -1,8 +1,8 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
 import net.minecraft.server.v1_12_R1.World;
-import simplepets.brainsynder.nms.entities.type.IEntityCaveSpiderPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityCaveSpiderPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 
 @Size(width = 0.7F, length = 0.5F)

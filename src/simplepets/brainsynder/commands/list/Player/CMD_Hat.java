@@ -1,10 +1,10 @@
 package simplepets.brainsynder.commands.list.Player;
 
 import org.bukkit.entity.Player;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
 
 @CommandName(name = "hat")

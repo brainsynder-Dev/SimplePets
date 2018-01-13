@@ -3,7 +3,7 @@ package simplepets.brainsynder.menu;
 import org.bukkit.entity.Player;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 

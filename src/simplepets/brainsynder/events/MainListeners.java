@@ -14,12 +14,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.spigotmc.event.entity.EntityDismountEvent;
 import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.IImpossaPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
+import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.PetDataMenu;
-import simplepets.brainsynder.nms.entities.type.IEntityParrotPet;
-import simplepets.brainsynder.nms.entities.type.IEntityShulkerPet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.nms.entities.type.main.IImpossaPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 

@@ -2,10 +2,10 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.menu.MenuItemAbstract;
-import simplepets.brainsynder.nms.entities.type.IEntityPigPet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.nms.entities.type.main.IHorseAbstract;
 import simplepets.brainsynder.pet.PetType;
 
 public class Saddle extends MenuItemAbstract {

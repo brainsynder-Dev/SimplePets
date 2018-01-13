@@ -1,7 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.AccessLevel;
-import lombok.Getter;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
@@ -14,9 +12,7 @@ public enum ProfessionWrapper {
     NITWIT(6, 111, false);
 
     private boolean zombie;
-    @Getter
     private int id;
-    @Getter(AccessLevel.PRIVATE)
     private int version;
 
     ProfessionWrapper(int id, int version, boolean zombie) {
@@ -73,6 +69,10 @@ public enum ProfessionWrapper {
     public boolean isZombie() {
         return this.zombie;
     }
+
+    public int getId() {return this.id;}
+
+    private int getVersion() {return this.version;}
 
     public enum ZombieProfession {
         NORMAL(0),

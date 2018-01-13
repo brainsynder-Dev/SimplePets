@@ -6,9 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import simple.brainsynder.math.MathUtils;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.nms.entities.v1_9_R1.EntityPet;
-import simplepets.brainsynder.pet.PetMoveEvent;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.Arrays;

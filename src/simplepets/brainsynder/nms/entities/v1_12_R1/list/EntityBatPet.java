@@ -2,10 +2,10 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
 import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityBatPet;
-import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
+import simplepets.brainsynder.api.entity.IFlyablePet;
+import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 
 @Size(length = 0.9F)

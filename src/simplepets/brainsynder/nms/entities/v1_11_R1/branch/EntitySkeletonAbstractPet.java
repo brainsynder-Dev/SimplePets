@@ -6,8 +6,8 @@ import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_11_R1.World;
 import org.bukkit.entity.Skeleton;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 
 public abstract class EntitySkeletonAbstractPet extends EntityPet {
     private static final DataWatcherObject<Boolean> b;

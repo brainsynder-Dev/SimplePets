@@ -1,14 +1,11 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.Getter;
-
 public enum LlamaColor {
     CREAMY(0),
     WHITE(1),
     BROWN(2),
     GRAY(3);
 
-    @Getter
     private int id;
 
     LlamaColor(int id) {
@@ -30,4 +27,6 @@ public enum LlamaColor {
         }
         return CREAMY;
     }
+
+    public int getId() {return this.id;}
 }

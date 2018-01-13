@@ -2,10 +2,10 @@ package simplepets.brainsynder.menu.menuItems.sizes;
 
 import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityMagmaCubePet;
+import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.menu.MenuItemAbstract;
-import simplepets.brainsynder.nms.entities.type.IEntityMagmaCubePet;
-import simplepets.brainsynder.nms.entities.type.IEntitySlimePet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.pet.PetType;
 
 public class Size2 extends MenuItemAbstract {

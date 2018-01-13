@@ -2,9 +2,9 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
 import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityLlamaPet;
+import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityHorseChestedAbstractPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;

@@ -4,9 +4,9 @@ import net.minecraft.server.v1_10_R1.DataWatcher;
 import net.minecraft.server.v1_10_R1.DataWatcherObject;
 import net.minecraft.server.v1_10_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_10_R1.World;
-import simplepets.brainsynder.nms.entities.type.IEntityZombiePet;
+import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_10_R1.AgeableEntityPet;
-import simplepets.brainsynder.pet.IPet;
 
 /**
  * @Deprecated Will be removed when MC version 1.13 is released

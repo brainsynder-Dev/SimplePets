@@ -1,7 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.Getter;
-
 public enum RabbitType {
     BROWN(0),
     WHITE(1),
@@ -11,7 +9,6 @@ public enum RabbitType {
     SALT_AND_PEPPER(5),
     THE_KILLER_BUNNY(99);
 
-    @Getter
     private int id;
 
     RabbitType(int id) {
@@ -33,4 +30,6 @@ public enum RabbitType {
         }
         return BROWN;
     }
+
+    public int getId() {return this.id;}
 }

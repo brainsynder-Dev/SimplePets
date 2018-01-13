@@ -3,9 +3,9 @@ package simplepets.brainsynder.nms.entities.v1_9_R2.list;
 import com.google.common.base.Optional;
 import net.minecraft.server.v1_9_R2.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityEndermanPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_9_R2.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 
 /**
  * @Deprecated Will be removed when MC version 1.13 is released

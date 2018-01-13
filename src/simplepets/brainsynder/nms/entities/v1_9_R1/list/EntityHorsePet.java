@@ -1,12 +1,11 @@
 package simplepets.brainsynder.nms.entities.v1_9_R1.list;
 
 import com.google.common.base.Optional;
-import lombok.Getter;
 import net.minecraft.server.v1_9_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityHorsePet;
+import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_9_R1.AgeableEntityPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
@@ -32,7 +31,6 @@ public class EntityHorsePet extends AgeableEntityPet implements IEntityHorsePet 
         ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
     }
 
-    @Getter
     private HorseArmorType armor;
 
     public EntityHorsePet(World world, IPet pet) {
@@ -145,4 +143,6 @@ public class EntityHorsePet extends AgeableEntityPet implements IEntityHorsePet 
     private boolean o(int i) {
         return (this.datawatcher.get(VISUAL) & i) != 0;
     }
+
+    public HorseArmorType getArmor() {return this.armor;}
 }

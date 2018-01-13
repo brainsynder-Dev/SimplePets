@@ -6,8 +6,8 @@ import net.minecraft.server.v1_12_R1.DataWatcherObject;
 import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.main.ITameable;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.pet.IPet;
 
 import java.util.UUID;
 

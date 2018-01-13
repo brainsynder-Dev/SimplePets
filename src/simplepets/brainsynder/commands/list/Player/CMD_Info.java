@@ -4,12 +4,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.*;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandPermission;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.Arrays;

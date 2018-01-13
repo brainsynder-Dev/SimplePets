@@ -1,9 +1,9 @@
 package simplepets.brainsynder.nms.entities.v1_9_R1.list;
 
 import net.minecraft.server.v1_9_R1.*;
-import simplepets.brainsynder.nms.entities.type.IEntityWolfPet;
+import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_9_R1.EntityTameablePet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 /**

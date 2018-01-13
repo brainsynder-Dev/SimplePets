@@ -1,7 +1,5 @@
 package simplepets.brainsynder.player;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,11 +12,15 @@ import simple.brainsynder.api.ParticleMaker;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
+import simplepets.brainsynder.api.event.pet.PetRemoveEvent;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
-import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
-import simplepets.brainsynder.nms.entities.type.main.ITameable;
-import simplepets.brainsynder.pet.*;
+import simplepets.brainsynder.pet.Pet;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.PerVersion;
 import simplepets.brainsynder.utils.Valid;
 
@@ -31,38 +33,30 @@ public class PetOwner {
     /**
      * JSONArray contains all the pets the player has owned while Vault was Enabled.
      */
-    @Getter()
     JSONArray ownedPets = new JSONArray();
     /**
      * Players Pet name, Will return null if empty.
      */
-    @Getter
     String petName = null;
     /**
      * Will return the players active pet, Will return null if there is no pet.
      */
-    @Getter
     IPet pet = null;
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    @Getter
     Player player = null;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
-    @Getter
     OwnerFile file = null;
     /**
      * This little boolean is for checking if a player is renaming their pet via chat.
      */
-    @Getter
-    @Setter
     boolean renaming = false;
     /**
      * Handles Pet respawning when the player teleports, dies, etc...
      */
-    @Setter
     StorageTagCompound petToRespawn = null;
 
     private PetOwner(Player player) {
@@ -288,4 +282,20 @@ public class PetOwner {
         ParticleMaker maker = new ParticleMaker(effect, amount, 0.5, 0.5, 0.5);
         maker.sendToLocation(location);
     }
+
+    public JSONArray getOwnedPets() {return this.ownedPets;}
+
+    public String getPetName() {return this.petName;}
+
+    public IPet getPet() {return this.pet;}
+
+    public Player getPlayer() {return this.player;}
+
+    public OwnerFile getFile() {return this.file;}
+
+    public boolean isRenaming() {return this.renaming;}
+
+    public void setRenaming(boolean renaming) {this.renaming = renaming; }
+
+    public void setPetToRespawn(StorageTagCompound petToRespawn) {this.petToRespawn = petToRespawn; }
 }

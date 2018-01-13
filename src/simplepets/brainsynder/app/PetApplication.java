@@ -15,11 +15,9 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import lombok.Getter;
 import simplepets.brainsynder.PetCore;
 
 public class PetApplication extends Application {
-    @Getter
     private Stage window;
 
     public static void main(String[] args) {
@@ -113,4 +111,6 @@ public class PetApplication extends Application {
         });
 
     }
+
+    public Stage getWindow() {return this.window;}
 }

@@ -8,11 +8,11 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
 import simplepets.brainsynder.holders.PetDataHolder;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.MenuItem;
 import simplepets.brainsynder.menu.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDataChangeEvent;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.LoaderRetriever;
 

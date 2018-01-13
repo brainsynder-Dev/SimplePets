@@ -1,6 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.Getter;
 import org.bukkit.entity.Horse;
 
 public enum HorseStyleType {
@@ -14,7 +13,6 @@ public enum HorseStyleType {
     private HorseColorType[] a;
     private Integer[] b;
     private Horse.Style bukkitStyle;
-    @Getter
     private int id;
 
     HorseStyleType(int id, Horse.Style bukkitStyle, Integer[] i) {
@@ -67,4 +65,6 @@ public enum HorseStyleType {
     public Horse.Style getBukkitStyle() {
         return this.bukkitStyle;
     }
+
+    public int getId() {return this.id;}
 }

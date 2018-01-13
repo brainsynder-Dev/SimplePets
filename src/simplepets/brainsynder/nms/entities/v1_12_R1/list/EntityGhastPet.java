@@ -4,10 +4,10 @@ import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
 import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
-import simplepets.brainsynder.nms.entities.type.IEntityGhastPet;
-import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
+import simplepets.brainsynder.api.entity.IFlyablePet;
+import simplepets.brainsynder.api.entity.hostile.IEntityGhastPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 
 @Size(width = 4.0F, length = 4.0F)

@@ -1,15 +1,10 @@
 package simplepets.brainsynder;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.pet.PetType;
 
 public class PetTypeStorage {
-    @Getter
     private PetType type;
-    @Getter
-    @Setter
     private ItemStack item;
 
     public PetTypeStorage(PetType type) {
@@ -20,4 +15,10 @@ public class PetTypeStorage {
     public boolean isSimilar(PetTypeStorage storage) {
         return (type == storage.type) && (storage.item.isSimilar(item));
     }
+
+    public PetType getType() {return this.type;}
+
+    public ItemStack getItem() {return this.item;}
+
+    public void setItem(ItemStack item) {this.item = item; }
 }

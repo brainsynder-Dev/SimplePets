@@ -2,9 +2,9 @@ package simplepets.brainsynder.nms.entities.v1_8_R3.list;
 
 import net.minecraft.server.v1_8_R3.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntitySheepPet;
+import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.AgeableEntityPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 /**

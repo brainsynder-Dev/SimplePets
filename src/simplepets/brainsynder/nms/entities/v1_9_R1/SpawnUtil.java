@@ -4,8 +4,8 @@ import net.minecraft.server.v1_9_R1.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_9_R1.CraftWorld;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
 

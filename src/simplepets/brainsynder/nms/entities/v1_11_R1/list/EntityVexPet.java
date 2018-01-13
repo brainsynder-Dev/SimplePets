@@ -5,9 +5,9 @@ import net.minecraft.server.v1_11_R1.DataWatcherObject;
 import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_11_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityVexPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.EntityNoClipPet;
-import simplepets.brainsynder.pet.IPet;
 
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     protected static final DataWatcherObject<Byte> DATA;

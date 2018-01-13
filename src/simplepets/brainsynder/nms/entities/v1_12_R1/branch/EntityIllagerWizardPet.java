@@ -3,7 +3,7 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.branch;
 import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {

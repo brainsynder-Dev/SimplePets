@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
-import lombok.Getter;
 import net.minecraft.server.v1_12_R1.PacketPlayOutEntityTeleport;
 import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Location;
@@ -11,9 +10,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.nms.entities.type.main.IEntityControllerPet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.IStandMethod;
@@ -25,7 +24,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private List<Entity> entities = new ArrayList<>();
     private Entity displayEntity;
     private Location previus;
-    @Getter
     private boolean moving = false;
 
     public EntityControllerPet(World world, IPet pet) {
@@ -169,4 +167,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         }
         return this;
     }
+
+    public boolean isMoving() {return this.moving;}
 }

@@ -6,9 +6,9 @@ import net.minecraft.server.v1_9_R1.DataWatcherObject;
 import net.minecraft.server.v1_9_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_9_R1.IBlockData;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityEndermanPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_9_R1.EntityPet;
-import simplepets.brainsynder.pet.IPet;
 
 /**
  * @Deprecated Will be removed when MC version 1.13 is released

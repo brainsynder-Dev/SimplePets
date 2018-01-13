@@ -1,6 +1,5 @@
 package simplepets.brainsynder.utils;
 
-import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -12,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryStorage implements ConfigurationSerializable {
-    @Getter
     private Inventory inventory;
 
     public InventoryStorage(Inventory inventory) {
@@ -66,4 +64,6 @@ public class InventoryStorage implements ConfigurationSerializable {
         map.put("items", items);
         return map;
     }
+
+    public Inventory getInventory() {return this.inventory;}
 }

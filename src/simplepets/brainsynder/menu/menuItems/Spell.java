@@ -3,9 +3,9 @@ package simplepets.brainsynder.menu.menuItems;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.IEntityWizard;
 import simplepets.brainsynder.menu.MenuItemAbstract;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
-import simplepets.brainsynder.nms.entities.type.main.IEntityWizard;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.wrapper.WizardSpell;
 

@@ -2,8 +2,8 @@ package simplepets.brainsynder.reflection;
 
 import org.bukkit.Location;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.errors.SimplePetsException;
-import simplepets.brainsynder.nms.entities.type.main.IEntityPet;
 import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.utils.ISpawner;
 

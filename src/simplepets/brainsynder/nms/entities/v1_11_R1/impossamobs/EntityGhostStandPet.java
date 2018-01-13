@@ -1,19 +1,15 @@
 package simplepets.brainsynder.nms.entities.v1_11_R1.impossamobs;
 
-import lombok.Getter;
-import lombok.Setter;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simplepets.brainsynder.nms.entities.type.main.IImpossaPet;
-import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.api.entity.IImpossaPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet {
-    @Getter
-    @Setter
     private boolean isSpecial = false;
 
     public EntityGhostStandPet(World world) {
@@ -64,4 +60,8 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
             return false;
         return super.damageEntity(damagesource, f);
     }
+
+    public boolean isSpecial() {return this.isSpecial;}
+
+    public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
 }

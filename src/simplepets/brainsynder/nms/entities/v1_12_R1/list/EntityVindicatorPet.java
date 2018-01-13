@@ -3,9 +3,9 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.entity.LivingEntity;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.nms.entities.type.IEntityVindicatorPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
+import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityIllagerAbstractPet;
-import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.utils.Size;
 
 @Size(width = 0.6F, length = 1.95F)
