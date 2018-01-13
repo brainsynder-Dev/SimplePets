@@ -3,7 +3,7 @@ main: simplepets.brainsynder.PetCore
 version: 3.9
 depends: [SimpleAPI]
 softdepend: [WorldGuard, Vault]
-loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared011]
+loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared]
 authors: [brainsynder]
 commands:
     pet:
