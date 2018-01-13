@@ -14,6 +14,4 @@ public abstract class MenuItemAbstract extends MenuItem {
     public void onRightClick() {
         onLeftClick();
     }
-
-
 }

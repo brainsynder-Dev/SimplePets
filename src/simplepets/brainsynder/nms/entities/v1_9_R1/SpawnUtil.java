@@ -11,6 +11,9 @@ import simplepets.brainsynder.utils.ISpawner;
 
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class SpawnUtil implements ISpawner {
     public IEntityPet spawnEntityPet(IPet pet, String className) {

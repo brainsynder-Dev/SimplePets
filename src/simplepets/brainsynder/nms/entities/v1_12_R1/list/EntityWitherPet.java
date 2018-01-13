@@ -8,16 +8,26 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityWitherPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.9F, length = 4.0F)
 public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     private static final DataWatcherObject<Integer> a;
     private static final DataWatcherObject<Integer> b;
     private static final DataWatcherObject<Integer> c;
     private static final DataWatcherObject<Integer> SHIELDED;
 
+    static {
+        a = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        b = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        c = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+        SHIELDED = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
+    }
+
     public EntityWitherPet(World world) {
         super(world);
     }
+
     public EntityWitherPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -65,12 +75,5 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     public void setShielded(boolean flag) {
         this.datawatcher.set(SHIELDED, flag ? 1 : 0);
         this.setHealth((float) (flag ? 150 : 300));
-    }
-
-    static {
-        a = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        b = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        c = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
-        SHIELDED = DataWatcher.a(EntityWitherPet.class, DataWatcherRegistry.b);
     }
 }

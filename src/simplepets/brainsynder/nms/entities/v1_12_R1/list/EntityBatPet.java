@@ -6,14 +6,21 @@ import simplepets.brainsynder.nms.entities.type.IEntityBatPet;
 import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(length = 0.9F)
 public class EntityBatPet extends EntityPet implements IEntityBatPet,
         IFlyablePet {
     private static final DataWatcherObject<Byte> byteWatcher;
 
+    static {
+        byteWatcher = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
+    }
+
     public EntityBatPet(World world) {
         super(world);
     }
+
     public EntityBatPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -61,9 +68,5 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
         } else {
             this.datawatcher.set(byteWatcher, (byte) (var2 & -2));
         }
-    }
-
-    static {
-        byteWatcher = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
     }
 }

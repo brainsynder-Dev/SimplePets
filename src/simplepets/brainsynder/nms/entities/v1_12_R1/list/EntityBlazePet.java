@@ -8,13 +8,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityBlazePet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.6f, length = 1.7f)
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     private static final DataWatcherObject<Byte> ANGERED;
+
+    static {
+        ANGERED = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
+    }
 
     public EntityBlazePet(World world) {
         super(world);
     }
+
     public EntityBlazePet(World world, IPet pet) {
         super(world, pet);
     }
@@ -53,9 +60,5 @@ public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
         }
 
         this.datawatcher.set(ANGERED, b1);
-    }
-
-    static {
-        ANGERED = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
     }
 }

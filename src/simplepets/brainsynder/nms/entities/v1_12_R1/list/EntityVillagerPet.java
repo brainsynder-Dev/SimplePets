@@ -9,14 +9,21 @@ import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.nms.entities.type.IEntityVillagerPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+@Size(width = 0.6F, length = 1.8F)
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
     private static final DataWatcherObject<Integer> PROFESSION;
+
+    static {
+        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherRegistry.b);
+    }
 
     public EntityVillagerPet(World world) {
         super(world);
     }
+
     public EntityVillagerPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -57,9 +64,5 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
         } else {
             SoundMaker.ENTITY_VILLAGER_TRADING.playSound(getEntity());
         }
-    }
-
-    static {
-        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherRegistry.b);
     }
 }

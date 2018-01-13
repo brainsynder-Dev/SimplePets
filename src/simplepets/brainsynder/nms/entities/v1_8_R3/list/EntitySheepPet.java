@@ -7,6 +7,9 @@ import simplepets.brainsynder.nms.entities.v1_8_R3.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     public EntitySheepPet(World world, IPet pet) {
@@ -22,15 +25,15 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setInteger("Color", getColor().ordinal());
+        object.setInteger("color", getColor().ordinal());
         object.setBoolean("Sheared", isSheared());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Color"))
-            setColor(DyeColorWrapper.values()[object.getInteger("Color")]);
+        if (object.hasKey("color"))
+            setColor(DyeColorWrapper.values()[object.getInteger("color")]);
         if (object.hasKey("Sheared"))
             setSheared(object.getBoolean("Sheared"));
 

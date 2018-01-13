@@ -32,15 +32,15 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("Color", color.name());
+        object.setString("color", color.name());
         object.setBoolean("Sheared", sheared);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Color"))
-            setColor(DyeColorWrapper.valueOf(String.valueOf(object.getString("Color"))));
+        if (object.hasKey("color"))
+            setColor(DyeColorWrapper.valueOf(String.valueOf(object.getString("color"))));
         if (object.hasKey("Sheared"))
             setSheared(object.getBoolean("Sheared"));
 
@@ -62,7 +62,6 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     public void setColor(DyeColorWrapper i) {
         color = i;
         if (sheared) setSheared(false);
-        byte b0 = this.datawatcher.get(COLOR_SHEARED);
         this.datawatcher.set(COLOR_SHEARED, i.getWoolData());
     }
 

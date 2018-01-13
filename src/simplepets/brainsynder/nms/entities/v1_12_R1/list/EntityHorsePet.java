@@ -6,14 +6,23 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityHorsePet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
+@Size(width = 1.4F, length = 1.6F)
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
     private static final DataWatcherObject<Integer> STYLE;
     private static final DataWatcherObject<Integer> ARMOR;
-    @Getter private HorseArmorType armor = HorseArmorType.NONE;
+
+    static {
+        STYLE = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
+        ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
+    }
+
+    @Getter
+    private HorseArmorType armor = HorseArmorType.NONE;
 
     public EntityHorsePet(World world) {
         super(world);
@@ -69,10 +78,5 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     public void setArmor(HorseArmorType a) {
         this.armor = a;
         this.datawatcher.set(ARMOR, EnumHorseArmor.values()[a.ordinal()].a());
-    }
-
-    static {
-        STYLE = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
-        ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
     }
 }

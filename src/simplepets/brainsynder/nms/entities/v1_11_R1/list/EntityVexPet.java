@@ -32,14 +32,14 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Powered", isPowered());
+        object.setBoolean("powered", isPowered());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Powered")) {
-            setPowered(object.getBoolean("Powered"));
+        if (object.hasKey("powered")) {
+            setPowered(object.getBoolean("powered"));
         }
         super.applyCompound(object);
     }

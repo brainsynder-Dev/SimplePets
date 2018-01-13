@@ -137,7 +137,6 @@ public class Pet implements IPet {
                 return;
             if (getPet().getPassenger() != null) {
                 getPet().eject();
-                ent.removePassenger(getPet().getPassenger());
             }
             vehicle = false;
             delay = true;
@@ -152,17 +151,17 @@ public class Pet implements IPet {
                         public void run() {
                             if (!event.isCancelled()) {
                                 setHat(true);
-                                getEntity().setPassenger(0, owner, petOwner.getPet().getDisplayEntity());
+                                owner.setPassenger(ent.getEntity());
                             }
                         }
                     }.runTaskLater(PetCore.get(), 3);
                 } else {
                     if (!event.isCancelled()) {
                         setHat(true);
-                        ent.setPassenger(0, owner, petOwner.getPet().getDisplayEntity());
+                        owner.setPassenger(ent.getEntity());
                     }
                 }
-                PerVersion.handleMount(player, player.getPassenger());
+                PerVersion.handleMount(player, ent.getEntity());
             }
         } else {
             PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
@@ -183,7 +182,6 @@ public class Pet implements IPet {
             if (event.isCancelled())
                 return;
             getPet().eject();
-            //getEntity().removePassenger(getPet().getPassenger());
             vehicle = false;
             return;
         } else if (isVehicle()) {
@@ -194,8 +192,9 @@ public class Pet implements IPet {
             PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (!event.isCancelled()) {
-                ent.removePassenger(p.getPassenger());
+                p.eject();
                 setHat(false);
+                PerVersion.handleMount(p, ent.getEntity());
             }
         }
         PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.MOUNT);
@@ -207,8 +206,7 @@ public class Pet implements IPet {
         new BukkitRunnable() {
             @Override
             public void run() {
-                //getEntity().setPassenger(0, petOwner.getPet().getEntity().getEntity(), p);
-                petOwner.getPet().getEntity().getEntity().setPassenger(p);
+                ent.getEntity().setPassenger(p);
             }
         }.runTaskLater(PetCore.get(), 2L);
     }
@@ -284,6 +282,8 @@ public class Pet implements IPet {
 
     @Override
     public void removePet(boolean var1) {
+        if (isHat()) handleHat();
+
         if (ent instanceof IEntityControllerPet) {
             ((IEntityControllerPet) ent).remove();
             return;
@@ -327,7 +327,7 @@ public class Pet implements IPet {
             PerVersion.clearPathfinders(owner);
         } else {
             if (owner.getPassenger() == null) {
-                isHat = true;
+                isHat = false;
                 PerVersion.handlePathfinders(owner, getPet(), type.getSpeed());
             }
         }

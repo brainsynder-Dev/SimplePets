@@ -7,6 +7,9 @@ import net.minecraft.server.v1_10_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class AgeableEntityPet extends EntityPet {
 
@@ -29,14 +32,14 @@ public class AgeableEntityPet extends EntityPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Baby", isBaby());
+        object.setBoolean("baby", isBaby());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Baby")) {
-            setBaby(object.getBoolean("Baby"));
+        if (object.hasKey("baby")) {
+            setBaby(object.getBoolean("baby"));
         }
         super.applyCompound(object);
     }

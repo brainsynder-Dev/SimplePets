@@ -12,7 +12,7 @@ public enum HorseArmorType {
         this.id = id;
     }
 
-    public static HorseArmorType getByName (String name) {
+    public static HorseArmorType getByName(String name) {
         for (HorseArmorType wrapper : values()) {
             if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
         }

@@ -21,9 +21,11 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private boolean wet;
     private boolean shaking;
     private float shakeCount;
+
     public EntityWolfPet(World world) {
         super(world);
     }
+
     public EntityWolfPet(World world, IPet pet) {
         super(world, pet);
     }

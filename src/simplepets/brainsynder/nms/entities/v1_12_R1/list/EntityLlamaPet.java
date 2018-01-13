@@ -5,14 +5,22 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityLlamaPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityHorseChestedAbstractPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.LlamaColor;
 
+@Size(width = 0.9F, length = 1.87F)
 public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEntityLlamaPet {
     private static final DataWatcherObject<Integer> STRENGTH;
     private static final DataWatcherObject<Integer> COLOR;
     private static final DataWatcherObject<Integer> VARIANT;
+
+    static {
+        STRENGTH = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
+        COLOR = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
+        VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
+    }
 
     public EntityLlamaPet(World world) {
         super(world);
@@ -69,11 +77,5 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
     @Override
     public EntityWrapper getEntityType() {
         return EntityWrapper.LLAMA;
-    }
-
-    static {
-        STRENGTH = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
-        COLOR = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
-        VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
     }
 }

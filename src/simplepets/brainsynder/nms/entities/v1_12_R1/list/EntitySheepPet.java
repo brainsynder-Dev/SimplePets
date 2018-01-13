@@ -8,14 +8,21 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntitySheepPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+@Size(width = 0.9F, length = 1.3F)
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> COLOR_SHEARED;
+
+    static {
+        COLOR_SHEARED = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
+    }
 
     public EntitySheepPet(World world) {
         super(world);
     }
+
     public EntitySheepPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -66,9 +73,5 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         } else {
             this.datawatcher.set(COLOR_SHEARED, (byte) (data & -17));
         }
-    }
-
-    static {
-        COLOR_SHEARED = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
     }
 }

@@ -8,11 +8,19 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityZombieVillagerPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+@Size(width = 0.6F, length = 1.8F)
 public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntityZombieVillagerPet {
     private static final DataWatcherObject<Integer> PROFESSION;
     private static final DataWatcherObject<Boolean> CONVERTING;
+
+    static {
+        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
+        CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
+    }
+
     private ProfessionWrapper profession;
 
     public EntityZombieVillagerPet(World world) {
@@ -56,11 +64,6 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
     public void setProfession(ProfessionWrapper wrapper) {
         profession = wrapper;
         this.datawatcher.set(PROFESSION, wrapper.getId());
-    }
-
-    static {
-        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
-        CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
     }
 
 }

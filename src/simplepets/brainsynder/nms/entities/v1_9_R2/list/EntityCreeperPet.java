@@ -9,6 +9,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityCreeperPet;
 import simplepets.brainsynder.nms.entities.v1_9_R2.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     private static final DataWatcherObject<Integer> a;
@@ -28,14 +31,14 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Powered", isPowered());
+        object.setBoolean("powered", isPowered());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Powered")) {
-            setPowered(object.getBoolean("Powered"));
+        if (object.hasKey("powered")) {
+            setPowered(object.getBoolean("powered"));
         }
         super.applyCompound(object);
     }

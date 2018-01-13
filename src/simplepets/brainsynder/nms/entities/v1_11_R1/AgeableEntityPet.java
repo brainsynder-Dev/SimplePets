@@ -20,6 +20,7 @@ public abstract class AgeableEntityPet extends EntityPet {
     public AgeableEntityPet(World world) {
         super(world);
     }
+
     public AgeableEntityPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -27,14 +28,14 @@ public abstract class AgeableEntityPet extends EntityPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Baby", isBaby());
+        object.setBoolean("baby", isBaby());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Baby")) {
-            setBaby(object.getBoolean("Baby"));
+        if (object.hasKey("baby")) {
+            setBaby(object.getBoolean("baby"));
         }
         super.applyCompound(object);
     }

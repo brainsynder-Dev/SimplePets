@@ -8,6 +8,7 @@ public abstract class EntityNoClipPet extends EntityPet implements IEntityNoClip
     public EntityNoClipPet(World world, IPet pet) {
         super(world, pet);
     }
+
     public EntityNoClipPet(World world) {
         super(world);
     }

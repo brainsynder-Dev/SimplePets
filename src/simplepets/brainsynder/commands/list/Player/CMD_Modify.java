@@ -39,7 +39,7 @@ public class CMD_Modify extends PetCommand<Player> {
                 sendUsage(p);
             } else {
                 StorageTagCompound compound;
-                String json = buildMultiArg (args, 1).replace(" ", "~");
+                String json = buildMultiArg(args, 1).replace(" ", "~");
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {

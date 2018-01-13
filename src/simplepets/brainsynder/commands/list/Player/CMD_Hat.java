@@ -15,7 +15,7 @@ public class CMD_Hat extends PetCommand<Player> {
         PetOwner petOwner = PetOwner.getPetOwner(p);
         if (petOwner.hasPet()) {
             IPet pet = petOwner.getPet();
-            pet.hatPet();
+            if (pet.getPetType().canHat(p)) pet.hatPet();
         }
     }
 }

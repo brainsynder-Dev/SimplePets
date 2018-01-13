@@ -56,7 +56,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
     public void open() {
         this.levels = this.player.getLevel();
         this.exp = this.player.getExp();
-        EntityPlayer p = ((CraftPlayer)this.player).getHandle();
+        EntityPlayer p = ((CraftPlayer) this.player).getHandle();
         AnvilContainer container = new AnvilContainer(p);
         this.inv = container.getBukkitView().getTopInventory();
 
@@ -81,6 +81,20 @@ public class HandleAnvilGUI implements IAnvilGUI {
         this.items = null;
         HandlerList.unregisterAll(this.listener);
         this.listener = null;
+    }
+
+    public static class AnvilContainer extends ContainerAnvil {
+        AnvilContainer(EntityHuman entity) {
+            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
+            checkReachable = false;
+        }
+
+        public boolean a(EntityHuman entityhuman) {
+            return true;
+        }
+        public boolean canUse(EntityHuman entityhuman) {
+            return true;
+        }
     }
 
     private class LIST implements Listener {
@@ -141,18 +155,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
                 destroy();
             }
 
-        }
-    }
-
-    public static class AnvilContainer extends ContainerAnvil {
-        AnvilContainer(EntityHuman entity) {
-            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
-            checkReachable = false;
-        }
-
-        @Override
-        public boolean canUse(EntityHuman entityhuman) {
-            return true;
         }
     }
 }

@@ -3,6 +3,9 @@ package simplepets.brainsynder.wrapper;
 
 import org.bukkit.entity.Horse.Variant;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public enum HorseType {
     NORMAL(Variant.HORSE, 0),
@@ -19,7 +22,7 @@ public enum HorseType {
         this.id = id;
     }
 
-    public static HorseType getByName (String name) {
+    public static HorseType getByName(String name) {
         for (HorseType wrapper : values()) {
             if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
         }

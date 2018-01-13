@@ -1,5 +1,6 @@
 package simplepets.brainsynder;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
@@ -16,6 +17,8 @@ import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.CMD_Pet;
+import simplepets.brainsynder.database.ConnectionPool;
+import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.events.*;
 import simplepets.brainsynder.files.*;
 import simplepets.brainsynder.links.IProtectionLink;
@@ -29,6 +32,7 @@ import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.LoaderRetriever;
 
 import java.io.File;
+import java.sql.Connection;
 import java.util.*;
 
 public class PetCore extends JavaPlugin {
@@ -43,18 +47,13 @@ public class PetCore extends JavaPlugin {
     );
     public boolean forceSpawn;
     public ObjectPager<PetType> petTypes;
-    @Getter
-    private boolean disabling = false;
-    @Getter
-    private Config configuration;
-    @Getter
-    private Messages messages;
-    @Getter
-    private IProtectionLink worldGuardLink;
+    @Getter private boolean disabling = false;
+    @Getter private Config configuration;
+    @Getter private Messages messages;
+    @Getter @Setter(value = AccessLevel.PRIVATE) private MySQL mySQL = null;
+    @Getter private IProtectionLink worldGuardLink;
     private ISpawner spawner;
-    @Getter
-    @Setter
-    private IStorage<Integer> availableSlots = new StorageList<>();
+    @Getter @Setter private IStorage<Integer> availableSlots = new StorageList<>();
     private Map<UUID, PlayerFile> fileStorage = new HashMap<>();
 
     public static PetCore get() {
@@ -70,6 +69,10 @@ public class PetCore extends JavaPlugin {
         return true;
     }
 
+    public static String getPluginVersion() {
+        return "3.9";
+    }
+
     public void onEnable() {
         long start = System.currentTimeMillis();
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
@@ -79,7 +82,7 @@ public class PetCore extends JavaPlugin {
             return;
         }
         double ver = Double.parseDouble(plugin.getDescription().getVersion());
-        if (ver < 3.7) {
+        if (ver < 3.8) {
             System.out.println("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/");
             System.out.println("Disabling SimplePets...");
             setEnabled(false);
@@ -87,7 +90,7 @@ public class PetCore extends JavaPlugin {
         }
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
-        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", "3.8")) {
+        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", getPluginVersion())) {
             setEnabled(false);
             return;
         }
@@ -100,14 +103,20 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        if (!(getJavaVersion() >= 1.8)) {
-            System.out.println("-------------------------------------------");
-            System.out.println("          Error Type: CRITICAL");
-            System.out.println("    An Internal Version Error Occurred");
-            System.out.println("SimplePets Requires Java 8+ in order to work. Please update Java.");
-            System.out.println("-------------------------------------------");
-            setEnabled(false);
-            return;
+
+        double version = getJavaVersion();
+        if (version == 0.0) {
+            System.out.println("An error occurred when trying to get the simplified Java version for: '" + System.getProperty("java.version") + "' Please make sure you are using a recommended Java version (Java 8)");
+        } else {
+            if (!(version >= 1.8)) {
+                System.out.println("-------------------------------------------");
+                System.out.println("          Error Type: CRITICAL");
+                System.out.println("    An Internal Version Error Occurred");
+                System.out.println("SimplePets Requires Java 8+ in order to work. Please update Java.");
+                System.out.println("-------------------------------------------");
+                setEnabled(false);
+                return;
+            }
         }
 
         instance = this;
@@ -178,6 +187,7 @@ public class PetCore extends JavaPlugin {
         }
         petTypes = new ObjectPager<>(size, types);
         worldGuardLink = new WorldGuardLink();
+        handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
 
@@ -189,10 +199,41 @@ public class PetCore extends JavaPlugin {
     }
 
     private double getJavaVersion() {
-        String version = System.getProperty("java.version");
-        int pos = version.indexOf('.');
-        pos = version.indexOf('.', pos + 1);
-        return Double.parseDouble(version.substring(0, pos));
+        try {
+            String version = System.getProperty("java.version");
+            int pos = version.indexOf('.');
+            pos = version.indexOf('.', pos + 1);
+            return Double.parseDouble(version.substring(0, pos));
+        } catch (Throwable t) {
+            return 0.0;
+        }
+    }
+
+    private void handleSQL() {
+        if (getConfiguration().isSet("MySQL.Enabled")) {
+            String host = getConfiguration().getString("MySQL.Host", false);
+            String port = getConfiguration().getString("MySQL.Port", false);
+            String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
+            String username = getConfiguration().getString("MySQL.Login.Username", false);
+            String password = getConfiguration().getString("MySQL.Login.Password", false);
+            mySQL = new MySQL(host, port, databaseName, username, password);
+            Thread thread = new Thread(() -> {
+                try {
+                    debug("Creating SQL table if there is none...");
+                    ConnectionPool pool = mySQL.getPool();
+                    Connection connection = pool.borrowConnection();
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
+                    pool.surrenderConnection(connection);
+                    connection.close();
+                } catch (Exception e) {
+                    debug("Unable to create default SQL tables Error:");
+                    e.printStackTrace();
+                }
+            });
+            thread.setName("SimplePets SQL");
+            thread.setDaemon(false);
+            thread.start();
+        }
     }
 
     private void reloadSpawner() {
@@ -289,6 +330,11 @@ public class PetCore extends JavaPlugin {
             }
             petOwner.getFile().save();
         }
+
+        if (getConfiguration().isSet("MySQL.Enabled")) {
+            mySQL.getPool().dumpPool();
+            mySQL = null;
+        }
         VersionNMS.unregisterPets();
         try {
             Thread.sleep(20L);
@@ -340,5 +386,32 @@ public class PetCore extends JavaPlugin {
                 break;
         }
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+    }
+
+    public void reload () {
+        if (getConfiguration().isSet("MySQL.Enabled")) {
+            String host = getConfiguration().getString("MySQL.Host", false);
+            String port = getConfiguration().getString("MySQL.Port", false);
+            String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
+            String username = getConfiguration().getString("MySQL.Login.Username", false);
+            String password = getConfiguration().getString("MySQL.Login.Password", false);
+            mySQL = new MySQL(host, port, databaseName, username, password);
+            Thread thread = new Thread(() -> {
+                try {
+                    debug("Creating SQL table if there is none...");
+                    ConnectionPool pool = mySQL.getPool();
+                    Connection connection = pool.borrowConnection();
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
+                    pool.surrenderConnection(connection);
+                    connection.close();
+                } catch (Exception e) {
+                    debug("Unable to create default SQL tables Error:");
+                    e.printStackTrace();
+                }
+            });
+            thread.setName("SimplePets SQL");
+            thread.setDaemon(false);
+            thread.start();
+        }
     }
 }

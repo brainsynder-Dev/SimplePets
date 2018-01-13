@@ -8,6 +8,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityZombiePet;
 import simplepets.brainsynder.nms.entities.v1_9_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePet {
     private static final DataWatcherObject<Integer> by;

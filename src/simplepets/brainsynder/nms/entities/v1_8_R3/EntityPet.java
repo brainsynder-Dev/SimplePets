@@ -18,6 +18,9 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.lang.reflect.Field;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {

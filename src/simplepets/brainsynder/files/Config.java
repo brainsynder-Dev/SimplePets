@@ -57,15 +57,7 @@ public class Config extends FileMaker {
         if (!isSet("Respawn-Last-Pet-On-Login"))
             set("Respawn-Last-Pet-On-Login", true, "If the player had a pet when they logged out", "Should that pet be re-spawned on Login");
         if (!isSet("WorldGuard.Spawning.Always-Allowed"))
-            set("WorldGuard.Spawning.Always-Allowed", true,
-                "Spawning Always-Allowed = Should pets always be allowed", " to spawn in regions",
-                "O__O",
-                "Spawning Allowed-Regions = List the WorldGuard regions", " that allow the pets to spawn in",
-                "O__O",
-                "Pet-Entering Always-Allowed = Should pets be allowed", " to enter certain regions?",
-                "O__O",
-                "Pet-Entering Allowed-Regions = List the WorldGuard regions", " that allow pets to enter"
-            );
+            set("WorldGuard.Spawning.Always-Allowed", true);
         if (!isSet("WorldGuard.Spawning.Blocked-Regions"))
             set("WorldGuard.Spawning.Blocked-Regions", Collections.singletonList("pvp"));
         if (!isSet("WorldGuard.Pet-Entering.Always-Allowed")) set("WorldGuard.Pet-Entering.Always-Allowed", true);
@@ -92,6 +84,8 @@ public class Config extends FileMaker {
         if (!isSet("MySQL.DatabaseName")) set("MySQL.DatabaseName", "insert_DatabaseName");
         if (!isSet("MySQL.Login.Username")) set("MySQL.Login.Username", "username");
         if (!isSet("MySQL.Login.Password")) set("MySQL.Login.Password", "password");
+        if (!isSet("MySQL.Options.UseSSL")) set("MySQL.Options.UseSSL", false);
+        if (!isSet("MySQL.Options.AutoReconnect")) set("MySQL.Options.AutoReconnect", false);
 
         if (!isSet("Debug.Enabled"))
             set("Debug.Enabled", false,

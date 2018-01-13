@@ -13,6 +13,9 @@ import simplepets.brainsynder.wrapper.HorseStyleType;
 
 import java.util.UUID;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityHorsePet extends AgeableEntityPet implements IEntityHorsePet {
     private static final DataWatcherObject<Byte> VISUAL;
@@ -40,8 +43,8 @@ public class EntityHorsePet extends AgeableEntityPet implements IEntityHorsePet 
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setBoolean("Chested", isChested());
-        object.setInteger("HorseArmor", this.armor.ordinal());
-        object.setInteger("Color", getColor().ordinal());
+        object.setInteger("armor", this.armor.ordinal());
+        object.setInteger("color", getColor().ordinal());
         object.setBoolean("Saddled", isSaddled());
         object.setInteger("Style", getStyle().ordinal());
         return object;
@@ -49,10 +52,10 @@ public class EntityHorsePet extends AgeableEntityPet implements IEntityHorsePet 
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("HorseArmor"))
-            setArmor(HorseArmorType.values()[object.getInteger("HorseArmor")]);
-        if (object.hasKey("Color"))
-            setColor(HorseColorType.values()[object.getInteger("Color")]);
+        if (object.hasKey("armor"))
+            setArmor(HorseArmorType.values()[object.getInteger("armor")]);
+        if (object.hasKey("color"))
+            setColor(HorseColorType.values()[object.getInteger("color")]);
         if (object.hasKey("Style"))
             setStyle(HorseStyleType.values()[object.getInteger("Style")]);
         if (object.hasKey("Saddled"))

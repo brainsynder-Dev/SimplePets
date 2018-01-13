@@ -27,7 +27,7 @@ public enum RabbitType {
         return null;
     }
 
-    public static RabbitType getByName (String name) {
+    public static RabbitType getByName(String name) {
         for (RabbitType wrapper : values()) {
             if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
         }

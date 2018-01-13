@@ -73,8 +73,20 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
     public void c() {
         if (owner.hasPet()) {
             if (owner.getPet().getEntity() != null) {
-                PetMoveEvent event = new PetMoveEvent(owner.getPet().getEntity(), PetMoveEvent.Cause.FOLLOW);
-                Bukkit.getServer().getPluginManager().callEvent(event);
+                if (pet == null) {
+                    if (pet.getEntity() != null) pet.getEntity().remove();
+                    return;
+                }
+
+                if (pet.getOwner() == null) {
+                    if (pet.getEntity() != null) pet.getEntity().remove();
+                    return;
+                }
+
+                try {
+                    PetMoveEvent event = new PetMoveEvent(pet, PetMoveEvent.Cause.FOLLOW);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                }catch (Throwable ignored) {}
             }
             PathEntity path = ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ());
             ((EntityPet) pet).getNavigation().a(path, speed);

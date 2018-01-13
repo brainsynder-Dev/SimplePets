@@ -87,7 +87,7 @@ public enum ProfessionWrapper {
         public static ZombieProfession getPrevious(ZombieProfession current) {
             if (current == NORMAL) {
                 return HUSK;
-            }else{
+            } else {
                 return NORMAL;
             }
         }

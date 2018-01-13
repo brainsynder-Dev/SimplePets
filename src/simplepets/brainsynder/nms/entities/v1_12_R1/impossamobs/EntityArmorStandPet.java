@@ -113,6 +113,12 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return false;
     }
 
+    /**
+     * Runs per-tick
+     *
+     * Search for: this.world.methodProfiler.a("entityBaseTick");
+     * Class: Entity
+     */
     @Override
     public void Y() {
         super.Y();

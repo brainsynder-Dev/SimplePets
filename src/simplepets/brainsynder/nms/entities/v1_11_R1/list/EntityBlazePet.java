@@ -28,14 +28,14 @@ public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Burning", isBurning());
+        object.setBoolean("burning", isBurning());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Burning")) {
-            setBurning(object.getBoolean("Burning"));
+        if (object.hasKey("burning")) {
+            setBurning(object.getBoolean("burning"));
         }
         super.applyCompound(object);
     }

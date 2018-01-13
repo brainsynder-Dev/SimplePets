@@ -57,7 +57,7 @@ public class AnimationCycle {
 
                     try {
                         frames.get(this.i).setLocations(armor);
-                    } catch (Exception e) {
+                    } catch (Exception ignored) {
                     }
                     ++this.i;
 

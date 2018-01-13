@@ -15,6 +15,9 @@ import simplepets.brainsynder.pet.PetMoveEvent;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {

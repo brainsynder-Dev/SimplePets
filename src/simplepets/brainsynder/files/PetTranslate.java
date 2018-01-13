@@ -142,7 +142,7 @@ public class PetTranslate {
                 set(type.getConfigName() + ".AmbientSound", "off");
             }
             set(type.getConfigName() + ".Description", Arrays.asList("Click here to select", "The " + name + " pet."));
-            set(type.getConfigName() + ".On-Summon", new ArrayList<> ());
+            set(type.getConfigName() + ".On-Summon", new ArrayList<>());
 
             //TODO: These values are temp. disabled till a fix arises.
             //set(type.getConfigName() + ".Float-Down", true);

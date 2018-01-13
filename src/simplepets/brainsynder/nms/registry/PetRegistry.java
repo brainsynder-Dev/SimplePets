@@ -8,6 +8,9 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class PetRegistry {
     public static String getVersion() {

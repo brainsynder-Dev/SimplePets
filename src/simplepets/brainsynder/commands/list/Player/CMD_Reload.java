@@ -50,6 +50,7 @@ public class CMD_Reload extends PetCommand<Player> {
                 }
             }
         }
+        PetCore.get().reload();
         PetCore.get().petTypes = new ObjectPager<>(size, types);
         LoaderRetriever.reloadLoaders();
         p.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));

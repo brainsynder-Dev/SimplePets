@@ -35,7 +35,7 @@ public class WorldGuardLink extends PluginLink<WorldGuardPlugin> implements IWor
         List<String> regions = PetCore.get().getConfiguration().getStringList("WorldGuard.Pet-Entering.Blocked-Regions");
         List<Boolean> val = new ArrayList<>();
         for (ProtectedRegion rg : regionIterator) {
-            val.add( (!regions.contains(rg.getId())) );
+            val.add((!regions.contains(rg.getId())));
         }
         return (!val.contains(false));
     }

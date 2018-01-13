@@ -8,9 +8,15 @@ public interface IHorseAbstract extends IAgeablePet {
 
     void setSaddled(boolean var1);
 
+    /**
+     * @Deprecated Will be removed when MC version 1.13 is released
+     */
     @Deprecated
     void setVariant(HorseColorType var1);
 
+    /**
+     * @Deprecated Will be removed when MC version 1.13 is released
+     */
     @Deprecated
     void setVariant(HorseColorType var1, HorseStyleType var2);
 }

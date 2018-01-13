@@ -25,7 +25,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private List<Entity> entities = new ArrayList<>();
     private Entity displayEntity;
     private Location previus;
-    @Getter private boolean moving = false;
+    @Getter
+    private boolean moving = false;
 
     public EntityControllerPet(World world, IPet pet) {
         super(world, pet);
@@ -82,7 +83,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         }
     }
 
-    public void updateName () {
+    public void updateName() {
         if (hasCustomName()) {
             setCustomNameVisible(false);
             if (displayEntity.getPassenger() != null) {

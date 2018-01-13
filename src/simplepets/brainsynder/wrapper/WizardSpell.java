@@ -18,7 +18,7 @@ public enum WizardSpell {
         this.array = new double[]{var4, var6, var8};
     }
 
-    public static WizardSpell getByName (String name) {
+    public static WizardSpell getByName(String name) {
         for (WizardSpell wrapper : values()) {
             if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
         }

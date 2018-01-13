@@ -26,8 +26,7 @@ public class PerVersion {
     }
 
     public static void handleMount(Player player, Entity entity) {
-        if (ServerVersion.getVersion() == ServerVersion.v1_8_R3)
-            return;
+        if (ServerVersion.getVersion() == ServerVersion.v1_8_R3) return;
         Class<?> outMount = ReflectionUtil.getNmsClass("PacketPlayOutMount");
         Constructor<?> constructor = ReflectionUtil.fillConstructor(outMount, ReflectionUtil.getNmsClass("Entity"));
         Object packet = ReflectionUtil.initiateClass(constructor, ReflectionUtil.getEntityHandle(entity));

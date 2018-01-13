@@ -8,13 +8,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityPolarBearPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 1.3F, length = 1.4F)
 public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolarBearPet {
     private static final DataWatcherObject<Boolean> STANDING_UP;
+
+    static {
+        STANDING_UP = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.h);
+    }
 
     public EntityPolarBearPet(World world) {
         super(world);
     }
+
     public EntityPolarBearPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -45,9 +52,5 @@ public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolar
     @Override
     public boolean isStanding() {
         return this.datawatcher.get(STANDING_UP);
-    }
-
-    static {
-        STANDING_UP = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.h);
     }
 }

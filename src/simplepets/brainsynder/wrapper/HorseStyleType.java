@@ -24,7 +24,7 @@ public enum HorseStyleType {
         this.id = id;
     }
 
-    public static HorseStyleType getByName (String name) {
+    public static HorseStyleType getByName(String name) {
         for (HorseStyleType wrapper : values()) {
             if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
         }

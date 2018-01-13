@@ -10,10 +10,17 @@ import simplepets.brainsynder.nms.entities.type.IEntityParrotPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.CustomMoveFlying;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
+@Size(width = 0.5F, length = 0.9F)
 public class EntityParrotPet extends EntityTameablePet implements IEntityParrotPet {
     private static final DataWatcherObject<Integer> TYPE;
+
+    static {
+        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherRegistry.b);
+    }
+
     private boolean rainbow = false;
     private int toggle = 0;
     private int r = 0;
@@ -129,9 +136,9 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("parrotcolor"))
-        setVariant(ParrotVariant.getByName("parrotcolor"));
+            setVariant(ParrotVariant.getByName("parrotcolor"));
         if (object.hasKey("rainbow"))
-        rainbow = object.getBoolean("rainbow");
+            rainbow = object.getBoolean("rainbow");
         super.applyCompound(object);
     }
 
@@ -151,9 +158,5 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     public void setVariant(ParrotVariant variant) {
         this.datawatcher.set(TYPE, variant.ordinal());
-    }
-
-    static {
-        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherRegistry.b);
     }
 }

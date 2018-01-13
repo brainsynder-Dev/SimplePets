@@ -8,13 +8,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityVexPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityNoClipPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.4F, length = 0.8F)
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     protected static final DataWatcherObject<Byte> DATA;
+
+    static {
+        DATA = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
+    }
 
     public EntityVexPet(World world) {
         super(world);
     }
+
     public EntityVexPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -51,9 +58,5 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
         }
 
         this.datawatcher.set(DATA, (byte) (j & 255));
-    }
-
-    static {
-        DATA = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
     }
 }

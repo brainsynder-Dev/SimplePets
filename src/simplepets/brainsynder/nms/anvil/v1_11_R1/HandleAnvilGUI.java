@@ -53,7 +53,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
     public void open() {
         this.levels = this.player.getLevel();
         this.exp = this.player.getExp();
-        EntityPlayer p = ((CraftPlayer)this.player).getHandle();
+        EntityPlayer p = ((CraftPlayer) this.player).getHandle();
         HandleAnvilGUI.AnvilContainer container = new HandleAnvilGUI.AnvilContainer(p);
         this.inv = container.getBukkitView().getTopInventory();
 
@@ -80,13 +80,21 @@ public class HandleAnvilGUI implements IAnvilGUI {
         this.listener = null;
     }
 
+    public static class AnvilContainer extends ContainerAnvil {
+        AnvilContainer(EntityHuman entity) {
+            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
+        }
+
+        public boolean a(EntityHuman entityhuman) {
+            return true;
+        }
+    }
+
     private class LIST implements Listener {
         private LIST() {
         }
 
-        @EventHandler(
-            ignoreCancelled = true
-        )
+        @EventHandler(ignoreCancelled = true)
         public void onInventoryClick(InventoryClickEvent event) {
             if (event.getWhoClicked() instanceof Player && event.getInventory().equals(HandleAnvilGUI.this.inv)) {
                 ItemStack item = event.getCurrentItem();
@@ -126,7 +134,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
         }
 
         @EventHandler(
-            ignoreCancelled = true
+                ignoreCancelled = true
         )
         public void onInventoryClose(InventoryCloseEvent event) {
             if (event.getPlayer() instanceof Player) {
@@ -140,23 +148,13 @@ public class HandleAnvilGUI implements IAnvilGUI {
         }
 
         @EventHandler(
-            ignoreCancelled = true
+                ignoreCancelled = true
         )
         public void onPlayerQuit(PlayerQuitEvent event) {
             if (event.getPlayer().equals(HandleAnvilGUI.this.getPlayer())) {
                 HandleAnvilGUI.this.destroy();
             }
 
-        }
-    }
-
-    public static class AnvilContainer extends ContainerAnvil {
-        AnvilContainer(EntityHuman entity) {
-            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
-        }
-
-        public boolean a(EntityHuman entityhuman) {
-            return true;
         }
     }
 }

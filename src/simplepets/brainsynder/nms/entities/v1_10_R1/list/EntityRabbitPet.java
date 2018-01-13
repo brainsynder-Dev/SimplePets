@@ -10,6 +10,9 @@ import simplepets.brainsynder.nms.entities.v1_10_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.RabbitType;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> TYPE;

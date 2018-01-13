@@ -5,10 +5,17 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityRabbitPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.RabbitType;
 
+@Size(width = 0.6F, length = 0.7F)
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> TYPE;
+
+    static {
+        TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
+    }
+
     private boolean onGroundLastTick = false;
     private int delay = 0;
 
@@ -65,7 +72,6 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
             this.delay = 1;
         }
     }
-
 
     @Override
     public void repeatTask() {
@@ -133,9 +139,5 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
             }
 
         }
-    }
-
-    static {
-        TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
     }
 }

@@ -31,31 +31,39 @@ public class PetOwner {
     /**
      * JSONArray contains all the pets the player has owned while Vault was Enabled.
      */
-    @Getter() JSONArray ownedPets = new JSONArray();
+    @Getter()
+    JSONArray ownedPets = new JSONArray();
     /**
      * Players Pet name, Will return null if empty.
      */
-    @Getter String petName = null;
+    @Getter
+    String petName = null;
     /**
      * Will return the players active pet, Will return null if there is no pet.
      */
-    @Getter IPet pet = null;
+    @Getter
+    IPet pet = null;
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    @Getter Player player = null;
+    @Getter
+    Player player = null;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
-    @Getter OwnerFile file = null;
+    @Getter
+    OwnerFile file = null;
     /**
      * This little boolean is for checking if a player is renaming their pet via chat.
      */
-    @Getter @Setter boolean renaming = false;
+    @Getter
+    @Setter
+    boolean renaming = false;
     /**
      * Handles Pet respawning when the player teleports, dies, etc...
      */
-    @Setter StorageTagCompound petToRespawn = null;
+    @Setter
+    StorageTagCompound petToRespawn = null;
 
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
@@ -86,7 +94,8 @@ public class PetOwner {
             return ownerMap.get(player.getUniqueId());
         }
         PetOwner owner = new PetOwner(player);
-        return ownerMap.put(player.getUniqueId(), owner);
+        ownerMap.put(player.getUniqueId(), owner);
+        return ownerMap.get(player.getUniqueId());
     }
 
     /**
@@ -113,6 +122,7 @@ public class PetOwner {
     public void setPetName(String name) {
         setPetName(name, false);
     }
+
     public void setPetName(String name, boolean override) {
         boolean hasLimit = PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.Limit-Number-Of-Characters");
         boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
@@ -139,7 +149,7 @@ public class PetOwner {
                 name = ChatColor.translateAlternateColorCodes('&', event.canUseMagic() ? name : name.replace("&k", "k"));
             }
             player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
-        }else{
+        } else {
             name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
         }
         petName = name;
@@ -246,7 +256,7 @@ public class PetOwner {
         player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat", true));
     }
 
-    public void respawnPet () {
+    public void respawnPet() {
         if (hasPet()) return;
         if (!hasPetToRespawn()) return;
         if (!petToRespawn.hasKey("PetType")) return;
@@ -265,7 +275,7 @@ public class PetOwner {
         }.runTaskLater(PetCore.get(), 2);
     }
 
-    public boolean hasPetToRespawn () {
+    public boolean hasPetToRespawn() {
         return (petToRespawn != null) && (pet == null);
     }
 

@@ -25,6 +25,9 @@ import simplepets.brainsynder.utils.Valid;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class HandleAnvilGUI implements IAnvilGUI {
     private Player player;
@@ -55,13 +58,13 @@ public class HandleAnvilGUI implements IAnvilGUI {
     public void open() {
         this.levels = this.player.getLevel();
         this.exp = this.player.getExp();
-        EntityPlayer p = ((CraftPlayer)this.player).getHandle();
+        EntityPlayer p = ((CraftPlayer) this.player).getHandle();
         HandleAnvilGUI.AnvilContainer container = new HandleAnvilGUI.AnvilContainer(p);
         this.inv = container.getBukkitView().getTopInventory();
         Iterator var3 = this.items.keySet().iterator();
 
-        while(var3.hasNext()) {
-            AnvilSlot slot = (AnvilSlot)var3.next();
+        while (var3.hasNext()) {
+            AnvilSlot slot = (AnvilSlot) var3.next();
             this.inv.setItem(slot.getSlot(), this.items.get(slot));
         }
 
@@ -84,12 +87,22 @@ public class HandleAnvilGUI implements IAnvilGUI {
         this.listener = null;
     }
 
+    public static class AnvilContainer extends ContainerAnvil {
+        public AnvilContainer(EntityHuman entity) {
+            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
+        }
+
+        public boolean a(EntityHuman entityhuman) {
+            return true;
+        }
+    }
+
     private class LIST implements Listener {
         private LIST() {
         }
 
         @EventHandler(
-            ignoreCancelled = true
+                ignoreCancelled = true
         )
         public void onInventoryClick(InventoryClickEvent event) {
             if (event.getWhoClicked() instanceof Player && event.getInventory().equals(HandleAnvilGUI.this.inv)) {
@@ -130,7 +143,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
         }
 
         @EventHandler(
-            ignoreCancelled = true
+                ignoreCancelled = true
         )
         public void onInventoryClose(InventoryCloseEvent event) {
             if (event.getPlayer() instanceof Player) {
@@ -144,23 +157,13 @@ public class HandleAnvilGUI implements IAnvilGUI {
         }
 
         @EventHandler(
-            ignoreCancelled = true
+                ignoreCancelled = true
         )
         public void onPlayerQuit(PlayerQuitEvent event) {
             if (event.getPlayer().equals(HandleAnvilGUI.this.getPlayer())) {
                 HandleAnvilGUI.this.destroy();
             }
 
-        }
-    }
-
-    public static class AnvilContainer extends ContainerAnvil {
-        public AnvilContainer(EntityHuman entity) {
-            super(entity.inventory, entity.world, new BlockPosition(0, 0, 0), entity);
-        }
-
-        public boolean a(EntityHuman entityhuman) {
-            return true;
         }
     }
 }

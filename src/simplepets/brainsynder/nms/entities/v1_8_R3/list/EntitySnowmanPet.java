@@ -5,6 +5,9 @@ import simplepets.brainsynder.nms.entities.type.IEntitySnowmanPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     public EntitySnowmanPet(World world, IPet pet) {

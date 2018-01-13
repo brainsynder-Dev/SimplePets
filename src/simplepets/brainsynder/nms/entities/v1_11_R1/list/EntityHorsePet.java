@@ -57,18 +57,18 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setInteger("HorseArmor", this.armor.ordinal());
-        object.setInteger("Color", getColor().ordinal());
+        object.setInteger("armor", this.armor.ordinal());
+        object.setInteger("color", getColor().ordinal());
         object.setInteger("Style", getStyle().ordinal());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("HorseArmor"))
-            setArmor(HorseArmorType.values()[object.getInteger("HorseArmor")]);
-        if (object.hasKey("Color"))
-            setColor(HorseColorType.values()[object.getInteger("Color")]);
+        if (object.hasKey("armor"))
+            setArmor(HorseArmorType.values()[object.getInteger("armor")]);
+        if (object.hasKey("color"))
+            setColor(HorseColorType.values()[object.getInteger("color")]);
         if (object.hasKey("Style"))
             setStyle(HorseStyleType.values()[object.getInteger("Style")]);
         super.applyCompound(object);

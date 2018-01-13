@@ -37,7 +37,7 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
         StorageTagCompound object = super.asCompound();
         object.setString("LlamaColor", getLlamaColor().name());
         if (getColor() != null)
-            object.setString("Color", this.color.name());
+            object.setString("color", this.color.name());
         return object;
     }
 
@@ -45,8 +45,8 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("LlamaColor"))
             setSkinColor(LlamaColor.valueOf(String.valueOf(object.getString("LlamaColor"))));
-        if (object.hasKey("Color"))
-            setColor(DyeColorWrapper.valueOf(String.valueOf(object.getString("Color"))));
+        if (object.hasKey("color"))
+            setColor(DyeColorWrapper.valueOf(String.valueOf(object.getString("color"))));
         super.applyCompound(object);
     }
 

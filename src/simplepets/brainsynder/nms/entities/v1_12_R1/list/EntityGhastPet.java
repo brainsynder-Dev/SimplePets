@@ -8,14 +8,21 @@ import simplepets.brainsynder.nms.entities.type.IEntityGhastPet;
 import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 4.0F, length = 4.0F)
 public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
         IFlyablePet {
     private static final DataWatcherObject<Boolean> a;
 
+    static {
+        a = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
+    }
+
     public EntityGhastPet(World world) {
         super(world);
     }
+
     public EntityGhastPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -24,9 +31,5 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(a, Boolean.FALSE);
-    }
-
-    static {
-        a = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
     }
 }

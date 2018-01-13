@@ -36,6 +36,12 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
         return ((ArmorStand) stand.getBukkitEntity());
     }
 
+    /**
+     * Runs per-tick
+     *
+     * Search for: this.world.methodProfiler.a("entityBaseTick");
+     * Class: Entity
+     */
     @Override
     public void Y() {
         super.Y();

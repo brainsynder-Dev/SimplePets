@@ -23,6 +23,7 @@ import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.pet.PetMoveEvent;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.Map;
@@ -30,10 +31,8 @@ import java.util.Map;
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     private IPet pet;
-    private double upSpeed = 0.5,
-            floatSpeed = 0.5,
-            walkSpeed = 0.6000000238418579,
-            rideSpeed = 0.4000000238418579;
+    private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
+
     private boolean floatDown = true,
             canGlow = true,
             isGlowing = false,
@@ -51,7 +50,11 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         super(world);
         this.pet = pet;
         this.collides = false;
-        this.setSize(0.5F, 0.5F);
+        if (getClass().isAnnotationPresent(Size.class)) {
+            Size size = getClass().getAnnotation(Size.class);
+            setSize(size.length(), size.width());
+        }
+
         this.noclip = false;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
 
@@ -67,14 +70,11 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
         floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
-        floatSpeed = PetTranslate.getDouble(pet.getPetType(), "Float-Speed");
-        upSpeed = PetTranslate.getDouble(pet.getPetType(), "Up-Speed");
     }
 
     public EntityPet(World world) {
         super(world);
-        if (bukkitEntity != null)
-            bukkitEntity.remove();
+        if (bukkitEntity != null) bukkitEntity.remove();
     }
 
     @Override
@@ -82,7 +82,8 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", pet.getPetType().name());
         PetOwner owner = PetOwner.getPetOwner(getOwner());
-        object.setString("name", owner.getPetName().replace('§', '&'));
+        if (owner.getPetName() != null)
+            object.setString("name", owner.getPetName().replace('§', '&'));
         object.setBoolean("silent", silent);
         return object;
     }
@@ -103,6 +104,12 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
     }
 
+    /**
+     * Handles the registration of DataWatchers
+     *
+     * Search for: this.datawatcher.register
+     * Class: EntityLiving
+     */
     @Override
     protected void i() {
         super.i();
@@ -115,6 +122,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
 
     @Override
     public Player getOwner() {
+        if (pet == null) return null;
         return pet.getOwner();
     }
 
@@ -299,6 +307,12 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         }
     }
 
+    /**
+     * Handles the Ambient Sound playing
+     *
+     * Search for: SoundEffect soundeffect = this.
+     * Class: EntityInsentient
+     */
     @Override
     protected SoundEffect F() {
         if (pet == null) return null;
@@ -325,6 +339,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
 
     /**
      * This method handles the Pet riding
+     *
+     * Search for: !this.isInWater() || this instanceof EntityHuman && ((EntityHuman)this).abilities.isFlying
+     * Class: EntityLiving
      */
     @Override
     public void a(float f, float f1, float f2) {
@@ -398,18 +415,41 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                     this.aH += this.aG;
                 }
             }
-            PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
-            Bukkit.getServer().getPluginManager().callEvent(event);
+
+            if (pet == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+
+            if (getOwner() == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+            try {
+                PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+            }catch (Throwable ignored) {}
         }
     }
 
     @Override
     public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
-        PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.WALK);
-        Bukkit.getServer().getPluginManager().callEvent(event);
         super.move(enummovetype, d0, d1, d2);
+        try {
+            PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.WALK);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+        }catch (Throwable ignored) {}
     }
 
+
+    /**
+     * Runs per-tick
+     *
+     * Search for: this.world.methodProfiler.a("entityBaseTick");
+     * Class: Entity
+     */
     @Override
     public void Y() {
         super.Y();
@@ -448,7 +488,38 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     protected void registerDatawatchers() {
     }
 
+    /**
+     * Used to stop the pet from moving when its pushed
+     *
+     * Search for: this.impulse = true;
+     * Class: Entity
+     */
     @Override
     public void f(double x, double y, double z) {
+    }
+
+
+    /**
+     * Pets should NEVER be saved in the world
+     */
+    public void a(NBTTagCompound nbttagcompound){
+    }
+
+    public void b(NBTTagCompound nbttagcompound){
+    }
+
+    public boolean c(NBTTagCompound nbttagcompound){
+        return false;
+    }
+
+    public boolean d(NBTTagCompound nbttagcompound){
+        return false;
+    }
+
+    public NBTTagCompound e(NBTTagCompound nbttagcompound){
+        return nbttagcompound;
+    }
+
+    public void f(NBTTagCompound nbttagcompound){
     }
 }

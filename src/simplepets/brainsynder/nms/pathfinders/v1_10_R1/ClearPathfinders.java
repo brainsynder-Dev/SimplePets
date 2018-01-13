@@ -8,6 +8,9 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.util.Set;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class ClearPathfinders extends ReflectionUtil {
     public ClearPathfinders(org.bukkit.entity.Entity e) {

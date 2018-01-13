@@ -8,9 +8,17 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntitySlimePet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+
+@Size(width = 0.6F, length = 0.6F)
 public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;
+
+    static {
+        SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherRegistry.b);
+    }
+
     private int jumpDelay;
 
     public EntitySlimePet(World world) {
@@ -59,9 +67,5 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
             jumpDelay = this.random.nextInt(15) + 10;
             this.getControllerJump().a();
         }
-    }
-
-    static {
-        SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherRegistry.b);
     }
 }

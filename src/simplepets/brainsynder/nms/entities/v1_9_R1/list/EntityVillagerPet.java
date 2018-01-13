@@ -10,6 +10,9 @@ import simplepets.brainsynder.nms.entities.v1_9_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
     private static final DataWatcherObject<Integer> PROFESSION;

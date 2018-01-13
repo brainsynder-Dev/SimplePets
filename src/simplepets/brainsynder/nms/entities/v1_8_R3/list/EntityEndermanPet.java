@@ -6,6 +6,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityEndermanPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     public EntityEndermanPet(World world, IPet pet) {
@@ -27,14 +30,14 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Screaming", isScreaming());
+        object.setBoolean("screaming", isScreaming());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Screaming")) {
-            setScreaming(object.getBoolean("Screaming"));
+        if (object.hasKey("screaming")) {
+            setScreaming(object.getBoolean("screaming"));
         }
         super.applyCompound(object);
     }

@@ -6,6 +6,9 @@ import simplepets.brainsynder.nms.entities.v1_10_R1.EntityTameablePet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Float> DATA_HEALTH;

@@ -25,6 +25,9 @@ public interface IPet {
 
     IEntityPet getVisableEntity();
 
+    /**
+     * @Deprecated Will be removed when MC version 1.13 is released
+     */
     @Deprecated
     Entity getDisplayEntity();
 

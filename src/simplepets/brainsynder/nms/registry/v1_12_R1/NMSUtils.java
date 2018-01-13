@@ -546,7 +546,11 @@ public class NMSUtils {
         SAVANNA_M(163),
         /**
          * The savanna plateau M biome features incredibly large and steep cliffs that jut violently out of the terrain, compared to the regular
+<<<<<<< HEAD
          * savanna plateau; these cliffs generally exceed cloud height, sometimes above y=200, and sometimes even border the world height limit.
+=======
+         * savanna plateau; these cliffs generally exceed cloud length, sometimes above y=200, and sometimes even border the world length limit.
+>>>>>>> development
          */
         SAVANNA_PLATEAU_M(164),
         /**

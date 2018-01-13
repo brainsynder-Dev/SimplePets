@@ -10,6 +10,9 @@ import simplepets.brainsynder.nms.entities.type.IEntitySlimePet;
 import simplepets.brainsynder.nms.entities.v1_10_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;

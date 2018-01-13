@@ -8,14 +8,22 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityGuardianPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.85F, length = 0.85F)
 public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
     private static final DataWatcherObject<Boolean> bz;
     private static final DataWatcherObject<Integer> bA;
 
+    static {
+        bz = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.h);
+        bA = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.b);
+    }
+
     public EntityGuardianPet(World world) {
         super(world);
     }
+
     public EntityGuardianPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -38,10 +46,5 @@ public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("elder")) setElder(object.getBoolean("elder"));
         super.applyCompound(object);
-    }
-
-    static {
-        bz = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.h);
-        bA = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.b);
     }
 }

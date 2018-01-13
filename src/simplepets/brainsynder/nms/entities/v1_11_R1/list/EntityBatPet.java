@@ -26,14 +26,14 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Hanging", isHanging());
+        object.setBoolean("hanging", isHanging());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Hanging")) {
-            setHanging(object.getBoolean("Hanging"));
+        if (object.hasKey("hanging")) {
+            setHanging(object.getBoolean("hanging"));
         }
         super.applyCompound(object);
     }

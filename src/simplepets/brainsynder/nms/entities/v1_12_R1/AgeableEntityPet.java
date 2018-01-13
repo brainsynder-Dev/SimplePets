@@ -11,12 +11,15 @@ import simplepets.brainsynder.pet.IPet;
 
 public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet {
     private static final DataWatcherObject<Boolean> BABY;
-    protected int age;
-    private boolean ageLocked = true;
+
+    static {
+        BABY = DataWatcher.a(AgeableEntityPet.class, DataWatcherRegistry.h);
+    }
 
     public AgeableEntityPet(World world) {
         super(world);
     }
+
     public AgeableEntityPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -31,7 +34,7 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         if (!(this instanceof IEntityControllerPet))
-        object.setBoolean("baby", isBaby());
+            object.setBoolean("baby", isBaby());
         return object;
     }
 
@@ -39,7 +42,7 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
     public void applyCompound(StorageTagCompound object) {
         super.applyCompound(object);
         if (!(this instanceof IEntityControllerPet))
-        if (object.hasKey("baby")) setBaby(object.getBoolean("baby"));
+            if (object.hasKey("baby")) setBaby(object.getBoolean("baby"));
     }
 
     public boolean isBaby() {
@@ -48,9 +51,5 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
 
     public void setBaby(boolean flag) {
         this.datawatcher.set(BABY, flag);
-    }
-
-    static {
-        BABY = DataWatcher.a(AgeableEntityPet.class, DataWatcherRegistry.h);
     }
 }

@@ -7,6 +7,9 @@ import simplepets.brainsynder.nms.entities.type.main.IFlyablePet;
 import simplepets.brainsynder.nms.entities.v1_9_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityBatPet extends EntityPet implements IEntityBatPet,
         IFlyablePet {
@@ -23,14 +26,14 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("Hanging", isHanging());
+        object.setBoolean("hanging", isHanging());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Hanging")) {
-            setHanging(object.getBoolean("Hanging"));
+        if (object.hasKey("hanging")) {
+            setHanging(object.getBoolean("hanging"));
         }
         super.applyCompound(object);
     }

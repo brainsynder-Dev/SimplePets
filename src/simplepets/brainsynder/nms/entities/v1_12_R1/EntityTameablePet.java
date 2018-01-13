@@ -15,9 +15,15 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
     protected static final DataWatcherObject<Byte> TAME_SIT;
     protected static final DataWatcherObject<Optional<UUID>> OWNER;
 
+    static {
+        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
+        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.m);
+    }
+
     public EntityTameablePet(World world) {
         super(world);
     }
+
     public EntityTameablePet(World world, IPet pet) {
         super(world, pet);
     }
@@ -68,11 +74,5 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
         } else {
             this.datawatcher.set(TAME_SIT, (byte) (i & -2));
         }
-
-    }
-
-    static {
-        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
-        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.m);
     }
 }

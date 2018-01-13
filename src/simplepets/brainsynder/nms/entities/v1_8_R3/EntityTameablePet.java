@@ -5,6 +5,9 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.main.ITameable;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityTameablePet extends AgeableEntityPet implements ITameable {
     public EntityTameablePet(World world) {

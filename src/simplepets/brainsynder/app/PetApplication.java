@@ -16,6 +16,7 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import lombok.Getter;
+import simplepets.brainsynder.PetCore;
 
 public class PetApplication extends Application {
     @Getter
@@ -70,7 +71,7 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://app.pluginwiki.tk/?version=3.8");
+        webEngine.load("http://app.pluginwiki.tk/?version=" + PetCore.getPluginVersion());
     }
 
     private void createContextMenu(WebView webView) {

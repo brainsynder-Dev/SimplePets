@@ -14,6 +14,9 @@ import simplepets.brainsynder.player.PetOwner;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
     private IEntityPet pet;

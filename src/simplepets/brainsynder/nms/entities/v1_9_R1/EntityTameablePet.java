@@ -11,6 +11,9 @@ import simplepets.brainsynder.pet.IPet;
 
 import java.util.UUID;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityTameablePet extends AgeableEntityPet implements ITameable {
     protected static final DataWatcherObject<Byte> TAME_SIT;

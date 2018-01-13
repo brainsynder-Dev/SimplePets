@@ -1,44 +1,32 @@
 package simplepets.brainsynder.database;
 
-import java.sql.DriverManager;
+import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import simplepets.brainsynder.PetCore;
 
-public class MySQL extends Database {
-    private String user = null,
-			database = null,
-			pass = null,
-			port = null,
-			host = null;
+import java.sql.SQLException;
+
+public class MySQL {
+    private ConnectionPool pool;
 
     public MySQL(String host, String port, String database, String user, String pass) {
-		this.host = host;
-		this.port = port;
-		this.database = database;
-		this.user = user;
-		this.pass = pass;
-	}
-	
-	public void connect(Connector connector) throws Exception {
-		if (!checkConnection()) {
-			String u = "jdbc:mysql://" + this.host + ":" + this.port;
-			if (database != null) {
-				u = u + "/" + this.database;
-			}
+        MysqlDataSource source = new MysqlDataSource();
+        source.setPort(Integer.parseInt(port));
+        source.setPassword(pass);
+        source.setUser(user);
+        source.setDatabaseName(database);
+        source.setServerName(host);
+        source.setAutoReconnect(PetCore.get().getConfiguration().getBoolean("MySQL.Options.AutoReconnect"));
+        source.setUseSSL(PetCore.get().getConfiguration().getBoolean("MySQL.Options.UseSSL"));
 
-			connection = DriverManager.getConnection(u, this.user, this.pass);
-			connector.run(connection);
-		}
-	}
-
-	public void connectAutoClose(Connector connector) throws Exception {
-        if (!checkConnection()) {
-            String u = "jdbc:mysql://" + this.host + ":" + this.port;
-            if (database != null) {
-                u = u + "/" + this.database;
-            }
-
-            connection = DriverManager.getConnection(u, this.user, this.pass);
-            connector.run(connection);
-            connection.close();
+        try {
+            pool = new ConnectionPool(10, 10, source);
+        } catch (ClassNotFoundException | SQLException e) {
+            System.out.println("Unable to initiate the ConnectionPool... Error:");
+            e.printStackTrace();
         }
+    }
+
+    public ConnectionPool getPool() {
+        return pool;
     }
 }

@@ -50,6 +50,7 @@ public class Console_Reload extends PetCommand {
                 }
             }
         }
+        PetCore.get().reload();
         PetCore.get().petTypes = new ObjectPager<>(size, types);
         LoaderRetriever.reloadLoaders();
         sender.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));

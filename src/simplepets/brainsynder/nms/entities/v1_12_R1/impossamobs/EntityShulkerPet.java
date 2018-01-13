@@ -101,6 +101,10 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         return super.damageEntity(var1, var2);
     }
 
+    /**
+     * Search for: if (Math.abs(this.motX) < 0.003D) {
+     * Class: Entity
+     */
     @Override
     public void n() {
         super.n();
@@ -155,6 +159,11 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         super.move(var1, var2, var4, var6);
     }
 
+
+    /**
+     * Search for: this.getAttributeInstance(GenericAttributes.
+     * Class: EntityShulker
+     */
     @Override
     public void a(int var1) {
         if (isCustom) {

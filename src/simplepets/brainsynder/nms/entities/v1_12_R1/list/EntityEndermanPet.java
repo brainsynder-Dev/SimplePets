@@ -6,14 +6,22 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityEndermanPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.6F, length = 2.9F)
 public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     private static final DataWatcherObject<Optional<IBlockData>> BLOCK;
     private static final DataWatcherObject<Boolean> SCREAMING;
 
+    static {
+        BLOCK = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.g);
+        SCREAMING = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.h);
+    }
+
     public EntityEndermanPet(World world) {
         super(world);
     }
+
     public EntityEndermanPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -41,12 +49,8 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     public boolean isScreaming() {
         return this.datawatcher.get(SCREAMING);
     }
+
     public void setScreaming(boolean flag) {
         this.datawatcher.set(SCREAMING, flag);
-    }
-
-    static {
-        BLOCK = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.g);
-        SCREAMING = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.h);
     }
 }

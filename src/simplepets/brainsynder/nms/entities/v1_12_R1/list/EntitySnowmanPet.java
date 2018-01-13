@@ -8,13 +8,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntitySnowmanPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.4F, length = 1.8F)
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     private static final DataWatcherObject<Byte> PUMPKIN;
+
+    static {
+        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherRegistry.a);
+    }
 
     public EntitySnowmanPet(World world) {
         super(world);
     }
+
     public EntitySnowmanPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -48,9 +55,5 @@ public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
         } else {
             this.datawatcher.set(PUMPKIN, (byte) (b0 & -17));
         }
-    }
-
-    static {
-        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherRegistry.a);
     }
 }

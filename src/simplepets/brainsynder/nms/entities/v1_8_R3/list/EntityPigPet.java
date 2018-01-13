@@ -6,6 +6,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityPigPet;
 import simplepets.brainsynder.nms.entities.v1_8_R3.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
     public EntityPigPet(World world, IPet pet) {

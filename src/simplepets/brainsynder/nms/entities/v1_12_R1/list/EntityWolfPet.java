@@ -5,12 +5,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityWolfPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+@Size(width = 0.6F, length = 0.8F)
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Float> DATA_HEALTH;
     private static final DataWatcherObject<Boolean> HEAD_TILT;
     private static final DataWatcherObject<Integer> COLLAR_COLOR;
+
+    static {
+        DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.c);
+        HEAD_TILT = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.h);
+        COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.b);
+    }
 
     public EntityWolfPet(World world) {
         super(world);
@@ -90,11 +98,5 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     @Override
     public void setHeadTilted(boolean var) {
         datawatcher.set(HEAD_TILT, var);
-    }
-
-    static {
-        DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.c);
-        HEAD_TILT = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.h);
-        COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.b);
     }
 }

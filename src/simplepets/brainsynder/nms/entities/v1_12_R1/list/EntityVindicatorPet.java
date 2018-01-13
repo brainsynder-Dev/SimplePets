@@ -6,7 +6,9 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityVindicatorPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityIllagerAbstractPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.6F, length = 1.95F)
 public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEntityVindicatorPet {
     boolean johhny = false;
 

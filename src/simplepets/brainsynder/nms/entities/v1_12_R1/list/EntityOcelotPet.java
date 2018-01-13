@@ -8,9 +8,15 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityOcelotPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.6F, length = 0.8F)
 public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotPet {
     private static final DataWatcherObject<Integer> TYPE;
+
+    static {
+        TYPE = DataWatcher.a(EntityOcelotPet.class, DataWatcherRegistry.b);
+    }
 
     public EntityOcelotPet(World world) {
         super(world);
@@ -44,9 +50,5 @@ public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotP
 
     public void setCatType(int i) {
         this.datawatcher.set(TYPE, i);
-    }
-
-    static {
-        TYPE = DataWatcher.a(EntityOcelotPet.class, DataWatcherRegistry.b);
     }
 }

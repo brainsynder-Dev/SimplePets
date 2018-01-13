@@ -8,15 +8,24 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityCreeperPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.6F, length = 1.9F)
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     protected static final DataWatcherObject<Integer> a;
     protected static final DataWatcherObject<Boolean> POWERED;
     protected static final DataWatcherObject<Boolean> IGNITED;
 
+    static {
+        a = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
+        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
+        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
+    }
+
     public EntityCreeperPet(World world) {
         super(world);
     }
+
     public EntityCreeperPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -60,11 +69,5 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     @Override
     public void setPowered(boolean flag) {
         this.datawatcher.set(POWERED, flag);
-    }
-
-    static {
-        a = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
-        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
-        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
     }
 }

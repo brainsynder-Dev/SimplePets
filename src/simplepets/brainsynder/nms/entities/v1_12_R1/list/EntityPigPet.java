@@ -8,13 +8,20 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.nms.entities.type.IEntityPigPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
+import simplepets.brainsynder.utils.Size;
 
+@Size(width = 0.9F, length = 0.9F)
 public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
     private static final DataWatcherObject<Boolean> SADDLE;
+
+    static {
+        SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherRegistry.h);
+    }
 
     public EntityPigPet(World world) {
         super(world);
     }
+
     public EntityPigPet(World world, IPet pet) {
         super(world, pet);
     }
@@ -44,9 +51,5 @@ public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
 
     public void setSaddled(boolean flag) {
         datawatcher.set(SADDLE, flag);
-    }
-
-    static {
-        SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherRegistry.h);
     }
 }

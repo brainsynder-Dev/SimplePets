@@ -39,7 +39,8 @@ public class OnJoin implements Listener {
                     }
                 }.runTaskLater(PetCore.get(), 10);
             }
-        }catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     @EventHandler

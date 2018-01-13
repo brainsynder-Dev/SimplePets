@@ -13,7 +13,6 @@ public class CMD_Help extends PetCommand<Player> {
     @Override
     public void onCommand(Player p, String[] args) {
         for (PetCommand gcmd : CMD_Pet.commands) {
-            if (gcmd instanceof CMD_Register) continue;
             String name = "", description = "", usage = "";
             if (gcmd.getClass().isAnnotationPresent(CommandName.class)) {
                 name = gcmd.getClass().getAnnotation(CommandName.class).name();

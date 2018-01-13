@@ -1,8 +1,8 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.branch;
 
 import net.minecraft.server.v1_12_R1.*;
-import org.bukkit.Sound;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
@@ -59,14 +59,20 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
 
     public void setSpell(WizardSpell var1) {
         if (var1 == WizardSpell.WOLOLO) {
-            getEntity().getWorld().playSound(getEntity().getLocation(), Sound.ENTITY_EVOCATION_ILLAGER_PREPARE_WOLOLO, 1.0F, 1.0F);
+            SoundMaker.ENTITY_EVOCATION_ILLAGER_PREPARE_WOLOLO.playSound(getEntity());
         } else {
-            getEntity().getWorld().playSound(getEntity().getLocation(), Sound.ENTITY_EVOCATION_ILLAGER_CAST_SPELL, 1.0F, 1.0F);
+            SoundMaker.ENTITY_EVOCATION_ILLAGER_CAST_SPELL.playSound(getEntity());
         }
         this.spell = var1;
         this.datawatcher.set(c, (byte) var1.getId());
     }
 
+    /**
+     * Handles the Ambient Sound playing
+     *
+     * Search for: Method is empty
+     * Class: EntityInsentient
+     */
     protected void M() {
         super.M();
         if (this.b > 0) {
@@ -74,6 +80,12 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
         }
     }
 
+    /**
+     * Handles the Ambient Sound playing
+     *
+     * Search for: EnumItemSlot enumitemslot = aenumitemslot[
+     * Class: EntityLiving
+     */
     public void B_() {
         super.B_();
         if (this.world.isClientSide && this.dl()) {

@@ -28,27 +28,27 @@ public class AnimationFrame {
         return this;
     }
 
-    public AnimationFrame setLeftHand(EulerAngle leftHand) {
+    AnimationFrame setLeftHand(EulerAngle leftHand) {
         this.leftHand = leftHand;
         return this;
     }
 
-    public AnimationFrame setRightHand(EulerAngle rightHand) {
+    AnimationFrame setRightHand(EulerAngle rightHand) {
         this.rightHand = rightHand;
         return this;
     }
 
-    public AnimationFrame setLeftLeg(EulerAngle leftLeg) {
+    AnimationFrame setLeftLeg(EulerAngle leftLeg) {
         this.leftLeg = leftLeg;
         return this;
     }
 
-    public AnimationFrame setRightLeg(EulerAngle rightLeg) {
+    AnimationFrame setRightLeg(EulerAngle rightLeg) {
         this.rightLeg = rightLeg;
         return this;
     }
 
-    public void setLocations(ArmorStand armor) {
+    void setLocations(ArmorStand armor) {
         armor.setHeadPose(this.head == null ? armor.getHeadPose() : this.head);
         armor.setBodyPose(this.body == null ? armor.getBodyPose() : this.body);
         armor.setLeftArmPose(this.leftHand == null ? armor.getLeftArmPose() : this.leftHand);

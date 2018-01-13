@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.util.*;
 
 public class FileMaker {
-    //private String _fileName;
-    //private SimpleConfig simpleConfig;
     private File file;
     private FileConfiguration configuration;
 
@@ -26,11 +24,10 @@ public class FileMaker {
             file = new File(folder, fileName);
             if (!file.exists()) file.createNewFile();
 
-            //SimpleConfigManager manager = new SimpleConfigManager((JavaPlugin)plugin);
-            //this.simpleConfig = manager.getNewConfig(directory + '/' + fileName);
             new File(plugin.getDataFolder().toString() + File.separator + directory, fileName);
-            this.configuration = YamlConfiguration.loadConfiguration(file);//this.simpleConfig.getConfig();
-        } catch (Throwable ignored) {}
+            this.configuration = YamlConfiguration.loadConfiguration(file);
+        } catch (Throwable ignored) {
+        }
     }
 
     public FileMaker(File folder, String fileName) {
@@ -42,7 +39,8 @@ public class FileMaker {
 
             this.file = new File(folder, fileName);
             this.configuration = YamlConfiguration.loadConfiguration(file);
-        } catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
     public FileMaker(Plugin plugin, String fileName) {
@@ -50,10 +48,9 @@ public class FileMaker {
         if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) try {
             file.createNewFile();
-        } catch (IOException ignored) {}
-        //SimpleConfigManager manager = new SimpleConfigManager((JavaPlugin)plugin);
-        //this.simpleConfig = manager.getNewConfig(fileName);
-        this.configuration = YamlConfiguration.loadConfiguration(file);//this.simpleConfig.getConfig();
+        } catch (IOException ignored) {
+        }
+        this.configuration = YamlConfiguration.loadConfiguration(file);
     }
 
     public String getString(String tag, boolean color) {
@@ -93,7 +90,7 @@ public class FileMaker {
 
     public List<String> getStringList(String tag) {
         this.configuration = YamlConfiguration.loadConfiguration(file);
-        return (List)(this.isSet(tag) ? this.configuration.getStringList(tag) : new ArrayList());
+        return (List) (this.isSet(tag) ? this.configuration.getStringList(tag) : new ArrayList());
     }
 
     public IStorage<String> getStorageList(String tag) {
@@ -126,12 +123,6 @@ public class FileMaker {
 
     public void set(String tag, Object data, String... comments) {
         set(tag, data);
-        /* TODO: This is Temp Disabled
-        Valid.notNull(comments);
-        Valid.isTrue(!Arrays.asList(comments).isEmpty());
-        this.simpleConfig.set(tag, data, comments);
-        this.simpleConfig.saveConfig();
-        this.simpleConfig.reloadConfig();*/
     }
 
     public void setHeader(String... header) {
@@ -149,9 +140,9 @@ public class FileMaker {
             return map;
         } else {
             if (o instanceof ConfigurationSection) {
-                map = ((ConfigurationSection)o).getValues(deep);
+                map = ((ConfigurationSection) o).getValues(deep);
             } else if (o instanceof Map) {
-                map = (Map)o;
+                map = (Map) o;
             }
 
             return map;

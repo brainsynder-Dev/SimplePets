@@ -9,6 +9,9 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class HandlePathfinders extends ReflectionUtil {
     public HandlePathfinders(Player p, org.bukkit.entity.Entity e, double speed) {

@@ -7,6 +7,9 @@ import simplepets.brainsynder.nms.entities.v1_8_R3.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityWolfPet extends AgeableEntityPet implements IEntityWolfPet {
     public EntityWolfPet(World world) {

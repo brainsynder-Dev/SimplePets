@@ -8,6 +8,9 @@ import simplepets.brainsynder.nms.entities.type.IEntityPolarBearPet;
 import simplepets.brainsynder.nms.entities.v1_10_R1.AgeableEntityPet;
 import simplepets.brainsynder.pet.IPet;
 
+/**
+ * @Deprecated Will be removed when MC version 1.13 is released
+ */
 @Deprecated
 public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolarBearPet {
     private static final DataWatcherObject<Boolean> STANDING_UP;
