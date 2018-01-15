@@ -170,12 +170,12 @@ public class PetCore extends JavaPlugin {
         }
         petTypes = new ObjectPager<>(size, types);
         worldGuardLink = new WorldGuardLink();
-        handleSQL();
+        if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
 
     private void handleSQL() {
-        if (getConfiguration().isSet("MySQL.Enabled")) {
+        if (getConfiguration().getBoolean("MySQL.Enabled")) {
             String host = getConfiguration().getString("MySQL.Host", false);
             String port = getConfiguration().getString("MySQL.Port", false);
             String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
