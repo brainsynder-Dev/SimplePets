@@ -15,10 +15,10 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.PetTypeStorage;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetInventorySelectTypeEvent;
-import simplepets.brainsynder.holders.PetHolder;
+import simplepets.brainsynder.menu.holders.PetHolder;
+import simplepets.brainsynder.menu.items.Items;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.utils.LoaderRetriever;
 import simplepets.brainsynder.utils.PetMap;
 
 import java.util.HashMap;
@@ -39,24 +39,24 @@ public class PetSelectionMenu implements Listener {
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {
             if (!slots.contains((placeHolder - 1))) {
-                inv.setItem(placeHolder - 1, LoaderRetriever.placeholderLoader.getItem());
+                inv.setItem(placeHolder - 1, Items.PLACEHOLDER.getItem());
             }
             placeHolder--;
         }
         if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-            inv.setItem(LoaderRetriever.hatLoader.getSlot(), LoaderRetriever.hatLoader.getItem());
+            inv.setItem(Items.HAT.getSlot(), Items.HAT.getItem());
         if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-            inv.setItem(LoaderRetriever.rideLoader.getSlot(), LoaderRetriever.rideLoader.getItem());
-        inv.setItem(LoaderRetriever.removeLoader.getSlot(), LoaderRetriever.removeLoader.getItem());
+            inv.setItem(Items.RIDE.getSlot(), Items.RIDE.getItem());
+        inv.setItem(Items.REMOVE.getSlot(), Items.REMOVE.getItem());
         if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming"))
-            inv.setItem(LoaderRetriever.namePetLoader.getSlot(), LoaderRetriever.namePetLoader.getItem());
+            inv.setItem(Items.NAME.getSlot(), Items.NAME.getItem());
 
         if (PetCore.get().petTypes.totalPages() > (page)) {
-            inv.setItem(LoaderRetriever.nextPageLoader.getSlot(), LoaderRetriever.nextPageLoader.getItem());
+            inv.setItem(Items.NEXT.getSlot(), Items.NEXT.getItem());
         }
 
         if (page > 1) {
-            inv.setItem(LoaderRetriever.previousPageLoader.getSlot(), LoaderRetriever.previousPageLoader.getItem());
+            inv.setItem(Items.PREVIOUS.getSlot(), Items.PREVIOUS.getItem());
         }
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : PetCore.get().petTypes.getPage(page)) {
@@ -93,17 +93,17 @@ public class PetSelectionMenu implements Listener {
             }
             int currentPage = 1;
             if (pageSave.containsKey(p.getName())) currentPage = pageSave.get(p.getName());
-            if (e.getSlot() == LoaderRetriever.removeLoader.getSlot()) {
+            if (e.getSlot() == Items.REMOVE.getSlot()) {
                 if (petOwner.hasPet()) {
                     petOwner.removePet();
                     p.closeInventory();
                 }
-            } else if (e.getSlot() == LoaderRetriever.namePetLoader.getSlot()) {
+            } else if (e.getSlot() == Items.NAME.getSlot()) {
                 if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming")) {
                     p.closeInventory();
                     petOwner.renamePet();
                 }
-            } else if (e.getSlot() == LoaderRetriever.rideLoader.getSlot()) {
+            } else if (e.getSlot() == Items.RIDE.getSlot()) {
                 if (!petOwner.hasPet()) {
                     e.setCancelled(true);
                     return;
@@ -115,17 +115,17 @@ public class PetSelectionMenu implements Listener {
                 }
                 e.setCancelled(true);
                 p.closeInventory();
-                petOwner.getPet().ridePet();
-            } else if (e.getSlot() == LoaderRetriever.hatLoader.getSlot()) {
+                petOwner.getPet().setVehicle(!petOwner.getPet().isVehicle());
+            } else if (e.getSlot() == Items.HAT.getSlot()) {
                 if (!petOwner.hasPet()) return;
                 if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats")) return;
                 if (!petOwner.getPet().getPetType().canHat(p)) return;
                 e.setCancelled(true);
                 p.closeInventory();
-                petOwner.getPet().hatPet();
-            } else if (e.getSlot() == LoaderRetriever.previousPageLoader.getSlot()) {
+                petOwner.getPet().setHat(!petOwner.getPet().isHat());
+            } else if (e.getSlot() == Items.PREVIOUS.getSlot()) {
                 if (currentPage > 1) openMenu(p, (currentPage - 1));
-            } else if (e.getSlot() == LoaderRetriever.nextPageLoader.getSlot()) {
+            } else if (e.getSlot() == Items.NEXT.getSlot()) {
                 if (PetCore.get().petTypes.totalPages() > currentPage) openMenu(p, (currentPage + 1));
             } else {
                 if (e.getCurrentItem() == null) return;

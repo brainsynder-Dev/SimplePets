@@ -21,12 +21,12 @@ import simplepets.brainsynder.files.*;
 import simplepets.brainsynder.links.IProtectionLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
 import simplepets.brainsynder.menu.ItemStorageMenu;
+import simplepets.brainsynder.menu.items.Items;
 import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.nms.entities.v1_8_R3.SpawnUtil;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.ISpawner;
-import simplepets.brainsynder.utils.LoaderRetriever;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class PetCore extends JavaPlugin {
         }
 
         instance = this;
-        utilities = new Utilities(this);
+        utilities = new Utilities();
         saveResource("SimplePets-Info-App.txt", true);
         if (!supportedVersions.contains(Reflection.getVersion())) {
             System.out.println("-------------------------------------------");
@@ -121,7 +121,7 @@ public class PetCore extends JavaPlugin {
             System.out.println("-------------------------------------------");
         }
         loadConfig();
-        LoaderRetriever.initiate();
+        Items.initiate();
         VersionNMS.registerPets();
         PetType.initiate();
         debug("Registering Listeners...");
@@ -442,6 +442,6 @@ public class PetCore extends JavaPlugin {
     }
 
     public static String getPluginVersion() {
-        return "3.9";
+        return "4.0";
     }
 }

@@ -18,7 +18,7 @@ import simplepets.brainsynder.api.event.pet.PetPreSpawnEvent;
 import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.files.PetTranslate;
-import simplepets.brainsynder.menu.MenuItem;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -36,9 +36,11 @@ public class Pet implements IPet {
     private boolean isHat = false;
     private IStorage<MenuItem> items;
     private boolean vehicle;
+    private PetCore instance;
 
-    public Pet(UUID player, PetType type) {
+    public Pet(UUID player, PetType type, PetCore instance) {
         this.type = type;
+        this.instance = instance;
         if (player == null) {
             return;
         }
@@ -117,115 +119,12 @@ public class Pet implements IPet {
         return items;
     }
 
-    public void hatPet() {
-        final Player p = owner;
-        if (PetCore.get().getConfiguration().getBoolean("Pet.NeedsPermission")) {
-            if (p.hasPermission("Pet.PetToHat")) {
-                handleHat();
-            }
-        } else {
-            handleHat();
-        }
+    public void toggleHat() {
+        setHat(!isHat());
     }
 
-    public void handleHat() {
-        final Player player = owner;
-        boolean delay = false;
-        if (isVehicle()) {
-            PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.DISMOUNT);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled())
-                return;
-            if (getPet().getPassenger() != null) {
-                getPet().eject();
-            }
-            vehicle = false;
-            delay = true;
-        }
-        if (!isHat) {
-            final PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.SET);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
-                if (delay) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (!event.isCancelled()) {
-                                setHat(true);
-                                owner.setPassenger(ent.getEntity());
-                            }
-                        }
-                    }.runTaskLater(PetCore.get(), 3);
-                } else {
-                    if (!event.isCancelled()) {
-                        setHat(true);
-                        owner.setPassenger(ent.getEntity());
-                    }
-                }
-                PetCore.get().getUtilities().sendMountPacket(player, ent.getEntity());
-            }
-        } else {
-            PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
-                setHat(false);
-                PetCore.get().getUtilities().removePassenger(player, ent.getEntity());
-            }
-        }
-    }
-
-    public void handleRide() {
-        final Player p = owner;
-        if (getPet().getPassenger() != null) {
-            PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.DISMOUNT);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled())
-                return;
-            getPet().eject();
-            vehicle = false;
-            return;
-        } else if (isVehicle()) {
-            vehicle = false;
-        }
-
-        if (isHat) {
-            PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (!event.isCancelled()) {
-                p.eject();
-                setHat(false);
-                PetCore.get().getUtilities().sendMountPacket(p, ent.getEntity());
-            }
-        }
-        PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.MOUNT);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled())
-            return;
-        vehicle = true;
-        getPet().teleport(p);
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                ent.getEntity().setPassenger(p);
-            }
-        }.runTaskLater(PetCore.get(), 2L);
-    }
-
-    public void ridePet() {
-        if (ent instanceof IHorseAbstract) {
-            IHorseAbstract horse = (IHorseAbstract) ent;
-            if (!horse.isSaddled()) {
-                horse.setSaddled(true);
-            }
-        }
-        final Player p = owner;
-        if ((PetCore.get().getConfiguration().getBoolean("Needs-Permission"))) {
-            if (p.hasPermission("Pet.PetToMount")) {
-                handleRide();
-            }
-        } else {
-            handleRide();
-        }
+    public void toggleRiding() {
+        setVehicle(!isVehicle());
     }
 
     public boolean isVehicle() {
@@ -261,7 +160,7 @@ public class Pet implements IPet {
                     Bukkit.getServer().getPluginManager().callEvent(event);
                     if (event.isCancelled()) return;
 
-                    PetCore.get().getUtilities().removePassenger(owner, ent.getEntity());
+                    instance.getUtilities().removePassenger(owner, ent.getEntity());
                     setHat(false);
                 }
 
@@ -286,10 +185,10 @@ public class Pet implements IPet {
     public void setInvisible(boolean flag) {
         Player p = owner;
         if (flag && (!isHidden)) {
-            PetCore.get().getUtilities().hidePet(p);
+            instance.getUtilities().hidePet(p);
             this.isHidden = true;
         } else {
-            PetCore.get().getUtilities().showPet(p);
+            instance.getUtilities().showPet(p);
             this.isHidden = false;
         }
     }
@@ -318,18 +217,13 @@ public class Pet implements IPet {
 
     @Override
     public void removePet(boolean var1) {
-        if (isHat()) handleHat();
+        if (isHat()) setHat(false);
 
         if (ent instanceof IEntityControllerPet) {
             ((IEntityControllerPet) ent).remove();
             return;
         }
         getPet().remove();
-    }
-
-    @Override
-    public void teleport(Location var1) {
-        getPet().teleport(var1);
     }
 
     @Override
@@ -345,11 +239,19 @@ public class Pet implements IPet {
         return isHidden;
     }
 
-    public void setHidden(boolean isHidden) {
-        this.isHidden = isHidden;
+    public void setHidden(boolean flag) {
+        Player p = owner;
+        if (flag && (!isHidden)) {
+            instance.getUtilities().hidePet(p);
+            this.isHidden = true;
+        } else {
+            instance.getUtilities().showPet(p);
+            this.isHidden = false;
+        }
     }
 
     public boolean isHat() {
+        if (owner.getPassenger() != null) return true;
         return isHat;
     }
 
@@ -360,7 +262,8 @@ public class Pet implements IPet {
             delay = 3;
         }
 
-        if (value) {
+
+        if (type.canHat(owner) && value && (isHat () != value)) {
             PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.SET);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
@@ -368,29 +271,21 @@ public class Pet implements IPet {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    PetCore.get().getUtilities().clearPathfinders(owner);
-                    owner.setPassenger(ent.getEntity());
-                    PetCore.get().getUtilities().sendMountPacket(owner, ent.getEntity());
+                    instance.getUtilities().clearPathfinders(owner);
+                    instance.getUtilities().setPassenger(owner, ent.getEntity());
                 }
             }.runTaskLater(PetCore.get(), delay);
         } else {
-            PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
-            Bukkit.getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled()) return;
+            if (isHat()) {
+                PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                if (event.isCancelled()) return;
 
-            PetCore.get().getUtilities().handlePathfinders(owner, getPet(), type.getSpeed());
-            PetCore.get().getUtilities().removePassenger(owner, ent.getEntity());
-
-        }
-
-        if (value) {
-            PetCore.get().getUtilities().clearPathfinders(owner);
-        } else {
-            if (owner.getPassenger() == null) {
-                value = false;
-                PetCore.get().getUtilities().handlePathfinders(owner, getPet(), type.getSpeed());
+                instance.getUtilities().handlePathfinders(owner, getPet(), type.getSpeed());
+                instance.getUtilities().removePassenger(owner, ent.getEntity());
             }
         }
+
         this.isHat = value;
     }
 }

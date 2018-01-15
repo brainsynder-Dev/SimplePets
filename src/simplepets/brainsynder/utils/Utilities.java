@@ -11,11 +11,6 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 import java.lang.reflect.Constructor;
 
 public class Utilities {
-    private PetCore instance;
-    public Utilities (PetCore instance) {
-        this.instance = instance;
-    }
-
 
     public void setPassenger(Entity entity, Entity passenger) {
         try {
@@ -23,8 +18,11 @@ public class Utilities {
             if (passenger instanceof Player) {
                 sendMountPacket((Player) passenger, entity);
             }
+            if (entity instanceof Player) {
+                sendMountPacket((Player) entity, passenger);
+            }
         } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
+            PetCore.get().debug(2, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
         }
     }

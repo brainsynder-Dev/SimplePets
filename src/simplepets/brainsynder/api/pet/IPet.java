@@ -1,10 +1,9 @@
 package simplepets.brainsynder.api.pet;
 
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.menu.MenuItem;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -12,8 +11,6 @@ public interface IPet {
     Player getOwner();
 
     void removePet(boolean var1);
-
-    void teleport(Location var1);
 
     PetType getPetType();
 
@@ -33,7 +30,7 @@ public interface IPet {
 
     void setVehicle(boolean vehicle);
 
-    void ridePet();
+    void toggleRiding();
 
-    void hatPet();
+    void toggleHat();
 }

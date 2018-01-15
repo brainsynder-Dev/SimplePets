@@ -15,7 +15,7 @@ public class CMD_Ride extends PetCommand<Player> {
         PetOwner petOwner = PetOwner.getPetOwner(p);
         if (petOwner.hasPet()) {
             IPet pet = petOwner.getPet();
-            if (pet.getPetType().canMount(p)) pet.ridePet();
+            if (pet.getPetType().canMount(p)) pet.toggleRiding();
         }
     }
 }

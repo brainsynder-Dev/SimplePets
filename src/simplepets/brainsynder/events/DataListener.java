@@ -9,12 +9,12 @@ import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
-import simplepets.brainsynder.holders.PetDataHolder;
 import simplepets.brainsynder.menu.ItemStorageMenu;
-import simplepets.brainsynder.menu.MenuItem;
-import simplepets.brainsynder.menu.MenuItemAbstract;
+import simplepets.brainsynder.menu.holders.PetDataHolder;
+import simplepets.brainsynder.menu.items.Items;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
+import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.utils.LoaderRetriever;
 
 public class DataListener implements Listener {
 
@@ -29,24 +29,24 @@ public class DataListener implements Listener {
                 if (e.getCurrentItem() == null)
                     return;
                 e.setCancelled(true);
-                if (e.getSlot() == LoaderRetriever.removeLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.removeLoader.getItem())) return;
+                if (e.getSlot() == Items.REMOVE.getSlot()) {
+                    if (!e.getCurrentItem().isSimilar(Items.REMOVE.getItem())) return;
                     if (petOwner.hasPet()) {
                         petOwner.removePet();
                         p.closeInventory();
                     }
-                } else if (e.getSlot() == LoaderRetriever.namePetLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.namePetLoader.getItem())) return;
+                } else if (e.getSlot() == Items.NAME.getSlot()) {
+                    if (!e.getCurrentItem().isSimilar(Items.NAME.getItem())) return;
                     if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming")) {
                         p.closeInventory();
                         petOwner.renamePet();
                     }
-                } else if (e.getSlot() == LoaderRetriever.storageLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.storageLoader.getItem())) return;
+                } else if (e.getSlot() == Items.STORAGE.getSlot()) {
+                    if (!e.getCurrentItem().isSimilar(Items.STORAGE.getItem())) return;
                     if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
                         ItemStorageMenu.loadFromPlayer(p);
-                } else if (e.getSlot() == LoaderRetriever.rideLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.rideLoader.getItem())) return;
+                } else if (e.getSlot() == Items.RIDE.getSlot()) {
+                    if (!e.getCurrentItem().isSimilar(Items.RIDE.getItem())) return;
                     if (!petOwner.hasPet()) {
                         e.setCancelled(true);
                         return;
@@ -63,9 +63,9 @@ public class DataListener implements Listener {
                     }
                     e.setCancelled(true);
                     p.closeInventory();
-                    petOwner.getPet().ridePet();
-                } else if (e.getSlot() == LoaderRetriever.hatLoader.getSlot()) {
-                    if (!e.getCurrentItem().isSimilar(LoaderRetriever.hatLoader.getItem())) return;
+                    petOwner.getPet().toggleRiding();
+                } else if (e.getSlot() == Items.HAT.getSlot()) {
+                    if (!e.getCurrentItem().isSimilar(Items.HAT.getItem())) return;
                     if (!petOwner.hasPet()) {
                         return;
                     }
@@ -76,7 +76,7 @@ public class DataListener implements Listener {
                     }
                     e.setCancelled(true);
                     p.closeInventory();
-                    petOwner.getPet().hatPet();
+                    petOwner.getPet().toggleHat();
                 } else {
                     IStorage<MenuItem> menuItems = petOwner.getPet().getItems().copy();
                     if (!menuItems.isEmpty()) {

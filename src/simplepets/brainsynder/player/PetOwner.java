@@ -11,6 +11,7 @@ import org.json.simple.JSONArray;
 import simple.brainsynder.api.ParticleMaker;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
+import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.ITameable;
@@ -21,8 +22,6 @@ import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.pet.PetType;
-import simplepets.brainsynder.reflection.PerVersion;
-import simplepets.brainsynder.utils.Valid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -168,7 +167,7 @@ public class PetOwner {
             if (name == null || name.equals("null")) {
                 name = PetCore.get().getDefaultPetName(pet.getPetType(), player);
             }
-            PerVersion.handlePathfinders(player, pet.getEntity().getEntity(), pet.getPetType().getSpeed());
+            PetCore.get().getUtilities().handlePathfinders(player, pet.getEntity().getEntity(), pet.getPetType().getSpeed());
             if (pet.getEntity() instanceof ITameable) {
                 ITameable wolf = (ITameable) pet.getEntity();
                 wolf.setTamed(true);

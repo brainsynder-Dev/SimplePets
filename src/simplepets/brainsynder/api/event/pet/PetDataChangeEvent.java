@@ -1,7 +1,7 @@
 package simplepets.brainsynder.api.event.pet;
 
 import simplepets.brainsynder.api.event.CancellablePetEvent;
-import simplepets.brainsynder.menu.MenuItem;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 
 public class PetDataChangeEvent extends CancellablePetEvent {
     private MenuItem menuItem;

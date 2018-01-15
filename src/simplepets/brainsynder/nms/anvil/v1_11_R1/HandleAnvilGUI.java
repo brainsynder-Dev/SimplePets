@@ -16,11 +16,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.nms.anvil.AnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.anvil.IAnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.IAnvilGUI;
-import simplepets.brainsynder.utils.Valid;
 
 import java.util.HashMap;
 

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.pet;
 
-import simplepets.brainsynder.menu.MenuItem;
 import simplepets.brainsynder.menu.menuItems.*;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.menu.menuItems.sizes.Size1;
 import simplepets.brainsynder.menu.menuItems.sizes.Size2;
 import simplepets.brainsynder.menu.menuItems.sizes.Size3;
