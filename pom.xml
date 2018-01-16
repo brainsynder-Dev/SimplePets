@@ -6,7 +6,7 @@
 
     <groupId>simplepets.brainsynder</groupId>
     <artifactId>SimplePets</artifactId>
-    <version>3.7</version>
+    <version>3.9</version>
 
     <build>
         <plugins>

@@ -29,14 +29,14 @@ public class PetEventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSelect(PetInventorySelectTypeEvent event) {
-        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy"))
-            return;
+        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) return;
+        if (event.getPlayer().hasPermission("Pets.economy.bypass")) return;
 
         double price = economyFile.getPrice(event.getPetType());
-        if (price == -1)
-            return;
-        if (!LinkRetriever.getPluginLink(IVaultLink.class).isHooked())
-            return;
+
+        if (price == -1) return;
+        if (!LinkRetriever.getPluginLink(IVaultLink.class).isHooked()) return;
+
         double bal = LinkRetriever.getPluginLink(IVaultLink.class).getBalance(event.getPlayer());
         if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
             if (bal < price) {
@@ -79,6 +79,9 @@ public class PetEventListeners implements Listener {
             PetType type = storage.getType();
             ItemMaker maker = new ItemMaker(storage.getItem());
             String price = ((economyFile.getPrice(type) == -1) ? economyFile.getString("Price-Free") : String.valueOf(economyFile.getPrice(type)));
+
+            if (event.getPlayer().hasPermission("Pets.economy.bypass")) price = economyFile.getString("Price-Bypass");
+
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
                 for (String line : economyFile.getStringList("Pay-Per-Use.Lore-Lines"))
                     maker.addLoreLine(line.replace("%cost%", price));

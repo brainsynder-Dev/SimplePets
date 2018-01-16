@@ -18,6 +18,8 @@ public class EconomyFile extends FileMaker {
             set("InsufficientFunds", "&eSimplePets &6>> &cYou do not have enough money to buy this pet, you need to have %price%", "Ohhh noo they dont have enough money...");
         if (!isSet("Price-Free"))
             set("Price-Free", "Free", "If a pet price is -1 this will show up instead");
+        if (!isSet("Price-Bypass"))
+            set("Price-Bypass", "Bypassed");
         if (!isSet("Pay-Per-Use.Enabled"))
             set("Pay-Per-Use.Enabled", false,
                     "Enabled -- Do users have to pay each time to spawn a pet",
