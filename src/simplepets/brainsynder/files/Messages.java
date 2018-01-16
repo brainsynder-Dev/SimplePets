@@ -54,7 +54,9 @@ public class Messages extends FileMaker {
         if (!isSet("Pet-No-Enter"))
             set("Pet-No-Enter", "&eSimplePets &6>> &cPets are not allowed in this region.", "Message sent to the player when their", "pet tries to enter a WorldGuard region", "That is not added to the region list");
         if (!isSet("Pet-RenameViaChat"))
-            set("Pet-RenameViaChat", "&eSimplePets &6>> &7Type your pets new name in chat:");
+            set("Pet-RenameViaChat", "&eSimplePets &6>> &7Type your pets new name in chat (Type 'cancel' to cancel):");
+        if (!isSet("Pet-RenameViaChat-Cancel"))
+            set("Pet-RenameViaChat-Cancel", "&eSimplePets &6>> &cPet renaming has been canceled");
         if (!isSet("Pet-RenameViaAnvil"))
             set("Pet-RenameViaAnvil", "&eSimplePets &6>> &7Type your pets new name in the anvil, then click the item on the right when complete.");
     }
