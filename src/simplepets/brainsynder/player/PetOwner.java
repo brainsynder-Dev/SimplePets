@@ -262,6 +262,10 @@ public class PetOwner {
         if (!petToRespawn.hasKey("PetType")) return;
 
         PetType type = PetType.getByName(petToRespawn.getString("PetType"));
+        if (type == null) {
+            PetCore.get().debug(2, "Could not fetch pet type from value: " + petToRespawn.getString("PetType"));
+            return;
+        }
         type.setPet(player);
 
         new BukkitRunnable() {
