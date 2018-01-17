@@ -331,9 +331,11 @@ public class PetCore extends JavaPlugin {
             petOwner.getFile().save();
         }
 
-        if (getConfiguration().isSet("MySQL.Enabled")) {
-            mySQL.getPool().dumpPool();
-            mySQL = null;
+        if (getConfiguration().getBoolean("MySQL.Enabled")) {
+            if (mySQL != null) {
+                mySQL.getPool().dumpPool();
+                mySQL = null;
+            }
         }
         VersionNMS.unregisterPets();
         try {
