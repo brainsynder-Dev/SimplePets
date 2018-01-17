@@ -6,7 +6,7 @@
 
     <groupId>simplepets.brainsynder</groupId>
     <artifactId>SimplePets</artifactId>
-    <version>3.7</version>
+    <version>4.0</version>
 
     <build>
         <plugins>
@@ -63,15 +63,9 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>3.6</version>
+            <version>3.8</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/resources/SimpleAPI.jar</systemPath>
         </dependency>
