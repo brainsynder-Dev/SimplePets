@@ -193,8 +193,8 @@ public class OwnerFile {
             owner.setRawOwned(new JSONArray());
         }
         owner.setRawPetName(file.getString("PetName", false));
-        String needs = file.getString("NeedsRespawn", false);
-        handle(needs);
+        StorageTagCompound compound = getPetData(p.getUniqueId().toString());
+        if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
     }
 
     private void handle(String needs) {
@@ -214,14 +214,17 @@ public class OwnerFile {
 
     // These new methods handle the Pet Saving for when MySQL is disabled.
     private StorageTagCompound getPetData(String uuid) {
+        StorageTagCompound compound = new StorageTagCompound ();
         if (hasPetSave(uuid)) {
             try {
-                FileInputStream stream = new FileInputStream(getPetSave(uuid));
-                return CompressedStreamTools.readCompressed(stream);
+                File file = getPetSave(uuid);
+                FileInputStream stream = new FileInputStream(file);
+                compound = CompressedStreamTools.readCompressed(stream);
+                file.delete();
             } catch (Exception ignored) {
             }
         }
-        return new StorageTagCompound();
+        return compound;
     }
 
     private boolean hasPetSave(String uuid) {
