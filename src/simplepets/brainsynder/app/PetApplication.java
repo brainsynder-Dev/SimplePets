@@ -7,7 +7,6 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
-import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
@@ -16,7 +15,6 @@ import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import lombok.Getter;
-import simplepets.brainsynder.PetCore;
 
 public class PetApplication extends Application {
     @Getter
@@ -35,7 +33,6 @@ public class PetApplication extends Application {
         window = primaryStage;
         String windowName = "SimplePets Info App";
         window.setTitle(windowName);
-        window.getIcons().add(new Image("simplepets/brainsynder/app/resources/icon.png"));
         window.setOnCloseRequest(e -> {
             e.consume();
             handleDisconnect();
@@ -53,7 +50,6 @@ public class PetApplication extends Application {
         BorderPane pane = new BorderPane();
         Worker<Void> worker = webEngine.getLoadWorker();
         progressBar.progressProperty().bind(worker.progressProperty());
-        progressBar.getStylesheets().addAll("simplepets/brainsynder/app/resources/style.css");
         pane.setCenter(browser);
         pane.setBottom(progressBar);
         worker.stateProperty().addListener((observable, oldValue, newValue) -> {
@@ -71,7 +67,11 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://app.pluginwiki.tk/?version=" + PetCore.getPluginVersion());
+        webEngine.load("http://app.pluginwiki.tk/?version=" + getPluginVersion());
+    }
+
+    public static String getPluginVersion() {
+        return "3.9";
     }
 
     private void createContextMenu(WebView webView) {
