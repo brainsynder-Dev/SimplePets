@@ -232,16 +232,15 @@ public class PetOwner {
     public void renamePet() {
         if (PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.ViaAnvil")) {
             AnvilGUI gui = new AnvilGUI(PetCore.get(), player, event -> {
+                event.setCanceled(true);
                 if (event.getSlot() != AnvilSlot.OUTPUT) {
                     event.setWillClose(false);
                     event.setWillDestroy(false);
-                    event.setCanceled(true);
                     return;
                 }
-                event.setCanceled(true);
                 event.setWillClose(true);
                 event.setWillDestroy(true);
-                setPetName(event.getName());
+                setPetName(event.getName(), true);
             });
             gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
             gui.open();
