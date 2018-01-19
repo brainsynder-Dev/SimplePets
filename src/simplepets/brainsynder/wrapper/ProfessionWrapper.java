@@ -1,6 +1,5 @@
 package simplepets.brainsynder.wrapper;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -16,7 +15,6 @@ public enum ProfessionWrapper {
     private boolean zombie;
     @Getter
     private int id;
-    @Getter(AccessLevel.PRIVATE)
     private int version;
 
     ProfessionWrapper(int id, int version, boolean zombie) {
@@ -27,7 +25,7 @@ public enum ProfessionWrapper {
 
     public static ProfessionWrapper getById(int id) {
         for (ProfessionWrapper wrapper : values()) {
-            if (wrapper.id == id) {
+            if (wrapper.ordinal() == id) {
                 return wrapper;
             }
         }
@@ -35,27 +33,57 @@ public enum ProfessionWrapper {
     }
 
     public static ProfessionWrapper getPrevious(ProfessionWrapper current) {
-        int original = current.id;
-        if (original == 0) {
-            if (ServerVersion.getVersion().getIntVersion() >= 111)
-                return NITWIT;
-            return BUTCHER;
+        ProfessionWrapper target = FARMER;
+
+        switch (current) {
+            case FARMER:
+                if (ServerVersion.getVersion().getIntVersion() >= 111) {
+                    target =  NITWIT;
+                }else{
+                    target = BUTCHER;
+                }
+                break;
+            case LIBRARIAN: break;
+            case PRIEST:
+                target = LIBRARIAN;
+                break;
+            case BLACKSMITH:
+                target = PRIEST;
+                break;
+            case BUTCHER:
+                target = BLACKSMITH;
+                break;
+            case NITWIT:
+                target = BUTCHER;
+                break;
         }
-        return values()[(original - 1)];
+
+        return target;
     }
 
     public static ProfessionWrapper getNext(ProfessionWrapper current) {
-        int original = current.id;
-        if (ServerVersion.getVersion().getIntVersion() >= 111) {
-            if (original == 5) {
-                return FARMER;
-            }
-        } else {
-            if (original == 4) {
-                return FARMER;
-            }
+        ProfessionWrapper target = FARMER;
+
+        switch (current) {
+            case FARMER:
+                target = LIBRARIAN;
+                break;
+            case LIBRARIAN:
+                target = PRIEST;
+                break;
+            case PRIEST:
+                target = BLACKSMITH;
+                break;
+            case BLACKSMITH:
+                target = BUTCHER;
+                break;
+            case BUTCHER:
+                if (ServerVersion.getVersion().getIntVersion() >= 111)
+                    target = NITWIT;
+                break;
+            case NITWIT: break;
         }
-        return values()[(original + 1)];
+        return target;
     }
 
     public static ProfessionWrapper getProfession(String name) {

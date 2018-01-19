@@ -34,10 +34,6 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
         this.datawatcher.register(PROFESSION, 0);
     }
 
-    public int getProfessionInt() {
-        return Math.max(this.datawatcher.get(PROFESSION) % 6, 0);
-    }
-
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
@@ -52,11 +48,11 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
     }
 
     public ProfessionWrapper getProfession() {
-        return ProfessionWrapper.getById(getProfessionInt());
+        return ProfessionWrapper.getById(datawatcher.get(PROFESSION));
     }
 
     public void setProfession(ProfessionWrapper wrapper) {
-        this.datawatcher.set(PROFESSION, wrapper.getId());
+        this.datawatcher.set(PROFESSION, wrapper.ordinal());
         if (wrapper == ProfessionWrapper.NITWIT) {
             SoundMaker.ENTITY_VILLAGER_NO.playSound(getEntity());
         } else if (wrapper == ProfessionWrapper.LIBRARIAN) {
