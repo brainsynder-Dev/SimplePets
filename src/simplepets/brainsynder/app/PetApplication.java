@@ -67,11 +67,7 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://app.pluginwiki.tk/?version=" + getPluginVersion());
-    }
-
-    public static String getPluginVersion() {
-        return "3.9";
+        webEngine.load("http://app.pluginwiki.tk/?version=3.9");
     }
 
     private void createContextMenu(WebView webView) {

@@ -1,10 +1,13 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SimplePets:jar">
-    <output-path>$USER_HOME$/Desktop/Java SCR Code/,outut</output-path>
+    <output-path>$PROJECT_DIR$/builds</output-path>
     <root id="archive" name="SimplePets.jar">
       <element id="module-output" name="SimplePets" />
       <element id="file-copy" path="$PROJECT_DIR$/src/plugin.yml" />
       <element id="file-copy" path="$PROJECT_DIR$/src/SimplePets-Info-App.txt" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+      </element>
     </root>
   </artifact>
 </component>

@@ -16,7 +16,6 @@ import simple.brainsynder.utils.ObjectPager;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
-import simplepets.brainsynder.app.PetApplication;
 import simplepets.brainsynder.commands.CMD_Pet;
 import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
@@ -87,7 +86,7 @@ public class PetCore extends JavaPlugin {
         }
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
-        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", PetApplication.getPluginVersion())) {
+        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", "3.9")) {
             setEnabled(false);
             return;
         }
