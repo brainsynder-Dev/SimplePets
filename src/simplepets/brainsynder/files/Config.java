@@ -110,6 +110,8 @@ public class Config extends FileMaker {
             set("PetToggles.Rename.Limit-Number-Of-Characters", false);
         if (!isSet("PetToggles.Rename.CharacterLimit"))
             set("PetToggles.Rename.CharacterLimit", 10);
+        if (!isSet("PetToggles.Rename.Blocked-Words"))
+            set("PetToggles.Rename.Blocked-Words", Arrays.asList("jeb_"));
     }
 
     @Override

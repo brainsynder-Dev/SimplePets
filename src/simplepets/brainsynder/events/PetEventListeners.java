@@ -1,5 +1,6 @@
 package simplepets.brainsynder.events;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +19,9 @@ import simplepets.brainsynder.pet.PetNameChangeEvent;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.LinkRetriever;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class PetEventListeners implements Listener {
     private EconomyFile economyFile;
@@ -99,6 +103,21 @@ public class PetEventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onName(PetNameChangeEvent event) {
+        boolean cancel = false;
+
+        if (!event.getPlayer().hasPermission("Pet.name.bypass")) {
+            List<String> blocked = PetCore.get().getConfiguration().getStringList("PetToggles.Rename.Blocked-Words");
+            List<String> split = Arrays.asList(event.getNewName().split(" "));
+            for (String arg : split) {
+                String name = ChatColor.translateAlternateColorCodes('&', arg);
+                name = ChatColor.stripColor(name);
+                if (blocked.contains(name.toLowerCase())) {
+                    cancel = true;
+                    break;
+                }
+            }
+        }
+
         if (event.canUseColor())
             if (!PetCore.hasPerm(event.getPlayer(), "Pet.name.color"))
                 event.setColor(false);
@@ -106,7 +125,8 @@ public class PetEventListeners implements Listener {
             if (!PetCore.hasPerm(event.getPlayer(), "Pet.name.magic"))
                 event.setMagic(false);
         if (!PetCore.hasPerm(event.getPlayer(), "Pet.name"))
-            event.setCancelled(true);
+            cancel = true;
+        event.setCancelled(cancel);
 
     }
 }
