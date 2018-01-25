@@ -142,7 +142,7 @@ public class PetOwner {
             if (event.isCancelled()) {
                 play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
                 SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
-                player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameFailure", true).replace("{name}", name));
+                player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameFailure", true).replace("{name}", ChatColor.translateAlternateColorCodes('&', name)));
                 return;
             }
             name = event.getNewName();
