@@ -59,6 +59,8 @@ public class Messages extends FileMaker {
             set("Pet-RenameViaChat-Cancel", "&eSimplePets &6>> &cPet renaming has been canceled");
         if (!isSet("Pet-RenameViaAnvil"))
             set("Pet-RenameViaAnvil", "&eSimplePets &6>> &7Type your pets new name in the anvil, then click the item on the right when complete.");
+        if (!isSet("Pet-RenameFailure"))
+            set("Pet-RenameFailure", "&eSimplePets &6>> &cSorry, but your pets name could not be changed to: &7{name}");
     }
 
     @Override
