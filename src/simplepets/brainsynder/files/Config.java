@@ -76,6 +76,7 @@ public class Config extends FileMaker {
         if (!isSet("PlotSquared.Allow-Pets.On-Unclaimed-Plots")) set("PlotSquared.Allow-Pets.On-Unclaimed-Plots", true);
         if (!isSet("PlotSquared.Spawn-Pets.On-Roads")) set("PlotSquared.Allow-Pets.On-Roads", true);
         if (!isSet("PlotSquared.Spawn-Pets.On-Unclaimed-Plots")) set("PlotSquared.Allow-Pets.On-Unclaimed-Plots", true);
+        if (!isSet("PlotSquared.Block-If-Denied")) set("PlotSquared.Block-If-Denied", true);
 
         if (!isSet("MySQL.Enabled")) set("MySQL.Enabled", false,
                 "MySQL support is still in beta", "if you find issues report them to ", "http://pluginwiki.tk/issues/");
