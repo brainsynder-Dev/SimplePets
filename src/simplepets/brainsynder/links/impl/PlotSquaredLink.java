@@ -7,6 +7,7 @@ import com.plotsquared.bukkit.util.BukkitUtil;
 import org.bukkit.Location;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.IPlotSquaredLink;
+import simplepets.brainsynder.player.PetOwner;
 
 public class PlotSquaredLink extends PluginLink<BukkitMain> implements IPlotSquaredLink {
     public PlotSquaredLink() {
@@ -22,16 +23,51 @@ public class PlotSquaredLink extends PluginLink<BukkitMain> implements IPlotSqua
     }
 
     @Override
-    public boolean allowPetEntry(Location at) {
+    public boolean allowPetEntry(PetOwner owner, Location at) {
         if (!isHooked()) return true;
         com.intellectualcrafters.plot.object.Location loc = BukkitUtil.getLocation(at);
         PlotArea area = loc.getPlotArea();
         if (area == null) return true;
-        Plot now = area.getPlot(loc);
-        if (now == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Roads");
-        if (!now.hasOwner())
+        Plot plot = area.getPlot(loc);
+        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Roads");
+        if (!plot.hasOwner())
+            return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Unclaimed-Plots");
+
+        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied"))
+            if (owner != null) if (plot.isDenied(owner.getPlayer().getUniqueId())) return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean allowPetSpawn(PetOwner owner, Location at) {
+        if (!isHooked()) return true;
+        com.intellectualcrafters.plot.object.Location loc = BukkitUtil.getLocation(at);
+        PlotArea area = loc.getPlotArea();
+        if (area == null) return true;
+        Plot plot = area.getPlot(loc);
+        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Roads");
+        if (!plot.hasOwner())
+            return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Unclaimed-Plots");
+
+        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied"))
+            if (owner != null) if (plot.isDenied(owner.getPlayer().getUniqueId())) return false;
+
+        return true;
+    }
+
+    @Override
+    public boolean allowPetEntry(Location location) {
+        if (!isHooked()) return true;
+        com.intellectualcrafters.plot.object.Location loc = BukkitUtil.getLocation(location);
+        PlotArea area = loc.getPlotArea();
+        if (area == null) return true;
+        Plot plot = area.getPlot(loc);
+        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Roads");
+        if (!plot.hasOwner())
             return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Unclaimed-Plots");
         return true;
+
     }
 
     @Override
@@ -40,9 +76,9 @@ public class PlotSquaredLink extends PluginLink<BukkitMain> implements IPlotSqua
         com.intellectualcrafters.plot.object.Location loc = BukkitUtil.getLocation(at);
         PlotArea area = loc.getPlotArea();
         if (area == null) return true;
-        Plot now = area.getPlot(loc);
-        if (now == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Roads");
-        if (!now.hasOwner())
+        Plot plot = area.getPlot(loc);
+        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Roads");
+        if (!plot.hasOwner())
             return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Unclaimed-Plots");
         return true;
     }

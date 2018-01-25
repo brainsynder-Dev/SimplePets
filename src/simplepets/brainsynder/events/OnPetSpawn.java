@@ -58,7 +58,7 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCreatureSpawnUnBlock(EntitySpawnEvent event) {
+    public void onCreatureSpawnHigh(EntitySpawnEvent event) {
         Entity e = event.getEntity();
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
             if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")) {
@@ -83,12 +83,12 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
             Player player = e.getPlayer();
             PetOwner petOwner = PetOwner.getPetOwner(player);
             if (petOwner.hasPet()) {
-                if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(player.getLocation())) {
+                if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(petOwner, player.getLocation())) {
                     petOwner.removePet();
                     player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                     return;
                 }
-                if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(player.getLocation())) {
+                if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(petOwner, player.getLocation())) {
                     petOwner.removePet();
                     player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                 }
@@ -105,12 +105,12 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
             if (e.getEntity().getOwner() == null) return;
             IEntityPet entity = e.getEntity();
             PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-            if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(e.getTargetLocation())) {
+            if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(petOwner, e.getTargetLocation())) {
                 petOwner.removePet();
                 entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                 return;
             }
-            if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(e.getTargetLocation())) {
+            if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(petOwner, e.getTargetLocation())) {
                 petOwner.removePet();
                 entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
             }
