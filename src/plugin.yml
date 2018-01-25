@@ -32,6 +32,7 @@ permissions:
     Pet.name.*:
         default: false
         children:
+            Pet.name.bypass: true
             Pet.name.bypassLimit: true
             Pet.name: true
             Pet.name.color: true
