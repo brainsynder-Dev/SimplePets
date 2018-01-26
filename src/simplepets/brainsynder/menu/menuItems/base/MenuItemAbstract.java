@@ -1,4 +1,4 @@
-package simplepets.brainsynder.menu;
+package simplepets.brainsynder.menu.menuItems.base;
 
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.pet.PetType;

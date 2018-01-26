@@ -5,7 +5,7 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IHorseAbstract;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
-import simplepets.brainsynder.menu.MenuItemAbstract;
+import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
 
 public class Saddle extends MenuItemAbstract {

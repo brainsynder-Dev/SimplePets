@@ -5,7 +5,7 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
-import simplepets.brainsynder.menu.MenuItemAbstract;
+import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
 
 public class Stand extends MenuItemAbstract {

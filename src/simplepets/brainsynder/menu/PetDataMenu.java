@@ -7,12 +7,13 @@ import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.holders.PetDataHolder;
+import simplepets.brainsynder.menu.holders.PetDataHolder;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static simplepets.brainsynder.utils.LoaderRetriever.*;
+import static simplepets.brainsynder.menu.items.ItemLoaders.PLACEHOLDER;
 
 public class PetDataMenu {
     private Inventory inv;
@@ -26,15 +27,15 @@ public class PetDataMenu {
     public void showTo(Player p) {
         if (!PetCore.get().getConfiguration().getBoolean("PetDataMenu-Enabled"))
             return;
-        if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
-            inv.setItem(storageLoader.getSlot(), storageLoader.getItem());
+        /*if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
+            inv.setItem(STORAGE.getSlot(), STORAGE.getItem());
         if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-            inv.setItem(hatLoader.getSlot(), hatLoader.getItem());
+            inv.setItem(HAT.getSlot(), HAT.getItem());
         if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-            inv.setItem(rideLoader.getSlot(), rideLoader.getItem());
-        inv.setItem(removeLoader.getSlot(), removeLoader.getItem());
+            inv.setItem(RIDE.getSlot(), RIDE.getItem());
+        inv.setItem(REMOVE.getSlot(), REMOVE.getItem());
         if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming"))
-            inv.setItem(namePetLoader.getSlot(), namePetLoader.getItem());
+            inv.setItem(NAME.getSlot(), NAME.getItem());*/
         p.openInventory(inv);
     }
 
@@ -46,7 +47,7 @@ public class PetDataMenu {
         while (placeHolder > 0) {
             int i = (placeHolder - 1);
             if (!clearSlots.contains(i))
-                inv.setItem(i, placeholderLoader.getItem());
+                inv.setItem(i, PLACEHOLDER.getItem());
             placeHolder--;
         }
         IStorage<MenuItem> items = pet.getItems().copy();

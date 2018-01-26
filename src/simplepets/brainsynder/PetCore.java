@@ -16,16 +16,21 @@ import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.CMD_Pet;
 import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
-import simplepets.brainsynder.events.*;
-import simplepets.brainsynder.files.*;
+import simplepets.brainsynder.events.MainListeners;
+import simplepets.brainsynder.events.OnJoin;
+import simplepets.brainsynder.events.OnPetSpawn;
+import simplepets.brainsynder.events.PetEventListeners;
 import simplepets.brainsynder.links.IProtectionLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
 import simplepets.brainsynder.menu.ItemStorageMenu;
-import simplepets.brainsynder.menu.items.Items;
+import simplepets.brainsynder.menu.inventory.InvLoaders;
+import simplepets.brainsynder.menu.inventory.listeners.DataListener;
+import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
+import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
-import simplepets.brainsynder.nms.entities.v1_8_R3.SpawnUtil;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.*;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
 
@@ -36,10 +41,6 @@ import java.util.*;
 public class PetCore extends JavaPlugin {
     private static PetCore instance;
     private final List<String> supportedVersions = Arrays.asList(
-            "v1_8_R3",
-            "v1_9_R1",
-            "v1_9_R2",
-            "v1_10_R1",
             "v1_11_R1",
             "v1_12_R1"
     );
@@ -121,7 +122,6 @@ public class PetCore extends JavaPlugin {
             System.out.println("-------------------------------------------");
         }
         loadConfig();
-        Items.initiate();
         VersionNMS.registerPets();
         PetType.initiate();
         debug("Registering Listeners...");
@@ -130,9 +130,10 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
         getServer().getPluginManager().registerEvents(new PetEventListeners(), this);
-        getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new OnPetSpawn(), this);
-        getServer().getPluginManager().registerEvents(new PetSelectionMenu(), this);
+        //getServer().getPluginManager().registerEvents(new PetSelectionMenu(), this);
+        getServer().getPluginManager().registerEvents(new SelectionListener(), this);
+        getServer().getPluginManager().registerEvents(new DataListener(), this);
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
             PetCore.get().debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
@@ -168,6 +169,8 @@ public class PetCore extends JavaPlugin {
                 }
             }
         }
+        ItemLoaders.initiate();
+        InvLoaders.initiate();
         petTypes = new ObjectPager<>(size, types);
         worldGuardLink = new WorldGuardLink();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
@@ -203,19 +206,7 @@ public class PetCore extends JavaPlugin {
 
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
-        if (version == ServerVersion.v1_8_R3) {
-            spawner = new SpawnUtil();
-            debug("Successfully Linked to v1_8_R3 SpawnUtil Class");
-        } else if (version == ServerVersion.v1_9_R1) {
-            spawner = new simplepets.brainsynder.nms.entities.v1_9_R1.SpawnUtil();
-            debug("Successfully Linked to v1_9_R1 SpawnUtil Class");
-        } else if (version == ServerVersion.v1_9_R2) {
-            spawner = new simplepets.brainsynder.nms.entities.v1_9_R2.SpawnUtil();
-            debug("Successfully Linked to v1_9_R2 SpawnUtil Class");
-        } else if (version == ServerVersion.v1_10_R1) {
-            spawner = new simplepets.brainsynder.nms.entities.v1_10_R1.SpawnUtil();
-            debug("Successfully Linked to v1_10_R1 SpawnUtil Class");
-        } else if (version == ServerVersion.v1_11_R1) {
+        if (version == ServerVersion.v1_11_R1) {
             spawner = new simplepets.brainsynder.nms.entities.v1_11_R1.SpawnUtil();
             debug("Successfully Linked to v1_11_R1 SpawnUtil Class");
         } else if (version == ServerVersion.v1_12_R1) {
@@ -248,11 +239,12 @@ public class PetCore extends JavaPlugin {
             petOwner.getFile().save();
         }
 
-        if (getConfiguration().isSet("MySQL.Enabled")) {
-            mySQL.getPool().dumpPool();
-            mySQL = null;
+        if (getConfiguration().getBoolean("MySQL.Enabled")) {
+            if (mySQL != null) {
+                mySQL.getPool().dumpPool();
+                mySQL = null;
+            }
         }
-        VersionNMS.unregisterPets();
         try {
             Thread.sleep(20L);
         } catch (InterruptedException ignored) {

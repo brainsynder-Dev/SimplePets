@@ -11,8 +11,8 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.files.PlayerPetInv;
-import simplepets.brainsynder.utils.InventoryStorage;
+import simplepets.brainsynder.storage.InventoryStorage;
+import simplepets.brainsynder.storage.files.PlayerPetInv;
 
 import java.util.Map;
 

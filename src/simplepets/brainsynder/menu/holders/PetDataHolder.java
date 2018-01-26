@@ -1,4 +1,4 @@
-package simplepets.brainsynder.holders;
+package simplepets.brainsynder.menu.holders;
 
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

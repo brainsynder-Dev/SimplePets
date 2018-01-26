@@ -7,7 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.api.ItemMaker;
 import simple.brainsynder.api.SkullMaker;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.files.JSONFile;
+import simplepets.brainsynder.storage.files.base.JSONFile;
 
 import java.io.File;
 

@@ -1,4 +1,4 @@
-package simplepets.brainsynder.menu;
+package simplepets.brainsynder.menu.menuItems.base;
 
 import org.bukkit.entity.Player;
 import simple.brainsynder.api.ItemMaker;

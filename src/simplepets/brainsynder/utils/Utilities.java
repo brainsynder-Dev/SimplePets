@@ -2,6 +2,8 @@ package simplepets.brainsynder.utils;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
@@ -9,6 +11,8 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utilities {
 
@@ -83,5 +87,33 @@ public class Utilities {
         Constructor<?> constructor = ReflectionUtil.fillConstructor(outSpawnEntityLiving, ReflectionUtil.getNmsClass("EntityLiving"));
         Object packet = ReflectionUtil.initiateClass(constructor, ReflectionUtil.getEntityHandle(petOwner.getPet().getEntity().getEntity()));
         ReflectionUtil.sendPacket(packet, player);
+    }
+
+    public boolean isSimilar (ItemStack main, ItemStack check) {
+        List<Boolean> values = new ArrayList<>();
+        if ((main == null) || (check == null)) return false;
+        //if (main.isSimilar(check)) return true;
+
+        if (main.getType() == check.getType()) {
+            if (main.hasItemMeta() && check.hasItemMeta()) {
+                ItemMeta mainMeta = main.getItemMeta();
+                ItemMeta checkMeta = check.getItemMeta();
+                if (mainMeta.hasDisplayName() && checkMeta.hasDisplayName()) {
+                    values.add(mainMeta.getDisplayName().equals(checkMeta.getDisplayName()));
+                }
+
+                if (mainMeta.hasLore() && checkMeta.hasLore()) {
+                    values.add(mainMeta.getLore().equals(checkMeta.getLore()));
+                }
+
+                if (mainMeta.hasEnchants() && checkMeta.hasEnchants()) {
+                    values.add(mainMeta.getEnchants().equals(checkMeta.getEnchants()));
+                }
+
+                if (!values.isEmpty()) return !values.contains(false);
+            }
+        }
+
+        return main.isSimilar(check);
     }
 }
