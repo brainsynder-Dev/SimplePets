@@ -14,8 +14,9 @@ import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.menu.PetDataMenu;
+import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -195,8 +196,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
                         r = 0;
                         rainbow = false;
                     }
-                    PetDataMenu menu = new PetDataMenu(getPet());
-                    menu.showTo(getOwner());
+                    InvLoaders.PET_DATA.open(PetOwner.getPetOwner(getOwner()));
                 }
                 didClick = (!didClick);
             }

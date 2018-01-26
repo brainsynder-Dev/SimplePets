@@ -15,9 +15,9 @@ import simplepets.brainsynder.api.entity.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.files.PetTranslate;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
 import simplepets.brainsynder.reflection.FieldAccessor;
+import simplepets.brainsynder.storage.files.PetTranslate;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public abstract class EntityPet extends EntityCreature implements IAnimal,

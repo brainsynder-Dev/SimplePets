@@ -18,11 +18,11 @@ import simplepets.brainsynder.api.entity.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.files.PetTranslate;
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityArmorStandPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
+import simplepets.brainsynder.storage.files.PetTranslate;
 import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 

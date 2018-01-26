@@ -12,16 +12,11 @@ public enum AnvilSlot {
     }
 
     public static AnvilSlot bySlot(int slot) {
-        AnvilSlot[] var1 = values();
-        int var2 = var1.length;
-
-        for (int var3 = 0; var3 < var2; ++var3) {
-            AnvilSlot anvilSlot = var1[var3];
+        for (AnvilSlot anvilSlot : values()) {
             if (anvilSlot.getSlot() == slot) {
                 return anvilSlot;
             }
         }
-
         return null;
     }
 

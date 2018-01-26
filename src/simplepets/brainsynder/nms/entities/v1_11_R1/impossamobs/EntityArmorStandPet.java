@@ -17,8 +17,9 @@ import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.menu.PetDataMenu;
+import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.utils.IStandMethod;
@@ -105,8 +106,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public boolean onInteract(Player p) {
         if (pet != null) {
             if (p.getName().equals(pet.getOwner().getName())) {
-                PetDataMenu data = new PetDataMenu(getPet());
-                data.showTo(p);
+                InvLoaders.PET_DATA.open(PetOwner.getPetOwner(getOwner()));
                 return true;
             }
             return false;

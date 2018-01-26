@@ -13,18 +13,6 @@ public class AnvilGUI {
     public AnvilGUI(Plugin plugin, Player player, IAnvilClickEvent handler) {
         ServerVersion version = ServerVersion.getVersion();
         switch (version) {
-            case v1_8_R3:
-                gui = new simplepets.brainsynder.nms.anvil.v1_8_R3.HandleAnvilGUI(plugin, player, handler);
-                break;
-            case v1_9_R1:
-                gui = new simplepets.brainsynder.nms.anvil.v1_9_R1.HandleAnvilGUI(plugin, player, handler);
-                break;
-            case v1_9_R2:
-                gui = new simplepets.brainsynder.nms.anvil.v1_9_R2.HandleAnvilGUI(plugin, player, handler);
-                break;
-            case v1_10_R1:
-                gui = new simplepets.brainsynder.nms.anvil.v1_10_R1.HandleAnvilGUI(plugin, player, handler);
-                break;
             case v1_11_R1:
                 gui = new simplepets.brainsynder.nms.anvil.v1_11_R1.HandleAnvilGUI(plugin, player, handler);
                 break;

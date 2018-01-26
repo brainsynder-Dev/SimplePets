@@ -9,8 +9,6 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.IHorseAbstract;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.AgeableEntityPet;
-import simplepets.brainsynder.wrapper.HorseColorType;
-import simplepets.brainsynder.wrapper.HorseStyleType;
 
 import java.util.UUID;
 
@@ -83,14 +81,6 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
         } else {
             this.datawatcher.set(VISUAL, (byte) (b0 & ~i));
         }
-
-    }
-
-    public void setVariant(HorseColorType variant) {
-    }
-
-    @Override
-    public void setVariant(HorseColorType var1, HorseStyleType var2) {
 
     }
 }
