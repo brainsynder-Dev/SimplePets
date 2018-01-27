@@ -28,15 +28,11 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
         super(world, pet);
     }
 
-    public int getProfessionInt() {
-        return Math.max(this.datawatcher.get(PROFESSION) % 6, 0);
-    }
-
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         profession = ProfessionWrapper.FARMER;
-        this.datawatcher.register(PROFESSION, profession.getId());
+        this.datawatcher.register(PROFESSION, profession.ordinal());
     }
 
     @Override
@@ -60,7 +56,7 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
 
     public void setProfession(ProfessionWrapper wrapper) {
         profession = wrapper;
-        this.datawatcher.set(PROFESSION, wrapper.getId());
+        this.datawatcher.set(PROFESSION, wrapper.ordinal());
     }
 
 }

@@ -23,7 +23,7 @@ public enum ProfessionWrapper {
 
     public static ProfessionWrapper getById(int id) {
         for (ProfessionWrapper wrapper : values()) {
-            if (wrapper.id == id) {
+            if (wrapper.ordinal() == id) {
                 return wrapper;
             }
         }
@@ -31,27 +31,57 @@ public enum ProfessionWrapper {
     }
 
     public static ProfessionWrapper getPrevious(ProfessionWrapper current) {
-        int original = current.id;
-        if (original == 0) {
-            if (ServerVersion.getVersion().getIntVersion() >= 111)
-                return NITWIT;
-            return BUTCHER;
+        ProfessionWrapper target = FARMER;
+
+        switch (current) {
+            case FARMER:
+                if (ServerVersion.getVersion().getIntVersion() >= 111) {
+                    target =  NITWIT;
+                }else{
+                    target = BUTCHER;
+                }
+                break;
+            case LIBRARIAN: break;
+            case PRIEST:
+                target = LIBRARIAN;
+                break;
+            case BLACKSMITH:
+                target = PRIEST;
+                break;
+            case BUTCHER:
+                target = BLACKSMITH;
+                break;
+            case NITWIT:
+                target = BUTCHER;
+                break;
         }
-        return values()[(original - 1)];
+
+        return target;
     }
 
     public static ProfessionWrapper getNext(ProfessionWrapper current) {
-        int original = current.id;
-        if (ServerVersion.getVersion().getIntVersion() >= 111) {
-            if (original == 5) {
-                return FARMER;
-            }
-        } else {
-            if (original == 4) {
-                return FARMER;
-            }
+        ProfessionWrapper target = FARMER;
+
+        switch (current) {
+            case FARMER:
+                target = LIBRARIAN;
+                break;
+            case LIBRARIAN:
+                target = PRIEST;
+                break;
+            case PRIEST:
+                target = BLACKSMITH;
+                break;
+            case BLACKSMITH:
+                target = BUTCHER;
+                break;
+            case BUTCHER:
+                if (ServerVersion.getVersion().getIntVersion() >= 111)
+                    target = NITWIT;
+                break;
+            case NITWIT: break;
         }
-        return values()[(original + 1)];
+        return target;
     }
 
     public static ProfessionWrapper getProfession(String name) {
@@ -70,9 +100,9 @@ public enum ProfessionWrapper {
         return this.zombie;
     }
 
-    public int getId() {return this.id;}
-
-    private int getVersion() {return this.version;}
+    public int getId() {
+        return id;
+    }
 
     public enum ZombieProfession {
         NORMAL(0),
