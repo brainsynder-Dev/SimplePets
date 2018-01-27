@@ -29,6 +29,7 @@ public class DataMenu extends CustomInventory {
 
     @Override
     public void loadDefaults() {
+        defaults.put("enabled", "true");
         defaults.put("size", "54");
         defaults.put("title", "&a&lPet Data Changer");
 
@@ -57,6 +58,7 @@ public class DataMenu extends CustomInventory {
 
     @Override
     public void open(PetOwner owner) {
+        if (!isEnabled()) return;
         Inventory inv = Bukkit.createInventory(new PetDataHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {
@@ -74,7 +76,7 @@ public class DataMenu extends CustomInventory {
                 if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
                     inv.setItem(slot, item.getItem());
             } else if (item instanceof Name) {
-                if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming"))
+                if (PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled"))
                     inv.setItem(slot, item.getItem());
             } else {
                 inv.setItem(slot, item.getItem());

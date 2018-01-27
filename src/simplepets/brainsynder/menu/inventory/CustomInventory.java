@@ -14,6 +14,7 @@ import java.util.Map;
 public class CustomInventory extends JSONFile {
     private int size = 0;
     private String title;
+    private boolean enabled = true;
     protected Map<String, Integer> pageSave = new HashMap<>();
     private Map<Integer, CustomItem> slots = new HashMap<>();
 
@@ -31,6 +32,8 @@ public class CustomInventory extends JSONFile {
     }
 
     public void load() {
+        if (hasKey("enabled")) enabled = getBoolean("enabled");
+
         title = getString("title", true);
         size = getInteger("size");
 
@@ -73,4 +76,8 @@ public class CustomInventory extends JSONFile {
     }
 
     public void open(PetOwner owner, int page) {}
+
+    public boolean isEnabled() {
+        return enabled;
+    }
 }

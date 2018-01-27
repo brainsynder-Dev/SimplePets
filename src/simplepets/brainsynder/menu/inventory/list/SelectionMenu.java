@@ -79,6 +79,7 @@ public class SelectionMenu extends CustomInventory {
 
     @Override
     public void open(PetOwner owner, int page) {
+        if (!isEnabled()) return;
         pageSave.put(owner.getPlayer().getName(), page);
         Inventory inv = Bukkit.createInventory(new SelectionHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
@@ -98,7 +99,6 @@ public class SelectionMenu extends CustomInventory {
             placeHolder--;
         }
 
-
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
             if (type.hasPermission(owner.getPlayer())) {
@@ -113,16 +113,13 @@ public class SelectionMenu extends CustomInventory {
             pagerMap.put(owner.getPlayer().getName(), pages);
         }
 
-        PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), owner.getPlayer());
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) return;
-
+        ObjectPager<PetTypeStorage> finalPages = pages;
         getSlots().forEach((slot, item) -> {
             if (item instanceof PreviousPage) {
                 if ((getCurrentPage(owner) > 1))
                     inv.setItem(slot, item.getItem());
             } else if (item instanceof NextPage) {
-                if (PetCore.get().petTypes.totalPages() > getCurrentPage(owner))
+                if (finalPages.totalPages() > getCurrentPage(owner))
                     inv.setItem(slot, item.getItem());
             } else if (item instanceof Hat) {
                 if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
@@ -131,12 +128,16 @@ public class SelectionMenu extends CustomInventory {
                 if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
                     inv.setItem(slot, item.getItem());
             } else if (item instanceof Name) {
-                if (PetCore.get().getConfiguration().getBoolean("PlayerPetNaming"))
+                if (PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled"))
                     inv.setItem(slot, item.getItem());
             } else {
                 inv.setItem(slot, item.getItem());
             }
         });
+
+        PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), owner.getPlayer());
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
         IStorage<ItemStack> types = event.getItems().copy();
         while (types.hasNext()) {
             inv.addItem(types.next());

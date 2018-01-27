@@ -2,14 +2,12 @@ package simplepets.brainsynder.menu.items.list;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
 import simplepets.brainsynder.menu.items.CustomItem;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.storage.PetTypeStorage;
 
 import java.io.File;
 
@@ -40,17 +38,14 @@ public class PreviousPage extends CustomItem {
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (inventory instanceof DataMenu) {
             InvLoaders.SELECTION.open(owner);
-            return;
         }
 
         if (inventory instanceof SelectionMenu) {
             SelectionMenu menu = (SelectionMenu)inventory;
-            ObjectPager<PetTypeStorage> pages = menu.getPages(owner);
             int current = menu.getCurrentPage(owner);
-
-            if (pages == null) return;
-
-            if (current > 1) menu.open(owner, (current-1));
+            if (current > 1) {
+                menu.open(owner, (current-1));
+            }
         }
     }
 }

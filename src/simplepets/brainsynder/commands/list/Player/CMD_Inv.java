@@ -6,8 +6,9 @@ import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
-import simplepets.brainsynder.events.PetSelectionMenu;
 import simplepets.brainsynder.menu.ItemStorageMenu;
+import simplepets.brainsynder.menu.inventory.InvLoaders;
+import simplepets.brainsynder.player.PetOwner;
 
 @CommandName(name = "inv")
 @CommandUsage(usage = "[player]")
@@ -33,7 +34,7 @@ public class CMD_Inv extends PetCommand<Player> {
                 }
             }
         } else {
-            PetSelectionMenu.openMenu(p, 1);
+            InvLoaders.SELECTION.open(PetOwner.getPetOwner(p));
         }
     }
 }

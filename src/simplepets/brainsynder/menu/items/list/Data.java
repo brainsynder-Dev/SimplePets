@@ -34,6 +34,7 @@ public class Data extends CustomItem {
 
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
+        inventory.reset(owner);
         InvLoaders.PET_DATA.open(owner);
     }
 }

@@ -71,10 +71,11 @@ public class SelectionListener implements Listener {
     }
 
     @EventHandler
-    public void onClose (InventoryCloseEvent e) {
+    public void onClose(InventoryCloseEvent e) {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SelectionHolder)) return;
         SelectionMenu menu = InvLoaders.SELECTION;
-
+        if (e.getPlayer().getOpenInventory() == null)
+            menu.reset(PetOwner.getPetOwner((Player) e.getPlayer()));
     }
 }

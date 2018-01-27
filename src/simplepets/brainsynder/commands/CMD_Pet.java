@@ -8,8 +8,9 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.annotations.*;
 import simplepets.brainsynder.commands.list.Console.*;
 import simplepets.brainsynder.commands.list.Player.*;
-import simplepets.brainsynder.events.PetSelectionMenu;
+import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -91,9 +92,10 @@ public class CMD_Pet implements CommandExecutor {
                 return true;
             } else {
                 Player p = (Player) commandSender;
+                PetOwner owner = PetOwner.getPetOwner(p);
 
                 if (args.length == 0) {
-                    PetSelectionMenu.openMenu(p, 1);
+                    InvLoaders.SELECTION.open(owner);
                     return true;
                 } else {
                     PetCommand base = null;
