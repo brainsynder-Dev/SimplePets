@@ -3,7 +3,6 @@ package simplepets.brainsynder.links.impl;
 import com.intellectualcrafters.plot.PS;
 import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotArea;
-import com.intellectualcrafters.plot.object.PlotPlayer;
 import org.bukkit.Location;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.IPlotSquaredLink;
@@ -49,14 +48,9 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
         PlotArea area = ps.getApplicablePlotArea(loc);
         if (area == null) return true;
         Plot plot = area.getPlot(loc);
-        PlotPlayer player = null;
 
         if (owner != null) {
-            player = PlotPlayer.get(owner.getPlayer().getName());
-        }
-
-        if (player != null) {
-            if (player.hasPermission(PetCore.get().getConfiguration().getString("PlotSquared.BypassPermission", false))) return true;
+            if (owner.getPlayer().hasPermission(PetCore.get().getConfiguration().getString("PlotSquared.BypassPermission", false))) return true;
         }
 
         if (plot == null) {
