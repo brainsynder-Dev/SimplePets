@@ -46,37 +46,43 @@ public class Config extends FileMaker {
             set("Needs-Data-Permissions", false, "Does the player need to have the", "data permissions for the pet?", "Needs-Permission overrides this value");
         if (!isSet("Allow-Pets-Being-Mounts"))
             set("Allow-Pets-Being-Mounts", true, "Does the pet mounting item show in the menu?");
+
         if (!isSet("Worlds.Enabled"))
             set("Worlds.Enabled", false, "Should pet spawning only be for certain worlds?");
         if (!isSet("Worlds.Allowed-Worlds"))
             set("Worlds.Allowed-Worlds", Collections.singletonList(
                     "world"
             ));
+
         if (!isSet("Allow-Pets-Being-Hats"))
             set("Allow-Pets-Being-Hats", true, "Does the pet hat item show in the menu?");
         if (!isSet("Respawn-Last-Pet-On-Login"))
             set("Respawn-Last-Pet-On-Login", true, "If the player had a pet when they logged out", "Should that pet be re-spawned on Login");
+
+        if (!isSet("WorldGuard.BypassPermission")) set("WorldGuard.BypassPermission", "region.bypass");
         if (!isSet("WorldGuard.Spawning.Always-Allowed"))
             set("WorldGuard.Spawning.Always-Allowed", true);
         if (!isSet("WorldGuard.Spawning.Blocked-Regions"))
             set("WorldGuard.Spawning.Blocked-Regions", Collections.singletonList("pvp"));
-        if (!isSet("WorldGuard.Pet-Entering.Always-Allowed")) set("WorldGuard.Pet-Entering.Always-Allowed", true);
+        if (!isSet("WorldGuard.Pet-Entering.Always-Allowed"))
+            set("WorldGuard.Pet-Entering.Always-Allowed", true);
         if (!isSet("WorldGuard.Pet-Entering.Blocked-Regions"))
             set("WorldGuard.Pet-Entering.Blocked-Regions", Collections.singletonList("pvp"));
+        if (!isSet("WorldGuard.Pet-Riding.Always-Allowed"))
+            set("WorldGuard.Pet-Riding.Always-Allowed", true);
+        if (!isSet("WorldGuard.Pet-Riding.Blocked-Regions"))
+            set("WorldGuard.Pet-Riding.Blocked-Regions", Collections.singletonList("pvp"));
 
-        if (!isSet("PlotSquared.Allow-Pets.On-Roads")) set("PlotSquared.Allow-Pets.On-Roads", true,
-                "Allow-Pets On-Roads = Are pets allowed", "on roads in the PlotWorld?",
-                "O__O",
-                "Allow-Pets On-Unclaimed-Plots = Are pets allowed on", "unclaimed plots in the PlotWorld?",
-                "O__O",
-                "Spawn-Pets On-Roads = Are pets allowed to", "spawn on roads in the PlotWorld?",
-                "O__O",
-                "Spawn-Pets On-Unclaimed-Plots Are pets allowed to", "spawn on Unclaimed Plots in the PlotWorld?"
-        );
-        if (!isSet("PlotSquared.Allow-Pets.On-Unclaimed-Plots")) set("PlotSquared.Allow-Pets.On-Unclaimed-Plots", true);
-        if (!isSet("PlotSquared.Spawn-Pets.On-Roads")) set("PlotSquared.Allow-Pets.On-Roads", true);
-        if (!isSet("PlotSquared.Spawn-Pets.On-Unclaimed-Plots")) set("PlotSquared.Allow-Pets.On-Unclaimed-Plots", true);
-        if (!isSet("PlotSquared.Block-If-Denied")) set("PlotSquared.Block-If-Denied", true);
+        if (!isSet("PlotSquared.BypassPermission")) set("PlotSquared.BypassPermission", "plots.admin");
+        if (!isSet("PlotSquared.On-Unclaimed-Plots.Move")) set("PlotSquared.On-Unclaimed-Plots.Move", true);
+        if (!isSet("PlotSquared.On-Unclaimed-Plots.Spawn")) set("PlotSquared.On-Unclaimed-Plots.Spawn", true);
+        if (!isSet("PlotSquared.On-Unclaimed-Plots.Riding")) set("PlotSquared.On-Unclaimed-Plots.Riding", true);
+        if (!isSet("PlotSquared.On-Roads.Move")) set("PlotSquared.On-Roads.Move", true);
+        if (!isSet("PlotSquared.On-Roads.Spawn")) set("PlotSquared.On-Roads.Spawn", true);
+        if (!isSet("PlotSquared.On-Roads.Riding")) set("PlotSquared.On-Roads.Riding", true);
+        if (!isSet("PlotSquared.Block-If-Denied.Move")) set("PlotSquared.Block-If-Denied.Move", true);
+        if (!isSet("PlotSquared.Block-If-Denied.Spawn")) set("PlotSquared.Block-If-Denied.Spawn", true);
+        if (!isSet("PlotSquared.Block-If-Denied.Riding")) set("PlotSquared.Block-If-Denied.Riding", true);
 
         if (!isSet("MySQL.Enabled")) set("MySQL.Enabled", false,
                 "MySQL support is still in beta", "if you find issues report them to ", "http://pluginwiki.tk/issues/");
