@@ -66,6 +66,22 @@ public class LinkRetriever {
         return (!list.contains(false));
     }
 
+    public static boolean canRidePet(PetOwner owner, Location location) {
+        if (loaders == null) initiate();
+        if (loaders.isEmpty()) initiate();
+        List<Boolean> list = new ArrayList<>();
+        for (IPluginLink link : loaders) {
+            if (!link.isHooked()) continue;
+            if (!(link instanceof IProtectionLink)) continue;
+            if (owner == null) {
+                list.add(((IProtectionLink) link).allowPetEntry(location));
+                continue;
+            }
+            list.add(((IProtectionLink) link).allowPetEntry(owner, location));
+        }
+        return (!list.contains(false));
+    }
+
     public static boolean canSpawnPet(PetOwner owner, Location location) {
         if (loaders == null) initiate();
         if (loaders.isEmpty()) initiate();
@@ -79,6 +95,6 @@ public class LinkRetriever {
             }
             list.add(((IProtectionLink) link).allowPetSpawn(owner, location));
         }
-        return (!list.contains(false));
+        return (!list.contains(false)) && canPetEnter(owner, location);
     }
 }

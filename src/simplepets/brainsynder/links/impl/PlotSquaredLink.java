@@ -3,6 +3,7 @@ package simplepets.brainsynder.links.impl;
 import com.intellectualcrafters.plot.PS;
 import com.intellectualcrafters.plot.object.Plot;
 import com.intellectualcrafters.plot.object.PlotArea;
+import com.intellectualcrafters.plot.object.PlotPlayer;
 import org.bukkit.Location;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.IPlotSquaredLink;
@@ -18,48 +19,56 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
 
     @Override
     public boolean allowPetEntry(PetOwner owner, Location at) {
-        if (!isHooked()) return true;
-        PS ps = PS.get();
-        com.intellectualcrafters.plot.object.Location loc = new com.intellectualcrafters.plot.object.Location(at.getWorld().getName(), at.getBlockX(), at.getBlockY(), at.getBlockZ());
-        PlotArea area = ps.getApplicablePlotArea(loc);
-        if (area == null) return true;
-        Plot plot = area.getPlot(loc);
-        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Roads");
-        if (!plot.hasOwner())
-            return PetCore.get().getConfiguration().getBoolean("PlotSquared.Allow-Pets.On-Unclaimed-Plots");
-
-        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied") && (owner != null))
-            if (plot.isDenied(owner.getPlayer().getUniqueId())) return false;
-
-        return true;
+        return fetchValue("Move", owner, at);
     }
 
     @Override
     public boolean allowPetSpawn(PetOwner owner, Location at) {
-        if (!isHooked()) return true;
-        PS ps = PS.get();
-        com.intellectualcrafters.plot.object.Location loc = new com.intellectualcrafters.plot.object.Location(at.getWorld().getName(), at.getBlockX(), at.getBlockY(), at.getBlockZ());
-        PlotArea area = ps.getApplicablePlotArea(loc);
-        if (area == null) return true;
-        Plot plot = area.getPlot(loc);
-        if (plot == null) return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Roads");
-        if (!plot.hasOwner())
-            return PetCore.get().getConfiguration().getBoolean("PlotSquared.Spawn-Pets.On-Unclaimed-Plots");
+        return fetchValue("Spawn", owner, at);
+    }
 
-        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied") && (owner != null))
-            if (plot.isDenied(owner.getPlayer().getUniqueId())) return false;
-
-        return true;
+    @Override
+    public boolean allowPetRiding(PetOwner owner, Location at) {
+        return fetchValue("Riding", owner, at);
     }
 
     @Override
     public boolean allowPetEntry(Location location) {
         return allowPetEntry (null, location);
-
     }
 
     @Override
     public boolean allowPetSpawn(Location at) {
         return allowPetSpawn(null, at);
+    }
+
+    private boolean fetchValue (String section, PetOwner owner, Location at) {
+        if (!isHooked()) return true;
+        PS ps = PS.get();
+        com.intellectualcrafters.plot.object.Location loc = new com.intellectualcrafters.plot.object.Location(at.getWorld().getName(), at.getBlockX(), at.getBlockY(), at.getBlockZ());
+        PlotArea area = ps.getApplicablePlotArea(loc);
+        if (area == null) return true;
+        Plot plot = area.getPlot(loc);
+        PlotPlayer player = null;
+
+        if (owner != null) {
+            player = PlotPlayer.get(owner.getPlayer().getName());
+        }
+
+        if (player != null) {
+            if (player.hasPermission(PetCore.get().getConfiguration().getString("PlotSquared.BypassPermission", false))) return true;
+        }
+
+        if (plot == null) {
+            return PetCore.get().getConfiguration().getBoolean("PlotSquared.On-Roads."+section);
+        }
+
+        if (!plot.hasOwner())
+            return PetCore.get().getConfiguration().getBoolean("PlotSquared.On-Unclaimed-Plots."+section);
+
+        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied."+section) && (owner != null))
+            if (plot.isDenied(owner.getPlayer().getUniqueId())) return false;
+
+        return true;
     }
 }
