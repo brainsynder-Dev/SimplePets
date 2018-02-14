@@ -30,7 +30,7 @@ import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.storage.files.*;
+import simplepets.brainsynder.files.*;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
 
@@ -60,70 +60,34 @@ public class PetCore extends JavaPlugin {
         long start = System.currentTimeMillis();
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
-            System.out.println("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin");
+            System.out.println(onEnableErrors.NO_API.getErrMsg());
             new MissingAPI(this).runTaskTimer(this, 0, 20 * 60 * 2);
             return;
         }
-        double ver = Double.parseDouble(plugin.getDescription().getVersion());
-        if (ver < 3.8) {
-            System.out.println("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/");
-            System.out.println("Disabling SimplePets...");
-            setEnabled(false);
-            return;
-        }
-        SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
-        SpigotPluginHandler.registerPlugin(spigotPluginHandler);
-        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", getPluginVersion())) {
-            setEnabled(false);
-            return;
-        }
-        try {
-            Class.forName("org.spigotmc.event.entity.EntityMountEvent");
-        } catch (Exception e) {
-            System.out.println("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software");
-            System.out.println("SimplePets requires events in the Spigot Software that CraftBukkit does not offer.");
-            System.out.println("Disabling SimplePets...");
-            setEnabled(false);
-            return;
-        }
-
-        double version = getJavaVersion();
-        if (version == 0.0) {
-            System.out.println("An error occurred when trying to get the simplified Java version for: '" + System.getProperty("java.version") + "' Please make sure you are using a recommended Java version (Java 8)");
-        } else {
-            if (!(version >= 1.8)) {
-                System.out.println("-------------------------------------------");
-                System.out.println("          Error Type: CRITICAL");
-                System.out.println("    An Internal Version Error Occurred");
-                System.out.println("SimplePets Requires Java 8+ in order to work. Please update Java.");
-                System.out.println("-------------------------------------------");
-                setEnabled(false);
-                return;
-            }
-        }
-
+        setEnabled(errorCheck());
         instance = this;
         utilities = new Utilities();
         saveResource("SimplePets-Info-App.txt", true);
-        if (!supportedVersions.contains(Reflection.getVersion())) {
-            System.out.println("-------------------------------------------");
-            System.out.println("          Error Type: CRITICAL");
-            System.out.println("    An Internal Version Error Occurred");
-            System.out.println("SimplePets Does not support " + Reflection.getVersion() + ", Please Update your server.");
-            System.out.println("-------------------------------------------");
-            setEnabled(false);
-            return;
-        }
-        if (!Reflection.getVersion().equals("v1_12_R1")) {
-            System.out.println("-------------------------------------------");
-            System.out.println("          Error Type: WARNING");
-            System.out.println("You seem to be on a version below 1.12.1");
-            System.out.println("SimplePets works best on 1.12.1, Just saying :P");
-            System.out.println("-------------------------------------------");
-        }
         loadConfig();
         VersionNMS.registerPets();
         PetType.initiate();
+        registerEvents();
+        int v = ServerVersion.getVersion().getIntVersion();
+        if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
+            PetCore.get().debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
+            setEnabled(false);
+            return;
+        }
+        loadPetMenuLayout();
+        ItemLoaders.initiate();
+        InvLoaders.initiate();
+
+        worldGuardLink = new WorldGuardLink();
+        if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
+        debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
+    }
+
+    private void registerEvents() {
         debug("Registering Listeners...");
         getCommand("pet").setExecutor(new CMD_Pet());
         getServer().getPluginManager().registerEvents(new MainListeners(), this);
@@ -134,12 +98,9 @@ public class PetCore extends JavaPlugin {
         //getServer().getPluginManager().registerEvents(new PetSelectionMenu(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
-        int v = ServerVersion.getVersion().getIntVersion();
-        if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            PetCore.get().debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
-            setEnabled(false);
-            return;
-        }
+    }
+    
+    private void loadPetMenuLayout() {
         debug("Loading PetMenu Layout");
         List<String> _allowed_ = configuration.getStringList("AvailableSlots");
         int size = 1;
@@ -169,12 +130,46 @@ public class PetCore extends JavaPlugin {
                 }
             }
         }
-        ItemLoaders.initiate();
-        InvLoaders.initiate();
         petTypes = new ObjectPager<>(size, types);
-        worldGuardLink = new WorldGuardLink();
-        if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
-        debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
+    }
+
+    private boolean errorCheck() {
+        double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion());
+        if (ver < 3.8) {
+            System.out.println(onEnableErrors.API_OUT_OF_DATE.getErrMsg());
+            return false;
+        }
+        SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
+        SpigotPluginHandler.registerPlugin(spigotPluginHandler);
+        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", getPluginVersion())) {
+            return false;
+        }
+        try {
+            Class.forName("org.spigotmc.event.entity.EntityMountEvent");
+        } catch (Exception e) {
+            System.out.println(onEnableErrors.NO_SPIGOT.getErrMsg());
+            return false;
+        }
+
+        double version = getJavaVersion();
+        if (version == 0.0) {
+            System.out.println(onEnableErrors.JAVA_WARNING_WEAK);
+        } else {
+            if (!(version >= 1.8)) {
+                System.out.println(onEnableErrors.JAVA_WARNING_CRITICAL.getErrMsg());
+                return false;
+            }
+        }
+
+
+        if (!supportedVersions.contains(Reflection.getVersion())) {
+            System.out.println(onEnableErrors.UNSUPPORTED_VERSION_CRITICAL.getErrMsg());
+            return false;
+        }
+        if (!Reflection.getVersion().equals("v1_12_R1")) {
+            System.out.println(onEnableErrors.UNSUPPORTED_VERSION_WEAK);
+        }
+        return true;
     }
 
     private void handleSQL() {
@@ -324,8 +319,6 @@ public class PetCore extends JavaPlugin {
         }
     }
 
-
-
     // GETTERS
 
     public boolean isDisabling() {return this.disabling;}
@@ -435,5 +428,39 @@ public class PetCore extends JavaPlugin {
 
     public static String getPluginVersion() {
         return "4.0";
+    }
+
+    public enum onEnableErrors {
+        NO_API("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin"),
+        API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/" +
+                "\n\"Disabling SimplePets...\""),
+        NO_SPIGOT("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software" +
+                "\nSimplePets requires events in the Spigot Software that CraftBukkit does not offer."),
+        JAVA_WARNING_WEAK("An error occurred when trying to get the simplified Java version for: " + System.getProperty("java.version") + " Please make sure you are using a recommended Java version (Java 8)"),
+        JAVA_WARNING_CRITICAL("-------------------------------------------" +
+                "\n          Error Type: CRITICAL" +
+                "\n    An Internal Version Error Occurred" +
+                "\nSimplePets Requires Java 8+ in order to work. Please update Java." +
+                "\n-------------------------------------------"),
+        UNSUPPORTED_VERSION_CRITICAL("-------------------------------------------" +
+                "\n          Error Type: CRITICAL" +
+                "\n    An Internal Version Error Occurred" +
+                "\nSimplePets Does not support " + Reflection.getVersion() + ", Please Update your server." +
+                "\n-------------------------------------------"),
+        UNSUPPORTED_VERSION_WEAK("-------------------------------------------" +
+                "\n          Error Type: WARNING" +
+                "\nYou seem to be on a version below 1.12.1" +
+                "\nSimplePets works best on 1.12.1, Just saying :P" +
+                "\n-------------------------------------------");
+
+        String errMsg;
+
+        onEnableErrors(String s) {
+            errMsg = s;
+        }
+
+        public String getErrMsg() {
+            return errMsg;
+        }
     }
 }
