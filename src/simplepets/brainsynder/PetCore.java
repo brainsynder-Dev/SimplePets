@@ -78,7 +78,7 @@ public class PetCore extends JavaPlugin {
             return;
         }
         double ver = Double.parseDouble(plugin.getDescription().getVersion());
-        if (ver < 3.8) {
+        if (ver < 3.7) {
             System.out.println("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/");
             System.out.println("Disabling SimplePets...");
             setEnabled(false);
