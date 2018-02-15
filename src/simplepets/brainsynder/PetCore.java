@@ -39,6 +39,7 @@ import java.sql.Connection;
 import java.util.*;
 
 public class PetCore extends JavaPlugin {
+
     private static PetCore instance;
     private final List<String> supportedVersions = Arrays.asList(
             "v1_11_R1",
@@ -74,7 +75,7 @@ public class PetCore extends JavaPlugin {
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            PetCore.get().debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
+            debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
             setEnabled(false);
             return;
         }
@@ -101,23 +102,26 @@ public class PetCore extends JavaPlugin {
     }
     
     private void loadPetMenuLayout() {
+
         debug("Loading PetMenu Layout");
         List<String> _allowed_ = configuration.getStringList("AvailableSlots");
         int size = 1;
+        String slotStr = "SimplePets Error: Invalid Slot number '%s' Value must be from 1-54";
+
         for (String s : _allowed_) {
             try {
                 int slot = Integer.parseInt(s);
                 if (slot <= 0) {
-                    PetCore.get().debug("SimplePets Error: Invalid Slot number '" + slot + "' Value must be from 1-54");
+                    debug(slotStr.replaceAll("%s", String.valueOf(slot)));
                     continue;
                 }
                 if (slot >= 55) {
-                    PetCore.get().debug("SimplePets Error: Invalid Slot number '" + slot + "' Value must be from 1-54");
+                    debug(slotStr.replaceAll("%s", String.valueOf(slot)));
                     continue;
                 }
                 availableSlots.add((slot - 1));
             } catch (NumberFormatException e) {
-                PetCore.get().debug("SimplePets Error: Invalid Slot number '" + s + "' Value must be from 1-54");
+                debug(slotStr.replaceAll("%s", s));
             }
             size++;
         }
@@ -130,17 +134,21 @@ public class PetCore extends JavaPlugin {
                 }
             }
         }
+
         petTypes = new ObjectPager<>(size, types);
     }
 
     private boolean errorCheck() {
+
         double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion());
         if (ver < 3.8) {
             System.out.println(onEnableErrors.API_OUT_OF_DATE.getErrMsg());
             return false;
         }
+
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
+
         if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", getPluginVersion())) {
             return false;
         }
@@ -252,34 +260,6 @@ public class PetCore extends JavaPlugin {
 
     public void debug(int level, String message) {
         if (level >= 3) level = 2;
-        if (configuration == null) {
-            ChatColor color = ChatColor.WHITE;
-            switch (level) {
-                case 1:
-                    color = ChatColor.YELLOW;
-                    break;
-                case 2:
-                    color = ChatColor.RED;
-                    break;
-            }
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
-            return;
-        }
-        if (!configuration.isSet("Debug.Enabled")) {
-            ChatColor color = ChatColor.WHITE;
-            switch (level) {
-                case 1:
-                    color = ChatColor.YELLOW;
-                    break;
-                case 2:
-                    color = ChatColor.RED;
-                    break;
-            }
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
-            return;
-        }
-        if (!configuration.getBoolean("Debug.Enabled")) return;
-        if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
         ChatColor color = ChatColor.WHITE;
         switch (level) {
             case 1:
@@ -289,6 +269,17 @@ public class PetCore extends JavaPlugin {
                 color = ChatColor.RED;
                 break;
         }
+        if (configuration == null) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            return;
+        }
+        if (!configuration.isSet("Debug.Enabled")) {
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            return;
+        }
+        if (!configuration.getBoolean("Debug.Enabled")) return;
+        if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
+
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
     }
 
@@ -319,6 +310,42 @@ public class PetCore extends JavaPlugin {
         }
     }
 
+    // On Enable Issue messages
+
+    public enum onEnableErrors {
+        NO_API("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin"),
+        API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/" +
+                "\n\"Disabling SimplePets...\""),
+        NO_SPIGOT("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software" +
+                "\nSimplePets requires events in the Spigot Software that CraftBukkit does not offer."),
+        JAVA_WARNING_WEAK("An error occurred when trying to get the simplified Java version for: " + System.getProperty("java.version") + " Please make sure you are using a recommended Java version (Java 8)"),
+        JAVA_WARNING_CRITICAL("-------------------------------------------" +
+                "\n          Error Type: CRITICAL" +
+                "\n    An Internal Version Error Occurred" +
+                "\nSimplePets Requires Java 8+ in order to work. Please update Java." +
+                "\n-------------------------------------------"),
+        UNSUPPORTED_VERSION_CRITICAL("-------------------------------------------" +
+                "\n          Error Type: CRITICAL" +
+                "\n    An Internal Version Error Occurred" +
+                "\nSimplePets Does not support " + Reflection.getVersion() + ", Please Update your server." +
+                "\n-------------------------------------------"),
+        UNSUPPORTED_VERSION_WEAK("-------------------------------------------" +
+                "\n          Error Type: WARNING" +
+                "\nYou seem to be on a version below 1.12.1" +
+                "\nSimplePets works best on 1.12.1, Just saying :P" +
+                "\n-------------------------------------------");
+
+        final String errMsg;
+
+        onEnableErrors(String s) {
+            errMsg = s;
+        }
+
+        String getErrMsg() {
+            return errMsg;
+        }
+    }
+
     // GETTERS
 
     public boolean isDisabling() {return this.disabling;}
@@ -334,13 +361,12 @@ public class PetCore extends JavaPlugin {
     public IStorage<Integer> getAvailableSlots() {return this.availableSlots;}
 
     public String getDefaultPetName(PetType petType, Player player) {
-        String name = petType.getDefaultName();
-        return translateName(name).replace("%player%", player.getName());
+        return translateName(petType.getDefaultName()).replace("%player%", player.getName());
     }
 
     public String translateName(String name) {
-        boolean color = get().configuration.getBoolean("ColorCodes");
-        boolean k = get().configuration.getBoolean("Use&k");
+        boolean color = getConfiguration().getBoolean("ColorCodes");
+        boolean k = getConfiguration().getBoolean("Use&k");
         if (color)
             name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
 
@@ -363,16 +389,12 @@ public class PetCore extends JavaPlugin {
         File folder = new File(getDataFolder().toString() + "/PetInventories/");
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
-            if (files != null) {
-                if (files.length != 0) {
-                    for (File file : files) {
-                        if (file.getName().contains(".storage")) {
-                            FileConfiguration con = YamlConfiguration.loadConfiguration(file);
-                            if (con.get("Username") != null) {
-                                if (con.getString("Username").equalsIgnoreCase(name)) {
-                                    return new PlayerPetInv(file.getName());
-                                }
-                            }
+            if (files != null && files.length != 0) {
+                for (File file : files) {
+                    if (file.getName().contains(".storage")) {
+                        FileConfiguration con = YamlConfiguration.loadConfiguration(file);
+                        if (con.getString("Username").equalsIgnoreCase(name) && con.get("Username") != null) {
+                            return new PlayerPetInv(file.getName());
                         }
                     }
                 }
@@ -430,37 +452,5 @@ public class PetCore extends JavaPlugin {
         return "4.0";
     }
 
-    public enum onEnableErrors {
-        NO_API("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin"),
-        API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/" +
-                "\n\"Disabling SimplePets...\""),
-        NO_SPIGOT("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software" +
-                "\nSimplePets requires events in the Spigot Software that CraftBukkit does not offer."),
-        JAVA_WARNING_WEAK("An error occurred when trying to get the simplified Java version for: " + System.getProperty("java.version") + " Please make sure you are using a recommended Java version (Java 8)"),
-        JAVA_WARNING_CRITICAL("-------------------------------------------" +
-                "\n          Error Type: CRITICAL" +
-                "\n    An Internal Version Error Occurred" +
-                "\nSimplePets Requires Java 8+ in order to work. Please update Java." +
-                "\n-------------------------------------------"),
-        UNSUPPORTED_VERSION_CRITICAL("-------------------------------------------" +
-                "\n          Error Type: CRITICAL" +
-                "\n    An Internal Version Error Occurred" +
-                "\nSimplePets Does not support " + Reflection.getVersion() + ", Please Update your server." +
-                "\n-------------------------------------------"),
-        UNSUPPORTED_VERSION_WEAK("-------------------------------------------" +
-                "\n          Error Type: WARNING" +
-                "\nYou seem to be on a version below 1.12.1" +
-                "\nSimplePets works best on 1.12.1, Just saying :P" +
-                "\n-------------------------------------------");
 
-        String errMsg;
-
-        onEnableErrors(String s) {
-            errMsg = s;
-        }
-
-        public String getErrMsg() {
-            return errMsg;
-        }
-    }
 }
