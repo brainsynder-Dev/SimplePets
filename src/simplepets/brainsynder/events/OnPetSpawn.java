@@ -1,13 +1,11 @@
 package simplepets.brainsynder.events;
 
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IImpossaPet;
@@ -78,47 +76,26 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     }
 
     @EventHandler
-    public void onMove(PlayerMoveEvent e) {
-        try {
-            Player player = e.getPlayer();
-            PetOwner petOwner = PetOwner.getPetOwner(player);
-            if (petOwner.hasPet()) {
-                if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(player.getLocation())) {
-                    removePet(petOwner, player);
-                    return;
-                }
-                if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(player.getLocation())) {
-                    removePet(petOwner, player);
-                }
-            }
-        } catch (Exception ignored) {
-        }
-    }
-
-    @EventHandler
     public void onMove(PetMoveEvent e) {
         try {
-            if (e.getEntity() != null) {
-                if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
-                    IEntityPet entity = e.getEntity();
-                    PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-                    IWorldGuardLink worldGuard = LinkRetriever.getProtectionLink(IWorldGuardLink.class);
-                    IPlotSquaredLink plot2 = LinkRetriever.getProtectionLink(IPlotSquaredLink.class);
-                    if (!worldGuard.allowPetEntry(e.getTargetLocation())) {
-                        removePet(petOwner, e.getEntity().getOwner());
-                        return;
-                    }
-                    if (!plot2.allowPetEntry(e.getTargetLocation())) {
-                        removePet(petOwner, e.getEntity().getOwner());
-                    }
+            if (e.getEntity() == null) return;
+            if (e.getEntity().getPet() == null) return;
+            if (e.getEntity().getOwner() == null) return;
+            IEntityPet entity = e.getEntity();
+            PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+            if (e.getCause() == PetMoveEvent.Cause.RIDE) {
+                if (!LinkRetriever.canRidePet(petOwner, entity.getEntity().getLocation())) {
+                    petOwner.getPet().setVehicle(false);
+                    entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                 }
+                return;
+            }
+
+            if (!LinkRetriever.canPetEnter(petOwner, entity.getEntity().getLocation())) {
+                petOwner.removePet();
+                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
             }
         } catch (Exception ignored) {
         }
-    }
-
-    private void removePet(PetOwner petOwner, Player player) {
-        petOwner.removePet();
-        player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
     }
 }
