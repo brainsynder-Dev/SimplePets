@@ -7,9 +7,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
-import simple.brainsynder.utils.ObjectPager;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
@@ -20,8 +17,6 @@ import simplepets.brainsynder.events.MainListeners;
 import simplepets.brainsynder.events.OnJoin;
 import simplepets.brainsynder.events.OnPetSpawn;
 import simplepets.brainsynder.events.PetEventListeners;
-import simplepets.brainsynder.links.IProtectionLink;
-import simplepets.brainsynder.links.impl.WorldGuardLink;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.listeners.DataListener;
@@ -30,7 +25,8 @@ import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.files.*;
+import simplepets.brainsynder.storage.files.*;
+import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
 
@@ -46,14 +42,14 @@ public class PetCore extends JavaPlugin {
             "v1_12_R1"
     );
     public boolean forceSpawn;
-    public ObjectPager<PetType> petTypes;
     private boolean disabling = false;
+
     private Config configuration;
     private Messages messages;
+    private PetTranslator translator;
+
     private MySQL mySQL = null;
-    private IProtectionLink worldGuardLink;
     private ISpawner spawner;
-    private IStorage<Integer> availableSlots = new StorageList<>();
     private Map<UUID, PlayerFile> fileStorage = new HashMap<>();
     private Utilities utilities = null;
 
@@ -61,11 +57,14 @@ public class PetCore extends JavaPlugin {
         long start = System.currentTimeMillis();
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
-            System.out.println(onEnableErrors.NO_API.getErrMsg());
+            Errors.NO_API.print();
             new MissingAPI(this).runTaskTimer(this, 0, 20 * 60 * 2);
             return;
         }
-        setEnabled(errorCheck());
+        if (!errorCheck()) {
+            setEnabled(false);
+            return;
+        }
         instance = this;
         utilities = new Utilities();
         saveResource("SimplePets-Info-App.txt", true);
@@ -79,11 +78,9 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        loadPetMenuLayout();
         ItemLoaders.initiate();
         InvLoaders.initiate();
 
-        worldGuardLink = new WorldGuardLink();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
@@ -96,86 +93,47 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
         getServer().getPluginManager().registerEvents(new PetEventListeners(), this);
         getServer().getPluginManager().registerEvents(new OnPetSpawn(), this);
-        //getServer().getPluginManager().registerEvents(new PetSelectionMenu(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
     }
-    
-    private void loadPetMenuLayout() {
-
-        debug("Loading PetMenu Layout");
-        List<String> _allowed_ = configuration.getStringList("AvailableSlots");
-        int size = 1;
-        String slotStr = "SimplePets Error: Invalid Slot number '%s' Value must be from 1-54";
-
-        for (String s : _allowed_) {
-            try {
-                int slot = Integer.parseInt(s);
-                if (slot <= 0) {
-                    debug(slotStr.replaceAll("%s", String.valueOf(slot)));
-                    continue;
-                }
-                if (slot >= 55) {
-                    debug(slotStr.replaceAll("%s", String.valueOf(slot)));
-                    continue;
-                }
-                availableSlots.add((slot - 1));
-            } catch (NumberFormatException e) {
-                debug(slotStr.replaceAll("%s", s));
-            }
-            size++;
-        }
-
-        List<PetType> types = new ArrayList<>();
-        for (PetType type : PetType.values()) {
-            if (type.isSupported()) {
-                if (type.isEnabled()) {
-                    types.add(type);
-                }
-            }
-        }
-
-        petTypes = new ObjectPager<>(size, types);
-    }
 
     private boolean errorCheck() {
-
         double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion());
-        if (ver < 3.8) {
-            System.out.println(onEnableErrors.API_OUT_OF_DATE.getErrMsg());
+        if (ver < 3.7) {
+            Errors.API_OUT_OF_DATE.print();
             return false;
         }
 
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
-        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", getPluginVersion())) {
+        if (!spigotPluginHandler.runTamperCheck("brainsynder", "SimplePets", "4.0")) {
             return false;
         }
         try {
             Class.forName("org.spigotmc.event.entity.EntityMountEvent");
         } catch (Exception e) {
-            System.out.println(onEnableErrors.NO_SPIGOT.getErrMsg());
+            Errors.NO_SPIGOT.print();
             return false;
         }
 
         double version = getJavaVersion();
         if (version == 0.0) {
-            System.out.println(onEnableErrors.JAVA_WARNING_WEAK);
+            Errors.JAVA_WARNING_WEAK.print();
         } else {
             if (!(version >= 1.8)) {
-                System.out.println(onEnableErrors.JAVA_WARNING_CRITICAL.getErrMsg());
+                Errors.JAVA_WARNING_CRITICAL.print();
                 return false;
             }
         }
 
 
         if (!supportedVersions.contains(Reflection.getVersion())) {
-            System.out.println(onEnableErrors.UNSUPPORTED_VERSION_CRITICAL.getErrMsg());
+            Errors.UNSUPPORTED_VERSION_CRITICAL.print();
             return false;
         }
         if (!Reflection.getVersion().equals("v1_12_R1")) {
-            System.out.println(onEnableErrors.UNSUPPORTED_VERSION_WEAK);
+            Errors.UNSUPPORTED_VERSION_WEAK.print();
         }
         return true;
     }
@@ -229,7 +187,8 @@ public class PetCore extends JavaPlugin {
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
         debug("Loading PetTranslator.yml... (Longest Task)");
-        PetTranslate.loadDefaults();
+        translator = new PetTranslator(this);
+        translator.loadDefaults();
     }
 
     public void onDisable() {
@@ -310,42 +269,6 @@ public class PetCore extends JavaPlugin {
         }
     }
 
-    // On Enable Issue messages
-
-    public enum onEnableErrors {
-        NO_API("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin"),
-        API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/" +
-                "\n\"Disabling SimplePets...\""),
-        NO_SPIGOT("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software" +
-                "\nSimplePets requires events in the Spigot Software that CraftBukkit does not offer."),
-        JAVA_WARNING_WEAK("An error occurred when trying to get the simplified Java version for: " + System.getProperty("java.version") + " Please make sure you are using a recommended Java version (Java 8)"),
-        JAVA_WARNING_CRITICAL("-------------------------------------------" +
-                "\n          Error Type: CRITICAL" +
-                "\n    An Internal Version Error Occurred" +
-                "\nSimplePets Requires Java 8+ in order to work. Please update Java." +
-                "\n-------------------------------------------"),
-        UNSUPPORTED_VERSION_CRITICAL("-------------------------------------------" +
-                "\n          Error Type: CRITICAL" +
-                "\n    An Internal Version Error Occurred" +
-                "\nSimplePets Does not support " + Reflection.getVersion() + ", Please Update your server." +
-                "\n-------------------------------------------"),
-        UNSUPPORTED_VERSION_WEAK("-------------------------------------------" +
-                "\n          Error Type: WARNING" +
-                "\nYou seem to be on a version below 1.12.1" +
-                "\nSimplePets works best on 1.12.1, Just saying :P" +
-                "\n-------------------------------------------");
-
-        final String errMsg;
-
-        onEnableErrors(String s) {
-            errMsg = s;
-        }
-
-        String getErrMsg() {
-            return errMsg;
-        }
-    }
-
     // GETTERS
 
     public boolean isDisabling() {return this.disabling;}
@@ -354,11 +277,11 @@ public class PetCore extends JavaPlugin {
 
     public Messages getMessages() {return this.messages;}
 
+    public PetTranslator getTranslator() {
+        return translator;
+    }
+
     public MySQL getMySQL() {return this.mySQL;}
-
-    public IProtectionLink getWorldGuardLink() {return this.worldGuardLink;}
-
-    public IStorage<Integer> getAvailableSlots() {return this.availableSlots;}
 
     public String getDefaultPetName(PetType petType, Player player) {
         return translateName(petType.getDefaultName()).replace("%player%", player.getName());
@@ -429,9 +352,6 @@ public class PetCore extends JavaPlugin {
 
     private void setMySQL(MySQL mySQL) {this.mySQL = mySQL; }
 
-    public void setAvailableSlots(IStorage<Integer> availableSlots) {this.availableSlots = availableSlots; }
-
-
 
     // STATIC
 
@@ -447,10 +367,4 @@ public class PetCore extends JavaPlugin {
         }
         return true;
     }
-
-    public static String getPluginVersion() {
-        return "4.0";
-    }
-
-
 }
