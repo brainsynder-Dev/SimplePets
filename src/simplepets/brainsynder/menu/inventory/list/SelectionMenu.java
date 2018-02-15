@@ -12,7 +12,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.menu.items.list.*;
 import simplepets.brainsynder.pet.PetType;
@@ -87,7 +87,7 @@ public class SelectionMenu extends CustomInventory {
         while (placeHolder > 0) {
             int slot = (placeHolder - 1);
             if (getSlots().containsKey(slot)) {
-                CustomItem item = getSlots().get(slot);
+                Item item = getSlots().get(slot);
                 if (item instanceof Air) {
                     maxPets++;
                 } else {

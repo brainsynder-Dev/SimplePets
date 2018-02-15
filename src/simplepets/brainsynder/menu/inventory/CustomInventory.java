@@ -2,7 +2,7 @@ package simplepets.brainsynder.menu.inventory;
 
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.base.JSONFile;
@@ -16,7 +16,7 @@ public class CustomInventory extends JSONFile {
     private String title;
     private boolean enabled = true;
     protected Map<String, Integer> pageSave = new HashMap<>();
-    private Map<Integer, CustomItem> slots = new HashMap<>();
+    private Map<Integer, Item> slots = new HashMap<>();
 
     public CustomInventory(File file) {
         super(file);
@@ -43,7 +43,7 @@ public class CustomInventory extends JSONFile {
                 try {
                     String key = String.valueOf(json.get("slot"));
                     int slot = Integer.parseInt(key);
-                    CustomItem item = ItemLoaders.getLoader(String.valueOf(json.get("item")));
+                    Item item = ItemLoaders.getLoader(String.valueOf(json.get("item")));
                     if (item == null) {
                         PetCore.get().debug(2, "Could not retrieve the item for: " + key);
                         continue;
@@ -59,7 +59,7 @@ public class CustomInventory extends JSONFile {
         return pageSave.getOrDefault(owner.getPlayer().getName(), 1);
     }
 
-    public Map<Integer, CustomItem> getSlots() {
+    public Map<Integer, Item> getSlots() {
         return slots;
     }
 

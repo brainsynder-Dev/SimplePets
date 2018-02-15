@@ -14,13 +14,10 @@ import simplepets.brainsynder.api.event.inventory.PetInventorySelectTypeEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.ItemLoaders;
-import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
-
-import java.util.List;
 
 public class SelectionListener implements Listener {
     @EventHandler
@@ -38,15 +35,12 @@ public class SelectionListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            int currentPage = menu.getCurrentPage(owner);
-            CustomItem item = ItemLoaders.getLoader(e.getCurrentItem());
+            Item item = ItemLoaders.getLoader(e.getCurrentItem());
             if (item != null) {
                 item.onClick(owner, menu);
                 return;
             }
 
-            final List<PetType> types = PetCore.get().petTypes.getPage(currentPage);
-            if (types == null) return;
             if (!menu.getPetMap().containsKey(p.getName())) return;
             IStorage<PetTypeStorage> storage = menu.getPetMap().getKey(p.getName()).copy();
             while (storage.hasNext()) {

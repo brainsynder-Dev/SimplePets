@@ -14,7 +14,7 @@ import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -36,7 +36,7 @@ public class DataListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            CustomItem item = ItemLoaders.getLoader(e.getCurrentItem());
+            Item item = ItemLoaders.getLoader(e.getCurrentItem());
             if (item != null) {
                 item.onClick(owner, menu);
                 return;
