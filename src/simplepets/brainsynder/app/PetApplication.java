@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
-import simplepets.brainsynder.PetCore;
 
 public class PetApplication extends Application {
     private Stage window;
@@ -69,7 +68,7 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://app.pluginwiki.tk/?version=" + PetCore.getPluginVersion());
+        webEngine.load("http://app.pluginwiki.tk/?version=4.0");
     }
 
     private void createContextMenu(WebView webView) {
