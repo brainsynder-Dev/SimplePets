@@ -158,6 +158,11 @@ public class PetCore extends JavaPlugin {
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
                 }
+                if (!mySQL.hasColumn("UUID")) mySQL.addColumn("UUID", "TEXT");
+                if (!mySQL.hasColumn("name")) mySQL.addColumn("name", "TEXT");
+                if (!mySQL.hasColumn("UnlockedPets")) mySQL.addColumn("UnlockedPets", "MEDIUMTEXT");
+                if (!mySQL.hasColumn("PetName")) mySQL.addColumn("PetName", "TEXT");
+                if (!mySQL.hasColumn("NeedsRespawn")) mySQL.addColumn("NeedsRespawn", "MEDIUMTEXT");
             });
             thread.setName("SimplePets SQL");
             thread.setDaemon(false);
