@@ -6,12 +6,12 @@ import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
 
-public class PreviousPage extends CustomItem {
+public class PreviousPage extends Item {
     public PreviousPage(File file) {
         super(file);
     }

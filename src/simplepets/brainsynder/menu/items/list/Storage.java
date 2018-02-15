@@ -5,12 +5,12 @@ import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
 
-public class Storage extends CustomItem {
+public class Storage extends Item {
     public Storage(File file) {
         super(file);
     }

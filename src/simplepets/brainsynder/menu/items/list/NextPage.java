@@ -5,13 +5,13 @@ import org.json.simple.JSONObject;
 import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 
 import java.io.File;
 
-public class NextPage extends CustomItem {
+public class NextPage extends Item {
     public NextPage(File file) {
         super(file);
     }

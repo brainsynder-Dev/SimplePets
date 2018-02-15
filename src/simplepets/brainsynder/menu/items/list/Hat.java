@@ -3,12 +3,12 @@ package simplepets.brainsynder.menu.items.list;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
 
-public class Hat extends CustomItem {
+public class Hat extends Item {
     public Hat(File file) {
         super(file);
     }

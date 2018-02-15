@@ -2,11 +2,11 @@ package simplepets.brainsynder.menu.items.list;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import simplepets.brainsynder.menu.items.CustomItem;
+import simplepets.brainsynder.menu.items.Item;
 
 import java.io.File;
 
-public class Air extends CustomItem {
+public class Air extends Item {
     public Air(File file) {
         super(file);
     }
