@@ -117,14 +117,14 @@ public class PetOwner {
     }
 
     public void setPetName(String name, boolean override) {
-        boolean hasLimit = PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.Limit-Number-Of-Characters");
+        boolean hasLimit = PetCore.get().getConfiguration().getBoolean("RenamePet.Limit-Number-Of-Characters");
         boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
         boolean k = PetCore.get().getConfiguration().getBoolean("Use&k");
         name = name.replace("~", " ");
 
         if (!override) {
             if (hasLimit && (!player.hasPermission("Pet.name.bypassLimit"))) {
-                int limit = PetCore.get().getConfiguration().getInt("PetToggles.Rename.CharacterLimit");
+                int limit = PetCore.get().getConfiguration().getInt("RenamePet.CharacterLimit");
                 if (name.length() > limit) {
                     name = name.substring(0, limit);
                 }
@@ -135,6 +135,7 @@ public class PetOwner {
             if (event.isCancelled()) {
                 play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
                 SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
+                player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameFailure", true).replace("{name}", ChatColor.translateAlternateColorCodes('&', name)));
                 return;
             }
             name = event.getNewName();
@@ -223,7 +224,7 @@ public class PetOwner {
      * Opens a Anvil GUI which allows the owner to rename their pet.
      */
     public void renamePet() {
-        if (PetCore.get().getConfiguration().getBoolean("PetToggles.Rename.ViaAnvil")) {
+        if (PetCore.get().getConfiguration().getBoolean("RenamePet.ViaAnvil")) {
             AnvilGUI gui = new AnvilGUI(PetCore.get(), player, event -> {
                 if (event.getSlot() != AnvilSlot.OUTPUT) {
                     event.setWillClose(false);
@@ -234,7 +235,7 @@ public class PetOwner {
                 event.setCanceled(true);
                 event.setWillClose(true);
                 event.setWillDestroy(true);
-                setPetName(event.getName());
+                setPetName(event.getName(), false);
             });
             gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
             gui.open();

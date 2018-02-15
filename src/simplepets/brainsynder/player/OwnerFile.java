@@ -12,7 +12,7 @@ import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
-import simplepets.brainsynder.files.PlayerFile;
+import simplepets.brainsynder.storage.files.PlayerFile;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -193,8 +193,8 @@ public class OwnerFile {
             owner.setRawOwned(new JSONArray());
         }
         owner.setRawPetName(file.getString("PetName", false));
-        String needs = file.getString("NeedsRespawn", false);
-        handle(needs);
+        StorageTagCompound compound = getPetData(p.getUniqueId().toString());
+        if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
     }
 
     private void handle(String needs) {
