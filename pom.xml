@@ -35,8 +35,18 @@
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
+        <repository>
+            <id>plot-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
+        </repository>
     </repositories>
     <dependencies>
+        <dependency>
+            <groupId>com.plotsquared</groupId>
+            <artifactId>plotsquared-api</artifactId>
+            <version>latest</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
@@ -68,13 +78,6 @@
             <version>3.8</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/resources/SimpleAPI.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.intellectualcrafters</groupId>
-            <artifactId>PlotSquared-Bukkit</artifactId>
-            <version>3.5.0-SNAPSHOT-95f8aaa</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/resources/PlotSquared-Bukkit.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
