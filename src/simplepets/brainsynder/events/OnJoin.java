@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEnterEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -17,11 +18,7 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 public class OnJoin implements Listener {
     @EventHandler
     public void onKick(PlayerKickEvent e) {
-        Player player = e.getPlayer();
-        PetOwner owner = PetOwner.getPetOwner(player);
-        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
-        owner.getFile().save();
-        if (owner.hasPet()) owner.removePet();
+        petRemoveOnLeave(e);
     }
 
     @EventHandler
@@ -45,18 +42,13 @@ public class OnJoin implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-        Player player = e.getPlayer();
-        PetOwner owner = PetOwner.getPetOwner(player);
-        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
-        owner.getFile().save();
-        if (owner.hasPet()) owner.removePet();
+        petRemoveOnLeave(e);
     }
 
     @EventHandler
     public void onPortal(EntityPortalEnterEvent e) {
         if (e.getEntity() instanceof Player) {
-            Player player = (Player) e.getEntity();
-            PetOwner owner = PetOwner.getPetOwner(player);
+            PetOwner owner = PetOwner.getPetOwner((Player) e.getEntity());
             if (owner.hasPet()) owner.removePet();
         } else {
             if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
@@ -64,9 +56,16 @@ public class OnJoin implements Listener {
                 PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
                 if (owner.hasPet()) {
                     owner.removePet();
-                    return;
                 }
             }
         }
+    }
+
+    private void petRemoveOnLeave(PlayerEvent e) {
+        Player player = e.getPlayer();
+        PetOwner owner = PetOwner.getPetOwner(player);
+        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
+        owner.getFile().save();
+        if (owner.hasPet()) owner.removePet();
     }
 }

@@ -84,13 +84,11 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
             PetOwner petOwner = PetOwner.getPetOwner(player);
             if (petOwner.hasPet()) {
                 if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(player.getLocation())) {
-                    petOwner.removePet();
-                    player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                    removePet(petOwner, player);
                     return;
                 }
                 if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(player.getLocation())) {
-                    petOwner.removePet();
-                    player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                    removePet(petOwner, player);
                 }
             }
         } catch (Exception ignored) {
@@ -100,21 +98,27 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler
     public void onMove(PetMoveEvent e) {
         try {
-            if (e.getEntity() == null) return;
-            if (e.getEntity().getPet() == null) return;
-            if (e.getEntity().getOwner() == null) return;
-            IEntityPet entity = e.getEntity();
-            PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-            if (!LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetEntry(e.getTargetLocation())) {
-                petOwner.removePet();
-                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
-                return;
-            }
-            if (!LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetEntry(e.getTargetLocation())) {
-                petOwner.removePet();
-                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+            if (e.getEntity() != null) {
+                if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
+                    IEntityPet entity = e.getEntity();
+                    PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+                    IWorldGuardLink worldGuard = LinkRetriever.getProtectionLink(IWorldGuardLink.class);
+                    IPlotSquaredLink plot2 = LinkRetriever.getProtectionLink(IPlotSquaredLink.class);
+                    if (!worldGuard.allowPetEntry(e.getTargetLocation())) {
+                        removePet(petOwner, e.getEntity().getOwner());
+                        return;
+                    }
+                    if (!plot2.allowPetEntry(e.getTargetLocation())) {
+                        removePet(petOwner, e.getEntity().getOwner());
+                    }
+                }
             }
         } catch (Exception ignored) {
         }
+    }
+
+    private void removePet(PetOwner petOwner, Player player) {
+        petOwner.removePet();
+        player.sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
     }
 }
