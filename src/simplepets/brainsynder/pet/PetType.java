@@ -13,8 +13,7 @@ import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.*;
 import simplepets.brainsynder.api.entity.passive.*;
-import simplepets.brainsynder.files.PetTranslate;
-import simplepets.brainsynder.utils.TypeStorage;
+import simplepets.brainsynder.storage.TypeStorage;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
 
@@ -124,13 +123,13 @@ public enum PetType {
         this.mat = mat;
         if (isSupported()) {
             this.type = type;
-            if (!PetTranslate.isSet(this, "AmbientSound")) {
+            if (!PetCore.get().getTranslator().isSet(this, "AmbientSound")) {
                 ambientSound = defSound;
             } else {
-                if (PetTranslate.getString(this, "AmbientSound").equals("off")) {
+                if (PetCore.get().getTranslator().getString(this, "AmbientSound").equals("off")) {
                     ambientSound = null;
                 } else {
-                    ambientSound = SoundMaker.fromString(PetTranslate.getString(this, "AmbientSound"));
+                    ambientSound = SoundMaker.fromString(PetCore.get().getTranslator().getString(this, "AmbientSound"));
                 }
             }
         } else {
@@ -170,27 +169,27 @@ public enum PetType {
         for (PetType type : values()) {
             if (!storage.containsKey(type)) {
                 TypeStorage typeStorage = new TypeStorage();
-                typeStorage.setNoColorName(PetTranslate.getString(type.cfgName + ".NoColorName"));
-                typeStorage.setDisplayName(PetTranslate.getString(type.cfgName + ".DisplayName"));
-                typeStorage.setDescription(PetTranslate.getList(type.cfgName + ".Description"));
-                typeStorage.setDefaultName(PetTranslate.getString(type.cfgName + ".DefaultName"));
+                typeStorage.setNoColorName(PetCore.get().getTranslator().getString(type.cfgName + ".NoColorName"));
+                typeStorage.setDisplayName(PetCore.get().getTranslator().getString(type.cfgName + ".DisplayName"));
+                typeStorage.setDescription(PetCore.get().getTranslator().getStringList(type.cfgName + ".Description"));
+                typeStorage.setDefaultName(PetCore.get().getTranslator().getString(type.cfgName + ".DefaultName"));
                 try {
-                    Object mat = PetTranslate.get(type.cfgName + ".ItemData.MaterialWrapper");
+                    Object mat = PetCore.get().getTranslator().get(type.cfgName + ".ItemData.MaterialWrapper");
                     MaterialWrapper material = MaterialWrapper.fromIDName(mat);
                     if (material == MaterialWrapper.NOT_SUPPORTED) {
                         PetCore.get().debug("Not Supported MaterialWrapper, Resetting the " + type.cfgName + " MaterialWrapper to the Default MaterialWrapper...");
-                        PetTranslate.setOver(type.cfgName + ".ItemData.MaterialWrapper", type.mat.toString());
+                        PetCore.get().getTranslator().set(type.cfgName + ".ItemData.MaterialWrapper", type.mat.toString());
                         material = type.mat;
                     }
                     if (material == MaterialWrapper.AIR) {
                         PetCore.get().debug("Not Supported MaterialWrapper, Resetting the " + type.cfgName + " MaterialWrapper to the Default MaterialWrapper...");
-                        PetTranslate.setOver(type.cfgName + ".ItemData.MaterialWrapper", type.mat.toString());
+                        PetCore.get().getTranslator().set(type.cfgName + ".ItemData.MaterialWrapper", type.mat.toString());
                         material = type.mat;
                     }
-                    int data = PetTranslate.getInteger(type.cfgName + ".ItemData.Durability");
+                    int data = PetCore.get().getTranslator().getInteger(type,"ItemData.Durability");
                     ItemMaker maker = new ItemMaker(material.toMaterial(), (byte) data);
                     maker.setName(typeStorage.getDisplayName().replace("%name%", typeStorage.getNoColorName()));
-                    if (!PetTranslate.getBoolean(type.cfgName + ".DisableItemLore")) {
+                    if (!PetCore.get().getTranslator().getBoolean(type.cfgName + ".DisableItemLore")) {
                         if ((typeStorage.getDescription().size() != 0)
                                 || (!typeStorage.getDescription().isEmpty())
                                 || (typeStorage.getDescription() != null)) {
@@ -240,15 +239,15 @@ public enum PetType {
         if (!PetCore.get().getConfiguration().getBoolean("Needs-Permission")) {
             return true;
         }
-        return player.hasPermission("Pet.types.*") || player.hasPermission(getPermission());
+        return player.hasPermission("Pet.type.*") || player.hasPermission(getPermission());
     }
 
     public boolean isEnabled() {
-        return PetTranslate.getBoolean(this.cfgName + ".Enabled");
+        return PetCore.get().getTranslator().getBoolean(this.cfgName + ".Enabled");
     }
 
     public boolean canHat(Player player) {
-        if (PetTranslate.getBoolean(this.cfgName + ".Hat")) {
+        if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Hat")) {
             if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
             if (PetCore.hasPerm(player, getPermission() + ".hat")) return true;
         }
@@ -256,7 +255,7 @@ public enum PetType {
     }
 
     public double getSpeed() {
-        return PetTranslate.getDouble(this.cfgName + ".WalkSpeed");
+        return PetCore.get().getTranslator().getDouble(this.cfgName + ".WalkSpeed");
     }
 
     public boolean canMount(Player player) {
@@ -264,7 +263,7 @@ public enum PetType {
             return false;
         if (this == SHULKER)
             return false;
-        if (PetTranslate.getBoolean(this.cfgName + ".Mount")) {
+        if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Mount")) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
             if (PetCore.hasPerm(player, getPermission() + ".mount")) return true;
         }
@@ -272,7 +271,7 @@ public enum PetType {
     }
 
     public boolean canFly(Player player) {
-        if (PetTranslate.getBoolean(this.cfgName + ".Fly")) {
+        if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Fly")) {
             if (PetCore.hasPerm(player, "Pet.FlyAll")) return true;
             if (PetCore.hasPerm(player, getPermission() + ".fly")) return true;
         }
@@ -284,7 +283,7 @@ public enum PetType {
     }
 
     public float getRideSpeed() {
-        return (float) PetTranslate.getDouble(this.cfgName + ".RideSpeed");
+        return (float) PetCore.get().getTranslator().getDouble(this.cfgName + ".RideSpeed");
     }
 
     public String getDisplayName() {
@@ -323,7 +322,7 @@ public enum PetType {
     }
 
     public String getPermission() {
-        return "Pet." + this.perm;
+        return "Pet.type." + this.perm;
     }
 
     public byte getData() {
@@ -347,25 +346,25 @@ public enum PetType {
     }
 
     private ItemStack rawItem() {
-        Object mat = PetTranslate.get(this.cfgName + ".ItemData.MaterialWrapper");
+        Object mat = PetCore.get().getTranslator().get(this.cfgName + ".ItemData.MaterialWrapper");
         MaterialWrapper material = MaterialWrapper.fromIDName(mat);
         if (material == MaterialWrapper.NOT_SUPPORTED) {
             PetCore.get().debug("Not Supported MaterialWrapper, Resetting the " + this.cfgName + " MaterialWrapper to the Default MaterialWrapper...");
-            PetTranslate.setOver(this.cfgName + ".ItemData.MaterialWrapper", this.mat.toString());
+            PetCore.get().getTranslator().set(this.cfgName + ".ItemData.MaterialWrapper", this.mat.toString());
             material = this.mat;
         }
         if (material == MaterialWrapper.AIR) {
             PetCore.get().debug("Not Supported MaterialWrapper, Resetting the " + this.cfgName + " MaterialWrapper to the Default MaterialWrapper...");
-            PetTranslate.setOver(this.cfgName + ".ItemData.MaterialWrapper", this.mat.toString());
+            PetCore.get().getTranslator().set(this.cfgName + ".ItemData.MaterialWrapper", this.mat.toString());
             material = this.mat;
         }
         if (material.getSupportedVersion().getIntVersion() > ServerVersion.getVersion().getIntVersion()) {
             material = BARRIER;
         }
-        int data = PetTranslate.getInteger(this.cfgName + ".ItemData.Durability");
+        int data = PetCore.get().getTranslator().getInteger(this, "ItemData.Durability");
         ItemMaker maker = new ItemMaker(material.toMaterial(), (byte) data);
         maker.setName(WordUtils.capitalizeFully(this.toString().toLowerCase().replace("_", " ")));
-        if (!PetTranslate.getBoolean(this.cfgName + ".DisableItemLore")) {
+        if (!PetCore.get().getTranslator().getBoolean(this.cfgName + ".DisableItemLore")) {
             if ((getDescription().size() != 0) || (!getDescription().isEmpty()) || (getDescription() != null)) {
                 for (String s : getDescription())
                     maker.addLoreLine(s);

@@ -17,7 +17,6 @@ import simplepets.brainsynder.api.event.pet.PetHatEvent;
 import simplepets.brainsynder.api.event.pet.PetPreSpawnEvent;
 import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.files.PetTranslate;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
@@ -94,7 +93,7 @@ public class Pet implements IPet {
         this.items = items;
         petOwner.setPet(this);
 
-        List<String> commands = PetTranslate.getList(getPetType().getConfigName() + ".On-Summon");
+        List<String> commands = PetCore.get().getTranslator().getStringList(getPetType().getConfigName() + ".On-Summon");
         if (!commands.isEmpty()) {
             commands.forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command
                     .replace("{player}", getOwner().getName())
