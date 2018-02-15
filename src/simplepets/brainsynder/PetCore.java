@@ -388,6 +388,7 @@ public class PetCore extends JavaPlugin {
 
     public void reload () {
         if (getConfiguration().isSet("MySQL.Enabled")) {
+            if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
             String host = getConfiguration().getString("MySQL.Host", false);
             String port = getConfiguration().getString("MySQL.Port", false);
             String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
