@@ -7,6 +7,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Location;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.IWorldGuardLink;
+import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,31 +27,34 @@ public class WorldGuardLink extends PluginLink<WorldGuardPlugin> implements IWor
     }
 
     @Override
-    public boolean allowPetEntry(Location at) {
-        if (!isHooked()) return true;
-        if (PetCore.get().getConfiguration().getBoolean("WorldGuard.Pet-Entering.Always-Allowed")) return true;
-        RegionManager set = getDependency().getRegionManager(at.getWorld());
-        ApplicableRegionSet regionSet = set.getApplicableRegions(at);
-        Set<ProtectedRegion> regionIterator = regionSet.getRegions();
-        List<String> regions = PetCore.get().getConfiguration().getStringList("WorldGuard.Pet-Entering.Blocked-Regions");
-        List<Boolean> val = new ArrayList<>();
-        for (ProtectedRegion rg : regionIterator) {
-            val.add((!regions.contains(rg.getId())));
-        }
-        return (!val.contains(false));
+    public boolean allowPetEntry(PetOwner owner, Location at) {
+        return fetchValue("Pet-Entering", owner, at);
     }
 
     @Override
-    public boolean allowPetSpawn(Location at) {
+    public boolean allowPetSpawn(PetOwner owner, Location at) {
+        return fetchValue("Spawning", owner, at);
+    }
+
+    @Override
+    public boolean allowPetRiding(PetOwner owner, Location at) {
+        return fetchValue("Pet-Riding", owner, at);
+    }
+
+    private boolean fetchValue (String section, PetOwner owner, Location at) {
         if (!isHooked()) return true;
-        if (PetCore.get().getConfiguration().getBoolean("WorldGuard.Spawning.Always-Allowed")) return true;
+        if (PetCore.get().getConfiguration().getBoolean("WorldGuard."+section+".Always-Allowed")) return true;
+        if (owner != null) {
+            if (owner.getPlayer().hasPermission(PetCore.get().getConfiguration().getString("WorldGuard.BypassPermission", false)))
+                return true;
+        }
         RegionManager set = getDependency().getRegionManager(at.getWorld());
         ApplicableRegionSet regionSet = set.getApplicableRegions(at);
         Set<ProtectedRegion> regionIterator = regionSet.getRegions();
-        List<String> regions = PetCore.get().getConfiguration().getStringList("WorldGuard.Spawning.Allowed-Regions");
+        List<String> regions = PetCore.get().getConfiguration().getStringList("WorldGuard."+section+".Blocked-Regions");
         List<Boolean> val = new ArrayList<>();
         for (ProtectedRegion rg : regionIterator) {
-            val.add(regions.contains(rg.getId()));
+            val.add((!regions.contains(rg.getId())));
         }
         return (!val.contains(false));
     }
