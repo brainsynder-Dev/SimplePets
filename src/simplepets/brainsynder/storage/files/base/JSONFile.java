@@ -1,4 +1,4 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.storage.files.base;
 
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
@@ -11,12 +11,13 @@ import org.json.simple.parser.JSONParser;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 public abstract class JSONFile {
     private final Charset ENCODE = Charsets.UTF_8;
-    protected HashMap<String, Object> defaults = new HashMap<>();
+    protected Map<String, Object> defaults = new HashMap<>();
     private File file;
     private JSONObject json;
     private JSONParser parser = new JSONParser();
@@ -83,7 +84,7 @@ public abstract class JSONFile {
      */
     public boolean save() {
         try {
-            JSONObject toSave = new JSONObject();
+            LinkedHashMap<String, Object> toSave = new LinkedHashMap<>();
 
             for (Map.Entry<String, Object> stringObjectEntry : defaults.entrySet()) {
                 Object o = stringObjectEntry.getValue();
@@ -99,10 +100,8 @@ public abstract class JSONFile {
                     toSave.put(stringObjectEntry.getKey(), getObject(stringObjectEntry.getKey()));
                 }
             }
-            TreeMap<String, Object> treeMap = new TreeMap<>();
-            treeMap.putAll(toSave);
             Gson g = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-            String prettyJsonString = g.toJson(treeMap);
+            String prettyJsonString = g.toJson(toSave);
             OutputStreamWriter fw = new OutputStreamWriter(new FileOutputStream(file), ENCODE);
             try {
                 fw.write(prettyJsonString.replace("\u0026", "&"));
@@ -198,5 +197,13 @@ public abstract class JSONFile {
     public JSONArray getArray(JSONObject obj, String key) {
         return obj.containsKey(key) ? (JSONArray) obj.get(key)
                 : new JSONArray();
+    }
+
+    public boolean hasKey (String key) {
+        return (json.containsKey(key));
+    }
+
+    public Set<String> keySet (){
+        return json.keySet();
     }
 }

@@ -1,4 +1,4 @@
-package simplepets.brainsynder.utils;
+package simplepets.brainsynder.storage;
 
 import java.util.Collection;
 import java.util.HashMap;

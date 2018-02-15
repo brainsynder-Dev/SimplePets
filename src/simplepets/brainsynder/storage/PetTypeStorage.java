@@ -1,4 +1,4 @@
-package simplepets.brainsynder;
+package simplepets.brainsynder.storage;
 
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.pet.PetType;

@@ -1,4 +1,4 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.storage.files.base;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -53,6 +53,10 @@ public class FileMaker {
         this.configuration = YamlConfiguration.loadConfiguration(file);
     }
 
+    public void setDefault (String key, Object value) {
+        if (!isSet(key)) set(key, value);
+    }
+
     public String getString(String tag, boolean color) {
         this.configuration = YamlConfiguration.loadConfiguration(file);
         return this.configuration.get(tag) != null ? (color ? this.translate(this.configuration.getString(tag)) : this.configuration.getString(tag)) : tag;
@@ -105,6 +109,11 @@ public class FileMaker {
     public ConfigurationSection getSection(String tag) {
         this.configuration = YamlConfiguration.loadConfiguration(file);
         return this.configuration.getConfigurationSection(tag);
+    }
+
+    public Object get(String tag) {
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+        return this.configuration.get(tag);
     }
 
     private String translate(String msg) {

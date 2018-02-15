@@ -1,8 +1,9 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.storage.files;
 
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.storage.files.base.JSONFile;
 
 import java.io.File;
 

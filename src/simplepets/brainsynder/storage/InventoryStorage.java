@@ -1,4 +1,4 @@
-package simplepets.brainsynder.utils;
+package simplepets.brainsynder.storage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.MemorySection;

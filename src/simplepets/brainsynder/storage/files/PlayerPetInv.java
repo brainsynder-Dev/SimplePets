@@ -1,6 +1,7 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.storage.files;
 
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.storage.files.base.FileMaker;
 
 import java.io.File;
 
