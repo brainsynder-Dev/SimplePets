@@ -22,7 +22,6 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityArmorStand
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
-import simplepets.brainsynder.storage.files.PetTranslate;
 import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -69,7 +68,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
         autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
-        floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
+        floatDown = PetCore.get().getTranslator().getBoolean(pet.getPetType(), "Float-Down");
     }
 
     public EntityPet(World world) {

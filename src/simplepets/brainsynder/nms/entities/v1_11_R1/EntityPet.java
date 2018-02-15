@@ -17,7 +17,6 @@ import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
 import simplepets.brainsynder.reflection.FieldAccessor;
-import simplepets.brainsynder.storage.files.PetTranslate;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public abstract class EntityPet extends EntityCreature implements IAnimal,
@@ -38,9 +37,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
         if (pet.getPetType().canFlyDefault()) {
-            floatDown = PetTranslate.getBoolean(pet.getPetType(), "Float-Down");
-            upSpeed = PetTranslate.getDouble(pet.getPetType(), "Float-Down");
-            floatSpeed = PetTranslate.getDouble(pet.getPetType(), "Up-Speed");
+            floatDown = PetCore.get().getTranslator().getBoolean(pet.getPetType(), "Float-Down");
+            upSpeed = PetCore.get().getTranslator().getDouble(pet.getPetType(), "Float-Down");
+            floatSpeed = PetCore.get().getTranslator().getDouble(pet.getPetType(), "Up-Speed");
         }
     }
 
