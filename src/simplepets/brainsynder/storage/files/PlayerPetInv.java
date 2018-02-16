@@ -5,6 +5,7 @@ import simplepets.brainsynder.storage.files.base.FileMaker;
 
 import java.io.File;
 
+@Deprecated
 public class PlayerPetInv extends FileMaker {
     private String fileName;
 
