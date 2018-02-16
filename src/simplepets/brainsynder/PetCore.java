@@ -58,6 +58,7 @@ public class PetCore extends JavaPlugin {
 
     public void onEnable() {
         long start = System.currentTimeMillis();
+        instance = this;
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
             Errors.NO_API.print();
@@ -68,11 +69,12 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
+
+        loadConfig();
+        PetType.initiate();
         createPluginInstances();
         saveResource("SimplePets-Info-App.txt", true);
-        loadConfig();
         new VersionNMS().registerPets();
-        PetType.initiate();
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
@@ -101,7 +103,6 @@ public class PetCore extends JavaPlugin {
 
     private void createPluginInstances() {
         debug("Creating plugin instances...");
-        instance = this;
         utilities = new Utilities();
         itemLoaders = new ItemLoaders();
         invLoaders = new InvLoaders();

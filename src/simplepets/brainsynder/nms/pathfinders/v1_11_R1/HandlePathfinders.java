@@ -14,6 +14,7 @@ public class HandlePathfinders extends ReflectionUtil {
             Object nms_entity = ((CraftEntity) e).getHandle();
             if (nms_entity instanceof EntityPet) {
                 final EntityPet creature = (EntityPet) nms_entity;
+
                 Set goalB = (Set) getPrivateField("b", getNmsClass("PathfinderGoalSelector"), creature.goalSelector);
                 goalB.clear();
                 Set goalC = (Set) getPrivateField("c", getNmsClass("PathfinderGoalSelector"), creature.goalSelector);

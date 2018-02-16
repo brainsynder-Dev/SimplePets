@@ -2,8 +2,10 @@ package simplepets.brainsynder.nms.pathfinders.v1_11_R1;
 
 import net.minecraft.server.v1_11_R1.PathEntity;
 import net.minecraft.server.v1_11_R1.PathfinderGoal;
+import net.minecraft.server.v1_11_R1.PathfinderGoalMoveTowardsTarget;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simple.brainsynder.math.MathUtils;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -14,17 +16,19 @@ import simplepets.brainsynder.player.PetOwner;
 import java.util.Arrays;
 import java.util.List;
 
-public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
-    private IEntityPet pet;
-    private double speed;
-    private PetOwner owner;
+public class PathFinderGoalWalkToPlayer /* extends PathfinderGoalMoveTowardsTarget */ extends PathfinderGoal{
+
+    public IEntityPet pet;
+    protected double speed;
+    public PetOwner owner;
     private boolean isFirst;
-    private Location location;
+    public Location location;
     private double teleportDistance = 10.0;
     private double stopDistance = 3.0;
     private List<Double> ints = Arrays.asList(1.9, -1.9);
 
-    public PathFinderGoalWalkToPlayer(IEntityPet entitycreature, Player p, double speed) {
+    PathFinderGoalWalkToPlayer(IEntityPet entitycreature, Player p, double speed) {
+      //  super();
         this.pet = entitycreature;
         this.speed = speed;
         isFirst = true;
@@ -38,36 +42,39 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
 
     @Override
     public boolean a() {
-        if (pet == null) return false;
-        if (!owner.getPlayer().isOnline()) return false;
-        if (owner.getPlayer().isInsideVehicle()) return false;
-        if (!owner.hasPet()) return false;
+        if (pet != null) {
+            if (owner.getPlayer().isOnline()) {
+                if (!owner.getPlayer().isInsideVehicle() && owner.hasPet()) {
+                    Location start = owner.getPlayer().getLocation();
+                    Entity petEntity = pet.getEntity();
+                    if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
+                        if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
+                            petEntity.teleport(start);
+                            return false;
+                        }
+                    } else {
+                        petEntity.teleport(start);
+                        return false;
+                    }
+                    int x = MathUtils.random(ints.size());
+                    int z = MathUtils.random(ints.size());
 
-        Location start = owner.getPlayer().getLocation();
-        if (pet.getEntity().getWorld().getName().equals(start.getWorld().getName())) {
-            if ((pet.getEntity().getLocation().distance(start) >= teleportDistance)) {
-                pet.getEntity().teleport(start);
+                    if (isFirst) {
+                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+                        isFirst = false;
+                        this.c();
+                        return true;
+                    }
+                    if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
+                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+                    }
+                    this.c();
+                    return location != null;
+                }
             }
-        } else {
-            pet.getEntity().teleport(start);
-            return false;
         }
-        int x = MathUtils.random(ints.size());
-        int z = MathUtils.random(ints.size());
-
-        if (isFirst) {
-            location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-            isFirst = false;
-            this.c();
-            return true;
-        }
-        if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
-            location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-        }
-        this.c();
-        return location != null;
+        return false;
     }
-
 
     @Override
     public void c() {
@@ -76,8 +83,9 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
                 PetMoveEvent event = new PetMoveEvent(owner.getPet().getEntity(), PetMoveEvent.Cause.FOLLOW);
                 Bukkit.getServer().getPluginManager().callEvent(event);
             }
-            PathEntity path = ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ());
-            ((EntityPet) pet).getNavigation().a(path, speed);
+            EntityPet entityPet = (EntityPet) pet;
+            PathEntity path = entityPet.getNavigation().a(location.getX(), location.getY(), location.getZ());
+            entityPet.getNavigation().a(path, speed);
         }
     }
 }
