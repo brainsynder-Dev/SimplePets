@@ -6,7 +6,6 @@ import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandPermission;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 
 @CommandName(name = "reload")
 @CommandPermission(permission = "reload")
@@ -17,7 +16,7 @@ public class CMD_Reload extends PetCommand<Player> {
         PetCore pc = PetCore.get();
         pc.reload();
         pc.getItemLoaders().reloadLoaders();
-        InvLoaders.reloadLoaders();
+        pc.getInvLoaders().reloadLoaders();
         p.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));
     }
 }

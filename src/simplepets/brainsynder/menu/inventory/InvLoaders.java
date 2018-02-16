@@ -8,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InvLoaders {
-    public static SelectionMenu SELECTION;
-    public static DataMenu PET_DATA;
-    private static List<CustomInventory> loaders = new ArrayList<>();
+    public SelectionMenu SELECTION;
+    public DataMenu PET_DATA;
+    private List<CustomInventory> loaders = new ArrayList<>();
 
-    public static void initiate() {
+    public void initiate() {
         PetCore core = PetCore.get();
         PetCore.get().debug("Initializing Inventories...");
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
@@ -32,12 +32,12 @@ public class InvLoaders {
         PET_DATA = getLoader(DataMenu.class);
     }
 
-    public static void reloadLoaders() {
+    public void reloadLoaders() {
         loaders.clear();
         initiate();
     }
 
-    public static <T extends CustomInventory> T getLoader(Class<T> clazz) {
+    public <T extends CustomInventory> T getLoader(Class<T> clazz) {
         if (loaders == null) initiate();
         if (loaders.isEmpty()) initiate();
         for (CustomInventory loader : loaders) {

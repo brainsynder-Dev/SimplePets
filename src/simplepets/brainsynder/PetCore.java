@@ -42,17 +42,19 @@ public class PetCore extends JavaPlugin {
             "v1_12_R1"
     );
     public boolean forceSpawn;
-    private ItemLoaders itemLoaders;
     private boolean disabling = false;
 
+    private ItemLoaders itemLoaders;
+    private InvLoaders invLoaders;
     private Config configuration;
     private Messages messages;
     private PetTranslator translator;
-
+    private Utilities utilities = null;
     private MySQL mySQL = null;
+    private CMD_Pet cmd_pet;
+
     private ISpawner spawner;
     private Map<UUID, PlayerFile> fileStorage = new HashMap<>();
-    private Utilities utilities = null;
 
     public void onEnable() {
         long start = System.currentTimeMillis();
@@ -66,9 +68,7 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        instance = this;
-        utilities = new Utilities();
-        itemLoaders = new ItemLoaders();
+        createPluginInstances();
         saveResource("SimplePets-Info-App.txt", true);
         loadConfig();
         new VersionNMS().registerPets();
@@ -81,7 +81,7 @@ public class PetCore extends JavaPlugin {
             return;
         }
         itemLoaders.initiate();
-        InvLoaders.initiate();
+        invLoaders.initiate();
 
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
@@ -89,7 +89,7 @@ public class PetCore extends JavaPlugin {
 
     private void registerEvents() {
         debug("Registering Listeners...");
-        getCommand("pet").setExecutor(new CMD_Pet());
+        getCommand("pet").setExecutor(cmd_pet);
         getServer().getPluginManager().registerEvents(new MainListeners(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
@@ -97,6 +97,15 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPetSpawn(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
+    }
+
+    private void createPluginInstances() {
+        debug("Creating plugin instances...");
+        instance = this;
+        utilities = new Utilities();
+        itemLoaders = new ItemLoaders();
+        invLoaders = new InvLoaders();
+        cmd_pet = new CMD_Pet();
     }
 
     private boolean errorCheck() {
@@ -357,6 +366,14 @@ public class PetCore extends JavaPlugin {
 
     public ItemLoaders getItemLoaders() {
         return itemLoaders;
+    }
+
+    public InvLoaders getInvLoaders() {
+        return invLoaders;
+    }
+
+    public CMD_Pet getCmd_pet() {
+        return cmd_pet;
     }
 
     // SETTERS

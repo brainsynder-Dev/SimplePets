@@ -2,8 +2,8 @@ package simplepets.brainsynder.menu.items.list;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -35,6 +35,6 @@ public class Data extends Item {
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
         inventory.reset(owner);
-        InvLoaders.PET_DATA.open(owner);
+        PetCore.get().getInvLoaders().PET_DATA.open(owner);
     }
 }

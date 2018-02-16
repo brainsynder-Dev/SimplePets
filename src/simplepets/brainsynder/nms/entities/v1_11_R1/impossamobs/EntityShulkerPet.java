@@ -12,9 +12,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
@@ -186,7 +186,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
                         r = 0;
                         rainbow = false;
                     }
-                    InvLoaders.PET_DATA.open(PetOwner.getPetOwner(getOwner()));
+                    PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(getOwner()));
                 }
                 didClick = (!didClick);
             }

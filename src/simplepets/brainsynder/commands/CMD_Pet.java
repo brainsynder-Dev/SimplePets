@@ -8,7 +8,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.annotations.*;
 import simplepets.brainsynder.commands.list.Console.*;
 import simplepets.brainsynder.commands.list.Player.*;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 public class CMD_Pet implements CommandExecutor {
-    public static ArrayList<PetCommand> commands;
+    public ArrayList<PetCommand> commands;
 
     public CMD_Pet() {
         commands = new ArrayList<>();
@@ -46,7 +45,7 @@ public class CMD_Pet implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("pet")) {
             if (!(commandSender instanceof Player)) {
                 if (args.length == 0) {
-                    for (PetCommand gcmd : CMD_Pet.commands) {
+                    for (PetCommand gcmd : commands) {
                         String name = "", description = "", usage = "";
                         if (gcmd.getClass().isAnnotationPresent(CommandName.class)) {
                             name = gcmd.getClass().getAnnotation(CommandName.class).name();
@@ -95,7 +94,7 @@ public class CMD_Pet implements CommandExecutor {
                 PetOwner owner = PetOwner.getPetOwner(p);
 
                 if (args.length == 0) {
-                    InvLoaders.SELECTION.open(owner);
+                    PetCore.get().getInvLoaders().SELECTION.open(owner);
                     return true;
                 } else {
                     PetCommand base = null;

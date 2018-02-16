@@ -13,7 +13,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
@@ -25,7 +24,7 @@ public class DataListener implements Listener {
     public void onClick(InventoryClickEvent e) {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof PetDataHolder)) return;
-        DataMenu menu = InvLoaders.PET_DATA;
+        DataMenu menu = PetCore.get().getInvLoaders().PET_DATA;
         if ((e.getWhoClicked() instanceof Player)) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
@@ -72,7 +71,7 @@ public class DataListener implements Listener {
     public void onClose (InventoryCloseEvent e) {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SelectionHolder)) return;
-        DataMenu menu = InvLoaders.PET_DATA;
+        DataMenu menu = PetCore.get().getInvLoaders().PET_DATA;
         menu.reset(PetOwner.getPetOwner((Player) e.getPlayer()));
     }
 }

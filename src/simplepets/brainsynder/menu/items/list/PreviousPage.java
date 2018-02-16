@@ -2,8 +2,8 @@ package simplepets.brainsynder.menu.items.list;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
 import simplepets.brainsynder.menu.items.Item;
@@ -37,7 +37,7 @@ public class PreviousPage extends Item {
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (inventory instanceof DataMenu) {
-            InvLoaders.SELECTION.open(owner);
+            PetCore.get().getInvLoaders().SELECTION.open(owner);
         }
 
         if (inventory instanceof SelectionMenu) {

@@ -7,7 +7,6 @@ import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
 import simplepets.brainsynder.menu.ItemStorageMenu;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.player.PetOwner;
 
 @CommandName(name = "inv")
@@ -34,7 +33,7 @@ public class CMD_Inv extends PetCommand<Player> {
                 }
             }
         } else {
-            InvLoaders.SELECTION.open(PetOwner.getPetOwner(p));
+            PetCore.get().getInvLoaders().SELECTION.open(PetOwner.getPetOwner(p));
         }
     }
 }

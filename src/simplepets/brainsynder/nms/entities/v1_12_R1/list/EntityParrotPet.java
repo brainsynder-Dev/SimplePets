@@ -5,9 +5,9 @@ import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.nms.entities.v1_12_R1.CustomMoveFlying;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 import simplepets.brainsynder.player.PetOwner;
@@ -125,7 +125,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
                         r = 0;
                         rainbow = false;
                     }
-                    InvLoaders.PET_DATA.open(PetOwner.getPetOwner(getOwner()));
+                    PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(getOwner()));
                 }
                 didClick = (!didClick);
             }

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.commands.list.Player;
 
 import org.bukkit.entity.Player;
-import simplepets.brainsynder.commands.CMD_Pet;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.*;
 
@@ -12,7 +12,7 @@ import simplepets.brainsynder.commands.annotations.*;
 public class CMD_Help extends PetCommand<Player> {
     @Override
     public void onCommand(Player p, String[] args) {
-        for (PetCommand gcmd : CMD_Pet.commands) {
+        for (PetCommand gcmd : PetCore.get().getCmd_pet().commands) {
             String name = "", description = "", usage = "";
             if (gcmd.getClass().isAnnotationPresent(CommandName.class)) {
                 name = gcmd.getClass().getAnnotation(CommandName.class).name();

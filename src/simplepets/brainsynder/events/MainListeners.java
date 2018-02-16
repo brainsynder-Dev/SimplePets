@@ -19,7 +19,6 @@ import simplepets.brainsynder.api.entity.IImpossaPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
@@ -113,7 +112,7 @@ public class MainListeners implements Listener {
                 if (entityPet instanceof IEntityParrotPet) return;
 
                 if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
-                    InvLoaders.PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
+                    PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
                 }
             }
         }
@@ -126,7 +125,7 @@ public class MainListeners implements Listener {
             e.setCancelled(true);
             IEntityPet entityPet = (IEntityPet) handle;
             if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
-                InvLoaders.PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
+                PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
             }
         }
     }
