@@ -9,13 +9,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.items.Item;
-import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.player.PetOwner;
@@ -36,7 +36,7 @@ public class DataListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            Item item = ItemLoaders.getLoader(e.getCurrentItem());
+            Item item = PetCore.get().getItemLoaders().getLoader(e.getCurrentItem());
             if (item != null) {
                 item.onClick(owner, menu);
                 return;

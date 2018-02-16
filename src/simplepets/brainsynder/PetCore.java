@@ -42,6 +42,7 @@ public class PetCore extends JavaPlugin {
             "v1_12_R1"
     );
     public boolean forceSpawn;
+    private ItemLoaders itemLoaders;
     private boolean disabling = false;
 
     private Config configuration;
@@ -67,9 +68,10 @@ public class PetCore extends JavaPlugin {
         }
         instance = this;
         utilities = new Utilities();
+        itemLoaders = new ItemLoaders();
         saveResource("SimplePets-Info-App.txt", true);
         loadConfig();
-        VersionNMS.registerPets();
+        new VersionNMS().registerPets();
         PetType.initiate();
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
@@ -78,7 +80,7 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        ItemLoaders.initiate();
+        itemLoaders.initiate();
         InvLoaders.initiate();
 
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
@@ -351,6 +353,10 @@ public class PetCore extends JavaPlugin {
 
     public Utilities getUtilities() {
         return utilities;
+    }
+
+    public ItemLoaders getItemLoaders() {
+        return itemLoaders;
     }
 
     // SETTERS

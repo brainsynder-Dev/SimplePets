@@ -3,7 +3,6 @@ package simplepets.brainsynder.menu.inventory;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.items.Item;
-import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 
@@ -43,7 +42,7 @@ public class CustomInventory extends JSONFile {
                 try {
                     String key = String.valueOf(json.get("slot"));
                     int slot = Integer.parseInt(key);
-                    Item item = ItemLoaders.getLoader(String.valueOf(json.get("item")));
+                    Item item = PetCore.get().getItemLoaders().getLoader(String.valueOf(json.get("item")));
                     if (item == null) {
                         PetCore.get().debug(2, "Could not retrieve the item for: " + key);
                         continue;

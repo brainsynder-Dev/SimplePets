@@ -31,10 +31,8 @@ public enum HorseStyleType {
 
     public static HorseStyleType getForBukkitStyle(Horse.Style style) {
         HorseStyleType[] arr$ = values();
-        int len$ = arr$.length;
 
-        for (int i$ = 0; i$ < len$; ++i$) {
-            HorseStyleType v = arr$[i$];
+        for (HorseStyleType v : arr$) {
             if (v.getBukkitStyle().equals(style)) {
                 return v;
             }

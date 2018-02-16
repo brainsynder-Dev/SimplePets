@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 public class ItemLoaders {
-    private static Air AIR;
-    public static Placeholder PLACEHOLDER;
-    public static Data DATA;
-    private static Map<String, Item> items = new HashMap<>();
+    private Air AIR;
+    public Placeholder PLACEHOLDER;
+    public Data DATA;
+    private Map<String, Item> items = new HashMap<>();
 
-    public static void initiate() {
+    public void initiate() {
         PetCore core = PetCore.get();
         PetCore.get().debug("Initializing Menu Items...");
         if (items != null) if (!items.isEmpty()) items.clear();
@@ -60,16 +60,16 @@ public class ItemLoaders {
         DATA = getLoader(Data.class);
     }
 
-    private static void add (Item item) {
+    private void add (Item item) {
         items.putIfAbsent(item.namespace(), item);
     }
 
-    public static void reloadLoaders() {
+    public void reloadLoaders() {
         items.clear();
         initiate();
     }
 
-    private static <T extends Item> T getLoader(Class<T> clazz) {
+    private <T extends Item> T getLoader(Class<T> clazz) {
         if (items == null) initiate();
         if (items.isEmpty()) initiate();
         for (Item loader : items.values()) {
@@ -80,7 +80,7 @@ public class ItemLoaders {
         return null;
     }
 
-    public static Item getLoader(String namespace) {
+    public Item getLoader(String namespace) {
         if (items == null) initiate();
         if (items.isEmpty()) initiate();
         if (namespace.equalsIgnoreCase("air")) return AIR;
@@ -90,7 +90,7 @@ public class ItemLoaders {
         return null;
     }
 
-    public static Item getLoader(ItemStack item) {
+    public Item getLoader(ItemStack item) {
         if (items == null) initiate();
         if (items.isEmpty()) initiate();
         if (item.getType() == Material.AIR) return AIR;

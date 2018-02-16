@@ -23,8 +23,6 @@ import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
-import java.util.UUID;
-
 public class MainListeners implements Listener {
     @EventHandler
     public void onhurt(EntityDamageEvent e) {
@@ -91,6 +89,8 @@ public class MainListeners implements Listener {
             }
         }
     }
+
+
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
@@ -221,7 +221,7 @@ public class MainListeners implements Listener {
             if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
                 owner.removePet();
             } else {
-                final UUID uuid = p.getUniqueId();
+            //    final UUID uuid = p.getUniqueId();
                 final IPet pet = owner.getPet();
                 if (owner.hasPet()) {
                     if (pet.getVisableEntity() == null) return;

@@ -15,7 +15,6 @@ import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
 import simplepets.brainsynder.menu.items.Item;
-import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 
@@ -35,7 +34,7 @@ public class SelectionListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            Item item = ItemLoaders.getLoader(e.getCurrentItem());
+            Item item = PetCore.get().getItemLoaders().getLoader(e.getCurrentItem());
             if (item != null) {
                 item.onClick(owner, menu);
                 return;

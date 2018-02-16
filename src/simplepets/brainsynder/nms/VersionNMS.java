@@ -7,7 +7,7 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 
 public class VersionNMS extends ReflectionUtil {
 
-    public static void registerPets() {
+    public void registerPets() {
         PetCore.get().debug("Registering Pets...");
         if (ServerVersion.getVersion() == ServerVersion.v1_11_R1) {
             PetCore.get().debug("Registering Mobs/Pets...");

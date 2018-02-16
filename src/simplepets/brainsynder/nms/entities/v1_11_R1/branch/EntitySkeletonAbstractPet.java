@@ -50,6 +50,6 @@ public abstract class EntitySkeletonAbstractPet extends EntityPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(b, Boolean.valueOf(false));
+        this.datawatcher.register(b, false);
     }
 }
