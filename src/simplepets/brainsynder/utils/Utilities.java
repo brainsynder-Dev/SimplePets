@@ -1,5 +1,6 @@
 package simplepets.brainsynder.utils;
 
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -89,7 +90,7 @@ public class Utilities {
         ReflectionUtil.sendPacket(packet, player);
     }
 
-    public boolean isSimilar (ItemStack main, ItemStack check) {
+    public boolean isSimilar(ItemStack main, ItemStack check) {
         List<Boolean> values = new ArrayList<>();
         if ((main == null) || (check == null)) return false;
         //if (main.isSimilar(check)) return true;
@@ -115,5 +116,22 @@ public class Utilities {
         }
 
         return main.isSimilar(check);
+    }
+
+    public String itemToString(ItemStack itemStack) {
+        YamlConfiguration config = new YamlConfiguration();
+        config.set("i", itemStack);
+        return config.saveToString();
+    }
+
+    public ItemStack stringToItem(String stringBlob) {
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(stringBlob);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return config.getItemStack("i", null);
     }
 }
