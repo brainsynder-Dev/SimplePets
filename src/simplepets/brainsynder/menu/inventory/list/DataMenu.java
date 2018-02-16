@@ -10,7 +10,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.menu.items.list.Hat;
 import simplepets.brainsynder.menu.items.list.Name;
 import simplepets.brainsynder.menu.items.list.PreviousPage;
@@ -43,7 +42,7 @@ public class DataMenu extends CustomInventory {
 
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, (o1, o2) -> (o1.getKey()).compareTo(o2.getKey()));
+        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
 
         JSONArray array = new JSONArray();
         for (Map.Entry<Integer, String> entry : list) {
@@ -62,7 +61,7 @@ public class DataMenu extends CustomInventory {
         Inventory inv = Bukkit.createInventory(new PetDataHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {
-            inv.setItem(placeHolder - 1, ItemLoaders.PLACEHOLDER.getItem());
+            inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
             placeHolder--;
         }
 

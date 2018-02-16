@@ -13,7 +13,6 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
-import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.menu.items.list.*;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
@@ -58,7 +57,7 @@ public class SelectionMenu extends CustomInventory {
 
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, (o1, o2) -> (o1.getKey()).compareTo(o2.getKey()));
+        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
 
         JSONArray array = new JSONArray();
         for (Map.Entry<Integer, String> entry : list) {
@@ -91,10 +90,10 @@ public class SelectionMenu extends CustomInventory {
                 if (item instanceof Air) {
                     maxPets++;
                 } else {
-                    inv.setItem(placeHolder - 1, ItemLoaders.PLACEHOLDER.getItem());
+                    inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
                 }
             } else {
-                inv.setItem(placeHolder - 1, ItemLoaders.PLACEHOLDER.getItem());
+                inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
             }
             placeHolder--;
         }
