@@ -75,19 +75,18 @@ public class Utilities {
     }
 
     public void hidePet(Player player) {
-        PetOwner petOwner = PetOwner.getPetOwner(player);
-        Class<?> outEntityDestroy = ReflectionUtil.getNmsClass("PacketPlayOutEntityDestroy");
-        Constructor<?> constructor = ReflectionUtil.fillConstructor(outEntityDestroy, Integer.TYPE);
-        Object packet = ReflectionUtil.initiateClass(constructor, petOwner.getPet().getEntity().getEntity().getEntityId());
-        ReflectionUtil.sendPacket(packet, player);
+        managePetVisibility(player, "PacketPlayOutEntityDestroy", Integer.TYPE, PetOwner.getPetOwner(player).getPet().getEntity().getEntity().getEntityId());
     }
 
     public void showPet(Player player) {
-        PetOwner petOwner = PetOwner.getPetOwner(player);
-        Class<?> outSpawnEntityLiving = ReflectionUtil.getNmsClass("PacketPlayOutSpawnEntityLiving");
-        Constructor<?> constructor = ReflectionUtil.fillConstructor(outSpawnEntityLiving, ReflectionUtil.getNmsClass("EntityLiving"));
-        Object packet = ReflectionUtil.initiateClass(constructor, ReflectionUtil.getEntityHandle(petOwner.getPet().getEntity().getEntity()));
-        ReflectionUtil.sendPacket(packet, player);
+        managePetVisibility(player, "PacketPlayOutSpawnEntityLiving", ReflectionUtil.getNmsClass("EntityLiving"), ReflectionUtil.getEntityHandle(PetOwner.getPetOwner(player).getPet().getEntity().getEntity()));
+    }
+
+    private void managePetVisibility(Player p, String nmsClass, Class<?> o1, Object o2) {
+        Class<?> entity = ReflectionUtil.getNmsClass(nmsClass);
+        Constructor<?> constructor = ReflectionUtil.fillConstructor(entity, o1);
+        Object packet = ReflectionUtil.initiateClass(constructor, o2);
+        ReflectionUtil.sendPacket(packet, p);
     }
 
     public boolean isSimilar(ItemStack main, ItemStack check) {
