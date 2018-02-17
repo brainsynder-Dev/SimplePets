@@ -40,10 +40,7 @@ public class MainListeners implements Listener {
             if (owner.hasPet()) {
                 if (p.isInsideVehicle()) {
                     if (p.getVehicle() == owner.getPet().getEntity().getEntity()) {
-                        if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION) {
-                            e.setCancelled(true);
-                        }
-                        if (e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                        if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
                             e.setCancelled(true);
                         }
                     }
@@ -60,17 +57,12 @@ public class MainListeners implements Listener {
         }
         if (!(e.getEntity() instanceof Player)) {
             Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
-            if (handle instanceof IEntityPet) {
-                e.setCancelled(true);
-            }
+            e.setCancelled(handle instanceof Player);
         } else {
-            Player p = (Player) e.getEntity();
             if (!(e.getDamager() instanceof Player)) {
                 Entity ent = e.getDamager();
                 Object handle = ReflectionUtil.getEntityHandle(ent);
-                if (handle instanceof IEntityPet) {
-                    e.setCancelled(true);
-                }
+                e.setCancelled(handle instanceof IEntityPet);
             }
         }
     }
@@ -83,9 +75,7 @@ public class MainListeners implements Listener {
         }
         if (!(e.getEntity() instanceof Player)) {
             Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
-            if (handle instanceof IImpossaPet) {
-                e.setCancelled(true);
-            }
+            e.setCancelled(handle instanceof IImpossaPet);
         }
     }
 
@@ -135,37 +125,38 @@ public class MainListeners implements Listener {
         Object handle = ReflectionUtil.getEntityHandle(e.getMount());
         if (handle instanceof IEntityPet) {
             IEntityPet entityPet = (IEntityPet) handle;
-            if (!entityPet.getPet().isVehicle())
-                e.setCancelled(true);
+            e.setCancelled(!entityPet.getPet().isVehicle());
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
-        if (p == null) return;
-        PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner.hasPet()) {
-            if (owner.getPet().getVisableEntity() == null) return;
-            if (!owner.hasPetToRespawn()) {
-                owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+        if (p != null) {
+            PetOwner owner = PetOwner.getPetOwner(p);
+            if (owner.hasPet()) {
+                if (owner.getPet().getVisableEntity() == null) return;
+                if (!owner.hasPetToRespawn()) {
+                    owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+                }
+                owner.removePet();
             }
-            owner.removePet();
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onRespawn(PlayerRespawnEvent e) {
         final Player p = e.getPlayer();
-        if (p == null) return;
-        final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner.hasPetToRespawn()) {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    owner.respawnPet();
-                }
-            }.runTaskLater(PetCore.get(), 40);
+        if (p == null) {
+            final PetOwner owner = PetOwner.getPetOwner(p);
+            if (owner.hasPetToRespawn()) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        owner.respawnPet();
+                    }
+                }.runTaskLater(PetCore.get(), 40);
+            }
         }
     }
 

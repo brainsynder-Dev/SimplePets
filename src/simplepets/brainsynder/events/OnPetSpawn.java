@@ -21,27 +21,18 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
-        if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
-            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")) {
+            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
+                    || LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
+                    || LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
-                return;
-            }
 
-            if (LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())) {
-                event.setCancelled(false);
-                return;
-            }
-
-            if (LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
-                event.setCancelled(false);
             }
         }
     }
@@ -50,26 +41,16 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCreatureSpawn(EntitySpawnEvent event) {
         Entity e = event.getEntity();
-        if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
-            event.setCancelled(true);
-        }
+        event.setCancelled(ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(EntitySpawnEvent event) {
         Entity e = event.getEntity();
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
-            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")) {
-                event.setCancelled(false);
-                return;
-            }
-
-            if (LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())) {
-                event.setCancelled(false);
-                return;
-            }
-
-            if (LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
+            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
+                    || LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
+                    || LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
             }
         }
@@ -79,21 +60,21 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     public void onMove(PetMoveEvent e) {
         try {
             if (e.getEntity() == null) return;
-            if (e.getEntity().getPet() == null) return;
-            if (e.getEntity().getOwner() == null) return;
-            IEntityPet entity = e.getEntity();
-            PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-            if (e.getCause() == PetMoveEvent.Cause.RIDE) {
-                if (!LinkRetriever.canRidePet(petOwner, entity.getEntity().getLocation())) {
-                    petOwner.getPet().setVehicle(false);
+            if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
+                IEntityPet entity = e.getEntity();
+                PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+                if (e.getCause() == PetMoveEvent.Cause.RIDE) {
+                    if (!LinkRetriever.canRidePet(petOwner, entity.getEntity().getLocation())) {
+                        petOwner.getPet().setVehicle(false);
+                        entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                    }
+                    return;
+                }
+
+                if (!LinkRetriever.canPetEnter(petOwner, entity.getEntity().getLocation())) {
+                    petOwner.removePet();
                     entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                 }
-                return;
-            }
-
-            if (!LinkRetriever.canPetEnter(petOwner, entity.getEntity().getLocation())) {
-                petOwner.removePet();
-                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
             }
         } catch (Exception ignored) {
         }

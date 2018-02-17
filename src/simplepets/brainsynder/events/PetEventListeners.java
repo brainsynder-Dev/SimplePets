@@ -33,41 +33,32 @@ public class PetEventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSelect(PetInventorySelectTypeEvent event) {
-        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy"))
-            return;
-
-        double price = economyFile.getPrice(event.getPetType());
-        if (price == -1)
-            return;
-        if (!LinkRetriever.getPluginLink(IVaultLink.class).isHooked())
-            return;
-        double bal = LinkRetriever.getPluginLink(IVaultLink.class).getBalance(event.getPlayer());
-        if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
+        if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
+            double price = economyFile.getPrice(event.getPetType());
+            IVaultLink vault = LinkRetriever.getPluginLink(IVaultLink.class);
+            if (price == -1)
+                return;
+            if (!vault.isHooked())
+                return;
+            double bal = vault.getBalance(event.getPlayer());
             if (bal < price) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)));
                 return;
             }
-
-            LinkRetriever.getPluginLink(IVaultLink.class).withdrawPlayer(event.getPlayer(), price);
-            event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%type%", event.getPetType().getConfigName()));
-            return;
+            if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
+                vault.withdrawPlayer(event.getPlayer(), price);
+                event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%type%", event.getPetType().getConfigName()));
+                return;
+            }
+            PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
+            JSONArray petArray = petOwner.getOwnedPets();
+            if (petArray.contains(event.getPetType().getConfigName()))
+                return;
+            petOwner.addPurchasedPet(event.getPetType().getConfigName());
+            vault.withdrawPlayer(event.getPlayer(), price);
+            event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%type%", event.getPetType().getConfigName()));
         }
-
-        PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
-        JSONArray petArray = petOwner.getOwnedPets();
-        if (petArray.contains(event.getPetType().getConfigName()))
-            return;
-
-        if (bal < price) {
-            event.setCancelled(true);
-            event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)));
-            return;
-        }
-
-        petOwner.addPurchasedPet(event.getPetType().getConfigName());
-        LinkRetriever.getPluginLink(IVaultLink.class).withdrawPlayer(event.getPlayer(), price);
-        event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%type%", event.getPetType().getConfigName()));
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
