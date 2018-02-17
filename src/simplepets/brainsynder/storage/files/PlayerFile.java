@@ -7,6 +7,7 @@ import simplepets.brainsynder.storage.files.base.JSONFile;
 
 import java.io.File;
 
+@Deprecated
 public class PlayerFile extends JSONFile {
 
     public PlayerFile(Player player) {

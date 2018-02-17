@@ -2,7 +2,14 @@ language: java
 jdk:
   - oraclejdk8
 notifications:
-  webhooks: https://webhook.pluginwiki.tk/travis.php
+  webhooks:
+    urls:
+      - https://webhook.pluginwiki.tk/travis.php
+    on_success: always
+    on_failure: always
+    on_start: always
+    on_cancel: always
+    on_error: always
 after_success:
   - wget https://raw.githubusercontent.com/brainsynder-Dev/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh

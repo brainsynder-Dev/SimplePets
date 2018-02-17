@@ -15,7 +15,6 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.utils.IStandMethod;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,16 +139,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
         }
-    }
-
-    @Override
-    public void onStopWalking(IStandMethod standMethod) {
-        standMethod.run();
-    }
-
-    @Override
-    public void onStartWalking(IStandMethod standMethod) {
-        standMethod.run();
     }
 
     @Override

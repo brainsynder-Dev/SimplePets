@@ -1,7 +1,6 @@
 package simplepets.brainsynder.api.entity;
 
 import org.bukkit.entity.Entity;
-import simplepets.brainsynder.utils.IStandMethod;
 
 public interface IEntityControllerPet extends IEntityPet {
     Entity getDisplayEntity();
@@ -15,10 +14,6 @@ public interface IEntityControllerPet extends IEntityPet {
     boolean isMoving();
 
     default void updateName() {}
-
-    void onStopWalking(IStandMethod standMethod);
-
-    void onStartWalking(IStandMethod standMethod);
 
     IEntityPet getVisibleEntity();
 }
