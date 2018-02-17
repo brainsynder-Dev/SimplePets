@@ -1,8 +1,6 @@
 package simplepets.brainsynder.nms.pathfinders.v1_11_R1;
 
-import net.minecraft.server.v1_11_R1.PathEntity;
-import net.minecraft.server.v1_11_R1.PathfinderGoal;
-import net.minecraft.server.v1_11_R1.PathfinderGoalMoveTowardsTarget;
+import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -16,7 +14,7 @@ import simplepets.brainsynder.player.PetOwner;
 import java.util.Arrays;
 import java.util.List;
 
-public class PathFinderGoalWalkToPlayer /* extends PathfinderGoalMoveTowardsTarget */ extends PathfinderGoal{
+public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
 
     public IEntityPet pet;
     protected double speed;
@@ -28,7 +26,6 @@ public class PathFinderGoalWalkToPlayer /* extends PathfinderGoalMoveTowardsTarg
     private List<Double> ints = Arrays.asList(1.9, -1.9);
 
     PathFinderGoalWalkToPlayer(IEntityPet entitycreature, Player p, double speed) {
-      //  super();
         this.pet = entitycreature;
         this.speed = speed;
         isFirst = true;
@@ -74,6 +71,11 @@ public class PathFinderGoalWalkToPlayer /* extends PathfinderGoalMoveTowardsTarg
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean b() { // Executed when the mob isn't working with its path
+        return !((EntityPet) pet).getNavigation().n();
     }
 
     @Override
