@@ -22,7 +22,6 @@ import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
-import simplepets.brainsynder.utils.IStandMethod;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
@@ -156,38 +155,20 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             }
             store = !store;
             if (moving) {
-                onStart(new IStandMethod() {
-                    @Override
-                    public void run() {
-                        if (!walking.isRegistered(getEntity())) walking.register(getEntity(), 1);
-                        if (!arm_swing.isRegistered(getEntity())) arm_swing.register(getEntity(), 1);
+                if (!walking.isRegistered(getEntity())) walking.register(getEntity(), 1);
+                if (!arm_swing.isRegistered(getEntity())) arm_swing.register(getEntity(), 1);
 
-                        walking.toggle(getEntity(), true);
-                        arm_swing.toggle(getEntity(), true);
-                    }
-                });
+                walking.toggle(getEntity(), true);
+                arm_swing.toggle(getEntity(), true);
             } else {
-                onStop(new IStandMethod() {
-                    @Override
-                    public void run() {
-                        if (arm_swing.isRunning(getEntity())) arm_swing.toggle(getEntity(), false);
-                        if (walking.isRunning(getEntity())) walking.toggle(getEntity(), false);
-                    }
-                });
+                if (arm_swing.isRunning(getEntity())) arm_swing.toggle(getEntity(), false);
+                if (walking.isRunning(getEntity())) walking.toggle(getEntity(), false);
                 getEntity().setLeftLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                 getEntity().setRightLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                 getEntity().setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                 getEntity().setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
             }
         }
-    }
-
-    private void onStop(IStandMethod method) {
-        method.run();
-    }
-
-    private void onStart(IStandMethod method) {
-        method.run();
     }
 
     @Override

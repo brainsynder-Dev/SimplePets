@@ -5,11 +5,11 @@ notifications:
   webhooks:
     urls:
       - https://webhook.pluginwiki.tk/travis.php
-    on_success: change
-    on_failure: change
-    on_start: change
-    on_cancel: change
-    on_error: change
+    on_success: always
+    on_failure: always
+    on_start: always
+    on_cancel: always
+    on_error: always
 after_success:
   - wget https://raw.githubusercontent.com/brainsynder-Dev/travis-ci-discord-webhook/master/send.sh
   - chmod +x send.sh
