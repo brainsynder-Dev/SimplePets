@@ -1,8 +1,9 @@
 # SimplePets
-Github Build Status: ![Build Status](https://travis-ci.org/brainsynder-Dev/SimplePets.svg?branch=master "Build Status")
+master branch: ![Build Status](https://travis-ci.org/brainsynder-Dev/SimplePets.svg?branch=master "Build Status")
+development branch: ![Build Status](https://travis-ci.org/brainsynder-Dev/SimplePets.svg?branch=development "Build Status")
 ![SimplePets Logo](http://brainsynder.us/assets/SimplePets.jpg "SimplePets Logo")
 ## Requirements:
-- SimpleAPI (Version: 3.6+)the plugin will not function without the plugin.
+- SimpleAPI (Version: 3.7+)the plugin will not function without the plugin.
 - Spigot Version 1.8.8, 1.9, 1.9.4, 1.10, 1.11, 1.11.2, or 1.12 (Recommended)
 - Java 8 (If you are not on Java 8 then update.... like really...)
 
@@ -11,8 +12,8 @@ Just a little notice i will be removing 1.8 -> 1.10 support due to it being a hu
 
 ## Files Used:
 -  Spigot API (inside pom.xml)
-- SimpleAPI (v3.6) (resources Folder)
-- PlotSquared-Bukkit.jar (Could not find a Repo for this that works...) (resources Folder)
+- SimpleAPI (v3.7) (resources Folder)
+- plotsquared-api:latest (inside pom.xml)
 - craftbukkit-1.8.8-R0.1-SNAPSHOT.jar
 - craftbukkit-1.9-R0.1-SNAPSHOT.jar
 - craftbukkit-1.9.4-R0.1-SNAPSHOT.jar
