@@ -87,7 +87,6 @@ public class InventoryStorage implements ConfigurationSerializable {
             if ((item != null) && (item.getType() != Material.AIR)) {
                 JSONObject json = new JSONObject();
                 json.put("slot", String.valueOf(slot));
-                System.out.println(item);
                 json.put("stack", Base64Wrapper.encodeString(String.valueOf(PetCore.get().getUtilities().itemToString(item))));
                 items.add(json);
             }
