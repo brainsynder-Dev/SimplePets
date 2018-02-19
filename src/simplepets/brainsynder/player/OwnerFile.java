@@ -12,7 +12,7 @@ import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
-import simplepets.brainsynder.storage.files.PlayerFile;
+import simplepets.brainsynder.storage.files.PlayerStorage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -113,15 +113,19 @@ public class OwnerFile {
         }
 
         boolean canSave = false;
-        PlayerFile file = PetCore.get().getPlayerFile(p);
+        PlayerStorage file = PetCore.get().getPlayerFile(p);
         if (!owner.getOwnedPets().isEmpty()) {
-            file.set("PurchasedPets", owner.getOwnedPets());
+            file.setJSONArray("PurchasedPets", owner.getOwnedPets());
             canSave = true;
         }
         if ((owner.getPetName() != null)
                 && (!owner.getPetName().equals("null"))
                 && (!owner.getPetName().equals("PetName"))) {
-            file.set("PetName", owner.getPetName());
+            file.setString("PetName", owner.getPetName());
+            canSave = true;
+        }
+        if (owner.getStoredInventory() != null) {
+            file.setJSONObject("ItemStorage", owner.getStoredInventory());
             canSave = true;
         }
         if (owner.hasPet()) {
@@ -186,13 +190,16 @@ public class OwnerFile {
             return;
         }
 
-        PlayerFile file = PetCore.get().getPlayerFile(p);
+        PlayerStorage file = PetCore.get().getPlayerFile(p);
         try {
-            owner.setRawOwned(file.getArray("PurchasedPets"));
+            owner.setRawOwned(file.getJSONArray("PurchasedPets"));
         } catch (Exception e) {
             owner.setRawOwned(new JSONArray());
         }
-        owner.setRawPetName(file.getString("PetName", false));
+        if (file.hasKey("ItemStorage")) {
+            owner.setStoredInventory(file.getJSONObject("ItemStorage"));
+        }
+        owner.setRawPetName(file.getString("PetName"));
         StorageTagCompound compound = getPetData(p.getUniqueId().toString());
         if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
     }
@@ -213,7 +220,7 @@ public class OwnerFile {
     }
 
     // These new methods handle the Pet Saving for when MySQL is disabled.
-    private StorageTagCompound getPetData(String uuid) {
+    public StorageTagCompound getPetData(String uuid) {
         if (hasPetSave(uuid)) {
             try {
                 FileInputStream stream = new FileInputStream(getPetSave(uuid));

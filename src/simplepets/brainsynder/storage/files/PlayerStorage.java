@@ -16,4 +16,8 @@ public class PlayerStorage extends StorageMaker {
         if (!hasKey("PurchasedPets")) setJSONArray("PurchasedPets", new JSONArray());
         save();
     }
+
+    public PlayerStorage(File file) {
+        super(file);
+    }
 }

@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -10,22 +10,18 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
+import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.InventoryStorage;
-import simplepets.brainsynder.storage.files.PlayerPetInv;
-
-import java.util.Map;
+import simplepets.brainsynder.storage.files.PlayerStorage;
 
 public class ItemStorageMenu implements Listener {
     public static boolean loadFromPlayer(Player player) {
-        PlayerPetInv inv = PetCore.get().getPlayerPetInv(player);
-        if (inv == null)
-            return false;
+        PetOwner owner = PetOwner.getPetOwner(player);
         Inventory inventory = Bukkit.createInventory(new ItemHandler(), 27, player.getName() + "'s Item Storage");
-        if (inv.isSet("ItemStorage")) {
-            ConfigurationSection section = inv.getSection("ItemStorage");
-            Map map = section.getValues(false);
-            InventoryStorage storage = new InventoryStorage(new ItemHandler(), map);
+        if (owner.getStoredInventory() != null) {
+            InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), owner.getStoredInventory());
             inventory = storage.getInventory();
         }
         player.openInventory(inventory);
@@ -33,17 +29,23 @@ public class ItemStorageMenu implements Listener {
     }
 
     public static boolean loadFromName(Player player, String name) {
-        PlayerPetInv inv = PetCore.get().getPetInvByName(name);
-        if (inv == null)
-            return false;
-        Inventory inventory = Bukkit.createInventory(new ItemHandler(), 27, name + "'s Item Storage");
-        if (inv.isSet("ItemStorage")) {
-            ConfigurationSection section = inv.getSection("ItemStorage");
-            Map map = section.getValues(false);
-            InventoryStorage storage = new InventoryStorage(new ItemHandler(), map);
-            inventory = storage.getInventory();
+        PetOwner owner = PetOwner.getPetOwner(name);
+        JSONObject json = null;
+        if (owner != null) {
+            json = owner.getStoredInventory();
         }
-        player.openInventory(inventory);
+
+        if (json == null) {
+            PlayerStorage file = PetCore.get().getPetInvByName(name);
+            if (file == null) return false;
+            if (file.hasKey("ItemStorage")) {
+                json = file.getJSONObject("ItemStorage");
+            }
+        }
+        if (json == null) return false;
+
+        InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), json);
+        player.openInventory(storage.getInventory());
         return true;
     }
 
@@ -56,15 +58,8 @@ public class ItemStorageMenu implements Listener {
             if (e.getView().getTopInventory().getTitle().contains("'s Item Storage")) {
                 String name = e.getView().getTopInventory().getTitle().replace("'s Item Storage", "");
                 if (!name.equalsIgnoreCase(player.getName())) return;
-                PlayerPetInv inv = PetCore.get().getPlayerPetInv(player);
                 InventoryStorage storage = new InventoryStorage(e.getInventory());
-                if (inv.isSet("Username")) {
-                    if (!inv.getString("Username").equalsIgnoreCase(player.getName()))
-                        inv.set("Username", player.getName());
-                } else {
-                    inv.set("Username", player.getName());
-                }
-                inv.set("ItemStorage", storage.serialize());
+                PetOwner.getPetOwner(player).setStoredInventory(storage.toJSON());
             }
         }
     }
@@ -77,9 +72,9 @@ public class ItemStorageMenu implements Listener {
         if (e.getView().getTopInventory().getHolder() instanceof ItemHandler) {
             if (e.getView().getTopInventory().getTitle().contains("'s Item Storage")) {
                 String name = e.getView().getTopInventory().getTitle().replace("'s Item Storage", "");
-                PlayerPetInv inv = PetCore.get().getPlayerPetInv(player);
                 if (!name.equalsIgnoreCase(player.getName())) {
                     e.setCancelled(true);
+                    e.setResult(Event.Result.DENY);
                 }
             }
         }

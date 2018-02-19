@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import simple.brainsynder.api.ParticleMaker;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
@@ -32,11 +33,11 @@ public class PetOwner {
     /**
      * JSONArray contains all the pets the player has owned while Vault was Enabled.
      */
-    JSONArray ownedPets = new JSONArray();
+    private JSONArray ownedPets = new JSONArray();
     /**
      * Players Pet name, Will return null if empty.
      */
-    String petName = null;
+    private String petName = null;
     /**
      * Will return the players active pet, Will return null if there is no pet.
      */
@@ -44,19 +45,20 @@ public class PetOwner {
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    Player player = null;
+    private Player player = null;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
-    OwnerFile file = null;
+    private OwnerFile file = null;
     /**
      * This little boolean is for checking if a player is renaming their pet via chat.
      */
-    boolean renaming = false;
+    private boolean renaming = false;
     /**
      * Handles Pet respawning when the player teleports, dies, etc...
      */
-    StorageTagCompound petToRespawn = null;
+    private StorageTagCompound petToRespawn = null;
+    private JSONObject storedInventory = null;
 
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
@@ -82,7 +84,7 @@ public class PetOwner {
      * @return PetOwner Instance
      */
     public static PetOwner getPetOwner(Player player) {
-        Valid.notNull(player, "Player can not be null");
+        if ((player == null) || (!player.isOnline())) return null;
         if (ownerMap.containsKey(player.getUniqueId())) {
             return ownerMap.get(player.getUniqueId());
         }
@@ -273,7 +275,7 @@ public class PetOwner {
         return (petToRespawn != null) && (pet == null);
     }
 
-    void play(Location location, ParticleMaker.Particle effect, float offsetX, float offsetY, float offsetZ) {
+    private void play(Location location, ParticleMaker.Particle effect, float offsetX, float offsetY, float offsetZ) {
         ParticleMaker maker = new ParticleMaker(effect, 20, offsetX, offsetY, offsetZ);
         maker.sendToLocation(location);
     }
@@ -284,6 +286,14 @@ public class PetOwner {
     }
 
     public JSONArray getOwnedPets() {return this.ownedPets;}
+
+    public JSONObject getStoredInventory() {
+        return storedInventory;
+    }
+
+    public void setStoredInventory(JSONObject storedInventory) {
+        this.storedInventory = storedInventory;
+    }
 
     public String getPetName() {return this.petName;}
 

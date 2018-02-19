@@ -2,8 +2,6 @@ package simplepets.brainsynder;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,7 +23,10 @@ import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.storage.files.*;
+import simplepets.brainsynder.storage.files.Config;
+import simplepets.brainsynder.storage.files.Messages;
+import simplepets.brainsynder.storage.files.PetTranslator;
+import simplepets.brainsynder.storage.files.PlayerStorage;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
@@ -33,6 +34,7 @@ import simplepets.brainsynder.utils.Utilities;
 import java.io.File;
 import java.sql.Connection;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class PetCore extends JavaPlugin {
 
@@ -54,7 +56,7 @@ public class PetCore extends JavaPlugin {
     private CMD_Pet cmd_pet;
 
     private ISpawner spawner;
-    private Map<UUID, PlayerFile> fileStorage = new HashMap<>();
+    private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
     public void onEnable() {
         long start = System.currentTimeMillis();
@@ -261,6 +263,7 @@ public class PetCore extends JavaPlugin {
 
     public void reload () {
         if (getConfiguration().isSet("MySQL.Enabled")) {
+            if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
             String host = getConfiguration().getString("MySQL.Host", false);
             String port = getConfiguration().getString("MySQL.Port", false);
             String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
@@ -313,31 +316,36 @@ public class PetCore extends JavaPlugin {
         return name;
     }
 
-    public PlayerFile getPlayerFile(Player player) {
+    public PlayerStorage getPlayerFile(Player player) {
         if (fileStorage.containsKey(player.getUniqueId()))
             return fileStorage.get(player.getUniqueId());
-        PlayerFile file = new PlayerFile(player);
+        PlayerStorage file = new PlayerStorage(player);
         fileStorage.put(player.getUniqueId(), file);
         return fileStorage.get(player.getUniqueId());
     }
 
-    public PlayerPetInv getPlayerPetInv(Player player) {
-        return new PlayerPetInv(player.getUniqueId() + ".storage");
-    }
-
-    public PlayerPetInv getPetInvByName(String name) {
-        File folder = new File(getDataFolder().toString() + "/PetInventories/");
+    public PlayerStorage getPetInvByName(String name) {
+        File folder = new File(getDataFolder().toString() + "/PlayerData/");
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
             if (files != null && files.length != 0) {
-                for (File file : files) {
-                    if (file.getName().contains(".storage")) {
-                        FileConfiguration con = YamlConfiguration.loadConfiguration(file);
-                        if (con.getString("Username").equalsIgnoreCase(name) && con.get("Username") != null) {
-                            return new PlayerPetInv(file.getName());
+                CompletableFuture<PlayerStorage> future = CompletableFuture.supplyAsync(() -> {
+                    for (File file : files) {
+                        if (file.getName().endsWith(".stc")) {
+                            PlayerStorage storage = new PlayerStorage(file);
+                            if (!storage.hasKey("username")) return null;
+
+                            if (storage.getString("username").equalsIgnoreCase(name)) {
+                                return new PlayerStorage(file);
+                            }
                         }
                     }
-                }
+                    return null;
+                });
+
+                try {
+                    return future.get();
+                } catch (Exception ignored) {}
             }
         }
         return null;
