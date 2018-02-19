@@ -250,7 +250,11 @@ public class Pet implements IPet {
     }
 
     public boolean isHat() {
-        if (owner.getPassenger() != null) return true;
+        if ((owner.getPassenger() != null)
+                && (ReflectionUtil.getEntityHandle(owner.getPassenger()) instanceof IEntityPet)) {
+            if (!isHat) isHat = true;
+            return true;
+        }
         return isHat;
     }
 
@@ -276,6 +280,7 @@ public class Pet implements IPet {
             }.runTaskLater(PetCore.get(), delay);
         } else {
             if (isHat()) {
+                value = false;
                 PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;

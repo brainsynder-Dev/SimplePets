@@ -341,8 +341,8 @@ public enum PetType {
         return rawItem();
     }
 
-    public Pet setPet(Player player) {
-        return new Pet(player.getUniqueId(), this, PetCore.get());
+    public void setPet(Player player) {
+        new Pet(player.getUniqueId(), this, PetCore.get());
     }
 
     private ItemStack rawItem() {
