@@ -1,7 +1,10 @@
 package simplepets.brainsynder.pet;
 
+import net.minecraft.server.v1_8_R3.BlockStainedGlassPane;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -24,6 +27,8 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.LinkRetriever;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -168,7 +173,14 @@ public class Pet implements IPet {
                 if (event.isCancelled()) return;
 
                 value = true;
-                getPet().teleport(owner);
+                if (owner.getLocation().getBlock() != null) {
+                    List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE, Material.THIN_GLASS, Material.IRON_FENCE, Material.IRON_DOOR, Material.WOODEN_DOOR));
+                    if (!blocks.contains(owner.getLocation().getBlock().getType())) {
+                        getPet().teleport(owner);
+                    }
+                } else {
+                    getPet().teleport(owner);
+                }
                 new BukkitRunnable() {
                     @Override
                     public void run() {
