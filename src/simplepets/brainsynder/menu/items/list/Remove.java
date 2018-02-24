@@ -31,7 +31,9 @@ public class Remove extends Item {
 
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
-        if (owner.hasPet())
+        if (owner.hasPet()) {
             owner.removePet();
+            owner.getPlayer().closeInventory();
+        }
     }
 }

@@ -14,7 +14,7 @@ import java.util.List;
 public class LinkRetriever {
     private static List<IPluginLink> loaders = new ArrayList<>();
 
-    public static void initiate() {
+    private static void initiate() {
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new WorldGuardLink());
