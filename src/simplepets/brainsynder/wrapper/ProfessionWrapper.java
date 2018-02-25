@@ -1,5 +1,6 @@
 package simplepets.brainsynder.wrapper;
 
+import io.netty.channel.RecvByteBufAllocator;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
@@ -115,11 +116,7 @@ public enum ProfessionWrapper {
 
 
         public static ZombieProfession getPrevious(ZombieProfession current) {
-            if (current == NORMAL) {
-                return HUSK;
-            } else {
-                return NORMAL;
-            }
+            return current == NORMAL ? HUSK : NORMAL;
         }
 
         public int getId() {
@@ -127,11 +124,7 @@ public enum ProfessionWrapper {
         }
 
         public static ZombieProfession getNext(ZombieProfession current) {
-            if (current == NORMAL) {
-                return HUSK;
-            }else{
-                return NORMAL;
-            }
+            return current == NORMAL ? HUSK : NORMAL;
         }
 
         public static ZombieProfession getProfession(String name) {

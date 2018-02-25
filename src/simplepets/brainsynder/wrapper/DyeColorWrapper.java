@@ -44,11 +44,10 @@ public enum DyeColorWrapper {
     }
 
     public static DyeColorWrapper getNext(DyeColorWrapper current) {
-        int original = current.ordinal();
-        if (original == 15) {
+        if (current.ordinal() == 15) {
             return WHITE;
         }
-        return values()[(original + 1)];
+        return values()[(current.ordinal() + 1)];
     }
 
     public static DyeColorWrapper getByWoolData(byte data) {

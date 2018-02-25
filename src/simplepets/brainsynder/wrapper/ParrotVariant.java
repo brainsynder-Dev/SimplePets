@@ -32,18 +32,10 @@ public enum ParrotVariant {
 
 
     public static ParrotVariant getPrevious(ParrotVariant current) {
-        int original = current.id;
-        if (original == 0) {
-            return GRAY;
-        }
-        return values()[(original - 1)];
+        return current.id == 0 ? GRAY : values()[(current.id - 1)];
     }
 
     public static ParrotVariant getNext(ParrotVariant current) {
-        int original = current.id;
-        if (original == 4) {
-            return RED;
-        }
-        return values()[(original + 1)];
+        return current.id == 4 ? RED : values()[(current.id + 1)];
     }
 }

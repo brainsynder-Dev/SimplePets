@@ -85,7 +85,7 @@ public enum EntityWrapper {
     public EntityType toEntityType() {
         try {
             return EntityType.valueOf(name());
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
         return EntityType.UNKNOWN;
     }

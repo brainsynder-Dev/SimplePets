@@ -35,26 +35,24 @@ public enum WizardSpell {
     }
 
     public static WizardSpell getPrevious(WizardSpell current) {
-        int original = current.id;
-        if (original == 0) {
+        if (current.id == 0) {
             if (ServerVersion.getVersion().getIntVersion() == 111) {
                 return WOLOLO;
             }
             return BLINDNESS;
         }
-        return values()[(original - 1)];
+        return values()[(current.id - 1)];
     }
 
     public static WizardSpell getNext(WizardSpell current) {
-        int original = current.id;
         if (ServerVersion.getVersion().getIntVersion() == 111) {
-            if (original == 3)
+            if (current.id == 3)
                 return NONE;
         }
-        if (original == 5) {
+        if (current.id == 5) {
             return NONE;
         }
-        return values()[(original + 1)];
+        return values()[(current.id + 1)];
     }
 
     public int getId() {

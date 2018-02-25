@@ -515,15 +515,11 @@ public enum MaterialWrapper {
     }
 
     public static MaterialWrapper fromID(int id) {
-        if (BY_ID.containsKey(id))
-            return BY_ID.get(id);
-        return NOT_SUPPORTED;
+        return BY_ID.getOrDefault(id, NOT_SUPPORTED);
     }
 
     public static MaterialWrapper fromName(String name) {
-        if (BY_NAME.containsKey(name))
-            return BY_NAME.get(name);
-        return NOT_SUPPORTED;
+        return BY_NAME.getOrDefault(name, NOT_SUPPORTED);
     }
 
     public static MaterialWrapper fromIDName(Object value) {

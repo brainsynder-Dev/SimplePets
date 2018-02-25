@@ -1,10 +1,8 @@
 package simplepets.brainsynder.pet;
 
-import net.minecraft.server.v1_8_R3.BlockStainedGlassPane;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
