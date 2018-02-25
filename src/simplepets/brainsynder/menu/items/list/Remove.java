@@ -3,7 +3,9 @@ package simplepets.brainsynder.menu.items.list;
 import org.bukkit.Material;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
+import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -33,7 +35,9 @@ public class Remove extends Item {
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (owner.hasPet()) {
             owner.removePet();
-            owner.getPlayer().closeInventory();
+            if (inventory instanceof DataMenu) {
+                PetCore.get().getInvLoaders().PET_DATA.open(owner);
+            }
         }
     }
 }

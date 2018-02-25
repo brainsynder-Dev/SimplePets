@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.items;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.json.simple.JSONArray;
 import simplepets.brainsynder.player.PetOwner;
@@ -25,7 +26,7 @@ public class CustomItem extends Item {
         }
 
         for (Object o : array) {
-            owner.getPlayer().performCommand(String.valueOf(o)
+            Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.valueOf(o)
                     .replace("{location}", loc)
                     .replace("{name}", owner.getPlayer().getName())
                     .replace("{type}", owner.getPet().getPetType().name())
