@@ -23,10 +23,8 @@ public class AnimationCycle {
     }
 
     public void register(final ArmorStand armor, final long delay) {
-        if (!framesMap.containsKey(armor.getUniqueId()))
-            framesMap.put(armor.getUniqueId(), frames);
-        if (!toggle.containsKey(armor.getUniqueId()))
-            toggle.put(armor.getUniqueId(), true);
+        framesMap.putIfAbsent(armor.getUniqueId(), frames);
+        toggle.putIfAbsent(armor.getUniqueId(), true);
         if (!endless.contains(armor.getUniqueId())) {
             this.endless.add(armor.getUniqueId());
             runnable = new BukkitRunnable() {

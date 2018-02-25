@@ -14,7 +14,6 @@ import simplepets.brainsynder.links.IPlotSquaredLink;
 import simplepets.brainsynder.links.IWorldGuardLink;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.utils.LinkRetriever;
 
 public class OnPetSpawn extends ReflectionUtil implements Listener {
 
@@ -27,10 +26,11 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
+        PetCore core = PetCore.get();
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
-            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
-                    || LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
+            if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
+                    || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
+                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
 
             }
@@ -47,10 +47,11 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(EntitySpawnEvent event) {
         Entity e = event.getEntity();
+        PetCore core = PetCore.get();
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
-            if (PetCore.get().getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
-                    || LinkRetriever.getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || LinkRetriever.getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
+            if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
+                    || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
+                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
             }
         }
@@ -63,15 +64,16 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
             if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
                 IEntityPet entity = e.getEntity();
                 PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+                PetCore core = PetCore.get();
                 if (e.getCause() == PetMoveEvent.Cause.RIDE) {
-                    if (!LinkRetriever.canRidePet(petOwner, entity.getEntity().getLocation())) {
+                    if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
                         petOwner.getPet().setVehicle(false);
                         entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                     }
                     return;
                 }
 
-                if (!LinkRetriever.canPetEnter(petOwner, entity.getEntity().getLocation())) {
+                if (!core.getLinkRetriever().canPetEnter(petOwner, entity.getEntity().getLocation())) {
                     petOwner.removePet();
                     entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                 }

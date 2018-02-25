@@ -12,47 +12,42 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkRetriever {
-    private static List<IPluginLink> loaders = new ArrayList<>();
+    private List<IPluginLink> loaders = new ArrayList<>();
 
-    private static void initiate() {
+    private void initiate() {
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new WorldGuardLink());
         loaders.add(new VaultLink());
     }
 
-    public static <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {
-        if (loaders == null) initiate();
-        if (loaders.isEmpty()) initiate();
+    public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {
+        return getLink(clazz);
+    }
+
+    public <T extends IPluginLink> T getPluginLink(Class<T> clazz) {
+        return getLink(clazz);
+    }
+
+    private <T extends IPluginLink> T getLink(Class<T> c) {
+        checkLoaders();
         for (IPluginLink loader : loaders) {
-            if (clazz.isAssignableFrom(loader.getClass())) {
+            if (c.isAssignableFrom(loader.getClass())) {
                 return (T) loader;
             }
         }
         return null;
     }
 
-    public static <T extends IPluginLink> T getPluginLink(Class<T> clazz) {
-        if (loaders == null) initiate();
-        if (loaders.isEmpty()) initiate();
-        for (IPluginLink loader : loaders) {
-            if (clazz.isAssignableFrom(loader.getClass())) {
-                return (T) loader;
-            }
-        }
-        return null;
-    }
-
-    public static boolean canSpawnPet(Location location) {
+    public boolean canSpawnPet(Location location) {
         return canSpawnPet (null, location);
     }
-    public static boolean canPetEnter(Location location) {
+    public boolean canPetEnter(Location location) {
         return canPetEnter (null, location);
     }
 
-    public static boolean canPetEnter(PetOwner owner, Location location) {
-        if (loaders == null) initiate();
-        if (loaders.isEmpty()) initiate();
+    public boolean canPetEnter(PetOwner owner, Location location) {
+        checkLoaders();
         List<Boolean> list = new ArrayList<>();
         for (IPluginLink link : loaders) {
             if (!link.isHooked()) continue;
@@ -66,9 +61,8 @@ public class LinkRetriever {
         return (!list.contains(false));
     }
 
-    public static boolean canRidePet(PetOwner owner, Location location) {
-        if (loaders == null) initiate();
-        if (loaders.isEmpty()) initiate();
+    public boolean canRidePet(PetOwner owner, Location location) {
+        checkLoaders();
         List<Boolean> list = new ArrayList<>();
         for (IPluginLink link : loaders) {
             if (!link.isHooked()) continue;
@@ -82,9 +76,8 @@ public class LinkRetriever {
         return (!list.contains(false));
     }
 
-    public static boolean canSpawnPet(PetOwner owner, Location location) {
-        if (loaders == null) initiate();
-        if (loaders.isEmpty()) initiate();
+    public boolean canSpawnPet(PetOwner owner, Location location) {
+        checkLoaders();
         List<Boolean> list = new ArrayList<>();
         for (IPluginLink link : loaders) {
             if (!link.isHooked()) continue;
@@ -96,5 +89,10 @@ public class LinkRetriever {
             list.add(((IProtectionLink) link).allowPetSpawn(owner, location));
         }
         return (!list.contains(false)) && canPetEnter(owner, location);
+    }
+
+    private void checkLoaders() {
+        if (loaders == null) initiate();
+        if (loaders.isEmpty()) initiate();
     }
 }

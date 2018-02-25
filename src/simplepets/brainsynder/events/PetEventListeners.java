@@ -18,7 +18,6 @@ import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.storage.files.EconomyFile;
-import simplepets.brainsynder.utils.LinkRetriever;
 
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +34,7 @@ public class PetEventListeners implements Listener {
     public void onSelect(PetInventorySelectTypeEvent event) {
         if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
             double price = economyFile.getPrice(event.getPetType());
-            IVaultLink vault = LinkRetriever.getPluginLink(IVaultLink.class);
+            IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
             if (price == -1)
                 return;
             if (!vault.isHooked())

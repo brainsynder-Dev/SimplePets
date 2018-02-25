@@ -22,7 +22,6 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.utils.LinkRetriever;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.ArrayList;
@@ -41,6 +40,7 @@ public class Pet implements IPet {
     private PetCore instance;
 
     public Pet(UUID player, PetType type, PetCore instance) {
+        PetCore core = PetCore.get();
         this.type = type;
         this.instance = instance;
         if (player == null) {
@@ -48,41 +48,41 @@ public class Pet implements IPet {
         }
         this.owner = Bukkit.getPlayer(player);
         if (!type.hasPermission(owner)) {
-            owner.sendMessage(PetCore.get().getMessages().getString("No-Pet-Permission"));
+            owner.sendMessage(core.getMessages().getString("No-Pet-Permission"));
             return;
         }
         PetOwner petOwner = PetOwner.getPetOwner(this.owner);
         PetPreSpawnEvent event = new PetPreSpawnEvent(owner, null, type);
         Bukkit.getServer().getPluginManager().callEvent(event);
-        PetCore.get().forceSpawn = true;
+        core.forceSpawn = true;
         Location spawnLoc = owner.getLocation();
         if (petOwner.hasPet()) {
             IPet oldPet = petOwner.getPet();
             spawnLoc = oldPet.getEntity().getEntity().getLocation().clone();
             petOwner.removePet();
         }
-        boolean allow = LinkRetriever.canSpawnPet(spawnLoc);
+        boolean allow = core.getLinkRetriever().canSpawnPet(spawnLoc);
         if (!allow) {
             SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
-            owner.sendMessage(PetCore.get().getMessages().getString("No-Spawning", true));
+            owner.sendMessage(core.getMessages().getString("No-Spawning", true));
             return;
         }
-        if (PetCore.get().getConfiguration().getBoolean("Worlds.Enabled")) {
+        if (core.getConfiguration().getBoolean("Worlds.Enabled")) {
             String world = spawnLoc.getWorld().getName();
-            if (!PetCore.get().getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(world)) {
+            if (!core.getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(world)) {
                 SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
-                owner.sendMessage(PetCore.get().getMessages().getString("No-Spawning", true));
+                owner.sendMessage(core.getMessages().getString("No-Spawning", true));
                 return;
             }
         }
         IEntityPet ent = PetSpawner.spawnPet(spawnLoc, this, type.getEntityClass());
         if (ent == null) {
             SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
-            PetCore.get().debug(2, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
+            core.debug(2, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
             return;
         }
-        PetCore.get().forceSpawn = false;
-        ent.getEntity().setMetadata("pet", new FixedMetadataValue(PetCore.get(), "pet"));
+        core.forceSpawn = false;
+        ent.getEntity().setMetadata("pet", new FixedMetadataValue(core, "pet"));
         this.ent = ent;
         IStorage<MenuItem> items = new StorageList<>();
         if (type.getPetData() != null) {
@@ -96,7 +96,7 @@ public class Pet implements IPet {
         this.items = items;
         petOwner.setPet(this);
 
-        List<String> commands = PetCore.get().getTranslator().getStringList(getPetType().getConfigName() + ".On-Summon");
+        List<String> commands = core.getTranslator().getStringList(getPetType().getConfigName() + ".On-Summon");
         if (!commands.isEmpty()) {
             commands.forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command
                     .replace("{player}", getOwner().getName())

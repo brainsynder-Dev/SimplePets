@@ -29,6 +29,7 @@ import simplepets.brainsynder.storage.files.PetTranslator;
 import simplepets.brainsynder.storage.files.PlayerStorage;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
+import simplepets.brainsynder.utils.LinkRetriever;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
@@ -54,6 +55,7 @@ public class PetCore extends JavaPlugin {
     private Utilities utilities = null;
     private MySQL mySQL = null;
     private CMD_Pet cmd_pet;
+    private LinkRetriever linkRetriever;
 
     private ISpawner spawner;
     private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
@@ -109,6 +111,7 @@ public class PetCore extends JavaPlugin {
         itemLoaders = new ItemLoaders();
         invLoaders = new InvLoaders();
         cmd_pet = new CMD_Pet();
+        linkRetriever = new LinkRetriever();
     }
 
     private boolean errorCheck() {
@@ -383,6 +386,10 @@ public class PetCore extends JavaPlugin {
 
     public CMD_Pet getCmd_pet() {
         return cmd_pet;
+    }
+
+    public LinkRetriever getLinkRetriever() {
+        return linkRetriever;
     }
 
     // SETTERS
