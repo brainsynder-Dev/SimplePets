@@ -15,6 +15,7 @@ import simplepets.brainsynder.events.MainListeners;
 import simplepets.brainsynder.events.OnJoin;
 import simplepets.brainsynder.events.OnPetSpawn;
 import simplepets.brainsynder.events.PetEventListeners;
+import simplepets.brainsynder.links.LinkRetriever;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.listeners.DataListener;
@@ -29,7 +30,6 @@ import simplepets.brainsynder.storage.files.PetTranslator;
 import simplepets.brainsynder.storage.files.PlayerStorage;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
-import simplepets.brainsynder.utils.LinkRetriever;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
@@ -214,13 +214,13 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onDisable() {
-        disabling = true;
+        //disabling = true;
         for (Player player : Bukkit.getOnlinePlayers()) {
             PetOwner petOwner = PetOwner.getPetOwner(player);
+            petOwner.getFile().save();
             if (petOwner.hasPet()) {
                 petOwner.removePet();
             }
-            petOwner.getFile().save();
         }
 
         if (getConfiguration().getBoolean("MySQL.Enabled")) {
@@ -229,10 +229,10 @@ public class PetCore extends JavaPlugin {
                 mySQL = null;
             }
         }
-        try {
+        /*try {
             Thread.sleep(20L);
         } catch (InterruptedException ignored) {
-        }
+        }*/
     }
 
     public void debug(String message) {

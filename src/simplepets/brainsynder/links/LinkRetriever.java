@@ -1,8 +1,6 @@
-package simplepets.brainsynder.utils;
+package simplepets.brainsynder.links;
 
 import org.bukkit.Location;
-import simplepets.brainsynder.links.IPluginLink;
-import simplepets.brainsynder.links.IProtectionLink;
 import simplepets.brainsynder.links.impl.PlotSquaredLink;
 import simplepets.brainsynder.links.impl.VaultLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
