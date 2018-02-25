@@ -1,4 +1,4 @@
-package simplepets.brainsynder.utils;
+package simplepets.brainsynder.api;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

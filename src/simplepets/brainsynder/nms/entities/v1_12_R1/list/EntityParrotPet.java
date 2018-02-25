@@ -6,12 +6,12 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.CustomMoveFlying;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 @Size(width = 0.5F, length = 0.9F)

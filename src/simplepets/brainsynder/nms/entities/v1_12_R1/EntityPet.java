@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IFlyablePet;
@@ -22,7 +23,6 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityArmorStand
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
-import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.Map;

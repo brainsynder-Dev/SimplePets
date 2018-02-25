@@ -3,10 +3,10 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 import com.google.common.base.Optional;
 import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
-import simplepets.brainsynder.utils.Size;
 
 @Size(width = 0.6F, length = 2.9F)
 public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {

@@ -2,10 +2,10 @@ package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
 import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
-import simplepets.brainsynder.utils.Size;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 @Size(width = 0.6F, length = 0.8F)
