@@ -36,7 +36,7 @@ public class ItemStorageMenu implements Listener {
         }
 
         if (json == null) {
-            PlayerStorage file = PetCore.get().getPetInvByName(name);
+            PlayerStorage file = PetCore.get().getPlayerStorageByName(name);
             if (file == null) return false;
             if (file.hasKey("ItemStorage")) {
                 json = file.getJSONObject("ItemStorage");
