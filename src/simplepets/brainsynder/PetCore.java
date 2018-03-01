@@ -11,11 +11,11 @@ import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.CMD_Pet;
 import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
-import simplepets.brainsynder.events.MainListeners;
-import simplepets.brainsynder.events.OnJoin;
-import simplepets.brainsynder.events.OnPetSpawn;
-import simplepets.brainsynder.events.PetEventListeners;
 import simplepets.brainsynder.links.LinkRetriever;
+import simplepets.brainsynder.listeners.MainListeners;
+import simplepets.brainsynder.listeners.OnJoin;
+import simplepets.brainsynder.listeners.OnPetSpawn;
+import simplepets.brainsynder.listeners.PetEventListeners;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.listeners.DataListener;
@@ -319,7 +319,7 @@ public class PetCore extends JavaPlugin {
         return name;
     }
 
-    public PlayerStorage getPlayerFile(Player player) {
+    public PlayerStorage getPlayerStorage(Player player) {
         if (fileStorage.containsKey(player.getUniqueId()))
             return fileStorage.get(player.getUniqueId());
         PlayerStorage file = new PlayerStorage(player);
@@ -327,7 +327,7 @@ public class PetCore extends JavaPlugin {
         return fileStorage.get(player.getUniqueId());
     }
 
-    public PlayerStorage getPetInvByName(String name) {
+    public PlayerStorage getPlayerStorageByName(String name) {
         File folder = new File(getDataFolder().toString() + "/PlayerData/");
         if (folder.isDirectory()) {
             File[] files = folder.listFiles();
