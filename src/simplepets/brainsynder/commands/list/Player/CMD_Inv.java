@@ -21,7 +21,7 @@ public class CMD_Inv extends PetCommand<Player> {
                     p.sendMessage("§eSimplePets §6>> §7No Items Stored in your Pet Inventory");
                 }
             } else {
-                if (!p.hasPermission("Pet.inv.other")) {
+                if (!p.hasPermission("Pet.commands.inv.other")) {
                     if (!ItemStorageMenu.loadFromPlayer(p)) {
                         p.sendMessage("§eSimplePets §6>> §7No Items Stored in your Pet Inventory");
                     }

@@ -24,7 +24,7 @@ public class CMD_Remove extends PetCommand<Player> {
                 p.sendMessage(PetCore.get().getMessages().getString("Pet-Remove-Self-No-Pet", true));
             }
         } else {
-            if (p.hasPermission("Pet.remove.other")) {
+            if (p.hasPermission("Pet.commands.remove.other")) {
                 Player tp = Bukkit.getPlayer(args[0]);
                 if (tp == null) {
                     p.sendMessage(PetCore.get().getMessages().getString("Player-Not-Found", true).replace("%player%", tp.getName()));

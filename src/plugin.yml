@@ -17,18 +17,18 @@ permissions:
             Pet.name.*: true
             Pet.PetToMount: true
             Pet.PetToHat: true
-            Pet.reload: true
+            Pet.commands.reload: true
     Pet.commands.*:
         default: false
         children:
-            Pet.summon.other: true
-            Pet.help: true
-            Pet.list: true
+            Pet.commands.summon.other: true
+            Pet.commands.help: true
+            Pet.commands.list: true
     Pet.type.*:
         default: false
         children:
-            Pet.passive: true
-            Pet.hostile: true
+            Pet.type.passive: true
+            Pet.type.hostile: true
     Pet.name.*:
         default: false
         children:
@@ -37,7 +37,7 @@ permissions:
             Pet.name: true
             Pet.name.color: true
             Pet.name.magic: true
-    Pet.passive:
+    Pet.type.passive:
         default: false
         children:
             Pet.type.bat: true
@@ -62,7 +62,7 @@ permissions:
             Pet.type.armorstand: true
             Pet.type.parrot: true
             Pet.type.mule: true
-    Pet.hostile:
+    Pet.type.hostile:
         default: false
         children:
             Pet.type.blaze: true

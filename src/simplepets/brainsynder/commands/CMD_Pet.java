@@ -122,7 +122,7 @@ public class CMD_Pet implements CommandExecutor {
                     }
 
                     if ((base.getClass().isAnnotationPresent(CommandPermission.class)) &&
-                            (!p.hasPermission("Pet." + base.getClass().getAnnotation(CommandPermission.class).permission()))) {
+                            (!p.hasPermission("Pet.commands." + base.getClass().getAnnotation(CommandPermission.class).permission()))) {
                         p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                         return true;
                     }

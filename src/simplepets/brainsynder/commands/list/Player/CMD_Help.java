@@ -25,7 +25,7 @@ public class CMD_Help extends PetCommand<Player> {
             }
             if (!gcmd.getClass().isAnnotationPresent(Console.class)) {
                 if (gcmd.getClass().isAnnotationPresent(CommandPermission.class)) {
-                    if (!p.hasPermission("Pet." + gcmd.getClass().getAnnotation(CommandPermission.class).permission()))
+                    if (!p.hasPermission("Pet.commands." + gcmd.getClass().getAnnotation(CommandPermission.class).permission()))
                         continue;
                 }
                 p.sendMessage("§eSimplePets §6>> §7" + ("/pet " + name + usage + description));
