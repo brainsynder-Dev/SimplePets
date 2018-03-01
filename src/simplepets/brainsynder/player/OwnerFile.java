@@ -16,7 +16,6 @@ import simplepets.brainsynder.storage.files.PlayerStorage;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -36,7 +35,11 @@ public class OwnerFile {
     }
 
     public void save() {
-        String needsRespawn = ((!owner.hasPet()) ? "null" : Base64Wrapper.encodeString(owner.pet.getEntity().asCompound().toString()));
+        save(true);
+    }
+
+    public void save(boolean savePet) {
+        String needsRespawn = (((!owner.hasPet()) && (!savePet)) ? "null" : Base64Wrapper.encodeString(owner.pet.getEntity().asCompound().toString()));
         final Player p = owner.getPlayer();
         if (p.hasMetadata("npc") || p.hasMetadata("NPC")) return;
         PetOwner.ownerMap.remove(p.getUniqueId());
@@ -113,7 +116,7 @@ public class OwnerFile {
         }
 
         boolean canSave = false;
-        PlayerStorage file = PetCore.get().getPlayerFile(p);
+        PlayerStorage file = PetCore.get().getPlayerStorage(p);
         if (!owner.getOwnedPets().isEmpty()) {
             file.setJSONArray("PurchasedPets", owner.getOwnedPets());
             canSave = true;
@@ -128,13 +131,9 @@ public class OwnerFile {
             file.setJSONObject("ItemStorage", owner.getStoredInventory());
             canSave = true;
         }
-        if (owner.hasPet()) {
-            try {
-                File save = getPetSave(p.getUniqueId().toString());
-                if (!save.exists()) save.createNewFile();
-                CompressedStreamTools.writeCompressed(owner.getPet().getEntity().asCompound(), new FileOutputStream(save));
-            } catch (Exception ignored) {
-            }
+        if (savePet && owner.hasPet()) {
+            file.setTag("NeedsRespawn", owner.getPet().getEntity().asCompound());
+            canSave = true;
         }
         if (canSave) file.save();
     }
@@ -190,7 +189,7 @@ public class OwnerFile {
             return;
         }
 
-        PlayerStorage file = PetCore.get().getPlayerFile(p);
+        PlayerStorage file = PetCore.get().getPlayerStorage(p);
         try {
             owner.setRawOwned(file.getJSONArray("PurchasedPets"));
         } catch (Exception e) {
@@ -199,9 +198,13 @@ public class OwnerFile {
         if (file.hasKey("ItemStorage")) {
             owner.setStoredInventory(file.getJSONObject("ItemStorage"));
         }
+        if (file.hasKey("NeedsRespawn")) {
+            StorageTagCompound compound = file.getCompoundTag("NeedsRespawn");
+            file.removeTag("NeedsRespawn");
+            file.save();
+            if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
+        }
         owner.setRawPetName(file.getString("PetName"));
-        StorageTagCompound compound = getPetData(p.getUniqueId().toString());
-        if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
     }
 
     private void handle(String needs) {

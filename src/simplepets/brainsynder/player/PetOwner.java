@@ -265,7 +265,7 @@ public class PetOwner {
             public void run() {
                 if (hasPet()) {
                     getPet().getVisableEntity().applyCompound(petToRespawn);
-                    petToRespawn = null;
+                    PetOwner.this.petToRespawn = null;
                 }
             }
         }.runTaskLater(PetCore.get(), 2);
@@ -293,6 +293,7 @@ public class PetOwner {
 
     public void setStoredInventory(JSONObject storedInventory) {
         this.storedInventory = storedInventory;
+        file.save(false);
     }
 
     public String getPetName() {return this.petName;}

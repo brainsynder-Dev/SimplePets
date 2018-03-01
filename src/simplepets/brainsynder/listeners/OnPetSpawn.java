@@ -1,4 +1,4 @@
-package simplepets.brainsynder.events;
+package simplepets.brainsynder.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
