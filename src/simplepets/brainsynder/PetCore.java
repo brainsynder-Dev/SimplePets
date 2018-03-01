@@ -214,13 +214,12 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onDisable() {
-        //disabling = true;
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            PetOwner petOwner = PetOwner.getPetOwner(player);
-            petOwner.getFile().save();
+        disabling = true;
+        for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner.hasPet()) {
                 petOwner.removePet();
             }
+            petOwner.getFile().save();
         }
 
         if (getConfiguration().getBoolean("MySQL.Enabled")) {
@@ -229,10 +228,10 @@ public class PetCore extends JavaPlugin {
                 mySQL = null;
             }
         }
-        /*try {
+        try {
             Thread.sleep(20L);
         } catch (InterruptedException ignored) {
-        }*/
+        }
     }
 
     public void debug(String message) {

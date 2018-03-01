@@ -24,6 +24,7 @@ import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.pet.PetType;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -77,6 +78,10 @@ public class PetOwner {
     public static PetOwner getPetOwner(String name) {
         Valid.notNull(name, "PlayerName can not be null");
         return getPetOwner(Bukkit.getPlayerExact(name));
+    }
+
+    public static Collection<PetOwner> values () {
+        return ownerMap.values();
     }
 
     /**

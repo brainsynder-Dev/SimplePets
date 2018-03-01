@@ -16,12 +16,11 @@ public class StorageMaker extends StorageTagCompound {
     private File file;
 
     public StorageMaker (File file) {
+        if (!file.getParentFile().exists()) file.getParentFile().mkdirs();
         if (!file.exists()) {
             try {
                 file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            } catch (IOException ignored) {}
         }
 
         this.file = file;
