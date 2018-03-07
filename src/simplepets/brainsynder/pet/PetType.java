@@ -25,6 +25,12 @@ import java.util.Map;
 import static simple.brainsynder.utils.ServerVersion.*;
 import static simplepets.brainsynder.wrapper.MaterialWrapper.*;
 
+/**
+ * I am Removing this enum for the new system (I will delete this once it is done)
+ *
+ * @Deprecated
+ */
+@Deprecated
 public enum PetType {
     BLAZE(SoundMaker.ENTITY_BLAZE_AMBIENT, v1_8_R3, BLAZE_ROD, (byte) 0, "Pet_Blaze", EntityWrapper.BLAZE, IEntityBlazePet.class, PetData.BLAZE),
     BAT(SoundMaker.ENTITY_BAT_AMBIENT, v1_8_R3, FEATHER, (byte) 0, "Pet_Bat", EntityWrapper.BAT, IEntityBatPet.class, PetData.BAT),
@@ -249,7 +255,7 @@ public enum PetType {
     public boolean canHat(Player player) {
         if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Hat")) {
             if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".hat")) return true;
+            return PetCore.hasPerm(player, getPermission() + ".hat");
         }
         return false;
     }
@@ -265,7 +271,7 @@ public enum PetType {
             return false;
         if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Mount")) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".mount")) return true;
+            return PetCore.hasPerm(player, getPermission() + ".mount");
         }
         return false;
     }
@@ -273,7 +279,7 @@ public enum PetType {
     public boolean canFly(Player player) {
         if (PetCore.get().getTranslator().getBoolean(this.cfgName + ".Fly")) {
             if (PetCore.hasPerm(player, "Pet.FlyAll")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".fly")) return true;
+            return PetCore.hasPerm(player, getPermission() + ".fly");
         }
         return false;
     }
