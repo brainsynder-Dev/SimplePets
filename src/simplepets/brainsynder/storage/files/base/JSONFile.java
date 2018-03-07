@@ -76,6 +76,9 @@ public abstract class JSONFile {
     public void set(String tag, Object value) {
         json.put(tag, value);
     }
+    public void setDefault (String tag, Object value) {
+        defaults.put(tag, value);
+    }
 
     /**
      * This saves the values of the file so that they are in the file (*Recommended* Should be called in the onEnable and onDisable).
