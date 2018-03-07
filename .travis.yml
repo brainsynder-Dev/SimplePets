@@ -4,7 +4,7 @@ jdk:
 notifications:
   webhooks:
     urls:
-      - https://discord.pluginwiki.us/travis.php
+      - http://discord.pluginwiki.us/travis.php
     on_success: always
     on_failure: always
     on_start: always
