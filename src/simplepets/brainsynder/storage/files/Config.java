@@ -46,6 +46,10 @@ public class Config extends FileMaker {
         setDefault("PlotSquared.Block-If-Denied.Spawn", true);
         setDefault("PlotSquared.Block-If-Denied.Riding", true);
 
+        setDefault("WorldBorder.Block-If-Denied.Move", true);
+        setDefault("WorldBorder.Block-If-Denied.Spawn", true);
+        setDefault("WorldBorder.Block-If-Denied.Riding", true);
+
         setDefault("MySQL.Enabled", false);
         setDefault("MySQL.Host", "host");
         setDefault("MySQL.Port", "3306");

@@ -3,6 +3,7 @@ package simplepets.brainsynder.links;
 import org.bukkit.Location;
 import simplepets.brainsynder.links.impl.PlotSquaredLink;
 import simplepets.brainsynder.links.impl.VaultLink;
+import simplepets.brainsynder.links.impl.WorldBorderLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -17,6 +18,7 @@ public class LinkRetriever {
         loaders.add(new PlotSquaredLink());
         loaders.add(new WorldGuardLink());
         loaders.add(new VaultLink());
+        loaders.add(new WorldBorderLink());
     }
 
     public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {

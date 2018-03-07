@@ -11,6 +11,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IImpossaPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.links.IPlotSquaredLink;
+import simplepets.brainsynder.links.IWorldBorderLink;
 import simplepets.brainsynder.links.IWorldGuardLink;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -30,7 +31,8 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
+                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
+                    || core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
 
             }
@@ -51,7 +53,8 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
         if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())) {
+                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
+                    || core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class).allowPetSpawn(event.getLocation())) {
                 event.setCancelled(false);
             }
         }
