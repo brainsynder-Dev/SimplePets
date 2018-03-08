@@ -39,9 +39,15 @@ public class OwnerFile {
     }
 
     public void save(boolean savePet) {
-        String needsRespawn = (((!owner.hasPet()) && (!savePet)) ? "null" : Base64Wrapper.encodeString(owner.pet.getEntity().asCompound().toString()));
         final Player p = owner.getPlayer();
+        if (p == null) return;
         if (p.hasMetadata("npc") || p.hasMetadata("NPC")) return;
+
+        String needsRespawn = "null";
+        try {
+            needsRespawn = (((!owner.hasPet()) && (!savePet)) ? "null" : Base64Wrapper.encodeString(owner.pet.getEntity().asCompound().toString()));
+        }catch (Exception ignored){}
+
         PetOwner.ownerMap.remove(p.getUniqueId());
         if (PetCore.get().getConfiguration().isSet("MySQL.Enabled") && PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
             if (PetCore.get().isDisabling()) {
@@ -67,6 +73,7 @@ public class OwnerFile {
                 String finalPetName = petName;
 
                 // The CompletableFuture.class is a a class that allows async operations (according to the docs)
+                String finalNeedsRespawn = needsRespawn;
                 CompletableFuture.runAsync(() -> {
                     try {
                         ConnectionPool pool = sql.getPool();
@@ -78,7 +85,7 @@ public class OwnerFile {
                             PreparedStatement update = connection.prepareStatement(UPDATE);
                             update.setString(1, Base64Wrapper.encodeString(obj.toJSONString()));
                             update.setString(2, Base64Wrapper.encodeString(finalPetName));
-                            update.setString(3, needsRespawn);
+                            update.setString(3, finalNeedsRespawn);
                             update.setString(4, uuid);
                             update.execute();
                             update.close();
@@ -88,7 +95,7 @@ public class OwnerFile {
                             insert.setString(2, name);
                             insert.setString(3, Base64Wrapper.encodeString(obj.toJSONString()));
                             insert.setString(4, Base64Wrapper.encodeString(finalPetName));
-                            insert.setString(5, needsRespawn);
+                            insert.setString(5, finalNeedsRespawn);
                             insert.execute();
                             insert.close();
                         }
@@ -101,7 +108,7 @@ public class OwnerFile {
                         PetCore.get().debug("- Name:" + name);
                         PetCore.get().debug("- UUID:" + uuid);
                         PetCore.get().debug("- PetName (Base64):" + Base64Wrapper.encodeString(finalPetName));
-                        PetCore.get().debug("- PetData:" + needsRespawn);
+                        PetCore.get().debug("- PetData:" + finalNeedsRespawn);
                         PetCore.get().debug("- PurchasedPets (Base64):" + Base64Wrapper.encodeString(obj.toJSONString()));
                         PetCore.get().debug("- Error:");
                         e.printStackTrace();
