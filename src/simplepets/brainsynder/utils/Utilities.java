@@ -5,10 +5,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.lang.reflect.Constructor;
@@ -36,6 +38,8 @@ public class Utilities {
         try {
             entity.eject();
             if (entity instanceof Player) {
+                FieldAccessor<Integer> field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
+                field.set(Reflection.getHandle(passenger), 0);
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {

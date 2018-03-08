@@ -460,30 +460,6 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         repeatTask();
     }
 
-    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        try {
-            ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
-            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-            if (entity instanceof Player) {
-                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-            }
-        } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
-        }
-    }
-
-    public void removePassenger(org.bukkit.entity.Entity entity) {
-        try {
-            ((CraftEntity) entity).getHandle().passengers.clear();
-            PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-            if (entity instanceof Player) {
-                ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-            }
-        } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
-        }
-    }
-
     protected void registerDatawatchers() {
     }
 
