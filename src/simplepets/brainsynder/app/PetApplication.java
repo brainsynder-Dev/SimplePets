@@ -28,7 +28,7 @@ public class PetApplication extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         window = primaryStage;
         String windowName = "SimplePets Info App";
         window.setTitle(windowName);
@@ -68,7 +68,7 @@ public class PetApplication extends Application {
         window.setScene(scene);
         window.setMaximized(true);
         window.show();
-        webEngine.load("http://app.pluginwiki.tk/?version=4.0");
+        webEngine.load("http://app.pluginwiki.us/?version=4.0");
     }
 
     private void createContextMenu(WebView webView) {
