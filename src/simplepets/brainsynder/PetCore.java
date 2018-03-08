@@ -22,11 +22,11 @@ import simplepets.brainsynder.menu.inventory.listeners.DataListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.Config;
 import simplepets.brainsynder.storage.files.Messages;
-import simplepets.brainsynder.storage.files.PetTranslator;
 import simplepets.brainsynder.storage.files.PlayerStorage;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
@@ -51,11 +51,11 @@ public class PetCore extends JavaPlugin {
     private InvLoaders invLoaders;
     private Config configuration;
     private Messages messages;
-    private PetTranslator translator;
     private Utilities utilities = null;
     private MySQL mySQL = null;
     private CMD_Pet cmd_pet;
     private LinkRetriever linkRetriever;
+    private TypeManager typeManager;
 
     private ISpawner spawner;
     private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
@@ -74,8 +74,8 @@ public class PetCore extends JavaPlugin {
             return;
         }
 
+        typeManager = new TypeManager(this);
         loadConfig();
-        PetType.initiate();
         createPluginInstances();
         saveResource("SimplePets-Info-App.txt", true);
         new VersionNMS().registerPets();
@@ -110,7 +110,7 @@ public class PetCore extends JavaPlugin {
         utilities = new Utilities();
         itemLoaders = new ItemLoaders();
         invLoaders = new InvLoaders();
-        cmd_pet = new CMD_Pet();
+        cmd_pet = new CMD_Pet(this);
         linkRetriever = new LinkRetriever();
     }
 
@@ -208,12 +208,10 @@ public class PetCore extends JavaPlugin {
         debug("Loading Messages.yml...");
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
-        debug("Loading PetTranslator.yml... (Longest Task)");
-        translator = new PetTranslator(this);
-        translator.loadDefaults();
     }
 
     public void onDisable() {
+        typeManager.unLoad();
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner.hasPet()) {
@@ -232,6 +230,10 @@ public class PetCore extends JavaPlugin {
             Thread.sleep(20L);
         } catch (InterruptedException ignored) {
         }
+    }
+
+    public TypeManager getTypeManager() {
+        return typeManager;
     }
 
     public void debug(String message) {
@@ -299,13 +301,9 @@ public class PetCore extends JavaPlugin {
 
     public Messages getMessages() {return this.messages;}
 
-    public PetTranslator getTranslator() {
-        return translator;
-    }
-
     public MySQL getMySQL() {return this.mySQL;}
 
-    public String getDefaultPetName(PetType petType, Player player) {
+    public String getDefaultPetName(PetDefault petType, Player player) {
         return translateName(petType.getDefaultName()).replace("%player%", player.getName());
     }
 
@@ -404,9 +402,7 @@ public class PetCore extends JavaPlugin {
 
     public static boolean hasPerm(Player p, String perm) {
         if (get().configuration.getBoolean("Needs-Permission")) {
-            if (!p.hasPermission(perm)) {
-                return false;
-            }
+            return p.hasPermission(perm);
         }
         return true;
     }
