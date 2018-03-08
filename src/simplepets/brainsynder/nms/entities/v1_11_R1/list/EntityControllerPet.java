@@ -13,7 +13,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         super.repeatTask();
         if (!this.isInvisible())
             this.setInvisible(true);
-        if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() == PetType.SHULKER));
+        if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() instanceof ShulkerDefault));
         Player p = getPet().getOwner();
         if (hasCustomName()) {
             setCustomNameVisible(false);

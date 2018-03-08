@@ -5,11 +5,11 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class Ocelot extends MenuItemAbstract {
 
-    public Ocelot(PetType type, IEntityPet entityPet) {
+    public Ocelot(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

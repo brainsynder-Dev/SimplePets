@@ -5,12 +5,12 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
 
 public class ShulkerColor extends MenuItemAbstract {
-    public ShulkerColor(PetType type, IEntityPet entityPet) {
+    public ShulkerColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

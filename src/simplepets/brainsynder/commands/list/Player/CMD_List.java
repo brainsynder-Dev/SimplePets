@@ -4,11 +4,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import simple.brainsynder.nms.ITellraw;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandPermission;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.TypeManager;
 
 @CommandName(name = "list")
 @CommandPermission(permission = "list")
@@ -16,9 +18,10 @@ import simplepets.brainsynder.pet.PetType;
 public class CMD_List extends PetCommand<Player> {
     @Override
     public void onCommand(Player p, String[] args) {
-        ITellraw tellraw = Reflection.getTellraw("§ePet list §6(§7" + PetType.values().length + "§6)§e: ");
+        TypeManager manager = PetCore.get().getTypeManager();
+        ITellraw tellraw = Reflection.getTellraw("§ePet list §6(§7" + manager.getTypes().size() + "§6)§e: ");
         int i = 1;
-        for (PetType type : PetType.values()) {
+        for (PetDefault type : manager.getTypes()) {
             tellraw.then(type.getConfigName());
             if (type.isSupported()) {
                 tellraw.color(ChatColor.GRAY);
@@ -26,7 +29,7 @@ public class CMD_List extends PetCommand<Player> {
                 tellraw.color(ChatColor.RED);
                 tellraw.tooltip("§cPet is not supported", "§cin your current server version");
             }
-            if ((PetType.values().length) != i) {
+            if ((manager.getTypes().size()) != i) {
                 tellraw.then(", ");
                 tellraw.color(ChatColor.YELLOW);
             }

@@ -7,7 +7,8 @@ import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.TypeManager;
 
 @CommandName(name = "summon")
 @CommandUsage(usage = "<pet> [player]")
@@ -18,7 +19,8 @@ public class CMD_Summon extends PetCommand<Player> {
         if (args.length == 0) {
             sendUsage(p);
         } else {
-            PetType type = PetType.getByName(args[0]);
+            TypeManager manager = PetCore.get().getTypeManager();
+            PetDefault type = manager.getItem(args[0]);
             if (type == null) {
                 p.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));
                 return;
@@ -36,7 +38,7 @@ public class CMD_Summon extends PetCommand<Player> {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
                 }
-                p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getNoColorName()));
+                p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
                 type.setPet(p);
             } else {
                 if (!p.hasPermission("Pet.commands.summon.other")) {
@@ -50,7 +52,7 @@ public class CMD_Summon extends PetCommand<Player> {
                 }
                 if (tp.getName().equals(p.getName())) {
                     type.setPet(p);
-                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getNoColorName()));
+                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
                     return;
                 }
                 if (!type.hasPermission(tp)) {
@@ -58,10 +60,10 @@ public class CMD_Summon extends PetCommand<Player> {
                     return;
                 }
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Sender", true)
-                        .replace("%pet%", type.getNoColorName())
+                        .replace("%pet%", type.getDisplayName())
                         .replace("%player%", tp.getName()));
                 tp.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Other", true)
-                        .replace("%pet%", type.getNoColorName())
+                        .replace("%pet%", type.getDisplayName())
                         .replace("%player%", p.getName()));
                 type.setPet(tp);
             }

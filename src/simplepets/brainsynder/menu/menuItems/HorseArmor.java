@@ -5,11 +5,11 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 
 public class HorseArmor extends MenuItemAbstract {
-    public HorseArmor(PetType type, IEntityPet entityPet) {
+    public HorseArmor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

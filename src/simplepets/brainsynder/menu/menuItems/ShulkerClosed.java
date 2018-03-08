@@ -4,13 +4,13 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
 
 public class ShulkerClosed extends MenuItemAbstract {
     private ItemMaker item = new ItemMaker(MaterialWrapper.SHULKER_SHELL.toMaterial());
 
-    public ShulkerClosed(PetType type, IEntityPet entityPet) {
+    public ShulkerClosed(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

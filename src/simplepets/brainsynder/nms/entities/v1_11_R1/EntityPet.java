@@ -23,7 +23,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     protected FieldAccessor<Boolean> fieldAccessor;
     private IPet pet;
-    private double upSpeed, floatSpeed, walkSpeed, rideSpeed;
+    private double walkSpeed, rideSpeed;
     private boolean floatDown;
 
     public EntityPet(World world, IPet pet) {
@@ -36,11 +36,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(20.0D);
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
-        if (pet.getPetType().canFlyDefault()) {
-            floatDown = PetCore.get().getTranslator().getBoolean(pet.getPetType(), "Float-Down");
-            upSpeed = PetCore.get().getTranslator().getDouble(pet.getPetType(), "Float-Down");
-            floatSpeed = PetCore.get().getTranslator().getDouble(pet.getPetType(), "Up-Speed");
-        }
+        floatDown = pet.getPetType().canFloat();
     }
 
     public EntityPet(World world) {
@@ -50,13 +46,13 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
-        object.setString("PetType", pet.getPetType().name());
+        object.setString("PetType", pet.getPetType().getConfigName());
         return object;
     }
 
     @Override
     public EntityWrapper getEntityType() {
-        return pet.getPetType().getType();
+        return pet.getPetType().getEntityType();
     }
 
     @Override
@@ -137,7 +133,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             if (pet.isVehicle()) {
                 if (floatDown) {
                     if (!this.onGround && this.motY < 0.0D) {
-                        this.motY *= floatSpeed;
+                        this.motY *= 0.4;
                     }
                 }
             }

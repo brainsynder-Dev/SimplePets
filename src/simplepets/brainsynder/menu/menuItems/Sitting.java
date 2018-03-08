@@ -5,12 +5,12 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ITameable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class Sitting extends MenuItemAbstract {
     private ItemMaker item = new ItemMaker(Material.WOOD_STAIRS);
 
-    public Sitting(PetType type, IEntityPet entityPet) {
+    public Sitting(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

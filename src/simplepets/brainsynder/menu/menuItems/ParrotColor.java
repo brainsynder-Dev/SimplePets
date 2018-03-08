@@ -5,12 +5,12 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 public class ParrotColor extends MenuItemAbstract {
 
-    public ParrotColor(PetType type, IEntityPet entityPet) {
+    public ParrotColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

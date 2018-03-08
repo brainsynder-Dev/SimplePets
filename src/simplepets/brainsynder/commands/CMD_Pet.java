@@ -8,7 +8,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.annotations.*;
 import simplepets.brainsynder.commands.list.Console.*;
 import simplepets.brainsynder.commands.list.Player.*;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
@@ -16,8 +16,10 @@ import java.util.Collections;
 
 public class CMD_Pet implements CommandExecutor {
     public ArrayList<PetCommand> commands;
+    private PetCore plugin;
 
-    public CMD_Pet() {
+    public CMD_Pet(PetCore core) {
+        plugin = core;
         commands = new ArrayList<>();
         commands.add(new Console_Help());
         commands.add(new Console_Remove());
@@ -37,7 +39,7 @@ public class CMD_Pet implements CommandExecutor {
         commands.add(new CMD_Name());
         commands.add(new CMD_Modify());
         commands.add(new CMD_Info());
-        if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable")) commands.add(new CMD_Inv());
+        if (core.getConfiguration().getBoolean("PetItemStorage.Enable")) commands.add(new CMD_Inv());
     }
 
     @Override
@@ -112,7 +114,7 @@ public class CMD_Pet implements CommandExecutor {
                     }
 
                     if (base == null) {
-                        PetType type = PetType.getByName(args[0]);
+                        PetDefault type = plugin.getTypeManager().getItem(args[0]);
                         if (type == null) {
                             p.sendMessage(PetCore.get().getMessages().getString("Unknown-commands", true));
                             return true;

@@ -49,7 +49,7 @@ public class SelectionListener implements Listener {
                     Bukkit.getServer().getPluginManager().callEvent(event);
                     if (event.isCancelled()) return;
                     p.closeInventory();
-                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getType().getNoColorName()));
+                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getType().getDisplayName()));
                     new BukkitRunnable() {
                         @Override
                         public void run() {

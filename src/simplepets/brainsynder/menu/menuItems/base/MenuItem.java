@@ -4,14 +4,14 @@ import org.bukkit.entity.Player;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 public abstract class MenuItem {
     protected IEntityPet entityPet;
-    protected PetType type;
+    protected PetDefault type;
 
-    MenuItem(PetType type, IEntityPet entityPet) {
+    MenuItem(PetDefault type, IEntityPet entityPet) {
         this.entityPet = entityPet;
         this.type = type;
     }

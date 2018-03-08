@@ -5,11 +5,11 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.HorseColorType;
 
 public class HorseColor extends MenuItemAbstract {
-    public HorseColor(PetType type, IEntityPet entityPet) {
+    public HorseColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

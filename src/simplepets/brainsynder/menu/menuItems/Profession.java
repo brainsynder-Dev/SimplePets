@@ -5,11 +5,11 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 public class Profession extends MenuItemAbstract {
-    public Profession(PetType type, IEntityPet entityPet) {
+    public Profession(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

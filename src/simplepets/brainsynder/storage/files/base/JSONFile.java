@@ -10,10 +10,11 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.text.Collator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 public abstract class JSONFile {
     private final Charset ENCODE = Charsets.UTF_8;
@@ -87,7 +88,7 @@ public abstract class JSONFile {
      */
     public boolean save() {
         try {
-            LinkedHashMap<String, Object> toSave = new LinkedHashMap<>();
+            TreeMap<String, Object> toSave = new TreeMap<>(Collator.getInstance());
 
             for (Map.Entry<String, Object> stringObjectEntry : defaults.entrySet()) {
                 Object o = stringObjectEntry.getValue();
@@ -97,6 +98,8 @@ public abstract class JSONFile {
                     toSave.put(stringObjectEntry.getKey(), getInteger(stringObjectEntry.getKey()));
                 } else if (o instanceof Double) {
                     toSave.put(stringObjectEntry.getKey(), getDouble(stringObjectEntry.getKey()));
+                } else if (o instanceof Boolean) {
+                    toSave.put(stringObjectEntry.getKey(), getBoolean(stringObjectEntry.getKey()));
                 } else if (o instanceof JSONArray) {
                     toSave.put(stringObjectEntry.getKey(), getArray(stringObjectEntry.getKey()));
                 } else if (o instanceof JSONObject) {

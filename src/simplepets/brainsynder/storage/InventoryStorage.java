@@ -28,9 +28,11 @@ public class InventoryStorage implements ConfigurationSerializable {
         } else {
             inventory = Bukkit.createInventory(null, (int) config.get("size"), (String) config.get("title"));
             Map<String, Object> items = ((MemorySection) config.get("items")).getValues(false);
-            for (String slot : items.keySet()) {
-                ItemStack item = (ItemStack) items.get(slot);
-                inventory.setItem(Integer.parseInt(slot), item);
+            if (!items.isEmpty()) {
+                for (String slot : items.keySet()) {
+                    ItemStack item = (ItemStack) items.get(slot);
+                    inventory.setItem(Integer.parseInt(slot), item);
+                }
             }
         }
     }
@@ -42,9 +44,11 @@ public class InventoryStorage implements ConfigurationSerializable {
             inventory = Bukkit.createInventory(holder, Integer.parseInt(String.valueOf(config.get("size"))), String.valueOf(config.get("title")));
             if (config.containsKey("items")) {
                 Map<String, Object> items = (Map<String, Object>) config.get("items");
-                for (String slot : items.keySet()) {
-                    ItemStack item = (ItemStack) items.get(slot);
-                    inventory.setItem(Integer.parseInt(slot), item);
+                if (!items.isEmpty()) {
+                    for (String slot : items.keySet()) {
+                        ItemStack item = (ItemStack) items.get(slot);
+                        inventory.setItem(Integer.parseInt(slot), item);
+                    }
                 }
             }
         }
@@ -100,15 +104,17 @@ public class InventoryStorage implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>();
         Map<String, Object> items = new HashMap();
         map.put("title", json.get("title"));
-        map.put("size", json.get("size"));
-        JSONArray array = (JSONArray) json.get("items");
-        if (!array.isEmpty()) {
-            for (Object obj : array) {
-                JSONObject inner = (JSONObject) obj;
-                items.put(String.valueOf(inner.get("slot")), PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(String.valueOf(inner.get("stack")))));
+        map.put("size", json.getOrDefault("size", 27));
+        if (json.containsKey("items")) {
+            JSONArray array = (JSONArray) json.get("items");
+            if (!array.isEmpty()) {
+                for (Object obj : array) {
+                    JSONObject inner = (JSONObject) obj;
+                    items.put(String.valueOf(inner.get("slot")), PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(String.valueOf(inner.get("stack")))));
+                }
             }
-            map.put("items", items);
         }
+        map.put("items", items);
         return deserialize(holder, map);
     }
 

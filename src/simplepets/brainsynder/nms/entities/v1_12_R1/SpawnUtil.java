@@ -15,7 +15,8 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityArmorStand
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityGhostStandPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.types.ArmorStandDefault;
+import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
 
@@ -35,7 +36,7 @@ public class SpawnUtil implements ISpawner {
 
             mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
             if (customEntity instanceof IEntityControllerPet) {
-                if (pet.getPetType() == PetType.ARMOR_STAND) {
+                if (pet.getPetType() instanceof ArmorStandDefault) {
                     ArmorStand stand = EntityArmorStandPet.spawn(l, ((EntityControllerPet) customEntity));
                     stand.setGravity(false);
                     stand.setArms(true);
@@ -45,7 +46,7 @@ public class SpawnUtil implements ISpawner {
                     stand.setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                     stand.setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                     ((IEntityControllerPet) customEntity).setDisplayEntity(stand);
-                } else if (pet.getPetType() == PetType.SHULKER) {
+                } else if (pet.getPetType() instanceof ShulkerDefault) {
                     ArmorStand stand = EntityGhostStandPet.spawn(l, pet);
                     stand.setGravity(false);
                     stand.setCollidable(false);

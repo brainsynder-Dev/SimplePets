@@ -6,12 +6,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityMagmaCubePet;
 import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class Size2 extends MenuItemAbstract {
     private ItemMaker item = new ItemMaker(Material.SLIME_BLOCK);
 
-    public Size2(PetType type, IEntityPet entityPet) {
+    public Size2(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

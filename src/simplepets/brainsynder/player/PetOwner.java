@@ -22,7 +22,7 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -262,7 +262,7 @@ public class PetOwner {
         if (!hasPetToRespawn()) return;
         if (!petToRespawn.hasKey("PetType")) return;
 
-        PetType type = PetType.getByName(petToRespawn.getString("PetType"));
+        PetDefault type = PetCore.get().getTypeManager().getItem(petToRespawn.getString("PetType"));
         type.setPet(player);
 
         new BukkitRunnable() {

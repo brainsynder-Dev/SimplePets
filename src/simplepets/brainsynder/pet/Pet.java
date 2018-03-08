@@ -32,17 +32,16 @@ import java.util.UUID;
 public class Pet implements IPet {
     private IEntityPet ent;
     private Player owner;
-    private PetType type;
+    private PetDefault type;
     private boolean isHidden = false;
     private boolean isHat = false;
     private IStorage<MenuItem> items;
     private boolean vehicle;
     private PetCore instance;
 
-    public Pet(UUID player, PetType type, PetCore instance) {
-        PetCore core = PetCore.get();
+    public Pet(UUID player, PetDefault type, PetCore core) {
         this.type = type;
-        this.instance = instance;
+        this.instance = core;
         if (player == null) {
             return;
         }
@@ -96,12 +95,12 @@ public class Pet implements IPet {
         this.items = items;
         petOwner.setPet(this);
 
-        List<String> commands = core.getTranslator().getStringList(getPetType().getConfigName() + ".On-Summon");
+        List<String> commands = type.getCommands();
         if (!commands.isEmpty()) {
             commands.forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command
                     .replace("{player}", getOwner().getName())
                     .replace("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
-                    .replace("{type}", getPetType().name())
+                    .replace("{type}", getPetType().getConfigName())
             ));
         }
     }
@@ -111,7 +110,7 @@ public class Pet implements IPet {
             IEntityPet entity = ent;
             if (ent instanceof IEntityControllerPet)
                 entity = ((IEntityControllerPet) ent).getVisibleEntity();
-            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetType.class, IEntityPet.class), type, entity);
+            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetDefault.class, IEntityPet.class), type, entity);
         } catch (Exception e) {
             return null;
         }
@@ -218,12 +217,12 @@ public class Pet implements IPet {
         }
     }
 
-    public PetType getType() {
+    public PetDefault getType() {
         return type;
     }
 
     public EntityWrapper getEntityType() {
-        return type.getType();
+        return type.getEntityType();
     }
 
     public IEntityPet getEntity() {
@@ -252,7 +251,7 @@ public class Pet implements IPet {
     }
 
     @Override
-    public PetType getPetType() {
+    public PetDefault getPetType() {
         return type;
     }
 

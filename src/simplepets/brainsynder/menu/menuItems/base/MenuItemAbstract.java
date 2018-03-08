@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems.base;
 
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public abstract class MenuItemAbstract extends MenuItem {
 
-    public MenuItemAbstract(PetType type, IEntityPet entityPet) {
+    public MenuItemAbstract(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

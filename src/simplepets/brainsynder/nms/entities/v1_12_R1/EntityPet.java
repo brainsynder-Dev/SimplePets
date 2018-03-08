@@ -68,7 +68,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
         autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
-        floatDown = PetCore.get().getTranslator().getBoolean(pet.getPetType(), "Float-Down");
+        floatDown = pet.getPetType().canFloat();
     }
 
     public EntityPet(World world) {
@@ -79,7 +79,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
-        object.setString("PetType", pet.getPetType().name());
+        object.setString("PetType", pet.getPetType().getConfigName());
         PetOwner owner = PetOwner.getPetOwner(getOwner());
         if (owner.getPetName() != null)
             object.setString("name", owner.getPetName().replace('§', '&'));
@@ -89,7 +89,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
 
     @Override
     public EntityWrapper getEntityType() {
-        return pet.getPetType().getType();
+        return pet.getPetType().getEntityType();
     }
 
     @Override
@@ -316,7 +316,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     protected SoundEffect F() {
         if (pet == null) return null;
         if (silent) return null;
-        SoundMaker sound = pet.getPetType().getAmbientSound();
+        SoundMaker sound = pet.getPetType().getSound();
         if (sound != null)
             sound.playSound(getEntity());
         return null;

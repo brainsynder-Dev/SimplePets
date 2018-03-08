@@ -6,12 +6,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class Powered extends MenuItemAbstract {
     private ItemMaker item = new ItemMaker(Material.SULPHUR);
 
-    public Powered(PetType type, IEntityPet entityPet) {
+    public Powered(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

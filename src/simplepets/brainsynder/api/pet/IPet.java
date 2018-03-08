@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public interface IPet {
@@ -12,7 +12,7 @@ public interface IPet {
 
     void removePet(boolean var1);
 
-    PetType getPetType();
+    PetDefault getPetType();
 
     EntityWrapper getEntityType();
 

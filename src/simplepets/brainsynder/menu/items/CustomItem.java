@@ -29,7 +29,7 @@ public class CustomItem extends Item {
             Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.valueOf(o)
                     .replace("{location}", loc)
                     .replace("{name}", owner.getPlayer().getName())
-                    .replace("{type}", owner.getPet().getPetType().name())
+                    .replace("{type}", owner.getPet().getPetType().getConfigName())
             );
         }
     }

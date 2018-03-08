@@ -237,7 +237,13 @@ public class ItemBuilder {
 
         if ((is.getType() == Material.SKULL_ITEM) && (is.getDurability() == 3)) {
             SkullMeta meta = (SkullMeta) im;
-            im = applyTextureToMeta(meta, createProfile(textureURL));
+
+            if (textureURL.length() > 17) {
+                im = applyTextureToMeta(meta, createProfile(textureURL));
+            }else{
+                meta.setOwner(textureURL);
+                im = meta;
+            }
         }
         return this;
     }
@@ -266,10 +272,12 @@ public class ItemBuilder {
                     SkullMeta mainSkullMeta = (SkullMeta) mainMeta;
                     SkullMeta checkSkullMeta = (SkullMeta) checkMeta;
 
-                    if (mainSkullMeta.hasOwner() && checkSkullMeta.hasOwner()) {
-                        values.add(mainSkullMeta.getOwner().equals(checkSkullMeta.getOwner()));
-                    }
-                    values.add(getTexture(getGameProfile(mainSkullMeta)).equals(getTexture(getGameProfile(checkSkullMeta))));
+                    try { // This is just to ignore any NPE errors that might happen if using regular skulls
+                        if (mainSkullMeta.hasOwner() && checkSkullMeta.hasOwner()) {
+                            values.add(mainSkullMeta.getOwner().equals(checkSkullMeta.getOwner()));
+                        }
+                        values.add(getTexture(getGameProfile(mainSkullMeta)).equals(getTexture(getGameProfile(checkSkullMeta))));
+                    }catch (Exception ignored) {}
                 }
 
                 if (!values.isEmpty()) return !values.contains(false);

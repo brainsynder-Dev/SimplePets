@@ -6,7 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
-import simple.brainsynder.api.ItemMaker;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
@@ -14,10 +13,11 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetInventorySelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.links.IVaultLink;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.storage.files.EconomyFile;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -70,19 +70,19 @@ public class PetEventListeners implements Listener {
         JSONArray petArray = petOwner.getOwnedPets();
         while (types.hasNext()) {
             PetTypeStorage storage = types.next();
-            PetType type = storage.getType();
-            ItemMaker maker = new ItemMaker(storage.getItem());
+            PetDefault type = storage.getType();
+            ItemBuilder maker = ItemBuilder.fromJSON(storage.getType().getItemBuilder().toJSON());
             String price = ((economyFile.getPrice(type) == -1) ? economyFile.getString("Price-Free") : String.valueOf(economyFile.getPrice(type)));
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
                 for (String line : economyFile.getStringList("Pay-Per-Use.Lore-Lines"))
-                    maker.addLoreLine(line.replace("%cost%", price));
+                    maker.addLore(line.replace("%cost%", price));
             } else {
                 boolean contains = petArray.contains(type.getConfigName());
                 for (String line : economyFile.getStringList("Lore-Lines"))
-                    maker.addLoreLine(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));
+                    maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));
             }
-            items.add(maker.create());
-            storage.setItem(maker.create());
+            items.add(maker.build());
+            storage.setItem(maker);
 
         }
         event.setItems(items);

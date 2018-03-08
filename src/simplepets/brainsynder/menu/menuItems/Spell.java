@@ -6,12 +6,12 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IEntityWizard;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public class Spell extends MenuItemAbstract {
 
-    public Spell(PetType type, IEntityPet entityPet) {
+    public Spell(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

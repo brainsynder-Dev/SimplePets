@@ -14,7 +14,7 @@ import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.list.*;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetMap;
 import simplepets.brainsynder.storage.PetTypeStorage;
@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.*;
 
 public class SelectionMenu extends CustomInventory {
-    private List<PetType> availableTypes;
+    private List<PetDefault> availableTypes;
     private Map<String, ObjectPager<PetTypeStorage>> pagerMap;
     private PetMap<String, IStorage<PetTypeStorage>> petMap;
 
@@ -69,7 +69,7 @@ public class SelectionMenu extends CustomInventory {
 
         defaults.put("slots", array);
 
-        for (PetType type : PetType.values()) {
+        for (PetDefault type : PetCore.get().getTypeManager().getTypes()) {
             if (type.isSupported() && type.isEnabled()) {
                 availableTypes.add(type);
             }
@@ -99,7 +99,7 @@ public class SelectionMenu extends CustomInventory {
         }
 
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
-        for (PetType type : availableTypes) {
+        for (PetDefault type : availableTypes) {
             if (type.hasPermission(owner.getPlayer())) {
                 petTypes.add(new PetTypeStorage(type));
             }
@@ -141,7 +141,7 @@ public class SelectionMenu extends CustomInventory {
         while (types.hasNext()) {
             inv.addItem(types.next());
         }
-        petMap.put(owner.getPlayer().getName(), event.getShownPetTypes());
+        petMap.put(owner.getPlayer().getName(), petTypes);
         owner.getPlayer().openInventory(inv);
     }
 

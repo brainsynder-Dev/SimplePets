@@ -6,12 +6,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IHorseAbstract;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class Saddle extends MenuItemAbstract {
     private ItemMaker item = new ItemMaker(Material.SADDLE);
 
-    public Saddle(PetType type, IEntityPet entityPet) {
+    public Saddle(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

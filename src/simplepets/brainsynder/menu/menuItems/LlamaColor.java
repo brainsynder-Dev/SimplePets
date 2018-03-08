@@ -5,10 +5,10 @@ import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.PetDefault;
 
 public class LlamaColor extends MenuItemAbstract {
-    public LlamaColor(PetType type, IEntityPet entityPet) {
+    public LlamaColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 
