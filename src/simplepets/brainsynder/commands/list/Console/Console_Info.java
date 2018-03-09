@@ -1,5 +1,6 @@
 package simplepets.brainsynder.commands.list.Console;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
 import simplepets.brainsynder.commands.annotations.Console;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.Commands;
 
 import java.util.Arrays;
 
@@ -31,16 +33,27 @@ public class Console_Info extends PetCommand {
                 return;
             }
             PetOwner owner = PetOwner.getPetOwner(target);
-
+            Commands commands = PetCore.get().getCommands();
             if (!owner.hasPet()) {
-                sender.sendMessage("&eSimplePets &6>> &7%player% does not have a pet.".replace('&', '§').replace("%player%", args[0]));
+                sender.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;
             }
 
-            sender.sendMessage("§eSimplePets §6>> §7" + target.getName() + "'s Pet Data:");
+            sender.sendMessage(commands.getString("Info.Pet-Data-Header")
+                    .replace("%player%", args[0])
+                    .replace("{prefix}", commands.getString("Prefix"))
+                    .replace('&', '§'));
             IEntityPet entity = owner.getPet().getVisableEntity();
             StorageTagCompound compound = entity.asCompound();
-            compound.getKeySet().forEach(key -> sender.sendMessage("§7- §e" + key + "§6: §y" + fetchValue(compound.getTag(key))));
+            compound.getKeySet().forEach(key -> {
+                if (!commands.getStringList("Info.Excluded-Data-Values").contains(key)) {
+                    sender.sendMessage(commands.getString("Info.Pet-Data-Values")
+                            .replace("%key%", WordUtils.capitalize(key.toLowerCase()))
+                            .replace("%value%", WordUtils.capitalize(fetchValue(compound.getTag(key)).toLowerCase()))
+                            .replace("{prefix}", commands.getString("Prefix"))
+                            .replace('&', '§'));
+                }
+            });
         }
     }
 

@@ -32,7 +32,7 @@ public class Console_Modify extends PetCommand {
             PetOwner owner = PetOwner.getPetOwner(target);
 
             if (!owner.hasPet()) {
-                sender.sendMessage("&eSimplePets &6>> &7%player% does not have a pet.".replace('&', '§').replace("%player%", args[0]));
+                sender.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;
             }
 
@@ -44,7 +44,9 @@ public class Console_Modify extends PetCommand {
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {
-                    sender.sendMessage("SimplePets >> Invalid JSON text has been entered");
+                    sender.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON")
+                    .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
+                            .replace('&', '§'));
                     e.printStackTrace();
                     return;
                 }

@@ -7,6 +7,7 @@ import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.CommandUsage;
 import simplepets.brainsynder.commands.annotations.Console;
+import simplepets.brainsynder.storage.files.Commands;
 
 @Console
 @CommandName(name = "help")
@@ -20,13 +21,20 @@ public class Console_Help extends PetCommand {
                 name = gcmd.getClass().getAnnotation(CommandName.class).name();
             }
             if (gcmd.getClass().isAnnotationPresent(CommandUsage.class)) {
-                usage = ' ' + gcmd.getClass().getAnnotation(CommandUsage.class).usage();
+                usage = gcmd.getClass().getAnnotation(CommandUsage.class).usage();
             }
             if (gcmd.getClass().isAnnotationPresent(CommandDescription.class)) {
-                description = " - " + gcmd.getClass().getAnnotation(CommandDescription.class).description();
+                description = gcmd.getClass().getAnnotation(CommandDescription.class).description();
             }
+            Commands commands = PetCore.get().getCommands();
             if (gcmd.getClass().isAnnotationPresent(Console.class)) {
-                sender.sendMessage("- pet " + name + usage + description);
+                sender.sendMessage(commands.getString("Help.Command-Display-Console")
+                        .replace("{prefix}", commands.getString("Prefix"))
+                        .replace("%name%", name)
+                        .replace("%usage%", usage)
+                        .replace("%description%", description)
+                        .replace('&', '§')
+                .replace("  ", " "));
             }
         }
     }

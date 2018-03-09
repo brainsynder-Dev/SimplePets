@@ -31,7 +31,7 @@ public class CMD_Modify extends PetCommand<Player> {
             PetOwner owner = PetOwner.getPetOwner(target);
 
             if (!owner.hasPet()) {
-                p.sendMessage("&eSimplePets &6>> &7%player% does not have a pet.".replace('&', '§').replace("%player%", args[0]));
+                p.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;
             }
 
@@ -43,13 +43,21 @@ public class CMD_Modify extends PetCommand<Player> {
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {
-                    p.sendMessage("§eSimplePets §6>> §cInvalid JSON text has been entered");
-                    p.sendMessage("§eSimplePets §6>> §cError: " + e.getMessage());
+                    p.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON")
+                            .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
+                            .replace('&', '§'));
+                    p.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON-Error-Player")
+                            .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
+                            .replace("%error%", e.getMessage())
+                            .replace('&', '§'));
                     return;
                 }
 
                 owner.getPet().getVisableEntity().applyCompound(compound);
-                p.sendMessage("§eSimplePets §6>> §7You have changed §c" + target.getName() + "'s §7Pet Data.");
+                p.sendMessage(PetCore.get().getCommands().getString("Modify.Pet-Modified")
+                        .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
+                        .replace("%player%", target.getName())
+                        .replace('&', '§'));
             }
         }
     }
