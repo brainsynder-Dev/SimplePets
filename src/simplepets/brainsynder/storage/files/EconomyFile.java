@@ -21,11 +21,7 @@ public class EconomyFile extends FileMaker {
         setDefault("Pay-Per-Use.Lore-Lines", Collections.singletonList("&6Price: &e%cost%"));
         setDefault("Lore-Lines", Arrays.asList("&6Price: &e%cost%", "&6Purchased: &e%contains%"));
 
-        System.out.println("Types: "+PetCore.get().getTypeManager().getTypes());
         for (PetDefault type : PetCore.get().getTypeManager().getTypes()) {
-            System.out.println("  - Type Not Null:"+(type != null));
-            System.out.println("    ~ Type Class:"+type.getClass().getSimpleName());
-            System.out.println("    ~ Type CFG Name:"+type.getConfigName());
             setDefault("Pet." + type.getConfigName() + ".Price", 2000.0);
         }
     }
