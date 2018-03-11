@@ -38,14 +38,18 @@ public class Utilities {
         try {
             entity.eject();
             if (entity instanceof Player) {
-                FieldAccessor<Integer> field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
-                field.set(Reflection.getHandle(passenger), 0);
+                resetRideCooldown (passenger);
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
             PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
             e.printStackTrace();
         }
+    }
+
+    public void resetRideCooldown (Entity entity) {
+        FieldAccessor<Integer> field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
+        field.set(Reflection.getHandle(entity), 0);
     }
 
     public void sendMountPacket(Player player, Entity entity) {

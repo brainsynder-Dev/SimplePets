@@ -289,18 +289,23 @@ public class Pet implements IPet {
             setVehicle(false);
             delay = 3;
         }
+        IEntityPet ent = this.ent;
 
+        if (ent instanceof IEntityControllerPet) {
+            ent = ((IEntityControllerPet)ent).getVisibleEntity();
+        }
 
         if (type.canHat(owner) && value && (isHat () != value)) {
             PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.SET);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) return;
 
+            IEntityPet finalEnt = ent;
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     instance.getUtilities().clearPathfinders(owner);
-                    instance.getUtilities().setPassenger(owner, ent.getEntity());
+                    instance.getUtilities().setPassenger(owner, finalEnt.getEntity());
                 }
             }.runTaskLater(PetCore.get(), delay);
         } else {
@@ -311,7 +316,19 @@ public class Pet implements IPet {
                 if (event.isCancelled()) return;
 
                 instance.getUtilities().handlePathfinders(owner, getPet(), type.getSpeed());
-                instance.getUtilities().removePassenger(owner, ent.getEntity());
+                if (ent instanceof IEntityControllerPet) {
+                    IEntityControllerPet controller = ((IEntityControllerPet)ent);
+                    if (controller.getDisplayRider() != null) {
+                        getOwner().eject();
+                        instance.getUtilities().sendMountPacket(getOwner(), controller.getDisplayRider());
+                        instance.getUtilities().resetRideCooldown(controller.getDisplayRider());
+                        controller.getDisplayEntity().setPassenger(controller.getDisplayRider());
+                    }else{
+                        instance.getUtilities().removePassenger(owner, ent.getEntity());
+                    }
+                }else{
+                    instance.getUtilities().removePassenger(owner, ent.getEntity());
+                }
             }
         }
 

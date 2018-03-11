@@ -21,7 +21,7 @@ import java.util.List;
 
 public class EntityControllerPet extends EntityZombiePet implements IEntityControllerPet {
     private List<Entity> entities = new ArrayList<>();
-    private Entity displayEntity;
+    private Entity displayEntity, displayRider = null;
     private Location previus;
     private boolean moving = false;
 
@@ -97,12 +97,19 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
+    public Entity getDisplayRider() {
+        return displayRider;
+    }
+
+    @Override
     public void setDisplayEntity(Entity entity) {
         if (!entities.contains(entity))
             entities.add(entity);
-        if (entity.getPassenger() != null)
+        if (entity.getPassenger() != null) {
+            displayRider = entity.getPassenger();
             if (!entities.contains(entity.getPassenger()))
                 entities.add(entity.getPassenger());
+        }
 
         displayEntity = entity;
         for (Entity e : entities) {
