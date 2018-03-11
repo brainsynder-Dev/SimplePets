@@ -25,6 +25,7 @@ import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.Commands;
 import simplepets.brainsynder.storage.files.Config;
 import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.storage.files.PlayerStorage;
@@ -56,6 +57,7 @@ public class PetCore extends JavaPlugin {
     private CMD_Pet cmd_pet;
     private LinkRetriever linkRetriever;
     private TypeManager typeManager;
+    private Commands commands;
 
     private ISpawner spawner;
     private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
@@ -208,6 +210,9 @@ public class PetCore extends JavaPlugin {
         debug("Loading Messages.yml...");
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
+        debug("Loading Commands.yml...");
+        commands = new Commands(this, "Commands.yml");
+        commands.loadDefaults();
     }
 
     public void onDisable() {
@@ -302,6 +307,8 @@ public class PetCore extends JavaPlugin {
     public Messages getMessages() {return this.messages;}
 
     public MySQL getMySQL() {return this.mySQL;}
+
+    public Commands getCommands() {return commands;}
 
     public String getDefaultPetName(PetDefault petType, Player player) {
         return translateName(petType.getDefaultName()).replace("%player%", player.getName());

@@ -9,6 +9,7 @@ import simplepets.brainsynder.commands.annotations.CommandName;
 import simplepets.brainsynder.commands.annotations.Console;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.storage.files.Commands;
 
 @Console
 @CommandName(name = "list")
@@ -16,23 +17,28 @@ import simplepets.brainsynder.pet.TypeManager;
 public class Console_List extends PetCommand {
     @Override
     public void onCommand(CommandSender sender, String[] args) {
-        StringBuilder builder = new StringBuilder();
         TypeManager manager = PetCore.get().getTypeManager();
-        builder.append("§ePet list §6(§7").append(manager.getTypes().size()).append("§6)§e: ");
+        Commands commands = PetCore.get().getCommands();
+        String list = commands.getString("List.List-Display")
+                .replace("{prefix}", commands.getString("Prefix"))
+                .replace("%size%", String.valueOf(manager.getTypes().size()))
+                .replace('&', '§');
         int i = 1;
+        StringBuilder sb2 = new StringBuilder();
         for (PetDefault type : manager.getTypes()) {
-            builder.append(type.getConfigName());
+            sb2.append(type.getConfigName());
             if (type.isSupported()) {
-                builder.append(ChatColor.GRAY);
+                sb2.append(ChatColor.GRAY);
             } else {
-                builder.append(ChatColor.RED);
+                sb2.append(ChatColor.RED);
             }
             if ((manager.getTypes().size()) != i) {
-                builder.append(", ");
-                builder.append(ChatColor.YELLOW);
+                sb2.append(", ");
+                sb2.append(ChatColor.YELLOW);
             }
             i++;
         }
-        sender.sendMessage(builder.toString());
+        String list2 = sb2.toString();
+        sender.sendMessage(list.replace("%list%", list2));
     }
 }
