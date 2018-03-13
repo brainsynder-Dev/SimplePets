@@ -25,9 +25,7 @@ public class CMD_List extends PetCommand<Player> {
         TypeManager manager = PetCore.get().getTypeManager();
         Commands commands = PetCore.get().getCommands();
         String list = commands.getString("List.List-Display")
-                .replace("{prefix}", commands.getString("Prefix"))
-                .replace("%size%", String.valueOf(manager.getTypes().size()))
-                .replace('&', '§');
+                .replace("%size%", String.valueOf(manager.getTypes().size()));
         p.sendMessage(list.substring(0, list.lastIndexOf("%list%")));
         String list2 = list.substring(list.indexOf("%list%") + 6, list.length());
         int i = 1;

@@ -27,18 +27,14 @@ public class CMD_Inv extends PetCommand<Player> {
             } else {
                 if (!p.hasPermission("Pet.commands.inv.other")) {
                     if (!ItemStorageMenu.loadFromPlayer(p)) {
-                        p.sendMessage(commands.getString("Inv.No-Pet-Items")
-                                .replace("{prefix}", commands.getString("Prefix"))
-                                .replace('&', '§'));
+                        p.sendMessage(commands.getString("Inv.No-Pet-Items"));
                     }
                     return;
                 }
 
                 if (!ItemStorageMenu.loadFromName(p, args[0])) {
                     p.sendMessage(commands.getString("Inv.No-Pet-Items-Other")
-                            .replace("%player%", args[0])
-                            .replace("{prefix}", commands.getString("Prefix"))
-                            .replace('&', '§'));
+                            .replace("%player%", args[0]));
                 }
             }
         } else {

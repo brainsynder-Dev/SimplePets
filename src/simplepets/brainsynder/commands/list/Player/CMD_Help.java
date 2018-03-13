@@ -31,11 +31,9 @@ public class CMD_Help extends PetCommand<Player> {
                 }
                 Commands commands = PetCore.get().getCommands();
                 p.sendMessage(commands.getString("Help.Command-Display-Player")
-                .replace("{prefix}", commands.getString("Prefix"))
                 .replace("%name%", name)
                 .replace("%usage%", usage)
-                .replace("%description%", description)
-                        .replace('&', '§'));
+                .replace("%description%", description));
             }
         }
     }

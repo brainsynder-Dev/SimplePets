@@ -40,18 +40,14 @@ public class CMD_Info extends PetCommand<Player> {
             }
 
             p.sendMessage(commands.getString("Info.Pet-Data-Header")
-            .replace("%player%", args[0])
-            .replace("{prefix}", commands.getString("Prefix"))
-                    .replace('&', '§'));
+            .replace("%player%", args[0]));
             IEntityPet entity = owner.getPet().getVisableEntity();
             StorageTagCompound compound = entity.asCompound();
             compound.getKeySet().forEach(key -> {
                 if (!commands.getStringList("Info.Excluded-Data-Values").contains(key)) {
                     p.sendMessage(commands.getString("Info.Pet-Data-Values")
                     .replace("%key%", WordUtils.capitalize(key.toLowerCase()))
-                    .replace("%value%", WordUtils.capitalize(fetchValue(compound.getTag(key)).toLowerCase()))
-                    .replace("{prefix}", commands.getString("Prefix"))
-                            .replace('&', '§'));
+                    .replace("%value%", WordUtils.capitalize(fetchValue(compound.getTag(key)).toLowerCase())));
                 }
             });
         }

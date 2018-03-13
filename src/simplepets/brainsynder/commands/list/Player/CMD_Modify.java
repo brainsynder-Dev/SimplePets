@@ -43,21 +43,15 @@ public class CMD_Modify extends PetCommand<Player> {
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {
-                    p.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON")
-                            .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
-                            .replace('&', '§'));
+                    p.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON"));
                     p.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON-Error-Player")
-                            .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
-                            .replace("%error%", e.getMessage())
-                            .replace('&', '§'));
+                            .replace("%error%", e.getMessage()));
                     return;
                 }
 
                 owner.getPet().getVisableEntity().applyCompound(compound);
                 p.sendMessage(PetCore.get().getCommands().getString("Modify.Pet-Modified")
-                        .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
-                        .replace("%player%", target.getName())
-                        .replace('&', '§'));
+                        .replace("%player%", target.getName()));
             }
         }
     }
