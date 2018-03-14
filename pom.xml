@@ -171,7 +171,7 @@
             <artifactId>craftbukkit-1-12-2</artifactId>
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/craftbukkit-1.12.2-R0.1-SNAPSHOT-b1479.jar</systemPath>
+            <systemPath>${project.basedir}/libs/craftbukkit-1.12.2-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
