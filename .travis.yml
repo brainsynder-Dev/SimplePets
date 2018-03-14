@@ -10,6 +10,7 @@ notifications:
     on_start: always
 
 script:
+ - bash fetch_dependencies.sh
  - mvn package
 
 deploy:
