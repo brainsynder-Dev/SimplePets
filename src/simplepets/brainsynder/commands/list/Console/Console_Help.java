@@ -29,11 +29,9 @@ public class Console_Help extends PetCommand {
             Commands commands = PetCore.get().getCommands();
             if (gcmd.getClass().isAnnotationPresent(Console.class)) {
                 sender.sendMessage(commands.getString("Help.Command-Display-Console")
-                        .replace("{prefix}", commands.getString("Prefix"))
                         .replace("%name%", name)
                         .replace("%usage%", usage)
                         .replace("%description%", description)
-                        .replace('&', '§')
                 .replace("  ", " "));
             }
         }

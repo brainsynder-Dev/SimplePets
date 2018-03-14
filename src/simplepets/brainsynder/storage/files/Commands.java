@@ -31,4 +31,11 @@ public class Commands extends FileMaker {
         setDefault("Inv.No-Pet-Items", "{prefix} &7No items stored in your Pet Inventory.");
         setDefault("Inv.No-Pet-Items-Other", "{prefix} &7No items stored for %player%.");
     }
+
+    @Override
+    public String getString(String path) {
+        return super.getString(path)
+                .replace('&', '§')
+                .replace("{prefix}", super.getString("Prefix"));
+    }
 }

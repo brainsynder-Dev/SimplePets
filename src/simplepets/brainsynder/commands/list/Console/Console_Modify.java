@@ -44,9 +44,7 @@ public class Console_Modify extends PetCommand {
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {
-                    sender.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON")
-                    .replace("{prefix}", PetCore.get().getCommands().getString("Prefix"))
-                            .replace('&', '§'));
+                    sender.sendMessage(PetCore.get().getCommands().getString("Modify.Invalid-JSON"));
                     e.printStackTrace();
                     return;
                 }
