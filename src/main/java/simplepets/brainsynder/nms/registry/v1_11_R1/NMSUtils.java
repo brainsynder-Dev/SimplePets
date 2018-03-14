@@ -364,7 +364,7 @@ public class NMSUtils {
          */
         EXTREME_HILLS_EDGE(20),
         /**
-         * A very dense, but rather uncommon tropical biome. It features large jungle trees that can reach up to 31 blocks tall with 2×2 thick trunks.
+         * A very dense, but rather uncommon tropical biome. It features large jungle trees that can reach up to 31 blocks tall with 2x2 thick trunks.
          * Oak trees are also common. The landscape is lush green and quite hilly, with many small lakes of water often nestled into deep valleys,
          * sometimes above sea level. Leaves cover much of the forest floor—these "bush trees" have single-blocks of jungle wood for trunks,
          * surrounded by oak leaves. When inside a jungle, the sky will become noticeably lighter. Vines are found alongside most blocks and may cover
@@ -419,7 +419,7 @@ public class NMSUtils {
          */
         COLD_TAIGA_HILLS(31),
         /**
-         * Mega taiga is an uncommon biome composed of spruce trees, much like the standard taiga biome. However, some trees are 2×2 thick and very
+         * Mega taiga is an uncommon biome composed of spruce trees, much like the standard taiga biome. However, some trees are 2x2 thick and very
          * tall, not unlike large jungle trees. Moss stone boulders appear frequently, brown mushrooms are common and podzol can be found along the
          * forest floor. There are also patches of coarse dirt, which will not grow grass. Wolves may also spawn here, as they do in normal taiga
          * biomes.
@@ -464,7 +464,7 @@ public class NMSUtils {
          */
         MESA_PLATEAU(39),
         /**
-         * A completely empty biome that generates only a single structure: a 33×33 stone platform with a single block of cobblestone in the center.
+         * A completely empty biome that generates only a single structure: a 33x33 stone platform with a single block of cobblestone in the center.
          * No mobs (passive or hostile) can spawn without spawn eggs, monster spawners or commands. Can only be accessed through The Void superflat
          * preset.
          */
@@ -622,7 +622,7 @@ public class NMSUtils {
          */
         COLLECTION_SAVANNA(35, 36, 163, 164),
         /**
-         * ~lé sigh~ A Collection consisting of every single biome type in the game.
+         * A Collection consisting of every single biome type in the game.
          */
         COLLECTION_ALL(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 127, 129, 130, 131, 132, 133, 134, 140, 149, 151, 155, 156, 157, 158, 160, 161, 162, 163, 164, 165, 166, 167);
         private static final Biome[] ID_LOOKUP_TABLE = new Biome[168];
