@@ -22,7 +22,7 @@ public class MySQL {
 
         try {
             pool = new ConnectionPool(10, 10, source);
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
             System.out.println("Unable to initiate the ConnectionPool... Error:");
             e.printStackTrace();
         }

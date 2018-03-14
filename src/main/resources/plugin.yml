@@ -1,10 +1,10 @@
 name: SimplePets
 main: simplepets.brainsynder.PetCore
-version: 4.0
+version: ${project.version}
 depends: [SimpleAPI]
 softdepend: [WorldGuard, Vault]
 loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared]
-authors: [brainsynder]
+authors: [brainsynder, ThatsMusic99]
 commands:
     pet:
         description: Main SimplePets command
