@@ -1,6 +1,15 @@
+# Use openjdk8
 language: java
-jdk:
-  - oraclejdk8
+jdk: openjdk8
+
+# Skip pre-install phase to download craftbukkit jars
+install: false
+
+# Cache for faster build time
+cache:
+  directories:
+  - $HOME/.m2
+
 notifications:
   webhooks:
     urls:
