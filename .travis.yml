@@ -2,9 +2,6 @@
 language: java
 jdk: openjdk8
 
-# Skip pre-install phase to download craftbukkit jars
-install: false
-
 # Cache for faster build time
 cache:
   directories:
@@ -18,9 +15,9 @@ notifications:
     on_failure: always
     on_start: always
 
-script:
- - bash fetch_dependencies.sh
- - mvn package
+before_install: "bash fetch_dependencies.sh"
+
+script: "mvn -B package"
 
 deploy:
   provider: releases
