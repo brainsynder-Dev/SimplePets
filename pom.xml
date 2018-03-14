@@ -23,6 +23,43 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <appendAssemblyId>false</appendAssemblyId>
+                    <ignoreMissingDescriptor>true</ignoreMissingDescriptor>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-shade-p</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>make-shade-d</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.0.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>simplepets.brainsynder.app.PetApplication</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -89,7 +126,7 @@
             <artifactId>SimpleAPI</artifactId>
             <version>3.6</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/resources/SimpleAPI.jar</systemPath>
+            <systemPath>${project.basedir}/libs/SimpleAPI.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
