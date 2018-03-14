@@ -33,6 +33,7 @@ public class PetEventListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSelect(PetInventorySelectTypeEvent event) {
         if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
+            if (event.getPlayer().hasPermission("Pets.economy.bypass")) return;
             double price = economyFile.getPrice(event.getPetType());
             IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
             if (price == -1)
@@ -73,6 +74,8 @@ public class PetEventListeners implements Listener {
             PetDefault type = storage.getType();
             ItemBuilder maker = ItemBuilder.fromJSON(storage.getType().getItemBuilder().toJSON());
             String price = ((economyFile.getPrice(type) == -1) ? economyFile.getString("Price-Free") : String.valueOf(economyFile.getPrice(type)));
+
+            if (event.getPlayer().hasPermission("Pets.economy.bypass")) price = economyFile.getString("Price-Bypass");
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
                 for (String line : economyFile.getStringList("Pay-Per-Use.Lore-Lines"))
                     maker.addLore(line.replace("%cost%", price));
