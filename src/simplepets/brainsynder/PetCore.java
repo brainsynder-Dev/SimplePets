@@ -216,7 +216,9 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onDisable() {
-        typeManager.unLoad();
+        if (typeManager != null) {
+            typeManager.unLoad();
+        }
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner.hasPet()) {
