@@ -4,7 +4,7 @@ import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 
 public enum Errors {
-    NO_API("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin"),
+
     API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/",
             "Disabling SimplePets..."),
     NO_SPIGOT("Please ensure you are using a version of Spigot. Either PaperSpigot, TacoSpigot, Spigot, or any other Spigot Software",

@@ -67,7 +67,7 @@ public class PetCore extends JavaPlugin {
         instance = this;
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
-            Errors.NO_API.print();
+            System.out.println("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin");
             new MissingAPI(this).runTaskTimer(this, 0, 20 * 60 * 2);
             return;
         }
