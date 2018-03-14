@@ -13,7 +13,7 @@ Just a little notice I will be removing 1.8 -> 1.10 support due to it being a hu
 
 ## Files Used:
 - Spigot API (inside pom.xml)
-- SimpleAPI (v3.7) (resources Folder)
+- SimpleAPI (v3.7) (libs folder)
 - plotsquared-api:latest (inside pom.xml)
 - craftbukkit-1.8.8-R0.1-SNAPSHOT.jar
 - craftbukkit-1.9-R0.1-SNAPSHOT.jar
