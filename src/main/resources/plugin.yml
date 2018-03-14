@@ -1,4 +1,4 @@
-name: ${project.artifactId}
+name: SimplePets
 main: simplepets.brainsynder.PetCore
 version: ${project.version}
 depends: [SimpleAPI]
