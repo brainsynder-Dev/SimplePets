@@ -58,7 +58,7 @@ public class FileMaker {
     }
 
     public String getString(String tag, boolean color) {
-        return (color ? translate(getString(tag)) : getString(tag));
+        return (color ? translate(configuration.getString(tag)) : configuration.getString(tag));
     }
 
     public String getString(String tag) {
