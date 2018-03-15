@@ -12,7 +12,7 @@ public class Commands extends FileMaker {
     }
 
     public void loadDefaults() {
-        setDefault("Prefix", "&eSimplePets &6>>");
+        setDefault("prefix", "&eSimplePets &6>>");
         // Info command
         setDefault("Info.Pet-Data-Header", "{prefix} &7%player%'s Pet Data:");
         setDefault("Info.Pet-Data-Values", "&7- &e%key%&6: &r%value%");
@@ -34,8 +34,10 @@ public class Commands extends FileMaker {
 
     @Override
     public String getString(String path) {
-        return super.getString(path)
-                .replace('&', '§')
-                .replace("{prefix}", super.getString("Prefix"));
+        String value = super.getString(path, true);
+        if (!path.equals("prefix")) {
+            value = value.replace("{prefix}", super.getString("Prefix", true));
+        }
+        return value;
     }
 }

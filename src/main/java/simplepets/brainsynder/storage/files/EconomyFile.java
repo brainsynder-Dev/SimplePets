@@ -13,11 +13,12 @@ public class EconomyFile extends FileMaker {
     }
 
     public void loadDefaults() {
-        setDefault("PurchaseSuccessful", "&eSimplePets &6>> &7You have Successfully Purchased the %type% Pet.");
-        setDefault("InsufficientFunds", "&eSimplePets &6>> &cYou do not have enough money to buy this pet, you need to have %price%");
+        setDefault("prefix", "&eSimplePets &6>>");
+        setDefault("PurchaseSuccessful", "{prefix} &7You have Successfully Purchased the %type% Pet.");
+        setDefault("InsufficientFunds", "{prefix} &cYou do not have enough money to buy this pet, you need to have %price%");
         setDefault("Price-Free", "Free");
         setDefault("Pay-Per-Use.Enabled", false);
-        setDefault("Pay-Per-Use.Paid", "&eSimplePets &6>> &7You have Successfully Paid for the %type% Pet.");
+        setDefault("Pay-Per-Use.Paid", "{prefix} &7You have Successfully Paid for the %type% Pet.");
         setDefault("Pay-Per-Use.Lore-Lines", Collections.singletonList("&6Price: &e%cost%"));
         setDefault("Lore-Lines", Arrays.asList("&6Price: &e%cost%", "&6Purchased: &e%contains%"));
 
@@ -33,11 +34,11 @@ public class EconomyFile extends FileMaker {
     }
 
     @Override
-    public void set(String tag, Object data, String... comments) {
-        try {
-            super.set(tag, data, comments);
-        } catch (Exception e) {
-            super.set(tag, data);
+    public String getString(String path) {
+        String value = super.getString(path, true);
+        if (!path.equals("prefix")) {
+            value = value.replace("{prefix}", super.getString("Prefix", true));
         }
+        return value;
     }
 }

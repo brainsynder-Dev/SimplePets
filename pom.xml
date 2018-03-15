@@ -108,7 +108,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>3.6</version>
+            <version>3.7</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/libs/SimpleAPI.jar</systemPath>
         </dependency>

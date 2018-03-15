@@ -58,8 +58,7 @@ public class FileMaker {
     }
 
     public String getString(String tag, boolean color) {
-        this.configuration = YamlConfiguration.loadConfiguration(file);
-        return this.configuration.get(tag) != null ? (color ? this.translate(this.configuration.getString(tag)) : this.configuration.getString(tag)) : tag;
+        return (color ? translate(getString(tag)) : getString(tag));
     }
 
     public String getString(String tag) {
