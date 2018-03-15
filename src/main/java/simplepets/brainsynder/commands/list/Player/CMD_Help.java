@@ -7,7 +7,6 @@ import simplepets.brainsynder.commands.annotations.*;
 import simplepets.brainsynder.storage.files.Commands;
 
 @CommandName(name = "help")
-@CommandUsage(usage = "<pet> [player]")
 @CommandPermission(permission = "help")
 @CommandDescription(description = "Show help on plugin commands.")
 public class CMD_Help extends PetCommand<Player> {

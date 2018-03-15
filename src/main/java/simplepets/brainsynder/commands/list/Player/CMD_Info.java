@@ -39,6 +39,16 @@ public class CMD_Info extends PetCommand<Player> {
                 return;
             }
 
+            if (args.length > 1) {
+                if (args[1].equalsIgnoreCase("debug")) {
+                    // This will stay hard coded just in case they want to use this as a reference
+                    p.sendMessage("§eSimplePets §6>> §7" + target.getName() + "'s Pet Data:");
+                    IEntityPet entity = owner.getPet().getVisableEntity();
+                    StorageTagCompound compound = entity.asCompound();
+                    compound.getKeySet().forEach(key -> p.sendMessage("§7- §e" + key + "§6: §e" + fetchValue(compound.getTag(key))));
+                    return;
+                }
+            }
             p.sendMessage(commands.getString("Info.Pet-Data-Header")
             .replace("%player%", args[0]));
             IEntityPet entity = owner.getPet().getVisableEntity();
