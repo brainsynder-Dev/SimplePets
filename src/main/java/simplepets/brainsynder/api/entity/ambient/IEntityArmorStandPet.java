@@ -10,4 +10,5 @@ public interface IEntityArmorStandPet extends IDisplayEntity {
     boolean isOwner();
 
     void setOwner(boolean flag);
+
 }

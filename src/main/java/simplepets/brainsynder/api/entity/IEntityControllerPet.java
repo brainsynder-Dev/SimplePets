@@ -15,6 +15,8 @@ public interface IEntityControllerPet extends IEntityPet {
 
     void reloadLocation();
 
+    void addPassenger(Entity passenger);
+
     boolean isMoving();
 
     default void updateName() {}

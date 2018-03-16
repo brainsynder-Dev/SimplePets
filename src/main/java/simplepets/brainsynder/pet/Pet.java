@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -149,7 +150,11 @@ public class Pet implements IPet {
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;
 
-                getPet().eject();
+                if (ent instanceof IEntityControllerPet) {
+                    ((IEntityControllerPet) ent).getDisplayEntity().eject();
+                } else {
+                    ent.getEntity().eject();
+                }
                 value = false;
             } else if (isVehicle()) {
                 value = false;
@@ -197,7 +202,16 @@ public class Pet implements IPet {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        ent.getEntity().setPassenger(owner);
+                        if (ent instanceof IEntityControllerPet) {
+                            if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
+
+                            } else {
+                                ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
+                            }
+                        } else {
+                            ent.getEntity().setPassenger(owner);
+                        }
+
                     }
                 }.runTaskLater(PetCore.get(), 2L);
             }

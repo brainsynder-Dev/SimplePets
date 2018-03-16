@@ -113,8 +113,8 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public boolean canMount(Player player) {
-        if (this instanceof ArmorStandDefault) return false;
-        if (this instanceof ShulkerDefault) return false;
+   //     if (this instanceof ArmorStandDefault) return false;
+   //     if (this instanceof ShulkerDefault) return false;
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;

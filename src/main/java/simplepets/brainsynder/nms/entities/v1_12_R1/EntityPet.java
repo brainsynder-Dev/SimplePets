@@ -344,7 +344,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
      */
     @Override
     public void a(float f, float f1, float f2) {
-        if (passengers.isEmpty()) {
+        if (passengers == null) {
             this.P = (float) 0.5;
             this.aR = (float) 0.02;
             super.a(f, f1, f2);
@@ -379,7 +379,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            this.aO = this.aM = this.yaw;
+            this.aP = this.aN = this.yaw;
             this.P = (float) 1.0;
             f = (float) (owner.be * 0.5);
             f2 = owner.bg;

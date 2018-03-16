@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs;
 
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
@@ -17,9 +18,11 @@ import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -33,6 +36,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean minime = false;
     private AnimationCycle walking = null;
     private AnimationCycle arm_swing = null;
+    private FieldAccessor<Boolean> fieldAccessor;
 
     public EntityArmorStandPet(World world) {
         super(world);
@@ -41,6 +45,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private EntityArmorStandPet(World world, EntityControllerPet pet) {
         super(world);
         this.pet = pet;
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
     }
 
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
@@ -58,8 +63,8 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return ((ArmorStand) stand.getBukkitEntity());
     }
 
-    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
+    public void addPassenger(org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
+        ((CraftEntity) entity).getHandle().passengers.add(((CraftEntity) passenger).getHandle());
         PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
         if (entity instanceof Player) {
             ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
@@ -223,4 +228,66 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public boolean isSpecial() {return this.isSpecial;}
 
     public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
+
+    private boolean isOwnerRiding() {
+        if (pet == null) return false;
+        if (getOwner() == null) return false;
+        if (passengers.size() == 0)
+            return false;
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        for (Entity passenger : this.passengers) {
+            if (passenger.getUniqueID().equals(owner.getUniqueID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void a(float f, float f1, float f2) {
+        if (passengers == null) {
+            this.P = (float) 0.5;
+            this.aR = (float) 0.02;
+            super.a(f, f1, f2);
+        } else {
+            if (this.pet == null) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            if (!isOwnerRiding()) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+            if (fieldAccessor != null) {
+                if (fieldAccessor.hasField(owner)) {
+                    if (fieldAccessor.get(owner)) {
+                        if (isOnGround(this)) {
+                            this.motY = 1;
+                        } else {
+                            if (pet.getPet().getPetType().canFly(pet.getOwner())) {
+                                this.motY = 0.3;
+                            }
+                        }
+                    }
+                }
+            }
+            this.yaw = owner.yaw;
+            this.lastYaw = this.yaw;
+            this.pitch = (float) (owner.pitch * 0.5);
+            this.setYawPitch(this.yaw, this.pitch);
+            this.aP = this.aN = this.yaw;
+            this.P = (float) 1.0;
+
+        }
+    }
+
+    private boolean isOnGround(Entity entity) {
+        org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid();
+    }
 }

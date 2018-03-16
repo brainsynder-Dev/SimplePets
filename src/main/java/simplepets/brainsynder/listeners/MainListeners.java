@@ -20,6 +20,8 @@ import simplepets.brainsynder.api.entity.IImpossaPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.pet.types.ArmorStandDefault;
+import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 

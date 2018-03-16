@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.impossamobs;
 
 import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
@@ -14,9 +15,11 @@ import simple.brainsynder.nms.IActionMessage;
 import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -33,6 +36,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     private boolean didClick = false;
     private DyeColorWrapper color = DyeColorWrapper.PURPLE;
     private EntityControllerPet pet;
+    private FieldAccessor<Boolean> fieldAccessor;
 
     public EntityShulkerPet(World world) {
         super(world);
@@ -41,6 +45,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public EntityShulkerPet(World world, EntityControllerPet pet) {
         super(world);
         this.pet = pet;
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
     }
 
     public static Shulker spawn(Location location, EntityControllerPet pet) {
@@ -54,8 +59,8 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         return ((Shulker) shulker.getBukkitEntity());
     }
 
-    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
+    public void addPassenger(org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
+        ((CraftEntity) entity).getHandle().passengers.add(((CraftEntity) passenger).getHandle());
         PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
         if (entity instanceof Player) {
             ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
@@ -255,4 +260,92 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public boolean isCustom() {return this.isCustom;}
 
     public void setCustom(boolean isCustom) {this.isCustom = isCustom; }
+
+    private boolean isOwnerRiding() {
+        if (pet == null) return false;
+        if (getOwner() == null) return false;
+        if (passengers.size() == 0)
+            return false;
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        for (net.minecraft.server.v1_12_R1.Entity passenger : this.passengers) {
+            if (passenger.getUniqueID().equals(owner.getUniqueID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public void a(float f, float f1, float f2) {
+        if (passengers == null) {
+            this.P = (float) 0.5;
+            this.aR = (float) 0.02;
+            super.a(f, f1, f2);
+        } else {
+            if (this.pet == null) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            if (!isOwnerRiding()) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+            if (fieldAccessor != null) {
+                if (fieldAccessor.hasField(owner)) {
+                    if (fieldAccessor.get(owner)) {
+                        if (isOnGround(this)) {
+                            this.motY = 0.5;
+                        } else {
+                            if (pet.getPet().getPetType().canFly(pet.getOwner())) {
+                                this.motY = 0.3;
+                            }
+                        }
+                    }
+                }
+            }
+            this.yaw = owner.yaw;
+            this.lastYaw = this.yaw;
+            this.pitch = (float) (owner.pitch * 0.5);
+            this.setYawPitch(this.yaw, this.pitch);
+            this.aP = this.aN = this.yaw;
+            this.P = (float) 1.0;
+            f = (float) (owner.be * 0.5);
+            f2 = owner.bg;
+            if (f2 <= 0.0) {
+                f2 *= 0.25;
+            }
+
+            f *= 0.75;
+            this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            if (!world.isClientSide) {
+                super.a(f, f1, f2);
+            }
+
+            if (pet == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+
+            if (getOwner() == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+            try {
+                PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+            }catch (Throwable ignored) {}
+        }
+    }
+
+    private boolean isOnGround(net.minecraft.server.v1_12_R1.Entity entity) {
+        org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid();
+    }
 }

@@ -137,6 +137,14 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
+    public void addPassenger(Entity passenger) {
+        this.passengers.add(((CraftEntity) passenger).getHandle());
+        if (passenger instanceof Player) {
+            PetCore.get().getUtilities().sendMountPacket((Player) passenger, this.getBukkitEntity());
+        }
+    }
+
+    @Override
     public IEntityPet getVisibleEntity() {
         Object handle = ReflectionUtil.getEntityHandle(displayEntity);
         if (handle instanceof IEntityPet) {

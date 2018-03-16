@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1.list;
 
-import net.minecraft.server.v1_12_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_12_R1.World;
+import net.minecraft.server.v1_12_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -12,8 +12,10 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.util.ArrayList;
@@ -23,19 +25,115 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private List<Entity> entities = new ArrayList<>();
     private Entity displayEntity, displayRider = null;
     private Location previus;
+    private IPet pet;
     private boolean moving = false;
+    private FieldAccessor<Boolean> fieldAccessor;
 
     public EntityControllerPet(World world, IPet pet) {
         super(world, pet);
+        this.pet = pet;
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
     }
     public EntityControllerPet(World world) {
         super(world);
     }
 
+  //  @Override
+  //  public void a(float f, float f1, float f2) {
+  //      System.out.println("Pong!");
+  //      super.a(f, f1, f2);
+  //      reloadLocation();
+  //  }
+
+    private boolean isOwnerRiding() {
+        if (pet == null) return false;
+        if (pet.getOwner() == null) return false;
+        if (((CraftEntity)getDisplayEntity()).getHandle().passengers.size() == 0)
+            return false;
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        for (net.minecraft.server.v1_12_R1.Entity passenger : ((CraftEntity)getDisplayEntity()).getHandle().passengers) {
+            if (passenger.getUniqueID().equals(owner.getUniqueID())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void a(float f, float f1, float f2) {
-        super.a(f, f1, f2);
         reloadLocation();
+        if (passengers == null) {
+            this.P = (float) 0.5;
+            this.aR = (float) 0.02;
+            super.a(f, f1, f2);
+        } else {
+            if (this.pet == null) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            if (!isOwnerRiding()) {
+                this.P = (float) 0.5;
+                this.aR = (float) 0.02;
+                super.a(f, f1, f2);
+                return;
+            }
+            EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+            if (fieldAccessor != null) {
+                if (fieldAccessor.hasField(owner)) {
+                    if (fieldAccessor.get(owner)) {
+                        if (isOnGround(this)) {
+                            this.motY = 0.5;
+                        } else {
+                            if (pet.getPetType().canFly(pet.getOwner())) {
+                                this.motY = 0.3;
+                            }
+                        }
+                    }
+                }
+            }
+            this.yaw = owner.yaw;
+            this.lastYaw = this.yaw;
+            this.pitch = (float) (owner.pitch * 0.5);
+            this.setYawPitch(this.yaw, this.pitch);
+            this.aP = this.aN = this.yaw;
+            this.P = (float) 1.0;
+            f = (float) (owner.be * 0.5);
+            f2 = owner.bg;
+            if (f2 <= 0.0) {
+                f2 *= 0.25;
+            }
+
+            f *= 0.75;
+            this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            if (!world.isClientSide) {
+                super.a(f, f1, f2);
+            }
+
+            if (pet == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+
+            if (pet.getOwner() == null) {
+                if (bukkitEntity != null)
+                    bukkitEntity.remove();
+                return;
+            }
+            try {
+                PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+            }catch (Throwable ignored) {}
+        }
+
+    }
+
+    private boolean isOnGround(net.minecraft.server.v1_12_R1.Entity entity) {
+        Location loc = entity.getBukkitEntity().getLocation();
+        org.bukkit.block.Block block = loc.subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid();
     }
 
     @Override
@@ -127,7 +225,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public void reloadLocation() {
         if (displayEntity.getPassenger() != null) {
             net.minecraft.server.v1_12_R1.Entity displayEntity = ((CraftEntity) this.displayEntity).getHandle();
-            Location loc = getBukkitEntity().getLocation().clone().subtract(0, 0.735, 0);
+            Location loc = getBukkitEntity().getLocation().clone();//.subtract(0, 0.735, 0);
             displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             if (!loc.getWorld().getPlayers().isEmpty()) {
                 for (Player player : loc.getWorld().getPlayers()) {
@@ -149,6 +247,14 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
+    public void addPassenger(Entity passenger) {
+        this.passengers.add(((CraftEntity) passenger).getHandle());
+        if (passenger instanceof Player) {
+            PetCore.get().getUtilities().sendMountPacket((Player) passenger, this.getBukkitEntity());
+        }
+    }
+
+    @Override
     public IEntityPet getVisibleEntity() {
         Object handle = ReflectionUtil.getEntityHandle(displayEntity);
         if (handle instanceof IEntityPet) {
@@ -165,4 +271,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     public boolean isMoving() {return this.moving;}
+
+
 }
