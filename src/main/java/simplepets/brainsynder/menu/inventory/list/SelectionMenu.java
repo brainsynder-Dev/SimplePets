@@ -104,6 +104,10 @@ public class SelectionMenu extends CustomInventory {
                 petTypes.add(new PetTypeStorage(type));
             }
         }
+        if (petTypes.getSize() == 0) {
+            owner.getPlayer().sendMessage(PetCore.get().getMessages().getString("No-Permission"));
+            return;
+        }
 
         ObjectPager<PetTypeStorage> pages = new ObjectPager<>(maxPets, petTypes.toArrayList());
         if (pagerMap.containsKey(owner.getPlayer().getName())) {
