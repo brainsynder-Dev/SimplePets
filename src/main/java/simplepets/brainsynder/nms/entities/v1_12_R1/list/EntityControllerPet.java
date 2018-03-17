@@ -6,7 +6,9 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.metadata.FixedMetadataValue;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -225,7 +227,16 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public void reloadLocation() {
         if (displayEntity.getPassenger() != null) {
             net.minecraft.server.v1_12_R1.Entity displayEntity = ((CraftEntity) this.displayEntity).getHandle();
-            Location loc = getBukkitEntity().getLocation().clone();//.subtract(0, 0.735, 0);
+            Location loc;
+            if (this.displayRider != null) {
+                if (this.displayRider.getType().equals(EntityType.SHULKER)) {
+                    loc = getBukkitEntity().getLocation().clone().subtract(0, 0.735, 0);
+                } else {
+                    loc = getBukkitEntity().getLocation().clone();
+                }
+            } else {
+                loc = getBukkitEntity().getLocation().clone();
+            }
             displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             if (!loc.getWorld().getPlayers().isEmpty()) {
                 for (Player player : loc.getWorld().getPlayers()) {
@@ -236,7 +247,18 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             return;
         }
         net.minecraft.server.v1_12_R1.Entity displayEntity = ((CraftEntity) this.displayEntity).getHandle();
-        Location loc = getBukkitEntity().getLocation();//.clone().add(0, 0.75, 0);
+        Location loc;
+        if (this.displayRider != null) {
+            if (this.displayRider.getType().equals(EntityType.SHULKER)) {
+                loc = getBukkitEntity().getLocation().clone().add(0, 0.75, 0);
+            } else {
+                loc = getBukkitEntity().getLocation().clone();
+            }
+        } else {
+            loc = getBukkitEntity().getLocation().clone();
+        }
+
+         //;
         displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         if (!loc.getWorld().getPlayers().isEmpty()) {
             for (Player player : loc.getWorld().getPlayers()) {

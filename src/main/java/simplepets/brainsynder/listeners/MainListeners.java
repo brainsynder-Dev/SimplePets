@@ -143,8 +143,6 @@ public class MainListeners implements Listener {
             if (handle instanceof IEntityPet) {
                 e.setCancelled(true);
                 IEntityPet entityPet = (IEntityPet) handle;
-                if (entityPet instanceof IEntityShulkerPet) return;
-                if (entityPet instanceof IEntityParrotPet) return;
 
                 if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
                     PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
