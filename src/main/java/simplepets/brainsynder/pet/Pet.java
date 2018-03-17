@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.sound.SoundMaker;
@@ -205,7 +204,7 @@ public class Pet implements IPet {
                     public void run() {
                         if (ent instanceof IEntityControllerPet) {
                             if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-                                ((Shulker) ((IEntityControllerPet) ent).getDisplayEntity()).setPassenger(owner);
+
                             } else {
                                 ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
                             }

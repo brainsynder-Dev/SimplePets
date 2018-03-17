@@ -1,12 +1,11 @@
 <component name="libraryTable">
   <library name="craftbukkit-1.12.2-R0.1-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/../../Server1.12/spigot-1.12.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../Spigot Jars/craftbukkit-1.12.2-R0.1-SNAPSHOT.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$PROJECT_DIR$/../Spigot Jars/craftbukkit-1.12.2-R0.1-SNAPSHOT.jar!/" />
-      <root url="jar://$PROJECT_DIR$/../../Server1.12/spigot-1.12.jar!/" />
     </SOURCES>
   </library>
 </component>

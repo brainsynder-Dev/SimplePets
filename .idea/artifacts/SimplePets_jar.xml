@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="jar" name="SimplePets:jar">
-    <output-path>$PROJECT_DIR$/../../Server1.12/plugins</output-path>
+    <output-path>$USER_HOME$/Desktop/Java SCR Code/,outut</output-path>
     <root id="archive" name="SimplePets.jar">
       <element id="module-output" name="SimplePets" />
       <element id="file-copy" path="$PROJECT_DIR$/src/plugin.yml" />
