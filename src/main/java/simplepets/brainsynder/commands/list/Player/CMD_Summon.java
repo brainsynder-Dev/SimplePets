@@ -41,6 +41,15 @@ public class CMD_Summon extends PetCommand<Player> {
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
                 type.setPet(p);
             } else {
+                if (args[1].equalsIgnoreCase(p.getName())) {
+                    if (!type.hasPermission(p)) {
+                        p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
+                        return;
+                    }
+                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
+                    type.setPet(p);
+                    return;
+                }
                 if (!p.hasPermission("Pet.commands.summon.other")) {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
@@ -48,11 +57,6 @@ public class CMD_Summon extends PetCommand<Player> {
                 Player tp = Bukkit.getPlayer(args[1]);
                 if (tp == null) {
                     p.sendMessage(PetCore.get().getMessages().getString("Player-Not-Found", true).replace("%player%", args[1]));
-                    return;
-                }
-                if (tp.getName().equals(p.getName())) {
-                    type.setPet(p);
-                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
                     return;
                 }
                 if (!type.hasPermission(tp)) {
