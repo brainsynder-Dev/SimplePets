@@ -60,7 +60,8 @@ public class CMD_Summon extends PetCommand<Player> {
                     return;
                 }
                 if (!type.hasPermission(tp)) {
-                    p.sendMessage(PetCore.get().getMessages().getString("Other-No-Pet-Permission", true));
+                    p.sendMessage(PetCore.get().getMessages().getString("Other-No-Pet-Permission", true)
+                    .replace("%player%", tp.getName()));
                     return;
                 }
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Sender", true)
