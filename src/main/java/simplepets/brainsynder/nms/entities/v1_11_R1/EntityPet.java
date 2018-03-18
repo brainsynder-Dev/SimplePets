@@ -188,11 +188,12 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     }
 
     protected boolean isOwnerRiding() {
-        if (passengers.size() == 0)
+        if (this.passengers.size() == 0)
             return false;
         EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
         for (Entity passenger : this.passengers) {
             if (passenger.getUniqueID().equals(owner.getUniqueID())) {
+
                 return true;
             }
         }
