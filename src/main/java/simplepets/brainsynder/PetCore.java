@@ -227,11 +227,12 @@ public class PetCore extends JavaPlugin {
             }
             petOwner.getFile().save(true);
         }
-
-        if (getConfiguration().getBoolean("MySQL.Enabled")) {
-            if (mySQL != null) {
-                mySQL.getPool().dumpPool();
-                mySQL = null;
+        if (getConfiguration() != null) {
+            if (getConfiguration().getBoolean("MySQL.Enabled")) {
+                if (mySQL != null) {
+                    mySQL.getPool().dumpPool();
+                    mySQL = null;
+                }
             }
         }
         try {
