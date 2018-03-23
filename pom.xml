@@ -29,9 +29,6 @@
                 <configuration>
                     <source>1.8</source>
                     <target>1.8</target>
-                    <excludes>
-                        <exclude>**/simplepets/brainsynder/app/PetApplication.java</exclude>
-                    </excludes>
                 </configuration>
             </plugin>
             <plugin>

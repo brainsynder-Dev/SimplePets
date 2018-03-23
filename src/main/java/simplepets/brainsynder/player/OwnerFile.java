@@ -1,9 +1,11 @@
 package simplepets.brainsynder.player;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.ParseException;
 import simple.brainsynder.nbt.JsonToNBT;
 import simple.brainsynder.nbt.NBTException;
 import simple.brainsynder.nbt.StorageTagCompound;
@@ -22,8 +24,8 @@ import java.util.concurrent.CompletableFuture;
 public class OwnerFile {
     private MySQL sql = null;
     private static final String SELECT_PETS = "SELECT * FROM `SimplePets` WHERE `UUID`=?";
-    private static final String UPDATE = "UPDATE `SimplePets` SET `UnlockedPets`=?, `PetName`=?, `NeedsRespawn`=? WHERE `UUID`=?";
-    private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`) VALUES(?,?,?,?,?)";
+    private static final String UPDATE = "UPDATE `SimplePets` SET `UnlockedPets`=?, `PetName`=?, `NeedsRespawn`=?, `SavedPets`=? WHERE `UUID`=?";
+    private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES(?,?,?,?,?,?)";
     private PetOwner owner;
 
     OwnerFile(PetOwner owner) {
@@ -84,7 +86,8 @@ public class OwnerFile {
                                 update.setString(1, Base64Wrapper.encodeString(obj.toJSONString()));
                                 update.setString(2, Base64Wrapper.encodeString(finalPetName));
                                 update.setString(3, finalNeedsRespawn);
-                                update.setString(4, uuid);
+                                update.setString(4, Base64Wrapper.encodeString(owner.getSavedPetsArray().toJSONString()));
+                                update.setString(5, uuid);
                                 update.execute();
                                 update.close();
                             } else {
@@ -94,6 +97,7 @@ public class OwnerFile {
                                 insert.setString(3, Base64Wrapper.encodeString(obj.toJSONString()));
                                 insert.setString(4, Base64Wrapper.encodeString(finalPetName));
                                 insert.setString(5, finalNeedsRespawn);
+                                insert.setString(6, Base64Wrapper.encodeString(owner.getSavedPetsArray().toJSONString()));
                                 insert.execute();
                                 insert.close();
                             }
@@ -125,6 +129,10 @@ public class OwnerFile {
         PlayerStorage file = PetCore.get().getPlayerStorage(p);
         if (!owner.getOwnedPets().isEmpty()) {
             file.setJSONArray("PurchasedPets", owner.getOwnedPets());
+            canSave = true;
+        }
+        if (!owner.getSavedPetsArray().isEmpty()) {
+            file.setJSONArray("SavedPets", owner.getSavedPetsArray());
             canSave = true;
         }
         if ((owner.getPetName() != null)
@@ -159,42 +167,46 @@ public class OwnerFile {
                 PetCore.get().debug(2, "Unable to load data from SQL, sql variable seems to be missing...");
                 return;
             }
-            try {
-                // The CompletableFuture.class is a a class that allows async operations (according to the docs)
-                CompletableFuture<Data> future = CompletableFuture.supplyAsync(() -> {
-                    Data data = new Data();
-                    try {
-                        ConnectionPool pool = sql.getPool();
-                        Connection connection = pool.borrowConnection();
+            // The CompletableFuture.class is a a class that allows async operations (according to the docs)
+            CompletableFuture.runAsync(() -> {
+                final JSONObject data = new JSONObject();
+                try {
+                    ConnectionPool pool = sql.getPool();
+                    Connection connection = pool.borrowConnection();
 
-                        PreparedStatement select = connection.prepareStatement(SELECT_PETS);
-                        select.setString(1, p.getUniqueId().toString());
-                        ResultSet result = select.executeQuery();
-                        if (result.next()) {
-                            data.unlocked = (result.getString("UnlockedPets"));
-                            data.name = (result.getString("PetName"));
-                            data.needsRespawn = (result.getString("NeedsRespawn"));
-                        }
-                        select.close();
-                        result.close();
-                        pool.surrenderConnection(connection);
-                    } catch (Exception e) {
-                        PetCore.get().debug("Unable to load " + p.getName() + "'s Pet data.");
+                    PreparedStatement select = connection.prepareStatement(SELECT_PETS);
+                    select.setString(1, p.getUniqueId().toString());
+                    ResultSet result = select.executeQuery();
+                    if (result.next()) {
+                        data.put("UnlockedPets", parse(result.getString("UnlockedPets")));
+                        data.put("PetName", result.getString("PetName"));
+                        data.put("NeedsRespawn", result.getString("NeedsRespawn"));
+                        data.put("SavedPets", result.getString("SavedPets"));
                     }
-                    return data;
-                });
-                Data data = future.get();
-
-                String unlocked = Base64Wrapper.decodeString(data.unlocked);
-                JSONObject obj = (JSONObject) JSONValue.parseWithException(unlocked);
-                JSONArray array = (JSONArray) obj.get("StoredPets");
-                owner.setRawOwned(array);
-                String name = Base64Wrapper.decodeString(data.name);
-                if (!name.equals("empty")) owner.setRawPetName(name);
-                handle(data.needsRespawn);
-            } catch (Exception e) {
-                PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
-            }
+                    select.close();
+                    result.close();
+                    pool.surrenderConnection(connection);
+                } catch (Exception e) {
+                    PetCore.get().debug("Unable to load " + p.getName() + "'s Pet data.");
+                    e.printStackTrace();
+                }
+                new BukkitRunnable() { // run task to make it sync
+                    @Override
+                    public void run() {
+                        try {
+                            JSONArray array = (JSONArray) ((JSONObject)data.get("UnlockedPets")).get("StoredPets");
+                            owner.setRawOwned(array);
+                            String name = Base64Wrapper.decodeString(String.valueOf(data.get("PetName")));
+                            if (!name.equals("empty")) owner.setRawPetName(name);
+                            owner.updateSavedPets((JSONArray) JSONValue.parseWithException(Base64Wrapper.decodeString(String.valueOf(data.get("SavedPets")))));
+                            handle(String.valueOf(data.get("NeedsRespawn")));
+                        } catch (Exception e) {
+                            PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
+                            e.printStackTrace();
+                        }
+                    }
+                }.runTask(PetCore.get());
+            });
             return;
         }
 
@@ -208,6 +220,10 @@ public class OwnerFile {
             JSONObject storage = file.getJSONObject("ItemStorage");
             if (!storage.isEmpty()) owner.setStoredInventory(storage, false);
         }
+        if (file.hasKey("SavedPets")) {
+            JSONArray storage = file.getJSONArray("SavedPets");
+            if (!storage.isEmpty()) owner.updateSavedPets(storage);
+        }
         if (file.hasKey("NeedsRespawn")) {
             StorageTagCompound compound = file.getCompoundTag("NeedsRespawn");
             file.removeTag("NeedsRespawn");
@@ -217,22 +233,26 @@ public class OwnerFile {
         owner.setRawPetName(file.getString("PetName"));
     }
 
-    private void handle(String needs) {
-        if (!needs.equals("null") && !needs.equals("NeedsRespawn")) {
+    private JSONObject parse (String string) {
+        if (string.equals("null")) return new JSONObject ();
+        try {
+            return (JSONObject) JSONValue.parseWithException(Base64Wrapper.decodeString(string));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return new JSONObject ();
+        }
+    }
+
+    private void handle(String json) {
+        if ((!json.isEmpty()) && (!json.equals("null"))) {
             StorageTagCompound compound;
             try {
-                compound = JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(needs));
+                compound = JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(json));
             } catch (NBTException e) {
                 compound = new StorageTagCompound();
                 e.printStackTrace();
             }
-            if (compound.hasKey("PetType")) {
-                owner.setPetToRespawn(compound);
-            }
+            owner.setPetToRespawn(compound);
         }
-    }
-
-    private class Data {
-        String unlocked, name, needsRespawn;
     }
 }

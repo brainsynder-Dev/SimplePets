@@ -43,9 +43,22 @@ public class CMD_Info extends PetCommand<Player> {
                 if (args[1].equalsIgnoreCase("debug")) {
                     // This will stay hard coded just in case they want to use this as a reference
                     p.sendMessage("§eSimplePets §6>> §7" + target.getName() + "'s Pet Data:");
-                    IEntityPet entity = owner.getPet().getVisableEntity();
-                    StorageTagCompound compound = entity.asCompound();
-                    compound.getKeySet().forEach(key -> p.sendMessage("§7- §e" + key + "§6: §e" + fetchValue(compound.getTag(key))));
+                    if (owner.hasPet()) {
+                        IEntityPet entity = owner.getPet().getVisableEntity();
+                        StorageTagCompound compound = entity.asCompound();
+                        p.sendMessage("§6Pet Data:");
+                        compound.getKeySet().forEach(key -> p.sendMessage("§7  - §e" + key + "§6: §7" + fetchValue(compound.getTag(key))));
+                        p.sendMessage("§7- §eIsVehicle§6: §7" + entity.getPet().isVehicle());
+                        p.sendMessage("§7- §eIsHat§6: §7" + entity.getPet().isHat());
+                        return;
+                    }
+
+                    if (owner.hasPetToRespawn()) {
+                        StorageTagCompound compound = owner.getPetToRespawn();
+                        p.sendMessage("§7- §eIsSpawned§6: §e" + false);
+                        p.sendMessage("§6Pet Data:");
+                        compound.getKeySet().forEach(key -> p.sendMessage("§7  - §e" + key + "§6: §7" + fetchValue(compound.getTag(key))));
+                    }
                     return;
                 }
             }
