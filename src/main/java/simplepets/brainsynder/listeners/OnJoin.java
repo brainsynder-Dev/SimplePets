@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,15 +27,17 @@ public class OnJoin implements Listener {
         Player player = e.getPlayer();
         try {
             PetOwner owner = PetOwner.getPetOwner(player);
-            owner.reloadData();
-            if (!owner.hasPetToRespawn()) return;
+            Bukkit.broadcastMessage("§bPRE-Config check");
             if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        Bukkit.broadcastMessage("§bPRE-Has Pet");
+                        if (!owner.hasPetToRespawn()) return;
+                        Bukkit.broadcastMessage("§6Respawning pet..");
                         owner.respawnPet();
                     }
-                }.runTaskLater(PetCore.get(), 10);
+                }.runTaskLater(PetCore.get(), 30);
             }
         } catch (Exception ignored) {
         }
