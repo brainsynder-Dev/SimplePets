@@ -6,10 +6,12 @@ import com.mojang.authlib.properties.PropertyMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.SpawnEggMeta;
 import org.bukkit.material.MaterialData;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -39,7 +41,7 @@ public class ItemBuilder {
     }
 
     public static ItemBuilder fromJSON (JSONObject json) {
-        if (!json.containsKey("material")) throw new NullPointerException("JSONObject seems to be missing speed material");
+        if (!json.containsKey("material")) throw new NullPointerException("JSONObject seems to be missing the material");
 
         int amount = 1;
         if (json.containsKey("amount")) amount = Integer.parseInt(String.valueOf(json.get("amount")));
@@ -71,6 +73,10 @@ public class ItemBuilder {
                 ItemFlag flag = ItemFlag.valueOf(String.valueOf(o));
                 builder.withFlag(flag);
             }
+        }
+
+        if (json.containsKey("entity")) {
+            builder.withEntity(EntityType.valueOf(String.valueOf(json.get("entity"))));
         }
 
         if (json.containsKey("skullData")) {
@@ -171,6 +177,19 @@ public class ItemBuilder {
         is.addUnsafeEnchantment(enchant, level);
         return this;
     }
+
+    public ItemBuilder withEntity(EntityType type) {
+        JSON.put("entity", type.name());
+
+        if (is.getType() == Material.MONSTER_EGG) {
+            SpawnEggMeta spawnEggMeta = (SpawnEggMeta) im;
+            spawnEggMeta.setSpawnedType(type);
+            im = spawnEggMeta;
+        }
+
+        return this;
+    }
+
     public ItemBuilder removeEnchant(Enchantment enchant) {
         if (JSON.containsKey("enchants")) {
             JSONArray ENCHANTS = (JSONArray) JSON.get("enchants");
