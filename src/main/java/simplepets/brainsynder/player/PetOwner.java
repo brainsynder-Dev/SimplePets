@@ -10,8 +10,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import simple.brainsynder.api.ParticleMaker;
+import simple.brainsynder.nbt.JsonToNBT;
+import simple.brainsynder.nbt.NBTException;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
+import simple.brainsynder.utils.Base64Wrapper;
 import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
@@ -125,12 +128,34 @@ public class PetOwner {
         setPetName(name, false);
     }
 
+    void updateSavedPets (JSONArray array) {
+        if (array.isEmpty()) return;
+
+        array.forEach(obj -> {
+            String json = Base64Wrapper.decodeString(String.valueOf(obj));
+            try {
+                savedPets.add(JsonToNBT.getTagFromJson(json));
+            } catch (NBTException ignored) {}
+        });
+
+    }
+
     public void setSavedPets(List<StorageTagCompound> savedPets) {
         this.savedPets = savedPets;
     }
 
     public List<StorageTagCompound> getSavedPets() {
         return savedPets;
+    }
+
+    JSONArray getSavedPetsArray () {
+        JSONArray array = new JSONArray();
+        if (!savedPets.isEmpty()) {
+            savedPets.forEach(compound -> {
+                array.add(Base64Wrapper.encodeString(compound.toString()));
+            });
+        }
+        return array;
     }
 
     public void setPetName(String name, boolean override) {
@@ -280,7 +305,7 @@ public class PetOwner {
             public void run() {
                 if (hasPet()) {
                     getPet().getVisableEntity().applyCompound(petToRespawn);
-                    PetOwner.this.petToRespawn = null;
+                    petToRespawn = null;
                 }
             }
         }.runTaskLater(PetCore.get(), 2);
@@ -304,6 +329,10 @@ public class PetOwner {
                 }
             }
         }.runTaskLater(PetCore.get(), 2);
+    }
+
+    public StorageTagCompound getPetToRespawn() {
+        return petToRespawn;
     }
 
     public boolean hasPetToRespawn() {

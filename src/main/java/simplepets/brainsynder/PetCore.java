@@ -126,7 +126,7 @@ public class PetCore extends JavaPlugin {
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
-        if (!spigotPluginHandler.runTamperCheck(Arrays.asList ("brainsynder", "ThatsMusic99"), "SimplePets", "4.0")) {
+        if (!spigotPluginHandler.runTamperCheck(Arrays.asList("brainsynder", "ThatsMusic99"), "SimplePets", "4.0")) {
             return false;
         }
         try {
@@ -170,19 +170,18 @@ public class PetCore extends JavaPlugin {
                     debug("Creating SQL table if there is none...");
                     ConnectionPool pool = mySQL.getPool();
                     Connection connection = pool.borrowConnection();
-                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT,`SavedPets` LONGTEXT);");
+                    if (!mySQL.hasColumn(connection,"UUID")) mySQL.addColumn(connection,"UUID", "TEXT");
+                    if (!mySQL.hasColumn(connection,"name")) mySQL.addColumn(connection,"name", "TEXT");
+                    if (!mySQL.hasColumn(connection,"UnlockedPets")) mySQL.addColumn(connection,"UnlockedPets", "MEDIUMTEXT");
+                    if (!mySQL.hasColumn(connection,"PetName")) mySQL.addColumn(connection,"PetName", "TEXT");
+                    if (!mySQL.hasColumn(connection,"NeedsRespawn")) mySQL.addColumn(connection,"NeedsRespawn", "MEDIUMTEXT");
+                    if (!mySQL.hasColumn(connection,"SavedPets")) mySQL.addColumn(connection,"SavedPets", "LONGTEXT");
                     pool.surrenderConnection(connection);
-                    connection.close();
                 } catch (Exception e) {
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
                 }
-                if (!mySQL.hasColumn("UUID")) mySQL.addColumn("UUID", "TEXT");
-                if (!mySQL.hasColumn("name")) mySQL.addColumn("name", "TEXT");
-                if (!mySQL.hasColumn("UnlockedPets")) mySQL.addColumn("UnlockedPets", "MEDIUMTEXT");
-                if (!mySQL.hasColumn("PetName")) mySQL.addColumn("PetName", "TEXT");
-                if (!mySQL.hasColumn("NeedsRespawn")) mySQL.addColumn("NeedsRespawn", "MEDIUMTEXT");
-                if (!mySQL.hasColumn("SavedPets")) mySQL.addColumn("SavedPets", "LONGTEXT");
             });
             thread.setName("SimplePets SQL");
             thread.setDaemon(false);
@@ -222,9 +221,8 @@ public class PetCore extends JavaPlugin {
         }
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
-            if (petOwner.hasPet()) {
-                petOwner.removePet();
-            }
+            if (!petOwner.getPlayer().isOnline()) continue;
+            if (petOwner.hasPet()) petOwner.removePet();
             petOwner.getFile().save(true);
         }
 
@@ -273,7 +271,7 @@ public class PetCore extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
     }
 
-    public void reload () {
+    public void reload() {
         if (getConfiguration().isSet("MySQL.Enabled")) {
             if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
             String host = getConfiguration().getString("MySQL.Host", false);
@@ -289,7 +287,6 @@ public class PetCore extends JavaPlugin {
                     Connection connection = pool.borrowConnection();
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
                     pool.surrenderConnection(connection);
-                    connection.close();
                 } catch (Exception e) {
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
@@ -355,7 +352,8 @@ public class PetCore extends JavaPlugin {
 
                 try {
                     return future.get();
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
         return null;
