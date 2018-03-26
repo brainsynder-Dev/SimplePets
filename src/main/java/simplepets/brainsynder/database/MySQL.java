@@ -32,7 +32,7 @@ public class MySQL {
     public boolean hasColumn(Connection connection, String column) {
         try {
             DatabaseMetaData md2 = connection.getMetaData();
-            ResultSet rsTables = md2.getColumns(null, null, source.getDatabaseName(), column);
+            ResultSet rsTables = md2.getColumns(null, null, "SimplePets", column);
             return rsTables.next();
         } catch (Exception e) {
             PetCore.get().debug("Unable to check if '" + column + "' exists in the database");
@@ -43,7 +43,7 @@ public class MySQL {
     public void addColumn(Connection connection, String column, String type) {
         try {
             Statement statement = connection.createStatement();
-            statement.executeUpdate("ALTER TABLE `" + source.getDatabaseName() + "` ADD '" + column + "' " + type + " NOT NULL");
+            statement.executeUpdate("ALTER TABLE `SimplePets` ADD " + column + " " + type + " NOT NULL");
             pool.surrenderConnection(connection);
         } catch (Exception e) {
             throw new SimplePetsException("Unable to add '" + column + "' to the database", e);
