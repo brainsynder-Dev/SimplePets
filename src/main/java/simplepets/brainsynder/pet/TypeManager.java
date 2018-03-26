@@ -90,7 +90,7 @@ public class TypeManager {
         items.put(item.getConfigName(), item);
     }
 
-    public PetDefault getItem (ItemStack itemstack) {
+    public PetDefault getType(ItemStack itemstack) {
         for (PetDefault item : items.values()) {
             if (item.getItemBuilder().isSimilar(itemstack)) return item;
         }
@@ -104,7 +104,7 @@ public class TypeManager {
         return null;
     }
 
-    public PetDefault getItem (String name) {
+    public PetDefault getType(String name) {
         return items.getOrDefault(name, null);
     }
 

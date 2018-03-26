@@ -90,10 +90,10 @@ public class SelectionMenu extends CustomInventory {
                 if (item instanceof Air) {
                     maxPets++;
                 } else {
-                    inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
+                    inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItemBuilder().build());
                 }
             } else {
-                inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
+                inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItemBuilder().build());
             }
             placeHolder--;
         }
@@ -122,21 +122,21 @@ public class SelectionMenu extends CustomInventory {
         getSlots().forEach((slot, item) -> {
             if (item instanceof PreviousPage) {
                 if ((getCurrentPage(owner) > 1))
-                    inv.setItem(slot, item.getItem());
+                    inv.setItem(slot, item.getItemBuilder().build());
             } else if (item instanceof NextPage) {
                 if (finalPages.totalPages() > getCurrentPage(owner))
-                    inv.setItem(slot, item.getItem());
+                    inv.setItem(slot, item.getItemBuilder().build());
             } else if (item instanceof Hat) {
                 if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-                    inv.setItem(slot, item.getItem());
+                    inv.setItem(slot, item.getItemBuilder().build());
             } else if (item instanceof Ride) {
                 if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-                    inv.setItem(slot, item.getItem());
+                    inv.setItem(slot, item.getItemBuilder().build());
             } else if (item instanceof Name) {
                 if (PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled"))
-                    inv.setItem(slot, item.getItem());
+                    inv.setItem(slot, item.getItemBuilder().build());
             } else {
-                inv.setItem(slot, item.getItem());
+                inv.setItem(slot, item.getItemBuilder().build());
             }
         });
 
