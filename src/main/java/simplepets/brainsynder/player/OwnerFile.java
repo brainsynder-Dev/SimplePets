@@ -131,7 +131,7 @@ public class OwnerFile {
             file.setJSONArray("PurchasedPets", owner.getOwnedPets());
             canSave = true;
         }
-        if (!owner.getSavedPetsArray().isEmpty()) {
+        if ((!savePet) && !owner.getSavedPetsArray().isEmpty()) {
             file.setJSONArray("SavedPets", owner.getSavedPetsArray());
             canSave = true;
         }
