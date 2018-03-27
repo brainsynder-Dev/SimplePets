@@ -77,6 +77,17 @@ public class PetCore extends JavaPlugin {
             return;
         }
 
+        // Oh no... Someone is reloading the server/plugin
+        // ALERT THE OPS !!!
+        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+            Errors.RELOAD_DETECTED.print();
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (player.isOp()) {
+                    player.sendMessage("§6[§eSimplePets§6] §7SimplePets has detected a reload, If §c§lANY§7 issues arise then please restart the server.");
+                }
+            });
+        }
+
         typeManager = new TypeManager(this);
         loadConfig();
         createPluginInstances();
@@ -169,28 +180,31 @@ public class PetCore extends JavaPlugin {
             mySQL = new MySQL(host, port, databaseName, username, password);
 
             debug("Creating SQL table if there is none...");
-            ConnectionPool pool = mySQL.getPool();
-            try {
-                Connection connection = pool.borrowConnection();
-                connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT,`SavedPets` LONGTEXT);");
-                pool.surrenderConnection(connection);
-            } catch (Exception e) {
-                debug("Unable to create default SQL tables Error:");
-                e.printStackTrace();
-            }
+            Thread thread = new Thread(() -> {
+                ConnectionPool pool = mySQL.getPool();
+                try {
+                    Connection connection = pool.borrowConnection();
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT,`SavedPets` LONGTEXT);");
+                    pool.surrenderConnection(connection);
+                } catch (Exception e) {
+                    System.out.println("Unable to create default SQL tables Error:");
+                    e.printStackTrace();
+                }
 
-            try {
-                Connection connection = pool.borrowConnection();
-                //if (!mySQL.hasColumn(connection,"UUID")) mySQL.addColumn(connection,"UUID", "TEXT");
-                //if (!mySQL.hasColumn(connection,"name")) mySQL.addColumn(connection,"name", "TEXT");
-                //if (!mySQL.hasColumn(connection,"UnlockedPets")) mySQL.addColumn(connection,"UnlockedPets", "MEDIUMTEXT");
-                //if (!mySQL.hasColumn(connection,"PetName")) mySQL.addColumn(connection,"PetName", "TEXT");
-                //if (!mySQL.hasColumn(connection,"NeedsRespawn")) mySQL.addColumn(connection,"NeedsRespawn", "MEDIUMTEXT");
-                if (!mySQL.hasColumn(connection, "SavedPets")) mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                pool.surrenderConnection(connection);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                try {
+                    // This part checks and makes sure that old SQL databases have the
+                    // new columns added, if not they will be added
+
+                    Connection connection = pool.borrowConnection();
+                    if (!mySQL.hasColumn(connection, "SavedPets"))
+                        mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
+                    pool.surrenderConnection(connection);
+                } catch (Exception ignored) {
+                }
+            });
+            thread.setDaemon(false);
+            thread.setName("SimplePets SQL");
+            thread.start();
         }
     }
 
