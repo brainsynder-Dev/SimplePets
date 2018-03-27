@@ -1,10 +1,11 @@
 package simplepets.brainsynder.menu.items.list;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 
@@ -14,18 +15,13 @@ public class Name extends Item {
     }
 
     @Override
-    public void loadDefaults() {
-        defaults.put(MATERIAL, "NAME_TAG");
-        defaults.put(DATA, "0");
-        defaults.put(AMOUNT, "1");
-        defaults.put(DISPLAY_NAME, "&a&lName Pet");
-        defaults.put(LORE_ENABLED, "false");
-        defaults.put(LORE, new JSONArray());
-        JSONObject custom = new JSONObject();
-        custom.put(ENABLED, "false");
-        custom.put(SKULL_OWNER, "SimpleAPI");
-        custom.put(TEXTURE_URL, "");
-        defaults.put(CUSTOM_SKULL, custom);
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder(Material.NAME_TAG).withName("&a&lName Pet");
+    }
+
+    @Override
+    public boolean addItemToInv(PetOwner owner, CustomInventory inventory) {
+        return PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled");
     }
 
     @Override

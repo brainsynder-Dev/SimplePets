@@ -9,24 +9,20 @@ import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 
-public class Ride extends Item {
-    public Ride(File file) {
+public class Saves extends Item {
+    public Saves(File file) {
         super(file);
     }
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.DIAMOND_BARDING).withName("&e&lToggle Pet Riding");
-    }
-
-    @Override
-    public boolean addItemToInv(PetOwner owner, CustomInventory inventory) {
-        return PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts");
+        return new ItemBuilder(Material.COMMAND)
+                .withName("&e&lPet Saves")
+                .addLore("&7", "&7View the pets you have saved");
     }
 
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
-        if (owner.hasPet())
-            owner.getPet().toggleRiding();
+        PetCore.get().getInvLoaders().SAVES.open(owner);
     }
 }

@@ -10,10 +10,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
-import simplepets.brainsynder.menu.items.list.Hat;
-import simplepets.brainsynder.menu.items.list.Name;
-import simplepets.brainsynder.menu.items.list.PreviousPage;
-import simplepets.brainsynder.menu.items.list.Ride;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -66,20 +62,8 @@ public class DataMenu extends CustomInventory {
         }
 
         getSlots().forEach((slot, item) -> {
-            if (item instanceof PreviousPage) {
+            if (item.isEnabled() && item.addItemToInv(owner, this))
                 inv.setItem(slot, item.getItemBuilder().build());
-            } else if (item instanceof Hat) {
-                if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-                    inv.setItem(slot, item.getItemBuilder().build());
-            } else if (item instanceof Ride) {
-                if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-                    inv.setItem(slot, item.getItemBuilder().build());
-            } else if (item instanceof Name) {
-                if (PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled"))
-                    inv.setItem(slot, item.getItemBuilder().build());
-            } else {
-                inv.setItem(slot, item.getItemBuilder().build());
-            }
         });
 
         if (owner.hasPet()) {

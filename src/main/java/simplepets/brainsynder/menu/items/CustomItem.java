@@ -7,7 +7,7 @@ import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
 
-public class CustomItem extends Item {
+public abstract class CustomItem extends Item {
     protected static final String NAMESPACE = "namespace";
 
     public CustomItem(File file) {

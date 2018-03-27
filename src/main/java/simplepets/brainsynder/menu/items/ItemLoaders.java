@@ -36,6 +36,8 @@ public class ItemLoaders {
         add(new Storage (Item.getLocation(core, Storage.class)));
         add(new Placeholder (Item.getLocation(core, Placeholder.class)));
         add(new Data(Item.getLocation(core, Data.class)));
+        add(new SavePet(Item.getLocation(core, SavePet.class)));
+        add(new Saves(Item.getLocation(core, Saves.class)));
         add(new FlameOn(new File(customFolder, "flameon.json")));
 
         for (Item loader : items.values()) {
@@ -95,7 +97,7 @@ public class ItemLoaders {
         if (items.isEmpty()) initiate();
         if (item.getType() == Material.AIR) return AIR;
         for (Item loader : items.values()) {
-            if (PetCore.get().getUtilities().isSimilar(loader.getItem(), item)) {
+            if (loader.getItemBuilder().isSimilar(item)) {
                 return loader;
             }
         }
