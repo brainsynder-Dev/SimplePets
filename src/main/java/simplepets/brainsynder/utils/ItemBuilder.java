@@ -122,7 +122,7 @@ public class ItemBuilder {
     }
     public ItemBuilder clearLore() {
         if (JSON.containsKey("lore")) JSON.remove("lore");
-        im.getLore().clear();
+        if (im.hasLore()) im.getLore().clear();
         return this;
     }
     public ItemBuilder removeLore(String lore) {
@@ -174,7 +174,7 @@ public class ItemBuilder {
         if (JSON.containsKey("enchants")) ENCHANTS = (JSONArray) JSON.get("enchants");
         ENCHANTS.add(enchant.getName()+" ~~ "+level);
         JSON.put("enchants", ENCHANTS);
-        is.addUnsafeEnchantment(enchant, level);
+        im.addEnchant(enchant, level, true);
         return this;
     }
 

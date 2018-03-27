@@ -71,6 +71,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>cubekrowd-repo</id>
+            <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -108,9 +112,8 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>3.7</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/SimpleAPI.jar</systemPath>
+            <version>3.8</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.github.Brettflan</groupId>
