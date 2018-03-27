@@ -7,7 +7,6 @@ import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.pet.types.ArmorStandDefault;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.utils.ItemBuilder;
@@ -107,6 +106,7 @@ public abstract class PetDefault extends JSONFile {
     public boolean canHat(Player player) {
         if (_HAT_) {
             if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
+            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
             return PetCore.hasPerm(player, getPermission() + ".hat");
         }
         return false;
@@ -118,6 +118,7 @@ public abstract class PetDefault extends JSONFile {
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
+            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
             return PetCore.hasPerm(player, getPermission() + ".mount");
         }
         return false;
@@ -126,6 +127,7 @@ public abstract class PetDefault extends JSONFile {
     public boolean canFly(Player player) {
         if (_FLY_) {
             if (PetCore.hasPerm(player, "Pet.FlyAll")) return true;
+            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
             return PetCore.hasPerm(player, getPermission() + ".fly");
         }
         return false;
