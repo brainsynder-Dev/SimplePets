@@ -194,12 +194,18 @@ public class OwnerFile {
                     @Override
                     public void run() {
                         try {
-                            JSONArray array = (JSONArray) ((JSONObject)data.get("UnlockedPets")).get("StoredPets");
-                            owner.setRawOwned(array);
-                            String name = Base64Wrapper.decodeString(String.valueOf(data.get("PetName")));
-                            if (!name.equals("empty")) owner.setRawPetName(name);
-                            owner.updateSavedPets((JSONArray) JSONValue.parseWithException(Base64Wrapper.decodeString(String.valueOf(data.get("SavedPets")))));
-                            handle(String.valueOf(data.get("NeedsRespawn")));
+                            if (data.get("UnlockedPets") != null) {
+                                JSONArray array = (JSONArray) ((JSONObject) data.get("UnlockedPets")).get("StoredPets");
+                                owner.setRawOwned(array);
+                            }
+                            if (data.get("PetName") != null) {
+                                String name = Base64Wrapper.decodeString(String.valueOf(data.get("PetName")));
+                                if (!name.equals("empty")) owner.setRawPetName(name);
+                            }
+                            if (data.get("SavedPets") != null)
+                                owner.updateSavedPets((JSONArray) JSONValue.parseWithException(Base64Wrapper.decodeString(String.valueOf(data.get("SavedPets")))));
+                            if (data.get("NeedsRespawn") != null)
+                                handle(String.valueOf(data.get("NeedsRespawn")));
                         } catch (Exception e) {
                             PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
                             e.printStackTrace();
@@ -233,13 +239,13 @@ public class OwnerFile {
         owner.setRawPetName(file.getString("PetName"));
     }
 
-    private JSONObject parse (String string) {
-        if (string.equals("null")) return new JSONObject ();
+    private JSONObject parse(String string) {
+        if (string.equals("null")) return new JSONObject();
         try {
             return (JSONObject) JSONValue.parseWithException(Base64Wrapper.decodeString(string));
         } catch (ParseException e) {
             e.printStackTrace();
-            return new JSONObject ();
+            return new JSONObject();
         }
     }
 
