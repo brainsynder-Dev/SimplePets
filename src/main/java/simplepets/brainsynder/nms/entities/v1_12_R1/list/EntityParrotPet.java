@@ -136,7 +136,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("parrotcolor"))
-            setVariant(ParrotVariant.getByName("parrotcolor"));
+            setVariant(ParrotVariant.getByName(object.getString("parrotcolor")));
         if (object.hasKey("rainbow"))
             rainbow = object.getBoolean("rainbow");
         super.applyCompound(object);
