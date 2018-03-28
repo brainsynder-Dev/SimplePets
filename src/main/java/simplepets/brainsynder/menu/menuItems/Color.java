@@ -2,15 +2,19 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
+import org.json.simple.JSONArray;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+import java.util.List;
+
 public class Color extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.WOOL).setName("&6Change Color");
+    private ItemBuilder item = type.getDataItemByName("color");
 
     public Color(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -20,21 +24,47 @@ public class Color extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
 
-        ItemMaker item = null;
+        ItemBuilder item = this.item;
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.WHITE;
             if (var.getColor() != null)
                 typeID = var.getColor();
-            item = new ItemMaker(Material.WOOL, typeID.getWoolData());
-            item.setName(" ");
+            item = new ItemBuilder(Material.valueOf(String.valueOf(item.toJSON().get("material"))), typeID.getWoolData());
+            item.withName(String.valueOf(item.toJSON().get("name")));
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
-            item.addLoreLine("&6Previous: §" + prev.getChatChar() + WordUtils.capitalize(prev.toString().toLowerCase()));
-            item.addLoreLine("&6Current: §" + typeID.getChatChar() + WordUtils.capitalize(typeID.toString().toLowerCase()));
-            item.addLoreLine("&6Next: §" + next.getChatChar() + WordUtils.capitalize(next.toString().toLowerCase()));
+            List<String> lore = (JSONArray) item.toJSON().get("lore");
+            for (Object s : (JSONArray) item.toJSON().get("lore")) {
+                String str = String.valueOf(s);
+                lore.add(str.replace("%prev_color%", "§" + prev.getChatChar())
+                .replace("%prev_name%", WordUtils.capitalize(prev.name().toLowerCase()))
+                .replace("%curr_color%", "§" + typeID.getChatChar())
+                .replace("%curr_name%", WordUtils.capitalize(typeID.name().toLowerCase()))
+                .replace("%next_color%", "§" + next.getChatChar())
+                .replace("%next_name%", WordUtils.capitalize(typeID.name().toLowerCase())));
+            }
+
+            item.withLore(lore);
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = this.item;
+        if (getEntityPet() instanceof IColorable) {
+            IColorable var = (IColorable) getEntityPet();
+            DyeColorWrapper typeID = DyeColorWrapper.WHITE;
+            if (var.getColor() != null)
+                typeID = var.getColor();
+            item = new ItemBuilder(Material.valueOf(String.valueOf(item.toJSON().get("material"))), typeID.getWoolData());
+            item.withName(" ");
+            item.addLore("&6Previous: %prev_color%%prev_name%",
+                    "&6Current: %curr_color%%curr_name%",
+                    "&6Next: %next_color%%next_name%");
         }
         return item;
     }

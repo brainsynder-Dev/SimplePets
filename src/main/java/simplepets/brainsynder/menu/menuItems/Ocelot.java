@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Ocelot extends MenuItemAbstract {
 
@@ -17,27 +17,55 @@ public class Ocelot extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = null;
+    public ItemBuilder getItem() {
+        ItemBuilder item = null;
         if (entityPet instanceof IEntityOcelotPet) {
             IEntityOcelotPet var = (IEntityOcelotPet) entityPet;
             int typeID = var.getCatType();
             switch (typeID) {
                 case 0:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 11);
-                    item.setName("&6Wild Cat");
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 11);
+                    item.withName("&6Wild Cat");
                     break;
                 case 1:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 0);
-                    item.setName("&6Black Cat");
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 0);
+                    item.withName("&6Black Cat");
                     break;
                 case 2:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 14);
-                    item.setName("&6Orange Cat");
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
+                    item.withName("&6Orange Cat");
                     break;
                 case 3:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 7);
-                    item.setName("&6Siamese Cat");
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 7);
+                    item.withName("&6Siamese Cat");
+                    break;
+            }
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = null;
+        if (entityPet instanceof IEntityOcelotPet) {
+            IEntityOcelotPet var = (IEntityOcelotPet) entityPet;
+            int typeID = var.getCatType();
+            switch (typeID) {
+                case 0:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 11);
+                    item.withName("&6Wild Cat");
+                    break;
+                case 1:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 0);
+                    item.withName("&6Black Cat");
+                    break;
+                case 2:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
+                    item.withName("&6Orange Cat");
+                    break;
+                case 3:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 7);
+                    item.withName("&6Siamese Cat");
                     break;
             }
         }

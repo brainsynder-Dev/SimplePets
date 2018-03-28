@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class LlamaColor extends MenuItemAbstract {
     public LlamaColor(PetDefault type, IEntityPet entityPet) {
@@ -16,8 +16,8 @@ public class LlamaColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = null;
+    public ItemBuilder getItem() {
+        ItemBuilder item = null;
         if (entityPet instanceof IEntityLlamaPet) {
             IEntityLlamaPet var = (IEntityLlamaPet) entityPet;
             simplepets.brainsynder.wrapper.LlamaColor typeID = simplepets.brainsynder.wrapper.LlamaColor.CREAMY;
@@ -26,24 +26,29 @@ public class LlamaColor extends MenuItemAbstract {
             }
             switch (typeID) {
                 case CREAMY:
-                    item = new ItemMaker(Material.WOOL, (byte) 4);
-                    item.setName("&6Creamy");
+                    item = new ItemBuilder(Material.WOOL, (byte) 4);
+                    item.withName("&6Creamy");
                     break;
                 case BROWN:
-                    item = new ItemMaker(Material.WOOL, (byte) 12);
-                    item.setName("&6Brown");
+                    item = new ItemBuilder(Material.WOOL, (byte) 12);
+                    item.withName("&6Brown");
                     break;
                 case GRAY:
-                    item = new ItemMaker(Material.WOOL, (byte) 7);
-                    item.setName("&6Gray");
+                    item = new ItemBuilder(Material.WOOL, (byte) 7);
+                    item.withName("&6Gray");
                     break;
                 case WHITE:
-                    item = new ItemMaker(Material.WOOL);
-                    item.setName("&6White");
+                    item = new ItemBuilder(Material.WOOL);
+                    item.withName("&6White");
                     break;
             }
         }
         return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        return null;
     }
 
     @Override

@@ -6,9 +6,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Johnny extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.IRON_AXE);
+    private ItemBuilder item = type.getDataItemByName("johnny");
     public Johnny(PetDefault type) {
         super(type);
     }
@@ -18,10 +19,19 @@ public class Johnny extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
-            item.setName("&6Johnny: &e" + var.isJohnny());
+            item.withName("&6Johnny: &e" + var.isJohnny());
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        if (entityPet instanceof IEntityVindicatorPet) {
+            IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
+            item.withName("&6Johnny: &e" + var.isJohnny());
         }
         return item;
     }

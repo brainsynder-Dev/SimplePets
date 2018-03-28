@@ -1,14 +1,16 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
+import org.json.simple.JSONObject;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Angry extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.WOOL, (byte) 14);
+    private ItemBuilder item = type.getDataItemByName("angry");
 
     public Angry(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,10 +20,23 @@ public class Angry extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        if (entityPet instanceof IEntityWolfPet) {
-            IEntityWolfPet var = (IEntityWolfPet) entityPet;
-            item.setName("&6Angry: &e" + var.isAngry());
+    public ItemBuilder getItem() {
+        if (item != null) {
+            if (entityPet instanceof IEntityWolfPet) {
+                IEntityWolfPet var = (IEntityWolfPet) entityPet;
+                item.withName(String.valueOf(item.toJSON().get("name"))
+                        .replace("%value%", String.valueOf(var.isAngry())));
+
+            }
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = this.item;
+        if (item != null) {
+            item.withName("&6Angry: &e%value%");
         }
         return item;
     }

@@ -7,9 +7,10 @@ import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Powered extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.SULPHUR);
+    private ItemBuilder item = type.getDataItemByName("powered");
 
     public Powered(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,15 +20,21 @@ public class Powered extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityCreeperPet) {
             IEntityCreeperPet var = (IEntityCreeperPet) entityPet;
-            item.setName("&6Powered: &e" + var.isPowered());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isPowered())));
         }
         if (entityPet instanceof IEntityVexPet) {
             IEntityVexPet var = (IEntityVexPet) entityPet;
-            item.setName("&6Powered: &e" + var.isPowered());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isPowered())));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        item.withName("&6Powered: &e%value%");
         return item;
     }
 

@@ -1,14 +1,13 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Clone extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.SKULL_ITEM, (byte) 3);
+    private ItemBuilder item = type.getDataItemByName("clone");
 
     public Clone(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,10 +17,22 @@ public class Clone extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        if (entityPet instanceof IEntityArmorStandPet) {
-            IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-            item.setName("&6IsClone: &e" + var.isOwner());
+    public ItemBuilder getItem() {
+        if (item != null) {
+            if (entityPet instanceof IEntityArmorStandPet) {
+                IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
+                item.withName(String.valueOf(item.toJSON().get("name"))
+                .replace("%value%", String.valueOf(var.isOwner())));
+            }
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = this.item;
+        if (item != null) {
+            item.withName("&6IsClone: &e%value%");
         }
         return item;
     }

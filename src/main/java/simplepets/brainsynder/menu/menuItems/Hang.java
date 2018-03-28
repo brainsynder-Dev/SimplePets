@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Hang extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.FEATHER);
+    private ItemBuilder item = type.getDataItemByName("hang");
 
     public Hang(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,10 +18,19 @@ public class Hang extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityBatPet) {
             IEntityBatPet var = (IEntityBatPet) entityPet;
-            item.setName("&6Hanging: &e" + var.isHanging());
+            item.withName(String.valueOf(item.toJSON().get("name")));
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = this.item;
+        if (item != null) {
+            item.withName("&6Hanging: &e%value%");
         }
         return item;
     }

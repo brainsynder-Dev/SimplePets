@@ -3,12 +3,16 @@ package simplepets.brainsynder.reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ReflectionUtil {
     public static int getVersionInt() {
@@ -89,6 +93,16 @@ public class ReflectionUtil {
 
     public static Object getEntityHandle(Entity entity) {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
+    }
+
+    public static JSONArray getMenuItems(List<Class<? extends MenuItem>> c) {
+        JSONArray a = new JSONArray();
+        for (Class<? extends MenuItem> cl : c) {
+            Method m = getMethod(cl,"getDefaultItem");
+            ItemBuilder o = invokeMethod(m, cl);
+            a.add(o.toJSON());
+        }
+        return a;
     }
 
     public static Object getPrivateField(String fieldName, Class clazz, Object object) {

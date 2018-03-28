@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems.base;
 
 import org.bukkit.entity.Player;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public abstract class MenuItem {
     protected IEntityPet entityPet = null;
@@ -36,7 +36,9 @@ public abstract class MenuItem {
         return entityPet;
     }
 
-    public abstract ItemMaker getItem();
+    public abstract ItemBuilder getItem();
+
+    public abstract ItemBuilder getDefaultItem();
 
     public String getPermission() {
         return (type.getPermission() + ".data." + getClass().getSimpleName().toLowerCase());

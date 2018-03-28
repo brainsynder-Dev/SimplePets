@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
 public class HorseStyle extends MenuItemAbstract {
@@ -17,8 +17,8 @@ public class HorseStyle extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = new ItemMaker(Material.LEASH);
+    public ItemBuilder getItem() {
+        ItemBuilder item = new ItemBuilder(Material.LEASH);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
             HorseStyleType typeID = HorseStyleType.NONE;
@@ -27,19 +27,49 @@ public class HorseStyle extends MenuItemAbstract {
             }
             switch (typeID) {
                 case NONE:
-                    item.setName("&6None");
+                    item.withName("&6None");
                     break;
                 case BLACK_DOTS:
-                    item.setName("&6Black Spots");
+                    item.withName("&6Black Spots");
                     break;
                 case WHITE_DOTS:
-                    item.setName("&6White Dots");
+                    item.withName("&6White Dots");
                     break;
                 case WHITEFIELD:
-                    item.setName("&6White Field");
+                    item.withName("&6White Field");
                     break;
                 case WHITE:
-                    item.setName("&6White");
+                    item.withName("&6White");
+                    break;
+            }
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.LEASH);
+        if (entityPet instanceof IEntityHorsePet) {
+            IEntityHorsePet var = (IEntityHorsePet) entityPet;
+            HorseStyleType typeID = HorseStyleType.NONE;
+            if (var.getStyle() != null) {
+                typeID = var.getStyle();
+            }
+            switch (typeID) {
+                case NONE:
+                    item.withName("&6None");
+                    break;
+                case BLACK_DOTS:
+                    item.withName("&6Black Spots");
+                    break;
+                case WHITE_DOTS:
+                    item.withName("&6White Dots");
+                    break;
+                case WHITEFIELD:
+                    item.withName("&6White Field");
+                    break;
+                case WHITE:
+                    item.withName("&6White");
                     break;
             }
         }

@@ -6,9 +6,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Pumpkin extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.PUMPKIN);
+    private ItemBuilder item = type.getDataItemByName("pumpkin");
 
     public Pumpkin(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -23,11 +24,17 @@ public class Pumpkin extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
-            item.setName("&6Pumpkin: &e" + var.hasPumpkin());
+            item.withName("&6Pumpkin: &e" + var.hasPumpkin());
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        item.withName("&6Pumpkin: &e%value%");
         return item;
     }
 

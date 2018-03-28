@@ -1,14 +1,13 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Burning extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.BLAZE_ROD);
+    private ItemBuilder item = type.getDataItemByName("burning");
 
     public Burning(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,10 +17,20 @@ public class Burning extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityBlazePet) {
             IEntityBlazePet var = (IEntityBlazePet) entityPet;
-            item.setName("&6Burning: &e" + var.isBurning());
+            item.withName(String.valueOf(item.toJSON().get("name"))
+                    .replace("%value%", String.valueOf(var.isBurning())));
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = this.item;
+        if (item != null) {
+            item.withName("&6Burning: &e%value%");
         }
         return item;
     }
