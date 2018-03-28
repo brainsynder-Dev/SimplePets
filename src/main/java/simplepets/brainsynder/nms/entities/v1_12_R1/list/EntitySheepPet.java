@@ -14,6 +14,8 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 @Size(width = 0.9F, length = 1.3F)
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> COLOR_SHEARED;
+    private boolean rainbow = false;
+    private int toggle = 0;
 
     static {
         COLOR_SHEARED = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
@@ -36,13 +38,16 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
+        if (!rainbow)
         object.setString("color", getColor().name());
         object.setBoolean("sheared", isSheared());
+        object.setBoolean("rainbow", rainbow);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("rainbow")) rainbow = object.getBoolean("rainbow");
         if (object.hasKey("color"))
             setColor(DyeColorWrapper.getByName(object.getString("color")));
         if (object.hasKey("sheared"))
@@ -61,6 +66,7 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         this.datawatcher.set(COLOR_SHEARED, i.getWoolData());
     }
 
+    @Override
     public boolean isSheared() {
         byte data = this.datawatcher.get(COLOR_SHEARED);
         return (data & 16) != 0;
@@ -73,5 +79,27 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         } else {
             this.datawatcher.set(COLOR_SHEARED, (byte) (data & -17));
         }
+    }
+
+    @Override
+    public void repeatTask() {
+        super.repeatTask();
+        if (rainbow) {
+            if (toggle == 4) {
+                setColor(DyeColorWrapper.getNext(getColor()));
+                toggle = 0;
+            }
+            toggle++;
+        }
+    }
+
+    @Override
+    public boolean isRainbow() {
+        return rainbow;
+    }
+
+    @Override
+    public void setRainbow(boolean rainbow) {
+        this.rainbow = rainbow;
     }
 }
