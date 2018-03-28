@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class WitherShield extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.NETHER_STAR);
+    private ItemBuilder item = type.getDataItemByName("withershield");
 
     public WitherShield(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,11 +18,18 @@ public class WitherShield extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
-            item.setName("&6Shielded: &e" + var.isShielded());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isShielded())));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.NETHER_STAR);
+        item.withName("&6Shielded: &e%value%");
         return item;
     }
 

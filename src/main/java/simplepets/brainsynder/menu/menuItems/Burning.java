@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -28,7 +29,7 @@ public class Burning extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
+        ItemBuilder item = new ItemBuilder(Material.BLAZE_ROD);
         if (item != null) {
             item.withName("&6Burning: &e%value%");
         }

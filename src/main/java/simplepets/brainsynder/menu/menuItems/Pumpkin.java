@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -27,13 +26,14 @@ public class Pumpkin extends MenuItemAbstract {
     public ItemBuilder getItem() {
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
-            item.withName("&6Pumpkin: &e" + var.hasPumpkin());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.hasPumpkin())));
         }
         return item;
     }
 
     @Override
     public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.PUMPKIN);
         item.withName("&6Pumpkin: &e%value%");
         return item;
     }

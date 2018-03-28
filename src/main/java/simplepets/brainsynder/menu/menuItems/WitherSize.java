@@ -1,13 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class WitherSize extends MenuItemAbstract {
+    private ItemBuilder item = type.getDataItemByName("withersize");
     public WitherSize(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -16,12 +17,18 @@ public class WitherSize extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = new ItemMaker(Material.NETHER_BRICK_ITEM);
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
-            item.setName("&6Small: &e" + var.isSmall());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var)));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.NETHER_BRICK_ITEM);
+        item.withName("&6Small: &e%value%");
         return item;
     }
 

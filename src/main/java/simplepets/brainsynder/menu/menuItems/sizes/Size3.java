@@ -7,9 +7,10 @@ import simplepets.brainsynder.api.entity.hostile.IEntityMagmaCubePet;
 import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Size3 extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.SLIME_BLOCK);
+    private ItemBuilder item = type.getDataItemByName("size3");
 
     public Size3(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,8 +20,13 @@ public class Size3 extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        return item.setName("&6&lSize:&e " + 3);
+    public ItemBuilder getItem() {
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder(Material.SLIME_BLOCK).withName("&6&lSize: &e3");
     }
 
     @Override

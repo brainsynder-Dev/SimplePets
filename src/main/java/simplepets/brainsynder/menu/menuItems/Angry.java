@@ -34,10 +34,8 @@ public class Angry extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
-        if (item != null) {
-            item.withName("&6Angry: &e%value%");
-        }
+        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 14);
+        item.withName("&6Angry: &e%value%");
         return item;
     }
 

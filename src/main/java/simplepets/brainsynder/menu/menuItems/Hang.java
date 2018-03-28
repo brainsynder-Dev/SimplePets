@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
@@ -28,10 +29,8 @@ public class Hang extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
-        if (item != null) {
-            item.withName("&6Hanging: &e%value%");
-        }
+        ItemBuilder item = new ItemBuilder(Material.FEATHER);
+        item.withName("&6Hanging: &e%value%");
         return item;
     }
 

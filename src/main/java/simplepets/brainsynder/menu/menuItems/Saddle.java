@@ -1,15 +1,15 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IHorseAbstract;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Saddle extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.SADDLE);
+    private ItemBuilder item = type.getDataItemByName("saddle");
 
     public Saddle(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,18 +19,27 @@ public class Saddle extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         try {
             if (entityPet instanceof IEntityPigPet) {
                 IEntityPigPet pig = (IEntityPigPet) entityPet;
-                item.setName("&6Has Saddle: &e" + pig.hasSaddle());
+                item.withName(String.valueOf(item.toJSON().get("name"))
+                .replace("%value%", String.valueOf(pig.hasSaddle())));
             } else if (entityPet instanceof IHorseAbstract) {
                 IHorseAbstract var = (IHorseAbstract) entityPet;
-                item.setName("&6Has Saddle: &e" + var.isSaddled());
+                item.withName(String.valueOf(item.toJSON().get("name"))
+                        .replace("%value%", String.valueOf(var.isSaddled())));
             }
         } catch (Exception e) {
-            item.setName("&6Has Saddle: &cERROR");
+            item.withName("&6Has Saddle: &cERROR");
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.SADDLE);
+        item.withName("&6Has Saddle: &e%value%");
         return item;
     }
 

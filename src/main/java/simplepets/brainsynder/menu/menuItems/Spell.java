@@ -2,11 +2,11 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IEntityWizard;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public class Spell extends MenuItemAbstract {
@@ -19,32 +19,63 @@ public class Spell extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = null;
+    public ItemBuilder getItem() {
+        ItemBuilder item = null;
         if (entityPet instanceof IEntityWizard) {
             IEntityWizard var = (IEntityWizard) entityPet;
             WizardSpell typeID = var.getSpell();
             switch (typeID) {
                 case BLINDNESS:
-                    item = new ItemMaker(Material.INK_SACK);
+                    item = new ItemBuilder(Material.INK_SACK);
                     break;
                 case DISAPPEAR:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 12);
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 12);
                     break;
                 case FANGS:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 3);
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 3);
                     break;
                 case NONE:
-                    item = new ItemMaker(Material.BARRIER);
+                    item = new ItemBuilder(Material.BARRIER);
                     break;
                 case SUMMON_VEX:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 8);
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 8);
                     break;
                 case WOLOLO:
-                    item = new ItemMaker(Material.INK_SACK, (byte) 14);
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
                     break;
             }
-            item.setName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
+            item.withName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = null;
+        if (entityPet instanceof IEntityWizard) {
+            IEntityWizard var = (IEntityWizard) entityPet;
+            WizardSpell typeID = var.getSpell();
+            switch (typeID) {
+                case BLINDNESS:
+                    item = new ItemBuilder(Material.INK_SACK);
+                    break;
+                case DISAPPEAR:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 12);
+                    break;
+                case FANGS:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 3);
+                    break;
+                case NONE:
+                    item = new ItemBuilder(Material.BARRIER);
+                    break;
+                case SUMMON_VEX:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 8);
+                    break;
+                case WOLOLO:
+                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
+                    break;
+            }
+            item.withName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
         }
         return item;
     }

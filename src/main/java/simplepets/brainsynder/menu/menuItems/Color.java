@@ -54,7 +54,7 @@ public class Color extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
+        ItemBuilder item = null;
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.WHITE;

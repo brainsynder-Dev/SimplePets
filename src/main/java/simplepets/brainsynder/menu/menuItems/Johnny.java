@@ -22,13 +22,14 @@ public class Johnny extends MenuItemAbstract {
     public ItemBuilder getItem() {
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
-            item.withName("&6Johnny: &e" + var.isJohnny());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isJohnny())));
         }
         return item;
     }
 
     @Override
     public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.IRON_AXE);
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
             item.withName("&6Johnny: &e" + var.isJohnny());

@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ITameable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Tame extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.BONE);
+    private ItemBuilder item = type.getDataItemByName("tame");
 
     public Tame(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,12 +18,19 @@ public class Tame extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            item.setName("&6Tamed: &e" + var.isTamed());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isTamed())));
         }
         return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.BONE);
+        item.withName("&6Tamed: &e%value%");
+        return null;
     }
 
     @Override

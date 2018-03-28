@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Scream extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.ENDER_PEARL);
+    private ItemBuilder item = type.getDataItemByName("scream");
 
     public Scream(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,12 +18,19 @@ public class Scream extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityEndermanPet) {
             IEntityEndermanPet var = (IEntityEndermanPet) entityPet;
-            item.setName("&6Screaming: &e" + var.isScreaming());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isScreaming())));
         }
         return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.ENDER_PEARL);
+        item.withName("&6Screaming: &e%value%");
+        return null;
     }
 
     @Override

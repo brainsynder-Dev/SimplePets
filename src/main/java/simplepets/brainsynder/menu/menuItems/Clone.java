@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -30,10 +31,8 @@ public class Clone extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
-        if (item != null) {
-            item.withName("&6IsClone: &e%value%");
-        }
+        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM, (byte) 3);
+        item.withName("&6IsClone: &e%value%");
         return item;
     }
 

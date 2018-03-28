@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.wrapper.MaterialWrapper;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class ShulkerClosed extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(MaterialWrapper.SHULKER_SHELL.toMaterial());
+    private ItemBuilder item = type.getDataItemByName("shulkerclosed");
 
     public ShulkerClosed(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,11 +18,18 @@ public class ShulkerClosed extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (getEntityPet() instanceof IEntityShulkerPet) {
             IEntityShulkerPet var = (IEntityShulkerPet) getEntityPet();
-            item.setName("&6Closed: &e" + var.isClosed());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isClosed())));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.SHULKER_SHELL);
+        item.withName("&6Closed: &e%value%");
         return item;
     }
 

@@ -34,6 +34,7 @@ public class Powered extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.SULPHUR);
         item.withName("&6Powered: &e%value%");
         return item;
     }

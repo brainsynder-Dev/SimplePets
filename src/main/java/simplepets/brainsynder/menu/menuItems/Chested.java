@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IChestedAbstractPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -31,10 +32,8 @@ public class Chested extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
-        if (item != null) {
-            item.withName("&6Chested: &e%value%");
-        }
+        ItemBuilder item = new ItemBuilder(Material.CHEST);
+        item.withName("&6Chested: &e%value%");
         return item;
     }
 

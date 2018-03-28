@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Tilt extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.SKULL_ITEM);
+    private ItemBuilder item = type.getDataItemByName("tilt");
 
     public Tilt(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,11 +18,18 @@ public class Tilt extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof IEntityWolfPet) {
             IEntityWolfPet var = (IEntityWolfPet) entityPet;
-            item.setName("&6Head Tilted: &e" + var.isHeadTilted());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isHeadTilted())));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM);
+        item.withName("&6Head Tilted: &e%value%");
         return item;
     }
 

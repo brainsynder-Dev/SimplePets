@@ -88,7 +88,7 @@ public class DataMenu extends CustomInventory {
             while (items.hasNext()) {
                 MenuItem item = items.next();
                 try {
-                    ItemStack stack = item.getItem().create();
+                    ItemStack stack = item.getItem().build();
                     if (!inv.contains(stack)) {
                         if (item.hasPermission(pet.getOwner())) {
                             inv.addItem(stack);

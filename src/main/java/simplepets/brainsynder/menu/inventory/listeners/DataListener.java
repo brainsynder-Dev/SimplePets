@@ -44,7 +44,7 @@ public class DataListener implements Listener {
             if (!menuItems.isEmpty()) {
                 while (menuItems.hasNext()) {
                     MenuItemAbstract menuItem = (MenuItemAbstract) menuItems.next();
-                    ItemStack stack = menuItem.getItem().create();
+                    ItemStack stack = menuItem.getItem().build();
                     PetDataChangeEvent.ClickType type = PetDataChangeEvent.ClickType.LEFT_CLICK;
                     if (e.getClick().toString().toLowerCase().contains("right"))
                         type = PetDataChangeEvent.ClickType.RIGHT_CLICK;
@@ -57,7 +57,7 @@ public class DataListener implements Listener {
                             } else {
                                 menuItem.onRightClick();
                             }
-                            e.getInventory().setItem(e.getSlot(), menuItem.getItem().create());
+                            e.getInventory().setItem(e.getSlot(), menuItem.getItem().build());
                         }
                         e.setCancelled(true);
                         return;

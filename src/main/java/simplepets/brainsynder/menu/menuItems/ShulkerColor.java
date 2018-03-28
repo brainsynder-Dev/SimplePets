@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
 
@@ -18,20 +18,39 @@ public class ShulkerColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
-        ItemMaker item = null;
+    public ItemBuilder getItem() {
+        ItemBuilder item = null;
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.PURPLE;
             if (var.getColor() != null)
                 typeID = var.getColor();
-            item = new ItemMaker(MaterialWrapper.fromName(typeID.name() + "_SHULKER_BOX").toMaterial());
-            item.setName(" ");
+            item = new ItemBuilder(MaterialWrapper.fromName(typeID.name() + "_SHULKER_BOX").toMaterial());
+            item.withName(" ");
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
-            item.addLoreLine("&6Previous: §" + prev.getChatChar() + WordUtils.capitalize(prev.toString().toLowerCase()));
-            item.addLoreLine("&6Current: §" + typeID.getChatChar() + WordUtils.capitalize(typeID.toString().toLowerCase()));
-            item.addLoreLine("&6Next: §" + next.getChatChar() + WordUtils.capitalize(next.toString().toLowerCase()));
+            item.addLore("&6Previous: §" + prev.getChatChar() + WordUtils.capitalize(prev.toString().toLowerCase()),
+                    "&6Current: §" + typeID.getChatChar() + WordUtils.capitalize(typeID.toString().toLowerCase()),
+                    "&6Next: §" + next.getChatChar() + WordUtils.capitalize(next.toString().toLowerCase()));
+        }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = null;
+        if (getEntityPet() instanceof IColorable) {
+            IColorable var = (IColorable) getEntityPet();
+            DyeColorWrapper typeID = DyeColorWrapper.PURPLE;
+            if (var.getColor() != null)
+                typeID = var.getColor();
+            item = new ItemBuilder(MaterialWrapper.fromName(typeID.name() + "_SHULKER_BOX").toMaterial());
+            item.withName(" ");
+            DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
+            DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
+            item.addLore("&6Previous: §" + prev.getChatChar() + WordUtils.capitalize(prev.toString().toLowerCase()),
+                    "&6Current: §" + typeID.getChatChar() + WordUtils.capitalize(typeID.toString().toLowerCase()),
+                    "&6Next: §" + next.getChatChar() + WordUtils.capitalize(next.toString().toLowerCase()));
         }
         return item;
     }

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IAgeablePet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -30,10 +31,8 @@ public class Age extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = this.item;
-        if (item != null) {
-            item.withName("&6Baby: &e%value%");
-        }
+        ItemBuilder item = new ItemBuilder(Material.WHEAT);
+        item.withName("&6Baby: &e%value%");
         return item;
     }
 

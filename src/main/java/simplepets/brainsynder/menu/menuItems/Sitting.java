@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ITameable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Sitting extends MenuItemAbstract {
-    private ItemMaker item = new ItemMaker(Material.WOOD_STAIRS);
+    private ItemBuilder item = type.getDataItemByName("sitting");
 
     public Sitting(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -18,11 +18,18 @@ public class Sitting extends MenuItemAbstract {
     }
 
     @Override
-    public ItemMaker getItem() {
+    public ItemBuilder getItem() {
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            item.setName("&6Sitting: &e" + var.isSitting());
+            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSitting())));
         }
+        return item;
+    }
+
+    @Override
+    public ItemBuilder getDefaultItem() {
+        ItemBuilder item = new ItemBuilder(Material.WOOD_STAIRS);
+        item.withName("&6Sitting: &e%value%");
         return item;
     }
 
