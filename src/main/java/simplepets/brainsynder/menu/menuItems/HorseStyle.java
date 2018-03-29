@@ -21,7 +21,7 @@ public class HorseStyle extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        ItemBuilder item = new ItemBuilder(Material.LEASH);
+        ItemBuilder item = type.getDataItemByName("horsestyle", 0);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
             HorseStyleType typeID = HorseStyleType.NONE;
@@ -30,19 +30,19 @@ public class HorseStyle extends MenuItemAbstract {
             }
             switch (typeID) {
                 case NONE:
-                    item.withName("&6None");
+                    item = type.getDataItemByName("horsestyle", 0);
                     break;
                 case BLACK_DOTS:
-                    item.withName("&6Black Spots");
+                    item = type.getDataItemByName("horsestyle", 1);
                     break;
                 case WHITE_DOTS:
-                    item.withName("&6White Dots");
+                    item = type.getDataItemByName("horsestyle", 2);
                     break;
                 case WHITEFIELD:
-                    item.withName("&6White Field");
+                    item = type.getDataItemByName("horsestyle", 3);
                     break;
                 case WHITE:
-                    item.withName("&6White");
+                    item = type.getDataItemByName("horsestyle", 4);
                     break;
             }
         }
@@ -51,32 +51,19 @@ public class HorseStyle extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
         ItemBuilder item = new ItemBuilder(Material.LEASH);
-        if (entityPet instanceof IEntityHorsePet) {
-            IEntityHorsePet var = (IEntityHorsePet) entityPet;
-            HorseStyleType typeID = HorseStyleType.NONE;
-            if (var.getStyle() != null) {
-                typeID = var.getStyle();
-            }
-            switch (typeID) {
-                case NONE:
-                    item.withName("&6None");
-                    break;
-                case BLACK_DOTS:
-                    item.withName("&6Black Spots");
-                    break;
-                case WHITE_DOTS:
-                    item.withName("&6White Dots");
-                    break;
-                case WHITEFIELD:
-                    item.withName("&6White Field");
-                    break;
-                case WHITE:
-                    item.withName("&6White");
-                    break;
-            }
-        }
-        return new ArrayList<>();
+        item.withName("&6None");
+        items.add(item);
+        item.withName("&6Black Spots");
+        items.add(item);
+        item.withName("&6White Dots");
+        items.add(item);
+        item.withName("&6White Field");
+        items.add(item);
+        item.withName("&6White");
+        items.add(item);
+        return items;
     }
 
     @Override

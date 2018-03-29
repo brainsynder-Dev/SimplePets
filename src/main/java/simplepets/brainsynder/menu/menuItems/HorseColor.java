@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -31,32 +30,25 @@ public class HorseColor extends MenuItemAbstract {
             }
             switch (typeID) {
                 case BLACK:
-                    item = new ItemBuilder(Material.WOOL, (byte) 15);
-                    item.withName("&6Black");
+                    item = type.getDataItemByName("horsecolor", 0);
                     break;
                 case CHESTNUT:
-                    item = new ItemBuilder(Material.STAINED_CLAY, (byte) 8);
-                    item.withName("&6Chestnut");
+                    item = type.getDataItemByName("horsecolor", 1);
                     break;
                 case CREAMY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 4);
-                    item.withName("&6Creamy");
+                    item = type.getDataItemByName("horsecolor", 2);
                     break;
                 case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
+                    item = type.getDataItemByName("horsecolor", 3);
                     break;
                 case DARKBROWN:
-                    item = new ItemBuilder(Material.STAINED_CLAY, (byte) 7);
-                    item.withName("&6Dark Brown");
+                    item = type.getDataItemByName("horsecolor", 4);
                     break;
                 case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Gray");
+                    item = type.getDataItemByName("horsecolor", 5);
                     break;
                 case WHITE:
-                    item = new ItemBuilder(Material.WOOL);
-                    item.withName("&6White");
+                    item = type.getDataItemByName("horsecolor", 6);
                     break;
             }
         }
@@ -65,45 +57,35 @@ public class HorseColor extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 15);
-        if (entityPet instanceof IEntityHorsePet) {
-            IEntityHorsePet var = (IEntityHorsePet) entityPet;
-            HorseColorType typeID = HorseColorType.WHITE;
-            if (var.getColor() != null) {
-                typeID = var.getColor();
-            }
-            switch (typeID) {
-                case BLACK:
-                    item = new ItemBuilder(Material.WOOL, (byte) 15);
-                    item.withName("&6Black");
-                    break;
-                case CHESTNUT:
-                    item = new ItemBuilder(Material.STAINED_CLAY, (byte) 8);
-                    item.withName("&6Chestnut");
-                    break;
-                case CREAMY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 4);
-                    item.withName("&6Creamy");
-                    break;
-                case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
-                    break;
-                case DARKBROWN:
-                    item = new ItemBuilder(Material.STAINED_CLAY, (byte) 7);
-                    item.withName("&6Dark Brown");
-                    break;
-                case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Gray");
-                    break;
-                case WHITE:
-                    item = new ItemBuilder(Material.WOOL);
-                    item.withName("&6White");
-                    break;
-            }
-        }
-        return new ArrayList<>(); // TODO
+        List<ItemBuilder> items = new ArrayList<>();
+        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Black");
+        item.withData(15);
+        items.add(item);
+        item = new ItemBuilder(Material.STAINED_CLAY);
+        item.withName("&6Chestnut");
+        item.withData(8);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Creamy");
+        item.withData(4);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Brown");
+        item.withData(12);
+        items.add(item);
+        item = new ItemBuilder(Material.STAINED_CLAY);
+        item.withName("&6Dark Brown");
+        item.withData(7);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL, (byte) 7);
+        item.withName("&6Gray");
+        item.withData(7);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6White");
+        items.add(item);
+        return items;
     }
 
     @Override

@@ -20,7 +20,7 @@ public class LlamaColor extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = type.getDataItemByName("llamacolor", 0);
         if (entityPet instanceof IEntityLlamaPet) {
             IEntityLlamaPet var = (IEntityLlamaPet) entityPet;
             simplepets.brainsynder.wrapper.LlamaColor typeID = simplepets.brainsynder.wrapper.LlamaColor.CREAMY;
@@ -29,20 +29,16 @@ public class LlamaColor extends MenuItemAbstract {
             }
             switch (typeID) {
                 case CREAMY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 4);
-                    item.withName("&6Creamy");
+                    item = type.getDataItemByName("llamacolor", 0);
                     break;
                 case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
+                    item = type.getDataItemByName("llamacolor", 1);
                     break;
                 case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Gray");
+                    item = type.getDataItemByName("llamacolor", 2);
                     break;
                 case WHITE:
-                    item = new ItemBuilder(Material.WOOL);
-                    item.withName("&6White");
+                    item = type.getDataItemByName("llamacolor", 3);
                     break;
             }
         }
@@ -51,33 +47,23 @@ public class LlamaColor extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 4);
-        if (entityPet instanceof IEntityLlamaPet) {
-            IEntityLlamaPet var = (IEntityLlamaPet) entityPet;
-            simplepets.brainsynder.wrapper.LlamaColor typeID = simplepets.brainsynder.wrapper.LlamaColor.CREAMY;
-            if (var.getLlamaColor() != null) {
-                typeID = var.getLlamaColor();
-            }
-            switch (typeID) {
-                case CREAMY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 4);
-                    item.withName("&6Creamy");
-                    break;
-                case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
-                    break;
-                case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Gray");
-                    break;
-                case WHITE:
-                    item = new ItemBuilder(Material.WOOL);
-                    item.withName("&6White");
-                    break;
-            }
-        }
-        return new ArrayList<>(); // TODO
+        List<ItemBuilder> items = new ArrayList<>();
+        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        item.withData(4);
+        item.withName("&6Creamy");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Brown");
+        item.withData(12);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Gray");
+        item.withData(7);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6White");
+        items.add(item);
+        return items;
     }
 
     @Override

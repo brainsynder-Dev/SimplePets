@@ -21,31 +21,22 @@ public class Ocelot extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        ItemBuilder item = new ItemBuilder(Material.INK_SACK);
-        item.withData(11);
+        ItemBuilder item = type.getDataItemByName("ocelot", 0);
         if (entityPet instanceof IEntityOcelotPet) {
             IEntityOcelotPet var = (IEntityOcelotPet) entityPet;
             int typeID = var.getCatType();
             switch (typeID) {
                 case 0:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(11);
-                    item.withName("&6Wild Cat");
+                    item = type.getDataItemByName("ocelot", 0);
                     break;
                 case 1:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(0);
-                    item.withName("&6Black Cat");
+                    item = type.getDataItemByName("ocelot", 1);
                     break;
                 case 2:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(14);
-                    item.withName("&6Orange Cat");
+                    item = type.getDataItemByName("ocelot", 2);
                     break;
                 case 3:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(7);
-                    item.withName("&6Siamese Cat");
+                    item = type.getDataItemByName("ocelot", 3);
                     break;
             }
         }
@@ -54,35 +45,24 @@ public class Ocelot extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
         ItemBuilder item = new ItemBuilder(Material.INK_SACK);
         item.withData(11);
-        if (entityPet instanceof IEntityOcelotPet) {
-            IEntityOcelotPet var = (IEntityOcelotPet) entityPet;
-            int typeID = var.getCatType();
-            switch (typeID) {
-                case 0:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(11);
-                    item.withName("&6Wild Cat");
-                    break;
-                case 1:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(0);
-                    item.withName("&6Black Cat");
-                    break;
-                case 2:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(14);
-                    item.withName("&6Orange Cat");
-                    break;
-                case 3:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    item.withData(7);
-                    item.withName("&6Siamese Cat");
-                    break;
-            }
-        }
-        return new ArrayList<>(); // TODO
+        item.withName("&6Wild Cat");
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(0);
+        item.withName("&6Black Cat");
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(14);
+        item.withName("&6Orange Cat");
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(7);
+        item.withName("&6Siamese Cat");
+        items.add(item);
+        return items;
     }
 
     @Override

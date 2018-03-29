@@ -12,6 +12,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Color extends MenuItemAbstract {
@@ -24,21 +25,19 @@ public class Color extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        int index = 2;
-        if (entityPet instanceof IEntitySheepPet) {
-            index = 1;
-        }
-        ItemBuilder item = type.getDataItemByName("color", index);
+        ItemBuilder item = type.getDataItemByName("color", 0);
+
         if (getEntityPet() instanceof IColorable) {
+
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.WHITE;
             if (var.getColor() != null)
                 typeID = var.getColor();
-            item = new ItemBuilder(Material.valueOf(String.valueOf(item.toJSON().get("material"))), typeID.getWoolData());
+            item = type.getDataItemByName("color", typeID.getWoolData());
             item.withName(String.valueOf(item.toJSON().get("name")));
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
-            List<String> lore = (JSONArray) item.toJSON().get("lore");
+            List<String> lore = new ArrayList<>();
             for (Object s : (JSONArray) item.toJSON().get("lore")) {
                 String str = String.valueOf(s);
                 lore.add(str.replace("%prev_color%", "§" + prev.getChatChar())
@@ -55,20 +54,18 @@ public class Color extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 0);
-        if (getEntityPet() instanceof IColorable) {
-            IColorable var = (IColorable) getEntityPet();
-            DyeColorWrapper typeID = DyeColorWrapper.WHITE;
-            if (var.getColor() != null)
-                typeID = var.getColor();
-            item = new ItemBuilder(Material.valueOf(String.valueOf(item.toJSON().get("material"))), typeID.getWoolData());
+    public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
+        for (DyeColorWrapper color : DyeColorWrapper.values()) {
+            ItemBuilder item = new ItemBuilder(Material.WOOL);
+            item.withData(color.getWoolData());
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",
                     "&6Next: %next_color%%next_name%");
+            items.add(item);
         }
-        return item;
+        return items;
     }
 
     @Override
