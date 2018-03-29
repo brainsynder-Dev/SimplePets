@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Tilt extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("tilt");
+    private ItemBuilder item = type.getDataItemByName("tilt", 5);
 
     public Tilt(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

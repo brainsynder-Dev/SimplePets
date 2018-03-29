@@ -3,13 +3,12 @@ package simplepets.brainsynder.menu.menuItems;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IChestedAbstractPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Chested extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("chested");
-
     public Chested(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -19,6 +18,7 @@ public class Chested extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("chested", 1);
         if (item != null) {
             if (entityPet instanceof IChestedAbstractPet) {
                 IChestedAbstractPet var = (IChestedAbstractPet) entityPet;
@@ -26,7 +26,6 @@ public class Chested extends MenuItemAbstract {
                         .replace("%value%", String.valueOf(var.isChested())));
             }
         }
-
         return item;
     }
 

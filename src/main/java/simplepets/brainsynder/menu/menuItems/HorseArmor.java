@@ -50,7 +50,7 @@ public class HorseArmor extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = new ItemBuilder(Material.BARRIER);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
             int typeID = 0;

@@ -3,12 +3,12 @@ package simplepets.brainsynder.pet;
 import org.apache.commons.lang3.text.WordUtils;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.pet.types.ArmorStandDefault;
-import simplepets.brainsynder.pet.types.ShulkerDefault;
+import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -24,6 +24,7 @@ public abstract class PetDefault extends JSONFile {
     private double _RIDE_SPEED_, _SPEED_;
     private JSONArray _COMMANDS_ = new JSONArray();
     private String fileName, _DISPLAY_NAME_;
+    private JSONObject _DATA_ITEMS_ = new JSONObject();
 
     private EntityWrapper type;
     private PetCore plugin;
@@ -34,6 +35,7 @@ public abstract class PetDefault extends JSONFile {
         this.plugin = plugin;
         this.sound = sound;
         this.type = type;
+
     }
 
     @Override
@@ -51,6 +53,11 @@ public abstract class PetDefault extends JSONFile {
         setDefault("item", getDefaultItem().toJSON());
 
         setDefault("on_summon", new JSONArray());
+        try {
+            JSONObject dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
+            setDefault("data-items", dataArrays);
+        } catch (NullPointerException ignored) { // In case there is no pet data
+        }
     }
 
     public void setPet (Player player) {
@@ -72,6 +79,8 @@ public abstract class PetDefault extends JSONFile {
         _DISPLAY_NAME_ = getString("display_name",false);
 
         _COMMANDS_ = getArray("on_summon");
+
+        _DATA_ITEMS_ = getObject("data-items");
 
         if (hasKey("sound")) {
             String sound = getString("sound", false);
@@ -113,8 +122,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public boolean canMount(Player player) {
-   //     if (this instanceof ArmorStandDefault) return false;
-        if (this instanceof ShulkerDefault) return false;
+     //   if (this instanceof ShulkerDefault) return false;
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
@@ -171,6 +179,15 @@ public abstract class PetDefault extends JSONFile {
         return list;
     }
 
+    public ItemBuilder getDataItemByName(String name, int index) {
+        if (!_DATA_ITEMS_.isEmpty()) {
+            if (_DATA_ITEMS_.get(name) != null) {
+                return ItemBuilder.fromJSON((JSONObject) ((JSONArray) _DATA_ITEMS_.get(name)).get(index));
+            }
+        }
+        return null;
+    }
+
     public boolean isEnabled() {
         return _ENABLED_;
     }
@@ -182,7 +199,7 @@ public abstract class PetDefault extends JSONFile {
     public String getPermission() {
         return "Pet.type."+fileName.replace("_", "");
     }
-    public PetData getPetData () {
+    public PetData getPetData() {
         return null;
     }
     public boolean isSupported() {

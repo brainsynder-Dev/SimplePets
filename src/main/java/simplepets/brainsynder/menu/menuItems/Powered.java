@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
@@ -10,7 +9,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Powered extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("powered");
+
 
     public Powered(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -21,6 +20,7 @@ public class Powered extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("powered", 0);
         if (entityPet instanceof IEntityCreeperPet) {
             IEntityCreeperPet var = (IEntityCreeperPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isPowered())));

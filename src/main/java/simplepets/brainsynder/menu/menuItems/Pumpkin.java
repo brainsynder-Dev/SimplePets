@@ -8,7 +8,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Pumpkin extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("pumpkin");
 
     public Pumpkin(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -24,6 +23,7 @@ public class Pumpkin extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("pumpkin", 0);
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.hasPumpkin())));

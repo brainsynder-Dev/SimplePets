@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Scream extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("scream");
+    private ItemBuilder item = type.getDataItemByName("scream", 0);
 
     public Scream(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

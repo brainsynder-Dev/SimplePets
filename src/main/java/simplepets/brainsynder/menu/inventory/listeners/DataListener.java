@@ -54,8 +54,10 @@ public class DataListener implements Listener {
                         if (!event.isCancelled()) {
                             if (type == PetDataChangeEvent.ClickType.LEFT_CLICK) {
                                 menuItem.onLeftClick();
+                                e.getInventory().setItem(e.getSlot(), menuItem.getItem().build());
                             } else {
                                 menuItem.onRightClick();
+                                e.getInventory().setItem(e.getSlot(), menuItem.getItem().build());
                             }
                             e.getInventory().setItem(e.getSlot(), menuItem.getItem().build());
                         }

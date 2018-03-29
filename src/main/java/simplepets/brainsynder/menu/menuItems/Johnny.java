@@ -9,7 +9,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Johnny extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("johnny");
+    private ItemBuilder item = type.getDataItemByName("johnny", 0);
     public Johnny(PetDefault type) {
         super(type);
     }

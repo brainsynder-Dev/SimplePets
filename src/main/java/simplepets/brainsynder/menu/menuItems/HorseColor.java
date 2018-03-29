@@ -62,7 +62,7 @@ public class HorseColor extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 15);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
             HorseColorType typeID = HorseColorType.WHITE;

@@ -6,6 +6,7 @@ import org.json.simple.JSONArray;
 import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
@@ -14,8 +15,6 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import java.util.List;
 
 public class Color extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("color");
-
     public Color(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -25,8 +24,11 @@ public class Color extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-
-        ItemBuilder item = this.item;
+        int index = 2;
+        if (entityPet instanceof IEntitySheepPet) {
+            index = 1;
+        }
+        ItemBuilder item = type.getDataItemByName("color", index);
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.WHITE;
@@ -54,7 +56,7 @@ public class Color extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 0);
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
             DyeColorWrapper typeID = DyeColorWrapper.WHITE;

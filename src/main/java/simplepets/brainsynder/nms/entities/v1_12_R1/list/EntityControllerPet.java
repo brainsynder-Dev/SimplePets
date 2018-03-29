@@ -8,7 +8,6 @@ import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.metadata.FixedMetadataValue;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -237,6 +236,21 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             } else {
                 loc = getBukkitEntity().getLocation().clone();
             }
+         /*   if (displayEntity.passengers.size() > 1) {
+                if (this.displayRider != null) {
+                    if (this.displayRider.getType().equals(EntityType.SHULKER)) {
+                        if (displayEntity.passengers.get(1).getBukkitEntity() instanceof CraftPlayer) {
+                            Location loc2 = displayEntity.passengers.get(1).getBukkitEntity().getLocation().clone().add(0.0, 1.0, 0);
+                            displayEntity.passengers.get(1).setPositionRotation(loc2.getX(), loc.getY(), loc.getZ(),
+                                    displayEntity.passengers.get(1).yaw,
+                                    displayEntity.passengers.get(1).pitch);
+                        }
+                    }
+                }
+
+
+
+            } */
             displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             if (!loc.getWorld().getPlayers().isEmpty()) {
                 for (Player player : loc.getWorld().getPlayers()) {
@@ -270,7 +284,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public void addPassenger(Entity passenger) {
-        this.passengers.add(((CraftEntity) passenger).getHandle());
+
+        ((CraftEntity) passenger).getHandle().passengers.add(0, this);
         if (passenger instanceof Player) {
             PetCore.get().getUtilities().sendMountPacket((Player) passenger, this.getBukkitEntity());
         }

@@ -88,8 +88,9 @@ public class Pet implements IPet {
         if (type.getPetData() != null) {
             for (Class<? extends MenuItem> item : type.getPetData().getItemClasses()) {
                 MenuItem item1 = getItem(item);
-                if (item1.isSupported())
-                    if (item1 != null)
+                System.out.println(item1);
+                if (item1 != null)
+                    if (item1.isSupported())
                         items.add(item1);
             }
         }
@@ -151,7 +152,11 @@ public class Pet implements IPet {
                 if (event.isCancelled()) return;
 
                 if (ent instanceof IEntityControllerPet) {
-                    ((IEntityControllerPet) ent).getDisplayEntity().eject();
+                    if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
+                        ent.getEntity().setPassenger(((IEntityControllerPet) ent).getDisplayEntity());
+                    } else {
+                        ((IEntityControllerPet) ent).getDisplayEntity().eject();
+                    }
                 } else {
                     ent.getEntity().eject();
                 }
@@ -204,7 +209,8 @@ public class Pet implements IPet {
                     public void run() {
                         if (ent instanceof IEntityControllerPet) {
                             if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-
+                                ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(ent.getEntity());
+                                ((IEntityControllerPet) ent).addPassenger(owner);
                             } else {
                                 ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
                             }

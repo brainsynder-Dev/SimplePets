@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class WitherShield extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("withershield");
+    private ItemBuilder item = type.getDataItemByName("withershield", 0);
 
     public WitherShield(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

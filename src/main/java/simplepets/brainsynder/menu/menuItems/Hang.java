@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemMaker;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -9,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Hang extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("hang");
+    private ItemBuilder item = type.getDataItemByName("hang", 0);
 
     public Hang(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -22,7 +21,8 @@ public class Hang extends MenuItemAbstract {
     public ItemBuilder getItem() {
         if (entityPet instanceof IEntityBatPet) {
             IEntityBatPet var = (IEntityBatPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")));
+            item.withName(String.valueOf(item.toJSON().get("name"))
+                    .replace("%value%", String.valueOf(var.isHanging())));
         }
         return item;
     }

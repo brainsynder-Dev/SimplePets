@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entities.v1_12_R1;
 
 import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Shulker;
@@ -54,7 +55,7 @@ public class SpawnUtil implements ISpawner {
                     Shulker shulker = EntityShulkerPet.spawn(l, (EntityControllerPet) customEntity);
                     shulker.setAI(false);
                     shulker.setCollidable(false);
-                    stand.setPassenger(shulker);
+                    ((CraftEntity) stand).getHandle().passengers.add(0, ((CraftEntity) shulker).getHandle());
                     ((IEntityControllerPet) customEntity).setDisplayEntity(stand);
                 }
             }

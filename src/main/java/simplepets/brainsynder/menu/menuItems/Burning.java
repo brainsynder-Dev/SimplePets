@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Burning extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("burning");
+    private ItemBuilder item = type.getDataItemByName("burning", 0);
 
     public Burning(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

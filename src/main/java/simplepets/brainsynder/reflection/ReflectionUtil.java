@@ -4,8 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.lang.reflect.Constructor;
@@ -56,6 +59,7 @@ public class ReflectionUtil {
         try {
             return (T) constructor.newInstance(args);
         } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
@@ -95,12 +99,16 @@ public class ReflectionUtil {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
     }
 
-    public static JSONArray getMenuItems(List<Class<? extends MenuItem>> c) {
-        JSONArray a = new JSONArray();
+    public static JSONObject getMenuItems(List<Class<? extends MenuItem>> c, PetDefault type) {
+        JSONObject a = new JSONObject();
         for (Class<? extends MenuItem> cl : c) {
-            Method m = getMethod(cl,"getDefaultItem");
-            ItemBuilder o = invokeMethod(m, cl);
-            a.add(o.toJSON());
+            JSONArray as = new JSONArray();
+            MenuItem o = initiateClass(fillConstructor(cl, PetDefault.class), type);
+            try {
+                as.add(o.getDefaultItem().toJSON());
+            } catch (NullPointerException ignored) {
+            }
+            a.put(cl.getSimpleName().toLowerCase(), as);
         }
         return a;
     }

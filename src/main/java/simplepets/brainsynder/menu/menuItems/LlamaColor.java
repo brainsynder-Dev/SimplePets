@@ -48,7 +48,7 @@ public class LlamaColor extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 4);
         if (entityPet instanceof IEntityLlamaPet) {
             IEntityLlamaPet var = (IEntityLlamaPet) entityPet;
             simplepets.brainsynder.wrapper.LlamaColor typeID = simplepets.brainsynder.wrapper.LlamaColor.CREAMY;

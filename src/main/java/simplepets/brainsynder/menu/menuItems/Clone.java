@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Clone extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("clone");
+    private ItemBuilder item = type.getDataItemByName("clone", 0);
 
     public Clone(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -31,7 +31,8 @@ public class Clone extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM, (byte) 3);
+        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM);
+        item.withData(3);
         item.withName("&6IsClone: &e%value%");
         return item;
     }

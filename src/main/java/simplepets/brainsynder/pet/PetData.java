@@ -21,31 +21,36 @@ public enum PetData {
     VILLAGER(Age.class, Profession.class),
     PIG(Age.class, Saddle.class),
     RABBIT(Age.class, RabbitColor.class),
-    OCELOT(Age.class, Ocelot.class, Tame.class, Sitting.class),
-    LLAMA(Age.class, Color.class, LlamaColor.class, Chested.class),
+    OCELOT(Age.class, Ocelot.class, Sitting.class, Tame.class),
+    LLAMA(Age.class, Chested.class,Color.class, LlamaColor.class),
     SLIME(Size1.class, Size2.class, Size3.class, Size4.class),
-    POLAR_BEAR(Stand.class, Age.class),
+    POLAR_BEAR(Age.class, Stand.class),
     POWERED(Powered.class),
-    SHULKER(ShulkerColor.class, ShulkerClosed.class),
-    WOLF(Color.class, Age.class, Tame.class, Sitting.class, Tilt.class, Angry.class),
-    HORSE(Saddle.class, Age.class, HorseArmor.class, HorseColor.class, HorseStyle.class),
-    MULE(Saddle.class, Age.class, Chested.class),
-    HORSE_OTHER(Saddle.class, Age.class),
-    ARMOR_STAND(Stand.class, Clone.class),
-    SHEEP(Color.class, Age.class, Shear.class),
+    SHULKER(ShulkerClosed.class, ShulkerColor.class),
+    WOLF(Age.class, Angry.class, Color.class,  Sitting.class, Tame.class, Tilt.class),
+    HORSE(Age.class, HorseArmor.class, HorseColor.class, HorseStyle.class, Saddle.class),
+    MULE(Age.class, Chested.class, Saddle.class),
+    HORSE_OTHER(Age.class, Saddle.class),
+    ARMOR_STAND(Clone.class, Stand.class),
+    SHEEP(Age.class, Color.class, Shear.class),
     PARROT(ParrotColor.class, Sitting.class),
     WIZARD(Spell.class),
     JOHNNY(Johnny.class),
     ZOMBIE_VILLAGER(Age.class);
 
-    private List<Class<? extends MenuItem>> items = new ArrayList<>();
+    private List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();
+
 
     @SafeVarargs
     PetData(Class<? extends MenuItem>... items) {
-        Collections.addAll(this.items, items);
+        Collections.addAll(this.itemsClasses, items);
     }
 
     public List<Class<? extends MenuItem>> getItemClasses() {
-        return items;
+        return itemsClasses;
     }
+
+
+
+
 }

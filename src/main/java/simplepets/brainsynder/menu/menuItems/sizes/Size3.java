@@ -10,7 +10,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Size3 extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("size3");
+    private ItemBuilder item = type.getDataItemByName("size3", 2);
 
     public Size3(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

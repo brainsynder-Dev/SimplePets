@@ -3,13 +3,14 @@ package simplepets.brainsynder.menu.menuItems;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
+import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
+import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Sitting extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("sitting");
-
     public Sitting(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -19,6 +20,15 @@ public class Sitting extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        int index = 0;
+        if (entityPet instanceof IEntityOcelotPet) {
+            index = 2;
+        } else if (entityPet instanceof IEntityWolfPet) {
+            index = 3;
+        } else if (entityPet instanceof IEntityParrotPet) {
+            index = 1;
+        }
+        ItemBuilder item = type.getDataItemByName("sitting", index);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSitting())));

@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class ShulkerClosed extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("shulkerclosed");
+    private ItemBuilder item = type.getDataItemByName("shulkerclosed", 0);
 
     public ShulkerClosed(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
