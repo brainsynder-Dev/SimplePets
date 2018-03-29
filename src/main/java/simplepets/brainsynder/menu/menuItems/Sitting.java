@@ -10,6 +10,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Sitting extends MenuItemAbstract {
     public Sitting(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -29,10 +33,10 @@ public class Sitting extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.WOOD_STAIRS);
         item.withName("&6Sitting: &e%value%");
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

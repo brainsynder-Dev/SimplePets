@@ -7,6 +7,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Hang extends MenuItemAbstract {
 
 
@@ -29,10 +33,10 @@ public class Hang extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.FEATHER);
         item.withName("&6Hanging: &e%value%");
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

@@ -9,6 +9,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HorseArmor extends MenuItemAbstract {
     public HorseArmor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -28,20 +31,16 @@ public class HorseArmor extends MenuItemAbstract {
             }
             switch (typeID) {
                 case 0:
-                    item = new ItemBuilder(Material.BARRIER);
-                    item.withName("&6No HorseArmor");
+                    item = type.getDataItemByName("horsearmor", 0);
                     break;
                 case 1:
-                    item = new ItemBuilder(Material.IRON_BARDING);
-                    item.withName("&6Iron HorseArmor");
+                    item = type.getDataItemByName("horsearmor", 1);
                     break;
                 case 2:
-                    item = new ItemBuilder(Material.GOLD_BARDING);
-                    item.withName("&6Gold HorseArmor");
+                    item = type.getDataItemByName("horsearmor", 2);
                     break;
                 case 3:
-                    item = new ItemBuilder(Material.DIAMOND_BARDING);
-                    item.withName("&6Diamond HorseArmor");
+                    item = type.getDataItemByName("horsearmor", 3);
                     break;
             }
         }
@@ -49,34 +48,21 @@ public class HorseArmor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
         ItemBuilder item = new ItemBuilder(Material.BARRIER);
-        if (entityPet instanceof IEntityHorsePet) {
-            IEntityHorsePet var = (IEntityHorsePet) entityPet;
-            int typeID = 0;
-            if (var.getArmor() != null) {
-                typeID = var.getArmor().getId();
-            }
-            switch (typeID) {
-                case 0:
-                    item = new ItemBuilder(Material.BARRIER);
-                    item.withName("&6No HorseArmor");
-                    break;
-                case 1:
-                    item = new ItemBuilder(Material.IRON_BARDING);
-                    item.withName("&6Iron HorseArmor");
-                    break;
-                case 2:
-                    item = new ItemBuilder(Material.GOLD_BARDING);
-                    item.withName("&6Gold HorseArmor");
-                    break;
-                case 3:
-                    item = new ItemBuilder(Material.DIAMOND_BARDING);
-                    item.withName("&6Diamond HorseArmor");
-                    break;
-            }
-        }
-        return item;
+        item.withName("&6No HorseArmor");
+        items.add(item);
+        item = new ItemBuilder(Material.IRON_BARDING);
+        item.withName("&6Iron HorseArmor");
+        items.add(item);
+        item = new ItemBuilder(Material.GOLD_BARDING);
+        item.withName("&6Gold HorseArmor");
+        items.add(item);
+        item = new ItemBuilder(Material.DIAMOND_BARDING);
+        item.withName("&6Diamond HorseArmor");
+        items.add(item);
+        return items;
     }
 
     @Override

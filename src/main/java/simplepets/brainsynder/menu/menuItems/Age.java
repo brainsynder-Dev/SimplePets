@@ -7,6 +7,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Age extends MenuItemAbstract {
     public Age(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -29,10 +33,10 @@ public class Age extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.WHEAT);
         item.withName("&6Baby: &e%value%");
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

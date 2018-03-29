@@ -11,6 +11,10 @@ import simplepets.brainsynder.pet.types.ArmorStandDefault;
 import simplepets.brainsynder.pet.types.PolarBearDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Stand extends MenuItemAbstract {
 
 
@@ -35,7 +39,7 @@ public class Stand extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.ARMOR_STAND);
         if (type instanceof ArmorStandDefault) {
             item.withName("&6Small: &e%value%");
@@ -43,7 +47,7 @@ public class Stand extends MenuItemAbstract {
             item = new ItemBuilder(Material.IRON_LEGGINGS);
             item.withName("&6Standing: &e%value%");
         }
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

@@ -9,6 +9,9 @@ import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.MaterialWrapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShulkerColor extends MenuItemAbstract {
     public ShulkerColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -37,7 +40,7 @@ public class ShulkerColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = null;
         if (getEntityPet() instanceof IColorable) {
             IColorable var = (IColorable) getEntityPet();
@@ -52,7 +55,7 @@ public class ShulkerColor extends MenuItemAbstract {
                     "&6Current: §" + typeID.getChatChar() + WordUtils.capitalize(typeID.toString().toLowerCase()),
                     "&6Next: §" + next.getChatChar() + WordUtils.capitalize(next.toString().toLowerCase()));
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

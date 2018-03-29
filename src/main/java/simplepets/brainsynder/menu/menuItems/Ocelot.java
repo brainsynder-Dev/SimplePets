@@ -7,6 +7,9 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Ocelot extends MenuItemAbstract {
 
     public Ocelot(PetDefault type, IEntityPet entityPet) {
@@ -50,7 +53,7 @@ public class Ocelot extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.INK_SACK);
         item.withData(11);
         if (entityPet instanceof IEntityOcelotPet) {
@@ -79,7 +82,7 @@ public class Ocelot extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

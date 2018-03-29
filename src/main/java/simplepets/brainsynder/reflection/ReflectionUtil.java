@@ -105,7 +105,9 @@ public class ReflectionUtil {
             JSONArray as = new JSONArray();
             MenuItem o = initiateClass(fillConstructor(cl, PetDefault.class), type);
             try {
-                as.add(o.getDefaultItem().toJSON());
+                for (ItemBuilder i : o.getDefaultItems()) {
+                    as.add(i.toJSON());
+                }
             } catch (NullPointerException ignored) {
             }
             a.put(cl.getSimpleName().toLowerCase(), as);

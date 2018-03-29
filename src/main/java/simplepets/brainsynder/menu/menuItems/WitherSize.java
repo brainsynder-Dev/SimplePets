@@ -7,6 +7,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class WitherSize extends MenuItemAbstract {
     private ItemBuilder item = type.getDataItemByName("withersize", 0);
     public WitherSize(PetDefault type, IEntityPet entityPet) {
@@ -26,10 +30,10 @@ public class WitherSize extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.NETHER_BRICK_ITEM);
         item.withName("&6Small: &e%value%");
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

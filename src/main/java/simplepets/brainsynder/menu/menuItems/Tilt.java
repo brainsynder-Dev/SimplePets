@@ -7,6 +7,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Tilt extends MenuItemAbstract {
 
 
@@ -28,10 +32,10 @@ public class Tilt extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM);
         item.withName("&6Head Tilted: &e%value%");
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

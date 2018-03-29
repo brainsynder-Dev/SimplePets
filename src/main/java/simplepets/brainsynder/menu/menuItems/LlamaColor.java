@@ -7,6 +7,9 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LlamaColor extends MenuItemAbstract {
     public LlamaColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -47,7 +50,7 @@ public class LlamaColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 4);
         if (entityPet instanceof IEntityLlamaPet) {
             IEntityLlamaPet var = (IEntityLlamaPet) entityPet;
@@ -74,7 +77,7 @@ public class LlamaColor extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

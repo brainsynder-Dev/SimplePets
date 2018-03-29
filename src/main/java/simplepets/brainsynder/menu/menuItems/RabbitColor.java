@@ -8,6 +8,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.RabbitType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RabbitColor extends MenuItemAbstract {
 
     public RabbitColor(PetDefault type, IEntityPet entityPet) {
@@ -61,7 +64,7 @@ public class RabbitColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = null;
         if (entityPet instanceof IEntityRabbitPet) {
             IEntityRabbitPet var = (IEntityRabbitPet) entityPet;
@@ -100,7 +103,7 @@ public class RabbitColor extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>();
     }
 
     @Override

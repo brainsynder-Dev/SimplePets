@@ -8,6 +8,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ParrotColor extends MenuItemAbstract {
 
     public ParrotColor(PetDefault type, IEntityPet entityPet) {
@@ -25,24 +28,19 @@ public class ParrotColor extends MenuItemAbstract {
             ParrotVariant typeID = var.getVariant();
             switch (typeID) {
                 case BLUE:
-                    item = new ItemBuilder(Material.WOOL, (byte) 11);
-                    item.withName("&9Blue");
+                    item = type.getDataItemByName("parrotcolor", 0);
                     break;
                 case CYAN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 9);
-                    item.withName("&3Cyan");
+                    item = type.getDataItemByName("parrotcolor", 1);
                     break;
                 case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 8);
-                    item.withName("&7Gray");
+                    item = type.getDataItemByName("parrotcolor", 2);
                     break;
                 case GREEN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 13);
-                    item.withName("&2Green");
+                    item = type.getDataItemByName("parrotcolor", 3);
                     break;
                 case RED:
-                    item = new ItemBuilder(Material.WOOL, (byte) 14);
-                    item.withName("&cRed");
+                    item = type.getDataItemByName("parrotcolor", 4);
                     break;
             }
         }
@@ -50,35 +48,25 @@ public class ParrotColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        ItemBuilder item = null;
-        if (entityPet instanceof IEntityParrotPet) {
-            IEntityParrotPet var = (IEntityParrotPet) entityPet;
-            ParrotVariant typeID = var.getVariant();
-            switch (typeID) {
-                case BLUE:
-                    item = new ItemBuilder(Material.WOOL, (byte) 11);
-                    item.withName("&9Blue");
-                    break;
-                case CYAN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 9);
-                    item.withName("&3Cyan");
-                    break;
-                case GRAY:
-                    item = new ItemBuilder(Material.WOOL, (byte) 8);
-                    item.withName("&7Gray");
-                    break;
-                case GREEN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 13);
-                    item.withName("&2Green");
-                    break;
-                case RED:
-                    item = new ItemBuilder(Material.WOOL, (byte) 14);
-                    item.withName("&cRed");
-                    break;
-            }
-        }
-        return item;
+    public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
+        ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 11);
+        item.withName("&9Blue");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL, (byte) 9);
+        item.withName("&3Cyan");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL, (byte) 8);
+        item.withName("&7Gray");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL, (byte) 13);
+        item.withName("&2Green");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL, (byte) 14);
+        item.withName("&cRed");
+        items.add(item);
+
+        return items;
     }
 
     @Override

@@ -7,6 +7,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Burning extends MenuItemAbstract {
 
 
@@ -29,12 +33,12 @@ public class Burning extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.BLAZE_ROD);
         if (item != null) {
             item.withName("&6Burning: &e%value%");
         }
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override

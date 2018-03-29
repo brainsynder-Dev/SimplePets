@@ -8,6 +8,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Profession extends MenuItemAbstract {
     public Profession(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -56,7 +59,7 @@ public class Profession extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = null;
         if (entityPet instanceof IEntityVillagerPet) {
             IEntityVillagerPet var = (IEntityVillagerPet) entityPet;
@@ -91,7 +94,7 @@ public class Profession extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

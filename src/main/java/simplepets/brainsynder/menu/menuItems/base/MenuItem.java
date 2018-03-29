@@ -7,6 +7,8 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.List;
+
 public abstract class MenuItem {
     protected IEntityPet entityPet = null;
     protected PetDefault type;
@@ -38,7 +40,7 @@ public abstract class MenuItem {
 
     public abstract ItemBuilder getItem();
 
-    public abstract ItemBuilder getDefaultItem();
+    public abstract List<ItemBuilder> getDefaultItems();
 
     public String getPermission() {
         return (type.getPermission() + ".data." + getClass().getSimpleName().toLowerCase());

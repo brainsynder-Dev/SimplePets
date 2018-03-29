@@ -9,6 +9,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Spell extends MenuItemAbstract {
 
     public Spell(PetDefault type, IEntityPet entityPet) {
@@ -50,7 +53,7 @@ public class Spell extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = null;
         if (entityPet instanceof IEntityWizard) {
             IEntityWizard var = (IEntityWizard) entityPet;
@@ -77,7 +80,7 @@ public class Spell extends MenuItemAbstract {
             }
             item.withName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

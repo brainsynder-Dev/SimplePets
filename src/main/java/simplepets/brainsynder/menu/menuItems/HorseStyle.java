@@ -8,6 +8,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HorseStyle extends MenuItemAbstract {
     public HorseStyle(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -47,7 +50,7 @@ public class HorseStyle extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.LEASH);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
@@ -73,7 +76,7 @@ public class HorseStyle extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>();
     }
 
     @Override

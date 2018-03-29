@@ -9,6 +9,9 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.HorseColorType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HorseColor extends MenuItemAbstract {
     public HorseColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -61,7 +64,7 @@ public class HorseColor extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.WOOL, (byte) 15);
         if (entityPet instanceof IEntityHorsePet) {
             IEntityHorsePet var = (IEntityHorsePet) entityPet;
@@ -100,7 +103,7 @@ public class HorseColor extends MenuItemAbstract {
                     break;
             }
         }
-        return item;
+        return new ArrayList<>(); // TODO
     }
 
     @Override

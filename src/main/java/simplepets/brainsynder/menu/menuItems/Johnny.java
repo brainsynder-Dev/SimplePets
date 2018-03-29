@@ -8,6 +8,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Johnny extends MenuItemAbstract {
 
     public Johnny(PetDefault type) {
@@ -29,13 +33,13 @@ public class Johnny extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
+    public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.IRON_AXE);
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
             item.withName("&6Johnny: &e" + var.isJohnny());
         }
-        return item;
+        return new ArrayList<>(Collections.singleton(item));
     }
 
     @Override
