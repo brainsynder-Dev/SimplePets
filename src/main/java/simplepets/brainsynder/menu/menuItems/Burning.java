@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Burning extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("burning", 0);
+
 
     public Burning(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,6 +19,7 @@ public class Burning extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("burning", 0);
         if (entityPet instanceof IEntityBlazePet) {
             IEntityBlazePet var = (IEntityBlazePet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name"))

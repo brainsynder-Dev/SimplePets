@@ -8,7 +8,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Clone extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("clone", 0);
 
     public Clone(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,6 +18,7 @@ public class Clone extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("clone", 0);
         if (item != null) {
             if (entityPet instanceof IEntityArmorStandPet) {
                 IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;

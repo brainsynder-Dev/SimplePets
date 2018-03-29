@@ -18,7 +18,7 @@ public class Chested extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        ItemBuilder item = type.getDataItemByName("chested", 1);
+        ItemBuilder item = type.getDataItemByName("chested", 0);
         if (item != null) {
             if (entityPet instanceof IChestedAbstractPet) {
                 IChestedAbstractPet var = (IChestedAbstractPet) entityPet;

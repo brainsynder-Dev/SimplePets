@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Shear extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("shear", 2);
+
 
     public Shear(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,6 +19,7 @@ public class Shear extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("shear", 0);
         if (entityPet instanceof IEntitySheepPet) {
             IEntitySheepPet var = (IEntitySheepPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSheared())));

@@ -12,7 +12,7 @@ import simplepets.brainsynder.pet.types.PolarBearDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Stand extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("stand", 1);
+
 
     public Stand(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -23,6 +23,7 @@ public class Stand extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("stand", 0);
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSmall())));

@@ -10,7 +10,6 @@ import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Powered extends MenuItemAbstract {
 
-
     public Powered(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }

@@ -20,11 +20,7 @@ public class Tame extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        int index = 3;
-        if (entityPet instanceof IEntityWolfPet) {
-            index = 4;
-        }
-        ItemBuilder item = type.getDataItemByName("tame", index);
+        ItemBuilder item = type.getDataItemByName("tame", 0);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isTamed())));

@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Tilt extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("tilt", 5);
+
 
     public Tilt(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,6 +19,7 @@ public class Tilt extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("tilt", 0);
         if (entityPet instanceof IEntityWolfPet) {
             IEntityWolfPet var = (IEntityWolfPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isHeadTilted())));

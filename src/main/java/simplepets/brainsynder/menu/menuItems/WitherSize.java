@@ -8,7 +8,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class WitherSize extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("withersize", 1);
+    private ItemBuilder item = type.getDataItemByName("withersize", 0);
     public WitherSize(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }

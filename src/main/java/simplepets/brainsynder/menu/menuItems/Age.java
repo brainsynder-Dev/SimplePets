@@ -8,8 +8,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Age extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("age", 0);
-
     public Age(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -19,6 +17,7 @@ public class Age extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("age", 0);
         if (item != null) {
             if (entityPet instanceof IAgeablePet) {
                 IAgeablePet var = (IAgeablePet) entityPet;

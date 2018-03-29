@@ -10,7 +10,7 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class Angry extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("angry", 2);
+
 
     public Angry(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -21,6 +21,7 @@ public class Angry extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("angry", 0);
         if (item != null) {
             if (entityPet instanceof IEntityWolfPet) {
                 IEntityWolfPet var = (IEntityWolfPet) entityPet;

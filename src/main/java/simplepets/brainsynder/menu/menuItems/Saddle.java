@@ -21,13 +21,7 @@ public class Saddle extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        int index = 1;
-        if (entityPet instanceof IEntityHorsePet) {
-            index = 4;
-        } else if (entityPet instanceof IEntityMulePet) {
-            index = 2;
-        }
-        ItemBuilder item = type.getDataItemByName("saddle", index);
+        ItemBuilder item = type.getDataItemByName("saddle", 0);
         try {
             if (entityPet instanceof IEntityPigPet) {
                 IEntityPigPet pig = (IEntityPigPet) entityPet;

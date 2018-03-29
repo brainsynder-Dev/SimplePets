@@ -20,15 +20,7 @@ public class Sitting extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        int index = 0;
-        if (entityPet instanceof IEntityOcelotPet) {
-            index = 2;
-        } else if (entityPet instanceof IEntityWolfPet) {
-            index = 3;
-        } else if (entityPet instanceof IEntityParrotPet) {
-            index = 1;
-        }
-        ItemBuilder item = type.getDataItemByName("sitting", index);
+        ItemBuilder item = type.getDataItemByName("sitting", 0);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSitting())));

@@ -8,7 +8,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
 public class WitherShield extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("withershield", 0);
 
     public WitherShield(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -19,6 +18,7 @@ public class WitherShield extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("withershield", 0);
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
             item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isShielded())));
