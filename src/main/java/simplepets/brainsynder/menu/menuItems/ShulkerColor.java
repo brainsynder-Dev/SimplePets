@@ -29,8 +29,8 @@ public class ShulkerColor extends MenuItemAbstract {
             DyeColorWrapper typeID = DyeColorWrapper.PURPLE;
             if (var.getColor() != null)
                 typeID = var.getColor();
-            item = new ItemBuilder(MaterialWrapper.fromName(typeID.name() + "_SHULKER_BOX").toMaterial());
-            item.withName(" ");
+            item = type.getDataItemByName("shulkercolor", typeID.getWoolData());
+            item.withLore(null);
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
             List<String> lore = new ArrayList<>();
@@ -41,7 +41,7 @@ public class ShulkerColor extends MenuItemAbstract {
                         .replace("%curr_color%", "§" + typeID.getChatChar())
                         .replace("%curr_name%", WordUtils.capitalize(typeID.name().toLowerCase()))
                         .replace("%next_color%", "§" + next.getChatChar())
-                        .replace("%next_name%", WordUtils.capitalize(typeID.name().toLowerCase())));
+                        .replace("%next_name%", WordUtils.capitalize(next.name().toLowerCase())));
             }
 
             item.withLore(lore);

@@ -32,18 +32,18 @@ public class Color extends MenuItemAbstract {
             if (var.getColor() != null)
                 typeID = var.getColor();
             item = type.getDataItemByName("color", typeID.getWoolData());
-            item.withName(String.valueOf(item.toJSON().get("name")));
+            item.withLore(null);
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
             List<String> lore = new ArrayList<>();
             for (Object s : (JSONArray) item.toJSON().get("lore")) {
                 String str = String.valueOf(s);
                 lore.add(str.replace("%prev_color%", "§" + prev.getChatChar())
-                .replace("%prev_name%", WordUtils.capitalize(prev.name().toLowerCase()))
+                .replace("%prev_name%", WordUtils.capitalize(prev.name().toLowerCase().replace("_", " ")))
                 .replace("%curr_color%", "§" + typeID.getChatChar())
-                .replace("%curr_name%", WordUtils.capitalize(typeID.name().toLowerCase()))
+                .replace("%curr_name%", WordUtils.capitalize(typeID.name().toLowerCase().replace("_", " ")))
                 .replace("%next_color%", "§" + next.getChatChar())
-                .replace("%next_name%", WordUtils.capitalize(typeID.name().toLowerCase())));
+                .replace("%next_name%", WordUtils.capitalize(next.name().toLowerCase().replace("_", " "))));
             }
 
             item.withLore(lore);
