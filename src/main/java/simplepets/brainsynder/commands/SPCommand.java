@@ -115,7 +115,7 @@ public class SPCommand implements CommandExecutor {
                     }
 
                     if (base == null) {
-                        PetDefault type = plugin.getTypeManager().getItem(args[0]);
+                        PetDefault type = plugin.getTypeManager().getType(args[0]);
                         if (type == null) {
                             p.sendMessage(PetCore.get().getMessages().getString("Unknown-commands", true));
                             return true;

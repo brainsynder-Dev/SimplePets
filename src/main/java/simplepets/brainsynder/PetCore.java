@@ -19,6 +19,7 @@ import simplepets.brainsynder.listeners.PetEventListeners;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.listeners.DataListener;
+import simplepets.brainsynder.menu.inventory.listeners.SavesListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
@@ -76,6 +77,17 @@ public class PetCore extends JavaPlugin {
             return;
         }
 
+        // Oh no... Someone is reloading the server/plugin
+        // ALERT THE OPS !!!
+        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+            Errors.RELOAD_DETECTED.print();
+            Bukkit.getOnlinePlayers().forEach(player -> {
+                if (player.isOp()) {
+                    player.sendMessage("§6[§eSimplePets§6] §7SimplePets has detected a reload, If §c§lANY§7 issues arise then please restart the server.");
+                }
+            });
+        }
+
         typeManager = new TypeManager(this);
         loadConfig();
         createPluginInstances();
@@ -105,6 +117,7 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OnPetSpawn(), this);
         getServer().getPluginManager().registerEvents(new SelectionListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
+        getServer().getPluginManager().registerEvents(new SavesListener(), this);
     }
 
     private void createPluginInstances() {
@@ -165,26 +178,32 @@ public class PetCore extends JavaPlugin {
             String username = getConfiguration().getString("MySQL.Login.Username", false);
             String password = getConfiguration().getString("MySQL.Login.Password", false);
             mySQL = new MySQL(host, port, databaseName, username, password);
+
+            debug("Creating SQL table if there is none...");
             Thread thread = new Thread(() -> {
+                ConnectionPool pool = mySQL.getPool();
                 try {
-                    debug("Creating SQL table if there is none...");
-                    ConnectionPool pool = mySQL.getPool();
                     Connection connection = pool.borrowConnection();
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT,`SavedPets` LONGTEXT);");
-                    if (!mySQL.hasColumn(connection,"UUID")) mySQL.addColumn(connection,"UUID", "TEXT");
-                    if (!mySQL.hasColumn(connection,"name")) mySQL.addColumn(connection,"name", "TEXT");
-                    if (!mySQL.hasColumn(connection,"UnlockedPets")) mySQL.addColumn(connection,"UnlockedPets", "MEDIUMTEXT");
-                    if (!mySQL.hasColumn(connection,"PetName")) mySQL.addColumn(connection,"PetName", "TEXT");
-                    if (!mySQL.hasColumn(connection,"NeedsRespawn")) mySQL.addColumn(connection,"NeedsRespawn", "MEDIUMTEXT");
-                    if (!mySQL.hasColumn(connection,"SavedPets")) mySQL.addColumn(connection,"SavedPets", "LONGTEXT");
                     pool.surrenderConnection(connection);
                 } catch (Exception e) {
-                    debug("Unable to create default SQL tables Error:");
+                    System.out.println("Unable to create default SQL tables Error:");
                     e.printStackTrace();
                 }
+
+                try {
+                    // This part checks and makes sure that old SQL databases have the
+                    // new columns added, if not they will be added
+
+                    Connection connection = pool.borrowConnection();
+                    if (!mySQL.hasColumn(connection, "SavedPets"))
+                        mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
+                    pool.surrenderConnection(connection);
+                } catch (Exception ignored) {
+                }
             });
-            thread.setName("SimplePets SQL");
             thread.setDaemon(false);
+            thread.setName("SimplePets SQL");
             thread.start();
         }
     }

@@ -1,13 +1,14 @@
 package simplepets.brainsynder.menu.items.list;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.bukkit.Material;
 import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
+import simplepets.brainsynder.menu.inventory.list.SavesMenu;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 
@@ -17,21 +18,24 @@ public class NextPage extends Item {
     }
 
     @Override
-    public void loadDefaults() {
-        defaults.put(MATERIAL, "ARROW");
-        defaults.put(DATA, "0");
-        defaults.put(AMOUNT, "1");
-        defaults.put(DISPLAY_NAME, "&6&l&m----&6&l>");
-        JSONArray lore = new JSONArray();
-        lore.add("&7Click Here to go");
-        lore.add("&7the next page");
-        defaults.put(LORE_ENABLED, "true");
-        defaults.put(LORE, lore);
-        JSONObject custom = new JSONObject();
-        custom.put(ENABLED, "true");
-        custom.put(SKULL_OWNER, "SimpleAPI");
-        custom.put(TEXTURE_URL, "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzJmOTEwYzQ3ZGEwNDJlNGFhMjhhZjZjYzgxY2Y0OGFjNmNhZjM3ZGFiMzVmODhkYjk5M2FjY2I5ZGZlNTE2In19fQ==");
-        defaults.put(CUSTOM_SKULL, custom);
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder(Material.SKULL_ITEM)
+                .withName("&6&l&m----&6&l>").withData(3)
+                .addLore("&7Click Here to go","&7the next page")
+                .setTexture("http://textures.minecraft.net/texture/c2f910c47da042e4aa28af6cc81cf48ac6caf37dab35f88db993accb9dfe516");
+    }
+
+    @Override
+    public boolean addItemToInv(PetOwner owner, CustomInventory inventory) {
+        if (inventory instanceof SelectionMenu) {
+            return ((SelectionMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
+        }
+
+        if (inventory instanceof SavesMenu) {
+            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
+        }
+
+        return false;
     }
 
     @Override
@@ -44,6 +48,9 @@ public class NextPage extends Item {
             if (pages == null) return;
 
             if (pages.totalPages() > current) menu.open(owner, (current+1));
+            return;
         }
+
+        inventory.open(owner, inventory.getCurrentPage(owner)+1);
     }
 }

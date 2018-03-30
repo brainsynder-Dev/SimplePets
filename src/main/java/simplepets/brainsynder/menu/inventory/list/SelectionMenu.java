@@ -13,7 +13,7 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
-import simplepets.brainsynder.menu.items.list.*;
+import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetMap;
@@ -47,7 +47,8 @@ public class SelectionMenu extends CustomInventory {
                 29, 30, 31, 32, 33, 34, 35,
                 38, 39, 40, 41, 42, 43, 44
         ).forEach(slot -> object.put(slot, "air"));
-        object.put(5, "name");
+        object.put(4, "saves");
+        object.put(6, "name");
         object.put(9, "data");
         object.put(46, "previouspage");
         object.put(49, "ride");
@@ -90,10 +91,10 @@ public class SelectionMenu extends CustomInventory {
                 if (item instanceof Air) {
                     maxPets++;
                 } else {
-                    inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
+                    inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItemBuilder().build());
                 }
             } else {
-                inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItem());
+                inv.setItem(placeHolder - 1, PetCore.get().getItemLoaders().PLACEHOLDER.getItemBuilder().build());
             }
             placeHolder--;
         }
@@ -118,26 +119,9 @@ public class SelectionMenu extends CustomInventory {
             pagerMap.put(owner.getPlayer().getName(), pages);
         }
 
-        ObjectPager<PetTypeStorage> finalPages = pages;
         getSlots().forEach((slot, item) -> {
-            if (item instanceof PreviousPage) {
-                if ((getCurrentPage(owner) > 1))
-                    inv.setItem(slot, item.getItem());
-            } else if (item instanceof NextPage) {
-                if (finalPages.totalPages() > getCurrentPage(owner))
-                    inv.setItem(slot, item.getItem());
-            } else if (item instanceof Hat) {
-                if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats"))
-                    inv.setItem(slot, item.getItem());
-            } else if (item instanceof Ride) {
-                if (PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts"))
-                    inv.setItem(slot, item.getItem());
-            } else if (item instanceof Name) {
-                if (PetCore.get().getConfiguration().getBoolean("RenamePet.Enabled"))
-                    inv.setItem(slot, item.getItem());
-            } else {
-                inv.setItem(slot, item.getItem());
-            }
+            if (item.isEnabled() && item.addItemToInv(owner, this))
+                inv.setItem(slot, item.getItemBuilder().build());
         });
 
         PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), owner.getPlayer());

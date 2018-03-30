@@ -20,7 +20,7 @@ public class CMD_Summon extends PetCommand<Player> {
             sendUsage(p);
         } else {
             TypeManager manager = PetCore.get().getTypeManager();
-            PetDefault type = manager.getItem(args[0]);
+            PetDefault type = manager.getType(args[0]);
             if (type == null) {
                 p.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));
                 return;

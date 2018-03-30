@@ -1,10 +1,11 @@
 package simplepets.brainsynder.menu.items.list;
 
+import org.bukkit.Material;
 import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.CustomItem;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 
@@ -15,24 +16,18 @@ public class FlameOn extends CustomItem {
 
     @Override
     public void loadDefaults() {
-        defaults.put("__COMMENT__", "This is an example of how the 'Custom Items' work");
-        defaults.put(NAMESPACE, "flameon");
-        defaults.put(MATERIAL, "FLINT_AND_STEEL");
-        defaults.put(DATA, "0");
-        defaults.put(AMOUNT, "1");
-        defaults.put(DISPLAY_NAME, "&c&lBurn Baby Burn");
-        defaults.put(LORE_ENABLED, "false");
-        defaults.put(LORE, new JSONArray());
+        setDefault("__COMMENT__", "This is an example of how the 'Custom Items' work");
 
         JSONArray array = new JSONArray();
         array.add("particle flame {location} 1.0 1.0 1.0 0.0 20");
-        defaults.put(COMMANDS, array);
+        setDefault(COMMANDS, array);
+        defaults.put(NAMESPACE, "flameon");
+        super.loadDefaults();
+    }
 
-        JSONObject custom = new JSONObject();
-        custom.put(ENABLED, "false");
-        custom.put(SKULL_OWNER, "SimpleAPI");
-        custom.put(TEXTURE_URL, "");
-        defaults.put(CUSTOM_SKULL, custom);
+    @Override
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder(Material.FLINT_AND_STEEL).withName("&c&lBurn Baby Burn");
     }
 
     @Override

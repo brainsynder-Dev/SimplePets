@@ -9,6 +9,7 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.utils.Base64Wrapper;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
@@ -22,6 +23,13 @@ public class StorageMaker extends StorageTagCompound {
                 file.createNewFile();
             } catch (IOException ignored) {}
         }
+
+        try {
+            StorageTagCompound compound = CompressedStreamTools.readCompressed(new FileInputStream(file));
+            compound.getKeySet().forEach(key -> {
+                setTag(key, compound.getTag(key));
+            });
+        } catch (IOException ignored) {}
 
         this.file = file;
     }

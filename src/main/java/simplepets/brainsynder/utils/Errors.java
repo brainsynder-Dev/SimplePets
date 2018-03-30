@@ -24,6 +24,12 @@ public enum Errors {
             "          Error Type: WARNING",
             "You seem to be on a version below 1.12.1",
             "SimplePets works best on 1.12.1, Just saying :P",
+            "-------------------------------------------"),
+    RELOAD_DETECTED("-------------------------------------------",
+            "          Error Type: CRITICAL",
+            "The plugin has detected a reload",
+            "If you encounter ANY strange issues then this will be the cause.",
+            "To fix those, Simply RESTART your server",
             "-------------------------------------------");
 
     String[] errMsg;
@@ -37,10 +43,9 @@ public enum Errors {
     }
 
     public void print(boolean debug) {
-        PetCore core = PetCore.get();
         for (String line : errMsg) {
             if (debug) {
-                core.debug(line);
+                PetCore.get().debug(line);
                 continue;
             }
 

@@ -4,7 +4,6 @@ import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -59,22 +58,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         compound.setBoolean("NoBasePlate", true);
         stand.a(compound);
         return ((ArmorStand) stand.getBukkitEntity());
-    }
-
-    public void addPassenger(org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        ((CraftEntity) entity).getHandle().passengers.add(((CraftEntity) passenger).getHandle());
-        PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-        if (entity instanceof Player) {
-            ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-        }
-    }
-
-    public void removePassenger(org.bukkit.entity.Entity entity) {
-        ((CraftEntity) entity).getHandle().passengers.clear();
-        PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-        if (entity instanceof Player) {
-            ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-        }
     }
 
     @Override

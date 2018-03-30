@@ -12,6 +12,8 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> COLOR_SHEARED;
+    private boolean rainbow = false;
+    private int toggle = 0;
 
     static {
         COLOR_SHEARED = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
@@ -32,13 +34,16 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
+        if (!rainbow)
         object.setString("color", color.name());
         object.setBoolean("Sheared", sheared);
+        object.setBoolean("rainbow", rainbow);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("rainbow")) rainbow = object.getBoolean("rainbow");
         if (object.hasKey("color"))
             setColor(DyeColorWrapper.valueOf(String.valueOf(object.getString("color"))));
         if (object.hasKey("Sheared"))
@@ -77,6 +82,27 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         } else {
             this.datawatcher.set(COLOR_SHEARED, (byte) (b0 & -17));
         }
+    }
 
+    @Override
+    public void repeatTask() {
+        super.repeatTask();
+        if (rainbow) {
+            if (toggle == 4) {
+                setColor(DyeColorWrapper.getNext(getColor()));
+                toggle = 0;
+            }
+            toggle++;
+        }
+    }
+
+    @Override
+    public boolean isRainbow() {
+        return rainbow;
+    }
+
+    @Override
+    public void setRainbow(boolean rainbow) {
+        this.rainbow = rainbow;
     }
 }

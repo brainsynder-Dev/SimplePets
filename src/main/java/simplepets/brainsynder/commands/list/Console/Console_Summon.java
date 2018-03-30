@@ -21,7 +21,7 @@ public class Console_Summon extends PetCommand {
             sendUsage(sender);
         } else {
             TypeManager manager = PetCore.get().getTypeManager();
-            PetDefault type = manager.getItem(args[0]);
+            PetDefault type = manager.getType(args[0]);
             if (type == null) {
                 sender.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));
                 return;

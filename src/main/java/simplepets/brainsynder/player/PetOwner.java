@@ -137,7 +137,14 @@ public class PetOwner {
                 savedPets.add(JsonToNBT.getTagFromJson(json));
             } catch (NBTException ignored) {}
         });
+    }
 
+    public boolean containsPetSave (StorageTagCompound compound) {
+        if (savedPets.isEmpty()) return false;
+        for (StorageTagCompound stc : savedPets) {
+            if (stc.toString().equals(compound.toString())) return true;
+        }
+        return false;
     }
 
     public void setSavedPets(List<StorageTagCompound> savedPets) {
@@ -297,7 +304,7 @@ public class PetOwner {
         if (!hasPetToRespawn()) return;
         if (!petToRespawn.hasKey("PetType")) return;
 
-        PetDefault type = PetCore.get().getTypeManager().getItem(petToRespawn.getString("PetType"));
+        PetDefault type = PetCore.get().getTypeManager().getType(petToRespawn.getString("PetType"));
         type.setPet(player);
 
         new BukkitRunnable() {
@@ -315,10 +322,9 @@ public class PetOwner {
         if (!compound.hasKey("PetType")) return;
         if (hasPet()) {
             removePet();
-            return;
         }
 
-        PetDefault type = PetCore.get().getTypeManager().getItem(compound.getString("PetType"));
+        PetDefault type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
         type.setPet(player);
 
         new BukkitRunnable() {

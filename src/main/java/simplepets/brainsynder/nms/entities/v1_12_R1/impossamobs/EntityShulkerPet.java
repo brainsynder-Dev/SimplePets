@@ -11,14 +11,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simple.brainsynder.nms.IActionMessage;
-import simple.brainsynder.utils.Reflection;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.list.EntityControllerPet;
-import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -30,10 +26,6 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     private boolean isCustom = false;
     private boolean rainbow = false;
     private int toggle = 0;
-    private int r = 0;
-    private int l = 0;
-    private boolean closed = true;
-    private boolean didClick = false;
     private DyeColorWrapper color = DyeColorWrapper.PURPLE;
     private EntityControllerPet pet;
     private FieldAccessor<Boolean> fieldAccessor;
@@ -75,34 +67,6 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         }
     }
 
-    public boolean damageEntity(DamageSource var1, float var2) {
-        if (isCustom) {
-            if (var1 instanceof EntityDamageSource) {
-                EntityDamageSource entityDamageSource = (EntityDamageSource) var1;
-                if (entityDamageSource.getEntity() instanceof EntityHuman) {
-                    EntityHuman human = (EntityHuman) entityDamageSource.getEntity();
-                    if (human.getName().equals(getOwner().getName())) {
-                        if (getOwner().isSneaking()) {
-                            if (l == 0) {
-                                l = 1;
-                                return false;
-                            }
-                            if (l != 0) l = 0;
-                            if (r != 0) r = 0;
-                        }
-                        if (rainbow) {
-                            l = 0;
-                            r = 0;
-                            rainbow = false;
-                        }
-                    }
-                }
-            }
-            return false;
-        }
-        return super.damageEntity(var1, var2);
-    }
-
     /**
      * Search for: if (Math.abs(this.motX) < 0.003D) {
      * Class: Entity
@@ -114,15 +78,6 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
             this.motX = 0;
             this.motY = 0;
             this.motZ = 0;
-            if (!rainbow) {
-                if (l == 1) {
-                    if (r == 1) {
-                        IActionMessage message = Reflection.getActionMessage();
-                        message.sendMessage(getOwner(), "§4§lR§c§lA§6§lI§e§lN§a§lB§2§lO§b§lW §f§lmode Activated. L/R Click to cancel");
-                        rainbow = true;
-                    }
-                }
-            }
             if (rainbow) {
                 if (toggle == 4) {
                     setColor(DyeColorWrapper.getNext(color));
@@ -145,8 +100,6 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
 
     @Override
     public void setClosed(boolean var) {
-        if (var != closed)
-            closed = var;
         if (var) {
             a(0);
         } else {
@@ -176,40 +129,6 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     }
 
     @Override
-    public EnumInteractionResult a(EntityHuman human, Vec3D vec3d, EnumHand enumhand) {
-        if (isCustom)
-            return this.onInteract((Player) human.getBukkitEntity()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.FAIL;
-        return super.a(human, vec3d, enumhand);
-    }
-
-    public boolean onInteract(Player p) {
-        if (pet != null) {
-            if (p.getName().equals(pet.getOwner().getName())) {
-                if (!didClick) {
-                    if (p.isSneaking()) {
-                        if (l == 1) {
-                            if (r == 0) {
-                                r = 1;
-                                return false;
-                            }
-                        }
-                        if (l != 0) l = 0;
-                        if (r != 0) r = 0;
-                    }
-                    if (rainbow) {
-                        l = 0;
-                        r = 0;
-                        rainbow = false;
-                    }
-                    PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(getOwner()));
-                }
-                didClick = (!didClick);
-            }
-        }
-        return false;
-    }
-
-    @Override
     public Player getOwner() {
         return pet.getOwner();
     }
@@ -228,6 +147,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public StorageTagCompound asCompound() {
         StorageTagCompound object = pet.asCompound();
         object.setBoolean("rainbow", rainbow);
+        if (!rainbow)
         object.setString("color", color.name());
         object.setBoolean("closed", isClosed());
         return object;
@@ -347,5 +267,15 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     private boolean isOnGround(net.minecraft.server.v1_12_R1.Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
+    }
+
+    @Override
+    public boolean isRainbow() {
+        return rainbow;
+    }
+
+    @Override
+    public void setRainbow(boolean rainbow) {
+        this.rainbow=rainbow;
     }
 }

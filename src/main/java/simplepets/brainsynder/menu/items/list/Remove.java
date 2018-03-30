@@ -1,13 +1,12 @@
 package simplepets.brainsynder.menu.items.list;
 
 import org.bukkit.Material;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 
@@ -17,18 +16,8 @@ public class Remove extends Item {
     }
 
     @Override
-    public void loadDefaults() {
-        defaults.put(MATERIAL, Material.BARRIER.toString());
-        defaults.put(DATA, "0");
-        defaults.put(AMOUNT, "1");
-        defaults.put(DISPLAY_NAME, "&4Remove Pet");
-        defaults.put(LORE_ENABLED, "false");
-        defaults.put(LORE, new JSONArray());
-        JSONObject custom = new JSONObject();
-        custom.put(ENABLED, "false");
-        custom.put(SKULL_OWNER, "SimpleAPI");
-        custom.put(TEXTURE_URL, "");
-        defaults.put(CUSTOM_SKULL, custom);
+    public ItemBuilder getDefaultItem() {
+        return new ItemBuilder(Material.BARRIER).withName("&4Remove Pet");
     }
 
     @Override
