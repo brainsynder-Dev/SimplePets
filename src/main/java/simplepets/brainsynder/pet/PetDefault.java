@@ -180,7 +180,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public ItemBuilder getDataItemByName(String name, int index) {
-        if (!_DATA_ITEMS_.isEmpty()) {
+        if (_DATA_ITEMS_ != null) {
             if (_DATA_ITEMS_.get(name) != null) {
                 return ItemBuilder.fromJSON((JSONObject) ((JSONArray) _DATA_ITEMS_.get(name)).get(index));
             }

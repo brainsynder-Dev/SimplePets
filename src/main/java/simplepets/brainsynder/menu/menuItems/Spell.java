@@ -29,58 +29,54 @@ public class Spell extends MenuItemAbstract {
             WizardSpell typeID = var.getSpell();
             switch (typeID) {
                 case BLINDNESS:
-                    item = new ItemBuilder(Material.INK_SACK);
+                    item = type.getDataItemByName("spell", 0);
                     break;
                 case DISAPPEAR:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 12);
+                    item = type.getDataItemByName("spell", 1);
                     break;
                 case FANGS:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 3);
+                    item = type.getDataItemByName("spell", 2);
                     break;
                 case NONE:
-                    item = new ItemBuilder(Material.BARRIER);
+                    item = type.getDataItemByName("spell", 3);
                     break;
                 case SUMMON_VEX:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 8);
+                    item = type.getDataItemByName("spell", 4);
                     break;
                 case WOLOLO:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
+                    item = type.getDataItemByName("spell", 5);
                     break;
             }
-            item.withName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
         }
         return item;
     }
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = null;
-        if (entityPet instanceof IEntityWizard) {
-            IEntityWizard var = (IEntityWizard) entityPet;
-            WizardSpell typeID = var.getSpell();
-            switch (typeID) {
-                case BLINDNESS:
-                    item = new ItemBuilder(Material.INK_SACK);
-                    break;
-                case DISAPPEAR:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 12);
-                    break;
-                case FANGS:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 3);
-                    break;
-                case NONE:
-                    item = new ItemBuilder(Material.BARRIER);
-                    break;
-                case SUMMON_VEX:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 8);
-                    break;
-                case WOLOLO:
-                    item = new ItemBuilder(Material.INK_SACK, (byte) 14);
-                    break;
-            }
-            item.withName(WordUtils.capitalize(typeID.name().toLowerCase().replace('_', ' ')));
-        }
-        return new ArrayList<>(); // TODO
+        List<ItemBuilder> items = new ArrayList<>();
+        ItemBuilder item = new ItemBuilder(Material.INK_SACK);
+        item.withName(WordUtils.capitalize(WizardSpell.BLINDNESS.name().toLowerCase().replace('_', ' ')));
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(12);
+        item.withName(WordUtils.capitalize(WizardSpell.DISAPPEAR.name().toLowerCase().replace('_', ' ')));
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withName(WordUtils.capitalize(WizardSpell.FANGS.name().toLowerCase().replace('_', ' ')));
+        item.withData(3);
+        items.add(item);
+        item = new ItemBuilder(Material.BARRIER);
+        item.withName(WordUtils.capitalize(WizardSpell.NONE.name().toLowerCase().replace('_', ' ')));
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(8);
+        item.withName(WordUtils.capitalize(WizardSpell.SUMMON_VEX.name().toLowerCase().replace('_', ' ')));
+        items.add(item);
+        item = new ItemBuilder(Material.INK_SACK);
+        item.withData(14);
+        item.withName(WordUtils.capitalize(WizardSpell.WOLOLO.name().toLowerCase().replace('_', ' ')));
+        items.add(item);
+        return items;
     }
 
     @Override

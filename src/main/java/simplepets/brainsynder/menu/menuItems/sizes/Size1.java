@@ -9,6 +9,10 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Size1 extends MenuItemAbstract {
 
     public Size1(PetDefault type, IEntityPet entityPet) {
@@ -24,8 +28,8 @@ public class Size1 extends MenuItemAbstract {
     }
 
     @Override
-    public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SLIME_BLOCK).setTexture("&6&lSize: &e1");
+    public List<ItemBuilder> getDefaultItems() {
+        return new ArrayList<>(Collections.singleton(new ItemBuilder(Material.SLIME_BLOCK).setTexture("&6&lSize: &e1")));
     }
 
     @Override

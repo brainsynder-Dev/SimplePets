@@ -22,7 +22,7 @@ public class RabbitColor extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
-        ItemBuilder item = null;
+        ItemBuilder item = type.getDataItemByName("rabbitcolor", 0);
         if (entityPet instanceof IEntityRabbitPet) {
             IEntityRabbitPet var = (IEntityRabbitPet) entityPet;
             RabbitType typeID = RabbitType.WHITE;
@@ -31,32 +31,25 @@ public class RabbitColor extends MenuItemAbstract {
             }
             switch (typeID) {
                 case BLACK:
-                    item = new ItemBuilder(Material.WOOL, (byte) 15);
-                    item.withName("&6Black");
+                    item = type.getDataItemByName("rabbitcolor", 0);
                     break;
                 case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
+                    item = type.getDataItemByName("rabbitcolor", 1);
                     break;
                 case GOLD:
-                    item = new ItemBuilder(Material.GOLD_BLOCK);
-                    item.withName("&6Golden");
+                    item = type.getDataItemByName("rabbitcolor", 2);
                     break;
                 case BLACK_AND_WHITE:
-                    item = new ItemBuilder(Material.WOOL, (byte) 0);
-                    item.withName("&6Black and White");
+                    item = type.getDataItemByName("rabbitcolor", 3);
                     break;
                 case SALT_AND_PEPPER:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Salt and Pepper");
+                    item = type.getDataItemByName("rabbitcolor", 4);
                     break;
                 case THE_KILLER_BUNNY:
-                    item = new ItemBuilder(Material.REDSTONE_BLOCK);
-                    item.withName("&6Killer Bunny");
+                    item = type.getDataItemByName("rabbitcolor", 5);
                     break;
                 case WHITE:
-                    item = new ItemBuilder(Material.QUARTZ_BLOCK);
-                    item.withName("&6White");
+                    item = type.getDataItemByName("rabbitcolor", 6);
                     break;
             }
         }
@@ -65,45 +58,33 @@ public class RabbitColor extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = null;
-        if (entityPet instanceof IEntityRabbitPet) {
-            IEntityRabbitPet var = (IEntityRabbitPet) entityPet;
-            RabbitType typeID = RabbitType.WHITE;
-            if (var.getRabbitType() != null) {
-                typeID = var.getRabbitType();
-            }
-            switch (typeID) {
-                case BLACK:
-                    item = new ItemBuilder(Material.WOOL, (byte) 15);
-                    item.withName("&6Black");
-                    break;
-                case BROWN:
-                    item = new ItemBuilder(Material.WOOL, (byte) 12);
-                    item.withName("&6Brown");
-                    break;
-                case GOLD:
-                    item = new ItemBuilder(Material.GOLD_BLOCK);
-                    item.withName("&6Golden");
-                    break;
-                case BLACK_AND_WHITE:
-                    item = new ItemBuilder(Material.WOOL, (byte) 0);
-                    item.withName("&6Black and White");
-                    break;
-                case SALT_AND_PEPPER:
-                    item = new ItemBuilder(Material.WOOL, (byte) 7);
-                    item.withName("&6Salt and Pepper");
-                    break;
-                case THE_KILLER_BUNNY:
-                    item = new ItemBuilder(Material.REDSTONE_BLOCK);
-                    item.withName("&6Killer Bunny");
-                    break;
-                case WHITE:
-                    item = new ItemBuilder(Material.QUARTZ_BLOCK);
-                    item.withName("&6White");
-                    break;
-            }
-        }
-        return new ArrayList<>();
+        List<ItemBuilder> items = new ArrayList<>();
+        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Black");
+        item.withData(15);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Brown");
+        item.withData(12);
+        items.add(item);
+        item = new ItemBuilder(Material.GOLD_BLOCK);
+        item.withName("&6Golden");
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Black and White");
+        item.withData(0);
+        items.add(item);
+        item = new ItemBuilder(Material.WOOL);
+        item.withName("&6Salt and Pepper");
+        item.withData(7);
+        items.add(item);
+        item = new ItemBuilder(Material.REDSTONE_BLOCK);
+        item.withName("&6Killer Bunny");
+        items.add(item);
+        item = new ItemBuilder(Material.QUARTZ_BLOCK);
+        item.withName("&6White");
+        items.add(item);
+        return items;
     }
 
     @Override

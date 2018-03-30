@@ -88,7 +88,6 @@ public class Pet implements IPet {
         if (type.getPetData() != null) {
             for (Class<? extends MenuItem> item : type.getPetData().getItemClasses()) {
                 MenuItem item1 = getItem(item);
-                System.out.println(item1);
                 if (item1 != null)
                     if (item1.isSupported())
                         items.add(item1);
