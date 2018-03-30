@@ -30,7 +30,6 @@ public class ShulkerColor extends MenuItemAbstract {
             if (var.getColor() != null)
                 typeID = var.getColor();
             item = type.getDataItemByName("shulkercolor", typeID.getWoolData());
-            item.withLore(null);
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
             List<String> lore = new ArrayList<>();

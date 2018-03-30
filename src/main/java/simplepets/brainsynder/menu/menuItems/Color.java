@@ -32,7 +32,6 @@ public class Color extends MenuItemAbstract {
             if (var.getColor() != null)
                 typeID = var.getColor();
             item = type.getDataItemByName("color", typeID.getWoolData());
-            item.withLore(null);
             DyeColorWrapper prev = DyeColorWrapper.getPrevious(typeID);
             DyeColorWrapper next = DyeColorWrapper.getNext(typeID);
             List<String> lore = new ArrayList<>();
