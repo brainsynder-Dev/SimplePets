@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
 import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
@@ -44,11 +43,10 @@ public class DataListener implements Listener {
             if (!menuItems.isEmpty()) {
                 while (menuItems.hasNext()) {
                     MenuItemAbstract menuItem = (MenuItemAbstract) menuItems.next();
-                    ItemStack stack = menuItem.getItem().build();
                     PetDataChangeEvent.ClickType type = PetDataChangeEvent.ClickType.LEFT_CLICK;
                     if (e.getClick().toString().toLowerCase().contains("right"))
                         type = PetDataChangeEvent.ClickType.RIGHT_CLICK;
-                    if (stack.isSimilar(e.getCurrentItem())) {
+                    if (menuItem.getItem().isSimilar(e.getCurrentItem())) {
                         PetDataChangeEvent event = new PetDataChangeEvent(menuItem, type);
                         Bukkit.getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {

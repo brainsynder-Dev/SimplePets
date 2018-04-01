@@ -302,6 +302,12 @@ public class ItemBuilder {
                         values.add(getTexture(getGameProfile(mainSkullMeta)).equals(getTexture(getGameProfile(checkSkullMeta))));
                     }catch (Exception ignored) {}
                 }
+                if ((mainMeta instanceof SpawnEggMeta) && (checkMeta instanceof SpawnEggMeta)) {
+                    SpawnEggMeta mainSkullMeta = (SpawnEggMeta) mainMeta;
+                    SpawnEggMeta checkSkullMeta = (SpawnEggMeta) checkMeta;
+
+                    values.add(mainSkullMeta.getSpawnedType() == (checkSkullMeta.getSpawnedType()));
+                }
 
                 if (!values.isEmpty()) return !values.contains(false);
             }
