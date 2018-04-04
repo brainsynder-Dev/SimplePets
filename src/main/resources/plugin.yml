@@ -18,6 +18,7 @@ permissions:
             Pet.PetToMount: true
             Pet.PetToHat: true
             Pet.commands.reload: true
+            Pet.itemstorage: true
     Pet.commands.*:
         default: false
         children:
