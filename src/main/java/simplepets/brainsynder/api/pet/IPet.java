@@ -28,9 +28,9 @@ public interface IPet {
 
     boolean isVehicle();
 
-    void setVehicle(boolean vehicle);
+    void setVehicle(boolean vehicle, boolean byEvent);
 
-    void toggleRiding();
+    void toggleRiding(boolean byEvent);
 
     void toggleHat();
 }

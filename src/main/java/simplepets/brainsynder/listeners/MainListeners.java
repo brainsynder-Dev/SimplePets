@@ -225,7 +225,7 @@ public class MainListeners implements Listener {
         if (handle instanceof IEntityPet) {
             IEntityPet pet = (IEntityPet) handle;
             if (pet.getOwner().getName().equals(e.getEntity().getName())) {
-                pet.getPet().setVehicle(false);
+                pet.getPet().setVehicle(false, true);
                 if (e.getEntity() instanceof Player) {
                     List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE,
                             Material.THIN_GLASS,
