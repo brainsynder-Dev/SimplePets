@@ -26,6 +26,7 @@ public class OnJoin implements Listener {
         Player player = e.getPlayer();
         try {
             PetOwner owner = PetOwner.getPetOwner(player);
+            if (owner == null) return;
             if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
                 new BukkitRunnable() {
                     @Override
@@ -48,11 +49,13 @@ public class OnJoin implements Listener {
     public void onPortal(EntityPortalEnterEvent e) {
         if (e.getEntity() instanceof Player) {
             PetOwner owner = PetOwner.getPetOwner((Player) e.getEntity());
+            if (owner == null) return;
             if (owner.hasPet()) owner.removePet();
         } else {
             if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
                 IEntityPet pet = (IEntityPet) ReflectionUtil.getEntityHandle(e.getEntity());
                 PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
+                if (owner == null) return;
                 if (owner.hasPet()) {
                     owner.removePet();
                 }
@@ -63,6 +66,7 @@ public class OnJoin implements Listener {
     private void petRemoveOnLeave(PlayerEvent e) {
         Player player = e.getPlayer();
         PetOwner owner = PetOwner.getPetOwner(player);
+        if (owner == null) return;
         if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
         owner.getFile().save();
         if (owner.hasPet()) owner.removePet();

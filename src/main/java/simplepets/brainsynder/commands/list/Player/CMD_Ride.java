@@ -13,9 +13,10 @@ public class CMD_Ride extends PetCommand<Player> {
     @Override
     public void onCommand(Player p, String[] args) {
         PetOwner petOwner = PetOwner.getPetOwner(p);
+        if (petOwner == null) return;
         if (petOwner.hasPet()) {
             IPet pet = petOwner.getPet();
-            if (pet.getPetType().canMount(p)) pet.toggleRiding();
+            if (pet.getPetType().canMount(p)) pet.toggleRiding(false);
         }
     }
 }

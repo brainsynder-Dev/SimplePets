@@ -34,6 +34,7 @@ public class Console_Info extends PetCommand {
             }
             PetOwner owner = PetOwner.getPetOwner(target);
             Commands commands = PetCore.get().getCommands();
+            if (owner == null) return;
             if (!owner.hasPet()) {
                 sender.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;

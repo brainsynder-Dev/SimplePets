@@ -70,7 +70,7 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
                 PetCore core = PetCore.get();
                 if (e.getCause() == PetMoveEvent.Cause.RIDE) {
                     if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
-                        petOwner.getPet().setVehicle(false);
+                        petOwner.getPet().setVehicle(false, false);
                         entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                     }
                     return;

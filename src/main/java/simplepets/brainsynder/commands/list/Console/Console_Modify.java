@@ -30,7 +30,7 @@ public class Console_Modify extends PetCommand {
                 return;
             }
             PetOwner owner = PetOwner.getPetOwner(target);
-
+            if (owner == null) return;
             if (!owner.hasPet()) {
                 sender.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;

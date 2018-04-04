@@ -125,8 +125,8 @@ public class Pet implements IPet {
         setHat(!isHat());
     }
 
-    public void toggleRiding() {
-        setVehicle(!isVehicle());
+    public void toggleRiding(boolean byEvent) {
+        setVehicle(!isVehicle(), byEvent);
     }
 
     public boolean isVehicle() {
@@ -138,90 +138,91 @@ public class Pet implements IPet {
         return false;
     }
 
-    public void setVehicle(boolean value) {
-        if (type.canMount(owner)) {
-            if (ent instanceof IHorseAbstract) {
-                IHorseAbstract horse = (IHorseAbstract) ent;
-                if (!horse.isSaddled()) horse.setSaddled(true);
-            }
-
-            if (getPet().getPassenger() != null) {
-                PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.DISMOUNT);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-                if (event.isCancelled()) return;
-
-                if (ent instanceof IEntityControllerPet) {
-                    if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-                        ent.getEntity().setPassenger(((IEntityControllerPet) ent).getDisplayEntity());
-                    } else {
-                        ((IEntityControllerPet) ent).getDisplayEntity().eject();
-                    }
-                } else {
-                    ent.getEntity().eject();
+    public void setVehicle(boolean value, boolean byEvent) {
+        if (!byEvent) {
+            if (type.canMount(owner)) {
+                if (ent instanceof IHorseAbstract) {
+                    IHorseAbstract horse = (IHorseAbstract) ent;
+                    if (!horse.isSaddled()) horse.setSaddled(true);
                 }
-                value = false;
-            } else if (isVehicle()) {
-                value = false;
-            }
 
-            if (value && (vehicle != value)) {
-                if (isHat) {
-                    PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
+                if (getPet().getPassenger() != null) {
+                    PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.DISMOUNT);
                     Bukkit.getServer().getPluginManager().callEvent(event);
                     if (event.isCancelled()) return;
 
-                    instance.getUtilities().removePassenger(owner, ent.getEntity());
-                    setHat(false);
+                    if (ent instanceof IEntityControllerPet) {
+                        if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
+                            ent.getEntity().setPassenger(((IEntityControllerPet) ent).getDisplayEntity());
+                        } else {
+                            ((IEntityControllerPet) ent).getDisplayEntity().eject();
+                        }
+                    } else {
+                        ent.getEntity().eject();
+                    }
+                    value = false;
+                } else if (isVehicle()) {
+                    value = false;
                 }
 
-                PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.MOUNT);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-                if (event.isCancelled()) return;
+                if (value && (vehicle != value)) {
+                    if (isHat) {
+                        PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
+                        Bukkit.getServer().getPluginManager().callEvent(event);
+                        if (event.isCancelled()) return;
 
-                value = true;
-                if (owner.getLocation().getBlock() != null) {
-                    List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE,
-                            Material.THIN_GLASS,
-                            Material.IRON_FENCE,
-                            Material.IRON_DOOR,
-                            Material.WOODEN_DOOR,
-                            Material.ACACIA_DOOR,
-                            Material.BIRCH_DOOR,
-                            Material.DARK_OAK_DOOR,
-                            Material.JUNGLE_DOOR,
-                            Material.SPRUCE_DOOR,
-                            Material.WOOD_DOOR,
-                            Material.ACACIA_FENCE_GATE,
-                            Material.BIRCH_FENCE_GATE,
-                            Material.DARK_OAK_FENCE_GATE,
-                            Material.FENCE_GATE,
-                            Material.JUNGLE_FENCE_GATE,
-                            Material.SPRUCE_FENCE_GATE));
-                    if (!blocks.contains(owner.getLocation().getBlock().getType()) && !blocks.contains(owner.getEyeLocation().getBlock().getType())) {
+                        instance.getUtilities().removePassenger(owner, ent.getEntity());
+                        setHat(false);
+                    }
+
+                    PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.MOUNT);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    if (event.isCancelled()) return;
+
+                    value = true;
+                    if (owner.getLocation().getBlock() != null) {
+                        List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE,
+                                Material.THIN_GLASS,
+                                Material.IRON_FENCE,
+                                Material.IRON_DOOR,
+                                Material.WOODEN_DOOR,
+                                Material.ACACIA_DOOR,
+                                Material.BIRCH_DOOR,
+                                Material.DARK_OAK_DOOR,
+                                Material.JUNGLE_DOOR,
+                                Material.SPRUCE_DOOR,
+                                Material.WOOD_DOOR,
+                                Material.ACACIA_FENCE_GATE,
+                                Material.BIRCH_FENCE_GATE,
+                                Material.DARK_OAK_FENCE_GATE,
+                                Material.FENCE_GATE,
+                                Material.JUNGLE_FENCE_GATE,
+                                Material.SPRUCE_FENCE_GATE));
+                        if (!blocks.contains(owner.getLocation().getBlock().getType()) && !blocks.contains(owner.getEyeLocation().getBlock().getType())) {
+                            getPet().teleport(owner);
+                        }
+                    } else {
                         getPet().teleport(owner);
                     }
-                } else {
-                    getPet().teleport(owner);
-                }
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (ent instanceof IEntityControllerPet) {
-                            if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-                                ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(ent.getEntity());
-                                ((IEntityControllerPet) ent).addPassenger(owner);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            if (ent instanceof IEntityControllerPet) {
+                                if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
+                                    ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(ent.getEntity());
+                                    ((IEntityControllerPet) ent).addPassenger(owner);
+                                } else {
+                                    ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
+                                }
                             } else {
-                                ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
+                                ent.getEntity().setPassenger(owner);
                             }
-                        } else {
-                            ent.getEntity().setPassenger(owner);
-                        }
 
-                    }
-                }.runTaskLater(PetCore.get(), 2L);
+                        }
+                    }.runTaskLater(PetCore.get(), 2L);
+                }
             }
         }
-
         vehicle = value;
     }
 
@@ -305,7 +306,7 @@ public class Pet implements IPet {
     public void setHat(boolean value) {
         int delay = 1;
         if (isVehicle()) {
-            setVehicle(false);
+            setVehicle(false, false);
             delay = 3;
         }
         IEntityPet ent = this.ent;

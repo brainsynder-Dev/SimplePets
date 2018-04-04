@@ -41,11 +41,13 @@ public class MainListeners implements Listener {
         } else {
             Player p = (Player) e.getEntity();
             PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner.hasPet()) {
-                if (p.isInsideVehicle()) {
-                    if (p.getVehicle() == owner.getPet().getEntity().getEntity()) {
-                        if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                            e.setCancelled(true);
+            if (owner != null) {
+                if (owner.hasPet()) {
+                    if (p.isInsideVehicle()) {
+                        if (p.getVehicle() == owner.getPet().getEntity().getEntity()) {
+                            if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                                e.setCancelled(true);
+                            }
                         }
                     }
                 }
@@ -89,10 +91,12 @@ public class MainListeners implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
-        if (owner.isRenaming()) {
-            owner.setPetName(event.getMessage(), false);
-            owner.setRenaming(false);
-            event.setCancelled(true);
+        if (owner != null) {
+            if (owner.isRenaming()) {
+                owner.setPetName(event.getMessage(), false);
+                owner.setRenaming(false);
+                event.setCancelled(true);
+            }
         }
     }
 
@@ -151,12 +155,14 @@ public class MainListeners implements Listener {
         Player p = e.getEntity();
         if (p != null) {
             PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner.hasPet()) {
-                if (owner.getPet().getVisableEntity() == null) return;
-                if (!owner.hasPetToRespawn()) {
-                    owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+            if (owner != null) {
+                if (owner.hasPet()) {
+                    if (owner.getPet().getVisableEntity() == null) return;
+                    if (!owner.hasPetToRespawn()) {
+                        owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+                    }
+                    owner.removePet();
                 }
-                owner.removePet();
             }
         }
     }
@@ -166,13 +172,15 @@ public class MainListeners implements Listener {
         final Player p = e.getPlayer();
         if (p == null) {
             final PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner.hasPetToRespawn()) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        owner.respawnPet();
-                    }
-                }.runTaskLater(PetCore.get(), 40);
+            if (owner != null) {
+                if (owner.hasPetToRespawn()) {
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            owner.respawnPet();
+                        }
+                    }.runTaskLater(PetCore.get(), 40);
+                }
             }
         }
     }
@@ -181,29 +189,31 @@ public class MainListeners implements Listener {
     public void onTeleport(final PlayerTeleportEvent e) {
         final Player p = e.getPlayer();
         final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner.hasPet()) {
-            if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN) {
-                if (p.getPassenger() != null) {
-                    e.setCancelled(true);
-                    return;
-                }
-                IPet pet = owner.getPet();
-                if (pet.getVisableEntity() == null) return;
-                if (!owner.hasPetToRespawn()) {
-                    owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-                    owner.removePet();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (owner.hasPetToRespawn()) {
-                                if (!p.isOnline()) {
-                                    owner.setPetToRespawn(null);
-                                    return;
+        if (owner != null) {
+            if (owner.hasPet()) {
+                if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN) {
+                    if (p.getPassenger() != null) {
+                        e.setCancelled(true);
+                        return;
+                    }
+                    IPet pet = owner.getPet();
+                    if (pet.getVisableEntity() == null) return;
+                    if (!owner.hasPetToRespawn()) {
+                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                        owner.removePet();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (owner.hasPetToRespawn()) {
+                                    if (!p.isOnline()) {
+                                        owner.setPetToRespawn(null);
+                                        return;
+                                    }
+                                    owner.respawnPet();
                                 }
-                                owner.respawnPet();
                             }
-                        }
-                    }.runTaskLater(PetCore.get(), 40);
+                        }.runTaskLater(PetCore.get(), 40);
+                    }
                 }
             }
         }
@@ -215,7 +225,7 @@ public class MainListeners implements Listener {
         if (handle instanceof IEntityPet) {
             IEntityPet pet = (IEntityPet) handle;
             if (pet.getOwner().getName().equals(e.getEntity().getName())) {
-                pet.getPet().setVehicle(false);
+                pet.getPet().setVehicle(false, true);
                 if (e.getEntity() instanceof Player) {
                     List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE,
                             Material.THIN_GLASS,
@@ -246,30 +256,32 @@ public class MainListeners implements Listener {
     public void onWorldChange(PlayerChangedWorldEvent e) {
         final Player p = e.getPlayer();
         final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner.hasPet()) {
-            if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
-                owner.removePet();
-                return;
-            }
-
-            IPet pet = owner.getPet();
+        if (owner != null) {
             if (owner.hasPet()) {
-                if (pet.getVisableEntity() == null) return;
-                if (!owner.hasPetToRespawn()) {
-                    owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
                     owner.removePet();
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            if (owner.hasPetToRespawn()) {
-                                if (!p.isOnline()) {
-                                    owner.setPetToRespawn(null);
-                                    return;
+                    return;
+                }
+
+                IPet pet = owner.getPet();
+                if (owner.hasPet()) {
+                    if (pet.getVisableEntity() == null) return;
+                    if (!owner.hasPetToRespawn()) {
+                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                        owner.removePet();
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                if (owner.hasPetToRespawn()) {
+                                    if (!p.isOnline()) {
+                                        owner.setPetToRespawn(null);
+                                        return;
+                                    }
+                                    owner.respawnPet();
                                 }
-                                owner.respawnPet();
                             }
-                        }
-                    }.runTaskLater(PetCore.get(), 40);
+                        }.runTaskLater(PetCore.get(), 40);
+                    }
                 }
             }
         }

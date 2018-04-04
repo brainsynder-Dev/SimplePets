@@ -27,6 +27,6 @@ public class Ride extends Item {
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (owner.hasPet())
-            owner.getPet().toggleRiding();
+            owner.getPet().toggleRiding(false);
     }
 }

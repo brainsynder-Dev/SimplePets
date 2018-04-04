@@ -26,6 +26,7 @@ public class Console_Remove extends PetCommand {
                 return;
             }
             PetOwner petOwner = PetOwner.getPetOwner(tp);
+            if (petOwner == null) return;
             if (petOwner.hasPet()) {
                 sender.sendMessage(PetCore.get().getMessages().getString("Pet-Remove-Other-Remover", true)
                         .replace("%player%", tp.getName()));
