@@ -36,7 +36,7 @@ public class Commands extends FileMaker {
     public String getString(String path) {
         String value = super.getString(path, true);
         if (!path.equals("prefix")) {
-            value = value.replace("{prefix}", super.getString("Prefix", true));
+            value = value.replace("{prefix}", super.getString("prefix", true));
         }
         return value;
     }
