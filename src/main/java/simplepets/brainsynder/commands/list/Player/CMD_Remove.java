@@ -17,6 +17,7 @@ public class CMD_Remove extends PetCommand<Player> {
     public void onCommand(Player p, String[] args) {
         if (args.length == 0) {
             PetOwner petOwner = PetOwner.getPetOwner(p);
+            if (petOwner == null) return;
             if (petOwner.hasPet()) {
                 petOwner.removePet();
                 p.sendMessage(PetCore.get().getMessages().getString("Pet-Remove-Self-Removed", true));
@@ -31,6 +32,7 @@ public class CMD_Remove extends PetCommand<Player> {
                     return;
                 }
                 PetOwner petOwner = PetOwner.getPetOwner(tp);
+                if (petOwner == null) return;
                 if (petOwner.hasPet()) {
                     p.sendMessage(PetCore.get().getMessages().getString("Pet-Remove-Other-Remover", true).replace("%player%", tp.getName()));
                     tp.sendMessage(PetCore.get().getMessages().getString("Pet-Remove-Other-Target", true).replace("%player%", p.getName()));

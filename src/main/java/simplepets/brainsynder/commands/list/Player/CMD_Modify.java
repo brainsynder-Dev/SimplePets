@@ -29,7 +29,7 @@ public class CMD_Modify extends PetCommand<Player> {
                 return;
             }
             PetOwner owner = PetOwner.getPetOwner(target);
-
+            if (owner == null) return;
             if (!owner.hasPet()) {
                 p.sendMessage(PetCore.get().getMessages().getString("Player-No-Pet", true).replace("%player%", args[0]));
                 return;

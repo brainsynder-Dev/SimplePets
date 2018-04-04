@@ -54,6 +54,7 @@ public class DataMenu extends CustomInventory {
     @Override
     public void open(PetOwner owner) {
         if (!isEnabled()) return;
+        if (owner == null) return;
         Inventory inv = Bukkit.createInventory(new PetDataHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {

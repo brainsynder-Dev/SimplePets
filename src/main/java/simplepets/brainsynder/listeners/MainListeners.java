@@ -41,11 +41,13 @@ public class MainListeners implements Listener {
         } else {
             Player p = (Player) e.getEntity();
             PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner.hasPet()) {
-                if (p.isInsideVehicle()) {
-                    if (p.getVehicle() == owner.getPet().getEntity().getEntity()) {
-                        if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
-                            e.setCancelled(true);
+            if (owner != null) {
+                if (owner.hasPet()) {
+                    if (p.isInsideVehicle()) {
+                        if (p.getVehicle() == owner.getPet().getEntity().getEntity()) {
+                            if (e.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION || e.getCause() == EntityDamageEvent.DamageCause.FALL) {
+                                e.setCancelled(true);
+                            }
                         }
                     }
                 }
@@ -89,10 +91,12 @@ public class MainListeners implements Listener {
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
         PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
-        if (owner.isRenaming()) {
-            owner.setPetName(event.getMessage(), false);
-            owner.setRenaming(false);
-            event.setCancelled(true);
+        if (owner != null) {
+            if (owner.isRenaming()) {
+                owner.setPetName(event.getMessage(), false);
+                owner.setRenaming(false);
+                event.setCancelled(true);
+            }
         }
     }
 

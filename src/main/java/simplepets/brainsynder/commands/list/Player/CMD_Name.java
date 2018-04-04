@@ -12,6 +12,7 @@ public class CMD_Name extends PetCommand<Player> {
     @Override
     public void onCommand(Player p, String[] args) {
         PetOwner petOwner = PetOwner.getPetOwner(p);
+        if (petOwner == null) return;
         petOwner.renamePet();
     }
 }
