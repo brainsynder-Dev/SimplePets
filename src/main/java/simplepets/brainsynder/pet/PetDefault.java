@@ -9,7 +9,6 @@ import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -45,7 +44,7 @@ public abstract class PetDefault extends JSONFile {
         setDefault("enabled", "true");
         setDefault("hat", "true");
         setDefault("mount", "true");
-        setDefault("float_down", "true");
+        setDefault("float_down", "false");
         setDefault("fly", String.valueOf(canFlyDefault()));
 
         setDefault("ride_speed", 0.4000000238418579D);

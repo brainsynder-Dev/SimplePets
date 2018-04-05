@@ -32,7 +32,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     private IPet pet;
     private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
 
-    private boolean floatDown = true,
+    private boolean floatDown = false,
             canGlow = true,
             isGlowing = false,
             autoRemove = true,
