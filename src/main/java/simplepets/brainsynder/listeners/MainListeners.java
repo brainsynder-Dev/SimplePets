@@ -1,7 +1,6 @@
 package simplepets.brainsynder.listeners;
 
 import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -28,17 +27,15 @@ import java.util.List;
 public class MainListeners implements Listener {
     @EventHandler
     public void onhurt(EntityDamageEvent e) {
+        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        if (handle instanceof IImpossaPet) e.setCancelled(true);
         if (e.getEntity().hasMetadata("NO_DAMAGE")
                 || e.getEntity().hasMetadata("pet")) {
             e.setCancelled(true);
             return;
         }
-        if (!(e.getEntity() instanceof Player)) {
-            Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
-            if (handle instanceof IImpossaPet) {
-                e.setCancelled(true);
-            }
-        } else {
+
+        if (e.getEntity() instanceof Player) {
             Player p = (Player) e.getEntity();
             PetOwner owner = PetOwner.getPetOwner(p);
             if (owner != null) {
@@ -57,33 +54,21 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onhurt(EntityDamageByEntityEvent e) {
+        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        if (handle instanceof IImpossaPet) e.setCancelled(true);
         if (e.getEntity().hasMetadata("NO_DAMAGE")
                 || e.getEntity().hasMetadata("pet")) {
             e.setCancelled(true);
-            return;
-        }
-        if (!(e.getEntity() instanceof Player)) {
-            Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
-            e.setCancelled(handle instanceof Player);
-        } else {
-            if (!(e.getDamager() instanceof Player)) {
-                Entity ent = e.getDamager();
-                Object handle = ReflectionUtil.getEntityHandle(ent);
-                e.setCancelled(handle instanceof IEntityPet);
-            }
         }
     }
 
     @EventHandler
     public void onhurt(EntityDamageByBlockEvent e) {
+        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        if (handle instanceof IImpossaPet) e.setCancelled(true);
         if (e.getEntity().hasMetadata("NO_DAMAGE")
                 || e.getEntity().hasMetadata("pet")) {
             e.setCancelled(true);
-            return;
-        }
-        if (!(e.getEntity() instanceof Player)) {
-            Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
-            e.setCancelled(handle instanceof IImpossaPet);
         }
     }
 
