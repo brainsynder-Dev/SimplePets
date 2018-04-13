@@ -16,6 +16,7 @@ public enum PetData {
     BAT(Hang.class),
     WITHER(WitherShield.class, WitherSize.class),
     BLAZE(Burning.class),
+    GHAST_SCREAM(GhastScream.class),
     SCREAM(Scream.class),
     PUMPKIN(Pumpkin.class),
     VILLAGER(Age.class, Profession.class),

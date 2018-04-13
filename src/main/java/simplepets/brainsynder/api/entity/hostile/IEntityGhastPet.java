@@ -7,4 +7,10 @@ public interface IEntityGhastPet extends IEntityPet {
     default boolean isBig() {
         return true;
     }
+
+    default boolean isScreaming () {
+        return false;
+    }
+
+    default void setScreaming (boolean var) {}
 }
