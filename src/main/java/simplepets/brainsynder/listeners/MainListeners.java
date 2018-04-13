@@ -78,7 +78,11 @@ public class MainListeners implements Listener {
         PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
         if (owner != null) {
             if (owner.isRenaming()) {
-                owner.setPetName(event.getMessage(), false);
+                if (event.getMessage().equalsIgnoreCase("cancel")) {
+                    event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
+                }else{
+                    owner.setPetName(event.getMessage(), false);
+                }
                 owner.setRenaming(false);
                 event.setCancelled(true);
             }

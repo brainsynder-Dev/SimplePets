@@ -34,6 +34,7 @@ public class Messages extends FileMaker {
         setDefault("No-Spawning", "{prefix} &cPets are not allowed to be spawned in this region.");
         setDefault("Pet-No-Enter", "{prefix} &cPets are not allowed in this region.");
         setDefault("Pet-RenameViaChat", "{prefix} &7Type your pets new name in chat:");
+        setDefault("Pet-RenameViaChat-Cancel", "{prefix} &cPet renaming has been canceled");
         setDefault("Pet-RenameViaAnvil", "{prefix} &7Type your pets new name in the anvil, then click the item on the right when complete.");
         setDefault("Pet-RenameFailure", "{prefix} &cSorry, but your pets name could not be changed to: &7{name}");
         setDefault("Player-No-Pet", "{prefix} &7%player% does not have a pet.");
