@@ -26,7 +26,7 @@ public class Johnny extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("johnny", 0);
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isJohnny())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isJohnny())));
         }
         return item;
     }

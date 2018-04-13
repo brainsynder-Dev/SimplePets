@@ -26,7 +26,7 @@ public class Scream extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("scream", 0);
         if (entityPet instanceof IEntityEndermanPet) {
             IEntityEndermanPet var = (IEntityEndermanPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isScreaming())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isScreaming())));
         }
         return item;
     }

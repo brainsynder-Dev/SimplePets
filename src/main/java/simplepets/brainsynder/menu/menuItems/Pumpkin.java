@@ -30,7 +30,7 @@ public class Pumpkin extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("pumpkin", 0);
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.hasPumpkin())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.hasPumpkin())));
         }
         return item;
     }

@@ -26,8 +26,7 @@ public class Hang extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("hang", 0);
         if (entityPet instanceof IEntityBatPet) {
             IEntityBatPet var = (IEntityBatPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name"))
-                    .replace("%value%", String.valueOf(var.isHanging())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isHanging())));
         }
         return item;
     }

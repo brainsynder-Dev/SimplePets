@@ -25,7 +25,7 @@ public class WitherShield extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("withershield", 0);
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isShielded())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isShielded())));
         }
         return item;
     }

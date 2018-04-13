@@ -26,7 +26,7 @@ public class Tilt extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("tilt", 0);
         if (entityPet instanceof IEntityWolfPet) {
             IEntityWolfPet var = (IEntityWolfPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isHeadTilted())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isHeadTilted())));
         }
         return item;
     }

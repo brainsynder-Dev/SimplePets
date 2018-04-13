@@ -24,7 +24,7 @@ public class WitherSize extends MenuItemAbstract {
     public ItemBuilder getItem() {
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var)));
+            item.withName(item.getName().replace("%value%", String.valueOf(var)));
         }
         return item;
     }

@@ -26,11 +26,11 @@ public class Powered extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("powered", 0);
         if (entityPet instanceof IEntityCreeperPet) {
             IEntityCreeperPet var = (IEntityCreeperPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
         }
         if (entityPet instanceof IEntityVexPet) {
             IEntityVexPet var = (IEntityVexPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
         }
         return item;
     }

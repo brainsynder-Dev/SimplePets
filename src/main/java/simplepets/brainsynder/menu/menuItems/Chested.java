@@ -25,8 +25,7 @@ public class Chested extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IChestedAbstractPet) {
                 IChestedAbstractPet var = (IChestedAbstractPet) entityPet;
-                item.withName(String.valueOf(item.toJSON().get("name"))
-                        .replace("%value%", String.valueOf(var.isChested())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isChested())));
             }
         }
         return item;

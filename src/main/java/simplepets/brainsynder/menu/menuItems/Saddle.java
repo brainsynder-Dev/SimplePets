@@ -27,12 +27,10 @@ public class Saddle extends MenuItemAbstract {
         try {
             if (entityPet instanceof IEntityPigPet) {
                 IEntityPigPet pig = (IEntityPigPet) entityPet;
-                item.withName(String.valueOf(item.toJSON().get("name"))
-                .replace("%value%", String.valueOf(pig.hasSaddle())));
+                item.withName(item.getName().replace("%value%", String.valueOf(pig.hasSaddle())));
             } else if (entityPet instanceof IHorseAbstract) {
                 IHorseAbstract var = (IHorseAbstract) entityPet;
-                item.withName(String.valueOf(item.toJSON().get("name"))
-                        .replace("%value%", String.valueOf(var.isSaddled())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isSaddled())));
             }
         } catch (Exception e) {
             item.withName("&6Has Saddle: &cERROR");

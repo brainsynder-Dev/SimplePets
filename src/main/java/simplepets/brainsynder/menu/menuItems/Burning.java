@@ -26,8 +26,7 @@ public class Burning extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("burning", 0);
         if (entityPet instanceof IEntityBlazePet) {
             IEntityBlazePet var = (IEntityBlazePet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name"))
-                    .replace("%value%", String.valueOf(var.isBurning())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isBurning())));
         }
         return item;
     }

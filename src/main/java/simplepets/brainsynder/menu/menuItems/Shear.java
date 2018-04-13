@@ -26,7 +26,7 @@ public class Shear extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("shear", 0);
         if (entityPet instanceof IEntitySheepPet) {
             IEntitySheepPet var = (IEntitySheepPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSheared())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isSheared())));
         }
         return item;
     }

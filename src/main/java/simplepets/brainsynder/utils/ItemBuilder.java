@@ -93,6 +93,11 @@ public class ItemBuilder {
         return fromJSON(toJSON());
     }
 
+    public String getName () {
+        if (JSON.containsKey("name")) return String.valueOf(JSON.get("name"));
+        return null;
+    }
+
     public ItemBuilder withName(String name) {
         JSON.put("name", name);
         im.setDisplayName(translate(name));

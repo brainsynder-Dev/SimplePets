@@ -29,10 +29,10 @@ public class Stand extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("stand", 0);
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSmall())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isSmall())));
         } else if (entityPet instanceof IEntityPolarBearPet) {
             IEntityPolarBearPet var = (IEntityPolarBearPet) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isStanding())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isStanding())));
         }
         return item;
     }

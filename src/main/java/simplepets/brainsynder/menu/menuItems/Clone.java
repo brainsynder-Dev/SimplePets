@@ -26,8 +26,7 @@ public class Clone extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IEntityArmorStandPet) {
                 IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-                item.withName(String.valueOf(item.toJSON().get("name"))
-                .replace("%value%", String.valueOf(var.isOwner())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isOwner())));
             }
         }
         return item;

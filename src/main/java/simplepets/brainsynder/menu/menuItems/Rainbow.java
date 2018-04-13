@@ -24,7 +24,7 @@ public class Rainbow extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("rainbow", 0);
         if (entityPet instanceof IRainbow) {
             IRainbow var = (IRainbow) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isRainbow())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isRainbow())));
         }
         return item;
     }

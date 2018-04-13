@@ -25,8 +25,7 @@ public class Age extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IAgeablePet) {
                 IAgeablePet var = (IAgeablePet) entityPet;
-                item.withName(String.valueOf(item.toJSON().get("name"))
-                        .replace("%value%", String.valueOf(var.isBaby())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isBaby())));
             }
         }
         return item;

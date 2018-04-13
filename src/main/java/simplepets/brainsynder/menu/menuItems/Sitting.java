@@ -24,7 +24,7 @@ public class Sitting extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("sitting", 0);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isSitting())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isSitting())));
         }
         return item;
     }

@@ -25,7 +25,7 @@ public class ShulkerClosed extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("shulkerclosed", 0);
         if (getEntityPet() instanceof IEntityShulkerPet) {
             IEntityShulkerPet var = (IEntityShulkerPet) getEntityPet();
-            item.withName(String.valueOf(item.toJSON().get("name")).replace("%value%", String.valueOf(var.isClosed())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isClosed())));
         }
         return item;
     }
