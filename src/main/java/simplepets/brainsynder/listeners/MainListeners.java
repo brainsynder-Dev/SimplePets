@@ -172,36 +172,28 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onTeleport(final PlayerTeleportEvent e) {
-        final Player p = e.getPlayer();
-        final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner != null) {
-            if (owner.hasPet()) {
-                if (e.getCause() != PlayerTeleportEvent.TeleportCause.UNKNOWN) {
-                    if (p.getPassenger() != null) {
-                        e.setCancelled(true);
+        if (e.getCause() == PlayerTeleportEvent.TeleportCause.UNKNOWN) return;
+        Player p = e.getPlayer();
+        PetOwner owner = PetOwner.getPetOwner(p);
+        if (owner == null) return;
+        if (!owner.hasPet()) return;
+        if (owner.hasPetToRespawn()) return;
+        IPet pet = owner.getPet();
+        if (pet.getVisableEntity() == null) return;
+        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+        owner.removePet();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (owner.hasPetToRespawn()) {
+                    if (!p.isOnline()) {
+                        owner.setPetToRespawn(null);
                         return;
                     }
-                    IPet pet = owner.getPet();
-                    if (pet.getVisableEntity() == null) return;
-                    if (!owner.hasPetToRespawn()) {
-                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-                        owner.removePet();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (owner.hasPetToRespawn()) {
-                                    if (!p.isOnline()) {
-                                        owner.setPetToRespawn(null);
-                                        return;
-                                    }
-                                    owner.respawnPet();
-                                }
-                            }
-                        }.runTaskLater(PetCore.get(), 40);
-                    }
+                    owner.respawnPet();
                 }
             }
-        }
+        }.runTaskLater(PetCore.get(), 40);
     }
 
     @EventHandler
