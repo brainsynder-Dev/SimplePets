@@ -101,10 +101,11 @@ public class SelectionMenu extends CustomInventory {
 
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetDefault type : availableTypes) {
-            if (type.hasPermission(owner.getPlayer()) && PetCore.get().getConfiguration().getBoolean("Remove-Item-If-No-Permission")) {
+            if (type.hasPermission(owner.getPlayer())) {
                 petTypes.add(new PetTypeStorage(type));
             }else{
-                petTypes.add(new PetTypeStorage(type));
+                if (!PetCore.get().getConfiguration().getBoolean("Remove-Item-If-No-Permission"))
+                    petTypes.add(new PetTypeStorage(type));
             }
         }
         if (petTypes.getSize() == 0) {
