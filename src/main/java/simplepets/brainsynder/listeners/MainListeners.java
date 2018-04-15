@@ -226,7 +226,12 @@ public class MainListeners implements Listener {
                             Material.JUNGLE_FENCE_GATE,
                             Material.SPRUCE_FENCE_GATE));
                     if (blocks.contains(e.getEntity().getLocation().getBlock().getType())) {
-                        e.getEntity().teleport(pet.getEntity().getLocation());
+                        new BukkitRunnable() {
+                            @Override
+                            public void run() {
+                                e.getEntity().teleport(pet.getEntity().getLocation());
+                            }
+                        }.runTaskLater(PetCore.get(), 3);
                     }
                 }
             }
