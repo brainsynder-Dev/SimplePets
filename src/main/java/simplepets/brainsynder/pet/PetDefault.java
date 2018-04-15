@@ -8,6 +8,7 @@ import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.utils.ItemBuilder;
@@ -123,7 +124,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public boolean canMount(Player player) {
-     //   if (this instanceof ShulkerDefault) return false;
+        if (this instanceof ShulkerDefault) return false;
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
