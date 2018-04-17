@@ -25,9 +25,9 @@ public class OnJoin implements Listener {
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         try {
-            PetOwner owner = PetOwner.getPetOwner(player);
-            if (owner == null) return;
             if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
+                PetOwner owner = PetOwner.getPetOwner(player);
+                if (owner == null) return;
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -37,6 +37,7 @@ public class OnJoin implements Listener {
                 }.runTaskLater(PetCore.get(), 30);
             }
         } catch (Exception ignored) {
+      
         }
     }
 
