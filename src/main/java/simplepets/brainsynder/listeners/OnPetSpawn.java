@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IImpossaPet;
@@ -62,26 +63,33 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
 
     @EventHandler
     public void onMove(PetMoveEvent e) {
-        try {
-            if (e.getEntity() == null) return;
-            if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
-                IEntityPet entity = e.getEntity();
-                PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-                PetCore core = PetCore.get();
-                if (e.getCause() == PetMoveEvent.Cause.RIDE) {
-                    if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
-                        petOwner.getPet().setVehicle(false, false);
-                        entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
-                    }
-                    return;
-                }
+        new BukkitRunnable() {
 
-                if (!core.getLinkRetriever().canPetEnter(petOwner, entity.getEntity().getLocation())) {
-                    petOwner.removePet();
-                    entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+            @Override
+            public void run() {
+                try {
+                    if (e.getEntity() == null) return;
+                    if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
+                        IEntityPet entity = e.getEntity();
+                        PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+                        PetCore core = PetCore.get();
+                        if (e.getCause() == PetMoveEvent.Cause.RIDE) {
+                            if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
+                                petOwner.getPet().setVehicle(false, false);
+                                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                            }
+                            return;
+                        }
+
+                        if (!core.getLinkRetriever().canPetEnter(petOwner, entity.getEntity().getLocation())) {
+                            petOwner.removePet();
+                            entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                        }
+                    }
+                } catch (Exception ignored) {
                 }
             }
-        } catch (Exception ignored) {
-        }
+        }.runTaskAsynchronously(PetCore.get());
+
     }
 }

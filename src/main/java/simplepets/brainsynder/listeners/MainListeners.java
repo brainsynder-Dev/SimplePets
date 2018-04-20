@@ -75,18 +75,25 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
-        if (owner != null) {
-            if (owner.isRenaming()) {
-                if (event.getMessage().equalsIgnoreCase("cancel")) {
-                    event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
-                }else{
-                    owner.setPetName(event.getMessage(), false);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
+                if (owner != null) {
+                    if (owner.isRenaming()) {
+                        if (event.getMessage().equalsIgnoreCase("cancel")) {
+                            event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
+                        }else{
+                            owner.setPetName(event.getMessage(), false);
+                        }
+                        owner.setRenaming(false);
+                        event.setCancelled(true);
+                    }
                 }
-                owner.setRenaming(false);
-                event.setCancelled(true);
             }
-        }
+        }.runTaskAsynchronously(PetCore.get());
+
+
     }
 
     @EventHandler
@@ -143,16 +150,21 @@ public class MainListeners implements Listener {
     public void onDeath(PlayerDeathEvent e) {
         Player p = e.getEntity();
         if (p != null) {
-            PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner != null) {
-                if (owner.hasPet()) {
-                    if (owner.getPet().getVisableEntity() == null) return;
-                    if (!owner.hasPetToRespawn()) {
-                        owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    PetOwner owner = PetOwner.getPetOwner(p);
+                    if (owner != null) {
+                        if (owner.hasPet()) {
+                            if (owner.getPet().getVisableEntity() == null) return;
+                            if (!owner.hasPetToRespawn()) {
+                                owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());
+                            }
+                            owner.removePet();
+                        }
                     }
-                    owner.removePet();
                 }
-            }
+            }.runTaskAsynchronously(PetCore.get());
         }
     }
 
@@ -160,17 +172,22 @@ public class MainListeners implements Listener {
     public void onRespawn(PlayerRespawnEvent e) {
         final Player p = e.getPlayer();
         if (p == null) {
-            final PetOwner owner = PetOwner.getPetOwner(p);
-            if (owner != null) {
-                if (owner.hasPetToRespawn()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            owner.respawnPet();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    final PetOwner owner = PetOwner.getPetOwner(p);
+                    if (owner != null) {
+                        if (owner.hasPetToRespawn()) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    owner.respawnPet();
+                                }
+                            }.runTaskLater(PetCore.get(), 40);
                         }
-                    }.runTaskLater(PetCore.get(), 40);
+                    }
                 }
-            }
+            }.runTaskAsynchronously(PetCore.get());
         }
     }
 
@@ -178,26 +195,32 @@ public class MainListeners implements Listener {
     public void onTeleport(final PlayerTeleportEvent e) {
         if (e.getCause() == PlayerTeleportEvent.TeleportCause.UNKNOWN) return;
         Player p = e.getPlayer();
-        PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner == null) return;
-        if (!owner.hasPet()) return;
-        if (owner.hasPetToRespawn()) return;
-        IPet pet = owner.getPet();
-        if (pet.getVisableEntity() == null) return;
-        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-        owner.removePet();
         new BukkitRunnable() {
             @Override
             public void run() {
-                if (owner.hasPetToRespawn()) {
-                    if (!p.isOnline()) {
-                        owner.setPetToRespawn(null);
-                        return;
+                PetOwner owner = PetOwner.getPetOwner(p);
+                if (owner == null) return;
+                if (!owner.hasPet()) return;
+                if (owner.hasPetToRespawn()) return;
+                IPet pet = owner.getPet();
+                if (pet.getVisableEntity() == null) return;
+                owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                owner.removePet();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (owner.hasPetToRespawn()) {
+                            if (!p.isOnline()) {
+                                owner.setPetToRespawn(null);
+                                return;
+                            }
+                            owner.respawnPet();
+                        }
                     }
-                    owner.respawnPet();
-                }
+                }.runTaskLater(PetCore.get(), 40);
             }
-        }.runTaskLater(PetCore.get(), 40);
+        }.runTaskAsynchronously(PetCore.get());
+
     }
 
     @EventHandler
@@ -241,35 +264,41 @@ public class MainListeners implements Listener {
     @EventHandler
     public void onWorldChange(PlayerChangedWorldEvent e) {
         final Player p = e.getPlayer();
-        final PetOwner owner = PetOwner.getPetOwner(p);
-        if (owner != null) {
-            if (owner.hasPet()) {
-                if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
-                    owner.removePet();
-                    return;
-                }
 
-                IPet pet = owner.getPet();
-                if (owner.hasPet()) {
-                    if (pet.getVisableEntity() == null) return;
-                    if (!owner.hasPetToRespawn()) {
-                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-                        owner.removePet();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (owner.hasPetToRespawn()) {
-                                    if (!p.isOnline()) {
-                                        owner.setPetToRespawn(null);
-                                        return;
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                final PetOwner owner = PetOwner.getPetOwner(p);
+                if (owner != null) {
+                    if (owner.hasPet()) {
+                        if (PetCore.get().getConfiguration().getBoolean("RemovePetsOnWorldChange")) {
+                            owner.removePet();
+                            return;
+                        }
+
+                        IPet pet = owner.getPet();
+                        if (owner.hasPet()) {
+                            if (pet.getVisableEntity() == null) return;
+                            if (!owner.hasPetToRespawn()) {
+                                owner.setPetToRespawn(pet.getVisableEntity().asCompound());
+                                owner.removePet();
+                                new BukkitRunnable() {
+                                    @Override
+                                    public void run() {
+                                        if (owner.hasPetToRespawn()) {
+                                            if (!p.isOnline()) {
+                                                owner.setPetToRespawn(null);
+                                                return;
+                                            }
+                                            owner.respawnPet();
+                                        }
                                     }
-                                    owner.respawnPet();
-                                }
+                                }.runTaskLater(PetCore.get(), 40);
                             }
-                        }.runTaskLater(PetCore.get(), 40);
+                        }
                     }
                 }
             }
-        }
+        }.runTaskAsynchronously(PetCore.get());
     }
 }
