@@ -96,7 +96,7 @@ public class PetOwner {
         }
         PetOwner owner = new PetOwner(player);
         ownerMap.put(player.getUniqueId(), owner);
-        return ownerMap.get(player.getUniqueId());
+        return owner;
     }
 
     public static void removePlayer (UUID uuid) {
