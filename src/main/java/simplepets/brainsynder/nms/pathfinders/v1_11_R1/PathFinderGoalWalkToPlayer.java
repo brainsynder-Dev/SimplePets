@@ -43,7 +43,7 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
         if (pet != null) {
             if (owner.getPlayer().isOnline()) {
                 if (!owner.getPlayer().isInsideVehicle() && owner.hasPet()) {
-                    Location start = owner.getPlayer().getLocation();
+                    Location start = Bukkit.getPlayer(owner.getPlayer().getUniqueId()).getLocation();
                     Entity petEntity = pet.getEntity();
                     if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
                         if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
