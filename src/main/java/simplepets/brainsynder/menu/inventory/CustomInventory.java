@@ -1,5 +1,7 @@
 package simplepets.brainsynder.menu.inventory;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.items.Item;
@@ -27,7 +29,8 @@ public class CustomInventory extends JSONFile {
     }
 
     public void reset (PetOwner owner) {
-        pageSave.remove(owner.getPlayer().getName());
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        pageSave.remove(player.getName());
     }
 
     public void load() {
@@ -55,7 +58,8 @@ public class CustomInventory extends JSONFile {
     }
 
     public int getCurrentPage(PetOwner owner) {
-        return pageSave.getOrDefault(owner.getPlayer().getName(), 1);
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        return pageSave.getOrDefault(player.getName(), 1);
     }
 
     public Map<Integer, Item> getSlots() {
