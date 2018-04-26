@@ -9,7 +9,6 @@ import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.SPCommand;
-import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.links.LinkRetriever;
 import simplepets.brainsynder.listeners.MainListeners;
@@ -180,31 +179,16 @@ public class PetCore extends JavaPlugin {
             mySQL = new MySQL(host, port, databaseName, username, password);
 
             debug("Creating SQL table if there is none...");
-            Thread thread = new Thread(() -> {
-                ConnectionPool pool = mySQL.getPool();
-                try {
-                    Connection connection = pool.borrowConnection();
-                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT,`SavedPets` LONGTEXT);");
-                    pool.surrenderConnection(connection);
-                } catch (Exception e) {
-                    System.out.println("Unable to create default SQL tables Error:");
-                    e.printStackTrace();
-                }
-
-                try {
-                    // This part checks and makes sure that old SQL databases have the
-                    // new columns added, if not they will be added
-
-                    Connection connection = pool.borrowConnection();
+            CompletableFuture.runAsync(() -> {
+                try (Connection connection = mySQL.getSource().getConnection()) {
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
                     if (!mySQL.hasColumn(connection, "SavedPets"))
                         mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                    pool.surrenderConnection(connection);
-                } catch (Exception ignored) {
+                }catch (Exception e){
+                    debug("Unable to create default SQL tables Error:");
+                    e.printStackTrace();
                 }
             });
-            thread.setDaemon(false);
-            thread.setName("SimplePets SQL");
-            thread.start();
         }
     }
 
@@ -246,10 +230,7 @@ public class PetCore extends JavaPlugin {
         }
         if (getConfiguration() != null) {
             if (getConfiguration().getBoolean("MySQL.Enabled")) {
-                if (mySQL != null) {
-                    mySQL.getPool().dumpPool();
-                    mySQL = null;
-                }
+                if (mySQL != null) mySQL = null;
             }
         }
         try {
@@ -300,21 +281,16 @@ public class PetCore extends JavaPlugin {
             String username = getConfiguration().getString("MySQL.Login.Username", false);
             String password = getConfiguration().getString("MySQL.Login.Password", false);
             mySQL = new MySQL(host, port, databaseName, username, password);
-            Thread thread = new Thread(() -> {
-                try {
-                    debug("Creating SQL table if there is none...");
-                    ConnectionPool pool = mySQL.getPool();
-                    Connection connection = pool.borrowConnection();
+            CompletableFuture.runAsync(() -> {
+                try (Connection connection = mySQL.getSource().getConnection()) {
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
-                    pool.surrenderConnection(connection);
-                } catch (Exception e) {
+                    if (!mySQL.hasColumn(connection, "SavedPets"))
+                        mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
+                }catch (Exception e){
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
                 }
             });
-            thread.setName("SimplePets SQL");
-            thread.setDaemon(false);
-            thread.start();
         }
     }
 
