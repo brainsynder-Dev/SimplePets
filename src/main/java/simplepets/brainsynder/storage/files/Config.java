@@ -56,7 +56,6 @@ public class Config extends FileMaker {
         setDefault("MySQL.DatabaseName", "insert_DatabaseName");
         setDefault("MySQL.Login.Username", "username");
         setDefault("MySQL.Login.Password", "password");
-        setDefault("MySQL.Options.PoolSize", 10);
         setDefault("MySQL.Options.UseSSL", false);
         setDefault("MySQL.Options.AutoReconnect", false);
 
