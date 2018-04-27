@@ -366,7 +366,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 if (fieldAccessor.hasField(owner)) {
                     if (fieldAccessor.get(owner)) {
                         if (isOnGround(this)) {
-                            this.motY = 0.5;
+                            this.motY = 1;
                         } else {
                             if (pet.getPetType().canFly(pet.getOwner())) {
                                 this.motY = 0.3;
@@ -380,7 +380,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
             this.aP = this.aN = this.yaw;
-            this.P = (float) 1.0;
+            this.P = 1.0F;
             f = (float) (owner.be * 0.5);
             f2 = owner.bg;
             if (f2 <= 0.0) {
