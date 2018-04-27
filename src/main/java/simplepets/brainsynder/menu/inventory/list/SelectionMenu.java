@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.inventory.list;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -80,7 +81,8 @@ public class SelectionMenu extends CustomInventory {
     @Override
     public void open(PetOwner owner, int page) {
         if (!isEnabled()) return;
-        pageSave.put(owner.getPlayer().getName(), page);
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new SelectionHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         int maxPets = 0;
@@ -101,7 +103,7 @@ public class SelectionMenu extends CustomInventory {
 
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetDefault type : availableTypes) {
-            if (type.hasPermission(owner.getPlayer())) {
+            if (type.hasPermission(player)) {
                 petTypes.add(new PetTypeStorage(type));
             }else{
                 if (!PetCore.get().getConfiguration().getBoolean("Remove-Item-If-No-Permission"))
@@ -109,15 +111,15 @@ public class SelectionMenu extends CustomInventory {
             }
         }
         if (petTypes.getSize() == 0) {
-            owner.getPlayer().sendMessage(PetCore.get().getMessages().getString("No-Permission"));
+            player.sendMessage(PetCore.get().getMessages().getString("No-Permission"));
             return;
         }
 
         ObjectPager<PetTypeStorage> pages = new ObjectPager<>(maxPets, petTypes.toArrayList());
-        if (pagerMap.containsKey(owner.getPlayer().getName())) {
-            pages = pagerMap.get(owner.getPlayer().getName());
+        if (pagerMap.containsKey(player.getName())) {
+            pages = pagerMap.get(player.getName());
         } else {
-            pagerMap.put(owner.getPlayer().getName(), pages);
+            pagerMap.put(player.getName(), pages);
         }
 
         getSlots().forEach((slot, item) -> {
@@ -125,15 +127,15 @@ public class SelectionMenu extends CustomInventory {
                 inv.setItem(slot, item.getItemBuilder().build());
         });
 
-        PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), owner.getPlayer());
+        PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), player);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) return;
         IStorage<ItemStack> types = event.getItems().copy();
         while (types.hasNext()) {
             inv.addItem(types.next());
         }
-        petMap.put(owner.getPlayer().getName(), petTypes);
-        owner.getPlayer().openInventory(inv);
+        petMap.put(player.getName(), petTypes);
+        player.openInventory(inv);
     }
 
     public PetMap<String, IStorage<PetTypeStorage>> getPetMap() {
@@ -141,16 +143,18 @@ public class SelectionMenu extends CustomInventory {
     }
 
     public ObjectPager<PetTypeStorage> getPages(PetOwner owner) {
-        if (pagerMap.containsKey(owner.getPlayer().getName()))
-            return pagerMap.get(owner.getPlayer().getName());
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        if (pagerMap.containsKey(player.getName()))
+            return pagerMap.get(player.getName());
         return null;
     }
 
     @Override
     public void reset(PetOwner owner) {
+        Player player = Bukkit.getPlayer(owner.getUuid());
         super.reset(owner);
 
-        petMap.remove(owner.getPlayer().getName());
-        pagerMap.remove(owner.getPlayer().getName());
+        petMap.remove(player.getName());
+        pagerMap.remove(player.getName());
     }
 }

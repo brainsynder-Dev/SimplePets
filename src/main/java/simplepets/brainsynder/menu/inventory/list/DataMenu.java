@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.inventory.list;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -55,6 +56,7 @@ public class DataMenu extends CustomInventory {
     public void open(PetOwner owner) {
         if (!isEnabled()) return;
         if (owner == null) return;
+        Player player = Bukkit.getPlayer(owner.getUuid());
         Inventory inv = Bukkit.createInventory(new PetDataHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {
@@ -84,6 +86,6 @@ public class DataMenu extends CustomInventory {
                 }
             }
         }
-        owner.getPlayer().openInventory(inv);
+        player.openInventory(inv);
     }
 }

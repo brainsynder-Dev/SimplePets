@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.inventory.list;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
@@ -64,7 +65,8 @@ public class SavesMenu extends CustomInventory {
     @Override
     public void open(PetOwner owner, int page) {
         if (!isEnabled()) return;
-        pageSave.put(owner.getPlayer().getName(), page);
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new SavesHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         int maxPets = 0;
@@ -85,10 +87,10 @@ public class SavesMenu extends CustomInventory {
 
         ObjectPager<StorageTagCompound> pages = new ObjectPager<>(maxPets, new ArrayList<>(owner.getSavedPets()));
 
-        if (pagerMap.containsKey(owner.getPlayer().getName())) {
-            pages = pagerMap.get(owner.getPlayer().getName());
+        if (pagerMap.containsKey(player.getName())) {
+            pages = pagerMap.get(player.getName());
         } else {
-            pagerMap.put(owner.getPlayer().getName(), pages);
+            pagerMap.put(player.getName(), pages);
         }
 
         getSlots().forEach((slot, item) -> {
@@ -96,7 +98,7 @@ public class SavesMenu extends CustomInventory {
                 inv.setItem(slot, item.getItemBuilder().build());
         });
 
-        Map<StorageTagCompound, ItemStack> storageMap = itemMap.getOrDefault(owner.getPlayer().getName(), new HashMap<>());
+        Map<StorageTagCompound, ItemStack> storageMap = itemMap.getOrDefault(player.getName(), new HashMap<>());
         if (!pages.isEmpty()) {
             pages.getPage(page).forEach(compound -> {
 
@@ -122,8 +124,8 @@ public class SavesMenu extends CustomInventory {
                 }
             });
         }
-        itemMap.put(owner.getPlayer().getName(), storageMap);
-        owner.getPlayer().openInventory(inv);
+        itemMap.put(player.getName(), storageMap);
+        player.openInventory(inv);
     }
 
     private String fetchValue(StorageBase base) {
@@ -162,26 +164,30 @@ public class SavesMenu extends CustomInventory {
     }
 
     public void resetMaps (PetOwner owner) {
-        itemMap.remove(owner.getPlayer().getName());
-        pagerMap.remove(owner.getPlayer().getName());
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        itemMap.remove(player.getName());
+        pagerMap.remove(player.getName());
     }
 
     public ObjectPager<StorageTagCompound> getPages(PetOwner owner) {
-        if (pagerMap.containsKey(owner.getPlayer().getName()))
-            return pagerMap.get(owner.getPlayer().getName());
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        if (pagerMap.containsKey(player.getName()))
+            return pagerMap.get(player.getName());
         return null;
     }
 
     public Map<StorageTagCompound, ItemStack> getItemStorage(PetOwner owner) {
-        return itemMap.getOrDefault(owner.getPlayer().getName(), new HashMap<>());
+        Player player = Bukkit.getPlayer(owner.getUuid());
+        return itemMap.getOrDefault(player.getName(), new HashMap<>());
     }
 
 
 
     @Override
     public void reset(PetOwner owner) {
+        Player player = Bukkit.getPlayer(owner.getUuid());
         super.reset(owner);
-        itemMap.remove(owner.getPlayer().getName());
-        pagerMap.remove(owner.getPlayer().getName());
+        itemMap.remove(player.getName());
+        pagerMap.remove(player.getName());
     }
 }

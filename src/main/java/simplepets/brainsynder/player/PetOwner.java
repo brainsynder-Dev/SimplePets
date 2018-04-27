@@ -47,6 +47,7 @@ public class PetOwner {
      * Will return an instance of the Player (Pets Owner)
      */
     private Player player = null;
+    private UUID uuid = null;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
@@ -65,6 +66,7 @@ public class PetOwner {
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
         this.player = player;
+        uuid = player.getUniqueId();
         reloadData();
     }
 
@@ -367,6 +369,10 @@ public class PetOwner {
     public void setStoredInventory(JSONObject storedInventory, boolean save) {
         this.storedInventory = storedInventory;
         if (save) file.save(false);
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getPetName() {return this.petName;}

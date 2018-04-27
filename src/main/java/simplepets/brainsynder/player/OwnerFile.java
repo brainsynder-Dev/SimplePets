@@ -11,7 +11,6 @@ import simple.brainsynder.nbt.NBTException;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.database.ConnectionPool;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.storage.files.PlayerStorage;
 
@@ -75,9 +74,7 @@ public class OwnerFile {
                     // The CompletableFuture.class is a a class that allows async operations (according to the docs)
                     String finalNeedsRespawn = needsRespawn;
                     CompletableFuture.runAsync(() -> {
-                        try {
-                            ConnectionPool pool = sql.getPool();
-                            Connection connection = pool.borrowConnection();
+                        try (Connection connection = sql.getSource().getConnection()) {
                             PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                             select.setString(1, p.getUniqueId().toString());
                             ResultSet result = select.executeQuery();
@@ -103,7 +100,6 @@ public class OwnerFile {
                             }
                             select.close();
                             result.close();
-                            pool.surrenderConnection(connection);
                         } catch (Exception e) {
                             PetCore.get().debug("Unable to save " + name + "'s Pet data.");
                             PetCore.get().debug("Data that failed to save: ");
@@ -170,10 +166,7 @@ public class OwnerFile {
             // The CompletableFuture.class is a a class that allows async operations (according to the docs)
             CompletableFuture.runAsync(() -> {
                 final JSONObject data = new JSONObject();
-                try {
-                    ConnectionPool pool = sql.getPool();
-                    Connection connection = pool.borrowConnection();
-
+                try (Connection connection = sql.getSource().getConnection()) {
                     PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                     select.setString(1, p.getUniqueId().toString());
                     ResultSet result = select.executeQuery();
@@ -185,7 +178,6 @@ public class OwnerFile {
                     }
                     select.close();
                     result.close();
-                    pool.surrenderConnection(connection);
                 } catch (Exception e) {
                     PetCore.get().debug("Unable to load " + p.getName() + "'s Pet data.");
                     e.printStackTrace();
