@@ -373,7 +373,9 @@ public class PetOwner {
 
     public IPet getPet() {return this.pet;}
 
-    public Player getPlayer() {return this.player;}
+    public Player getPlayer() {
+        return Bukkit.getPlayer(this.player.getUniqueId());
+    }
 
     public OwnerFile getFile() {return this.file;}
 
