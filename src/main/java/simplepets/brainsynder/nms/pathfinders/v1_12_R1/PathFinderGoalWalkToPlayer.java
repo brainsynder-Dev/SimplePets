@@ -40,35 +40,40 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
     @Override
     public boolean a() {
         if (pet != null) {
-            if (owner.getPlayer().isOnline()) {
-                if (!owner.getPlayer().isInsideVehicle() && owner.hasPet()) {
-                    Location start = Bukkit.getPlayer(owner.getPlayer().getUniqueId()).getLocation();
-                    Entity petEntity = pet.getEntity();
-                    if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
-                        if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
-                            petEntity.teleport(start);
-                            return false;
-                        }
-                    } else {
-                        petEntity.teleport(start);
-                        return false;
-                    }
-                    int x = MathUtils.random(ints.size());
-                    int z = MathUtils.random(ints.size());
+            if (owner != null) {
+                if (owner.getPlayer() != null) {
+                    if (owner.getPlayer().isOnline()) {
+                        if (!owner.getPlayer().isInsideVehicle() && owner.hasPet()) {
+                            Location start = Bukkit.getPlayer(owner.getPlayer().getUniqueId()).getLocation();
+                            Entity petEntity = pet.getEntity();
+                            if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
+                                if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
+                                    petEntity.teleport(start);
+                                    return false;
+                                }
+                            } else {
+                                petEntity.teleport(start);
+                                return false;
+                            }
+                            int x = MathUtils.random(ints.size());
+                            int z = MathUtils.random(ints.size());
 
-                    if (isFirst) {
-                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-                        isFirst = false;
-                        this.c();
-                        return true;
+                            if (isFirst) {
+                                location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+                                isFirst = false;
+                                this.c();
+                                return true;
+                            }
+                            if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
+                                location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+                            }
+                            this.c();
+                            return location != null;
+                        }
                     }
-                    if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
-                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-                    }
-                    this.c();
-                    return location != null;
                 }
             }
+
         }
         return false;
     }
