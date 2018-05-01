@@ -92,7 +92,7 @@ public class PetOwner {
      * @return PetOwner Instance
      */
     public static PetOwner getPetOwner(Player player) {
-        if ((player == null) || (!player.isOnline())) return null;
+        if ((player == null) /*|| (!player.isOnline()) */) return null;
         if (ownerMap.containsKey(player.getUniqueId())) {
             return ownerMap.get(player.getUniqueId());
         }
