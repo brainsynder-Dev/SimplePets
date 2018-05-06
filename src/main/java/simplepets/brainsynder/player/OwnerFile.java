@@ -153,6 +153,7 @@ public class OwnerFile {
 
     void reload() {
         final Player p = owner.getPlayer();
+        if (p == null) return;
         if (p.hasMetadata("npc") || p.hasMetadata("NPC")) return;
         if (PetCore.get().getConfiguration().isSet("MySQL.Enabled") && PetCore.get().getConfiguration().getBoolean("MySQL.Enabled")) {
             if (PetCore.get().isDisabling()) {
