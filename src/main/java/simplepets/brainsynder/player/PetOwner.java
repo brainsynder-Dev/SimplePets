@@ -380,7 +380,7 @@ public class PetOwner {
     public IPet getPet() {return this.pet;}
 
     public Player getPlayer() {
-        return Bukkit.getPlayer(this.player.getUniqueId());
+        return Bukkit.getPlayer(uuid);
     }
 
     public OwnerFile getFile() {return this.file;}
