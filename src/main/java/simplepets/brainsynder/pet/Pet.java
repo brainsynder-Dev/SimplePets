@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -152,11 +151,7 @@ public class Pet implements IPet {
                     if (event.isCancelled()) return;
 
                     if (ent instanceof IEntityControllerPet) {
-                        if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-                            ent.getEntity().setPassenger(((IEntityControllerPet) ent).getDisplayEntity());
-                        } else {
-                            ((IEntityControllerPet) ent).getDisplayEntity().eject();
-                        }
+                        ((IEntityControllerPet) ent).getDisplayEntity().eject();
                     } else {
                         ent.getEntity().eject();
                     }
@@ -208,12 +203,7 @@ public class Pet implements IPet {
                         @Override
                         public void run() {
                             if (ent instanceof IEntityControllerPet) {
-                                if (((IEntityControllerPet) ent).getDisplayEntity().getType() == EntityType.SHULKER) {
-                                    ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(ent.getEntity());
-                                    ((IEntityControllerPet) ent).addPassenger(owner);
-                                } else {
-                                    ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
-                                }
+                                ((IEntityControllerPet) ent).getDisplayEntity().setPassenger(owner);
                             } else {
                                 ent.getEntity().setPassenger(owner);
                             }
