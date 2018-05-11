@@ -366,7 +366,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                 if (fieldAccessor.hasField(owner)) {
                     if (fieldAccessor.get(owner)) {
                         if (isOnGround(this)) {
-                            this.motY = 1;
+                            this.motY = 0.5;
                         } else {
                             if (pet.getPetType().canFly(pet.getOwner())) {
                                 this.motY = 0.3;
