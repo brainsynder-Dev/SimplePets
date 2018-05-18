@@ -224,6 +224,8 @@ public class PetCore extends JavaPlugin {
         }
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
+            if (petOwner == null) continue;
+            if (petOwner.getPlayer() == null) continue;
             if (!petOwner.getPlayer().isOnline()) continue;
             if (petOwner.hasPet()) petOwner.removePet();
             petOwner.getFile().save(true);
