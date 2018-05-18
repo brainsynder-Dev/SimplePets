@@ -272,27 +272,32 @@ public class PetCore extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
     }
 
-    public void reload() {
-        if (typeManager != null) typeManager.unLoad();
-        typeManager = new TypeManager(this);
-        if (getConfiguration().isSet("MySQL.Enabled")) {
-            if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
-            String host = getConfiguration().getString("MySQL.Host", false);
-            String port = getConfiguration().getString("MySQL.Port", false);
-            String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
-            String username = getConfiguration().getString("MySQL.Login.Username", false);
-            String password = getConfiguration().getString("MySQL.Login.Password", false);
-            mySQL = new MySQL(host, port, databaseName, username, password);
-            CompletableFuture.runAsync(() -> {
-                try (Connection connection = mySQL.getSource().getConnection()) {
-                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
-                    if (!mySQL.hasColumn(connection, "SavedPets"))
-                        mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                }catch (Exception e){
-                    debug("Unable to create default SQL tables Error:");
-                    e.printStackTrace();
-                }
-            });
+    public void reload(int type) {
+        if ((type == 0) || (type == 2)) {
+            if (typeManager != null) typeManager.unLoad();
+            typeManager = new TypeManager(this);
+        }
+
+        if ((type == 1) || (type == 2)) {
+            if (getConfiguration().isSet("MySQL.Enabled")) {
+                if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
+                String host = getConfiguration().getString("MySQL.Host", false);
+                String port = getConfiguration().getString("MySQL.Port", false);
+                String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
+                String username = getConfiguration().getString("MySQL.Login.Username", false);
+                String password = getConfiguration().getString("MySQL.Login.Password", false);
+                mySQL = new MySQL(host, port, databaseName, username, password);
+                CompletableFuture.runAsync(() -> {
+                    try (Connection connection = mySQL.getSource().getConnection()) {
+                        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
+                        if (!mySQL.hasColumn(connection, "SavedPets"))
+                            mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
+                    }catch (Exception e){
+                        debug("Unable to create default SQL tables Error:");
+                        e.printStackTrace();
+                    }
+                });
+            }
         }
     }
 
