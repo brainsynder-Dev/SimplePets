@@ -273,6 +273,8 @@ public class PetCore extends JavaPlugin {
     }
 
     public void reload() {
+        if (typeManager != null) typeManager.unLoad();
+        typeManager = new TypeManager(this);
         if (getConfiguration().isSet("MySQL.Enabled")) {
             if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
             String host = getConfiguration().getString("MySQL.Host", false);
