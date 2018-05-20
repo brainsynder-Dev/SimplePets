@@ -1,13 +1,24 @@
 package simplepets.brainsynder.nms.entities.v1_12_R1;
 
 import net.minecraft.server.v1_12_R1.ControllerMove;
-import net.minecraft.server.v1_12_R1.EntityInsentient;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
 import net.minecraft.server.v1_12_R1.MathHelper;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
+import simplepets.brainsynder.player.PetOwner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomMoveFlying extends ControllerMove {
-    public CustomMoveFlying(EntityInsentient entity) {
+    private EntityPet entity;
+    private PetOwner owner;
+
+    public CustomMoveFlying(EntityPet entity) {
         super(entity);
+        owner = PetOwner.getPetOwner(entity.getOwner());
+        this.entity = entity;
     }
 
     /**
@@ -22,13 +33,30 @@ public class CustomMoveFlying extends ControllerMove {
      * GenericAttributes.e = SharedMonsterAttributes.FLYING_SPEED
      */
     public void a() {
+        if (owner == null) return;
+        if (owner.getPlayer() == null) return;
+        if (!owner.getPlayer().isOnline()) return;
+        if (!owner.hasPet()) return;
+
         double posX = this.b;
         double posY = this.c;
         double posZ = this.d;
         double speed = this.e;
-        EntityInsentient entity = this.a;
+        List<Block> checks = new ArrayList<>();
+        if (owner.getPlayer().isFlying()) {
+            Location playerLoc = owner.getPlayer().getLocation().clone();
+            for (int i = 0; i < 2; i++) {
+                Block below = playerLoc.subtract(0, i, 0).getBlock();
+                if ((below == null) || (below.getType() == Material.AIR)) checks.add(below);
+            }
+            Location entityLoc = entity.getBukkitEntity().getLocation().clone();
+            for (int i = 0; i < 2; i++) {
+                Block below = entityLoc.subtract(0, i, 0).getBlock();
+                if ((below == null) || (below.getType() == Material.AIR)) checks.add(below);
+            }
+        }
 
-        if (this.h == Operation.MOVE_TO) {
+        if ((this.h == Operation.MOVE_TO) || (!checks.isEmpty())) {
             this.h = Operation.WAIT;
             entity.setNoGravity(true);
             double var1 = posX - entity.locX;
