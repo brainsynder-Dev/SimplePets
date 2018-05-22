@@ -28,7 +28,7 @@ public class Arms extends MenuItemAbstract {
             item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
         }else if (entityPet instanceof ISkeletonAbstract) {
             ISkeletonAbstract var = (ISkeletonAbstract) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsSwinging())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
         }
         return item;
     }
@@ -48,7 +48,7 @@ public class Arms extends MenuItemAbstract {
         }
         if (entityPet instanceof ISkeletonAbstract) {
             ISkeletonAbstract pet = (ISkeletonAbstract) entityPet;
-            pet.setArmsSwinging(!pet.isArmsSwinging());
+            pet.setArmsRaised(!pet.isArmsRaised());
         }
     }
 }

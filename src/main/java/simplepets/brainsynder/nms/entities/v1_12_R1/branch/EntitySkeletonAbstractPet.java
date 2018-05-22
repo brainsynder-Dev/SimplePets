@@ -31,12 +31,12 @@ public abstract class EntitySkeletonAbstractPet extends EntityPet implements ISk
     }
 
     @Override
-    public boolean isArmsSwinging() {
+    public boolean isArmsRaised() {
         return datawatcher.get(SWINGING_ARMS);
     }
 
     @Override
-    public void setArmsSwinging(boolean flag) {
+    public void setArmsRaised(boolean flag) {
         datawatcher.set(SWINGING_ARMS, flag);
     }
 }
