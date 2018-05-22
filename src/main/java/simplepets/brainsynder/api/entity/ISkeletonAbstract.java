@@ -1,7 +1,7 @@
 package simplepets.brainsynder.api.entity;
 
 public interface ISkeletonAbstract extends IEntityPet {
-    boolean isArmsSwinging();
+    default boolean isArmsSwinging() { return false; }
 
-    void setArmsSwinging(boolean flag);
+    default void setArmsSwinging(boolean flag) {}
 }

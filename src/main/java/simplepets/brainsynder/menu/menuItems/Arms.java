@@ -26,8 +26,7 @@ public class Arms extends MenuItemAbstract {
         if (entityPet instanceof IEntityZombiePet) {
             IEntityZombiePet var = (IEntityZombiePet) entityPet;
             item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
-        }
-        if (entityPet instanceof ISkeletonAbstract) {
+        }else if (entityPet instanceof ISkeletonAbstract) {
             ISkeletonAbstract var = (ISkeletonAbstract) entityPet;
             item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsSwinging())));
         }
@@ -36,7 +35,7 @@ public class Arms extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.POTION);
+        ItemBuilder item = new ItemBuilder(Material.STICK);
         item.withName("&6Arms Raised: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
