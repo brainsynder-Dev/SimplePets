@@ -110,7 +110,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
      * Class: EntityLiving
      */
     @Override
-    protected void i() {
+    protected void i() { // entityInit
         super.i();
         registerDatawatchers();
     }
@@ -456,7 +456,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
      * Class: Entity
      */
     @Override
-    public void Y() {
+    public void Y() { // onEntityUpdate
         super.Y();
         if (pet == null) {
             if (bukkitEntity != null)
