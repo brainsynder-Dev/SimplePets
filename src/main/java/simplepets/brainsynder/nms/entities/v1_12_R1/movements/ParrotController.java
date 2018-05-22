@@ -1,4 +1,4 @@
-package simplepets.brainsynder.nms.entities.v1_12_R1;
+package simplepets.brainsynder.nms.entities.v1_12_R1.movements;
 
 import net.minecraft.server.v1_12_R1.ControllerMove;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
@@ -6,16 +6,17 @@ import net.minecraft.server.v1_12_R1.MathHelper;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomMoveFlying extends ControllerMove {
+public class ParrotController extends ControllerMove {
     private EntityPet entity;
     private PetOwner owner;
 
-    public CustomMoveFlying(EntityPet entity) {
+    public ParrotController(EntityPet entity) {
         super(entity);
         owner = PetOwner.getPetOwner(entity.getOwner());
         this.entity = entity;
@@ -32,7 +33,7 @@ public class CustomMoveFlying extends ControllerMove {
      *
      * GenericAttributes.e = SharedMonsterAttributes.FLYING_SPEED
      */
-    public void a() {
+    public void a() { // onUpdateMoveHelper
         if (owner == null) return;
         if (owner.getPlayer() == null) return;
         if (!owner.getPlayer().isOnline()) return;

@@ -5,8 +5,8 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.nms.entities.v1_12_R1.CustomMoveFlying;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
+import simplepets.brainsynder.nms.entities.v1_12_R1.movements.ParrotController;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 @Size(width = 0.5F, length = 0.9F)
@@ -25,7 +25,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
     public EntityParrotPet(World world, IPet pet) {
         super(world, pet);
-        moveController = new CustomMoveFlying(this);
+        moveController = new ParrotController(this);
         this.setSize(0.5F, 0.9F);
     }
 
@@ -35,11 +35,18 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
         this.datawatcher.register(TYPE, 0);
     }
 
+    /**
+     * NMS translates (Thanks Forge):
+     * <p>
+     * NavigationFlying#a() = setCanOpenDoors();
+     * NavigationFlying#c() = setCanFloat();
+     * NavigationFlying#b() = setCanEnterDoors();
+     */
     @Override
     protected NavigationAbstract b(World var1) {
         NavigationFlying var2 = new NavigationFlying(this, var1);
         var2.a(false);
-        var2.c(false);
+        var2.c(true);
         var2.b(true);
         return var2;
     }
