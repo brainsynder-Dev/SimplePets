@@ -4,6 +4,7 @@ import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
 import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
+import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.ISkeletonAbstract;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
@@ -28,6 +29,20 @@ public abstract class EntitySkeletonAbstractPet extends EntityPet implements ISk
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(SWINGING_ARMS, true);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("raised", isArmsRaised());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("raised"))
+            setArmsRaised(object.getBoolean("raised"));
+        super.applyCompound(object);
     }
 
     @Override
