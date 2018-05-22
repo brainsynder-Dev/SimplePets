@@ -339,26 +339,32 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     /**
      * This method handles the Pet riding
      *
+     * NMS Translations (Thanks Forge):
+     *   a(float,float,float) = travel(float,float,float)
+     *   aF = prevLimbSwingAmount
+     *   aG = limbSwingAmount
+     *   aR = jumpMovementFactor
+     *
      * Search for: !this.isInWater() || this instanceof EntityHuman && ((EntityHuman)this).abilities.isFlying
      * Class: EntityLiving
      */
     @Override
-    public void a(float f, float f1, float f2) {
+    public void a(float strafe, float vertical, float forward) {
         if (passengers == null) {
             this.P = (float) 0.5;
             this.aR = (float) 0.02;
-            super.a(f, f1, f2);
+            super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
                 return;
             }
             EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
@@ -381,28 +387,28 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             this.setYawPitch(this.yaw, this.pitch);
             this.aP = this.aN = this.yaw;
             this.P = 1.0F;
-            f = (float) (owner.be * 0.5);
-            f2 = owner.bg;
-            if (f2 <= 0.0) {
-                f2 *= 0.25;
+            strafe = (float) (owner.be * 0.5);
+            forward = owner.bg;
+            if (forward <= 0.0) {
+                forward *= 0.25;
             }
 
-            if (!(this instanceof IEntityHorsePet)) f *= 0.75;
+            if (!(this instanceof IEntityHorsePet)) strafe *= 0.75;
             this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             if (!world.isClientSide) {
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
                 if (this instanceof IEntityHorsePet) {
                     Location location = getBukkitEntity().getLocation();
                     setPosition(location.getX(), location.getY(), location.getZ());
                     PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
                     owner.playerConnection.sendPacket(packet);
-                    if (f2 > 0.0F) {
-                        float f3 = MathHelper.sin((float) (this.yaw * 0.017453292));
-                        float f4 = MathHelper.cos((float) (this.yaw * 0.017453292));
-                        this.motX += -0.4 * f3 * 0.0;
-                        this.motZ += 0.4 * f4 * 0.0;
+                    if (forward > 0.0F) {
+                        float f = MathHelper.sin((float) (this.yaw * 0.017453292));
+                        float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
+                        this.motX += -0.4 * f * 0.0;
+                        this.motZ += 0.4 * f1 * 0.0;
                     }
-                    this.aF = this.aG;
+                    this.aF = this.aG; // this.prevLimbSwingAmount = this.limbSwingAmount;
                     double d0 = this.locX - this.lastX;
                     double d1 = this.locZ - this.lastZ;
                     float f5 = (float) (MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0);
@@ -410,8 +416,8 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                         f5 = (float) 1.0;
                     }
 
-                    this.aG += (f5 - this.aG) * 0.4;
-                    this.aH += this.aG;
+                    this.aG += (f5 - this.aG) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
+                    this.aH += this.aG; // this.limbSwing += this.limbSwingAmount;
                 }
             }
 
