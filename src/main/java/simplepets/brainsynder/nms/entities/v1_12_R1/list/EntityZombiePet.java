@@ -11,14 +11,12 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 
 @Size(width = 0.6F, length = 1.8F)
 public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePet {
-    private static final DataWatcherObject<Integer> by;
-    private static final DataWatcherObject<Boolean> bz;
-    private static final DataWatcherObject<Boolean> bA;
+    private static final DataWatcherObject<Integer> VILLAGER_TYPE;
+    private static final DataWatcherObject<Boolean> ARMS_RAISED;
 
     static {
-        by = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.b);
-        bz = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
-        bA = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
+        VILLAGER_TYPE = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.b);
+        ARMS_RAISED = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
     }
 
     public EntityZombiePet(World world) {
@@ -32,8 +30,17 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.getDataWatcher().register(by, 0);
-        this.getDataWatcher().register(bz, false);
-        this.getDataWatcher().register(bA, false);
+        this.getDataWatcher().register(VILLAGER_TYPE, 0);
+        this.getDataWatcher().register(ARMS_RAISED, false);
+    }
+
+    @Override
+    public boolean isArmsRaised() {
+        return datawatcher.get(ARMS_RAISED);
+    }
+
+    @Override
+    public void setArmsRaised(boolean flag) {
+        datawatcher.set(ARMS_RAISED, flag);
     }
 }
