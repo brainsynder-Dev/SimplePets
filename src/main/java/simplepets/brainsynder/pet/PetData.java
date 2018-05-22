@@ -13,6 +13,7 @@ import java.util.List;
 
 public enum PetData {
     AGE(Age.class),
+    ARMS(Arms.class),
     BAT(Hang.class),
     WITHER(WitherShield.class, WitherSize.class),
     BLAZE(Burning.class),
@@ -37,6 +38,8 @@ public enum PetData {
     PARROT(ParrotColor.class, Rainbow.class, Sitting.class),
     WIZARD(Spell.class),
     JOHNNY(Johnny.class),
+    POTION(Potion.class),
+    ZOMBIE(Age.class, Arms.class),
     ZOMBIE_VILLAGER(Age.class);
 
     private List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();

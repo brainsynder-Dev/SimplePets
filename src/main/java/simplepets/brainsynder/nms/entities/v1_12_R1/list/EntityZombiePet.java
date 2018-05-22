@@ -4,6 +4,7 @@ import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
 import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
+import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -32,6 +33,20 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
         super.registerDatawatchers();
         this.getDataWatcher().register(VILLAGER_TYPE, 0);
         this.getDataWatcher().register(ARMS_RAISED, false);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean("raised", isArmsRaised());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("raised"))
+            setArmsRaised(object.getBoolean("raised"));
+        super.applyCompound(object);
     }
 
     @Override

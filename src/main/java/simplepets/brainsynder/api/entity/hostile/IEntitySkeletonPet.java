@@ -1,6 +1,6 @@
 package simplepets.brainsynder.api.entity.hostile;
 
-import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.ISkeletonAbstract;
 
-public interface IEntitySkeletonPet extends IEntityPet {
+public interface IEntitySkeletonPet extends ISkeletonAbstract {
 }

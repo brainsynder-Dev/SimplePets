@@ -27,6 +27,6 @@ public class ZombieDefault extends PetDefault {
 
     @Override
     public PetData getPetData() {
-        return PetData.AGE;
+        return PetData.ZOMBIE;
     }
 }
