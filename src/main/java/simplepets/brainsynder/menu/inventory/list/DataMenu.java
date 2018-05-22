@@ -83,6 +83,7 @@ public class DataMenu extends CustomInventory {
                     }
                 } catch (Exception e) {
                     PetCore.get().debug("An Internal Error occurred when loading the pet data for the " + item.getClass().getSimpleName() + ".class");
+                    e.printStackTrace();
                 }
             }
         }
