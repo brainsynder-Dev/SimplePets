@@ -6,7 +6,6 @@ import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import simple.brainsynder.math.MathUtils;
@@ -51,19 +50,21 @@ public class EntityWitchPet extends EntityPet implements IEntityWitchPet {
         super.applyCompound(object);
     }
 
+    @Override
     public void setDrinkingPotion(boolean drinkingPotion) {
-        datawatcher.set(IS_DRINKING, drinkingPotion);
         if (drinkingPotion) {
             ItemStack item = new ItemStack(Material.POTION);
             PotionMeta meta = (PotionMeta) item.getItemMeta();
             meta.setColor(Color.fromRGB(MathUtils.random(0,255), MathUtils.random(0,255), MathUtils.random(0,255)));
             item.setItemMeta(meta);
-            ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(item);
+            getBukkitEntity().getEquipment().setItemInMainHand(item);
         } else {
-            ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new ItemStack(Material.AIR));
+            getBukkitEntity().getEquipment().setItemInMainHand(new ItemStack(Material.AIR));
         }
+        datawatcher.set(IS_DRINKING, drinkingPotion);
     }
 
+    @Override
     public boolean isDrinkingPotion() {
         return datawatcher.get(IS_DRINKING);
     }

@@ -40,11 +40,7 @@ public class Potion extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityWitchPet) {
             IEntityWitchPet pet = (IEntityWitchPet) entityPet;
-            if (pet.isDrinkingPotion()) {
-                pet.setDrinkingPotion(false);
-            } else {
-                pet.setDrinkingPotion(true);
-            }
+            pet.setDrinkingPotion(!pet.isDrinkingPotion());
         }
     }
 }
