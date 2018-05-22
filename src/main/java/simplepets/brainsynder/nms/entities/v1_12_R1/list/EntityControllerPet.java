@@ -61,23 +61,23 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
-    public void a(float f, float f1, float f2) {
+    public void a(float strafe, float vertical, float forward) {
         reloadLocation();
         if (passengers == null) {
             this.P = (float) 0.5;
             this.aR = (float) 0.02;
-            super.a(f, f1, f2);
+            super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
                 return;
             }
             EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
@@ -100,16 +100,16 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             this.setYawPitch(this.yaw, this.pitch);
             this.aP = this.aN = this.yaw;
             this.P = (float) 1.0;
-            f = (float) (owner.be * 0.5);
-            f2 = owner.bg;
-            if (f2 <= 0.0) {
-                f2 *= 0.25;
+            strafe = (float) (owner.be * 0.5);
+            forward = owner.bg;
+            if (forward <= 0.0) {
+                forward *= 0.25;
             }
 
-            f *= 0.75;
+            strafe *= 0.75;
             this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             if (!world.isClientSide) {
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
             }
 
             if (pet == null) {
