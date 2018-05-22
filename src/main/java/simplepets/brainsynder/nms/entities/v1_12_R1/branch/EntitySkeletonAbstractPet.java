@@ -28,7 +28,7 @@ public abstract class EntitySkeletonAbstractPet extends EntityPet implements ISk
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(SWINGING_ARMS, true);
+        this.datawatcher.register(SWINGING_ARMS, false);
     }
 
     @Override
