@@ -8,10 +8,10 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 
 public abstract class EntityIllagerAbstractPet extends EntityPet {
-    protected static final DataWatcherObject<Byte> a;
+    protected static final DataWatcherObject<Byte> AGGRESSIVE;
 
     static {
-        a = DataWatcher.a(EntityIllagerAbstractPet.class, DataWatcherRegistry.a);
+        AGGRESSIVE = DataWatcher.a(EntityIllagerAbstractPet.class, DataWatcherRegistry.a);
     }
 
     public EntityIllagerAbstractPet(World world) {
@@ -25,11 +25,11 @@ public abstract class EntityIllagerAbstractPet extends EntityPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(a, (byte) 0);
+        this.datawatcher.register(AGGRESSIVE, (byte) 0);
     }
 
     protected void a(int var1, boolean var2) {
-        byte var3 = this.datawatcher.get(a);
+        byte var3 = this.datawatcher.get(AGGRESSIVE);
         int var4;
         if (var2) {
             var4 = var3 | var1;
@@ -37,6 +37,6 @@ public abstract class EntityIllagerAbstractPet extends EntityPet {
             var4 = var3 & ~var1;
         }
 
-        this.datawatcher.set(a, (byte) (var4 & 255));
+        this.datawatcher.set(AGGRESSIVE, (byte) (var4 & 255));
     }
 }

@@ -12,10 +12,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 
 @Size(width = 1.3F, length = 1.4F)
 public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolarBearPet {
-    private static final DataWatcherObject<Boolean> STANDING_UP;
+    private static final DataWatcherObject<Boolean> IS_STANDING;
 
     static {
-        STANDING_UP = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.h);
+        IS_STANDING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.h);
     }
 
     public EntityPolarBearPet(World world) {
@@ -28,7 +28,7 @@ public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolar
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(STANDING_UP, Boolean.FALSE);
+        this.datawatcher.register(IS_STANDING, Boolean.FALSE);
     }
 
     @Override
@@ -46,11 +46,11 @@ public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolar
     }
 
     public void setStandingUp(boolean flag) {
-        this.datawatcher.set(STANDING_UP, flag);
+        this.datawatcher.set(IS_STANDING, flag);
     }
 
     @Override
     public boolean isStanding() {
-        return this.datawatcher.get(STANDING_UP);
+        return this.datawatcher.get(IS_STANDING);
     }
 }

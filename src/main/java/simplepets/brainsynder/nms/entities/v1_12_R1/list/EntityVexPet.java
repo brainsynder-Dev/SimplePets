@@ -12,10 +12,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityNoClipPet;
 
 @Size(width = 0.4F, length = 0.8F)
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
-    protected static final DataWatcherObject<Byte> DATA;
+    protected static final DataWatcherObject<Byte> VEX_FLAGS;
 
     static {
-        DATA = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
+        VEX_FLAGS = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
     }
 
     public EntityVexPet(World world) {
@@ -28,7 +28,7 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.getDataWatcher().register(DATA, (byte) 0);
+        this.getDataWatcher().register(VEX_FLAGS, (byte) 0);
     }
 
     @Override
@@ -45,11 +45,11 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     }
 
     public boolean isPowered() {
-        return (datawatcher.get(DATA) & 1) != 0;
+        return (datawatcher.get(VEX_FLAGS) & 1) != 0;
     }
 
     public void setPowered(boolean flag) {
-        byte b0 = this.datawatcher.get(DATA);
+        byte b0 = this.datawatcher.get(VEX_FLAGS);
         int j;
         if (flag) {
             j = b0 | 1;
@@ -57,6 +57,6 @@ public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
             j = b0 & ~1;
         }
 
-        this.datawatcher.set(DATA, (byte) (j & 255));
+        this.datawatcher.set(VEX_FLAGS, (byte) (j & 255));
     }
 }

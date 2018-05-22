@@ -13,10 +13,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 @Size(width = 4.0F, length = 4.0F)
 public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
         IFlyablePet {
-    private static final DataWatcherObject<Boolean> SCREAM;
+    private static final DataWatcherObject<Boolean> ATTACKING;
 
     static {
-        SCREAM = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
+        ATTACKING = DataWatcher.a(EntityGhastPet.class, DataWatcherRegistry.h);
     }
 
     public EntityGhastPet(World world) {
@@ -29,17 +29,17 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
 
     @Override
     public boolean isScreaming() {
-        return datawatcher.get(SCREAM);
+        return datawatcher.get(ATTACKING);
     }
 
     @Override
     public void setScreaming(boolean var) {
-        datawatcher.set(SCREAM, var);
+        datawatcher.set(ATTACKING, var);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(SCREAM, Boolean.FALSE);
+        this.datawatcher.register(ATTACKING, Boolean.FALSE);
     }
 }

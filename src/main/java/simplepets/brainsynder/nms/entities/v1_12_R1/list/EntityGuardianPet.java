@@ -12,12 +12,12 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 
 @Size(width = 0.85F, length = 0.85F)
 public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
-    private static final DataWatcherObject<Boolean> bz;
-    private static final DataWatcherObject<Integer> bA;
+    private static final DataWatcherObject<Boolean> MOVING;
+    private static final DataWatcherObject<Integer> TARGET_ENTITY;
 
     static {
-        bz = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.h);
-        bA = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.b);
+        MOVING = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.h);
+        TARGET_ENTITY = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.b);
     }
 
     public EntityGuardianPet(World world) {
@@ -31,8 +31,8 @@ public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(bz, Boolean.FALSE);
-        this.datawatcher.register(bA, 0);
+        this.datawatcher.register(MOVING, Boolean.FALSE);
+        this.datawatcher.register(TARGET_ENTITY, 0);
     }
 
     @Override

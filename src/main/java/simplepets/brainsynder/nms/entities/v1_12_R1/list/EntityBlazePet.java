@@ -12,10 +12,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 
 @Size(width = 0.6f, length = 1.7f)
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
-    private static final DataWatcherObject<Byte> ANGERED;
+    private static final DataWatcherObject<Byte> ON_FIRE;
 
     static {
-        ANGERED = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
+        ON_FIRE = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
     }
 
     public EntityBlazePet(World world) {
@@ -29,7 +29,7 @@ public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(ANGERED, (byte) 0);
+        this.datawatcher.register(ON_FIRE, (byte) 0);
     }
 
     @Override
@@ -47,18 +47,18 @@ public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
 
     @Override
     public boolean isBurning() {
-        return (this.datawatcher.get(ANGERED) & 1) != 0;
+        return (this.datawatcher.get(ON_FIRE) & 1) != 0;
     }
 
     @Override
     public void setBurning(boolean var1) {
-        byte b1 = this.datawatcher.get(ANGERED);
+        byte b1 = this.datawatcher.get(ON_FIRE);
         if (var1) {
             b1 = (byte) (b1 | 1);
         } else {
             b1 &= -2;
         }
 
-        this.datawatcher.set(ANGERED, b1);
+        this.datawatcher.set(ON_FIRE, b1);
     }
 }

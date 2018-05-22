@@ -13,12 +13,12 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.AgeableEntityPet;
 import java.util.UUID;
 
 public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements IHorseAbstract {
-    private static final DataWatcherObject<Byte> VISUAL;
-    private static final DataWatcherObject<Optional<UUID>> OWNER;
+    private static final DataWatcherObject<Byte> STATUS;
+    private static final DataWatcherObject<Optional<UUID>> OWNER_UNIQUE_ID;
 
     static {
-        VISUAL = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.a);
-        OWNER = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.m);
+        STATUS = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.a);
+        OWNER_UNIQUE_ID = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.m);
     }
 
     protected float jumpPower = 0.0F;
@@ -52,8 +52,8 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(VISUAL, (byte) 0);
-        this.datawatcher.register(OWNER, Optional.absent());
+        this.datawatcher.register(STATUS, (byte) 0);
+        this.datawatcher.register(OWNER_UNIQUE_ID, Optional.absent());
     }
 
     @Override
@@ -71,15 +71,15 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
     }
 
     public boolean getHorseVisual(int i) {
-        return (this.datawatcher.get(VISUAL) & i) != 0;
+        return (this.datawatcher.get(STATUS) & i) != 0;
     }
 
     public void setHorseVisual(int i, boolean flag) {
-        byte b0 = this.datawatcher.get(VISUAL);
+        byte b0 = this.datawatcher.get(STATUS);
         if (flag) {
-            this.datawatcher.set(VISUAL, (byte) (b0 | i));
+            this.datawatcher.set(STATUS, (byte) (b0 | i));
         } else {
-            this.datawatcher.set(VISUAL, (byte) (b0 & ~i));
+            this.datawatcher.set(STATUS, (byte) (b0 & ~i));
         }
     }
 }

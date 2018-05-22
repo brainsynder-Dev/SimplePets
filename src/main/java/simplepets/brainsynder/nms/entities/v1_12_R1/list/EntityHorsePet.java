@@ -12,12 +12,12 @@ import simplepets.brainsynder.wrapper.HorseStyleType;
 
 @Size(width = 1.4F, length = 1.6F)
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
-    private static final DataWatcherObject<Integer> STYLE;
-    private static final DataWatcherObject<Integer> ARMOR;
+    private static final DataWatcherObject<Integer> HORSE_VARIANT;
+    private static final DataWatcherObject<Integer> HORSE_ARMOR;
 
     static {
-        STYLE = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
-        ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
+        HORSE_VARIANT = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
+        HORSE_ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
     }
 
     private HorseArmorType armor = HorseArmorType.NONE;
@@ -32,12 +32,12 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(STYLE, 0);
-        this.datawatcher.register(ARMOR, EnumHorseArmor.NONE.a());
+        this.datawatcher.register(HORSE_VARIANT, 0);
+        this.datawatcher.register(HORSE_ARMOR, EnumHorseArmor.NONE.a());
     }
 
     public int getVariant() {
-        return this.datawatcher.get(STYLE);
+        return this.datawatcher.get(HORSE_VARIANT);
     }
 
     public HorseStyleType getStyle() {
@@ -45,7 +45,7 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     }
 
     public void setStyle(HorseStyleType style) {
-        this.datawatcher.set(STYLE, this.getColor().ordinal() & 255 | style.ordinal() << 8);
+        this.datawatcher.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
     }
 
     public HorseColorType getColor() {
@@ -53,7 +53,7 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     }
 
     public void setColor(HorseColorType color) {
-        this.datawatcher.set(STYLE, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
+        this.datawatcher.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
     }
 
     @Override
@@ -75,7 +75,7 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     public void setArmor(HorseArmorType a) {
         this.armor = a;
-        this.datawatcher.set(ARMOR, EnumHorseArmor.values()[a.ordinal()].a());
+        this.datawatcher.set(HORSE_ARMOR, EnumHorseArmor.values()[a.ordinal()].a());
     }
 
     public HorseArmorType getArmor() {return this.armor;}

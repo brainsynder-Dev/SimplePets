@@ -12,10 +12,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityTameablePet;
 
 @Size(width = 0.6F, length = 0.8F)
 public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotPet {
-    private static final DataWatcherObject<Integer> TYPE;
+    private static final DataWatcherObject<Integer> OCELOT_VARIANT;
 
     static {
-        TYPE = DataWatcher.a(EntityOcelotPet.class, DataWatcherRegistry.b);
+        OCELOT_VARIANT = DataWatcher.a(EntityOcelotPet.class, DataWatcherRegistry.b);
     }
 
     public EntityOcelotPet(World world) {
@@ -28,7 +28,7 @@ public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotP
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(TYPE, 0);
+        this.datawatcher.register(OCELOT_VARIANT, 0);
     }
 
     @Override
@@ -45,10 +45,10 @@ public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotP
     }
 
     public int getCatType() {
-        return this.datawatcher.get(TYPE);
+        return this.datawatcher.get(OCELOT_VARIANT);
     }
 
     public void setCatType(int i) {
-        this.datawatcher.set(TYPE, i);
+        this.datawatcher.set(OCELOT_VARIANT, i);
     }
 }

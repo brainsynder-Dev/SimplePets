@@ -13,12 +13,12 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 @Size(width = 0.9F, length = 1.3F)
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
-    private static final DataWatcherObject<Byte> COLOR_SHEARED;
+    private static final DataWatcherObject<Byte> DYE_COLOR;
     private boolean rainbow = false;
     private int toggle = 0;
 
     static {
-        COLOR_SHEARED = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
+        DYE_COLOR = DataWatcher.a(EntitySheepPet.class, DataWatcherRegistry.a);
     }
 
     public EntitySheepPet(World world) {
@@ -32,7 +32,7 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(COLOR_SHEARED, (byte) 0);
+        this.datawatcher.register(DYE_COLOR, (byte) 0);
     }
 
     @Override
@@ -58,26 +58,26 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
 
     public DyeColorWrapper getColor() {
         if (isSheared()) setSheared(false);
-        return DyeColorWrapper.getByWoolData(datawatcher.get(COLOR_SHEARED));
+        return DyeColorWrapper.getByWoolData(datawatcher.get(DYE_COLOR));
     }
 
     public void setColor(DyeColorWrapper i) {
         if (isSheared()) setSheared(false);
-        this.datawatcher.set(COLOR_SHEARED, i.getWoolData());
+        this.datawatcher.set(DYE_COLOR, i.getWoolData());
     }
 
     @Override
     public boolean isSheared() {
-        byte data = this.datawatcher.get(COLOR_SHEARED);
-        return (data & 16) != 0;
+        byte data = this.datawatcher.get(DYE_COLOR);
+        return (data & 0xF0) != 0;
     }
 
     public void setSheared(boolean flag) {
-        byte data = this.datawatcher.get(COLOR_SHEARED);
+        byte data = this.datawatcher.get(DYE_COLOR);
         if (flag) {
-            this.datawatcher.set(COLOR_SHEARED, (byte) (data | 16));
+            this.datawatcher.set(DYE_COLOR, (byte) (data | 0x10));
         } else {
-            this.datawatcher.set(COLOR_SHEARED, (byte) (data & -17));
+            this.datawatcher.set(DYE_COLOR, (byte) (data & 0xFFFFFFEF));
         }
     }
 

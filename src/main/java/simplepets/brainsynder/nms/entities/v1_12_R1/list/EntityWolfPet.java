@@ -11,12 +11,12 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 @Size(width = 0.6F, length = 0.8F)
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Float> DATA_HEALTH;
-    private static final DataWatcherObject<Boolean> HEAD_TILT;
+    private static final DataWatcherObject<Boolean> BEGGING;
     private static final DataWatcherObject<Integer> COLLAR_COLOR;
 
     static {
         DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.c);
-        HEAD_TILT = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.h);
+        BEGGING = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.h);
         COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.b);
     }
 
@@ -30,7 +30,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(DATA_HEALTH, this.getHealth());
-        this.datawatcher.register(HEAD_TILT, Boolean.FALSE);
+        this.datawatcher.register(BEGGING, Boolean.FALSE);
         this.datawatcher.register(COLLAR_COLOR, EnumColor.RED.getInvColorIndex());
     }
 
@@ -92,11 +92,11 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     @Override
     public boolean isHeadTilted() {
-        return datawatcher.get(HEAD_TILT);
+        return datawatcher.get(BEGGING);
     }
 
     @Override
     public void setHeadTilted(boolean var) {
-        datawatcher.set(HEAD_TILT, var);
+        datawatcher.set(BEGGING, var);
     }
 }

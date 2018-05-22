@@ -10,11 +10,11 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 
 @Size(width = 0.6F, length = 2.9F)
 public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
-    private static final DataWatcherObject<Optional<IBlockData>> BLOCK;
+    private static final DataWatcherObject<Optional<IBlockData>> CARRIED_BLOCK;
     private static final DataWatcherObject<Boolean> SCREAMING;
 
     static {
-        BLOCK = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.g);
+        CARRIED_BLOCK = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.g);
         SCREAMING = DataWatcher.a(EntityEndermanPet.class, DataWatcherRegistry.h);
     }
 
@@ -29,7 +29,7 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(BLOCK, Optional.absent());
+        this.datawatcher.register(CARRIED_BLOCK, Optional.absent());
         this.datawatcher.register(SCREAMING, Boolean.FALSE);
     }
 

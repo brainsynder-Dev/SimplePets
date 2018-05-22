@@ -12,12 +12,12 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 
 @Size(width = 0.6F, length = 1.9F)
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
-    protected static final DataWatcherObject<Integer> a;
+    protected static final DataWatcherObject<Integer> STATE;
     protected static final DataWatcherObject<Boolean> POWERED;
     protected static final DataWatcherObject<Boolean> IGNITED;
 
     static {
-        a = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
+        STATE = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
         POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
         IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
     }
@@ -33,7 +33,7 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(a, -1);
+        this.datawatcher.register(STATE, -1);
         this.datawatcher.register(POWERED, false);
         this.datawatcher.register(IGNITED, false);
     }

@@ -11,10 +11,10 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.EntityPet;
 @Size(length = 0.9F)
 public class EntityBatPet extends EntityPet implements IEntityBatPet,
         IFlyablePet {
-    private static final DataWatcherObject<Byte> byteWatcher;
+    private static final DataWatcherObject<Byte> HANGING;
 
     static {
-        byteWatcher = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
+        HANGING = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
     }
 
     public EntityBatPet(World world) {
@@ -28,7 +28,7 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(byteWatcher, (byte) 0);
+        this.datawatcher.register(HANGING, (byte) 0);
     }
 
     @Override
@@ -57,16 +57,16 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
 
     @Override
     public boolean isHanging() {
-        return (this.datawatcher.get(byteWatcher) & 1) != 0;
+        return (this.datawatcher.get(HANGING) & 1) != 0;
     }
 
     @Override
     public void setHanging(boolean flag) {
-        byte var2 = this.datawatcher.get(byteWatcher);
+        byte var2 = this.datawatcher.get(HANGING);
         if (flag) {
-            this.datawatcher.set(byteWatcher, (byte) (var2 | 1));
+            this.datawatcher.set(HANGING, (byte) (var2 | 1));
         } else {
-            this.datawatcher.set(byteWatcher, (byte) (var2 & -2));
+            this.datawatcher.set(HANGING, (byte) (var2 & -2));
         }
     }
 }

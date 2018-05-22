@@ -7,10 +7,10 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
-    private static final DataWatcherObject<Byte> c;
+    private static final DataWatcherObject<Byte> SPELL;
 
     static {
-        c = DataWatcher.a(EntityIllagerWizardPet.class, DataWatcherRegistry.a);
+        SPELL = DataWatcher.a(EntityIllagerWizardPet.class, DataWatcherRegistry.a);
     }
 
     protected int b;
@@ -28,7 +28,7 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(c, (byte) 0);
+        this.datawatcher.register(SPELL, (byte) 0);
     }
 
     @Override
@@ -44,17 +44,17 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
         if (object.hasKey("spell")) {
             WizardSpell var1 = WizardSpell.getByName(object.getString("spell"));
             this.spell = var1;
-            this.datawatcher.set(c, (byte) var1.getId());
+            this.datawatcher.set(SPELL, (byte) var1.getId());
         }
         super.applyCompound(object);
     }
 
     private boolean dl() {
-        return this.world.isClientSide ? this.datawatcher.get(c) > 0 : this.b > 0;
+        return this.world.isClientSide ? this.datawatcher.get(SPELL) > 0 : this.b > 0;
     }
 
     public WizardSpell getSpell() {
-        return !this.world.isClientSide ? this.spell : WizardSpell.fromID(this.datawatcher.get(c));
+        return !this.world.isClientSide ? this.spell : WizardSpell.fromID(this.datawatcher.get(SPELL));
     }
 
     public void setSpell(WizardSpell var1) {
@@ -64,7 +64,7 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
             SoundMaker.ENTITY_EVOCATION_ILLAGER_CAST_SPELL.playSound(getEntity());
         }
         this.spell = var1;
-        this.datawatcher.set(c, (byte) var1.getId());
+        this.datawatcher.set(SPELL, (byte) var1.getId());
     }
 
     /**

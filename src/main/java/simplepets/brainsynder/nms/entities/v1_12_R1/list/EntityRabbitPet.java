@@ -10,10 +10,10 @@ import simplepets.brainsynder.wrapper.RabbitType;
 
 @Size(width = 0.6F, length = 0.7F)
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
-    private static final DataWatcherObject<Integer> TYPE;
+    private static final DataWatcherObject<Integer> RABBIT_TYPE;
 
     static {
-        TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
+        RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
     }
 
     private boolean onGroundLastTick = false;
@@ -30,7 +30,7 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(TYPE, 0);
+        this.datawatcher.register(RABBIT_TYPE, 0);
     }
 
     @Override
@@ -48,11 +48,11 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     }
 
     public RabbitType getRabbitType() {
-        return RabbitType.getByID(this.datawatcher.get(TYPE));
+        return RabbitType.getByID(this.datawatcher.get(RABBIT_TYPE));
     }
 
     public void setRabbitType(RabbitType type) {
-        this.datawatcher.set(TYPE, type.getId());
+        this.datawatcher.set(RABBIT_TYPE, type.getId());
     }
 
     protected void cu() {

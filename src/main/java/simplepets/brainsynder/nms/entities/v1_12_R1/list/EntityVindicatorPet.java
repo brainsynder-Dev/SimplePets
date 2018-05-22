@@ -10,7 +10,7 @@ import simplepets.brainsynder.nms.entities.v1_12_R1.branch.EntityIllagerAbstract
 
 @Size(width = 0.6F, length = 1.95F)
 public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEntityVindicatorPet {
-    boolean johhny = false;
+    private boolean johnny = false;
 
     public EntityVindicatorPet(World world) {
         super(world);
@@ -22,7 +22,7 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("johnny", johhny);
+        object.setBoolean("johnny", johnny);
         return object;
     }
 
@@ -34,12 +34,12 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
 
     @Override
     public boolean isJohnny() {
-        return johhny;
+        return johnny;
     }
 
     @Override
     public void setJohnny(boolean var) {
-        johhny = var;
+        johnny = var;
         a(1, var);
         if (var) {
             ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.IRON_AXE));

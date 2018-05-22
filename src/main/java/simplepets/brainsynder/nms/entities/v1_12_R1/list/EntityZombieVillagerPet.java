@@ -38,10 +38,6 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
         datawatcher.register(CONVERTING, false);
     }
 
-    public int getProfessionInt() {
-        return Math.max(this.datawatcher.get(PROFESSION) % 6, 0);
-    }
-
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
