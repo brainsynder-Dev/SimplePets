@@ -16,7 +16,7 @@ public class Saves extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.COMMAND)
+        return new ItemBuilder(Material.COMMAND_BLOCK)
                 .withName("&e&lPet Saves")
                 .addLore("&7", "&7View the pets you have saved");
     }

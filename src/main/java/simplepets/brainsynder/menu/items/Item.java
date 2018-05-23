@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.items;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 
@@ -43,7 +43,7 @@ public class Item extends JSONFile {
             return getItemBuilder();
         }
 
-        return new ItemBuilder(Material.STAINED_GLASS_PANE).withData(14);
+        return new ItemBuilder(Utilities.toMaterial(Utilities.Type.STAINED_GLASS_PANE, 14));
     }
 
     /**

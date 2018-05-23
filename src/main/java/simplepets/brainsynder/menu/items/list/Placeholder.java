@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.items.list;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 
@@ -13,6 +13,6 @@ public class Placeholder extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.STAINED_GLASS_PANE).withData(8).withName(" ");
+        return new ItemBuilder(Utilities.toMaterial(Utilities.Type.STAINED_GLASS_PANE, 8)).withName(" ");
     }
 }

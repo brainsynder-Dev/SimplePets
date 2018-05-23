@@ -16,8 +16,8 @@ public class Data extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM)
-                .withName("&cPet Data").withData(3)
+        return new ItemBuilder(Material.PLAYER_HEAD)
+                .withName("&cPet Data")
                 .addLore("&7Click Here to open","&7the Pet Data Menu")
                 .setTexture("http://textures.minecraft.net/texture/8514d225b262d847c7e557b474327dcef758c2c5882e41ee6d8c5e9cd3bc914");
     }

@@ -18,8 +18,8 @@ public class PreviousPage extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM)
-                .withName("&6&l<&m----").withData(3)
+        return new ItemBuilder(Material.PLAYER_HEAD)
+                .withName("&6&l<&m----")
                 .addLore("&7Click Here to go", "&7the previous page")
                 .setTexture("http://textures.minecraft.net/texture/f2599bd986659b8ce2c4988525c94e19ddd39fad08a38284a197f1b70675acc");
     }

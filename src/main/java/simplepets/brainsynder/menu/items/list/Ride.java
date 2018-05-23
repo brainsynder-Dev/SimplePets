@@ -16,7 +16,7 @@ public class Ride extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.DIAMOND_BARDING).withName("&e&lToggle Pet Riding");
+        return new ItemBuilder(Material.DIAMOND_HORSE_ARMOR).withName("&e&lToggle Pet Riding");
     }
 
     @Override
