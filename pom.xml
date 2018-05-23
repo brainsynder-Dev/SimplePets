@@ -98,6 +98,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit-1-13</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/Bukkit_1.13.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.12.1-R0.1-SNAPSHOT</version>

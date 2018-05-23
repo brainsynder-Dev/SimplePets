@@ -1,5 +1,7 @@
 package simplepets.brainsynder.utils;
 
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,9 +17,39 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Utilities {
+
+    public static boolean canPassThrough (Material material) {
+        String mat = material.name();
+        List<String> names = Arrays.asList("GLASS_PANE", "IRON_BARS", "DOOR", "FENCE");
+        if (names.contains(mat)) return false;
+        for (String name : names) if (mat.contains(name)) return false;
+        return true;
+    }
+
+    public static Material toMaterial (Type type, int data) {
+        if (type == null) throw new NullPointerException("Type can not be null");
+        if ((data < 0) || (data > 15)) throw new IndexOutOfBoundsException("data value has to be between 0 -> 15");
+
+        DyeColor dye = DyeColor.values()[data];
+        return Material.valueOf(dye.name()+"_"+type.name());
+    }
+
+    public enum Type {
+        CONCRETE,
+        CONCRETE_POWDER,
+        STAINED_GLASS,
+        STAINED_GLASS_PANE,
+        SHULKER_BOX,
+        TERRACOTTA,
+        GLAZED_TERRACOTTA,
+        CARPET,
+        DYE,
+        WOOL
+    }
 
     public void setPassenger(Entity entity, Entity passenger) {
         try {

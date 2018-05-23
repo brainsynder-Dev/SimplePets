@@ -2,3 +2,5 @@ target
 dependency-reduced-pom.xml
 .idea
 libs/craftbukkit-*
+libs/Bukkit_*
+*.iml
