@@ -1,6 +1,5 @@
 package simplepets.brainsynder.utils;
 
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -14,6 +13,7 @@ import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -33,9 +33,11 @@ public class Utilities {
     public static Material toMaterial (Type type, int data) {
         if (type == null) throw new NullPointerException("Type can not be null");
         if ((data < 0) || (data > 15)) throw new IndexOutOfBoundsException("data value has to be between 0 -> 15");
-
-        DyeColor dye = DyeColor.values()[data];
-        return Material.valueOf(dye.name()+"_"+type.name());
+        DyeColorWrapper dye = DyeColorWrapper.getByWoolData((byte) data);
+        if (type == Type.DYE) dye = DyeColorWrapper.getByDyeData((byte) data);
+        String name = dye.name()+"_"+type.name();
+        if (name.equals("BLACK_DYE")) return Material.INK_SAC;
+        return Material.valueOf(name);
     }
 
     public enum Type {
