@@ -43,7 +43,8 @@ public class PetCore extends JavaPlugin {
     private static PetCore instance;
     private final List<String> supportedVersions = Arrays.asList(
             "v1_11_R1",
-            "v1_12_R1"
+            "v1_12_R1",
+            "v1_13_R1"
     );
     public boolean forceSpawn;
     private boolean disabling = false;

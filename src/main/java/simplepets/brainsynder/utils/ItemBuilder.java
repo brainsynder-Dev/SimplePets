@@ -186,7 +186,7 @@ public class ItemBuilder {
     public ItemBuilder withEntity(EntityType type) {
         JSON.put("entity", type.name());
 
-        if (is.getType() == Material.MONSTER_EGG) {
+        if (is.getType().name().contains("SPAWN_EGG")) {
             SpawnEggMeta spawnEggMeta = (SpawnEggMeta) im;
             spawnEggMeta.setSpawnedType(type);
             im = spawnEggMeta;
@@ -248,7 +248,7 @@ public class ItemBuilder {
         SKULL.put("owner", owner);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.SKULL_ITEM) && (is.getDurability() == 3)) {
+        if ((is.getType() == Material.PLAYER_HEAD) && (is.getDurability() == 3)) {
             SkullMeta meta = (SkullMeta) im;
             meta.setOwner(owner);
             im = meta;
@@ -263,7 +263,7 @@ public class ItemBuilder {
         SKULL.put("texture", textureURL);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.SKULL_ITEM) && (is.getDurability() == 3)) {
+        if ((is.getType() == Material.PLAYER_HEAD) && (is.getDurability() == 3)) {
             SkullMeta meta = (SkullMeta) im;
 
             if (textureURL.length() > 17) {
