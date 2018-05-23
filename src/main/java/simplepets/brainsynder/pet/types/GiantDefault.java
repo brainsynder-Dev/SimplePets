@@ -16,7 +16,7 @@ public class GiantDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM).withData(3)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/77f844bfea25429d45e1fcf96ef6654dfaaa6fc902dc1b6b68c0abc1343447")
                 .withName("&f&lGiant Pet");
     }

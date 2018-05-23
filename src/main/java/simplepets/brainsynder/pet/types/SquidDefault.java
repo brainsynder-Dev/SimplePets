@@ -16,7 +16,7 @@ public class SquidDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.INK_SACK).withName("&f&lSquid Pet");
+        return new ItemBuilder(Material.INK_SAC).withName("&f&lSquid Pet");
     }
 
     @Override

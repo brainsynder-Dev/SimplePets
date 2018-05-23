@@ -17,7 +17,7 @@ public class SkeletonDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM).withName("&f&lSkeleton Pet");
+        return new ItemBuilder(Material.SKELETON_SKULL).withName("&f&lSkeleton Pet");
     }
 
     @Override

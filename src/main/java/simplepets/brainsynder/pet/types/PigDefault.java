@@ -17,7 +17,7 @@ public class PigDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.PORK).withName("&f&lPig Pet");
+        return new ItemBuilder(Material.PORKCHOP).withName("&f&lPig Pet");
     }
 
     @Override

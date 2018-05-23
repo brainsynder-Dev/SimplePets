@@ -17,7 +17,7 @@ public class SheepDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.WOOL).withName("&f&lSheep Pet");
+        return new ItemBuilder(Material.WHITE_WOOL).withName("&f&lSheep Pet");
     }
 
     @Override

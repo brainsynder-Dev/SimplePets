@@ -17,7 +17,7 @@ public class ZombieDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM).withData(2).withName("&f&lZombie Pet");
+        return new ItemBuilder(Material.ZOMBIE_HEAD).withName("&f&lZombie Pet");
     }
 
     @Override

@@ -16,7 +16,7 @@ public class EndermiteDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.EYE_OF_ENDER).withName("&f&lEndermite Pet");
+        return new ItemBuilder(Material.ENDER_EYE).withName("&f&lEndermite Pet");
     }
 
     @Override

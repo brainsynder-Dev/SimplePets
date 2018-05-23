@@ -17,7 +17,7 @@ public class CreeperDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SULPHUR).withName("&f&lCreeper Pet");
+        return new ItemBuilder(Material.GUNPOWDER).withName("&f&lCreeper Pet");
     }
 
     @Override

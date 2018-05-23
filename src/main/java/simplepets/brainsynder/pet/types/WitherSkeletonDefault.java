@@ -17,7 +17,7 @@ public class WitherSkeletonDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM).withData(1).withName("&f&lWither Skeleton Pet");
+        return new ItemBuilder(Material.WITHER_SKELETON_SKULL).withName("&f&lWither Skeleton Pet");
     }
 
     @Override
