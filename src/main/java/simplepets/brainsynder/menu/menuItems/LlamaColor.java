@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +49,19 @@ public class LlamaColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.WOOL);
-        item.withData(4);
+        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 4));
         item.withName("&6Creamy");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 12));
         item.withName("&6Brown");
-        item.withData(12);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 7));
         item.withName("&6Gray");
-        item.withData(7);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Material.WHITE_WOOL);
         item.withName("&6White");
         items.add(item);
         return items;

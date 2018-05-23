@@ -52,13 +52,13 @@ public class HorseArmor extends MenuItemAbstract {
         ItemBuilder item = new ItemBuilder(Material.BARRIER);
         item.withName("&6No HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.IRON_BARDING);
+        item = new ItemBuilder(Material.IRON_HORSE_ARMOR);
         item.withName("&6Iron HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.GOLD_BARDING);
+        item = new ItemBuilder(Material.GOLDEN_HORSE_ARMOR);
         item.withName("&6Gold HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.DIAMOND_BARDING);
+        item = new ItemBuilder(Material.DIAMOND_HORSE_ARMOR);
         item.withName("&6Diamond HorseArmor");
         items.add(item);
         return items;

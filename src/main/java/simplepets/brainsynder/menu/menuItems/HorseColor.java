@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.HorseColorType;
 
 import java.util.ArrayList;
@@ -58,31 +59,31 @@ public class HorseColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 15));
         item.withName("&6Black");
-        item.withData(15);
         items.add(item);
-        item = new ItemBuilder(Material.STAINED_CLAY);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.TERRACOTTA, 8));
         item.withName("&6Chestnut");
-        item.withData(8);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 4));
         item.withName("&6Creamy");
-        item.withData(4);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 12));
         item.withName("&6Brown");
-        item.withData(12);
         items.add(item);
-        item = new ItemBuilder(Material.STAINED_CLAY);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.TERRACOTTA, 7));
         item.withName("&6Dark Brown");
-        item.withData(7);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL, (byte) 7);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 7));
         item.withName("&6Gray");
-        item.withData(7);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+
+        item = new ItemBuilder(Material.WHITE_WOOL);
         item.withName("&6White");
         items.add(item);
         return items;

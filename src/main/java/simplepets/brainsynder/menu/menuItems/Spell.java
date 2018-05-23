@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.IEntityWizard;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 import java.util.ArrayList;
@@ -54,26 +55,27 @@ public class Spell extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.INK_SACK);
+        ItemBuilder item = new ItemBuilder(Material.INK_SAC);
         item.withName(WordUtils.capitalize(WizardSpell.BLINDNESS.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(12);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 12));
         item.withName(WordUtils.capitalize(WizardSpell.DISAPPEAR.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 3));
         item.withName(WordUtils.capitalize(WizardSpell.FANGS.name().toLowerCase().replace('_', ' ')));
-        item.withData(3);
         items.add(item);
+
         item = new ItemBuilder(Material.BARRIER);
         item.withName(WordUtils.capitalize(WizardSpell.NONE.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(8);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 8));
         item.withName(WordUtils.capitalize(WizardSpell.SUMMON_VEX.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(14);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 14));
         item.withName(WordUtils.capitalize(WizardSpell.WOLOLO.name().toLowerCase().replace('_', ' ')));
         items.add(item);
         return items;

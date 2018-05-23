@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 import java.util.ArrayList;
@@ -58,19 +59,24 @@ public class Profession extends MenuItemAbstract {
         ItemBuilder item = new ItemBuilder(Material.IRON_SWORD);
         item.withName("&6BlackSmith");
         items.add(item);
+
         item = new ItemBuilder(Material.COOKED_BEEF);
         item.withName("&6Butcher");
         items.add(item);
-        item = new ItemBuilder(Material.SEEDS);
+
+        item = new ItemBuilder(Material.WHEAT_SEEDS);
         item.withName("&6Farmer");
         items.add(item);
+
         item = new ItemBuilder(Material.BOOK);
         item.withName("&6Librarian");
         items.add(item);
+
         item = new ItemBuilder(Material.ENCHANTED_BOOK);
         item.withName("&6Priest");
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK, (byte) 2);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 2));
         item.withName("&6NitWit");
         items.add(item);
         return items;

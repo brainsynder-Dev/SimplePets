@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,20 +46,19 @@ public class Ocelot extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.INK_SACK);
-        item.withData(11);
+        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 11));
         item.withName("&6Wild Cat");
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(0);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 0));
         item.withName("&6Black Cat");
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(14);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 14));
         item.withName("&6Orange Cat");
         items.add(item);
-        item = new ItemBuilder(Material.INK_SACK);
-        item.withData(7);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 7));
         item.withName("&6Siamese Cat");
         items.add(item);
         return items;

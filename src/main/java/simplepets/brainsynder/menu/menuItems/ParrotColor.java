@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 import java.util.ArrayList;
@@ -50,24 +50,23 @@ public class ParrotColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.WOOL);
-        item.withData(11);
+        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 11));
         item.withName("&9Blue");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
-        item.withData(9);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 9));
         item.withName("&3Cyan");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
-        item.withData(8);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 8));
         item.withName("&7Gray");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
-        item.withData(13);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 13));
         item.withName("&2Green");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
-        item.withData(14);
+
+        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 14));
         item.withName("&cRed");
         items.add(item);
 

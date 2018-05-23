@@ -7,8 +7,8 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
-import simplepets.brainsynder.wrapper.MaterialWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +52,7 @@ public class ShulkerColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = new ItemBuilder(MaterialWrapper.fromName(color.name() + "_SHULKER_BOX").toMaterial());
+            ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.SHULKER_BOX, color.getWoolData()));
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

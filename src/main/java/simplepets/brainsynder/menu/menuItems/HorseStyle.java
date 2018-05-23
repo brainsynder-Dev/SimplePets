@@ -52,7 +52,7 @@ public class HorseStyle extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.LEASH);
+        ItemBuilder item = new ItemBuilder(Material.LEAD);
         item.withName("&6None");
         items.add(item);
         item.withName("&6Black Spots");

@@ -37,7 +37,7 @@ public class Powered extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.SULPHUR);
+        ItemBuilder item = new ItemBuilder(Material.GUNPOWDER);
         item.withName("&6Powered: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

@@ -33,7 +33,7 @@ public class GhastScream extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM).withData(3);
+        ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
         item.withName("&6Screaming: &e%value%");
         item.setTexture("http://textures.minecraft.net/texture/8b6a72138d69fbbd2fea3fa251cabd87152e4f1c97e5f986bf685571db3cc0");
         return new ArrayList<>(Collections.singleton(item));

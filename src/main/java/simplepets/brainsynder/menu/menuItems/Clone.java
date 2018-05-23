@@ -34,8 +34,7 @@ public class Clone extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM);
-        item.withData(3);
+        ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
         item.withName("&6IsClone: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

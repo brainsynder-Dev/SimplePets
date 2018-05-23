@@ -1,13 +1,13 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
-import org.bukkit.Material;
 import org.json.simple.JSONArray;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.util.ArrayList;
@@ -54,8 +54,7 @@ public class Color extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = new ItemBuilder(Material.WOOL);
-            item.withData(color.getWoolData());
+            ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.STAINED_GLASS_PANE, color.getWoolData()));
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

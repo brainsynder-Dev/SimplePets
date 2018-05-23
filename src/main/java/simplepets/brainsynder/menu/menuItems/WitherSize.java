@@ -31,7 +31,7 @@ public class WitherSize extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.NETHER_BRICK_ITEM);
+        ItemBuilder item = new ItemBuilder(Material.NETHER_BRICK);
         item.withName("&6Small: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

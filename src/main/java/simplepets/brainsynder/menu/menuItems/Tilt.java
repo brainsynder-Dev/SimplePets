@@ -33,7 +33,7 @@ public class Tilt extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.SKULL_ITEM);
+        ItemBuilder item = new ItemBuilder(Material.SKELETON_SKULL);
         item.withName("&6Head Tilted: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

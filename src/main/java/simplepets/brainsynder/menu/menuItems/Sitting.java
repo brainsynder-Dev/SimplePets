@@ -31,7 +31,7 @@ public class Sitting extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.WOOD_STAIRS);
+        ItemBuilder item = new ItemBuilder(Material.OAK_STAIRS);
         item.withName("&6Sitting: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
