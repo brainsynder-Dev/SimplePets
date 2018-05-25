@@ -23,6 +23,7 @@ public class SPCommand implements CommandExecutor {
         commands = new ArrayList<>();
         commands.add(new Console_Help());
         commands.add(new Console_Remove());
+        commands.add(new Console_Reload());
         commands.add(new Console_Summon());
         commands.add(new Console_List());
         commands.add(new Console_Modify());
