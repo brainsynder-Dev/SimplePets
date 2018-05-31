@@ -22,6 +22,25 @@ import java.util.List;
 
 public class Utilities {
 
+    /**
+     * Translates the name to a {@link org.bukkit.Material}
+     *
+     * @param name
+     *      The new/old {@link org.bukkit.Material} name
+     * @return
+     */
+    public static Material fromOld (String name) {
+        try {
+            return Material.valueOf(name);
+        }catch (Exception e) {
+            try {
+                return Material.matchMaterial(name);
+            }catch (Exception e1) {
+                return Material.matchMaterial((!name.startsWith("LEGACY_") ? "LEGACY_" : "")+name, true);
+            }
+        }
+    }
+
     public static boolean canPassThrough (Material material) {
         String mat = material.name();
         List<String> names = Arrays.asList("GLASS_PANE", "IRON_BARS", "DOOR", "FENCE");
@@ -41,13 +60,9 @@ public class Utilities {
     }
 
     public enum Type {
-        CONCRETE,
-        CONCRETE_POWDER,
         STAINED_GLASS,
         STAINED_GLASS_PANE,
-        SHULKER_BOX,
         TERRACOTTA,
-        GLAZED_TERRACOTTA,
         CARPET,
         DYE,
         WOOL

@@ -15,14 +15,15 @@ import simple.brainsynder.api.ItemMaker;
 import simple.brainsynder.api.SkullMaker;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
@@ -217,7 +218,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setHelmet(maker.create());
             getEntity().setChestplate(new ItemMaker(Material.DIAMOND_CHESTPLATE).create());
             getEntity().setLeggings(new ItemMaker(Material.IRON_LEGGINGS).create());
-            getEntity().setBoots(new ItemMaker(Material.GOLD_BOOTS).create());
+            getEntity().setBoots(new ItemMaker(Utilities.fromOld("GOLD_BOOTS")).create());
         }
     }
 
