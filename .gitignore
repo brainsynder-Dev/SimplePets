@@ -2,3 +2,9 @@ target
 dependency-reduced-pom.xml
 .idea
 libs/craftbukkit-*
+.idea/artifacts/SimplePets_jar.xml
+.idea/SimplePets.iml
+.idea/libraries/craftbukkit_1_11_2_R0_1_SNAPSHOT.xml
+.idea/libraries/craftbukkit_1_12_2_R0_1_SNAPSHOT.xml
+.idea/libraries/Maven__net_md_5_bungeecord_chat_1_12_SNAPSHOT.xml
+pom.xml
