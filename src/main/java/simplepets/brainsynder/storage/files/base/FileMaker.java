@@ -58,7 +58,11 @@ public class FileMaker {
     }
 
     public String getString(String tag, boolean color) {
-        return (color ? translate(configuration.getString(tag)) : configuration.getString(tag));
+        String value = configuration.getString(tag);
+        if (!tag.equals("prefix")) {
+            value = value.replaceAll("\\{prefix}", configuration.getString("prefix"));
+        }
+        return (color ? translate(value) : value);
     }
 
     public String getString(String tag) {
