@@ -49,7 +49,7 @@ public class Utilities {
         return true;
     }
 
-    public static Material toMaterial (Type type, int data) {
+    public static Material materialColorable(Type type, int data) {
         if (type == null) throw new NullPointerException("Type can not be null");
         if ((data < 0) || (data > 15)) throw new IndexOutOfBoundsException("data value has to be between 0 -> 15");
         DyeColorWrapper dye = DyeColorWrapper.getByWoolData((byte) data);
