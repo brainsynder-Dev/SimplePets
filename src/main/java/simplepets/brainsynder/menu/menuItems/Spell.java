@@ -59,11 +59,11 @@ public class Spell extends MenuItemAbstract {
         item.withName(WordUtils.capitalize(WizardSpell.BLINDNESS.name().toLowerCase().replace('_', ' ')));
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 12));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 12));
         item.withName(WordUtils.capitalize(WizardSpell.DISAPPEAR.name().toLowerCase().replace('_', ' ')));
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 3));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 3));
         item.withName(WordUtils.capitalize(WizardSpell.FANGS.name().toLowerCase().replace('_', ' ')));
         items.add(item);
 
@@ -71,11 +71,11 @@ public class Spell extends MenuItemAbstract {
         item.withName(WordUtils.capitalize(WizardSpell.NONE.name().toLowerCase().replace('_', ' ')));
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 8));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 8));
         item.withName(WordUtils.capitalize(WizardSpell.SUMMON_VEX.name().toLowerCase().replace('_', ' ')));
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 14));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 14));
         item.withName(WordUtils.capitalize(WizardSpell.WOLOLO.name().toLowerCase().replace('_', ' ')));
         items.add(item);
         return items;

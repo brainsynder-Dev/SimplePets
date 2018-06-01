@@ -35,7 +35,7 @@ public class Angry extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 14));
+        ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 14));
         item.withName("&6Angry: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

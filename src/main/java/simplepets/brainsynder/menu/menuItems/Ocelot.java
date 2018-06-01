@@ -46,19 +46,19 @@ public class Ocelot extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 11));
+        ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 11));
         item.withName("&6Wild Cat");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 0));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 0));
         item.withName("&6Black Cat");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 14));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 14));
         item.withName("&6Orange Cat");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 7));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 7));
         item.withName("&6Siamese Cat");
         items.add(item);
         return items;

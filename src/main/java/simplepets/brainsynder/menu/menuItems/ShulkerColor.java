@@ -52,7 +52,7 @@ public class ShulkerColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.SHULKER_BOX, color.getWoolData()));
+            ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.SHULKER_BOX, color.getWoolData()));
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

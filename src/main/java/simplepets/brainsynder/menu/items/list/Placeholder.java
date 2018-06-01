@@ -13,6 +13,6 @@ public class Placeholder extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Utilities.toMaterial(Utilities.Type.STAINED_GLASS_PANE, 8)).withName(" ");
+        return new ItemBuilder(Utilities.materialColorable(Utilities.Type.STAINED_GLASS_PANE, 8)).withName(" ");
     }
 }

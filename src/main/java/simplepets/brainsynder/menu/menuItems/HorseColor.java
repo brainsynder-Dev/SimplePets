@@ -59,27 +59,27 @@ public class HorseColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 15));
+        ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 15));
         item.withName("&6Black");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.TERRACOTTA, 8));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.STAINED_CLAY, 8));
         item.withName("&6Chestnut");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 4));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 4));
         item.withName("&6Creamy");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 12));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 12));
         item.withName("&6Brown");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.TERRACOTTA, 7));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.STAINED_CLAY, 7));
         item.withName("&6Dark Brown");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 7));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 7));
         item.withName("&6Gray");
         items.add(item);
 

@@ -60,11 +60,11 @@ public class RabbitColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 15));
+        ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 15));
         item.withName("&6Black");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 12));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 12));
         item.withName("&6Brown");
         items.add(item);
 
@@ -72,11 +72,11 @@ public class RabbitColor extends MenuItemAbstract {
         item.withName("&6Golden");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 0));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 0));
         item.withName("&6Black and White");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 7));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 7));
         item.withName("&6Salt and Pepper");
         items.add(item);
 

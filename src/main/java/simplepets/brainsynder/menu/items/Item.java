@@ -43,7 +43,7 @@ public class Item extends JSONFile {
             return getItemBuilder();
         }
 
-        return new ItemBuilder(Utilities.toMaterial(Utilities.Type.STAINED_GLASS_PANE, 14));
+        return new ItemBuilder(Utilities.materialColorable(Utilities.Type.STAINED_GLASS_PANE, 14));
     }
 
     /**

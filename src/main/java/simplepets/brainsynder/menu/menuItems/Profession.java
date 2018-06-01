@@ -76,7 +76,7 @@ public class Profession extends MenuItemAbstract {
         item.withName("&6Priest");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.DYE, 2));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.DYE, 2));
         item.withName("&6NitWit");
         items.add(item);
         return items;

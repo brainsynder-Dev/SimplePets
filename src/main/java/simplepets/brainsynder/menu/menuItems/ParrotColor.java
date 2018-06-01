@@ -50,23 +50,23 @@ public class ParrotColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 11));
+        ItemBuilder item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 11));
         item.withName("&9Blue");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 9));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 9));
         item.withName("&3Cyan");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 8));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 8));
         item.withName("&7Gray");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 13));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 13));
         item.withName("&2Green");
         items.add(item);
 
-        item = new ItemBuilder(Utilities.toMaterial(Utilities.Type.WOOL, 14));
+        item = new ItemBuilder(Utilities.materialColorable(Utilities.Type.WOOL, 14));
         item.withName("&cRed");
         items.add(item);
 
