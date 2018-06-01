@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 import simple.brainsynder.reflection.FieldAccessor;
 import simple.brainsynder.utils.Base64Wrapper;
 import simple.brainsynder.utils.Reflection;
+import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.Valid;
 
 import java.util.*;
@@ -45,7 +46,7 @@ public class ItemBuilder {
 
         int amount = 1;
         if (json.containsKey("amount")) amount = Integer.parseInt(String.valueOf(json.get("amount")));
-        Material material = Material.valueOf(String.valueOf(json.get("material")));
+        Material material = Utilities.fromOld(String.valueOf(json.get("material")));
         ItemBuilder builder = new ItemBuilder(material, amount);
 
         if (json.containsKey("name")) builder.withName(String.valueOf(json.get("name")));
@@ -54,7 +55,7 @@ public class ItemBuilder {
             lore.addAll(((JSONArray)json.get("lore")));
             builder.withLore(lore);
         }
-        if (json.containsKey("data")) builder.withData(Integer.parseInt(String.valueOf(json.get("data"))));
+        if (json.containsKey("data")) builder.withDurability(Integer.parseInt(String.valueOf(json.get("data"))));
 
         if (json.containsKey("enchants") && (material.name().contains("SKULL"))) {
             JSONArray array = (JSONArray) json.get("enchants");
@@ -86,6 +87,7 @@ public class ItemBuilder {
             if (skull.containsKey("owner")) builder.setOwner(String.valueOf(skull.get("owner")));
         }
 
+        builder.fix();
         return builder;
     }
 
@@ -148,9 +150,9 @@ public class ItemBuilder {
     }
 
     @Deprecated
-    public ItemBuilder withData(int data) {
-        JSON.put("data", data);
-        is.setDurability((short) data);
+    public ItemBuilder withDurability(int durability) {
+        JSON.put("durability", durability);
+        is.setDurability((short) durability);
         return this;
     }
 
@@ -183,6 +185,7 @@ public class ItemBuilder {
         return this;
     }
 
+    @Deprecated
     public ItemBuilder withEntity(EntityType type) {
         JSON.put("entity", type.name());
 
@@ -235,6 +238,7 @@ public class ItemBuilder {
     }
 
     public JSONObject toJSON () {
+        fix();
         return JSON;
     }
 
@@ -248,7 +252,7 @@ public class ItemBuilder {
         SKULL.put("owner", owner);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.PLAYER_HEAD) && (is.getDurability() == 3)) {
+        if (is.getType() == Material.PLAYER_HEAD) {
             SkullMeta meta = (SkullMeta) im;
             meta.setOwner(owner);
             im = meta;
@@ -263,7 +267,7 @@ public class ItemBuilder {
         SKULL.put("texture", textureURL);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.PLAYER_HEAD) && (is.getDurability() == 3)) {
+        if (is.getType() == Material.PLAYER_HEAD) {
             SkullMeta meta = (SkullMeta) im;
 
             if (textureURL.length() > 17) {
@@ -376,5 +380,107 @@ public class ItemBuilder {
             }
         }
         return text;
+    }
+
+    private void fix () {
+        if (ServerVersion.getVersion().getIntVersion() < ServerVersion.v1_13_R1.getIntVersion()) return;
+
+        String mat = String.valueOf(JSON.get("material"));
+        switch (mat) {
+
+            //TODO: Spawn Egg(s)
+            case "LEGACY_SPAWN_EGG":
+            case "SPAWN_EGG":
+                if (JSON.containsKey("entity")) {
+                    try {
+                        Material material = Material.matchMaterial(JSON.get("entity")+"_SPAWN_EGG");
+                        JSON.put("material", material.name());
+                        is.setType(material);
+                        JSON.remove("entity");
+                    }catch (Exception e){}
+                }
+                break;
+
+            //TODO: Colored items
+            case "LEGACY_INK_SACK":
+            case "INK_SACK":
+                fixColorable (mat, "INK_SAC");
+                break;
+            case "LEGACY_STAINED_CLAY":
+            case "STAINED_CLAY":
+                fixColorable (mat, "WHITE_STAINED_CLAY");
+                break;
+            case "LEGACY_CARPET":
+            case "CARPET":
+                fixColorable (mat, "WHITE_CARPET");
+                break;
+            case "LEGACY_STAINED_GLASS":
+            case "STAINED_GLASS":
+                fixColorable (mat, "WHITE_STAINED_GLASS");
+                break;
+            case "LEGACY_STAINED_GLASS_PANE":
+            case "STAINED_GLASS_PANE":
+                fixColorable (mat, "WHITE_STAINED_GLASS_PANE");
+                break;
+            case "LEGACY_WOOL":
+            case "WOOL":
+                fixColorable (mat, "WHITE_WOOL");
+                break;
+
+            // TODO: Skull Item(s)
+            case "LEGACY_SKULL_ITEM":
+            case "SKULL_ITEM":
+                if (JSON.containsKey("data")) {
+                    try {
+                        int data = Integer.parseInt(String.valueOf(JSON.get("data")));
+                        Material material = null;
+                        if (data == 0) {
+                            material = Material.matchMaterial("SKELETON_SKULL");
+                        }else if (data == 1) {
+                            material = Material.matchMaterial("WITHER_SKELETON_SKULL");
+                        }else if (data == 2) {
+                            material = Material.matchMaterial("ZOMBIE_HEAD");
+                        }else if (data == 3) {
+                            material = Material.matchMaterial("PLAYER_HEAD");
+                        }else if (data == 4) {
+                            material = Material.matchMaterial("CREEPER_HEAD");
+                        }else if (data == 5) {
+                            material = Material.matchMaterial("DRAGON_HEAD");
+                        }
+
+                        if (material != null) {
+                            JSON.put("material", material.name());
+                            is.setType(material);
+                            JSON.remove("data");
+                        }
+                    }catch (Exception e){}
+                }
+                break;
+        }
+
+        if (JSON.containsKey("data")) {
+            JSON.put("durability", JSON.get("data"));
+            JSON.remove("data");
+        }
+    }
+
+    private void fixColorable (String mat, String defaultType) {
+        try {
+            if (JSON.containsKey("data")) {
+                int data = Integer.parseInt(String.valueOf(JSON.get("data")));
+                Material material = Utilities.materialColorable(Utilities.Type.fromName(mat), data);
+                if (material != null) {
+                    JSON.put("material", material.name());
+                    is.setType(material);
+                    JSON.remove("data");
+                }
+            }else{
+                Material material = Material.matchMaterial(defaultType);
+                if (material != null) {
+                    JSON.put("material", material.name());
+                    is.setType(material);
+                }
+            }
+        }catch (Exception e){}
     }
 }

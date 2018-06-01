@@ -62,10 +62,15 @@ public class Utilities {
     public enum Type {
         STAINED_GLASS,
         STAINED_GLASS_PANE,
-        TERRACOTTA,
+        STAINED_CLAY,
+        SHULKER_BOX,
         CARPET,
         DYE,
-        WOOL
+        WOOL;
+
+        public static Type fromName (String name) {
+            return Type.valueOf(name.toUpperCase().replace("LEGACY_",""));
+        }
     }
 
     public void setPassenger(Entity entity, Entity passenger) {
