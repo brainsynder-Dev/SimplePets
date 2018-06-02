@@ -42,10 +42,6 @@ public class Messages extends FileMaker {
 
     @Override
     public String getString(String path) {
-        String value = super.getString(path, true);
-        if (!path.equals("prefix")) {
-            value = value.replace("{prefix}", super.getString("prefix", true));
-        }
-        return value;
+        return super.getString(path, true);
     }
 }
