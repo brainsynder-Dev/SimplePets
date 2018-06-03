@@ -138,7 +138,7 @@ public class PetCore extends JavaPlugin {
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
-        if (!spigotPluginHandler.runTamperCheck(Arrays.asList("brainsynder", "ThatsMusic99"), "SimplePets", "4.0-SNAPSHOT")) {
+        if (!spigotPluginHandler.runTamperCheck(Arrays.asList("brainsynder", "Thatsmusic99"), "SimplePets", "4.1-SNAPSHOT")) {
             return false;
         }
         try {

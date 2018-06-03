@@ -4,7 +4,7 @@ version: ${project.version}
 depends: [SimpleAPI]
 softdepend: [WorldGuard, Vault]
 loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared]
-authors: [brainsynder, ThatsMusic99]
+authors: [brainsynder, Thatsmusic99]
 commands:
     pet:
         description: Main SimplePets command
