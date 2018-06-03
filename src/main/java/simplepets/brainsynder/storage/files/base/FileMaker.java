@@ -58,7 +58,8 @@ public class FileMaker {
     }
 
     public String getString(String tag, boolean color) {
-        String value = getString(tag);
+        this.configuration = YamlConfiguration.loadConfiguration(file);
+        String value = configuration.getString(tag);
         if (value == null) return "";
         if (value.equals(tag)) return tag;
 
