@@ -187,17 +187,26 @@ public class OwnerFile {
                     @Override
                     public void run() {
                         try {
-                            if (data.get("UnlockedPets") != null) {
+                            if ((data.containsKey("UnlockedPets"))
+                                    && (data.get("UnlockedPets") != null)
+                                    && (!String.valueOf(data.get("UnlockedPets")).isEmpty())) {
                                 JSONArray array = (JSONArray) ((JSONObject) data.get("UnlockedPets")).get("StoredPets");
                                 owner.setRawOwned(array);
                             }
-                            if (data.get("PetName") != null) {
+                            if ((data.containsKey("PetName"))
+                                    && (data.get("PetName") != null)
+                                    && (!String.valueOf(data.get("PetName")).isEmpty())) {
                                 String name = Base64Wrapper.decodeString(String.valueOf(data.get("PetName")));
                                 if (!name.equals("empty")) owner.setRawPetName(name);
                             }
-                            if (data.get("SavedPets") != null)
+                            if ((data.containsKey("SavedPets"))
+                                    && (data.get("SavedPets") != null)
+                                    && (!String.valueOf(data.get("SavedPets")).isEmpty()))
                                 owner.updateSavedPets((JSONArray) JSONValue.parseWithException(Base64Wrapper.decodeString(String.valueOf(data.get("SavedPets")))));
-                            if (data.get("NeedsRespawn") != null)
+
+                            if ((data.containsKey("NeedsRespawn"))
+                                    && (data.get("NeedsRespawn") != null)
+                                    && (!String.valueOf(data.get("NeedsRespawn")).isEmpty()))
                                 handle(String.valueOf(data.get("NeedsRespawn")));
                         } catch (Exception e) {
                             PetCore.get().debug("Could not retrieve " + p.getName() + "'s Pet data");
