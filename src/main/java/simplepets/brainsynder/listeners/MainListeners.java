@@ -75,25 +75,18 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
-                if (owner != null) {
-                    if (owner.isRenaming()) {
-                        if (event.getMessage().equalsIgnoreCase("cancel")) {
-                            event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
-                        }else{
-                            owner.setPetName(event.getMessage(), false);
-                        }
-                        owner.setRenaming(false);
-                        event.setCancelled(true);
-                    }
+        PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
+        if (owner != null) {
+            if (owner.isRenaming()) {
+                if (event.getMessage().equalsIgnoreCase("cancel")) {
+                    event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
+                }else{
+                    owner.setPetName(event.getMessage(), false);
                 }
+                owner.setRenaming(false);
+                event.setCancelled(true);
             }
-        }.runTaskAsynchronously(PetCore.get());
-
-
+        }
     }
 
     @EventHandler
