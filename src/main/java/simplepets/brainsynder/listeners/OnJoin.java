@@ -24,29 +24,19 @@ public class OnJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        if (!PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) return;
         try {
-
+            PetOwner owner = PetOwner.getPetOwner(player);
+            if (owner == null) return;
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) {
-                        PetOwner owner = PetOwner.getPetOwner(player);
-                        if (owner == null) return;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (!owner.hasPetToRespawn()) return;
-                                owner.respawnPet();
-                            }
-                        }.runTaskLater(PetCore.get(), 30);
-                    }
+                    if (!owner.hasPetToRespawn()) return;
+                    owner.respawnPet();
                 }
-            }.runTaskAsynchronously(PetCore.get());
-
-
-
+            }.runTaskLater(PetCore.get(), 30);
         } catch (Exception ignored) {
-      
+
         }
     }
 
@@ -57,41 +47,29 @@ public class OnJoin implements Listener {
 
     @EventHandler
     public void onPortal(EntityPortalEnterEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (e.getEntity() instanceof Player) {
-                    PetOwner owner = PetOwner.getPetOwner((Player) e.getEntity());
-                    if (owner == null) return;
-                    if (owner.hasPet()) owner.removePet();
-                } else {
-                    if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
-                        IEntityPet pet = (IEntityPet) ReflectionUtil.getEntityHandle(e.getEntity());
-                        PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
-                        if (owner == null) return;
-                        if (owner.hasPet()) {
-                            owner.removePet();
-                        }
-                    }
+        if (e.getEntity() instanceof Player) {
+            PetOwner owner = PetOwner.getPetOwner((Player) e.getEntity());
+            if (owner == null) return;
+            if (owner.hasPet()) owner.removePet();
+        } else {
+            if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
+                IEntityPet pet = (IEntityPet) ReflectionUtil.getEntityHandle(e.getEntity());
+                PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
+                if (owner == null) return;
+                if (owner.hasPet()) {
+                    owner.removePet();
                 }
             }
-        }.runTaskAsynchronously(PetCore.get());
+        }
     }
 
     private void petRemoveOnLeave(PlayerEvent e) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                Player player = e.getPlayer();
-                PetOwner owner = PetOwner.getPetOwner(player);
-                if (owner == null) return;
-                if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
-                owner.getFile().save();
-                if (owner.hasPet()) owner.removePet();
-                PetOwner.removePlayer(player.getUniqueId());
-            }
-        }.runTaskAsynchronously(PetCore.get());
-
-
+        Player player = e.getPlayer();
+        PetOwner owner = PetOwner.getPetOwner(player);
+        if (owner == null) return;
+        if (owner.hasPetToRespawn()) owner.setPetToRespawn(null);
+        owner.getFile().save();
+        if (owner.hasPet()) owner.removePet();
+        PetOwner.removePlayer(player.getUniqueId());
     }
 }

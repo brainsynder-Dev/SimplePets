@@ -6,7 +6,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IImpossaPet;
@@ -63,10 +62,6 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
 
     @EventHandler
     public void onMove(PetMoveEvent e) {
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
                 try {
                     if (e.getEntity() == null) return;
                     if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
@@ -88,8 +83,5 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
                     }
                 } catch (Exception ignored) {
                 }
-            }
-        }.runTaskAsynchronously(PetCore.get());
-
     }
 }
