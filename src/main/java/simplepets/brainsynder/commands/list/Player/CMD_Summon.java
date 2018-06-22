@@ -3,6 +3,8 @@ package simplepets.brainsynder.commands.list.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
+import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.annotations.CommandDescription;
 import simplepets.brainsynder.commands.annotations.CommandName;
@@ -38,6 +40,9 @@ public class CMD_Summon extends PetCommand<Player> {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
                 }
+                PetCommandSummonEvent event = new PetCommandSummonEvent(type, p);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) return;
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
                 type.setPet(p);
             } else {
@@ -64,6 +69,9 @@ public class CMD_Summon extends PetCommand<Player> {
                     .replace("%player%", tp.getName()));
                     return;
                 }
+                PetCommandSummonEvent event = new PetCommandSummonEvent(type, p); // Change to tp if needed, reason why is in case of the sender wanting to buy the pet for the player, or in case of abuse.
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) return;
                 p.sendMessage(PetCore.get().getMessages().getString("Select-Pet-Sender", true)
                         .replace("%pet%", type.getDisplayName())
                         .replace("%player%", tp.getName()));

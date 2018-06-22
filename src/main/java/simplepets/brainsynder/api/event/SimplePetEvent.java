@@ -50,6 +50,7 @@ public class SimplePetEvent extends Event {
         HAT,
         DATA_CHANGE,
         MOVE,
-        UNKNOWN
+        UNKNOWN,
+        SUMMON
     }
 }
