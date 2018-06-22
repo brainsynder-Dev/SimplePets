@@ -134,7 +134,7 @@ public class SelectionMenu extends CustomInventory {
         while (types.hasNext()) {
             inv.addItem(types.next());
         }
-        petMap.put(player.getName(), petTypes);
+        petMap.put(player.getName(), event.getShownPetTypes());
         player.openInventory(inv);
     }
 

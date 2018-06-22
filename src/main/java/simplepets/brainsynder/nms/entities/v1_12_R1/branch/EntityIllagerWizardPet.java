@@ -33,7 +33,8 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
 
     @Override
     public StorageTagCompound asCompound() {
-        System.out.println("asCompound");
+        // Is this still needed?
+    //    System.out.println("asCompound");
         StorageTagCompound json = super.asCompound();
         json.setString("spell", spell.name());
         return json;

@@ -30,7 +30,6 @@ public class SelectionListener implements Listener {
             PetOwner owner = PetOwner.getPetOwner(p);
             if (e.getCurrentItem() == null) return;
             if (e.getClick().isShiftClick()) {
-                e.setCancelled(true);
                 return;
             }
             Item item = PetCore.get().getItemLoaders().getLoader(e.getCurrentItem());
@@ -39,7 +38,9 @@ public class SelectionListener implements Listener {
                 return;
             }
 
-            if (!menu.getPetMap().containsKey(p.getName())) return;
+            if (!menu.getPetMap().containsKey(p.getName())) {
+                return;
+            }
             IStorage<PetTypeStorage> storage = menu.getPetMap().getKey(p.getName()).copy();
             while (storage.hasNext()) {
                 final PetTypeStorage type = storage.next();
