@@ -3,18 +3,11 @@ package simplepets.brainsynder.api.event.inventory;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.storage.PetTypeStorage;
 
-public class PetInventorySelectTypeEvent extends CancellablePetEvent {
-    private PetDefault petType;
-    private Player player;
+public class PetInventorySelectTypeEvent extends PetSelectTypeEvent {
 
     public PetInventorySelectTypeEvent(PetDefault petType, Player player) {
-        super(PetEventType.INVENTORY_SELECT);
-        this.petType = petType;
-        this.player = player;
+        super(PetEventType.INVENTORY_SELECT, petType, player);
     }
-
-    public PetDefault getPetType() {return this.petType;}
-
-    public Player getPlayer() {return this.player;}
 }
