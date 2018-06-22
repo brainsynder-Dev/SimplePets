@@ -25,10 +25,7 @@ import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.storage.files.Commands;
-import simplepets.brainsynder.storage.files.Config;
-import simplepets.brainsynder.storage.files.Messages;
-import simplepets.brainsynder.storage.files.PlayerStorage;
+import simplepets.brainsynder.storage.files.*;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
@@ -58,6 +55,7 @@ public class PetCore extends JavaPlugin {
     private LinkRetriever linkRetriever;
     private TypeManager typeManager;
     private Commands commands;
+    private EconomyFile ecomony;
 
     private ISpawner spawner;
     private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
@@ -216,6 +214,9 @@ public class PetCore extends JavaPlugin {
         debug("Loading Commands.yml...");
         commands = new Commands(this, "Commands.yml");
         commands.loadDefaults();
+        debug("Loading PetEconomy.yml...");
+        ecomony = new EconomyFile();
+        ecomony.loadDefaults();
     }
 
     public void onDisable() {
@@ -400,6 +401,10 @@ public class PetCore extends JavaPlugin {
 
     public LinkRetriever getLinkRetriever() {
         return linkRetriever;
+    }
+
+    public EconomyFile getEcomony() {
+        return ecomony;
     }
 
     // STATIC
