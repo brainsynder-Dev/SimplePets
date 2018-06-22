@@ -10,7 +10,7 @@ import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
-import simplepets.brainsynder.api.event.inventory.PetInventorySelectTypeEvent;
+import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.links.IVaultLink;
 import simplepets.brainsynder.pet.PetDefault;
@@ -26,14 +26,19 @@ public class PetEventListeners implements Listener {
     private EconomyFile economyFile;
 
     public PetEventListeners() {
-        economyFile = new EconomyFile();
-        economyFile.loadDefaults();
+        economyFile = PetCore.get().getEcomony();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onSelect(PetInventorySelectTypeEvent event) {
+    public void onSelect(PetSelectTypeEvent event) {
         if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
             if (event.getPlayer().hasPermission("Pets.economy.bypass")) return;
+
+            PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
+            JSONArray petArray = petOwner.getOwnedPets();
+            if (petArray.contains(event.getPetType().getConfigName()))
+                return;
+
             double price = economyFile.getPrice(event.getPetType());
             IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
             if (price == -1)
@@ -51,10 +56,6 @@ public class PetEventListeners implements Listener {
                 event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%type%", event.getPetType().getConfigName()));
                 return;
             }
-            PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
-            JSONArray petArray = petOwner.getOwnedPets();
-            if (petArray.contains(event.getPetType().getConfigName()))
-                return;
             petOwner.addPurchasedPet(event.getPetType().getConfigName());
             vault.withdrawPlayer(event.getPlayer(), price);
             event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%type%", event.getPetType().getConfigName()));
@@ -86,8 +87,8 @@ public class PetEventListeners implements Listener {
             }
             items.add(maker.build());
             storage.setItem(maker);
-
         }
+
         event.setItems(items);
     }
 
