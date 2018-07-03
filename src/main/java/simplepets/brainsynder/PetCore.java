@@ -127,7 +127,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private boolean errorCheck() {
-        double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion());
+        double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion().replace("-SNAPSHOT",""));
         if (ver < 3.7) {
             Errors.API_OUT_OF_DATE.print();
             return false;
@@ -136,9 +136,6 @@ public class PetCore extends JavaPlugin {
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
-        if (!spigotPluginHandler.runTamperCheck(Arrays.asList("brainsynder", "Thatsmusic99"), "SimplePets", "4.1-SNAPSHOT")) {
-            return false;
-        }
         try {
             Class.forName("org.spigotmc.event.entity.EntityMountEvent");
         } catch (Exception e) {
