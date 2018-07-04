@@ -5,12 +5,14 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.SPCommand;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.links.LinkRetriever;
+import simplepets.brainsynder.links.worldedit.WorldEditLink;
 import simplepets.brainsynder.listeners.MainListeners;
 import simplepets.brainsynder.listeners.OnJoin;
 import simplepets.brainsynder.listeners.OnPetSpawn;
@@ -99,6 +101,14 @@ public class PetCore extends JavaPlugin {
         }
         itemLoaders.initiate();
         invLoaders.initiate();
+
+        // Lets run this later, just to make sure WorldEdit is loaded
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                WorldEditLink.init();
+            }
+        }.runTaskLater(this, 20*10);
 
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
