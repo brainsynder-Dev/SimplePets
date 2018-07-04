@@ -82,6 +82,11 @@ public class PetOwner {
         Valid.notNull(name, "PlayerName can not be null");
         return getPetOwner(Bukkit.getPlayerExact(name));
     }
+    public static PetOwner getPetOwner(UUID uuid) {
+        Valid.notNull(uuid, "UUID can not be null");
+        if (ownerMap.containsKey(uuid)) return ownerMap.get(uuid);
+        return null;
+    }
 
     public static Collection<PetOwner> values () {
         return ownerMap.values();

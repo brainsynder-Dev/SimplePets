@@ -25,7 +25,6 @@ import java.util.List;
 public class EntityControllerPet extends EntityZombiePet implements IEntityControllerPet {
     private List<Entity> entities = new ArrayList<>();
     private Entity displayEntity, displayRider = null;
-    private Location previus;
     private IPet pet;
     private boolean moving = false;
     private FieldAccessor<Boolean> fieldAccessor;
@@ -45,6 +44,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
   //      super.a(f, f1, f2);
   //      reloadLocation();
   //  }
+
+
+    @Override
+    public List<Entity> getEntities() {
+        return entities;
+    }
 
     private boolean isOwnerRiding() {
         if (pet == null) return false;

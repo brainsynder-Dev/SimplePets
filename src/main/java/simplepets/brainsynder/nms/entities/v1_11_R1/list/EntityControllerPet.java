@@ -182,6 +182,11 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
+    public List<Entity> getEntities() {
+        return entities;
+    }
+
+    @Override
     public void setDisplayEntity(Entity entity) {
         if (!entities.contains(entity))
             entities.add(entity);
