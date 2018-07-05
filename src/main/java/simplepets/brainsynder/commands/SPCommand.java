@@ -34,6 +34,7 @@ public class SPCommand implements CommandExecutor {
         commands.add(new CMD_Help());
         commands.add(new CMD_Remove());
         commands.add(new CMD_Summon());
+        commands.add(new CMD_Saves());
         commands.add(new CMD_List());
         commands.add(new CMD_Hat());
         commands.add(new CMD_Ride());
