@@ -26,10 +26,11 @@ public class InventoryStorage implements ConfigurationSerializable {
         if (config.isEmpty()) {
             this.inventory = null;
         } else {
-            inventory = Bukkit.createInventory(null, (int) config.get("size"), (String) config.get("title"));
+            inventory = Bukkit.createInventory(null, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), (String) config.get("title"));
             Map<String, Object> items = ((MemorySection) config.get("items")).getValues(false);
             if (!items.isEmpty()) {
                 for (String slot : items.keySet()) {
+                    if (Integer.parseInt(slot) >= (inventory.getSize()-1)) break;
                     ItemStack item = (ItemStack) items.get(slot);
                     inventory.setItem(Integer.parseInt(slot), item);
                 }
@@ -41,11 +42,13 @@ public class InventoryStorage implements ConfigurationSerializable {
         if (config.isEmpty()) {
             this.inventory = null;
         } else {
-            inventory = Bukkit.createInventory(holder, Integer.parseInt(String.valueOf(config.get("size"))), String.valueOf(config.get("title")));
+            inventory = Bukkit.createInventory(holder, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), String.valueOf(config.get("title")));
             if (config.containsKey("items")) {
                 Map<String, Object> items = (Map<String, Object>) config.get("items");
                 if (!items.isEmpty()) {
                     for (String slot : items.keySet()) {
+                        if (Integer.parseInt(slot) >= (inventory.getSize()-1)) break;
+
                         ItemStack item = (ItemStack) items.get(slot);
                         inventory.setItem(Integer.parseInt(slot), item);
                     }

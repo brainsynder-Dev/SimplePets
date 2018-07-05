@@ -21,6 +21,7 @@ public class Config extends FileMaker {
         setDefault("Use&k", false);
         setDefault("ColorCodes", true);
         setDefault("PetItemStorage.Enable", true);
+        setDefault("PetItemStorage.Inventory-Size", 27);
         setDefault("OldPetRegistering", false); // TODO: Might Remove
         setDefault("Needs-Data-Permissions", true); // TODO: Reformat this value
 
