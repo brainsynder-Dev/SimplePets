@@ -155,10 +155,10 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     @Override
     public void repeatTask() {
         super.repeatTask();
-        if (!this.isInvisible())
-            this.setInvisible(true);
+        if (!this.isInvisible()) this.setInvisible(true);
         if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() instanceof ShulkerDefault));
         Player p = getPet().getOwner();
+
         if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {
                 if (displayEntity.getPassenger() != null) {
@@ -241,30 +241,19 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             } else {
                 loc = getBukkitEntity().getLocation().clone();
             }
-         /*   if (displayEntity.passengers.size() > 1) {
-                if (this.displayRider != null) {
-                    if (this.displayRider.getType().equals(EntityType.SHULKER)) {
-                        if (displayEntity.passengers.get(1).getBukkitEntity() instanceof CraftPlayer) {
-                            Location loc2 = displayEntity.passengers.get(1).getBukkitEntity().getLocation().clone().add(0.0, 1.0, 0);
-                            displayEntity.passengers.get(1).setPositionRotation(loc2.getX(), loc.getY(), loc.getZ(),
-                                    displayEntity.passengers.get(1).yaw,
-                                    displayEntity.passengers.get(1).pitch);
-                        }
-                    }
-                }
 
-
-
-            } */
             displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-            if (!loc.getWorld().getPlayers().isEmpty()) {
-                for (Player player : loc.getWorld().getPlayers()) {
+            loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
+                if (entity instanceof Player) {
+                    Player player = (Player) entity;
                     PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(displayEntity);
                     ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
                 }
-            }
+            });
             return;
         }
+
+
         net.minecraft.server.v1_12_R1.Entity displayEntity = ((CraftEntity) this.displayEntity).getHandle();
         Location loc;
         if (this.displayRider != null) {
@@ -277,14 +266,14 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             loc = getBukkitEntity().getLocation().clone();
         }
 
-         //;
         displayEntity.setPositionRotation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        if (!loc.getWorld().getPlayers().isEmpty()) {
-            for (Player player : loc.getWorld().getPlayers()) {
+        loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
+            if (entity instanceof Player) {
+                Player player = (Player) entity;
                 PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(displayEntity);
                 ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
             }
-        }
+        });
     }
 
     @Override
