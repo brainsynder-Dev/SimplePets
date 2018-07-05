@@ -176,7 +176,7 @@ public class PetOwner {
         boolean hasLimit = PetCore.get().getConfiguration().getBoolean("RenamePet.Limit-Number-Of-Characters");
         boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
         boolean k = PetCore.get().getConfiguration().getBoolean("Use&k");
-        name = name.replace("~", " ");
+        if (name != null) name = name.replace("~", " ");
 
         if (!override) {
             if (hasLimit && (!player.hasPermission("Pet.name.bypassLimit"))) {
@@ -200,12 +200,18 @@ public class PetOwner {
             }
             player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
         } else {
-            name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
+            if (name != null) name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
         }
         petName = name;
         if (!hasPet()) {
             return;
         }
+        if (name == null) {
+            if (name == null || name.equals("null"))
+                name = PetCore.get().getDefaultPetName(pet.getPetType(), player);
+            name = PetCore.get().translateName(name);
+        }
+
         pet.getEntity().getEntity().setCustomName(name.replace("%player%", player.getName()));
         if (PetCore.get().getConfiguration().getBoolean("ShowParticles") && (!override)) {
             play(pet.getEntity().getEntity().getLocation(), ParticleMaker.Particle.VILLAGER_HAPPY, 1.0F, 1.0F, 1.0F);
