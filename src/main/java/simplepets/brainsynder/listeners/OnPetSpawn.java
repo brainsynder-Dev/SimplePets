@@ -62,26 +62,26 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
 
     @EventHandler
     public void onMove(PetMoveEvent e) {
-                try {
-                    if (e.getEntity() == null) return;
-                    if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
-                        IEntityPet entity = e.getEntity();
-                        PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
-                        PetCore core = PetCore.get();
-                        if (e.getCause() == PetMoveEvent.Cause.RIDE) {
-                            if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
-                                petOwner.getPet().setVehicle(false, false);
-                                entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
-                            }
-                            return;
-                        }
-
-                        if (!core.getLinkRetriever().canPetEnter(petOwner, entity.getEntity().getLocation())) {
-                            petOwner.removePet();
-                            entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
-                        }
+        try {
+            if (e.getEntity() == null) return;
+            if (e.getEntity().getPet() != null && e.getEntity().getOwner() != null) {
+                IEntityPet entity = e.getEntity();
+                PetOwner petOwner = PetOwner.getPetOwner(entity.getOwner());
+                PetCore core = PetCore.get();
+                if (e.getCause() == PetMoveEvent.Cause.RIDE) {
+                    if (!core.getLinkRetriever().canRidePet(petOwner, entity.getEntity().getLocation())) {
+                        petOwner.getPet().setVehicle(false, false);
+                        entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
                     }
-                } catch (Exception ignored) {
+                    return;
                 }
+
+                if (!core.getLinkRetriever().canPetEnter(petOwner, entity.getEntity().getLocation())) {
+                    petOwner.removePet();
+                    entity.getOwner().sendMessage(PetCore.get().getMessages().getString("Pet-No-Enter", true));
+                }
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

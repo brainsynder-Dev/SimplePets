@@ -19,7 +19,6 @@ import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.storage.files.EconomyFile;
 import simplepets.brainsynder.utils.ItemBuilder;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class PetEventListeners implements Listener {
@@ -34,28 +33,29 @@ public class PetEventListeners implements Listener {
         if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
             if (event.getPlayer().hasPermission("Pets.economy.bypass")) return;
 
+            double price = economyFile.getPrice(event.getPetType());
+            if (price == -1) return;
+
+            IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
+            if (!vault.isHooked()) return;
+
             PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
             JSONArray petArray = petOwner.getOwnedPets();
-            if (petArray.contains(event.getPetType().getConfigName()))
-                return;
+            if (petArray.contains(event.getPetType().getConfigName())) return;
 
-            double price = economyFile.getPrice(event.getPetType());
-            IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
-            if (price == -1)
-                return;
-            if (!vault.isHooked())
-                return;
             double bal = vault.getBalance(event.getPlayer());
             if (bal < price) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)));
                 return;
             }
+
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
                 vault.withdrawPlayer(event.getPlayer(), price);
                 event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%type%", event.getPetType().getConfigName()));
                 return;
             }
+
             petOwner.addPurchasedPet(event.getPetType().getConfigName());
             vault.withdrawPlayer(event.getPlayer(), price);
             event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%type%", event.getPetType().getConfigName()));
@@ -64,8 +64,8 @@ public class PetEventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void openMenuSelector(PetInventoryOpenEvent event) {
-        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy"))
-            return;
+        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) return;
+
         IStorage<ItemStack> items = new StorageList<>();
         IStorage<PetTypeStorage> types = event.getShownPetTypes().copy();
         PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
@@ -99,7 +99,7 @@ public class PetEventListeners implements Listener {
         if (!event.getPlayer().hasPermission("Pet.name.bypass")) {
             List<String> blocked = PetCore.get().getConfiguration().getStringList("RenamePet.Blocked-Words");
             if (!blocked.isEmpty()) {
-                List<String> split = Arrays.asList(event.getNewName().split(" "));
+                String[] split = event.getNewName().split(" ");
                 for (String arg : split) {
                     String name = ChatColor.translateAlternateColorCodes('&', arg);
                     name = ChatColor.stripColor(name);
