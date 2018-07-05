@@ -297,7 +297,12 @@ public class PetOwner {
                 event.setCanceled(true);
                 event.setWillClose(true);
                 event.setWillDestroy(true);
-                setPetName(event.getName(), false);
+
+                if (event.getName().equalsIgnoreCase("reset")) {
+                    setPetName(null, true);
+                }else{
+                    setPetName(event.getName(), false);
+                }
             });
             gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemStack(Material.NAME_TAG));
             gui.open();
