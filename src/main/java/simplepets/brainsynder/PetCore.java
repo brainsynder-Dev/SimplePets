@@ -45,7 +45,7 @@ public class PetCore extends JavaPlugin {
             "v1_12_R1"
     );
     public boolean forceSpawn;
-    private boolean disabling = false;
+    private boolean disabling = false, reloaded = false;
 
     private ItemLoaders itemLoaders;
     private InvLoaders invLoaders;
@@ -79,6 +79,7 @@ public class PetCore extends JavaPlugin {
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
+            reloaded = true;
             Errors.RELOAD_DETECTED.print();
             Bukkit.getOnlinePlayers().forEach(player -> {
                 if (player.isOp()) {
@@ -251,6 +252,10 @@ public class PetCore extends JavaPlugin {
 
     public TypeManager getTypeManager() {
         return typeManager;
+    }
+
+    public boolean wasReloaded() {
+        return reloaded;
     }
 
     public void debug(String message) {

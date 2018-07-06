@@ -42,6 +42,7 @@ public class SPCommand implements CommandExecutor {
         commands.add(new CMD_Name());
         commands.add(new CMD_Modify());
         commands.add(new CMD_Info());
+        commands.add(new CMD_Debug());
         if (core.getConfiguration().getBoolean("PetItemStorage.Enable")) commands.add(new CMD_Inv());
     }
 
