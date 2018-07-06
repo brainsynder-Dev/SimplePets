@@ -105,7 +105,7 @@ public class SelectionMenu extends CustomInventory {
         for (PetDefault type : availableTypes) {
             if (type.hasPermission(player)) {
                 petTypes.add(new PetTypeStorage(type));
-            }else{
+            } else {
                 if (!PetCore.get().getConfiguration().getBoolean("Remove-Item-If-No-Permission"))
                     petTypes.add(new PetTypeStorage(type));
             }
@@ -116,11 +116,7 @@ public class SelectionMenu extends CustomInventory {
         }
 
         ObjectPager<PetTypeStorage> pages = new ObjectPager<>(maxPets, petTypes.toArrayList());
-        if (pagerMap.containsKey(player.getName())) {
-            pages = pagerMap.get(player.getName());
-        } else {
-            pagerMap.put(player.getName(), pages);
-        }
+        pagerMap.put(player.getName(), pages);
 
         getSlots().forEach((slot, item) -> {
             if (item.isEnabled() && item.addItemToInv(owner, this))
