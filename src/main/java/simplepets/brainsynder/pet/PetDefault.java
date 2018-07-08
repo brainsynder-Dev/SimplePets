@@ -110,7 +110,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public boolean hasPermission(Player player) {
-        if (!getPlugin().getConfiguration().getBoolean("Needs-Permission")) return true;
+        if (!PetCore.get().needsPermissions()) return true;
         return player.hasPermission("Pet.type.*") || player.hasPermission(getPermission());
     }
 
