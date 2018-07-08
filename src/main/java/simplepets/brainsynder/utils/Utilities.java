@@ -2,6 +2,7 @@ package simplepets.brainsynder.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -23,9 +24,33 @@ import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Utilities {
+    private static Map<String, Long> startTimeMap = new HashMap<>();
+
+    /**
+     * Finds how many Milliseconds it took to run a task
+     *
+     * @param clazz
+     *          - Class where the task is being called from
+     * @param taskName
+     *          - A name to give the task (use the same name for start/finish)
+     */
+    public static void findDelay (Class clazz, String taskName) {
+        String key = clazz.getSimpleName()+"|"+taskName;
+        if (startTimeMap.containsKey(key)) {
+            long start = startTimeMap.get(key);
+            long end = System.nanoTime();
+            long diff = (end - start) / 1000000;
+            Bukkit.broadcastMessage(key+" -   Took: "+diff+"ms");
+            startTimeMap.remove(key);
+            return;
+        }
+        startTimeMap.put(key, System.nanoTime());
+    }
 
     public static String saveTextToHastebin(String text) {
         try {
