@@ -2,12 +2,13 @@ package simplepets.brainsynder.nms.entities.v1_12_R1;
 
 import net.minecraft.server.v1_12_R1.World;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.EulerAngle;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -21,7 +22,22 @@ import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class SpawnUtil implements ISpawner {
+    private Map<String, Class<?>> petMap;
+
+    @Override
+    public void init() {
+        petMap = new HashMap<>();
+
+        PetCore.get().getTypeManager().getTypes().forEach(type -> {
+            String name = type.getEntityClass().getSimpleName().replaceFirst("I", "");
+            Class<?> clazz = ReflectionUtil.getPetNMSClass(name);
+            petMap.put(name, clazz);
+        });
+    }
 
     public IEntityPet spawnEntityPet(IPet pet, String className) {
         Location l = pet.getOwner().getLocation();
@@ -31,7 +47,7 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawn(Location l, IPet pet, String className) {
         try {
             World mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-            EntityPet customEntity = (EntityPet) ReflectionUtil.getPetNMSClass(className).getDeclaredConstructor(World.class, IPet.class).newInstance(mcWorld, pet);
+            EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(World.class, IPet.class).newInstance(mcWorld, pet);
             customEntity.setInvisible(false);
             customEntity.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
 

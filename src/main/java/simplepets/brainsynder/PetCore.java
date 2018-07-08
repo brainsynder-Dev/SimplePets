@@ -110,7 +110,8 @@ public class PetCore extends JavaPlugin {
                 WorldEditLink.init();
             }
         }.runTaskLater(this, 20*10);
-
+        reloadSpawner();
+        spawner.init();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
     }
