@@ -47,8 +47,8 @@ public abstract class MenuItem {
     }
 
     public boolean hasPermission(Player player) {
-        if (!PetCore.get().getConfiguration().getBoolean("Needs-Permission")) return true;
-        if (!PetCore.get().getConfiguration().getBoolean("Needs-Data-Permissions")) return true;
+        if (!PetCore.get().needsPermissions()) return true;
+        if (!PetCore.get().needsDataPermissions()) return true;
         if (PetCore.hasPerm(player, type.getPermission() + ".*")) return true;
         return player.hasPermission(type.getPermission() + ".data.*") || (player.hasPermission(getPermission()));
     }

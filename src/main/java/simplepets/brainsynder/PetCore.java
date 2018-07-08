@@ -45,7 +45,7 @@ public class PetCore extends JavaPlugin {
             "v1_12_R1"
     );
     public boolean forceSpawn;
-    private boolean disabling = false, reloaded = false, needsPermissions = true;
+    private boolean disabling = false, reloaded = false, needsPermissions = true, needsDataPermissions = true;
 
     private ItemLoaders itemLoaders;
     private InvLoaders invLoaders;
@@ -220,6 +220,8 @@ public class PetCore extends JavaPlugin {
         configuration = new Config(this, "Config.yml");
         configuration.loadDefaults();
         needsPermissions = configuration.getBoolean("Needs-Permission");
+        needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
+
         debug("Loading Messages.yml...");
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
@@ -293,6 +295,7 @@ public class PetCore extends JavaPlugin {
 
     public void reload(int type) {
         needsPermissions = configuration.getBoolean("Needs-Permission");
+        needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
         if ((type == 0) || (type == 2)) {
             if (typeManager != null) typeManager.unLoad();
             typeManager = new TypeManager(this);
@@ -326,6 +329,10 @@ public class PetCore extends JavaPlugin {
 
     public boolean needsPermissions() {
         return needsPermissions;
+    }
+
+    public boolean needsDataPermissions() {
+        return needsDataPermissions;
     }
 
     public boolean isDisabling() {return this.disabling;}
