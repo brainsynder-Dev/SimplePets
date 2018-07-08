@@ -63,7 +63,7 @@ public class PetCore extends JavaPlugin {
     private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
     public void onEnable() {
-        long start = System.currentTimeMillis();
+        Utilities.findDelay(getClass(), "startup", false);
         instance = this;
         Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
         if (plugin == null) {
@@ -113,7 +113,7 @@ public class PetCore extends JavaPlugin {
         reloadSpawner();
         spawner.init();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
-        debug("Took " + (System.currentTimeMillis() - start) + "ms to load");
+        debug("Took " + Utilities.findDelay(getClass(), "startup", false) + "ms to load");
     }
 
     private void registerEvents() {
