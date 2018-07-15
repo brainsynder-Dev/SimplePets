@@ -24,7 +24,7 @@ public abstract class PetDefault extends JSONFile {
     private boolean _FLY_, _HAT_, _MOUNT_, _ENABLED_, _FLOAT_DOWN_;
     private double _RIDE_SPEED_, _SPEED_;
     private JSONArray _COMMANDS_ = new JSONArray();
-    private String fileName, _DISPLAY_NAME_;
+    private String fileName, _DISPLAY_NAME_,SUMMON_NAME;
     private JSONObject _DATA_ITEMS_ = new JSONObject();
 
     private EntityWrapper type;
@@ -52,6 +52,7 @@ public abstract class PetDefault extends JSONFile {
         setDefault("speed", 0.6000000238418579D);
 
         setDefault("item", getDefaultItem().toJSON());
+        setDefault("summon_name", WordUtils.capitalizeFully(fileName.replace("_", " ")));
 
         setDefault("on_summon", new JSONArray());
         try {
@@ -78,6 +79,7 @@ public abstract class PetDefault extends JSONFile {
         _SPEED_ = getDouble("speed");
 
         _DISPLAY_NAME_ = getString("display_name",false);
+        SUMMON_NAME = getString("summon_name",false);
 
         _COMMANDS_ = getArray("on_summon");
 
@@ -90,7 +92,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public String getDisplayName() {
-        return WordUtils.capitalizeFully(fileName.replace("_", " "));
+        return SUMMON_NAME;
     }
 
     public String getDefaultName() {
