@@ -33,6 +33,10 @@ public abstract class JSONFile {
         reload();
     }
 
+    public String getName () {
+        return file.getName().replace(".json", "");
+    }
+
     /**
      * This is a method that loads the default values that you have configured.
      * To set the default values use this as an example:
