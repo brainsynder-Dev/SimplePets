@@ -23,6 +23,7 @@ public class TypeManager {
         register(new BlazeDefault(plugin));
         register(new CaveSpiderDefault(plugin));
         register(new ChickenDefault(plugin));
+        register(new CodDefault(plugin));
         register(new CowDefault(plugin));
         register(new CreeperDefault(plugin));
         register(new ElderGuardianDefault(plugin));
