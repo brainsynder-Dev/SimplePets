@@ -27,6 +27,6 @@ public class SlimeDefault extends PetDefault {
 
     @Override
     public PetData getPetData() {
-        return PetData.SLIME;
+        return PetData.SIZE;
     }
 }

@@ -1,12 +1,12 @@
 package simplepets.brainsynder.pet.types;
 
-import org.bukkit.Material;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySquidPet;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class SquidDefault extends PetDefault {
@@ -16,7 +16,7 @@ public class SquidDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.INK_SACK).withName("&f&lSquid Pet");
+        return new ItemBuilder(Utilities.fetchMaterial("INK_SACK", "INK_SAC")).withName("&f&lSquid Pet");
     }
 
     @Override

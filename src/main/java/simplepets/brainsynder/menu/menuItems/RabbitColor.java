@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.RabbitType;
 
 import java.util.ArrayList;
@@ -59,24 +60,20 @@ public class RabbitColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 15).toBuilder(1);
         item.withName("&6Black");
-        item.withData(15);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 12).toBuilder(1);
         item.withName("&6Brown");
-        item.withData(12);
         items.add(item);
         item = new ItemBuilder(Material.GOLD_BLOCK);
         item.withName("&6Golden");
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 0).toBuilder(1);
         item.withName("&6Black and White");
-        item.withData(0);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 7).toBuilder(1);
         item.withName("&6Salt and Pepper");
-        item.withData(7);
         items.add(item);
         item = new ItemBuilder(Material.REDSTONE_BLOCK);
         item.withName("&6Killer Bunny");

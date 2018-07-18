@@ -1,6 +1,5 @@
 package simplepets.brainsynder.menu.items.list;
 
-import org.bukkit.Material;
 import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.list.SavesMenu;
@@ -9,6 +8,7 @@ import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 
@@ -19,8 +19,8 @@ public class NextPage extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM)
-                .withName("&6&l&m----&6&l>").withData(3)
+        return Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1)
+                .withName("&6&l&m----&6&l>")
                 .addLore("&7Click Here to go","&7the next page")
                 .setTexture("http://textures.minecraft.net/texture/c2f910c47da042e4aa28af6cc81cf48ac6caf37dab35f88db993accb9dfe516");
     }

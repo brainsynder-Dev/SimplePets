@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.HorseColorType;
 
 import java.util.ArrayList;
@@ -58,31 +58,31 @@ public class HorseColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Material.WOOL);
+        ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 15).toBuilder(1);
         item.withName("&6Black");
         item.withData(15);
         items.add(item);
-        item = new ItemBuilder(Material.STAINED_CLAY);
+        item = Utilities.getColoredMaterial(Utilities.MatType.STAINED_CLAY, 8).toBuilder(1);
         item.withName("&6Chestnut");
         item.withData(8);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 4).toBuilder(1);
         item.withName("&6Creamy");
         item.withData(4);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 12).toBuilder(1);
         item.withName("&6Brown");
         item.withData(12);
         items.add(item);
-        item = new ItemBuilder(Material.STAINED_CLAY);
+        item = Utilities.getColoredMaterial(Utilities.MatType.STAINED_CLAY, 7).toBuilder(1);
         item.withName("&6Dark Brown");
         item.withData(7);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL, (byte) 7);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 7).toBuilder(1);
         item.withName("&6Gray");
         item.withData(7);
         items.add(item);
-        item = new ItemBuilder(Material.WOOL);
+        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 0).toBuilder(1);
         item.withName("&6White");
         items.add(item);
         return items;

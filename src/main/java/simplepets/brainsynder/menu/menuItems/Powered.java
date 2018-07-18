@@ -1,12 +1,12 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,7 +37,7 @@ public class Powered extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Material.SULPHUR);
+        ItemBuilder item = new ItemBuilder(Utilities.fetchMaterial("SULPHUR", "GUNPOWDER"));
         item.withName("&6Powered: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

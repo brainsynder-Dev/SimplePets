@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 
 import java.util.ArrayList;
@@ -52,13 +53,13 @@ public class HorseArmor extends MenuItemAbstract {
         ItemBuilder item = new ItemBuilder(Material.BARRIER);
         item.withName("&6No HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.IRON_BARDING);
+        item = new ItemBuilder(Utilities.fetchMaterial("IRON_BARDING", "IRON_HORSE_ARMOR"));
         item.withName("&6Iron HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.GOLD_BARDING);
+        item = new ItemBuilder(Utilities.fetchMaterial("GOLD_BARDING", "GOLDEN_HORSE_ARMOR"));
         item.withName("&6Gold HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Material.DIAMOND_BARDING);
+        item = new ItemBuilder(Utilities.fetchMaterial("DIAMOND_BARDING", "DIAMOND_HORSE_ARMOR"));
         item.withName("&6Diamond HorseArmor");
         items.add(item);
         return items;

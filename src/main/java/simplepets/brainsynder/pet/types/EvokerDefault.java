@@ -1,6 +1,5 @@
 package simplepets.brainsynder.pet.types;
 
-import org.bukkit.Material;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -8,6 +7,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntityEvokerPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EvokerDefault extends PetDefault {
@@ -17,7 +17,7 @@ public class EvokerDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.SKULL_ITEM).withData(3)
+        return Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1)
                 .setTexture("http://textures.minecraft.net/texture/d954135dc82213978db478778ae1213591b93d228d36dd54f1ea1da48e7cba6")
                 .withName("&f&lEvoker Pet");
     }

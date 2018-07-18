@@ -22,10 +22,9 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -176,23 +175,7 @@ public class Pet implements IPet {
 
                     value = true;
                     if (owner.getLocation().getBlock() != null) {
-                        List<Material> blocks = new ArrayList<>(Arrays.asList(Material.STAINED_GLASS_PANE,
-                                Material.THIN_GLASS,
-                                Material.IRON_FENCE,
-                                Material.IRON_DOOR,
-                                Material.WOODEN_DOOR,
-                                Material.ACACIA_DOOR,
-                                Material.BIRCH_DOOR,
-                                Material.DARK_OAK_DOOR,
-                                Material.JUNGLE_DOOR,
-                                Material.SPRUCE_DOOR,
-                                Material.WOOD_DOOR,
-                                Material.ACACIA_FENCE_GATE,
-                                Material.BIRCH_FENCE_GATE,
-                                Material.DARK_OAK_FENCE_GATE,
-                                Material.FENCE_GATE,
-                                Material.JUNGLE_FENCE_GATE,
-                                Material.SPRUCE_FENCE_GATE));
+                        List<Material> blocks = Utilities.getBlacklistedMaterials();
                         if (!blocks.contains(owner.getLocation().getBlock().getType()) && !blocks.contains(owner.getEyeLocation().getBlock().getType())) {
                             getPet().teleport(owner);
                         }

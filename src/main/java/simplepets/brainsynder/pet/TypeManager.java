@@ -80,6 +80,7 @@ public class TypeManager {
     }
 
     private void register (PetDefault item) {
+        if (!item.isSupported()) return;
         item.setDefault("sort_key", item.getConfigName());
         item.setDefault("sound", item.getDefaultSound().name());
         item.setDefault("display_name", "&a&l%player%'s " + item.getConfigName() + " Pet");

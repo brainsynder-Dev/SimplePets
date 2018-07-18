@@ -25,7 +25,7 @@ public enum PetData {
     RABBIT(Age.class, RabbitColor.class),
     OCELOT(Age.class, Ocelot.class, Sitting.class, Tame.class),
     LLAMA(Age.class, Chested.class,Color.class, LlamaColor.class),
-    SLIME(Size1.class, Size2.class, Size3.class, Size4.class),
+    SIZE(Size1.class, Size2.class, Size3.class, Size4.class),
     POLAR_BEAR(Age.class, Stand.class),
     POWERED(Powered.class),
     SHULKER(Rainbow.class, ShulkerClosed.class, ShulkerColor.class),

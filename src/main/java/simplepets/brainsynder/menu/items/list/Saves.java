@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.items.list;
 
-import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 
@@ -16,7 +16,7 @@ public class Saves extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.COMMAND)
+        return new ItemBuilder(Utilities.fetchMaterial("COMMAND", "COMMAND_BLOCK"))
                 .withName("&e&lPet Saves")
                 .addLore("&7", "&7View the pets you have saved");
     }

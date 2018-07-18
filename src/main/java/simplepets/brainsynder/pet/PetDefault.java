@@ -31,12 +31,12 @@ public abstract class PetDefault extends JSONFile {
     private PetCore plugin;
 
     public PetDefault(PetCore plugin, String name, SoundMaker sound, EntityWrapper type) {
-        super(new File(new File(plugin.getDataFolder().toString()+File.separator+"Pets"), name+".json"));
+        super(new File(new File(plugin.getDataFolder().toString()+File.separator+"Pets"), name+".json"), false);
+        if (isSupported()) reload();
         this.fileName = name;
         this.plugin = plugin;
         this.sound = sound;
         this.type = type;
-
     }
 
     @Override
