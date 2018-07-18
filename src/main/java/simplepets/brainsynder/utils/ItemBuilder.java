@@ -18,6 +18,7 @@ import org.json.simple.JSONObject;
 import simple.brainsynder.reflection.FieldAccessor;
 import simple.brainsynder.utils.Base64Wrapper;
 import simple.brainsynder.utils.Reflection;
+import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.Valid;
 
 import java.util.*;
@@ -45,7 +46,7 @@ public class ItemBuilder {
 
         int amount = 1;
         if (json.containsKey("amount")) amount = Integer.parseInt(String.valueOf(json.get("amount")));
-        Material material = Material.valueOf(String.valueOf(json.get("material")));
+        Material material = Utilities.findMaterial(String.valueOf(json.get("material")));
         ItemBuilder builder = new ItemBuilder(material, amount);
 
         if (json.containsKey("name")) builder.withName(String.valueOf(json.get("name")));
@@ -149,6 +150,8 @@ public class ItemBuilder {
 
     @Deprecated
     public ItemBuilder withData(int data) {
+        if (data == -1) return this;
+        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1) return this;
         JSON.put("data", data);
         is.setDurability((short) data);
         return this;
@@ -186,7 +189,7 @@ public class ItemBuilder {
     public ItemBuilder withEntity(EntityType type) {
         JSON.put("entity", type.name());
 
-        if (is.getType() == Material.MONSTER_EGG) {
+        if (is.getType().name().equals("MONSTER_EGG") || is.getType().name().contains("SPAWN_EGG")) {
             SpawnEggMeta spawnEggMeta = (SpawnEggMeta) im;
             spawnEggMeta.setSpawnedType(type);
             im = spawnEggMeta;
@@ -248,7 +251,12 @@ public class ItemBuilder {
         SKULL.put("owner", owner);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.SKULL_ITEM) && (is.getDurability() == 3)) {
+        boolean run = false;
+
+        if (is.getType().name().equals("PLAYER_HEAD")) run = true;
+        if (is.getType().name().equals("SKULL_ITEM") && is.getDurability() == 3) run = true;
+
+        if (run) {
             SkullMeta meta = (SkullMeta) im;
             meta.setOwner(owner);
             im = meta;
@@ -263,7 +271,12 @@ public class ItemBuilder {
         SKULL.put("texture", textureURL);
         JSON.put("skullData", SKULL);
 
-        if ((is.getType() == Material.SKULL_ITEM) && (is.getDurability() == 3)) {
+        boolean run = false;
+
+        if (is.getType().name().equals("PLAYER_HEAD")) run = true;
+        if (is.getType().name().equals("SKULL_ITEM") && is.getDurability() == 3) run = true;
+
+        if (run) {
             SkullMeta meta = (SkullMeta) im;
 
             if (textureURL.length() > 17) {

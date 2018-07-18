@@ -3,6 +3,8 @@ package simplepets.brainsynder.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -31,35 +33,152 @@ import java.util.Map;
 public class Utilities {
     private static Map<String, Long> startTimeMap = new HashMap<>();
 
+    public static List<Material> getBlacklistedMaterials() {
+        List<Material> materials = new ArrayList<>();
+        for (Material material : Material.values()) {
+            String name = material.name();
+
+            if (name.contains("GLASS_PANE")) materials.add(material);
+            if (name.contains("FENCE")) materials.add(material);
+            if (name.contains("DOOR") && (!name.contains("TRAP"))) materials.add(material);
+            if (name.contains("FENCE_GATE")) materials.add(material);
+            if (name.contains("THIN")) materials.add(material);
+        }
+
+        return materials;
+    }
+
+    public static Data getSkullMaterial(SkullType type) {
+        Material material = null;
+
+        int data = -1;
+        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1) {
+            if (type == SkullType.SKELETON) material = Material.SKELETON_SKULL;
+            if (type == SkullType.WITHER) material = Material.WITHER_SKELETON_SKULL;
+            if (type == SkullType.ZOMBIE) material = Material.ZOMBIE_HEAD;
+            if (type == SkullType.PLAYER) material = Material.PLAYER_HEAD;
+            if (type == SkullType.CREEPER) material = Material.CREEPER_HEAD;
+            if (type == SkullType.DRAGON) material = Material.DRAGON_HEAD;
+        } else {
+            material = Material.valueOf("SKULL_ITEM");
+            data = type.ordinal();
+        }
+
+        return new Data(material, data);
+    }
+
+    public static Data getColoredMaterial(MatType type, int data) {
+        Material material = null;
+
+        if (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion()) {
+            DyeColor dye = DyeColor.values()[data];
+            String name = dye.name();
+            if (name.equalsIgnoreCase("SILVER")) {
+                name = "LIGHT_GRAY";
+            }
+            if (type == MatType.INK_SACK) {
+                dye = DyeColor.getByDyeData((byte) data);
+                name = dye.name();
+                if (name.equalsIgnoreCase("SILVER")) {
+                    name = "LIGHT_GRAY";
+                }
+                if (dye == DyeColor.WHITE) {
+                    material = findMaterial("BONE_MEAL");
+                } else if (dye == DyeColor.YELLOW) {
+                    material = findMaterial("DANDELION_YELLOW");
+                } else if (dye == DyeColor.BLUE) {
+                    material = findMaterial("LAPIS_LAZULI");
+                } else if (dye == DyeColor.BROWN) {
+                    material = findMaterial("COCOA_BEANS");
+                } else if (dye == DyeColor.GREEN) {
+                    material = findMaterial("CACTUS_GREEN");
+                } else if (dye == DyeColor.RED) {
+                    material = findMaterial("ROSE_RED");
+                } else if (dye == DyeColor.BLACK) {
+                    material = findMaterial("INK_SAC");
+                } else {
+                    material = fetchMaterial(name + "_DYE");
+                }
+            } else {
+                material = fetchMaterial(name + "_" + type.name());
+            }
+            data = -1;
+        } else {
+            material = findMaterial(type.name());
+        }
+
+        return new Data(material, data);
+    }
+
+    /**
+     * Translates the name to a {@link org.bukkit.Material}
+     *
+     * @param name The new/old {@link org.bukkit.Material} name
+     * @return
+     */
+    public static Material findMaterial(String name) {
+        try {
+            return Material.valueOf(name);
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return Material.valueOf("LEGACY_" + name);
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return Material.matchMaterial(name);
+        } catch (Exception ignored) {
+        }
+
+        try {
+            return Material.matchMaterial(name, true);
+        } catch (Exception ignored) {
+        }
+
+        return Material.AIR;
+
+    }
+
+    public static Material fetchMaterial(String... names) {
+        for (String name : names) {
+            try {
+                return Material.valueOf(name);
+            } catch (Exception ignored) {
+            }
+//            try {
+//                return Material.matchMaterial(name);
+//            } catch (Exception ignored) {
+//            }
+        }
+        return Material.AIR;
+    }
+
     /**
      * Finds how many Milliseconds it took to run a task
      *
-     * @param clazz
-     *          - Class where the task is being called from
-     * @param taskName
-     *          - A name to give the task (use the same name for start/finish)
+     * @param clazz    - Class where the task is being called from
+     * @param taskName - A name to give the task (use the same name for start/finish)
      */
-    public static long findDelay (Class clazz, String taskName) {
+    public static long findDelay(Class clazz, String taskName) {
         return findDelay(clazz, taskName, true);
     }
 
     /**
      * Finds how many Milliseconds it took to run a task
      *
-     * @param clazz
-     *          - Class where the task is being called from
-     * @param taskName
-     *          - A name to give the task (use the same name for start/finish)
-     * @param output
-     *          - Should the data be broadcast to the server?
+     * @param clazz    - Class where the task is being called from
+     * @param taskName - A name to give the task (use the same name for start/finish)
+     * @param output   - Should the data be broadcast to the server?
      */
-    public static long findDelay (Class clazz, String taskName, boolean output) {
-        String key = clazz.getSimpleName()+"|"+taskName;
+    public static long findDelay(Class clazz, String taskName, boolean output) {
+        String key = clazz.getSimpleName() + "|" + taskName;
         if (startTimeMap.containsKey(key)) {
             long start = startTimeMap.get(key);
             long end = System.nanoTime();
             long diff = (end - start) / 1000000;
-            if (output) Bukkit.broadcastMessage(key+" -   Took: "+diff+"ms");
+            if (output) Bukkit.broadcastMessage(key + " -   Took: " + diff + "ms");
             startTimeMap.remove(key);
             return diff;
         }
@@ -117,7 +236,7 @@ public class Utilities {
         try {
             entity.eject();
             if (entity instanceof Player) {
-                resetRideCooldown (passenger);
+                resetRideCooldown(passenger);
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
@@ -126,7 +245,7 @@ public class Utilities {
         }
     }
 
-    public void resetRideCooldown (Entity entity) {
+    public void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
         field.set(Reflection.getHandle(entity), 0);
     }
@@ -219,5 +338,35 @@ public class Utilities {
             return null;
         }
         return config.getItemStack("i", null);
+    }
+
+    public static class Data {
+        public Material material;
+        public int data = -1;
+
+        Data(Material material, int data) {
+            this.material = material;
+            this.data = data;
+        }
+
+        public ItemBuilder toBuilder(int amount) {
+            return new ItemBuilder(material, amount).withData(data);
+        }
+    }
+
+    public enum SkullType {
+        SKELETON,
+        WITHER,
+        ZOMBIE,
+        PLAYER,
+        CREEPER,
+        DRAGON
+    }
+
+    public enum MatType {
+        STAINED_GLASS_PANE,
+        WOOL,
+        STAINED_CLAY,
+        INK_SACK
     }
 }
