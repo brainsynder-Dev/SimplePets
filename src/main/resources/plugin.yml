@@ -5,6 +5,7 @@ depends: [SimpleAPI]
 softdepend: [WorldGuard, WorldEdit, Vault]
 loadbefore: [Citizens, mcMMO, ProtocolSupport, PlotSquared]
 authors: [brainsynder, Thatsmusic99]
+api-version: 1.13
 commands:
     pet:
         description: Main SimplePets command

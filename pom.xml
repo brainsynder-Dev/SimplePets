@@ -80,6 +80,13 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-1-13</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/spigot-1.13-pre7-R0.1-SNAPSHOT-b1701.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.plotsquared</groupId>
             <artifactId>plotsquared-api</artifactId>
             <version>18.03.12-c208c53-1970</version>

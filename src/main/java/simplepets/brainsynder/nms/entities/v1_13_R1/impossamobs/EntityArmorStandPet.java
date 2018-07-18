@@ -1,11 +1,10 @@
-package simplepets.brainsynder.nms.entities.v1_11_R1.impossamobs;
+package simplepets.brainsynder.nms.entities.v1_13_R1.impossamobs;
 
-import net.minecraft.server.v1_11_R1.*;
+import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -18,12 +17,11 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.nms.entities.v1_11_R1.list.EntityControllerPet;
+import simplepets.brainsynder.nms.entities.v1_13_R1.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
@@ -41,7 +39,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         super(world);
     }
 
-    public EntityArmorStandPet(World world, EntityControllerPet pet) {
+    private EntityArmorStandPet(World world, EntityControllerPet pet) {
         super(world);
         this.pet = pet;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
@@ -60,26 +58,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         compound.setBoolean("NoBasePlate", true);
         stand.a(compound);
         return ((ArmorStand) stand.getBukkitEntity());
-    }
-
-    public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
-        ((CraftEntity) entity).getHandle().passengers.add(pos, ((CraftEntity) passenger).getHandle());
-        PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-        if (entity instanceof Player) {
-            ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-        } else {
-            ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(packet);
-        }
-    }
-
-    public void removePassenger(org.bukkit.entity.Entity entity) {
-        ((CraftEntity) entity).getHandle().passengers.clear();
-        PacketPlayOutMount packet = new PacketPlayOutMount(((CraftEntity) entity).getHandle());
-        if (entity instanceof Player) {
-            ((CraftPlayer) entity).getHandle().playerConnection.sendPacket(packet);
-        } else {
-            ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(packet);
-        }
     }
 
     @Override
@@ -117,9 +95,15 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return false;
     }
 
+    /**
+     * Runs per-tick
+     *
+     * Search for: this.world.methodProfiler.a("entityBaseTick");
+     * Class: Entity
+     */
     @Override
-    public void n() {
-        super.n();
+    public void W() {
+        super.W();
         if (isSpecial) {
             if (walking == null)
                 walking = new AnimationCycle(AnimationManager.walk);
@@ -161,7 +145,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             if (moving) {
                 if (!walking.isRegistered(getEntity())) walking.register(getEntity(), 1);
                 if (!arm_swing.isRegistered(getEntity())) arm_swing.register(getEntity(), 1);
-
                 walking.toggle(getEntity(), true);
                 arm_swing.toggle(getEntity(), true);
             } else {
@@ -192,16 +175,17 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     @Override
     public StorageTagCompound asCompound() {
-        StorageTagCompound object = new StorageTagCompound();
-        object.setBoolean("Small", isSmall());
-        object.setBoolean("MiniMe", isOwner());
+        StorageTagCompound object = pet.asCompound();
+        object.setBoolean("small", isSmall());
+        object.setBoolean("clone", isOwner());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("Small")) setSmall(object.getBoolean("Small"));
-        if (object.hasKey("MiniMe")) setOwner(object.getBoolean("MiniMe"));
+        if (object.hasKey("small")) setSmall(object.getBoolean("small"));
+        if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
+        pet.applyCompound(object);
     }
 
     @Override
@@ -218,7 +202,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setHelmet(maker.create());
             getEntity().setChestplate(new ItemMaker(Material.DIAMOND_CHESTPLATE).create());
             getEntity().setLeggings(new ItemMaker(Material.IRON_LEGGINGS).create());
-            getEntity().setBoots(new ItemMaker(Utilities.findMaterial("GOLD_BOOTS")).create());
+            getEntity().setBoots(new ItemMaker(Material.GOLDEN_BOOTS).create());
         }
     }
 
@@ -241,22 +225,22 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     @Override
-    public void g(float f, float f2) {
+    public void a(float f, float f1, float f2) {
         if (passengers == null) {
             this.P = (float) 0.5;
             this.aR = (float) 0.02;
-            super.g(f, f2);
+            super.a(f, f1, f2);
         } else {
             if (this.pet == null) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.g(f, f2);
+                super.a(f, f1, f2);
                 return;
             }
             if (!isOwnerRiding()) {
                 this.P = (float) 0.5;
                 this.aR = (float) 0.02;
-                super.g(f, f2);
+                super.a(f, f1, f2);
                 return;
             }
             EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();

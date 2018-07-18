@@ -42,7 +42,8 @@ public class PetCore extends JavaPlugin {
     private static PetCore instance;
     private final List<String> supportedVersions = Arrays.asList(
             "v1_11_R1",
-            "v1_12_R1"
+            "v1_12_R1",
+            "v1_13_R1"
     );
     public boolean forceSpawn;
     private boolean disabling = false, reloaded = false, needsPermissions = true, needsDataPermissions = true;
@@ -209,6 +210,9 @@ public class PetCore extends JavaPlugin {
         } else if (version == ServerVersion.v1_12_R1) {
             spawner = new simplepets.brainsynder.nms.entities.v1_12_R1.SpawnUtil();
             debug("Successfully Linked to v1_12_R1 SpawnUtil Class");
+        } else if (version == ServerVersion.v1_13_R1) {
+            spawner = new simplepets.brainsynder.nms.entities.v1_13_R1.SpawnUtil();
+            debug("Successfully Linked to v1_13_R1 SpawnUtil Class");
         } else {
             spawner = null;
             debug("Could not link to a SpawnUtil Class... Possible Wrong version?");

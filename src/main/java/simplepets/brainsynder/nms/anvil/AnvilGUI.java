@@ -19,6 +19,9 @@ public class AnvilGUI {
             case v1_12_R1:
                 gui = new HandleAnvilGUI(plugin, player, handler);
                 break;
+            case v1_13_R1:
+                gui = new simplepets.brainsynder.nms.anvil.v1_13_R1.HandleAnvilGUI(plugin, player, handler);
+                break;
             default:
                 PetCore.get().debug("Could not link to a version for HandleAnvilGUI. Possibly an Unsupported NMS version.");
                 gui = null;
