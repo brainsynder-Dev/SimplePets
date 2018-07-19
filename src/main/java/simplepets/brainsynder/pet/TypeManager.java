@@ -26,6 +26,8 @@ public class TypeManager {
         register(new CodDefault(plugin));
         register(new CowDefault(plugin));
         register(new CreeperDefault(plugin));
+        register(new DrownedDefault(plugin));
+        register(new DolphinDefault(plugin));
         register(new ElderGuardianDefault(plugin));
         register(new EndermanDefault(plugin));
         register(new EndermiteDefault(plugin));
