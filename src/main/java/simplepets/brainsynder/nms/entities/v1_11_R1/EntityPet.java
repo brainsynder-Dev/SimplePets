@@ -243,7 +243,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             sideMot = owner.be * 0.5F;
             forwMot = owner.bf;
             if (forwMot <= 0.0F) {
-                forwMot *= 0.25F;
+                forwMot *= (0.25 * rideSpeed);
+            } else {
+                forwMot *= rideSpeed;
             }
 
             if (!(this instanceof IEntityHorsePet))

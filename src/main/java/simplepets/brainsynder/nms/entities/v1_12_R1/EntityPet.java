@@ -390,7 +390,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             strafe = (float) (owner.be * 0.5);
             forward = owner.bg;
             if (forward <= 0.0) {
-                forward *= 0.25;
+                forward *= (rideSpeed * 0.25);
+            } else {
+                forward *= rideSpeed;
             }
 
             if (!(this instanceof IEntityHorsePet)) strafe *= 0.75;
