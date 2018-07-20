@@ -30,7 +30,7 @@ import java.util.Map;
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     private IPet pet;
-    private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
+    private double walkSpeed = 0.6000000238418579, rideSpeed = 0.7000000238418579;
 
     private boolean floatDown = false,
             canGlow = true,
