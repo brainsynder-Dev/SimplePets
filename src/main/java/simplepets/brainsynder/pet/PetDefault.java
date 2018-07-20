@@ -53,6 +53,7 @@ public abstract class PetDefault extends JSONFile {
 
         setDefault("item", getDefaultItem().toJSON());
    //     setDefault("summon_name", WordUtils.capitalizeFully(fileName.replace("_", " ")));
+        setDefault("summon_name", WordUtils.capitalizeFully(getName().replace("_", " ")));
 
         setDefault("on_summon", new JSONArray());
         try {
