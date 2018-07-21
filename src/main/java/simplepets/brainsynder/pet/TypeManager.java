@@ -45,6 +45,7 @@ public class TypeManager {
         register(new MuleDefault(plugin));
         register(new OcelotDefault(plugin));
         register(new ParrotDefault(plugin));
+        register(new PhantomDefault(plugin));
         register(new PigDefault(plugin));
         register(new PigmanDefault(plugin));
         register(new PolarBearDefault(plugin));
