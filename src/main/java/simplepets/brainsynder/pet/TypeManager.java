@@ -52,6 +52,7 @@ public class TypeManager {
         register(new PolarBearDefault(plugin));
         register(new PufferFishDefault(plugin));
         register(new RabbitDefault(plugin));
+        register(new SalmonDefault(plugin));
         register(new SheepDefault(plugin));
         register(new ShulkerDefault(plugin));
         register(new SilverfishDefault(plugin));
