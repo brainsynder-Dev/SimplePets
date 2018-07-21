@@ -49,6 +49,7 @@ public class TypeManager {
         register(new PigDefault(plugin));
         register(new PigmanDefault(plugin));
         register(new PolarBearDefault(plugin));
+        register(new PufferFishDefault(plugin));
         register(new RabbitDefault(plugin));
         register(new SheepDefault(plugin));
         register(new ShulkerDefault(plugin));

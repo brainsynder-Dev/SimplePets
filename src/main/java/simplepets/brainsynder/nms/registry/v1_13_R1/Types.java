@@ -37,6 +37,7 @@ public class Types {
     public static EntityTypes<EntityParrotPet> PARROT = CustomTypes.a(50,"pet_parrot", CustomTypes.a.a(EntityParrotPet.class, EntityParrotPet::new));
     public static EntityTypes<EntityPigPet> PIG = CustomTypes.a(51,"pet_pig", CustomTypes.a.a(EntityPigPet.class, EntityPigPet::new));
     // TODO: PUFFERFISH
+    public static EntityTypes<EntityPufferFishPet> PUFFER_FISH = CustomTypes.a(52,"pet_puffer_fish", CustomTypes.a.a(EntityPufferFishPet.class, EntityPufferFishPet::new));
     public static EntityTypes<EntityPigmanPet> PIGMAN = CustomTypes.a(53,"pet_pigman", CustomTypes.a.a(EntityPigmanPet.class, EntityPigmanPet::new));
     public static EntityTypes<EntityPolarBearPet> POLAR_BEAR = CustomTypes.a(54,"pet_polar_bear", CustomTypes.a.a(EntityPolarBearPet.class, EntityPolarBearPet::new));
     public static EntityTypes<EntityRabbitPet> RABBIT = CustomTypes.a(56,"pet_rabbit", CustomTypes.a.a(EntityRabbitPet.class, EntityRabbitPet::new));
