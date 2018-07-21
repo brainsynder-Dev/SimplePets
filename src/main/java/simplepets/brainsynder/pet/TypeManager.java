@@ -1,5 +1,6 @@
 package simplepets.brainsynder.pet;
 
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.pet.types.*;
@@ -89,6 +90,7 @@ public class TypeManager {
         item.setDefault("sort_key", item.getConfigName());
         item.setDefault("sound", item.getDefaultSound().name());
         item.setDefault("display_name", "&a&l%player%'s " + item.getConfigName() + " Pet");
+        item.setDefault("summon_name", WordUtils.capitalizeFully(item.getConfigName().replace("_", " ")));
         item.loadDefaults();
         item.save();
         item.reload();
