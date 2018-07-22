@@ -40,14 +40,14 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
      * NMS translates (Thanks Forge):
      * <p>
      * NavigationFlying#a() = setCanOpenDoors();
-     * NavigationFlying#c() = setCanFloat();
+     * NavigationFlying#d() = setCanFloat();
      * NavigationFlying#b() = setCanEnterDoors();
      */
     @Override
     protected NavigationAbstract b(World var1) {
         NavigationFlying var2 = new NavigationFlying(this, var1);
         var2.a(false);
-        var2.c(true);
+        var2.d(true);
         var2.b(true);
         return var2;
     }

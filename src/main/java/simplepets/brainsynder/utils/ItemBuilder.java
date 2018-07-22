@@ -48,6 +48,15 @@ public class ItemBuilder {
         if (json.containsKey("amount")) amount = Integer.parseInt(String.valueOf(json.get("amount")));
         Material material = Utilities.findMaterial(String.valueOf(json.get("material")));
         ItemBuilder builder = new ItemBuilder(material, amount);
+        int data = 0;
+        if (json.containsKey("data")){
+            data = Integer.parseInt(String.valueOf(json.get("data")));
+            if (json.containsKey("entity")) builder=Utilities.translate113(builder, json);
+        }
+
+        if (material.name().contains("SKULL_ITEM") && (ServerVersion.getVersion() == ServerVersion.v1_13_R1)) {
+            builder = Utilities.getSkullMaterial(Utilities.SkullType.values()[data]).toBuilder(amount);
+        }
 
         if (json.containsKey("name")) builder.withName(String.valueOf(json.get("name")));
         if (json.containsKey("lore")) {
@@ -55,7 +64,6 @@ public class ItemBuilder {
             lore.addAll(((JSONArray)json.get("lore")));
             builder.withLore(lore);
         }
-        if (json.containsKey("data")) builder.withData(Integer.parseInt(String.valueOf(json.get("data"))));
 
         if (json.containsKey("enchants") && (material.name().contains("SKULL"))) {
             JSONArray array = (JSONArray) json.get("enchants");
@@ -92,6 +100,10 @@ public class ItemBuilder {
 
     public ItemBuilder clone () {
         return fromJSON(toJSON());
+    }
+
+    ItemStack getstack() {
+        return is;
     }
 
     public String getName () {

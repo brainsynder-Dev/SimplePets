@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.simple.JSONObject;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
@@ -141,16 +142,47 @@ public class Utilities {
 
     }
 
+    public static ItemBuilder translate113 (ItemBuilder builder, JSONObject json) {
+        if (ServerVersion.getVersion().getIntVersion() < ServerVersion.v1_13_R1.getIntVersion()) return builder;
+        Material material = findMaterial(String.valueOf(json.get("material")));
+        int data = Integer.parseInt(String.valueOf(json.getOrDefault("data", "0")));
+
+        try {
+            MatType type = MatType.valueOf(material.name().replace("LEGACY_", ""));
+            Data data1 = getColoredMaterial(type, data);
+            json.put("material", data1.material.name());
+            if (data1.data == -1) json.remove("data");
+            return ItemBuilder.fromJSON(json);
+        }catch (Exception ignored){}
+
+        if (json.containsKey("skullData")) {
+            try {
+                Data data1 = getSkullMaterial(SkullType.values()[data]);
+                json.put("material", data1.material.name());
+                if (data1.data == -1) json.remove("data");
+                return ItemBuilder.fromJSON(json);
+            }catch (Exception ignored){}
+        }
+
+        if (json.containsKey("entity")) {
+            try {
+                material = findMaterial(json.get("entity")+"_SPAWN_EGG");
+                json.put("material", material.name());
+                json.remove("data");
+                json.remove("entity");
+                return ItemBuilder.fromJSON(json);
+            }catch (Exception ignored){}
+        }
+
+        return builder;
+    }
+
     public static Material fetchMaterial(String... names) {
         for (String name : names) {
             try {
                 return Material.valueOf(name);
             } catch (Exception ignored) {
             }
-//            try {
-//                return Material.matchMaterial(name);
-//            } catch (Exception ignored) {
-//            }
         }
         return Material.AIR;
     }

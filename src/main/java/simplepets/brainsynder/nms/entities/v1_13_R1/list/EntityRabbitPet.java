@@ -56,8 +56,8 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         this.datawatcher.set(RABBIT_TYPE, type.getId());
     }
 
-    protected void cG() {
-        super.cG();
+    protected void cH() {
+        super.cH();
         double d0 = this.moveController.c();
         if (d0 > 0.0D) {
             double d1 = this.motX * this.motX + this.motZ * this.motZ;
@@ -96,7 +96,7 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
             ControllerJumpRabbit jumpController = (ControllerJumpRabbit) this.h;
             if (!jumpController.c()) {
                 if (this.delay == 0) {
-                    PathEntity pathentity = getNavigation().n();
+                    PathEntity pathentity = getNavigation().m();
                     if (pathentity != null && pathentity.e() < pathentity.d()) {
                         Vec3D vec3d = pathentity.a(this);
                         this.a(vec3d.x, vec3d.z);

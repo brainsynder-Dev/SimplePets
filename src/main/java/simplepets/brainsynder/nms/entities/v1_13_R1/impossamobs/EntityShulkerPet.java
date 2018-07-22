@@ -72,8 +72,8 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
      * Class: Entity
      */
     @Override
-    public void n() {
-        super.n();
+    public void tick() {
+        super.tick();
         if (isCustom) {
             this.motX = 0;
             this.motY = 0;
@@ -95,7 +95,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
 
     @Override
     public boolean isClosed() {
-        return (dA() == 0);
+        return (dB() == 0);
     }
 
     @Override
