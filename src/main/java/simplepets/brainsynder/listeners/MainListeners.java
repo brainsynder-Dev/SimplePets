@@ -75,20 +75,6 @@ public class MainListeners implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEntityEvent e) {
-        if (!(e.getRightClicked() instanceof Player)) {
-            Object handle = ReflectionUtil.getEntityHandle(e.getRightClicked());
-            if (handle instanceof IEntityPet) {
-                e.setCancelled(true);
-                IEntityPet entityPet = (IEntityPet) handle;
-                if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
-                    PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
-                }
-            }
-        }
-    }
-
-    @EventHandler
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
         Object handle = ReflectionUtil.getEntityHandle(e.getRightClicked());
         if (handle instanceof IEntityPet) {
