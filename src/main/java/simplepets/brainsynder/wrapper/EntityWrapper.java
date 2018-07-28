@@ -54,7 +54,17 @@ public enum EntityWrapper {
     POLAR_BEAR("polar_bear", 102),
     LLAMA("llama", 103),
     PARROT("parrot", 105),
-    VILLAGER("villager", 120);
+    VILLAGER("villager", 120),
+
+    // 1.13 Mobs
+    COD("cod", -1),
+    SALMON("salmon", -1),
+    TURTLE("turtle", -1),
+    PHANTOM("phantom", -1),
+    DROWNED("drowned", -1),
+    DOLPHIN("dolphin", -1),
+    PUFFER_FISH("puffer_fish", -1),
+    TROPICAL_FISH("tropical_fish", -1);
 
     private int typeId;
     private String name;

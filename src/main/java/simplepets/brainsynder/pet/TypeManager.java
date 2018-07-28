@@ -63,6 +63,8 @@ public class TypeManager {
         register(new SpiderDefault(plugin));
         register(new SquidDefault(plugin));
         register(new StrayDefault(plugin));
+        register(new TropicalFishDefault (plugin));
+        register(new TurtleDefault (plugin));
         register(new VexDefault(plugin));
         register(new VillagerDefault(plugin));
         register(new VindicatorDefault(plugin));
