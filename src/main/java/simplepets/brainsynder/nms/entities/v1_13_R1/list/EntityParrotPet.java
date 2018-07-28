@@ -2,12 +2,14 @@ package simplepets.brainsynder.nms.entities.v1_13_R1.list;
 
 import net.minecraft.server.v1_13_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_13_R1.EntityTameablePet;
 import simplepets.brainsynder.nms.entities.v1_13_R1.movements.ParrotController;
 import simplepets.brainsynder.nms.registry.v1_13_R1.Types;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 @Size(width = 0.5F, length = 0.9F)
@@ -58,6 +60,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
         if (rainbow) {
             if (toggle == 4) {
                 setVariant(ParrotVariant.getNext(getVariant()));
+                PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
                 toggle = 0;
             }
             toggle++;

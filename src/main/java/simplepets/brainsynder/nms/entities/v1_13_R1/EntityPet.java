@@ -313,11 +313,12 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
      * Class: EntityInsentient
      */
     @Override
-    public void A() {
-        if (pet == null) return;
-        if (silent) return;
+    public SoundEffect D() {
+        if (pet == null) return null;
+        if (silent) return null;
         SoundMaker sound = pet.getPetType().getSound();
         if (sound != null) sound.playSound(getEntity());
+        return null;
     }
 
     private boolean isOwnerRiding() {

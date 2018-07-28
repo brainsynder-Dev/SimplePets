@@ -5,11 +5,13 @@ import net.minecraft.server.v1_13_R1.DataWatcherObject;
 import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_13_R1.AgeableEntityPet;
 import simplepets.brainsynder.nms.registry.v1_13_R1.Types;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 @Size(width = 0.9F, length = 1.3F)
@@ -88,6 +90,7 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         if (rainbow) {
             if (toggle == 4) {
                 setColor(DyeColorWrapper.getNext(getColor()));
+                PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
                 toggle = 0;
             }
             toggle++;

@@ -5,11 +5,13 @@ import net.minecraft.server.v1_13_R1.DataWatcherObject;
 import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_13_R1.EntityPet;
 import simplepets.brainsynder.nms.registry.v1_13_R1.Types;
+import simplepets.brainsynder.player.PetOwner;
 
 @Size(width = 0.9F, length = 4.0F)
 public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
@@ -65,6 +67,7 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     @Override
     public void setSmall(boolean var) {
         this.datawatcher.set(INVULNERABILITY_TIME, var ? 600 : 0);
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 
     @Override
@@ -76,5 +79,6 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     public void setShielded(boolean flag) {
         this.datawatcher.set(INVULNERABILITY_TIME, flag ? 1 : 0);
         this.setHealth((float) (flag ? 150 : 300));
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 }

@@ -11,6 +11,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
+import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -29,7 +30,7 @@ public class DataMenu extends CustomInventory {
         defaults.put("size", "54");
         defaults.put("title", "&a&lPet Data Changer");
 
-        Map<Integer, String> object = new HashMap<> ();
+        Map<Integer, String> object = new HashMap<>();
         Arrays.asList(21, 22, 23, 24, 25, 31, 33).forEach(slot -> object.put(slot, "air"));
         object.put(1, "storage");
         object.put(5, "name");
@@ -88,5 +89,41 @@ public class DataMenu extends CustomInventory {
             }
         }
         player.openInventory(inv);
+    }
+
+    public void update(PetOwner owner) {
+        if (!isEnabled()) return;
+        if (owner == null) return;
+        Player player = Bukkit.getPlayer(owner.getUuid());
+
+        if (player.getOpenInventory() == null) return;
+        Inventory inv = player.getOpenInventory().getTopInventory();
+        if (inv.getHolder() == null) return;
+        if (!(inv.getHolder() instanceof PetDataHolder)) return;
+
+        getSlots().forEach((slot, item) -> {
+            if (item instanceof Air)
+                if (item.isEnabled() && item.addItemToInv(owner, this))
+                    inv.setItem(slot, item.getItemBuilder().build());
+        });
+
+        if (owner.hasPet()) {
+            IPet pet = owner.getPet();
+            IStorage<MenuItem> items = pet.getItems().copy();
+            while (items.hasNext()) {
+                MenuItem item = items.next();
+                try {
+                    ItemStack stack = item.getItem().build();
+                    if (!inv.contains(stack)) {
+                        if (item.hasPermission(pet.getOwner())) {
+                            inv.addItem(stack);
+                        }
+                    }
+                } catch (Exception e) {
+                    PetCore.get().debug("An Internal Error occurred when loading the pet data for the " + item.getClass().getSimpleName() + ".class");
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

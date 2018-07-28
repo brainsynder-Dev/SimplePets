@@ -30,7 +30,7 @@ public class ItemBuilder {
     private ItemMeta im;
 
     public ItemBuilder(Material material) {
-        this (material, 1);
+        this(material, 1);
     }
 
     public ItemBuilder(Material material, int amount) {
@@ -41,17 +41,18 @@ public class ItemBuilder {
         this.im = is.getItemMeta();
     }
 
-    public static ItemBuilder fromJSON (JSONObject json) {
-        if (!json.containsKey("material")) throw new NullPointerException("JSONObject seems to be missing the material");
+    public static ItemBuilder fromJSON(JSONObject json) {
+        if (!json.containsKey("material"))
+            throw new NullPointerException("JSONObject seems to be missing the material");
 
         int amount = 1;
         if (json.containsKey("amount")) amount = Integer.parseInt(String.valueOf(json.get("amount")));
         Material material = Utilities.findMaterial(String.valueOf(json.get("material")));
         ItemBuilder builder = new ItemBuilder(material, amount);
         int data = 0;
-        if (json.containsKey("data")){
+        if (json.containsKey("data")) {
             data = Integer.parseInt(String.valueOf(json.get("data")));
-            if (json.containsKey("entity")) builder=Utilities.translate113(builder, json);
+            if (json.containsKey("entity")) builder = Utilities.translate113(builder, json);
         }
 
         if (material.name().contains("SKULL_ITEM") && (ServerVersion.getVersion() == ServerVersion.v1_13_R1)) {
@@ -61,7 +62,7 @@ public class ItemBuilder {
         if (json.containsKey("name")) builder.withName(String.valueOf(json.get("name")));
         if (json.containsKey("lore")) {
             List<String> lore = new ArrayList<>();
-            lore.addAll(((JSONArray)json.get("lore")));
+            lore.addAll(((JSONArray) json.get("lore")));
             builder.withLore(lore);
         }
 
@@ -73,7 +74,8 @@ public class ItemBuilder {
                     Enchantment enchant = Enchantment.getByName(args[0]);
                     int level = Integer.parseInt(args[1]);
                     builder.withEnchant(enchant, level);
-                }catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
         if (json.containsKey("flags")) {
@@ -98,7 +100,7 @@ public class ItemBuilder {
         return builder;
     }
 
-    public ItemBuilder clone () {
+    public ItemBuilder clone() {
         return fromJSON(toJSON());
     }
 
@@ -106,13 +108,15 @@ public class ItemBuilder {
         return is;
     }
 
-    public String getName () {
+    public String getName() {
         if (JSON.containsKey("name")) return String.valueOf(JSON.get("name"));
         return null;
     }
 
     public ItemBuilder withName(String name) {
+        if (name.equals(" ")) name = "&c" + name;
         JSON.put("name", name);
+        if (im == null) im = is.getItemMeta();
         im.setDisplayName(translate(name));
         return this;
     }
@@ -125,6 +129,7 @@ public class ItemBuilder {
         im.setLore(translate(lore));
         return this;
     }
+
     public ItemBuilder addLore(String... lore) {
         JSONArray LORE = new JSONArray();
         if (JSON.containsKey("lore")) LORE = (JSONArray) JSON.get("lore");
@@ -138,11 +143,13 @@ public class ItemBuilder {
         im.setLore(finalItemLore);
         return this;
     }
+
     public ItemBuilder clearLore() {
         if (JSON.containsKey("lore")) JSON.remove("lore");
         if (im.hasLore()) im.getLore().clear();
         return this;
     }
+
     public ItemBuilder removeLore(String lore) {
         List<String> itemLore = new ArrayList<>();
         if (im.hasLore()) itemLore = im.getLore();
@@ -151,7 +158,7 @@ public class ItemBuilder {
             LORE.stream().filter(o -> String.valueOf(o).startsWith(lore)).forEach(o -> LORE.remove(o));
             if (LORE.isEmpty()) {
                 JSON.remove("lore");
-            }else{
+            } else {
                 JSON.put("lore", LORE);
             }
         }
@@ -169,7 +176,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder withData (MaterialData data) {
+    public ItemBuilder withData(MaterialData data) {
         // Checks from the Bukkit API - Start
         Material mat = is.getType();
         if (data != null && mat != null && mat.getData() != null) {
@@ -192,7 +199,7 @@ public class ItemBuilder {
     public ItemBuilder withEnchant(Enchantment enchant, int level) {
         JSONArray ENCHANTS = new JSONArray();
         if (JSON.containsKey("enchants")) ENCHANTS = (JSONArray) JSON.get("enchants");
-        ENCHANTS.add(enchant.getName()+" ~~ "+level);
+        ENCHANTS.add(enchant.getName() + " ~~ " + level);
         JSON.put("enchants", ENCHANTS);
         im.addEnchant(enchant, level, true);
         return this;
@@ -216,7 +223,7 @@ public class ItemBuilder {
             ENCHANTS.stream().filter(o -> String.valueOf(o).startsWith(enchant.getName())).forEach(o -> ENCHANTS.remove(o));
             if (ENCHANTS.isEmpty()) {
                 JSON.remove("enchants");
-            }else{
+            } else {
                 JSON.put("enchants", ENCHANTS);
             }
         }
@@ -233,6 +240,7 @@ public class ItemBuilder {
         im.addItemFlags(flag);
         return this;
     }
+
     public ItemBuilder removeFlag(ItemFlag flag) {
         if (JSON.containsKey("flags")) {
             JSONArray FLAGS = (JSONArray) JSON.get("flags");
@@ -240,7 +248,7 @@ public class ItemBuilder {
 
             if (FLAGS.isEmpty()) {
                 JSON.remove("flags");
-            }else{
+            } else {
                 JSON.put("flags", FLAGS);
             }
         }
@@ -249,7 +257,7 @@ public class ItemBuilder {
         return this;
     }
 
-    public JSONObject toJSON () {
+    public JSONObject toJSON() {
         return JSON;
     }
 
@@ -258,7 +266,7 @@ public class ItemBuilder {
         return is;
     }
 
-    public ItemBuilder setOwner (String owner) {
+    public ItemBuilder setOwner(String owner) {
         JSONObject SKULL = (JSONObject) JSON.getOrDefault("skullData", new JSONObject());
         SKULL.put("owner", owner);
         JSON.put("skullData", SKULL);
@@ -276,8 +284,9 @@ public class ItemBuilder {
         return this;
     }
 
-    public ItemBuilder setTexture (String textureURL) {
-        if (textureURL.startsWith("http")) textureURL = Base64Wrapper.encodeString("{\"textures\":{\"SKIN\":{\"url\":\"" + textureURL + "\"}}}");
+    public ItemBuilder setTexture(String textureURL) {
+        if (textureURL.startsWith("http"))
+            textureURL = Base64Wrapper.encodeString("{\"textures\":{\"SKIN\":{\"url\":\"" + textureURL + "\"}}}");
 
         JSONObject SKULL = (JSONObject) JSON.getOrDefault("skullData", new JSONObject());
         SKULL.put("texture", textureURL);
@@ -293,7 +302,7 @@ public class ItemBuilder {
 
             if (textureURL.length() > 17) {
                 im = applyTextureToMeta(meta, createProfile(textureURL));
-            }else{
+            } else {
                 meta.setOwner(textureURL);
                 im = meta;
             }
@@ -330,7 +339,8 @@ public class ItemBuilder {
                             values.add(mainSkullMeta.getOwner().equals(checkSkullMeta.getOwner()));
                         }
                         values.add(getTexture(getGameProfile(mainSkullMeta)).equals(getTexture(getGameProfile(checkSkullMeta))));
-                    }catch (Exception ignored) {}
+                    } catch (Exception ignored) {
+                    }
                 }
                 if ((mainMeta instanceof SpawnEggMeta) && (checkMeta instanceof SpawnEggMeta)) {
                     SpawnEggMeta mainSkullMeta = (SpawnEggMeta) mainMeta;
@@ -349,6 +359,7 @@ public class ItemBuilder {
     private String translate(String message) {
         return ChatColor.translateAlternateColorCodes('&', message);
     }
+
     private List<String> translate(List<String> message) {
         ArrayList<String> newLore = new ArrayList<>();
         message.forEach(msg -> newLore.add(translate(msg)));
@@ -389,7 +400,7 @@ public class ItemBuilder {
         return field.get(meta);
     }
 
-    private String getTexture (GameProfile profile) {
+    private String getTexture(GameProfile profile) {
         PropertyMap propertyMap = profile.getProperties();
         Collection<Property> properties = propertyMap.get("textures");
         String text = "";

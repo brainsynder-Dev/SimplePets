@@ -12,7 +12,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class WitherSize extends MenuItemAbstract {
-    private ItemBuilder item = type.getDataItemByName("withersize", 0);
     public WitherSize(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -22,6 +21,7 @@ public class WitherSize extends MenuItemAbstract {
 
     @Override
     public ItemBuilder getItem() {
+        ItemBuilder item = type.getDataItemByName("withersize", 0);
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
             item.withName(item.getName().replace("%value%", String.valueOf(var.isSmall())));

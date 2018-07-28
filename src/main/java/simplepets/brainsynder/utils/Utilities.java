@@ -3,7 +3,6 @@ package simplepets.brainsynder.utils;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -18,6 +17,7 @@ import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -50,7 +50,7 @@ public class Utilities {
     }
 
     public static Data getSkullMaterial(SkullType type) {
-        Material material = null;
+        Material material = Material.AIR;
 
         int data = -1;
         if (ServerVersion.getVersion() == ServerVersion.v1_13_R1) {
@@ -69,43 +69,39 @@ public class Utilities {
     }
 
     public static Data getColoredMaterial(MatType type, int data) {
-        Material material = null;
+        Material material = Material.STONE;
+        DyeColorWrapper dye = DyeColorWrapper.getByWoolData((byte) data);
+        if (type == MatType.INK_SACK) dye = DyeColorWrapper.getByDyeData((byte) data);
+        String name = dye.name();
+        if (name.equalsIgnoreCase("SILVER")) {
+            name = "LIGHT_GRAY";
+        }
 
         if (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion()) {
-            DyeColor dye = DyeColor.values()[data];
-            String name = dye.name();
-            if (name.equalsIgnoreCase("SILVER")) {
-                name = "LIGHT_GRAY";
-            }
             if (type == MatType.INK_SACK) {
-                dye = DyeColor.getByDyeData((byte) data);
-                name = dye.name();
-                if (name.equalsIgnoreCase("SILVER")) {
-                    name = "LIGHT_GRAY";
-                }
-                if (dye == DyeColor.WHITE) {
+                if (dye == DyeColorWrapper.WHITE) {
                     material = findMaterial("BONE_MEAL");
-                } else if (dye == DyeColor.YELLOW) {
+                } else if (dye == DyeColorWrapper.YELLOW) {
                     material = findMaterial("DANDELION_YELLOW");
-                } else if (dye == DyeColor.BLUE) {
+                } else if (dye == DyeColorWrapper.BLUE) {
                     material = findMaterial("LAPIS_LAZULI");
-                } else if (dye == DyeColor.BROWN) {
+                } else if (dye == DyeColorWrapper.BROWN) {
                     material = findMaterial("COCOA_BEANS");
-                } else if (dye == DyeColor.GREEN) {
+                } else if (dye == DyeColorWrapper.GREEN) {
                     material = findMaterial("CACTUS_GREEN");
-                } else if (dye == DyeColor.RED) {
+                } else if (dye == DyeColorWrapper.RED) {
                     material = findMaterial("ROSE_RED");
-                } else if (dye == DyeColor.BLACK) {
+                } else if (dye == DyeColorWrapper.BLACK) {
                     material = findMaterial("INK_SAC");
                 } else {
-                    material = fetchMaterial(name + "_DYE");
+                    material = findMaterial(name + "_DYE");
                 }
             } else {
-                material = fetchMaterial(name + "_" + type.name());
+                material = findMaterial(name + "_" + type.getName());
             }
             data = -1;
         } else {
-            material = findMaterial(type.name());
+            material = findMaterial(type.getName());
         }
 
         return new Data(material, data);
@@ -398,7 +394,19 @@ public class Utilities {
     public enum MatType {
         STAINED_GLASS_PANE,
         WOOL,
-        STAINED_CLAY,
-        INK_SACK
+        STAINED_CLAY("TERRACOTTA"),
+        INK_SACK;
+        private String name;
+
+        MatType () {
+            this.name = name();
+        }
+        MatType (String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return name;
+        }
     }
 }
