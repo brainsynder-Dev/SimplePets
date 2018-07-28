@@ -3,7 +3,6 @@ package simplepets.brainsynder.menu.menuItems.sizes;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ISizable;
-import simplepets.brainsynder.api.entity.hostile.IEntityPhantomPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
@@ -33,10 +32,6 @@ public class Size3 extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
-        if (entityPet instanceof IEntityPhantomPet) {
-            IEntityPhantomPet slime = (IEntityPhantomPet) entityPet;
-            slime.setSize(1);
-        }
         if (entityPet instanceof ISizable) {
             ISizable slime = (ISizable) entityPet;
             slime.setSize(3);

@@ -53,6 +53,6 @@ public class EntityPhantomPet extends EntityPet implements IEntityPhantomPet {
     }
 
     static {
-        SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherRegistry.b);
+        SIZE = DataWatcher.a(EntityPhantomPet.class, DataWatcherRegistry.b);
     }
 }
