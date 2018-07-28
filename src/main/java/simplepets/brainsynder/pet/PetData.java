@@ -6,6 +6,9 @@ import simplepets.brainsynder.menu.menuItems.sizes.Size1;
 import simplepets.brainsynder.menu.menuItems.sizes.Size2;
 import simplepets.brainsynder.menu.menuItems.sizes.Size3;
 import simplepets.brainsynder.menu.menuItems.sizes.Size4;
+import simplepets.brainsynder.menu.menuItems.tropical.BodyColor;
+import simplepets.brainsynder.menu.menuItems.tropical.Pattern;
+import simplepets.brainsynder.menu.menuItems.tropical.PatternColor;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,7 +43,9 @@ public enum PetData {
     JOHNNY(Johnny.class),
     POTION(Potion.class),
     ZOMBIE(Age.class, Arms.class),
-    ZOMBIE_VILLAGER(Age.class);
+    ZOMBIE_VILLAGER(Age.class),
+    PUFFER_SIZE (PufferSize.class),
+    TROPICAL_FISH (BodyColor.class, Pattern.class, PatternColor.class);
 
     private List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();
 

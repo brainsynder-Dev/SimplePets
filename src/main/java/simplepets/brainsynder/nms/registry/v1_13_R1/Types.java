@@ -36,7 +36,6 @@ public class Types {
     public static EntityTypes<EntityOcelotPet> OCELOT = CustomTypes.a(48,"pet_ocelot", CustomTypes.a.a(EntityOcelotPet.class, EntityOcelotPet::new));
     public static EntityTypes<EntityParrotPet> PARROT = CustomTypes.a(50,"pet_parrot", CustomTypes.a.a(EntityParrotPet.class, EntityParrotPet::new));
     public static EntityTypes<EntityPigPet> PIG = CustomTypes.a(51,"pet_pig", CustomTypes.a.a(EntityPigPet.class, EntityPigPet::new));
-    // TODO: PUFFERFISH
     public static EntityTypes<EntityPufferFishPet> PUFFER_FISH = CustomTypes.a(52,"pet_puffer_fish", CustomTypes.a.a(EntityPufferFishPet.class, EntityPufferFishPet::new));
     public static EntityTypes<EntityPigmanPet> PIGMAN = CustomTypes.a(53,"pet_pigman", CustomTypes.a.a(EntityPigmanPet.class, EntityPigmanPet::new));
     public static EntityTypes<EntityPolarBearPet> POLAR_BEAR = CustomTypes.a(54,"pet_polar_bear", CustomTypes.a.a(EntityPolarBearPet.class, EntityPolarBearPet::new));
@@ -52,7 +51,7 @@ public class Types {
     public static EntityTypes<EntitySpiderPet> SPIDER = CustomTypes.a(69,"pet_spider", CustomTypes.a.a(EntitySpiderPet.class, EntitySpiderPet::new));
     public static EntityTypes<EntitySquidPet> SQUID = CustomTypes.a(70,"pet_squid", CustomTypes.a.a(EntitySquidPet.class, EntitySquidPet::new));
     public static EntityTypes<EntityStrayPet> STRAY = CustomTypes.a(71,"pet_stray", CustomTypes.a.a(EntityStrayPet.class, EntityStrayPet::new));
-    // TODO: TROPICAL_FISH
+    public static EntityTypes<EntityTropicalFishPet> TROPICAL_FISH = CustomTypes.a(72,"pet_tropical_fish", CustomTypes.a.a(EntityTropicalFishPet.class, EntityTropicalFishPet::new));
     public static EntityTypes<EntityTurtlePet> TURTLE = CustomTypes.a(73,"pet_turtle", CustomTypes.a.a(EntityTurtlePet.class, EntityTurtlePet::new));
     public static EntityTypes<EntityVexPet> VEX = CustomTypes.a(78,"pet_vex", CustomTypes.a.a(EntityVexPet.class, EntityVexPet::new));
     public static EntityTypes<EntityVillagerPet> VILLAGER = CustomTypes.a(79,"pet_villager", CustomTypes.a.a(EntityVillagerPet.class, EntityVillagerPet::new));
