@@ -14,10 +14,4 @@ public class EntityCodPet extends EntityFishPet implements IEntityCodPet {
     public EntityCodPet(World world) {
         super(Types.COD, world);
     }
-
-    @Override
-    public void repeatTask() {
-        super.repeatTask();
-        this.setAirTicks(300);
-    }
 }

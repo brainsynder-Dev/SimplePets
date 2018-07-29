@@ -14,9 +14,4 @@ public class EntitySalmonPet extends EntityFishPet implements IEntityCodPet {
     public EntitySalmonPet(World world) {
         super(Types.SALMON, world);
     }
-
-    @Override
-    public void repeatTask() {
-        super.repeatTask();
-    }
 }

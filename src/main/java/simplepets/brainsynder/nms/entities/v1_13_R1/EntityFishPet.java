@@ -18,7 +18,7 @@ public abstract class EntityFishPet extends EntityPet implements IEntityFishPet 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(FROM_BUCKET, true);
+        this.datawatcher.register(FROM_BUCKET, false);
     }
 
     static {
