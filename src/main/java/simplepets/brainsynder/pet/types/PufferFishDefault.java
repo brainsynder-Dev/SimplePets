@@ -13,7 +13,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class PufferFishDefault extends PetDefault {
     public PufferFishDefault(PetCore plugin) {
-        super(plugin, "puffer_fish", SoundMaker.ENTITY_BAT_LOOP, EntityWrapper.PUFFER_FISH);
+        super(plugin, "puffer_fish", SoundMaker.ENTITY_PUFFER_FISH_AMBIENT, EntityWrapper.PUFFER_FISH);
     }
 
     @Override

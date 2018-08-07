@@ -13,7 +13,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class TropicalFishDefault extends PetDefault {
     public TropicalFishDefault(PetCore plugin) {
-        super(plugin, "tropical_fish", SoundMaker.ENTITY_BAT_LOOP, EntityWrapper.TROPICAL_FISH);
+        super(plugin, "tropical_fish", SoundMaker.ENTITY_TROPICAL_FISH_AMBIENT, EntityWrapper.TROPICAL_FISH);
     }
 
     @Override

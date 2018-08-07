@@ -127,7 +127,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>3.8</version>
+            <version>3.8-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

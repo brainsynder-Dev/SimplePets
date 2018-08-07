@@ -13,7 +13,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class PhantomDefault extends PetDefault {
     public PhantomDefault(PetCore plugin) {
-        super(plugin, "phantom", SoundMaker.ENTITY_BAT_LOOP, EntityWrapper.PHANTOM);
+        super(plugin, "phantom", SoundMaker.ENTITY_PHANTOM_AMBIENT, EntityWrapper.PHANTOM);
     }
 
     @Override

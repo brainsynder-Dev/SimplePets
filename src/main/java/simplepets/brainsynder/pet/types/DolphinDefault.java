@@ -12,7 +12,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class DolphinDefault extends PetDefault {
     public DolphinDefault(PetCore plugin) {
-        super(plugin, "dolphin", SoundMaker.ENTITY_GENERIC_SPLASH, EntityWrapper.DOLPHIN);
+        super(plugin, "dolphin", SoundMaker.ENTITY_DOLPHIN_AMBIENT, EntityWrapper.DOLPHIN);
     }
 
     @Override

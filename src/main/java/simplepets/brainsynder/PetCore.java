@@ -142,7 +142,7 @@ public class PetCore extends JavaPlugin {
     private boolean errorCheck() {
         try {
             double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion().replace("-SNAPSHOT",""));
-            if (ver < 3.7) {
+            if (ver < 3.8) {
                 Errors.API_OUT_OF_DATE.print();
                 return false;
             }

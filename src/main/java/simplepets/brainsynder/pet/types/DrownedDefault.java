@@ -13,7 +13,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class DrownedDefault extends PetDefault {
     public DrownedDefault(PetCore plugin) {
-        super(plugin, "drowned", SoundMaker.ENTITY_ZOMBIE_AMBIENT, EntityWrapper.DROWNED);
+        super(plugin, "drowned", SoundMaker.ENTITY_DROWNED_AMBIENT_WATER, EntityWrapper.DROWNED);
     }
 
     @Override

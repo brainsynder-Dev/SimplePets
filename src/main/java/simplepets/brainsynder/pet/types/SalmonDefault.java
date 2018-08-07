@@ -12,7 +12,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class SalmonDefault extends PetDefault {
     public SalmonDefault(PetCore plugin) {
-        super(plugin, "salmon", SoundMaker.ENTITY_GENERIC_SPLASH, EntityWrapper.SALMON);
+        super(plugin, "salmon", SoundMaker.ENTITY_SALMON_AMBIENT, EntityWrapper.SALMON);
     }
 
     @Override

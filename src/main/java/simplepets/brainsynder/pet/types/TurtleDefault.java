@@ -13,7 +13,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class TurtleDefault extends PetDefault {
     public TurtleDefault(PetCore plugin) {
-        super(plugin, "turtle", SoundMaker.ENTITY_GENERIC_EAT, EntityWrapper.TURTLE);
+        super(plugin, "turtle", SoundMaker.ENTITY_TURTLE_AMBIENT_LAND, EntityWrapper.TURTLE);
     }
 
     @Override

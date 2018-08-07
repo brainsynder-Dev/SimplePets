@@ -12,7 +12,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class CodDefault extends PetDefault {
     public CodDefault(PetCore plugin) {
-        super(plugin, "cod", SoundMaker.ENTITY_GENERIC_SPLASH, EntityWrapper.COD);
+        super(plugin, "cod", SoundMaker.ENTITY_COD_AMBIENT, EntityWrapper.COD);
     }
 
     @Override
