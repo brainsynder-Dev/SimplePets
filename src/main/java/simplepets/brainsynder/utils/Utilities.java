@@ -274,7 +274,12 @@ public class Utilities {
     }
 
     public void resetRideCooldown(Entity entity) {
-        FieldAccessor<Integer> field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
+        FieldAccessor<Integer> field;
+        if (ReflectionUtil.getVersion().equalsIgnoreCase("v1_13_R1")) {
+            field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "k", Integer.TYPE);
+        } else {
+            field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
+        }
         field.set(Reflection.getHandle(entity), 0);
     }
 
