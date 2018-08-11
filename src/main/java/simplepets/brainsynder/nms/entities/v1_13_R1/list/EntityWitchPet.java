@@ -1,11 +1,9 @@
 package simplepets.brainsynder.nms.entities.v1_13_R1.list;
 
-import net.minecraft.server.v1_13_R1.DataWatcher;
-import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
-import net.minecraft.server.v1_13_R1.World;
+import net.minecraft.server.v1_13_R1.*;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftCreature;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import simple.brainsynder.math.MathUtils;
@@ -58,9 +56,9 @@ public class EntityWitchPet extends EntityPet implements IEntityWitchPet {
             PotionMeta meta = (PotionMeta) item.getItemMeta();
             meta.setColor(Color.fromRGB(MathUtils.random(0,255), MathUtils.random(0,255), MathUtils.random(0,255)));
             item.setItemMeta(meta);
-            getBukkitEntity().getEquipment().setItemInMainHand(item);
+            ((CraftCreature) getBukkitEntity()).getEquipment().setItemInMainHand(item);
         } else {
-            getBukkitEntity().getEquipment().setItemInMainHand(new ItemStack(Material.AIR));
+            ((CraftCreature) getBukkitEntity()).getEquipment().setItemInMainHand(new ItemStack(Material.AIR));
         }
         datawatcher.set(IS_DRINKING, drinkingPotion);
     }

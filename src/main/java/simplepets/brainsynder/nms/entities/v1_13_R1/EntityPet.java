@@ -115,9 +115,9 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         registerDatawatchers();
     }
 
-    public CraftCreature getBukkitEntity() {
+/*    public CraftCreature getBukkitEntity() {
         return (CraftCreature) super.getBukkitEntity();
-    }
+    } */
 
     @Override
     public Player getOwner() {
