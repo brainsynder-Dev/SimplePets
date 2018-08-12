@@ -32,7 +32,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public EntityControllerPet(World world, IPet pet) {
         super(world, pet);
         this.pet = pet;
-        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
     }
     public EntityControllerPet(World world) {
         super(world);

@@ -1,9 +1,9 @@
 package simplepets.brainsynder.utils;
 
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ public class AnimationCycle {
         return this.frames;
     }
 
-    public void register(final ArmorStand armor, final long delay) {
+    public void register(final IEntityArmorStandPet armor, final long delay) {
         framesMap.putIfAbsent(armor.getUniqueId(), frames);
         toggle.putIfAbsent(armor.getUniqueId(), true);
         if (!endless.contains(armor.getUniqueId())) {
@@ -64,7 +64,7 @@ public class AnimationCycle {
         }
     }
 
-    public boolean isRunning(ArmorStand stand) {
+    public boolean isRunning(IEntityArmorStandPet stand) {
         if (endless.contains(stand.getUniqueId())) {
             if (toggle.containsKey(stand.getUniqueId())) {
                 return toggle.get(stand.getUniqueId());
@@ -73,15 +73,15 @@ public class AnimationCycle {
         return false;
     }
 
-    public boolean isRegistered(ArmorStand stand) {
+    public boolean isRegistered(IEntityArmorStandPet stand) {
         return endless.contains(stand.getUniqueId());
     }
 
-    public void toggle(ArmorStand armor, boolean var) {
+    public void toggle(IEntityArmorStandPet armor, boolean var) {
         toggle.put(armor.getUniqueId(), var);
     }
 
-    public void cancelTask(ArmorStand armor) {
+    public void cancelTask(IEntityArmorStandPet armor) {
         runnable.cancel();
         List<UUID> remove = new ArrayList<>();
         for (UUID uuid : endless) {

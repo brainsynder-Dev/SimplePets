@@ -141,10 +141,10 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                 }
             }
             if (getEntity().isInsideVehicle()) {
-                if (arm_swing.isRunning(getEntity()))
-                    arm_swing.toggle(getEntity(), false);
-                if (walking.isRunning(getEntity()))
-                    walking.toggle(getEntity(), false);
+                if (arm_swing.isRunning(this))
+                    arm_swing.toggle(this, false);
+                if (walking.isRunning(this))
+                    walking.toggle(this, false);
                 this.lastYaw = this.yaw = getOwner().getLocation().getYaw();
                 getEntity().setRightLegPose(new EulerAngle(-1.553343034274955D, 0.13962634015954636D, 0.0D));
                 getEntity().setLeftLegPose(new EulerAngle(-1.5009831567151235D, -0.12217304763960307D, 0.0D));
@@ -159,14 +159,14 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             }
             store = !store;
             if (moving) {
-                if (!walking.isRegistered(getEntity())) walking.register(getEntity(), 1);
-                if (!arm_swing.isRegistered(getEntity())) arm_swing.register(getEntity(), 1);
+                if (!walking.isRegistered(this)) walking.register(this, 1);
+                if (!arm_swing.isRegistered(this)) arm_swing.register(this, 1);
 
-                walking.toggle(getEntity(), true);
-                arm_swing.toggle(getEntity(), true);
+                walking.toggle(this, true);
+                arm_swing.toggle(this, true);
             } else {
-                if (arm_swing.isRunning(getEntity())) arm_swing.toggle(getEntity(), false);
-                if (walking.isRunning(getEntity())) walking.toggle(getEntity(), false);
+                if (arm_swing.isRunning(this)) arm_swing.toggle(this, false);
+                if (walking.isRunning(this)) walking.toggle(this, false);
                 getEntity().setLeftLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                 getEntity().setRightLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                 getEntity().setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));

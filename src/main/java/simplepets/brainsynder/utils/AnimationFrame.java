@@ -1,7 +1,7 @@
 package simplepets.brainsynder.utils;
 
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.util.EulerAngle;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 
 public class AnimationFrame {
     private EulerAngle head;
@@ -41,7 +41,7 @@ public class AnimationFrame {
         return this;
     }
 
-    void setLocations(ArmorStand armor) {
+    void setLocations(IEntityArmorStandPet armor) {
         armor.setHeadPose(this.head == null ? armor.getHeadPose() : this.head);
         armor.setBodyPose(this.body == null ? armor.getBodyPose() : this.body);
         armor.setLeftArmPose(this.leftHand == null ? armor.getLeftArmPose() : this.leftHand);
