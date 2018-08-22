@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE})
-public @interface CommandUsage {
-    String usage() default "";
+public @interface Permission {
+    String permission() default "";
 }

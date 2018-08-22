@@ -18,8 +18,7 @@ public class Commands extends FileMaker {
         setDefault("Info.Pet-Data-Values", "&7- &e%key%&6: &r%value%");
         setDefault("Info.Excluded-Data-Values", new ArrayList<>());
         // Help command
-        setDefault("Help.Command-Display-Player", "{prefix} &7/pet %name% %usage% - %description%");
-        setDefault("Help.Command-Display-Console", "- pet %name% %usage% - %description%");
+        setDefault("Help.Header", "&6&m-------&e SimplePets Commands &6&m-------");
         // List command
         setDefault("List.List-Display", "&ePet list &6(&7%size%&6)&e: %list%");
         setDefault("List.List-Pet-Not-Supported", Arrays.asList("&cPet is not supported", "&cin your current version."));

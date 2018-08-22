@@ -1,20 +1,27 @@
-package simplepets.brainsynder.commands.list.Player;
+package simplepets.brainsynder.commands.sub;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
+import simple.brainsynder.commands.annotations.ICommand;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.commands.PetCommand;
-import simplepets.brainsynder.commands.annotations.CommandDescription;
-import simplepets.brainsynder.commands.annotations.CommandName;
-import simplepets.brainsynder.commands.annotations.CommandPermission;
-import simplepets.brainsynder.commands.annotations.CommandUsage;
+import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.commands.annotations.Permission;
 
-@CommandName(name = "reload")
-@CommandUsage(usage = "[pets|sql|inv|items]")
-@CommandPermission(permission = "reload")
-@CommandDescription(description = "Reloads the Settings that cant AutoReload.")
-public class CMD_Reload extends PetCommand<Player> {
+import java.util.Arrays;
+
+@ICommand(
+        name = "reload",
+        usage = "&r &r &6[] &7/pet reload [pets|sql|inv|items]",
+        description = "Reloads the Settings that cant AutoReload"
+)
+@Permission(permission = "reload")
+public class Reload_SubCommand extends PetSubCommand {
+
+    public Reload_SubCommand() {
+        registerCompletion(1, Arrays.asList("pets","sql","inv","items"));
+    }
+
     @Override
-    public void onCommand(Player p, String[] args) {
+    public void run(CommandSender sender, String[] args) {
         PetCore pc = PetCore.get();
         if (args.length == 0) {
             pc.reload(2);
@@ -41,6 +48,6 @@ public class CMD_Reload extends PetCommand<Player> {
                     pc.getInvLoaders().reloadLoaders();
             }
         }
-        p.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));
+        sender.sendMessage(PetCore.get().getMessages().getString("Reload-Complete", true));
     }
 }

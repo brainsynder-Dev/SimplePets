@@ -6,10 +6,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import simple.brainsynder.commands.CommandRegistry;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simple.brainsynder.utils.SpigotPluginHandler;
-import simplepets.brainsynder.commands.SPCommand;
+import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.links.LinkRetriever;
 import simplepets.brainsynder.links.worldedit.WorldEditLink;
@@ -54,7 +55,6 @@ public class PetCore extends JavaPlugin {
     private Messages messages;
     private Utilities utilities = null;
     private MySQL mySQL = null;
-    private SPCommand SPCommand;
     private LinkRetriever linkRetriever;
     private TypeManager typeManager;
     private Commands commands;
@@ -119,7 +119,11 @@ public class PetCore extends JavaPlugin {
 
     private void registerEvents() {
         debug("Registering Listeners...");
-        getCommand("pet").setExecutor(SPCommand);
+        try {
+            new CommandRegistry (this).register(new PetCommand());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         getServer().getPluginManager().registerEvents(new MainListeners(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
@@ -135,7 +139,6 @@ public class PetCore extends JavaPlugin {
         utilities = new Utilities();
         itemLoaders = new ItemLoaders();
         invLoaders = new InvLoaders();
-        SPCommand = new SPCommand(this);
         linkRetriever = new LinkRetriever();
     }
 
@@ -426,10 +429,6 @@ public class PetCore extends JavaPlugin {
 
     public InvLoaders getInvLoaders() {
         return invLoaders;
-    }
-
-    public SPCommand getSPCommand() {
-        return SPCommand;
     }
 
     public LinkRetriever getLinkRetriever() {

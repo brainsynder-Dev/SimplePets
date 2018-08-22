@@ -1,20 +1,19 @@
-package simplepets.brainsynder.commands.list.Player;
+package simplepets.brainsynder.commands.sub;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simple.brainsynder.commands.annotations.ICommand;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.commands.PetCommand;
-import simplepets.brainsynder.commands.annotations.CommandDescription;
-import simplepets.brainsynder.commands.annotations.CommandName;
-import simplepets.brainsynder.commands.annotations.CommandPermission;
+import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
@@ -23,14 +22,17 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
-@CommandName(name = "debug")
-@CommandPermission(permission = "debug")
-@CommandDescription(description = "Information about your server that we use for finding bugs")
-public class CMD_Debug extends PetCommand<Player> {
+@ICommand(
+        name = "debug",
+        usage = "&r &r &6[] &7/pet debug",
+        description = "Collects Information about your server that we use for finding bugs"
+)
+@Permission(permission = "debug")
+public class Debug_SubCommand extends PetSubCommand {
     @Override
-    public void onCommand(Player p, String[] args) {
+    public void run(CommandSender sender) {
         // Collects & formats the servers Java version
-        p.sendMessage("§eFetching Debug Information...");
+        sender.sendMessage("§eFetching Debug Information...");
         JSONObject json = new JSONObject();
         JSONObject info = new JSONObject();
 
@@ -72,16 +74,16 @@ public class CMD_Debug extends PetCommand<Player> {
 
         String JSON = json.toJSONString();
         Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        String jsonString = gson.toJson(new JsonParser ().parse(JSON));
+        String jsonString = gson.toJson(new JsonParser().parse(JSON));
         CompletableFuture.runAsync(() -> {
             String url = Utilities.saveTextToHastebin(jsonString);
             new BukkitRunnable() {
                 @Override
                 public void run() {
                     if (url != null) {
-                        p.sendMessage(ChatColor.GOLD + url);
+                        sender.sendMessage(ChatColor.GOLD + url);
                     }else{
-                        p.sendMessage("§cFailed to upload data to Hastebin... Outputting data to Console/Logs...");
+                        sender.sendMessage("§cFailed to upload data to Hastebin... Outputting data to Console/Logs...");
                         System.out.println(jsonString);
                     }
                 }

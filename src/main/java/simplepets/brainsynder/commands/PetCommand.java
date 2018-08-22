@@ -1,61 +1,102 @@
 package simplepets.brainsynder.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import simplepets.brainsynder.commands.annotations.CommandName;
-import simplepets.brainsynder.commands.annotations.CommandPermission;
-import simplepets.brainsynder.commands.annotations.CommandUsage;
-import simplepets.brainsynder.commands.annotations.Console;
+import simple.brainsynder.commands.ParentCommand;
+import simple.brainsynder.commands.annotations.ICommand;
+import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
+import simplepets.brainsynder.commands.annotations.Permission;
+import simplepets.brainsynder.commands.sub.*;
+import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.player.PetOwner;
 
-public abstract class PetCommand<T extends CommandSender> {
-    public void onCommand(T sender, String[] args) {}
+@ICommand(
+        name = "pet",
+        alias = {"pets", "simplepets", "simplepet"},
+        description = "Main SimplePets Command/Opens The Pet Selection GUI"
+)
+public class PetCommand extends ParentCommand<PetSubCommand> {
+    public PetCommand() {
+        registerSub(new Debug_SubCommand());
+        registerSub(new Generator_SubCommand(this));
+        registerSub(new Hat_SubCommand());
+        registerSub(new Help_SubCommand(this));
+        registerSub(new Info_SubCommand());
+        if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable"))
+            registerSub(new Inventory_SubCommand());
+        registerSub(new List_SubCommand());
+        registerSub(new Menu_SubCommand());
+        registerSub(new Modify_SubCommand());
+        registerSub(new Name_SubCommand());
+        registerSub(new Reload_SubCommand());
+        registerSub(new Remove_SubCommand());
+        registerSub(new Ride_SubCommand());
+        registerSub(new Saves_SubCommand());
+        registerSub(new Summon_SubCommand());
 
-    protected void sendUsage(T sender) {
-        String name = "", usage = "";
-        if (getClass().isAnnotationPresent(CommandName.class)) {
-            name = getClass().getAnnotation(CommandName.class).name();
-        }
-        if (getClass().isAnnotationPresent(CommandUsage.class)) {
-            usage = getClass().getAnnotation(CommandUsage.class).usage();
-        }
-        if (getClass().isAnnotationPresent(Console.class)) {
-            sender.sendMessage("- pet " + name + ' ' + usage);
-        } else {
-            sender.sendMessage("§eSimplePets §6>> §7/pet " + name + ' ' + usage);
+    }
+
+    @Override
+    public void run(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            if (sender instanceof Player) {
+                Player p = (Player) sender;
+                if (args.length == 0) {
+                    PetCore.get().getInvLoaders().SELECTION.open(PetOwner.getPetOwner(p));
+                } else {
+                    TypeManager manager = PetCore.get().getTypeManager();
+                    PetDefault type = manager.getType(args[0]);
+
+                    if (type == null) {
+                        sender.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));
+                        return;
+                    }
+
+                    if (!type.isSupported()) {
+                        sender.sendMessage(PetCore.get().getMessages().getString("Type-Not-Supported", true));
+                        return;
+                    }
+
+                    if (!type.isEnabled()) {
+                        sender.sendMessage(PetCore.get().getMessages().getString("Type-Not-Enabled", true));
+                        return;
+                    }
+
+                    if (!type.hasPermission(p)) {
+                        p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
+                        return;
+                    }
+
+                    PetCommandSummonEvent event = new PetCommandSummonEvent(type, p);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) return;
+                    p.sendMessage(PetCore.get().getMessages().getString("Select-Pet", true).replace("%pet%", type.getDisplayName()));
+                    type.setPet(p);
+                }
+            } else {
+                sendHelp(sender, false);
+            }
         }
     }
 
-    protected String buildMultiArg(String[] args, int start) {
-        StringBuilder msgBuilder = new StringBuilder();
-        for (int i = start; i < args.length; i++) {
-            msgBuilder.append(args[i]).append(' ');
-        }
-        return msgBuilder.toString().trim();
+    public boolean needsPermission() {
+        return getClass().isAnnotationPresent(Permission.class);
     }
 
-    public String getName () {
-        String name = "";
-        if (getClass().isAnnotationPresent(CommandName.class)) {
-            name = getClass().getAnnotation(CommandName.class).name();
-        }
-        return name;
-    }
-
-    public boolean hasPermission (Player player) {
-        if (getClass().isAnnotationPresent(CommandPermission.class)){
-            return player.hasPermission("Pet.commands." + getClass().getAnnotation(CommandPermission.class).permission());
+    public boolean hasPermission(CommandSender sender) {
+        if (getClass().isAnnotationPresent(Permission.class)) {
+            return sender.hasPermission(getPermission());
         }
         return true;
     }
 
-    public String getPermission () {
-        if (getClass().isAnnotationPresent(CommandPermission.class)){
-            return "Pet.commands." + getClass().getAnnotation(CommandPermission.class).permission();
+    public String getPermission() {
+        if (getClass().isAnnotationPresent(Permission.class)) {
+            return "Pet.commands." + getClass().getAnnotation(Permission.class).permission();
         }
         return null;
-    }
-
-    public boolean needsPermission () {
-        return getClass().isAnnotationPresent(CommandPermission.class);
     }
 }

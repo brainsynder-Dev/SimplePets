@@ -1,9 +1,11 @@
-package simplepets.brainsynder.commands.list.Player;
+package simplepets.brainsynder.commands.sub;
 
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
+import simple.brainsynder.commands.annotations.ICommand;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetCommand;
-import simplepets.brainsynder.commands.annotations.*;
+import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -13,15 +15,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Arrays;
-import java.util.Calendar;
 
-@CommandName(name = "generator")
-@CommandPermission(permission = "generate")
-@CommandUsage(usage = "<permissions|types>")
-@CommandDescription(description = "Generates a file that can contain Permissions, Pet Types, Commands, ETC...")
-public class CMD_AdminHelp extends PetCommand<Player> {
+@ICommand(
+        name = "generator",
+        usage = "&r &r &6[] &7/pet generator <permissions|types>",
+        description = "Generates a file that can contain Permissions, Pet Types, ETC..."
+)
+@Permission(permission = "generator")
+public class Generator_SubCommand extends PetSubCommand {
+    private PetCommand parent;
+    public Generator_SubCommand(PetCommand parent) {
+        this.parent = parent;
+        registerCompletion(1, Arrays.asList("permissions","types"));
+    }
+
     @Override
-    public void onCommand(Player sender, String[] args) {
+    public void run(CommandSender sender, String[] args) {
         if (args.length == 0) {
             sendUsage(sender);
             return;
@@ -38,22 +47,23 @@ public class CMD_AdminHelp extends PetCommand<Player> {
             StringBuilder builder = new StringBuilder();
             plugin.getTypeManager().getTypes().forEach(type -> {
                 builder.append(type.getConfigName()).append("\n");
-                builder.append("   Enabled:").append(type.isEnabled()).append("\n");
-                builder.append("   Supported:").append(type.isSupported()).append("\n");
-                builder.append("   Supported Version:").append(type.getAllowedVersion()).append("\n");
-                builder.append("   Ride Speed:").append(type.getRideSpeed()).append("\n");
-                builder.append("   Walk Speed:").append(type.getSpeed()).append("\n");
-                builder.append("   Default Sound:").append(type.getDefaultSound().name()).append("\n");
-                builder.append("   Sound:").append(type.getSound().name()).append("\n");
+                builder.append("   Enabled: ").append(type.isEnabled()).append("\n");
+                builder.append("   Supported: ").append(type.isSupported()).append("\n");
+                builder.append("   Supported Version: ").append(type.getAllowedVersion()).append("\n");
+                builder.append("   Ride Speed: ").append(type.getRideSpeed()).append("\n");
+                builder.append("   Walk Speed: ").append(type.getSpeed()).append("\n");
+                builder.append("   Default Sound: ").append(type.getDefaultSound().name()).append("\n");
+                builder.append("   Sound: ").append(type.getSound().name()).append("\n");
                 builder.append("   Display Name:").append(type.getDisplayName()).append("\n");
             });
             new Logger("Pet Types").log(new File(plugin.getDataFolder().toString() + File.separator + "Generated Files" + File.separator), builder.toString());
             sender.sendMessage("Pet Types have been generated into a file");
+            return;
         }
+        sendUsage(sender);
     }
 
     private class Logger {
-        private Calendar calendar = Calendar.getInstance();
         private String fileName;
 
         public Logger(String fileName) {
@@ -116,9 +126,8 @@ public class CMD_AdminHelp extends PetCommand<Player> {
         builder.append("  - Pet.commands.summon.other \n");
         builder.append("  - Pet.commands.remove.other \n");
         builder.append("  - Pet.commands.inv.other \n");
-        builder.append("  - Pet.commands.remove.other \n");
-        plugin.getSPCommand().commands.forEach(command -> {
-            if (!command.getClass().isAnnotationPresent(Console.class))
+        builder.append("  - Pet.commands.info.debug \n");
+        parent.getSubCommands().forEach(command -> {
                 if (command.needsPermission())
                     builder.append("  - ").append(command.getPermission()).append("\n");
         });
