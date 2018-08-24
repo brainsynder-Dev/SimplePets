@@ -42,7 +42,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private EntityArmorStandPet(World world, EntityControllerPet pet) {
         super(world);
         this.pet = pet;
-        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
     }
 
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
