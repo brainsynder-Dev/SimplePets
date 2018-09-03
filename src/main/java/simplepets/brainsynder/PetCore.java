@@ -24,6 +24,7 @@ import simplepets.brainsynder.menu.inventory.listeners.SavesListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
+import simplepets.brainsynder.nms.entities.v1_13_R2.SpawnUtil;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
@@ -43,7 +44,8 @@ public class PetCore extends JavaPlugin {
     private final List<String> supportedVersions = Arrays.asList(
             "v1_11_R1",
             "v1_12_R1",
-            "v1_13_R1"
+            "v1_13_R1",
+            "v1_13_R2"
     );
     public boolean forceSpawn;
     private boolean disabling = false, reloaded = false, needsPermissions = true, needsDataPermissions = true;
@@ -97,7 +99,7 @@ public class PetCore extends JavaPlugin {
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            debug("This version is not supported, be sure you are between 1.8.8 and 1.12");
+            debug("This version is not supported, be sure you are between 1.10.2 and 1.13.1");
             setEnabled(false);
             return;
         }
@@ -213,6 +215,9 @@ public class PetCore extends JavaPlugin {
         } else if (version == ServerVersion.v1_13_R1) {
             spawner = new simplepets.brainsynder.nms.entities.v1_13_R1.SpawnUtil();
             debug("Successfully Linked to v1_13_R1 SpawnUtil Class");
+        } else if (version == ServerVersion.v1_13_R2) {
+            spawner = new SpawnUtil();
+            debug("Successfully Linked to v1_13_R2 SpawnUtil Class");
         } else {
             spawner = null;
             debug("Could not link to a SpawnUtil Class... Possible Wrong version?");
@@ -225,7 +230,6 @@ public class PetCore extends JavaPlugin {
         configuration.loadDefaults();
         needsPermissions = configuration.getBoolean("Needs-Permission");
         needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
-
         debug("Loading Messages.yml...");
         messages = new Messages(this, "Messages.yml");
         messages.loadDefaults();
