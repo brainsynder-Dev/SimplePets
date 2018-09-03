@@ -53,7 +53,7 @@ public class Utilities {
         Material material = Material.AIR;
 
         int data = -1;
-        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1) {
+        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1 || ServerVersion.getVersion() == ServerVersion.v1_13_R2) {
             if (type == SkullType.SKELETON) material = Material.SKELETON_SKULL;
             if (type == SkullType.WITHER) material = Material.WITHER_SKELETON_SKULL;
             if (type == SkullType.ZOMBIE) material = Material.ZOMBIE_HEAD;
@@ -275,7 +275,7 @@ public class Utilities {
 
     public void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
-        if (ReflectionUtil.getVersion().equalsIgnoreCase("v1_13_R1")) {
+        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1 || ServerVersion.getVersion() == ServerVersion.v1_13_R2) {
             field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "k", Integer.TYPE);
         } else {
             field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
