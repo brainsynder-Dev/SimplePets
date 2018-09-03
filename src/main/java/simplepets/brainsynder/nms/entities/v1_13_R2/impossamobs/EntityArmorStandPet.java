@@ -1,10 +1,10 @@
-package simplepets.brainsynder.nms.entities.v1_13_R1.impossamobs;
+package simplepets.brainsynder.nms.entities.v1_13_R2.impossamobs;
 
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -17,7 +17,7 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.nms.entities.v1_13_R1.list.EntityControllerPet;
+import simplepets.brainsynder.nms.entities.v1_13_R2.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;

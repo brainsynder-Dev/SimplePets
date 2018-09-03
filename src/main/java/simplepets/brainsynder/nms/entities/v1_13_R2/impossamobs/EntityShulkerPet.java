@@ -1,12 +1,11 @@
-package simplepets.brainsynder.nms.entities.v1_13_R1.impossamobs;
+package simplepets.brainsynder.nms.entities.v1_13_R2.impossamobs;
 
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
+import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -14,14 +13,11 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.nms.entities.v1_13_R1.list.EntityControllerPet;
+import simplepets.brainsynder.nms.entities.v1_13_R2.list.EntityControllerPet;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
-/**
- * This is a beta mob, Simply because this does not work like the other mobs.
- */
 public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet {
     private boolean isCustom = false;
     private boolean rainbow = false;
@@ -90,12 +86,12 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
 
     @Override
     public void stopRiding() {
-        if (!this.a(TagsFluid.a)) super.stopRiding();
+        if (!this.a(TagsFluid.WATER)) super.stopRiding();
     }
 
     @Override
     public boolean isClosed() {
-        return (dB() == 0);
+        return (dA() == 0);
     }
 
     @Override
@@ -139,7 +135,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     }
 
     @Override
-    public Entity getEntity() {
+    public org.bukkit.entity.Entity getEntity() {
         return getBukkitEntity();
     }
 
@@ -148,7 +144,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         StorageTagCompound object = pet.asCompound();
         object.setBoolean("rainbow", rainbow);
         if (!rainbow)
-        object.setString("color", color.name());
+            object.setString("color", color.name());
         object.setBoolean("closed", isClosed());
         return object;
     }
@@ -187,7 +183,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         if (passengers.size() == 0)
             return false;
         EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
-        for (net.minecraft.server.v1_13_R1.Entity passenger : this.passengers) {
+        for (net.minecraft.server.v1_13_R2.Entity passenger : this.passengers) {
             if (passenger.getUniqueID().equals(owner.getUniqueID())) {
                 return true;
             }
@@ -264,7 +260,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         }
     }
 
-    private boolean isOnGround(net.minecraft.server.v1_13_R1.Entity entity) {
+    private boolean isOnGround(net.minecraft.server.v1_13_R2.Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
     }
@@ -279,3 +275,4 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         this.rainbow=rainbow;
     }
 }
+

@@ -22,7 +22,7 @@ public enum Errors {
             "-------------------------------------------"),
     UNSUPPORTED_VERSION_WEAK("-------------------------------------------",
             "          Error Type: WARNING",
-            "You seem to be on a version below 1.12.1",
+            "You seem to be on a version other than 1.12.1",
             "SimplePets works best on 1.12.1, Just saying :P",
             "-------------------------------------------"),
     RELOAD_DETECTED("-------------------------------------------",
