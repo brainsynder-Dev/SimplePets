@@ -11,10 +11,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.entities.v1_13_R1.list.EntityControllerPet;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -81,6 +83,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
             if (rainbow) {
                 if (toggle == 4) {
                     setColor(DyeColorWrapper.getNext(color));
+                    PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
                     toggle = 0;
                 }
                 toggle++;

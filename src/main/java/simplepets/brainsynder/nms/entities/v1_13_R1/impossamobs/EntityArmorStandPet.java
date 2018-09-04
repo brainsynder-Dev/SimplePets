@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -23,6 +24,8 @@ import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.wrapper.EntityWrapper;
+
+import java.util.UUID;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
     private boolean isSpecial = false;
@@ -72,12 +75,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return super.damageEntity(damagesource, f);
     }
 
-    private ItemStack checkItem(ItemStack item) {
-        if (item == null) return new ItemStack(Material.AIR);
-        if (item.getType() == Material.AIR) return new ItemStack(Material.AIR);
-        return item;
-    }
-
     public EnumInteractionResult a(EntityHuman human, Vec3D vec3d, EnumHand enumhand) {
         if (isSpecial)
             return this.onInteract((Player) human.getBukkitEntity()) ? EnumInteractionResult.SUCCESS : EnumInteractionResult.FAIL;
@@ -104,57 +101,52 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     @Override
     public void W() {
         super.W();
-        if (isSpecial) {
-            if (walking == null)
-                walking = new AnimationCycle(AnimationManager.walk);
-            if (arm_swing == null)
-                arm_swing = new AnimationCycle(AnimationManager.arm_swing);
-            if (getOwner().isValid()) {
-                if (!getOwner().isDead()) {
-                    if (!minime) {
-                        org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
-                        if (!getEntity().getHelmet().isSimilar(checkItem(inventory.getHelmet())))
-                            getEntity().setHelmet(checkItem(inventory.getHelmet()));
-                        if (!getEntity().getChestplate().isSimilar(checkItem(inventory.getChestplate())))
-                            getEntity().setChestplate(checkItem(inventory.getChestplate()));
-                        if (!getEntity().getLeggings().isSimilar(checkItem(inventory.getLeggings())))
-                            getEntity().setLeggings(checkItem(inventory.getLeggings()));
-                        if (!getEntity().getBoots().isSimilar(checkItem(inventory.getBoots())))
-                            getEntity().setBoots(checkItem(inventory.getBoots()));
-                    }
+        if (walking == null) walking = new AnimationCycle(AnimationManager.walk);
+        if (arm_swing == null) arm_swing = new AnimationCycle(AnimationManager.arm_swing);
+
+        if (getOwner().isValid()) {
+            if (!getOwner().isDead()) {
+                if (!minime) {
+                    org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
+                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
+                        setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
+                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
+                        setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+                    if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
+                        setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
+                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
+                        setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
                 }
             }
-            if (getEntity().isInsideVehicle()) {
-                if (arm_swing.isRunning(getEntity()))
-                    arm_swing.toggle(getEntity(), false);
-                if (walking.isRunning(getEntity()))
-                    walking.toggle(getEntity(), false);
-                this.lastYaw = this.yaw = getOwner().getLocation().getYaw();
-                getEntity().setRightLegPose(new EulerAngle(-1.553343034274955D, 0.13962634015954636D, 0.0D));
-                getEntity().setLeftLegPose(new EulerAngle(-1.5009831567151235D, -0.12217304763960307D, 0.0D));
-                return;
-            }
-            if (previus != null) {
-                moving = (previus.getX() != getEntity().getLocation().getX())
-                        || (previus.getZ() != getEntity().getLocation().getZ());
-            }
-            if (store) {
-                previus = getEntity().getLocation();
-            }
-            store = !store;
-            if (moving) {
-                if (!walking.isRegistered(getEntity())) walking.register(getEntity(), 1);
-                if (!arm_swing.isRegistered(getEntity())) arm_swing.register(getEntity(), 1);
-                walking.toggle(getEntity(), true);
-                arm_swing.toggle(getEntity(), true);
-            } else {
-                if (arm_swing.isRunning(getEntity())) arm_swing.toggle(getEntity(), false);
-                if (walking.isRunning(getEntity())) walking.toggle(getEntity(), false);
-                getEntity().setLeftLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
-                getEntity().setRightLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
-                getEntity().setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
-                getEntity().setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
-            }
+        }
+
+        if (getEntity().isInsideVehicle()) {
+            if (arm_swing.isRunning(this)) arm_swing.toggle(this, false);
+            if (walking.isRunning(this)) walking.toggle(this, false);
+            this.lastYaw = this.yaw = getOwner().getLocation().getYaw();
+            setRightLegPose(new EulerAngle(-1.553343034274955D, 0.13962634015954636D, 0.0D));
+            setLeftLegPose(new EulerAngle(-1.5009831567151235D, -0.12217304763960307D, 0.0D));
+            return;
+        }
+
+        if (previus != null) moving = (previus.getX() != getEntity().getLocation().getX()) || (previus.getZ() != getEntity().getLocation().getZ());
+        if (store) previus = getEntity().getLocation();
+
+        store = !store;
+        if (moving) {
+            if (!walking.isRegistered(this)) walking.register(this, 1);
+            if (!arm_swing.isRegistered(this)) arm_swing.register(this, 1);
+
+            walking.toggle(this, true);
+            arm_swing.toggle(this, true);
+        } else {
+            if (arm_swing.isRunning(this)) arm_swing.toggle(this, false);
+            if (walking.isRunning(this)) walking.toggle(this, false);
+
+            setLeftLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
+            setRightLegPose(new EulerAngle(0.0D, 0.0D, 0.0D));
+            setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
+            setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
         }
     }
 
@@ -166,6 +158,11 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     @Override
     public IPet getPet() {
         return pet.getPet();
+    }
+
+    @Override
+    public UUID getUniqueId() {
+        return super.getUniqueID();
     }
 
     @Override
@@ -270,5 +267,90 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean isOnGround(Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
+    }
+
+    @Override
+    public void setHeadPose(EulerAngle angle) {
+        setHeadPose(toNMS(angle));
+    }
+    @Override
+    public void setBodyPose(EulerAngle angle) {
+        setBodyPose(toNMS(angle));
+    }
+    @Override
+    public void setLeftArmPose(EulerAngle angle) {
+        setLeftArmPose(toNMS(angle));
+    }
+    @Override
+    public void setRightArmPose(EulerAngle angle) {
+        setRightArmPose(toNMS(angle));
+    }
+    @Override
+    public void setLeftLegPose(EulerAngle angle) {
+        setLeftLegPose(toNMS(angle));
+    }
+    @Override
+    public void setRightLegPose(EulerAngle angle) {
+        setRightLegPose(toNMS(angle));
+    }
+
+
+
+    @Override
+    public EulerAngle getHeadPose() {
+        return toBukkit(headPose);
+    }
+
+    @Override
+    public EulerAngle getBodyPose() {
+        return toBukkit(bodyPose);
+    }
+
+    @Override
+    public EulerAngle getLeftArmPose() {
+        return toBukkit(leftArmPose);
+    }
+
+    @Override
+    public EulerAngle getRightArmPose() {
+        return toBukkit(rightArmPose);
+    }
+
+    @Override
+    public EulerAngle getLeftLegPose() {
+        return toBukkit(leftLegPose);
+    }
+
+    @Override
+    public EulerAngle getRightLegPose() {
+        return toBukkit(rightLegPose);
+    }
+
+
+    // CONVERSIONS
+    private EulerAngle toBukkit (Vector3f vector3f) {
+        return new EulerAngle(vector3f.getX(), vector3f.getY(), vector3f.getZ());
+    }
+    private Vector3f toNMS (EulerAngle angle) {
+        return new Vector3f((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
+    }
+    public org.bukkit.inventory.ItemStack getItems(EnumItemSlot enumitemslot) {
+        return toBukkit(getEquipment(enumitemslot));
+    }
+    private org.bukkit.inventory.ItemStack toBukkit (net.minecraft.server.v1_13_R1.ItemStack stack) {
+        return CraftItemStack.asBukkitCopy(stack);
+    }
+    private net.minecraft.server.v1_13_R1.ItemStack toNMS (org.bukkit.inventory.ItemStack stack) {
+        return CraftItemStack.asNMSCopy(stack);
+    }
+
+    public void setSlot(EnumItemSlot enumitemslot, org.bukkit.inventory.ItemStack itemstack) {
+        setEquipment(enumitemslot, toNMS(itemstack));
+    }
+
+    private ItemStack checkItem(ItemStack item) {
+        if (item == null) return new ItemStack(Material.AIR);
+        if (item.getType() == Material.AIR) return new ItemStack(Material.AIR);
+        return item;
     }
 }

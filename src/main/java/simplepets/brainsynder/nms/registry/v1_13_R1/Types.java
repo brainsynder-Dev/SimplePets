@@ -6,7 +6,7 @@ import simplepets.brainsynder.nms.entities.v1_13_R1.impossamobs.EntityShulkerPet
 import simplepets.brainsynder.nms.entities.v1_13_R1.list.*;
 
 public class Types {
-    public static EntityTypes<EntityArmorStandPet> ARMOR_STAND = CustomTypes.a(1, "pet_stand", CustomTypes.a.a(EntityArmorStandPet.class, EntityArmorStandPet::new));
+//    public static EntityTypes<EntityArmorStandPet> ARMOR_STAND = CustomTypes.a(1, "pet_stand", CustomTypes.a.a(EntityArmorStandPet.class, EntityArmorStandPet::new));
     public static EntityTypes<EntityBatPet> BAT = CustomTypes.a(3,"pet_bat", CustomTypes.a.a(EntityBatPet.class, EntityBatPet::new));
     public static EntityTypes<EntityBlazePet> BLAZE = CustomTypes.a(4,"pet_blaze", CustomTypes.a.a(EntityBlazePet.class, EntityBlazePet::new));
     public static EntityTypes<EntityCaveSpiderPet> CAVE_SPIDER = CustomTypes.a(6,"pet_cave_spider", CustomTypes.a.a(EntityCaveSpiderPet.class, EntityCaveSpiderPet::new));
