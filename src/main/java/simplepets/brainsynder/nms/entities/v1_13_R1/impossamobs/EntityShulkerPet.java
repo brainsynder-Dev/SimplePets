@@ -199,22 +199,22 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     }
 
     @Override
-    public void a(float f, float f1, float f2) {
+    public void a(float strafe, float vertical, float forward) {
         if (passengers == null) {
-            this.P = (float) 0.5;
-            this.aR = (float) 0.02;
-            super.a(f, f1, f2);
+            this.Q = (float) 0.5;
+            this.aU = (float) 0.02;
+            super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
+                super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
+                super.a(strafe, vertical, forward);
                 return;
             }
             EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
@@ -235,18 +235,18 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            this.aP = this.aN = this.yaw;
-            this.P = (float) 1.0;
-            f = (float) (owner.bh * 0.5);
-            f2 = owner.bj;
-            if (f2 <= 0.0) {
-                f2 *= 0.25;
+            this.aR = this.aP = this.yaw;
+            this.Q = (float) 1.0;
+            strafe = (float) (owner.bh * 0.5);
+            forward = owner.bi;
+            if (forward <= 0.0) {
+                forward *= 0.25;
             }
 
-            f *= 0.75;
-            this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            strafe *= 0.75;
+            this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             if (!world.isClientSide) {
-                super.a(f, f1, f2);
+                super.a(strafe, vertical, forward);
             }
 
             if (pet == null) {

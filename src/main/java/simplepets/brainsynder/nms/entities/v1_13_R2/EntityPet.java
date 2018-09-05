@@ -349,18 +349,18 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     @Override
     public void a(float strafe, float vertical, float forward) {
         if (passengers == null) {
-            this.S = (float) 0.5;
+            this.Q = (float) 0.5;
             this.aU = (float) 0.02;
             super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
-                this.S = (float) 0.5;
+                this.Q = (float) 0.5;
                 this.aU = (float) 0.02;
                 super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
-                this.S = (float) 0.5;
+                this.Q = (float) 0.5;
                 this.aU = (float) 0.02;
                 super.a(strafe, vertical, forward);
                 return;
@@ -383,8 +383,8 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            this.aS = this.aQ = this.yaw;
-            this.S = 1.0F;
+            this.aR = this.aP = this.yaw;
+            this.Q = 1.0F;
             strafe = (float) (owner.bh * 0.5);
             forward = owner.bj;
             if (forward <= 0.0) {
@@ -481,24 +481,30 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     /**
      * Pets should NEVER be saved in the world
      */
+    @Override
     public void a(NBTTagCompound nbttagcompound){
     }
 
+    @Override
     public void b(NBTTagCompound nbttagcompound){
     }
 
+    @Override
     public boolean c(NBTTagCompound nbttagcompound){
         return false;
     }
 
+    @Override
     public boolean d(NBTTagCompound nbttagcompound){
         return false;
     }
 
-    public NBTTagCompound e(NBTTagCompound nbttagcompound){
+    @Override
+    public NBTTagCompound save(NBTTagCompound nbttagcompound){
         return nbttagcompound;
     }
 
+    @Override
     public void f(NBTTagCompound nbttagcompound){
     }
 }

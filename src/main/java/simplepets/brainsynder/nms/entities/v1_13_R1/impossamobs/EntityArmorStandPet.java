@@ -104,6 +104,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         if (walking == null) walking = new AnimationCycle(AnimationManager.walk);
         if (arm_swing == null) arm_swing = new AnimationCycle(AnimationManager.arm_swing);
 
+        // Handles Armor copying
         if (getOwner().isValid()) {
             if (!getOwner().isDead()) {
                 if (!minime) {
@@ -120,6 +121,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             }
         }
 
+        // Handles Limb movement
         if (getEntity().isInsideVehicle()) {
             if (arm_swing.isRunning(this)) arm_swing.toggle(this, false);
             if (walking.isRunning(this)) walking.toggle(this, false);
@@ -148,6 +150,16 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             setLeftArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
             setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
         }
+
+        // Updates the size of the controller
+        if (pet.isBaby() != isSmall()) pet.setBaby(isSmall());
+
+        // Updates The Pets Name
+        String name = pet.getEntity().getCustomName();
+        if (name == null) return;
+        if (name.isEmpty()) return;
+        if (name.equals(getEntity().getCustomName())) return;
+        getEntity().setCustomName(name);
     }
 
     @Override
@@ -200,6 +212,17 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(new ItemMaker(Material.DIAMOND_CHESTPLATE).create());
             getEntity().setLeggings(new ItemMaker(Material.IRON_LEGGINGS).create());
             getEntity().setBoots(new ItemMaker(Material.GOLDEN_BOOTS).create());
+        }else{
+            org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
+            if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
+                setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
+            if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
+                setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+            if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
+                setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
+            if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
+                setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+
         }
     }
 
@@ -222,22 +245,22 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     @Override
-    public void a(float f, float f1, float f2) {
+    public void a(float strafe, float vertical, float forward) {
         if (passengers == null) {
-            this.P = (float) 0.5;
-            this.aR = (float) 0.02;
-            super.a(f, f1, f2);
+            this.Q = (float) 0.5;
+            this.aU = (float) 0.02;
+            super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
+                super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
-                super.a(f, f1, f2);
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
+                super.a(strafe, vertical, forward);
                 return;
             }
             EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
@@ -254,13 +277,13 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                     }
                 }
             }
+
             this.yaw = owner.yaw;
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            this.aP = this.aN = this.yaw;
-            this.P = (float) 1.0;
-
+            this.aR = this.aP = this.yaw;
+            this.Q = (float) 1.0;
         }
     }
 
@@ -271,59 +294,59 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     @Override
     public void setHeadPose(EulerAngle angle) {
-        setHeadPose(toNMS(angle));
+        getEntity().setHeadPose(angle);
     }
     @Override
     public void setBodyPose(EulerAngle angle) {
-        setBodyPose(toNMS(angle));
+        getEntity().setBodyPose(angle);
     }
     @Override
     public void setLeftArmPose(EulerAngle angle) {
-        setLeftArmPose(toNMS(angle));
+        getEntity().setLeftArmPose(angle);
     }
     @Override
     public void setRightArmPose(EulerAngle angle) {
-        setRightArmPose(toNMS(angle));
+        getEntity().setRightArmPose(angle);
     }
     @Override
     public void setLeftLegPose(EulerAngle angle) {
-        setLeftLegPose(toNMS(angle));
+        getEntity().setLeftLegPose(angle);
     }
     @Override
     public void setRightLegPose(EulerAngle angle) {
-        setRightLegPose(toNMS(angle));
+        getEntity().setRightLegPose(angle);
     }
 
 
 
     @Override
     public EulerAngle getHeadPose() {
-        return toBukkit(headPose);
+        return getEntity().getHeadPose();
     }
 
     @Override
     public EulerAngle getBodyPose() {
-        return toBukkit(bodyPose);
+        return getEntity().getBodyPose();
     }
 
     @Override
     public EulerAngle getLeftArmPose() {
-        return toBukkit(leftArmPose);
+        return getEntity().getLeftArmPose();
     }
 
     @Override
     public EulerAngle getRightArmPose() {
-        return toBukkit(rightArmPose);
+        return getEntity().getRightArmPose();
     }
 
     @Override
     public EulerAngle getLeftLegPose() {
-        return toBukkit(leftLegPose);
+        return getEntity().getLeftLegPose();
     }
 
     @Override
     public EulerAngle getRightLegPose() {
-        return toBukkit(rightLegPose);
+        return getEntity().getRightLegPose();
     }
 
 

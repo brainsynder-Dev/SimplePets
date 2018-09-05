@@ -69,19 +69,19 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public void a(float strafe, float vertical, float forward) {
         reloadLocation();
         if (passengers == null) {
-            this.P = (float) 0.5;
-            this.aR = (float) 0.02;
+            this.Q = (float) 0.5;
+            this.aU = (float) 0.02;
             super.a(strafe, vertical, forward);
         } else {
             if (this.pet == null) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
                 super.a(strafe, vertical, forward);
                 return;
             }
             if (!isOwnerRiding()) {
-                this.P = (float) 0.5;
-                this.aR = (float) 0.02;
+                this.Q = (float) 0.5;
+                this.aU = (float) 0.02;
                 super.a(strafe, vertical, forward);
                 return;
             }
@@ -103,8 +103,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            this.aP = this.aN = this.yaw;
-            this.P = (float) 1.0;
+            this.aR = this.aP = this.yaw;
+            this.Q = (float) 1.0;
             strafe = (float) (owner.bh * 0.5);
             forward = owner.bj;
             if (forward <= 0.0) {
@@ -112,7 +112,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             }
 
             strafe *= 0.75;
-            this.k((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             if (!world.isClientSide) {
                 super.a(strafe, vertical, forward);
             }
@@ -133,7 +133,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 Bukkit.getServer().getPluginManager().callEvent(event);
             }catch (Throwable ignored) {}
         }
-
     }
 
     private boolean isOnGround(net.minecraft.server.v1_13_R2.Entity entity) {
