@@ -382,7 +382,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
             this.aR = this.aP = this.yaw;
             this.Q = 1.0F;
             strafe = (float) (owner.bh * 0.5);
-            forward = owner.bi;
+            forward = owner.bj;
             if (forward <= 0.0) {
                 forward *= 0.25;
             }

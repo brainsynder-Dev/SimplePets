@@ -9,8 +9,8 @@ Fields:
             aR - EntityLiving.class - Search for `tickPotionEffects()` (Second line down)
             bg - EntityLiving.class - Below `lastDamage` # Jump
             bh - EntityLiving.class - Below `bg`         # Side motion
-            bi - EntityLiving.class - Below `bh`         # Forward motion
-            bj - EntityLiving.class - Below `bi`         # Vertical motion
+            bi - EntityLiving.class - Below `bh`         # Vertical motion
+            bj - EntityLiving.class - Below `bi`         # Forward motion
             aI - EntityLiving.class - Search for `maxNoDamageTicks` (Third line up)
             aJ - EntityLiving.class - Search for `maxNoDamageTicks` (Second line up)
             aK - EntityLiving.class - Search for `maxNoDamageTicks` (It will be above it)
