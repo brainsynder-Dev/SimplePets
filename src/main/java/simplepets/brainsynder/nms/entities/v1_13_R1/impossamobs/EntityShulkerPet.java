@@ -88,6 +88,17 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
                 }
                 toggle++;
             }
+
+
+            // Updates the size of the controller
+            if (!pet.isBaby()) pet.setBaby(true);
+
+            // Updates The Pets Name
+            String name = pet.getEntity().getCustomName();
+            if (name == null) return;
+            if (name.isEmpty()) return;
+            if (name.equals(getEntity().getCustomName())) return;
+            getEntity().setCustomName(name);
         }
     }
 
