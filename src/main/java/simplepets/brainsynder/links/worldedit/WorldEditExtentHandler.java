@@ -6,7 +6,6 @@ import com.sk89q.worldedit.extension.platform.Actor;
 import com.sk89q.worldedit.extent.Extent;
 import com.sk89q.worldedit.extent.logging.AbstractLoggingExtent;
 import com.sk89q.worldedit.util.eventbus.Subscribe;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
