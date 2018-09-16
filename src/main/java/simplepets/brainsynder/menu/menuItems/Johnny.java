@@ -34,10 +34,7 @@ public class Johnny extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.IRON_AXE);
-        if (entityPet instanceof IEntityVindicatorPet) {
-            IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
-            item.withName("&6Johnny: &e" + var.isJohnny());
-        }
+        item.withName("&6Johnny: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
 
