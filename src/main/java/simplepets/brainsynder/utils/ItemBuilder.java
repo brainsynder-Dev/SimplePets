@@ -55,7 +55,7 @@ public class ItemBuilder {
             if (json.containsKey("entity")) builder = Utilities.translate113(builder, json);
         }
 
-        if (material.name().contains("SKULL_ITEM") && (ServerVersion.getVersion() == ServerVersion.v1_13_R1)) {
+        if (material.name().contains("SKULL_ITEM") && (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion())) {
             builder = Utilities.getSkullMaterial(Utilities.SkullType.values()[data]).toBuilder(amount);
         }
 
@@ -170,7 +170,7 @@ public class ItemBuilder {
     @Deprecated
     public ItemBuilder withData(int data) {
         if (data == -1) return this;
-        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1) return this;
+        if (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion()) return this;
         JSON.put("data", data);
         is.setDurability((short) data);
         return this;
