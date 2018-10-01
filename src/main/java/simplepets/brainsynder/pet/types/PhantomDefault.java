@@ -32,6 +32,11 @@ public class PhantomDefault extends PetDefault {
     }
 
     @Override
+    public boolean canFlyDefault() {
+        return true;
+    }
+
+    @Override
     public PetData getPetData() {
         return PetData.SIZE;
     }
