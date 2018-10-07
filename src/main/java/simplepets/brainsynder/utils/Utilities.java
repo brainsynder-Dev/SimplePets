@@ -101,7 +101,7 @@ public class Utilities {
             }
             data = -1;
         } else {
-            material = findMaterial(type.getName());
+            material = findMaterial(type.name());
         }
 
         return new Data(material, data);

@@ -61,30 +61,30 @@ public class HorseColor extends MenuItemAbstract {
         ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 15).toBuilder(1);
         item.withName("&6Black");
         item.withData(15);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.STAINED_CLAY, 8).toBuilder(1);
         item.withName("&6Chestnut");
         item.withData(8);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 4).toBuilder(1);
         item.withName("&6Creamy");
         item.withData(4);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 12).toBuilder(1);
         item.withName("&6Brown");
         item.withData(12);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.STAINED_CLAY, 7).toBuilder(1);
         item.withName("&6Dark Brown");
         item.withData(7);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 7).toBuilder(1);
         item.withName("&6Gray");
         item.withData(7);
-        items.add(item);
+        items.add(item.clone());
         item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 0).toBuilder(1);
         item.withName("&6White");
-        items.add(item);
+        items.add(item.clone());
         return items;
     }
 
