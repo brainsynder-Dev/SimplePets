@@ -74,6 +74,10 @@ public class PetCore extends JavaPlugin {
             new MissingAPI(this).runTaskTimer(this, 0, 20 * 60 * 2);
             return;
         }
+        // Oh God please.
+        if (getServer().getPluginManager().getPlugin("Citizens") != null) {
+            Errors.CITIZENS.print();
+        }
         if (!errorCheck()) {
             setEnabled(false);
             return;

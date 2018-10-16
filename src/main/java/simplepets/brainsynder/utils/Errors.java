@@ -30,6 +30,12 @@ public enum Errors {
             "The plugin has detected a reload",
             "If you encounter ANY strange issues then this will be the cause.",
             "To fix those, Simply RESTART your server",
+            "-------------------------------------------"),
+    CITIZENS("-------------------------------------------",
+            "          Error Type: CRITICAL",
+            "You're using the Citizens plugin as well as SimplePets.",
+            "Because of this, SimplePets won't work as intended (i.e. vanishing pets)",
+            "We're working on it, but we have no promises we can fix it...",
             "-------------------------------------------");
 
     String[] errMsg;
