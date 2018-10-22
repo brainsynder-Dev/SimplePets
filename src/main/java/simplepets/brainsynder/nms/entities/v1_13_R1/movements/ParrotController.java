@@ -72,12 +72,7 @@ public class ParrotController extends ControllerMove {
 
             float var9 = (float) (MathHelper.c(var5, var1) * 57.2957763671875D) - 90.0F;
             entity.yaw = this.a(entity.yaw, var9, 10.0F);
-            float var10;
-            if (entity.onGround) {
-                var10 = (float) (speed * entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-            } else {
-                var10 = (float) (speed * entity.getAttributeInstance(GenericAttributes.e).getValue());
-            }
+            float var10 = (float) (speed * entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
 
             entity.o(var10);
             double var11 = (double) MathHelper.sqrt(var1 * var1 + var5 * var5);

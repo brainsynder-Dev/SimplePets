@@ -14,7 +14,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
@@ -56,10 +55,6 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         this.noclip = false;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
 
-        if (this instanceof IFlyablePet) {
-            this.getAttributeMap().b(GenericAttributes.e);
-            this.getAttributeInstance(GenericAttributes.e).setValue(0.4000000059604645D);
-        }
         this.getAttributeInstance(GenericAttributes.maxHealth).setValue(20.0D);
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();

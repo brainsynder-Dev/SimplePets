@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.pathfinders.v1_13_R1;
 
+import net.minecraft.server.v1_13_R1.GenericAttributes;
 import net.minecraft.server.v1_13_R1.PathfinderGoal;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -114,7 +115,7 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
                 }
             }
             //  PathEntity path = ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ());
-            ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ(), speed);
+            ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ(), ((EntityPet) pet).getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
         }
     }
 }
