@@ -1,6 +1,9 @@
 package simplepets.brainsynder.nms.entities.v1_13_R2.list;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.DataWatcherRegistry;
+import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityPufferFishPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -42,6 +45,6 @@ public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferF
     }
 
     static {
-        PUFF_STATE = DataWatcher.a(EntityPufferFish.class, DataWatcherRegistry.b);
+        PUFF_STATE = DataWatcher.a(EntityPufferFishPet.class, DataWatcherRegistry.b);
     }
 }
