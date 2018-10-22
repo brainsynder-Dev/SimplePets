@@ -54,15 +54,15 @@ public class HorseStyle extends MenuItemAbstract {
         List<ItemBuilder> items = new ArrayList<>();
         ItemBuilder item = new ItemBuilder(Utilities.fetchMaterial("LEASH", "LEAD"));
         item.withName("&6None");
-        items.add(item);
+        items.add(item.clone());
         item.withName("&6Black Spots");
-        items.add(item);
+        items.add(item.clone());
         item.withName("&6White Dots");
-        items.add(item);
+        items.add(item.clone());
         item.withName("&6White Field");
-        items.add(item);
+        items.add(item.clone());
         item.withName("&6White");
-        items.add(item);
+        items.add(item.clone());
         return items;
     }
 

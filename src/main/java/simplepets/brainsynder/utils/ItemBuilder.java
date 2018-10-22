@@ -54,6 +54,7 @@ public class ItemBuilder {
             data = Integer.parseInt(String.valueOf(json.get("data")));
             if (json.containsKey("entity")) builder = Utilities.translate113(builder, json);
         }
+        builder.withData(data);
 
         if (material.name().contains("SKULL_ITEM") && (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion())) {
             builder = Utilities.getSkullMaterial(Utilities.SkullType.values()[data]).toBuilder(amount);
