@@ -41,12 +41,7 @@ import java.util.concurrent.CompletableFuture;
 public class PetCore extends JavaPlugin {
 
     private static PetCore instance;
-    private final List<String> supportedVersions = Arrays.asList(
-            "v1_11_R1",
-            "v1_12_R1",
-            "v1_13_R1",
-            "v1_13_R2"
-    );
+    private final List<String> supportedVersions = new ArrayList<>();
     public boolean forceSpawn;
     private boolean disabling = false, reloaded = false, needsPermissions = true, needsDataPermissions = true;
 
@@ -172,8 +167,9 @@ public class PetCore extends JavaPlugin {
             }
         }
 
-
-        if (!supportedVersions.contains(Reflection.getVersion())) {
+        fetchSupportedVersions();
+        //TODO
+        if (supportedVersions.isEmpty()) {
             Errors.UNSUPPORTED_VERSION_CRITICAL.print();
             return false;
         }
@@ -330,6 +326,28 @@ public class PetCore extends JavaPlugin {
 
     // GETTERS
 
+    private void fetchSupportedVersions () {
+        supportedVersions.clear();
+        String current = Reflection.getVersion();
+        boolean supported = false;
+        String packageName = "simplepets.brainsynder.nms.anvil.<VER>.HandleAnvilGUI";
+        for (ServerVersion version : ServerVersion.values()) {
+            if (version.name().equals(current) && (!supported)) supported = true;
+            try {
+                Class<?> clazz = Class.forName(packageName.replace("<VER>", version.name()), false, getClassLoader());
+                if (clazz != null) supportedVersions.add(version.name());
+            }catch (Exception e){}
+        }
+        if (!supported) {
+            try {
+                Class<?> clazz = Class.forName(packageName.replace("<VER>", current), false, getClassLoader());
+                if (clazz != null) supportedVersions.add(current);
+            }catch (Exception e){}
+        }
+
+        if (!supportedVersions.isEmpty())
+            debug("Found support for version(s): " + supportedVersions.toString());
+    }
 
     public boolean needsPermissions() {
         return needsPermissions;
