@@ -14,17 +14,16 @@ import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
+import simplepets.brainsynder.nms.DataConverter;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,7 +32,22 @@ import java.util.List;
 import java.util.Map;
 
 public class Utilities {
+    private static DataConverter converter;
     private static Map<String, Long> startTimeMap = new HashMap<>();
+
+    public static void init () {
+        ServerVersion version = ServerVersion.getVersion();
+        try {
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".utils.DataConverterHandler", false, PetCore.get().getClass().getClassLoader());
+            if (clazz != null) {
+                converter = (DataConverter) clazz.newInstance();
+                PetCore.get().debug("Successfully found DataConversions for " + version.name());
+            }
+        }catch (Exception e){
+            converter = new DataConverter();
+            PetCore.get().debug("Using pre-1.13 DataConversions for " + version.name());
+        }
+    }
 
     public static List<Material> getBlacklistedMaterials() {
         List<Material> materials = new ArrayList<>();
@@ -51,65 +65,11 @@ public class Utilities {
     }
 
     public static Data getSkullMaterial(SkullType type) {
-        Material material = Material.AIR;
-
-        int data = -1;
-        if (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion()) {
-            String name = "";
-            if (type == SkullType.WITHER) {
-                name = "WITHER_SKELETON_SKULL";
-            }else if (type == SkullType.SKELETON) {
-                name = "SKELETON_SKULL";
-            }else {
-                name = type.name()+"_HEAD";
-            }
-
-            material = findMaterial(name);
-        } else {
-            material = Material.valueOf("SKULL_ITEM");
-            data = type.ordinal();
-        }
-
-        return new Data(material, data);
+        return converter.getSkullMaterial(type);
     }
 
     public static Data getColoredMaterial(MatType type, int data) {
-        Material material = Material.STONE;
-        DyeColorWrapper dye = DyeColorWrapper.getByWoolData((byte) data);
-        if (type == MatType.INK_SACK) dye = DyeColorWrapper.getByDyeData((byte) data);
-        String name = dye.name();
-        if (name.equalsIgnoreCase("SILVER")) {
-            name = "LIGHT_GRAY";
-        }
-
-        if (ServerVersion.getVersion().getIntVersion() >= ServerVersion.v1_13_R1.getIntVersion()) {
-            if (type == MatType.INK_SACK) {
-                if (dye == DyeColorWrapper.WHITE) {
-                    material = findMaterial("BONE_MEAL");
-                } else if (dye == DyeColorWrapper.YELLOW) {
-                    material = findMaterial("DANDELION_YELLOW");
-                } else if (dye == DyeColorWrapper.BLUE) {
-                    material = findMaterial("LAPIS_LAZULI");
-                } else if (dye == DyeColorWrapper.BROWN) {
-                    material = findMaterial("COCOA_BEANS");
-                } else if (dye == DyeColorWrapper.GREEN) {
-                    material = findMaterial("CACTUS_GREEN");
-                } else if (dye == DyeColorWrapper.RED) {
-                    material = findMaterial("ROSE_RED");
-                } else if (dye == DyeColorWrapper.BLACK) {
-                    material = findMaterial("INK_SAC");
-                } else {
-                    material = findMaterial(name + "_DYE");
-                }
-            } else {
-                material = findMaterial(name + "_" + type.getName());
-            }
-            data = -1;
-        } else {
-            material = findMaterial(type.name());
-        }
-
-        return new Data(material, data);
+        return converter.getColoredMaterial(type, data);
     }
 
     /**
@@ -119,29 +79,7 @@ public class Utilities {
      * @return
      */
     public static Material findMaterial(String name) {
-        try {
-            return Material.valueOf(name);
-        } catch (Exception ignored) {
-        }
-
-        try {
-            return Material.valueOf("LEGACY_" + name);
-        } catch (Exception ignored) {
-        }
-
-        try {
-            return Material.matchMaterial(name);
-        } catch (Exception ignored) {
-        }
-
-        try {
-            Method method = ReflectionUtil.getMethod(Material.class, "matchMaterial", String.class, Boolean.TYPE);
-            Material mat = (Material) method.invoke(null, name, true);
-            if (mat != null) return mat;
-        } catch (Exception ignored) {
-        }
-
-        return Material.AIR;
+        return converter.findMaterial(name);
 
     }
 
@@ -300,7 +238,7 @@ public class Utilities {
 
     public void handlePathfinders(Player player, Entity entity, double speed) {
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms.pathfinders." + ReflectionUtil.getVersion() + ".HandlePathfinders");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + ReflectionUtil.getVersion() + ".pathfinders.HandlePathfinders");
             if (clazz == null) throw new SimplePetsException("HandlePathfinders not found");
             Constructor<?> con = clazz.getDeclaredConstructor(Player.class, Entity.class, double.class);
             con.newInstance(player, entity, speed);
@@ -311,7 +249,7 @@ public class Utilities {
 
     public void clearPathfinders(Entity entity) {
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms.pathfinders." + ReflectionUtil.getVersion() + ".ClearPathfinders");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms."+ReflectionUtil.getVersion()+".pathfinders.ClearPathfinders");
             if (clazz == null) throw new SimplePetsException("ClearPathfinders not found");
             Constructor<?> con = clazz.getDeclaredConstructor(Entity.class);
             con.newInstance(entity);
@@ -384,7 +322,7 @@ public class Utilities {
         public Material material;
         public int data = -1;
 
-        Data(Material material, int data) {
+        public Data(Material material, int data) {
             this.material = material;
             this.data = data;
         }

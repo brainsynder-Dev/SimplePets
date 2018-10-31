@@ -83,7 +83,7 @@ public class ReflectionUtil {
 
     public static Class<?> getPetNMSClass(String name) {
         try {
-            return Class.forName("simplepets.brainsynder.nms.entities." + getVersion() + ".list." + name);
+            return Class.forName("simplepets.brainsynder.nms." + getVersion() + ".entities.list." + name);
         } catch (ClassNotFoundException e) {
             return null;
         }

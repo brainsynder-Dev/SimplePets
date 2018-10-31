@@ -11,7 +11,7 @@ public class VersionNMS extends ReflectionUtil {
         if (version.getIntVersion() > ServerVersion.v1_12_R1.getIntVersion()) return;
         PetCore.get().debug("Registering Pets...");
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms.registry." + version.name() + ".PetRegister");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".registry.PetRegister");
             if (clazz == null) return;
             if (IEntityRegistry.class.isAssignableFrom(clazz)) {
                 IEntityRegistry registry = (IEntityRegistry)clazz.getConstructor().newInstance();

@@ -14,7 +14,7 @@ public class AnvilGUI {
     public AnvilGUI(Plugin plugin, Player player, IAnvilClickEvent handler) {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms.anvil." + version.name() + ".HandleAnvilGUI");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".anvil.HandleAnvilGUI");
             if (clazz == null) return;
 
             if (IAnvilGUI.class.isAssignableFrom(clazz)) {

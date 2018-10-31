@@ -72,6 +72,7 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
+        Utilities.init();
 
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
@@ -93,7 +94,7 @@ public class PetCore extends JavaPlugin {
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            debug("This version is not supported, be sure you are between 1.10.2 and 1.13.1");
+            debug("This version is not supported, be sure you are between 1.11 and 1.13.1");
             setEnabled(false);
             return;
         }
@@ -168,13 +169,9 @@ public class PetCore extends JavaPlugin {
         }
 
         fetchSupportedVersions();
-        //TODO
         if (supportedVersions.isEmpty()) {
             Errors.UNSUPPORTED_VERSION_CRITICAL.print();
             return false;
-        }
-        if (!Reflection.getVersion().equals("v1_12_R1")) {
-            Errors.UNSUPPORTED_VERSION_WEAK.print();
         }
         return true;
     }
@@ -205,7 +202,7 @@ public class PetCore extends JavaPlugin {
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms.entities." + version.name() + ".SpawnUtil");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms."+version.name()+".entities.SpawnUtil");
             if (clazz == null) return;
             if (ISpawner.class.isAssignableFrom(clazz)) {
                 spawner = (ISpawner)clazz.getConstructor().newInstance();
@@ -330,7 +327,7 @@ public class PetCore extends JavaPlugin {
         supportedVersions.clear();
         String current = Reflection.getVersion();
         boolean supported = false;
-        String packageName = "simplepets.brainsynder.nms.anvil.<VER>.HandleAnvilGUI";
+        String packageName = "simplepets.brainsynder.nms.<VER>.anvil.HandleAnvilGUI";
         for (ServerVersion version : ServerVersion.values()) {
             if (version.name().equals(current) && (!supported)) supported = true;
             try {
