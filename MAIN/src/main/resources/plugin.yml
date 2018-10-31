@@ -64,6 +64,10 @@ permissions:
             Pet.type.armorstand: true
             Pet.type.parrot: true
             Pet.type.mule: true
+            Pet.type.dolphin: true
+            Pet.type.salmon: true
+            Pet.type.tropicalfish: true
+            Pet.type.turtle: true
     Pet.type.hostile:
         default: false
         children:
@@ -92,3 +96,7 @@ permissions:
             Pet.type.shulker: true
             Pet.type.cavespider: true
             Pet.type.illusioner: true
+            Pet.type.drowned: true
+            Pet.type.phantom: true
+            Pet.type.pufferfish: true
+            Pet.type.zombievillager: true
