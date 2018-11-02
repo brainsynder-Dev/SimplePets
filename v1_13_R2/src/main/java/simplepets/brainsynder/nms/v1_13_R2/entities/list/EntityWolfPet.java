@@ -2,11 +2,13 @@ package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
 import net.minecraft.server.v1_13_R2.*;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityTameablePet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 /**
@@ -61,6 +63,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         }
 
         super.setTamed(flag);
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 
     @Override
@@ -80,6 +83,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         } else {
             this.datawatcher.set(TAME_SIT, (byte) (b0 & -3));
         }
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
 
     }
 
@@ -91,6 +95,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     public void setColor(DyeColorWrapper dc) {
         if (isTamed()) {
             this.datawatcher.set(COLLAR_COLOR, (int) dc.getDyeData());
+            PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
         }
     }
 
