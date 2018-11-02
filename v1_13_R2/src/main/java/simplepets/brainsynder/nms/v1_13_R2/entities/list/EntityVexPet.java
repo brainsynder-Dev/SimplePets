@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityNoClipPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityVex}
+ */
 @Size(width = 0.4F, length = 0.8F)
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     protected static final DataWatcherObject<Byte> VEX_FLAGS;

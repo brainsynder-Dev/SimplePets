@@ -9,6 +9,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.EntityTameablePet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityWolf}
+ */
 @Size(width = 0.6F, length = 0.8F)
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Float> DATA_HEALTH;

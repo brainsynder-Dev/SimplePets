@@ -8,6 +8,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySlime}
+ */
 @Size(width = 0.6F, length = 0.6F)
 public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;

@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityIronGolem}
+ */
 @Size(width = 1.4F, length = 2.9F)
 public class EntityIronGolemPet extends EntityPet implements IEntityIronGolemPet {
     public EntityIronGolemPet(World world, IPet pet) {

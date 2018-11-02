@@ -13,6 +13,9 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.TropicalPattern;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityTropicalFish}
+ */
 public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropicalFishPet {
     private static final DataWatcherObject<Integer> VARIANT;
     public EntityTropicalFishPet(World world, IPet pet) {

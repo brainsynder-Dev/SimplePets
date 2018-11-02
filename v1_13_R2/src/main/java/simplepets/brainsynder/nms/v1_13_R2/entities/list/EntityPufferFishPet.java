@@ -11,6 +11,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.EntityFishPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.PufferState;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityPufferFish}
+ */
 @Size(length = 0.7F, width = 0.7F)
 public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferFishPet {
     private static final DataWatcherObject<Integer> PUFF_STATE;

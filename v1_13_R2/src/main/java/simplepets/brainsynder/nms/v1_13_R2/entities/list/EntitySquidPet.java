@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySquid}
+ */
 @Size(width = 0.95F, length = 0.95F)
 public class EntitySquidPet extends EntityPet implements IEntitySquidPet {
     public EntitySquidPet(World world, IPet pet) {

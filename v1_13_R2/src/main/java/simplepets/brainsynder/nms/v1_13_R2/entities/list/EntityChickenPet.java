@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityChicken}
+ */
 @Size(width = 0.3F, length = 0.7F)
 public class EntityChickenPet extends AgeableEntityPet implements IEntityChickenPet {
     public EntityChickenPet(World world, IPet pet) {

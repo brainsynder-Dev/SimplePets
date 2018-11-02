@@ -9,6 +9,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.RabbitType;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityRabbit}
+ */
 @Size(width = 0.6F, length = 0.7F)
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> RABBIT_TYPE;

@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityCreeper}
+ */
 @Size(width = 0.6F, length = 1.9F)
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     protected static final DataWatcherObject<Integer> STATE;

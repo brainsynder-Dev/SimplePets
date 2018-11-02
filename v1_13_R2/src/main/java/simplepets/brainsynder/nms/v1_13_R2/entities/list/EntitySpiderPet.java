@@ -8,6 +8,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySpider}
+ */
 @Size(width = 1.4F, length = 0.9F)
 public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     public EntitySpiderPet(World world, IPet pet) {

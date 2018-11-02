@@ -6,6 +6,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityDolphin}
+ */
 public class EntityDolphinPet extends EntityPet implements IEntityDolphinPet {
     private static final DataWatcherObject<BlockPosition> TREASURE;
     private static final DataWatcherObject<Boolean> HAS_FISH;

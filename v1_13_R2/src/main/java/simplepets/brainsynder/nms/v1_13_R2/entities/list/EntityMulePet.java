@@ -8,6 +8,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntityHorseChestedAbs
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityHorseMule}
+ */
 @Size(width = 1.4F, length = 1.6F)
 public class EntityMulePet extends EntityHorseChestedAbstractPet implements IEntityMulePet {
     public EntityMulePet(World world, IPet pet) {

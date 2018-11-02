@@ -14,6 +14,9 @@ import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySheep}
+ */
 @Size(width = 0.9F, length = 1.3F)
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> DYE_COLOR;

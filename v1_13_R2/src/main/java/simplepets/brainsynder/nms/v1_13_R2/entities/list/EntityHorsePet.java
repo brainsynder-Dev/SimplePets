@@ -11,6 +11,9 @@ import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityHorse}
+ */
 @Size(width = 1.4F, length = 1.6F)
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
     private static final DataWatcherObject<Integer> HORSE_VARIANT;

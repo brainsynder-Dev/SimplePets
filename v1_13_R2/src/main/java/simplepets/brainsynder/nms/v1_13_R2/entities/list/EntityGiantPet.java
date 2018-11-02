@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityGiantZombie}
+ */
 @Size(width = 5.5F, length = 5.5F)
 public class EntityGiantPet extends EntityPet implements IEntityGiantPet {
     public EntityGiantPet(World world, IPet pet) {

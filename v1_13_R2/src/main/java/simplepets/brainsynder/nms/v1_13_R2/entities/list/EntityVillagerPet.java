@@ -13,6 +13,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityVillager}
+ */
 @Size(width = 0.6F, length = 1.8F)
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
     private static final DataWatcherObject<Integer> PROFESSION;

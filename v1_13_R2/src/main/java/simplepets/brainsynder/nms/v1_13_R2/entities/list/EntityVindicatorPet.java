@@ -9,6 +9,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntityIllagerAbstractPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityVindicator}
+ */
 @Size(width = 0.6F, length = 1.95F)
 public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEntityVindicatorPet {
     private boolean johnny = false;

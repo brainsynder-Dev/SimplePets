@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityMushroomCow}
+ */
 @Size(width = 0.9F, length = 1.3F)
 public class EntityMooshroomPet extends AgeableEntityPet implements IEntityMooshroomPet {
     public EntityMooshroomPet(World world, IPet pet) {

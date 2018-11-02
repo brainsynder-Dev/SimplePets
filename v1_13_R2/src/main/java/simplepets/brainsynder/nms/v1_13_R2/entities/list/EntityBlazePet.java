@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityBlaze}
+ */
 @Size(width = 0.6f, length = 1.7f)
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     private static final DataWatcherObject<Byte> ON_FIRE;

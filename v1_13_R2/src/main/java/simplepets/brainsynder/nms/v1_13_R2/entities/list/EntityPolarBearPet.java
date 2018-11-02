@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityPolarBear}
+ */
 @Size(width = 1.3F, length = 1.4F)
 public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolarBearPet {
     private static final DataWatcherObject<Boolean> IS_STANDING;

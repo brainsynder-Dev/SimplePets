@@ -12,6 +12,9 @@ import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityParrot}
+ */
 @Size(length = 0.9F)
 public class EntityParrotPet extends EntityTameablePet implements IEntityParrotPet {
     private static final DataWatcherObject<Integer> TYPE;

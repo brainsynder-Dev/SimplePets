@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntitySkeletonAbstractPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySkeleton}
+ */
 @Size(width = 0.6F, length = 1.9F)
 public class EntitySkeletonPet extends EntitySkeletonAbstractPet implements IEntitySkeletonPet {
     public EntitySkeletonPet(World world) {

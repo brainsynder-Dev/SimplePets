@@ -11,6 +11,9 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.LlamaColor;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityLlama}
+ */
 @Size(width = 0.9F, length = 1.87F)
 public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEntityLlamaPet {
     private static final DataWatcherObject<Integer> STRENGTH;

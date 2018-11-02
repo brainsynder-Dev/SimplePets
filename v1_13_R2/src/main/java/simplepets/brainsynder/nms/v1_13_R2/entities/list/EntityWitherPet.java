@@ -13,6 +13,9 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.player.PetOwner;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityWither}
+ */
 @Size(width = 0.9F, length = 4.0F)
 public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     private static final DataWatcherObject<Integer> FIRST_HEAD_TARGET;

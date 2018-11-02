@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntitySnowman}
+ */
 @Size(width = 0.4F, length = 1.8F)
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     private static final DataWatcherObject<Byte> PUMPKIN;

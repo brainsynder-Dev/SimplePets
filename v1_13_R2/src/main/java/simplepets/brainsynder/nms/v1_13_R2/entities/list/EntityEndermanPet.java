@@ -10,6 +10,9 @@ import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
 import java.util.Optional;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_13_R2.EntityEnderman}
+ */
 @Size(width = 0.6F, length = 2.9F)
 public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
     private static final DataWatcherObject<Optional<IBlockData>> CARRIED_BLOCK;
