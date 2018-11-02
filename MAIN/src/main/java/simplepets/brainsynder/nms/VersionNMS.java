@@ -13,14 +13,12 @@ public class VersionNMS extends ReflectionUtil {
         try {
             Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".registry.PetRegister");
             if (clazz == null) return;
-            if (IEntityRegistry.class.isAssignableFrom(clazz)) {
-                IEntityRegistry registry = (IEntityRegistry)clazz.getConstructor().newInstance();
-                PetCore.get().debug("Registering Mobs/Pets...");
-                for (IPetRegistry register : registry.list()) {
-                    register.registerPet();
-                }
+            IEntityRegistry registry = (IEntityRegistry) clazz.getConstructor().newInstance();
+            PetCore.get().debug("Registering Mobs/Pets...");
+            for (IPetRegistry register : registry.list()) {
+                register.registerPet();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             PetCore.get().debug("Could not link to a version for PetRegister. Possibly an Unsupported NMS version.");
         }
     }
