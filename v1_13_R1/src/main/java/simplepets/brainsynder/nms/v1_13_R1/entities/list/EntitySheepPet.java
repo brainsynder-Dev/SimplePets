@@ -17,6 +17,7 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
 @Size(width = 0.9F, length = 1.3F)
 public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> DYE_COLOR;
+    private DyeColorWrapper color = DyeColorWrapper.WHITE;
     private boolean rainbow = false;
     private int toggle = 0;
 
@@ -59,14 +60,15 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         super.applyCompound(object);
     }
 
+    @Override
     public DyeColorWrapper getColor() {
-        if (isSheared()) setSheared(false);
-        return DyeColorWrapper.getByWoolData(datawatcher.get(DYE_COLOR));
+        return color;
     }
 
-    public void setColor(DyeColorWrapper i) {
-        if (isSheared()) setSheared(false);
-        this.datawatcher.set(DYE_COLOR, i.getWoolData());
+    @Override
+    public void setColor(DyeColorWrapper color) {
+        this.color = color;
+        if (!isSheared()) datawatcher.set(DYE_COLOR, color.getWoolData());
     }
 
     @Override
@@ -81,7 +83,9 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
             this.datawatcher.set(DYE_COLOR, (byte) (data | 0x10));
         } else {
             this.datawatcher.set(DYE_COLOR, (byte) (data & 0xFFFFFFEF));
+            setColor(color);
         }
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 
     @Override
