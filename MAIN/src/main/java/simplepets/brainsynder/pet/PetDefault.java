@@ -7,6 +7,7 @@ import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.storage.files.base.JSONFile;
@@ -16,6 +17,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class PetDefault extends JSONFile {
     private ItemBuilder _BUILDER_;
@@ -55,7 +57,7 @@ public abstract class PetDefault extends JSONFile {
 
         setDefault("on_summon", new JSONArray());
         try {
-            JSONObject dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
+            JSONObject dataArrays = ReflectionUtil.getMenuItemsJSON(getPetData().getItemClasses(), this);
             setDefault("data-items", dataArrays);
         } catch (NullPointerException ignored) { // In case there is no pet data
         }
@@ -186,8 +188,21 @@ public abstract class PetDefault extends JSONFile {
 
     public ItemBuilder getDataItemByName(String name, int index) {
         if (_DATA_ITEMS_ != null) {
-            if (_DATA_ITEMS_.get(name) != null) {
+            if (_DATA_ITEMS_.containsKey(name)) {
                 return ItemBuilder.fromJSON((JSONObject) ((JSONArray) _DATA_ITEMS_.get(name)).get(index));
+            }else{
+                try {
+                    Map<String, MenuItem> dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
+                    if (dataArrays.containsKey(name)) {
+                        JSONArray items = ReflectionUtil.getItemsArray(dataArrays.get(name));
+                        _DATA_ITEMS_.put(name, items);
+                        set("data-items", _DATA_ITEMS_);
+                        save();
+                        PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
+                        return ItemBuilder.fromJSON((JSONObject) items.get(index));
+                    }
+                } catch (NullPointerException ignored) { // In case there is no pet data
+                }
             }
         }
         return null;

@@ -14,7 +14,9 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ReflectionUtil {
     public static int getVersionInt() {
@@ -98,7 +100,7 @@ public class ReflectionUtil {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
     }
 
-    public static JSONObject getMenuItems(List<Class<? extends MenuItem>> c, PetDefault type) {
+    public static JSONObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetDefault type) {
         JSONObject a = new JSONObject();
         for (Class<? extends MenuItem> cl : c) {
             JSONArray as = new JSONArray();
@@ -112,6 +114,24 @@ public class ReflectionUtil {
             a.put(cl.getSimpleName().toLowerCase(), as);
         }
         return a;
+    }
+
+    public static Map<String, MenuItem> getMenuItems (List<Class<? extends MenuItem>> c, PetDefault type) {
+        Map<String, MenuItem> map = new HashMap<>();
+        for (Class<? extends MenuItem> cl : c)
+            map.put(cl.getSimpleName().toLowerCase(), initiateClass(fillConstructor(cl, PetDefault.class), type));
+        return map;
+    }
+
+    public static JSONArray getItemsArray (MenuItem menuItem) {
+        JSONArray as = new JSONArray();
+        try {
+            for (ItemBuilder i : menuItem.getDefaultItems()) {
+                as.add(i.toJSON());
+            }
+        } catch (NullPointerException ignored) {
+        }
+        return as;
     }
 
     public static Object getPrivateField(String fieldName, Class clazz, Object object) {
