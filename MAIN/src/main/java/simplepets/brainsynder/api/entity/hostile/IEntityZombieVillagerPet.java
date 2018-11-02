@@ -1,11 +1,8 @@
 package simplepets.brainsynder.api.entity.hostile;
 
-import simplepets.brainsynder.api.entity.IAgeablePet;
-import simplepets.brainsynder.wrapper.ProfessionWrapper;
+public interface IEntityZombieVillagerPet extends IEntityZombiePet {
 
-public interface IEntityZombieVillagerPet extends IAgeablePet {
+    default boolean isShaking () { return false; }
 
-    ProfessionWrapper getProfession();
-
-    void setProfession(ProfessionWrapper wrapper);
+    default void setShaking (boolean value) {}
 }

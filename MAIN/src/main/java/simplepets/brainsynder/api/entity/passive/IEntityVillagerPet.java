@@ -5,7 +5,7 @@ import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 public interface IEntityVillagerPet extends IAgeablePet {
 
-    ProfessionWrapper getProfession();
+    default ProfessionWrapper getProfession(){ return ProfessionWrapper.FARMER; }
 
-    void setProfession(ProfessionWrapper wrapper);
+    default void setProfession(ProfessionWrapper wrapper){}
 }

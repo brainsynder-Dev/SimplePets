@@ -43,7 +43,7 @@ public enum PetData {
     JOHNNY(Johnny.class),
     POTION(Potion.class),
     ZOMBIE(Age.class, Arms.class),
-    ZOMBIE_VILLAGER(Age.class),
+    ZOMBIE_VILLAGER(Age.class, Profession.class, Arms.class, Shaking.class),
     PUFFER_SIZE (PufferSize.class),
     TROPICAL_FISH (BodyColor.class, Pattern.class, PatternColor.class);
 

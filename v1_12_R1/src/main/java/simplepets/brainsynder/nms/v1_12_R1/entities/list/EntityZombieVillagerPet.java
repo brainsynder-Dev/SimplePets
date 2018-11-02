@@ -13,15 +13,19 @@ import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 @Size(width = 0.6F, length = 1.8F)
 public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntityZombieVillagerPet {
-    private static final DataWatcherObject<Integer> PROFESSION;
+    private static final DataWatcherObject<Integer> VILLAGER_TYPE;
+    private static final DataWatcherObject<Boolean> ARMS_RAISED;
+    private static final DataWatcherObject<Boolean> UNKNOWN;
     private static final DataWatcherObject<Boolean> CONVERTING;
+    private static final DataWatcherObject<Integer> PROFESSION;
 
     static {
-        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
+        VILLAGER_TYPE = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
+        ARMS_RAISED = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
+        UNKNOWN = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
         CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
+        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
     }
-
-    private ProfessionWrapper profession;
 
     public EntityZombieVillagerPet(World world) {
         super(world);
@@ -33,33 +37,57 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        profession = ProfessionWrapper.FARMER;
-        this.datawatcher.register(PROFESSION, profession.ordinal());
+        datawatcher.register(VILLAGER_TYPE, 0);
+        datawatcher.register(ARMS_RAISED, false);
+        datawatcher.register(UNKNOWN, false);
         datawatcher.register(CONVERTING, false);
+        datawatcher.register(PROFESSION, 0);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("profession", profession.name());
+        object.setString("profession", getProfession().name());
+        object.setBoolean("shaking", isShaking());
+        object.setBoolean("arms_raised", isArmsRaised());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("profession")) {
-            setProfession(ProfessionWrapper.getProfession(object.getString("profession")));
-        }
+        if (object.hasKey("profession")) setProfession(ProfessionWrapper.getProfession(object.getString("profession")));
+        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking"));
+        if (object.hasKey("arms_raised")) setArmsRaised(object.getBoolean("arms_raised"));
         super.applyCompound(object);
     }
 
+    @Override
+    public boolean isShaking() {
+        return datawatcher.get(CONVERTING);
+    }
+
+    @Override
+    public void setShaking(boolean value) {
+        datawatcher.set(CONVERTING, value);
+    }
+
+    @Override
     public ProfessionWrapper getProfession() {
-        return profession;
+        return ProfessionWrapper.getById(datawatcher.get(PROFESSION));
     }
 
+    @Override
     public void setProfession(ProfessionWrapper wrapper) {
-        profession = wrapper;
-        this.datawatcher.set(PROFESSION, wrapper.getId());
+        this.datawatcher.set(PROFESSION, wrapper.ordinal());
     }
 
+    @Override
+    public boolean isArmsRaised() {
+        return datawatcher.get(ARMS_RAISED);
+    }
+
+    @Override
+    public void setArmsRaised(boolean flag) {
+        datawatcher.set(ARMS_RAISED, flag);
+    }
 }
