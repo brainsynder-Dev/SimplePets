@@ -93,6 +93,7 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         if (rainbow) {
             if (toggle == 4) {
                 setColor(DyeColorWrapper.getNext(getColor()));
+                PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
                 toggle = 0;
             }
             toggle++;
