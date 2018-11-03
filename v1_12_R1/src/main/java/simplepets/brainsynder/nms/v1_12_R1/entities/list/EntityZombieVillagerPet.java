@@ -11,18 +11,19 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.AgeableEntityPet;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
+/**
+ * {@link net.minecraft.server.v1_12_R1.EntityZombieVillager}
+ */
 @Size(width = 0.6F, length = 1.8F)
 public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntityZombieVillagerPet {
     private static final DataWatcherObject<Integer> VILLAGER_TYPE;
     private static final DataWatcherObject<Boolean> ARMS_RAISED;
-    private static final DataWatcherObject<Boolean> UNKNOWN;
     private static final DataWatcherObject<Boolean> CONVERTING;
     private static final DataWatcherObject<Integer> PROFESSION;
 
     static {
         VILLAGER_TYPE = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
         ARMS_RAISED = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
-        UNKNOWN = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
         CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
         PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
     }
@@ -39,7 +40,6 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
         super.registerDatawatchers();
         datawatcher.register(VILLAGER_TYPE, 0);
         datawatcher.register(ARMS_RAISED, false);
-        datawatcher.register(UNKNOWN, false);
         datawatcher.register(CONVERTING, false);
         datawatcher.register(PROFESSION, 0);
     }
