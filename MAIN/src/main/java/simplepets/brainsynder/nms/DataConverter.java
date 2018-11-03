@@ -5,7 +5,7 @@ import simplepets.brainsynder.utils.Utilities;
 
 public class DataConverter {
     public Utilities.Data getColoredMaterial(Utilities.MatType type, int data) {
-        return new Utilities.Data(findMaterial(type.getName()), data);
+        return new Utilities.Data(findMaterial(type.name()), data);
     }
 
     public Utilities.Data getSkullMaterial(Utilities.SkullType type) {

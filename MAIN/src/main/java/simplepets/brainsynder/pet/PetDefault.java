@@ -189,7 +189,18 @@ public abstract class PetDefault extends JSONFile {
     public ItemBuilder getDataItemByName(String name, int index) {
         if (_DATA_ITEMS_ != null) {
             if (_DATA_ITEMS_.containsKey(name)) {
-                return ItemBuilder.fromJSON((JSONObject) ((JSONArray) _DATA_ITEMS_.get(name)).get(index));
+                JSONArray items = ((JSONArray) _DATA_ITEMS_.get(name));
+                if (items.isEmpty()) {
+                    Map<String, MenuItem> dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
+                    if (dataArrays.containsKey(name)) {
+                        items = ReflectionUtil.getItemsArray(dataArrays.get(name));
+                        _DATA_ITEMS_.put(name, items);
+                        set("data-items", _DATA_ITEMS_);
+                        save();
+                        PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
+                    }
+                }
+                return ItemBuilder.fromJSON((JSONObject) items.get(index));
             }else{
                 try {
                     Map<String, MenuItem> dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);

@@ -109,7 +109,8 @@ public class ReflectionUtil {
                 for (ItemBuilder i : o.getDefaultItems()) {
                     as.add(i.toJSON());
                 }
-            } catch (NullPointerException ignored) {
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
             a.put(cl.getSimpleName().toLowerCase(), as);
         }
