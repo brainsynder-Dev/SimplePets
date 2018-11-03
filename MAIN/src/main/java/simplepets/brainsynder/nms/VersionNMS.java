@@ -11,15 +11,14 @@ public class VersionNMS extends ReflectionUtil {
         if (version.getIntVersion() > ServerVersion.v1_12_R1.getIntVersion()) return;
         PetCore.get().debug("Registering Pets...");
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".registry.PetRegister");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".registry.Registry");
             if (clazz == null) return;
-            IEntityRegistry registry = (IEntityRegistry) clazz.getConstructor().newInstance();
+            IPetRegistry registry = (IPetRegistry) clazz.getConstructor().newInstance();
             PetCore.get().debug("Registering Mobs/Pets...");
-            for (IPetRegistry register : registry.list()) {
-                register.registerPet();
-            }
+            registry.registerPets();
         } catch (Exception e) {
             PetCore.get().debug("Could not link to a version for PetRegister. Possibly an Unsupported NMS version.");
+            e.printStackTrace();
         }
     }
 }

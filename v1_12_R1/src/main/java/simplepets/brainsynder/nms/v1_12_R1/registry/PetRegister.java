@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_12_R1.registry;
 
 import net.minecraft.server.v1_12_R1.*;
 import simplepets.brainsynder.nms.IEntityRegistry;
-import simplepets.brainsynder.nms.IPetRegistry;
 import simplepets.brainsynder.nms.v1_12_R1.entities.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.list.*;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -69,18 +68,8 @@ public enum PetRegister implements IEntityRegistry<Entity> {
         this.type = type;
     }
 
-    @Override
     public void registerPet() {
         NMSUtils.registerEntity("pet_" + wrapper.getName(), type, pet, false);
-    }
-
-    @Override
-    public void unRegisterPet() {
-    }
-
-    @Override
-    public IPetRegistry[] list() {
-        return values();
     }
 
     @Override
