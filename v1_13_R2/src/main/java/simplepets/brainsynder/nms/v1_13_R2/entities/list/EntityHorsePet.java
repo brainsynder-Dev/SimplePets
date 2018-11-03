@@ -1,12 +1,17 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.DataWatcherRegistry;
+import net.minecraft.server.v1_13_R2.World;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
@@ -24,8 +29,6 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
         HORSE_ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
     }
 
-    private HorseArmorType armor = HorseArmorType.NONE;
-
     public EntityHorsePet(World world) {
         super(Types.HORSE, world);
     }
@@ -37,33 +40,39 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(HORSE_VARIANT, 0);
-        this.datawatcher.register(HORSE_ARMOR, EnumHorseArmor.NONE.a());
+        this.datawatcher.register(HORSE_ARMOR, 0);
     }
 
-    public int getVariant() {
+    private int getVariant() {
         return this.datawatcher.get(HORSE_VARIANT);
     }
 
+    @Override
     public HorseStyleType getStyle() {
         return HorseStyleType.values()[this.getVariant() >>> 8];
     }
 
+    @Override
     public void setStyle(HorseStyleType style) {
         this.datawatcher.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 
+    @Override
     public HorseColorType getColor() {
         return HorseColorType.values()[this.getVariant() & 255];
     }
 
+    @Override
     public void setColor(HorseColorType color) {
         this.datawatcher.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
+        PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("armor", this.armor.name());
+        object.setString("armor", getArmor().name());
         object.setString("horsecolor", getColor().name());
         object.setString("style", getStyle().name());
         return object;
@@ -77,10 +86,13 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
         super.applyCompound(object);
     }
 
+    @Override
     public void setArmor(HorseArmorType a) {
-        this.armor = a;
-        this.datawatcher.set(HORSE_ARMOR, EnumHorseArmor.values()[a.ordinal()].a());
+        this.datawatcher.set(HORSE_ARMOR, a.ordinal());
     }
 
-    public HorseArmorType getArmor() {return this.armor;}
+    @Override
+    public HorseArmorType getArmor() {
+        return HorseArmorType.values()[datawatcher.get(HORSE_ARMOR)];
+    }
 }
