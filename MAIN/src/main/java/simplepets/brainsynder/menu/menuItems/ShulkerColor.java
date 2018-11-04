@@ -2,6 +2,8 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.json.simple.JSONArray;
+import simple.brainsynder.utils.ServerVersion;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -53,7 +55,9 @@ public class ShulkerColor extends MenuItemAbstract {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
             String name = color.name();
-            if (name.equalsIgnoreCase("SILVER")) {
+            if (name.equalsIgnoreCase("SILVER")
+                    && (ServerVersion.getVersion() == ServerVersion.v1_13_R1
+                    || ServerVersion.getVersion() == ServerVersion.v1_13_R2)) {
                 name = "LIGHT_GRAY";
             }
             ItemBuilder item = new ItemBuilder(Utilities.findMaterial(name + "_SHULKER_BOX"));
