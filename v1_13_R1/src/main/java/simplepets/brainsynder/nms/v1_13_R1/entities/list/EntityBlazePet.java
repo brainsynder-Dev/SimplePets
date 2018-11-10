@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
@@ -10,13 +9,14 @@ import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.6f, length = 1.7f)
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     private static final DataWatcherObject<Byte> ON_FIRE;
 
     static {
-        ON_FIRE = DataWatcher.a(EntityBlazePet.class, DataWatcherRegistry.a);
+        ON_FIRE = DataWatcher.a(EntityBlazePet.class, DataWatcherWrapper.BYTE);
     }
 
     public EntityBlazePet(World world) {

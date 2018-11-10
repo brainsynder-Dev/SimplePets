@@ -4,13 +4,14 @@ import net.minecraft.server.v1_12_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet {
     private static final DataWatcherObject<Byte> SPELL;
 
     static {
-        SPELL = DataWatcher.a(EntityIllagerWizardPet.class, DataWatcherRegistry.a);
+        SPELL = DataWatcher.a(EntityIllagerWizardPet.class, DataWatcherWrapper.BYTE);
     }
 
     protected int b;

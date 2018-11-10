@@ -3,11 +3,11 @@ package simplepets.brainsynder.nms.v1_12_R1.entities;
 import com.google.common.base.Optional;
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.ITameable;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 import java.util.UUID;
 
@@ -16,8 +16,8 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
     protected static final DataWatcherObject<Optional<UUID>> OWNER;
 
     static {
-        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.a);
-        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherRegistry.m);
+        TAME_SIT = DataWatcher.a(EntityTameablePet.class, DataWatcherWrapper.BYTE);
+        OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherWrapper.UUID);
     }
 
     public EntityTameablePet(World world) {

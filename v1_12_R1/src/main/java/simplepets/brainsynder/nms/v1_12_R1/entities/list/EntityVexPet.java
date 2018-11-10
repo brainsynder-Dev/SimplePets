@@ -2,20 +2,20 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.EntityNoClipPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.4F, length = 0.8F)
 public class EntityVexPet extends EntityNoClipPet implements IEntityVexPet {
     protected static final DataWatcherObject<Byte> VEX_FLAGS;
 
     static {
-        VEX_FLAGS = DataWatcher.a(EntityVexPet.class, DataWatcherRegistry.a);
+        VEX_FLAGS = DataWatcher.a(EntityVexPet.class, DataWatcherWrapper.BYTE);
     }
 
     public EntityVexPet(World world) {

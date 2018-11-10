@@ -1,16 +1,20 @@
 package simplepets.brainsynder.nms.v1_13_R1.entities.branch;
 
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R1.DataWatcher;
+import net.minecraft.server.v1_13_R1.DataWatcherObject;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.ISkeletonAbstract;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityPet;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 public abstract class EntitySkeletonAbstractPet extends EntityPet implements ISkeletonAbstract {
     private static final DataWatcherObject<Boolean> SWINGING_ARMS;
 
     static {
-        SWINGING_ARMS = DataWatcher.a(EntitySkeletonAbstractPet.class, DataWatcherRegistry.i);
+        SWINGING_ARMS = DataWatcher.a(EntitySkeletonAbstractPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
 

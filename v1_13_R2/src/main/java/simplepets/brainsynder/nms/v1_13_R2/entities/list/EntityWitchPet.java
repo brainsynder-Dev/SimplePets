@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
 import net.minecraft.server.v1_13_R2.DataWatcher;
 import net.minecraft.server.v1_13_R2.DataWatcherObject;
-import net.minecraft.server.v1_13_R2.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R2.World;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -16,6 +15,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntityWitchPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_13_R2.EntityWitch}
@@ -25,7 +25,7 @@ public class EntityWitchPet extends EntityPet implements IEntityWitchPet {
     private static final DataWatcherObject<Boolean> IS_DRINKING;
 
     static {
-        IS_DRINKING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.i);
+        IS_DRINKING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
     public EntityWitchPet(World world) {

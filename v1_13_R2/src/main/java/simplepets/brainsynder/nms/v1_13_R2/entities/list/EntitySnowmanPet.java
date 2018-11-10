@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
 import net.minecraft.server.v1_13_R2.DataWatcher;
 import net.minecraft.server.v1_13_R2.DataWatcherObject;
-import net.minecraft.server.v1_13_R2.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R2.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
@@ -10,6 +9,7 @@ import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_13_R2.EntitySnowman}
@@ -19,7 +19,7 @@ public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     private static final DataWatcherObject<Byte> PUMPKIN;
 
     static {
-        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherRegistry.a);
+        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherWrapper.BYTE);
     }
 
     public EntitySnowmanPet(World world) {

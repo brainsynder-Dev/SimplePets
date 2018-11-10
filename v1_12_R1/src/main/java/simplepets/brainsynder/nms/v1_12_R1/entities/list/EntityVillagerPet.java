@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
@@ -10,6 +9,7 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.AgeableEntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 @Size(width = 0.6F, length = 1.8F)
@@ -17,7 +17,7 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
     private static final DataWatcherObject<Integer> PROFESSION;
 
     static {
-        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherRegistry.b);
+        PROFESSION = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityVillagerPet(World world) {

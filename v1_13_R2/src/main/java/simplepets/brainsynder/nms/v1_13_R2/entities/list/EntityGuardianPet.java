@@ -1,12 +1,16 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.EntityTypes;
+import net.minecraft.server.v1_13_R2.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityGuardianPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_13_R2.EntityGuardian}
@@ -17,8 +21,8 @@ public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
     private static final DataWatcherObject<Integer> TARGET_ENTITY;
 
     static {
-        MOVING = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.i);
-        TARGET_ENTITY = DataWatcher.a(EntityGuardianPet.class, DataWatcherRegistry.b);
+        MOVING = DataWatcher.a(EntityGuardianPet.class, DataWatcherWrapper.BOOLEAN);
+        TARGET_ENTITY = DataWatcher.a(EntityGuardianPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityGuardianPet(World world) {

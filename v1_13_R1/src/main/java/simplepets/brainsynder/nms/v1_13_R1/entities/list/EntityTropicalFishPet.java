@@ -2,13 +2,13 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityFishPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.TropicalPattern;
@@ -77,6 +77,6 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
     }
 
     static {
-        VARIANT = DataWatcher.a(EntityTropicalFishPet.class, DataWatcherRegistry.b);
+        VARIANT = DataWatcher.a(EntityTropicalFishPet.class, DataWatcherWrapper.INT);
     }
 }

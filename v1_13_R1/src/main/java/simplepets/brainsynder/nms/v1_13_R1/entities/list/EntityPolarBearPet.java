@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
@@ -10,13 +9,14 @@ import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 @Size(width = 1.3F, length = 1.4F)
 public class EntityPolarBearPet extends AgeableEntityPet implements IEntityPolarBearPet {
     private static final DataWatcherObject<Boolean> IS_STANDING;
 
     static {
-        IS_STANDING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherRegistry.i);
+        IS_STANDING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
     public EntityPolarBearPet(World world) {

@@ -2,13 +2,13 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.AgeableEntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.6F, length = 1.8F)
 public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePet {
@@ -16,8 +16,8 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
     private static final DataWatcherObject<Boolean> ARMS_RAISED;
 
     static {
-        VILLAGER_TYPE = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.b);
-        ARMS_RAISED = DataWatcher.a(EntityZombiePet.class, DataWatcherRegistry.h);
+        VILLAGER_TYPE = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.INT);
+        ARMS_RAISED = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.BOOLEAN);
     }
 
     public EntityZombiePet(World world) {

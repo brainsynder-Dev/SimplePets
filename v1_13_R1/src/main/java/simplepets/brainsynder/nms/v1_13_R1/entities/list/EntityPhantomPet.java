@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
@@ -10,6 +9,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntityPhantomPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 
 @Size(width = 0.6F, length = 0.6F)
@@ -53,6 +53,6 @@ public class EntityPhantomPet extends EntityPet implements IEntityPhantomPet {
     }
 
     static {
-        SIZE = DataWatcher.a(EntityPhantomPet.class, DataWatcherRegistry.b);
+        SIZE = DataWatcher.a(EntityPhantomPet.class, DataWatcherWrapper.INT);
     }
 }

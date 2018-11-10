@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
@@ -10,13 +9,14 @@ import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityTameablePet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.6F, length = 0.8F)
 public class EntityOcelotPet extends EntityTameablePet implements IEntityOcelotPet {
     private static final DataWatcherObject<Integer> OCELOT_VARIANT;
 
     static {
-        OCELOT_VARIANT = DataWatcher.a(EntityOcelotPet.class, DataWatcherRegistry.b);
+        OCELOT_VARIANT = DataWatcher.a(EntityOcelotPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityOcelotPet(World world) {

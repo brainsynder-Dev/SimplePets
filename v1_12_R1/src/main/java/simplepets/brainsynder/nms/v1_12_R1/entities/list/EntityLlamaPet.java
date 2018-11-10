@@ -1,11 +1,15 @@
 package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.DataWatcher;
+import net.minecraft.server.v1_12_R1.DataWatcherObject;
+import net.minecraft.server.v1_12_R1.EnumColor;
+import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.branch.EntityHorseChestedAbstractPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.LlamaColor;
@@ -17,9 +21,9 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
     private static final DataWatcherObject<Integer> VARIANT;
 
     static {
-        STRENGTH = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
-        COLOR = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
-        VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherRegistry.b);
+        STRENGTH = DataWatcher.a(EntityLlamaPet.class, DataWatcherWrapper.INT);
+        COLOR = DataWatcher.a(EntityLlamaPet.class, DataWatcherWrapper.INT);
+        VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityLlamaPet(World world) {

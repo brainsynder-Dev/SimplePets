@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.RabbitType;
 
 @Size(width = 0.6F, length = 0.7F)
@@ -14,7 +15,7 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     private static final DataWatcherObject<Integer> RABBIT_TYPE;
 
     static {
-        RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherRegistry.b);
+        RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherWrapper.INT);
     }
 
     private boolean onGroundLastTick = false;

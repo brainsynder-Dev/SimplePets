@@ -9,6 +9,7 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityTameablePet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.movements.ParrotController;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
@@ -19,7 +20,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     private int toggle = 0;
 
     static {
-        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherRegistry.b);
+        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherWrapper.INT);
     }
 
 

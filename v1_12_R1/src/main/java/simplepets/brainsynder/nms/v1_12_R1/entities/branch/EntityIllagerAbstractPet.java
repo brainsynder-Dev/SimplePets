@@ -2,16 +2,16 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.branch;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.EntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 public abstract class EntityIllagerAbstractPet extends EntityPet {
     protected static final DataWatcherObject<Byte> AGGRESSIVE;
 
     static {
-        AGGRESSIVE = DataWatcher.a(EntityIllagerAbstractPet.class, DataWatcherRegistry.a);
+        AGGRESSIVE = DataWatcher.a(EntityIllagerAbstractPet.class, DataWatcherWrapper.BYTE);
     }
 
     public EntityIllagerAbstractPet(World world) {

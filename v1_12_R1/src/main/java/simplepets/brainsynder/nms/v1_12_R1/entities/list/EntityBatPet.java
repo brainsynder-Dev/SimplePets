@@ -1,12 +1,16 @@
 package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.DataWatcher;
+import net.minecraft.server.v1_12_R1.DataWatcherObject;
+import net.minecraft.server.v1_12_R1.MathHelper;
+import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.EntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 @Size(length = 0.9F)
 public class EntityBatPet extends EntityPet implements IEntityBatPet,
@@ -14,7 +18,7 @@ public class EntityBatPet extends EntityPet implements IEntityBatPet,
     private static final DataWatcherObject<Byte> HANGING;
 
     static {
-        HANGING = DataWatcher.a(EntityBatPet.class, DataWatcherRegistry.a);
+        HANGING = DataWatcher.a(EntityBatPet.class, DataWatcherWrapper.BYTE);
     }
 
     public EntityBatPet(World world) {

@@ -1,8 +1,12 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.EntityTypes;
+import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.api.entity.IEntityFishPet;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 public abstract class EntityFishPet extends EntityPet implements IEntityFishPet {
     private static final DataWatcherObject<Boolean> FROM_BUCKET;
@@ -22,6 +26,6 @@ public abstract class EntityFishPet extends EntityPet implements IEntityFishPet 
     }
 
     static {
-        FROM_BUCKET = DataWatcher.a(EntityFishPet.class, DataWatcherRegistry.i);
+        FROM_BUCKET = DataWatcher.a(EntityFishPet.class, DataWatcherWrapper.BOOLEAN);
     }
 }

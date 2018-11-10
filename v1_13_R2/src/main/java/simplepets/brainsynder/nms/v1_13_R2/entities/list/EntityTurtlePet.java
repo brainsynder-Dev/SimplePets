@@ -1,11 +1,15 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
-import net.minecraft.server.v1_13_R2.*;
+import net.minecraft.server.v1_13_R2.BlockPosition;
+import net.minecraft.server.v1_13_R2.DataWatcher;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityTurtlePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_13_R2.EntityTurtle}
@@ -38,11 +42,11 @@ public class EntityTurtlePet extends AgeableEntityPet implements IEntityTurtlePe
     }
 
     static {
-        HOME = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.l);
-        HAS_EGG = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.i);
-        bG = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.i);
-        TRAVEL = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.l);
-        bI = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.i);
-        bJ = DataWatcher.a(EntityTurtlePet.class, DataWatcherRegistry.i);
+        HOME = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BLOCK_POS);
+        HAS_EGG = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
+        bG = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
+        TRAVEL = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BLOCK_POS);
+        bI = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
+        bJ = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
     }
 }

@@ -1,12 +1,16 @@
 package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
-import net.minecraft.server.v1_12_R1.*;
+import net.minecraft.server.v1_12_R1.DataWatcher;
+import net.minecraft.server.v1_12_R1.DataWatcherObject;
+import net.minecraft.server.v1_12_R1.EnumColor;
+import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.EntityTameablePet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
@@ -17,9 +21,9 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Integer> COLLAR_COLOR;
 
     static {
-        DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.c);
-        BEGGING = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.h);
-        COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherRegistry.b);
+        DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.FLOAT);
+        BEGGING = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.BOOLEAN);
+        COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityWolfPet(World world) {

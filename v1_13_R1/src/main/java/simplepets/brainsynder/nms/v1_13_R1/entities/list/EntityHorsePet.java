@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -11,6 +10,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
@@ -22,8 +22,8 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     private static final DataWatcherObject<Integer> HORSE_ARMOR;
 
     static {
-        HORSE_VARIANT = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
-        HORSE_ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherRegistry.b);
+        HORSE_VARIANT = DataWatcher.a(EntityHorsePet.class, DataWatcherWrapper.INT);
+        HORSE_ARMOR = DataWatcher.a(EntityHorsePet.class, DataWatcherWrapper.INT);
     }
 
     public EntityHorsePet(World world) {

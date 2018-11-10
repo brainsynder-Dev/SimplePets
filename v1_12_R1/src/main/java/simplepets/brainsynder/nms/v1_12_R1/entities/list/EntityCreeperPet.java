@@ -2,13 +2,13 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.EntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.6F, length = 1.9F)
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
@@ -17,9 +17,9 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     protected static final DataWatcherObject<Boolean> IGNITED;
 
     static {
-        STATE = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.b);
-        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
-        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherRegistry.h);
+        STATE = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.INT);
+        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.BOOLEAN);
+        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
     public EntityCreeperPet(World world) {

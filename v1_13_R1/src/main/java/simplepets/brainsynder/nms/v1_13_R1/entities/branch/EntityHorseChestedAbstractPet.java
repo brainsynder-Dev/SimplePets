@@ -1,15 +1,19 @@
 package simplepets.brainsynder.nms.v1_13_R1.entities.branch;
 
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R1.DataWatcher;
+import net.minecraft.server.v1_13_R1.DataWatcherObject;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.IChestedAbstractPet;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 public abstract class EntityHorseChestedAbstractPet extends EntityHorseAbstractPet implements IChestedAbstractPet {
     private static final DataWatcherObject<Boolean> CHEST;
 
     static {
-        CHEST = DataWatcher.a(EntityHorseChestedAbstractPet.class, DataWatcherRegistry.i);
+        CHEST = DataWatcher.a(EntityHorseChestedAbstractPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
 

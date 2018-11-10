@@ -2,13 +2,13 @@ package simplepets.brainsynder.nms.v1_12_R1.entities.list;
 
 import net.minecraft.server.v1_12_R1.DataWatcher;
 import net.minecraft.server.v1_12_R1.DataWatcherObject;
-import net.minecraft.server.v1_12_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_12_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.AgeableEntityPet;
+import simplepets.brainsynder.nms.v1_12_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
 /**
@@ -22,10 +22,10 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
     private static final DataWatcherObject<Integer> PROFESSION;
 
     static {
-        VILLAGER_TYPE = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
-        ARMS_RAISED = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
-        CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.h);
-        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherRegistry.b);
+        VILLAGER_TYPE = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.INT);
+        ARMS_RAISED = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.BOOLEAN);
+        CONVERTING = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.BOOLEAN);
+        PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.INT);
     }
 
     public EntityZombieVillagerPet(World world) {

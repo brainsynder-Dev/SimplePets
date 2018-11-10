@@ -1,10 +1,14 @@
 package simplepets.brainsynder.nms.v1_13_R1.entities.branch;
 
-import net.minecraft.server.v1_13_R1.*;
+import net.minecraft.server.v1_13_R1.DataWatcher;
+import net.minecraft.server.v1_13_R1.DataWatcherObject;
+import net.minecraft.server.v1_13_R1.EntityTypes;
+import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.IHorseAbstract;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
+import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -14,8 +18,8 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
     private static final DataWatcherObject<Optional<UUID>> OWNER_UNIQUE_ID;
 
     static {
-        STATUS = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.a);
-        OWNER_UNIQUE_ID = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherRegistry.o);
+        STATUS = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherWrapper.BYTE);
+        OWNER_UNIQUE_ID = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherWrapper.UUID);
     }
 
     protected float jumpPower = 0.0F;
