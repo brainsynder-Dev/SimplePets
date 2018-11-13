@@ -7,6 +7,7 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.function.Function;
 
 public class CustomTypes<T extends Entity> extends EntityTypes<T> {
@@ -16,6 +17,9 @@ public class CustomTypes<T extends Entity> extends EntityTypes<T> {
         try {
             if (!PetCore.get().getConfiguration().getBoolean("OldPetRegistering")) {
                 Field field = ReflectionUtil.getField(IRegistry.class, "ENTITY_TYPE");
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
                 CUSTOM = new CustomEntityRegistry((RegistryMaterials<EntityTypes<?>>) field.get(null));
                 field.set(null, CUSTOM);
             }

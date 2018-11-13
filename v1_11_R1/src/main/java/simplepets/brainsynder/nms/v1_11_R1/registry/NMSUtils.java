@@ -33,7 +33,8 @@ public class NMSUtils {
         try {
             if ((!PetCore.get().getConfiguration().getBoolean("OldPetRegistering")) && (ENTITY_REGISTRY == null)) {
                 Field field = ReflectionUtil.getField(EntityTypes.class, "b");
-                Field modifiersField = ReflectionUtil.getField(Field.class, "modifiers");
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
                 modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
                 ENTITY_REGISTRY = new CustomEntityRegistry((RegistryMaterials<MinecraftKey, Class<? extends Entity>>) field.get(null));
                 field.set(null, ENTITY_REGISTRY);
