@@ -49,7 +49,7 @@ public abstract class PetDefault extends JSONFile {
         setDefault("float_down", "false");
         setDefault("fly", String.valueOf(canFlyDefault()));
 
-        setDefault("ride_speed", 0.7000000238418579D);
+        setDefault("ride_speed", 0.2700000238418579);
         setDefault("speed", 0.6000000238418579D);
 
         setDefault("item", getDefaultItem().toJSON());

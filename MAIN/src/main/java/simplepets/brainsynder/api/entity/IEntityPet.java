@@ -31,4 +31,10 @@ public interface IEntityPet extends IImpossaPet {
     default boolean isBig() {
         return false;
     }
+
+    default boolean isPetSilent() {
+        return false;
+    }
+
+    default void setPetSilent(boolean silent) {}
 }

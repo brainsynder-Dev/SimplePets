@@ -5,6 +5,7 @@ import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntitySpiderPet;
+import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -22,5 +23,10 @@ public class SpiderDefault extends PetDefault {
     @Override
     public Class<? extends IEntityPet> getEntityClass() {
         return IEntitySpiderPet.class;
+    }
+
+    @Override
+    public PetData getPetData() {
+        return PetData.SILENT;
     }
 }

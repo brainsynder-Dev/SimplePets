@@ -103,6 +103,16 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
     }
 
+    @Override
+    public boolean isPetSilent() {
+        return silent;
+    }
+
+    @Override
+    public void setPetSilent(boolean silent) {
+        this.silent = silent;
+    }
+
     /**
      * Handles the registration of DataWatchers
      *

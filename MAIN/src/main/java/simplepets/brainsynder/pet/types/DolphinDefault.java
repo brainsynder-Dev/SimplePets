@@ -5,6 +5,7 @@ import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityDolphinPet;
+import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.utils.Utilities;
@@ -18,6 +19,11 @@ public class DolphinDefault extends PetDefault {
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder(Utilities.fetchMaterial("HEART_OF_THE_SEA")).withName("&f&lDolphin Pet");
+    }
+
+    @Override
+    public PetData getPetData() {
+        return PetData.SILENT;
     }
 
     @Override

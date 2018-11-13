@@ -15,41 +15,47 @@ import java.util.Collections;
 import java.util.List;
 
 public enum PetData {
-    AGE(Age.class),
-    ARMS(Arms.class),
-    BAT(Hang.class),
-    WITHER(WitherShield.class, WitherSize.class),
-    BLAZE(Burning.class),
-    GHAST_SCREAM(GhastScream.class),
-    SCREAM(Scream.class),
-    PUMPKIN(Pumpkin.class),
-    VILLAGER(Age.class, Profession.class),
-    PIG(Age.class, Saddle.class),
-    RABBIT(Age.class, RabbitColor.class),
-    OCELOT(Age.class, Ocelot.class, Sitting.class, Tame.class),
-    LLAMA(Age.class, Chested.class,Color.class, LlamaColor.class),
-    SIZE(Size1.class, Size2.class, Size3.class, Size4.class),
-    POLAR_BEAR(Age.class, Stand.class),
-    POWERED(Powered.class),
-    SHULKER(Rainbow.class, ShulkerClosed.class, ShulkerColor.class),
-    WOLF(Age.class, Angry.class, Color.class,  Sitting.class, Tame.class, Tilt.class),
-    HORSE(Age.class, HorseArmor.class, HorseColor.class, HorseStyle.class, Saddle.class),
-    MULE(Age.class, Chested.class, Saddle.class),
-    HORSE_OTHER(Age.class, Saddle.class),
-    ARMOR_STAND(Clone.class, Stand.class),
-    SHEEP(Age.class, Color.class, Rainbow.class, Shear.class),
-    PARROT(ParrotColor.class, Rainbow.class, Sitting.class),
-    WIZARD(Spell.class),
-    JOHNNY(Johnny.class),
-    POTION(Potion.class),
-    ZOMBIE(Age.class, Arms.class),
-    ZOMBIE_VILLAGER(Age.class, Profession.class, Arms.class, Shaking.class),
-    PUFFER_SIZE (PufferSize.class),
-    TROPICAL_FISH (BodyColor.class, Pattern.class, PatternColor.class);
+    SILENT(Silent.class),
+    AGE(SILENT, Age.class),
+    ARMS(SILENT, Arms.class),
+    BAT(SILENT, Hang.class),
+    WITHER(SILENT, WitherShield.class, WitherSize.class),
+    BLAZE(SILENT, Burning.class),
+    GHAST_SCREAM(SILENT, GhastScream.class),
+    SCREAM(SILENT, Scream.class),
+    PUMPKIN(SILENT, Pumpkin.class),
+    VILLAGER(AGE, Profession.class),
+    PIG(AGE, Saddle.class),
+    RABBIT(AGE, RabbitColor.class),
+    OCELOT(AGE, Ocelot.class, Sitting.class, Tame.class),
+    LLAMA(AGE, Chested.class,Color.class, LlamaColor.class),
+    SIZE(SILENT, Size1.class, Size2.class, Size3.class, Size4.class),
+    POLAR_BEAR(AGE, Stand.class),
+    POWERED(SILENT, Powered.class),
+    SHULKER(SILENT, Rainbow.class, ShulkerClosed.class, ShulkerColor.class),
+    WOLF(AGE, Angry.class, Color.class,  Sitting.class, Tame.class, Tilt.class),
+    HORSE(AGE, HorseArmor.class, HorseColor.class, HorseStyle.class, Saddle.class),
+    MULE(AGE, Chested.class, Saddle.class),
+    HORSE_OTHER(AGE, Saddle.class),
+    ARMOR_STAND(SILENT, Clone.class, Stand.class),
+    SHEEP(AGE, Color.class, Rainbow.class, Shear.class),
+    PARROT(SILENT, ParrotColor.class, Rainbow.class, Sitting.class),
+    WIZARD(SILENT, Spell.class),
+    JOHNNY(SILENT, Johnny.class),
+    POTION(SILENT, Potion.class),
+    ZOMBIE(AGE, Arms.class),
+    ZOMBIE_VILLAGER(AGE, Profession.class, Arms.class, Shaking.class),
+    PUFFER_SIZE (SILENT, PufferSize.class),
+    TROPICAL_FISH (SILENT, BodyColor.class, Pattern.class, PatternColor.class);
 
     private List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();
 
 
+    @SafeVarargs
+    PetData(PetData otherData, Class<? extends MenuItem>... items) {
+        itemsClasses.addAll(otherData.itemsClasses);
+        Collections.addAll(this.itemsClasses, items);
+    }
     @SafeVarargs
     PetData(Class<? extends MenuItem>... items) {
         Collections.addAll(this.itemsClasses, items);

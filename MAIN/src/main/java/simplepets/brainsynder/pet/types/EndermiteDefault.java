@@ -4,6 +4,7 @@ import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermitePet;
+import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.utils.Utilities;
@@ -17,6 +18,11 @@ public class EndermiteDefault extends PetDefault {
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder(Utilities.fetchMaterial("EYE_OF_ENDER", "ENDER_EYE")).withName("&f&lEndermite Pet");
+    }
+
+    @Override
+    public PetData getPetData() {
+        return PetData.SILENT;
     }
 
     @Override
