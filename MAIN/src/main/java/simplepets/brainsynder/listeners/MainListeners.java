@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +17,6 @@ import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.IImpossaPet;
-import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.Utilities;
@@ -151,24 +151,7 @@ public class MainListeners implements Listener {
         Player p = e.getPlayer();
         PetOwner owner = PetOwner.getPetOwner(p);
         if (owner == null) return;
-        if (!owner.hasPet()) return;
-        if (owner.hasPetToRespawn()) return;
-        IPet pet = owner.getPet();
-        if (pet.getVisableEntity() == null) return;
-        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-        owner.removePet();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (owner.hasPetToRespawn()) {
-                    if (!p.isOnline()) {
-                        owner.setPetToRespawn(null);
-                        return;
-                    }
-                    owner.respawnPet();
-                }
-            }
-        }.runTaskLater(PetCore.get(), 40);
+        owner.respawnPetFully(40);
     }
 
     @EventHandler
@@ -178,6 +161,7 @@ public class MainListeners implements Listener {
             IEntityPet pet = (IEntityPet) handle;
             if (pet.getOwner().getName().equals(e.getEntity().getName())) {
                 pet.getPet().setVehicle(false, true);
+                Location loc = pet.getEntity().getLocation();
                 if (e.getEntity() instanceof Player) {
                     List<Material> blocks = Utilities.getBlacklistedMaterials();
                     if (blocks.contains(e.getEntity().getLocation().getBlock().getType())) {
@@ -191,7 +175,11 @@ public class MainListeners implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                if (pet.getEntity().getLocation().distanceSquared(e.getEntity().getLocation()) >= 5) {
+                                if (!loc.getWorld().getName().equals(e.getEntity().getLocation().getWorld().getName())) {
+                                    PetOwner.getPetOwner(pet.getOwner()).respawnPetFully(40);
+                                    return;
+                                }
+                                if (loc.distanceSquared(e.getEntity().getLocation()) >= 5) {
                                     pet.getEntities().forEach(entity -> entity.teleport(e.getEntity().getLocation()));
                                 }
                             }
@@ -214,26 +202,7 @@ public class MainListeners implements Listener {
                     return;
                 }
 
-                IPet pet = owner.getPet();
-                if (owner.hasPet()) {
-                    if (pet.getVisableEntity() == null) return;
-                    if (!owner.hasPetToRespawn()) {
-                        owner.setPetToRespawn(pet.getVisableEntity().asCompound());
-                        owner.removePet();
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (owner.hasPetToRespawn()) {
-                                    if (!p.isOnline()) {
-                                        owner.setPetToRespawn(null);
-                                        return;
-                                    }
-                                    owner.respawnPet();
-                                }
-                            }
-                        }.runTaskLater(PetCore.get(), 40);
-                    }
-                }
+                owner.respawnPetFully(40);
             }
         }
     }

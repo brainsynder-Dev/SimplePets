@@ -82,13 +82,14 @@ public class PetOwner {
         Valid.notNull(name, "PlayerName can not be null");
         return getPetOwner(Bukkit.getPlayerExact(name));
     }
+
     public static PetOwner getPetOwner(UUID uuid) {
         Valid.notNull(uuid, "UUID can not be null");
         if (ownerMap.containsKey(uuid)) return ownerMap.get(uuid);
         return null;
     }
 
-    public static Collection<PetOwner> values () {
+    public static Collection<PetOwner> values() {
         return ownerMap.values();
     }
 
@@ -106,7 +107,7 @@ public class PetOwner {
         return owner;
     }
 
-    public static void removePlayer (UUID uuid) {
+    public static void removePlayer(UUID uuid) {
         ownerMap.remove(uuid);
     }
 
@@ -135,18 +136,19 @@ public class PetOwner {
         setPetName(name, false);
     }
 
-    void updateSavedPets (JSONArray array) {
+    void updateSavedPets(JSONArray array) {
         if (array.isEmpty()) return;
 
         array.forEach(obj -> {
             String json = Base64Wrapper.decodeString(String.valueOf(obj));
             try {
                 savedPets.add(JsonToNBT.getTagFromJson(json));
-            } catch (NBTException ignored) {}
+            } catch (NBTException ignored) {
+            }
         });
     }
 
-    public boolean containsPetSave (StorageTagCompound compound) {
+    public boolean containsPetSave(StorageTagCompound compound) {
         if (savedPets.isEmpty()) return false;
         for (StorageTagCompound stc : savedPets) {
             if (stc.toString().equals(compound.toString())) return true;
@@ -162,7 +164,7 @@ public class PetOwner {
         return savedPets;
     }
 
-    JSONArray getSavedPetsArray () {
+    JSONArray getSavedPetsArray() {
         JSONArray array = new JSONArray();
         if (!savedPets.isEmpty()) {
             savedPets.forEach(compound -> {
@@ -300,7 +302,7 @@ public class PetOwner {
 
                 if (event.getName().equalsIgnoreCase("reset")) {
                     setPetName(null, true);
-                }else{
+                } else {
                     setPetName(event.getName(), false);
                 }
             });
@@ -315,6 +317,32 @@ public class PetOwner {
         }
         renaming = true;
         player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat", true));
+    }
+
+    public void respawnPetFully() {
+        respawnPetFully(10);
+    }
+
+    public void respawnPetFully(int delay) {
+        if (!hasPet()) return;
+        IPet pet = getPet();
+        if (pet.getVisableEntity() == null) return;
+        if (hasPetToRespawn()) return;
+        setPetToRespawn(pet.getVisableEntity().asCompound());
+        removePet();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (hasPetToRespawn()) {
+                    if (!player.isOnline()) {
+                        setPetToRespawn(null);
+                        return;
+                    }
+
+                    respawnPet();
+                }
+            }
+        }.runTaskLater(PetCore.get(), delay);
     }
 
     public void respawnPet() {
@@ -373,15 +401,18 @@ public class PetOwner {
         maker.sendToLocation(location);
     }
 
-    public JSONArray getOwnedPets() {return this.ownedPets;}
+    public JSONArray getOwnedPets() {
+        return this.ownedPets;
+    }
 
     public JSONObject getStoredInventory() {
         return storedInventory;
     }
 
     public void setStoredInventory(JSONObject storedInventory) {
-        setStoredInventory (storedInventory, true);
+        setStoredInventory(storedInventory, true);
     }
+
     public void setStoredInventory(JSONObject storedInventory, boolean save) {
         this.storedInventory = storedInventory;
         if (save) file.save(false);
@@ -391,19 +422,31 @@ public class PetOwner {
         return uuid;
     }
 
-    public String getPetName() {return this.petName;}
+    public String getPetName() {
+        return this.petName;
+    }
 
-    public IPet getPet() {return this.pet;}
+    public IPet getPet() {
+        return this.pet;
+    }
 
     public Player getPlayer() {
         return Bukkit.getPlayer(uuid);
     }
 
-    public OwnerFile getFile() {return this.file;}
+    public OwnerFile getFile() {
+        return this.file;
+    }
 
-    public boolean isRenaming() {return this.renaming;}
+    public boolean isRenaming() {
+        return this.renaming;
+    }
 
-    public void setRenaming(boolean renaming) {this.renaming = renaming; }
+    public void setRenaming(boolean renaming) {
+        this.renaming = renaming;
+    }
 
-    public void setPetToRespawn(StorageTagCompound petToRespawn) {this.petToRespawn = petToRespawn; }
+    public void setPetToRespawn(StorageTagCompound petToRespawn) {
+        this.petToRespawn = petToRespawn;
+    }
 }
