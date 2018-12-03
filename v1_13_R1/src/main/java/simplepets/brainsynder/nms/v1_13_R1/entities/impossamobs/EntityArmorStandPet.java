@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.ItemMaker;
-import simple.brainsynder.api.SkullMaker;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -23,6 +21,8 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
+import simplepets.brainsynder.utils.ItemBuilder;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.UUID;
@@ -206,12 +206,14 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void setOwner(boolean flag) {
         minime = flag;
         if (flag) {
-            SkullMaker maker = new SkullMaker();
-            maker.setUrl(WebAPI.getData(WebAPI.Type.SKIN_URL, getOwner().getName()));
-            getEntity().setHelmet(maker.create());
-            getEntity().setChestplate(new ItemMaker(Material.DIAMOND_CHESTPLATE).create());
-            getEntity().setLeggings(new ItemMaker(Material.IRON_LEGGINGS).create());
-            getEntity().setBoots(new ItemMaker(Material.valueOf("GOLDEN_BOOTS")).create());
+            ItemBuilder builder = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+            getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
+            getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
+            getEntity().setBoots(new ItemBuilder(Utilities.findMaterial("GOLD_BOOTS")).build());
+            WebAPI.findTexture(getOwner().getUniqueId().toString(), texture -> {
+                builder.setTexture(texture);
+                if (isOwner()) getEntity().setHelmet(builder.build());
+            });
         }else{
             org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
             if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))

@@ -6,13 +6,12 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_11_R1.inventory.CraftItemStack;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.ItemMaker;
-import simple.brainsynder.api.SkullMaker;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -23,6 +22,7 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
+import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -213,12 +213,25 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void setOwner(boolean flag) {
         minime = flag;
         if (flag) {
-            SkullMaker maker = new SkullMaker();
-            maker.setUrl(WebAPI.getData(WebAPI.Type.SKIN_URL, getOwner().getName()));
-            getEntity().setHelmet(maker.create());
-            getEntity().setChestplate(new ItemMaker(Material.DIAMOND_CHESTPLATE).create());
-            getEntity().setLeggings(new ItemMaker(Material.IRON_LEGGINGS).create());
-            getEntity().setBoots(new ItemMaker(Utilities.findMaterial("GOLD_BOOTS")).create());
+            ItemBuilder builder = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+            getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
+            getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
+            getEntity().setBoots(new ItemBuilder(Utilities.findMaterial("GOLD_BOOTS")).build());
+            WebAPI.findTexture(getOwner().getUniqueId().toString(), texture -> {
+                builder.setTexture(texture);
+                if (isOwner()) getEntity().setHelmet(builder.build());
+            });
+        }else{
+            org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
+            if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
+                setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
+            if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
+                setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+            if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
+                setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
+            if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
+                setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+
         }
     }
 
@@ -286,5 +299,27 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean isOnGround(Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
+    }
+
+
+    // CONVERSIONS
+    private EulerAngle toBukkit (Vector3f vector3f) {
+        return new EulerAngle(vector3f.getX(), vector3f.getY(), vector3f.getZ());
+    }
+    private Vector3f toNMS (EulerAngle angle) {
+        return new Vector3f((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
+    }
+    public org.bukkit.inventory.ItemStack getItems(EnumItemSlot enumitemslot) {
+        return toBukkit(getEquipment(enumitemslot));
+    }
+    private org.bukkit.inventory.ItemStack toBukkit (net.minecraft.server.v1_11_R1.ItemStack stack) {
+        return CraftItemStack.asBukkitCopy(stack);
+    }
+    private net.minecraft.server.v1_11_R1.ItemStack toNMS (org.bukkit.inventory.ItemStack stack) {
+        return CraftItemStack.asNMSCopy(stack);
+    }
+
+    public void setSlot(EnumItemSlot enumitemslot, org.bukkit.inventory.ItemStack itemstack) {
+        setEquipment(enumitemslot, toNMS(itemstack));
     }
 }
