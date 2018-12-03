@@ -11,10 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simple.brainsynder.sound.SoundMaker;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_12_R1.entities.list.EntityControllerPet;
+import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -23,8 +26,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
  * This is a beta mob, Simply because this does not work like the other mobs.
  */
 public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet {
-    private boolean isCustom = false;
-    private boolean rainbow = false;
+    private boolean isCustom = false,rainbow = false;
     private int toggle = 0;
     private DyeColorWrapper color = DyeColorWrapper.PURPLE;
     private EntityControllerPet pet;
@@ -38,6 +40,32 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         super(world);
         this.pet = pet;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bd", Boolean.TYPE);
+    }
+
+    @Override
+    public boolean isPetSilent() {
+        return pet.isPetSilent();
+    }
+
+    @Override
+    public void setPetSilent(boolean silent) {
+        pet.setPetSilent(silent);
+    }
+
+    /**
+     * Handles the Ambient Sound playing
+     *
+     * Search for: SoundEffect soundeffect = this.
+     * Class: EntityInsentient
+     */
+    @Override
+    protected SoundEffect F() {
+        if (pet == null) return null;
+        if (isPetSilent()) return null;
+        SoundMaker sound = pet.getPet().getPetType().getSound();
+        if (sound != null)
+            sound.playSound(getEntity());
+        return null;
     }
 
     public static Shulker spawn(Location location, EntityControllerPet pet) {
@@ -81,6 +109,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
             if (rainbow) {
                 if (toggle == 4) {
                     setColor(DyeColorWrapper.getNext(color));
+                    PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
                     toggle = 0;
                 }
                 toggle++;
@@ -123,6 +152,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public void a(int var1) {
         if (isCustom) {
             this.datawatcher.set(c, (byte) var1);
+            PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
             return;
         }
         super.a(var1);
