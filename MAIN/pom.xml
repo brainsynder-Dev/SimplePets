@@ -9,7 +9,7 @@
         <artifactId>SimplePets</artifactId>
         <version>4.1.1-SNAPSHOT</version>
     </parent>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
 
     <artifactId>MAIN</artifactId>
 
