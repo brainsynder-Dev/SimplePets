@@ -8,8 +8,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -151,7 +153,20 @@ public class HandleAnvilGUI implements IAnvilGUI {
             if (event.getPlayer().equals(getPlayer())) {
                 destroy();
             }
+        }
 
+        @EventHandler(ignoreCancelled = true)
+        public void onPlayerKick(PlayerKickEvent event) {
+            if (event.getPlayer().equals(getPlayer())) {
+                destroy();
+            }
+        }
+
+        @EventHandler(ignoreCancelled = true)
+        public void onPlayerDeath(PlayerDeathEvent event) {
+            if (event.getEntity().equals(getPlayer())) {
+                destroy();
+            }
         }
     }
 }
