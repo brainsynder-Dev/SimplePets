@@ -28,6 +28,14 @@ public class ReflectionUtil {
         return 18;
     }
 
+    public static Constructor getConstructor (Class<?> clazz, Class<?>... params) {
+        try {
+            return clazz.getConstructor(params);
+        }catch (Exception e) {
+            return null;
+        }
+    }
+
     public static Field getField(Class<?> clazz, String field) {
         if (clazz == null)
             return null;

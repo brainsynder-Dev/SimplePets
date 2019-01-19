@@ -9,7 +9,7 @@
     <artifactId>SimplePets</artifactId>
     <packaging>pom</packaging>
     <name>SimplePets</name>
-    <version>4.1.1-SNAPSHOT</version>
+    <version>4.1.2-SNAPSHOT</version>
     <url>http://ci.pluginwiki.us</url>
 
     <properties>
@@ -58,10 +58,6 @@
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
-            <id>plot-repo</id>
-            <url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
@@ -69,14 +65,17 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
+        <repository>
+            <id>plot-repo</id>
+            <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>com.plotsquared</groupId>
-            <artifactId>plotsquared-api</artifactId>
-            <version>18.03.12-c208c53-1970</version>
-            <scope>provided</scope>
+            <groupId>com.github.intellectualsites.plotsquared</groupId>
+            <artifactId>Plotsquared-Api</artifactId>
+            <version>4.19.01.01-29868bd-2132</version>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>

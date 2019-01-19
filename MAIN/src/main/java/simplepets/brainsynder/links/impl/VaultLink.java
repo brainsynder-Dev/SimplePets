@@ -15,11 +15,13 @@ public class VaultLink extends PluginLink<Vault> implements IVaultLink {
     }
 
     @Override
-    public void onHook() {
+    public boolean onHook() {
         RegisteredServiceProvider economyProvider = Bukkit.getServer().getServicesManager().getRegistration(Economy.class);
         if (economyProvider != null) {
             this.econ = (Economy) economyProvider.getProvider();
         }
+        return true;
+
     }
 
     @Override

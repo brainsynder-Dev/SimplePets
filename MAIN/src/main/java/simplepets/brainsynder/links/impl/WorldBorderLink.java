@@ -14,8 +14,8 @@ public class WorldBorderLink extends PluginLink<WorldBorder> implements IWorldBo
     }
 
     @Override
-    public void onHook() {
-
+    public boolean onHook() {
+        return true;
     }
 
     @Override

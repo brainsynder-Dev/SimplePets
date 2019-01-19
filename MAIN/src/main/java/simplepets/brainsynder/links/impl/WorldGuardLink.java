@@ -19,7 +19,8 @@ public class WorldGuardLink extends PluginLink<WorldGuardPlugin> implements IWor
     }
 
     @Override
-    public void onHook() {
+    public boolean onHook() {
+        return true;
     }
 
     @Override

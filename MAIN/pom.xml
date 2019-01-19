@@ -44,10 +44,6 @@
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
         <repository>
-            <id>plot-repo</id>
-            <url>http://ci.athion.net/job/PlotSquared/ws/mvn/</url>
-        </repository>
-        <repository>
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>

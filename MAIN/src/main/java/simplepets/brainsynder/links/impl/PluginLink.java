@@ -7,28 +7,25 @@ import simplepets.brainsynder.links.IPluginLink;
 
 public abstract class PluginLink<T extends Plugin> implements IPluginLink<T> {
     protected PluginLink<T> instance = this;
-    protected boolean hooked;
+    boolean hooked;
     private T dependency;
     private String dependencyName;
 
     public PluginLink(String dependencyName) {
         this.dependencyName = dependencyName;
-        if (this.dependency == null && !this.hooked) {
-            try {
-                this.dependency = (T) Bukkit.getPluginManager().getPlugin(this.getDependencyName());
-                if (this.dependency != null && this.dependency.isEnabled()) {
-                    this.onHook();
-                    this.hooked = true;
-                    PetCore.get().debug(this.dependency.getName() + " Successfully linked");
-                }
-            } catch (Exception var4) {
-            }
-        }
     }
 
-    public abstract void onHook();
+    public abstract boolean onHook();
 
     public abstract void onUnhook();
+
+    public void setHooked(boolean hooked) {
+        this.hooked = hooked;
+    }
+
+    public void setDependency(T dependency) {
+        this.dependency = dependency;
+    }
 
     public T getDependency() {
         if (this.dependency == null) {

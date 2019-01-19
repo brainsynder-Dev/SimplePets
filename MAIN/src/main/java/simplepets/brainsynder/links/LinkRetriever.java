@@ -1,10 +1,10 @@
 package simplepets.brainsynder.links;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import simplepets.brainsynder.links.impl.PlotSquaredLink;
-import simplepets.brainsynder.links.impl.VaultLink;
-import simplepets.brainsynder.links.impl.WorldBorderLink;
-import simplepets.brainsynder.links.impl.WorldGuardLink;
+import org.bukkit.plugin.Plugin;
+import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.links.impl.*;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
@@ -13,12 +13,31 @@ import java.util.List;
 public class LinkRetriever {
     private List<IPluginLink> loaders = new ArrayList<>();
 
-    private void initiate() {
+    public void initiate() {
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new WorldGuardLink());
         loaders.add(new VaultLink());
         loaders.add(new WorldBorderLink());
+
+        loaders.forEach(pluginLink -> {
+            if (pluginLink instanceof PluginLink) {
+                PluginLink link = (PluginLink) pluginLink;
+                if (!link.isHooked()) {
+                    try {
+                        Plugin dependency = Bukkit.getPluginManager().getPlugin(link.getDependencyName());
+                        if (dependency != null && dependency.isEnabled()) {
+                            link.setHooked(link.onHook());
+                            if (link.isHooked()) {
+                                PetCore.get().debug(dependency.getName() + " Successfully linked");
+                            }else{
+                                PetCore.get().debug(link.getDependencyName() + " Could not be linked");
+                            }
+                        }
+                    } catch (Exception ignored) {}
+                }
+            }
+        });
     }
 
     public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {

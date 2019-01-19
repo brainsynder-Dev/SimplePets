@@ -105,6 +105,7 @@ public class PetCore extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
+                linkRetriever.initiate();
                 WorldEditLink.init();
             }
         }.runTaskLater(this, 20*10);
@@ -461,5 +462,9 @@ public class PetCore extends JavaPlugin {
             return p.hasPermission(perm);
         }
         return true;
+    }
+
+    public ClassLoader getLoader () {
+        return getClassLoader();
     }
 }
