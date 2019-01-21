@@ -65,18 +65,9 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
-        <repository>
-            <id>plot-repo</id>
-            <url>http://ci.athion.net/job/PlotSquared-Breaking/ws/mvn/</url>
-        </repository>
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.intellectualsites.plotsquared</groupId>
-            <artifactId>Plotsquared-Api</artifactId>
-            <version>4.19.01.01-29868bd-2132</version>
-        </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
