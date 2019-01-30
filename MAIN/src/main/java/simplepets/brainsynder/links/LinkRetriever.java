@@ -11,10 +11,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LinkRetriever {
-    private List<IPluginLink> loaders = new ArrayList<>();
+    private List<IPluginLink> loaders;
 
     public void initiate() {
-        if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
+        if (loaders == null) loaders = new ArrayList<>();
+        if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new WorldGuardLink());
         loaders.add(new VaultLink());
@@ -38,6 +39,13 @@ public class LinkRetriever {
                 }
             }
         });
+    }
+
+    public void cleanup () {
+        if (loaders.isEmpty()) return;
+        loaders.forEach(IPluginLink::onUnhook);
+        loaders.clear();
+        loaders = null;
     }
 
     public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {

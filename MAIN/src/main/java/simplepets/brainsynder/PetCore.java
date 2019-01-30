@@ -89,12 +89,11 @@ public class PetCore extends JavaPlugin {
         typeManager = new TypeManager(this);
         loadConfig();
         createPluginInstances();
-        saveResource("SimplePets-Info-App.txt", true);
         new VersionNMS().registerPets();
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            debug("This version is not supported, be sure you are between 1.11 and 1.13.1");
+            debug("This version is not supported, be sure you are between 1.11 and 1.13.2");
             setEnabled(false);
             return;
         }
@@ -235,6 +234,7 @@ public class PetCore extends JavaPlugin {
         if (typeManager != null) {
             typeManager.unLoad();
         }
+        linkRetriever.cleanup();
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner == null) continue;

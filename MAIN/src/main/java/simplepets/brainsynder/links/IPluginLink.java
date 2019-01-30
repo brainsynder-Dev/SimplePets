@@ -8,4 +8,8 @@ public interface IPluginLink<T extends Plugin> {
     boolean isHooked();
 
     String getDependencyName();
+
+    default boolean onHook() { return true; }
+
+    default void onUnhook() {}
 }

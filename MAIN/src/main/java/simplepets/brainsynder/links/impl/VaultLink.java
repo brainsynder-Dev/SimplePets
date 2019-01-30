@@ -26,6 +26,8 @@ public class VaultLink extends PluginLink<Vault> implements IVaultLink {
 
     @Override
     public void onUnhook() {
+        econ = null;
+        super.onUnhook();
     }
 
     @Override

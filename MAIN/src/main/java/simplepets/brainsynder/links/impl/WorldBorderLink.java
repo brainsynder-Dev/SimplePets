@@ -14,16 +14,6 @@ public class WorldBorderLink extends PluginLink<WorldBorder> implements IWorldBo
     }
 
     @Override
-    public boolean onHook() {
-        return true;
-    }
-
-    @Override
-    public void onUnhook() {
-
-    }
-
-    @Override
     public boolean allowPetEntry(PetOwner owner, Location at) {
         return fetchValue("Move", at);
     }

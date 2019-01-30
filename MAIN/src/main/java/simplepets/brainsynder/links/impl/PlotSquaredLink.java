@@ -50,7 +50,15 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
         locCon = ReflectionUtil.getConstructor(loc, String.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
         return true;
     }
-    @Override public void onUnhook() {}
+    @Override public void onUnhook() {
+        ps = null;
+        plotArea = null;
+        getPlot = null;
+        hasOwner = null;
+        isDenied = null;
+        locCon = null;
+        super.onUnhook();
+    }
 
     @Override
     public boolean allowPetEntry(PetOwner owner, Location at) {

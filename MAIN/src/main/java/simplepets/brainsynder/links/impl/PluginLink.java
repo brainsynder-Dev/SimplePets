@@ -15,12 +15,16 @@ public abstract class PluginLink<T extends Plugin> implements IPluginLink<T> {
         this.dependencyName = dependencyName;
     }
 
-    public abstract boolean onHook();
-
-    public abstract void onUnhook();
-
     public void setHooked(boolean hooked) {
         this.hooked = hooked;
+    }
+
+    @Override
+    public void onUnhook() {
+        dependency = null;
+        hooked = false;
+        instance = null;
+        dependencyName = null;
     }
 
     public void setDependency(T dependency) {
@@ -40,9 +44,13 @@ public abstract class PluginLink<T extends Plugin> implements IPluginLink<T> {
         this.dependency = (T) Bukkit.getPluginManager().getPlugin(this.getDependencyName());
         boolean var = (this.dependency != null && this.dependency.isEnabled());
         if (var) {
-            onHook();
-            PetCore.get().debug(this.dependency.getName() + " Successfully linked");
-            hooked = true;
+            if (onHook()) {
+                hooked = true;
+                PetCore.get().debug(dependency.getName() + " Successfully linked");
+            }else{
+                hooked = false;
+                PetCore.get().debug(getDependencyName() + " Could not be linked");
+            }
         }
         return var;
     }
