@@ -66,7 +66,11 @@ public class Debug_SubCommand extends PetSubCommand {
         JSONArray array = new JSONArray();
         List<String> plugins = new ArrayList<>();
         Arrays.asList(Bukkit.getPluginManager().getPlugins()).forEach(plugin -> {
-            if (plugin.isEnabled()) plugins.add(plugin.getDescription().getName());
+            if (plugin.isEnabled()) {
+                String name = plugin.getDescription().getName();
+                String ver = plugin.getDescription().getVersion();
+                plugins.add(name+" ("+ver+")");
+            }
         });
         plugins.sort(Comparator.naturalOrder());
         array.addAll(plugins);
