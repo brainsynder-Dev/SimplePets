@@ -82,9 +82,9 @@ public class TypeManager {
     }
 
     public void unLoad () {
-        items.clear();
+        if (items != null) items.clear();
         items = null;
-        sortedItems.clear();
+        if (sortedItems != null) sortedItems.clear();
         sortedItems = null;
     }
 

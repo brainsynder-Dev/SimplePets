@@ -166,6 +166,7 @@ public class PetCore extends JavaPlugin {
                 Errors.JAVA_WARNING_CRITICAL.print();
                 return false;
             }
+            debug("Using Java: "+version);
         }
 
         fetchSupportedVersions();
@@ -295,7 +296,10 @@ public class PetCore extends JavaPlugin {
         needsPermissions = configuration.getBoolean("Needs-Permission");
         needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
         if ((type == 0) || (type == 2)) {
-            if (typeManager != null) typeManager.unLoad();
+            if (typeManager != null) {
+                typeManager.unLoad();
+                typeManager = null;
+            }
             typeManager = new TypeManager(this);
         }
 
@@ -424,9 +428,12 @@ public class PetCore extends JavaPlugin {
     private double getJavaVersion() {
         try {
             String version = System.getProperty("java.version");
-            int pos = version.indexOf('.');
-            pos = version.indexOf('.', pos + 1);
-            return Double.parseDouble(version.substring(0, pos));
+            if (version.contains(".")) {
+                int pos = version.indexOf('.');
+                pos = version.indexOf('.', pos + 1);
+                version = version.substring(0, pos);
+            }
+            return Double.parseDouble(version);
         } catch (Throwable t) {
             return 0.0;
         }
