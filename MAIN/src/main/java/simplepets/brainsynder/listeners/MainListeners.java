@@ -32,12 +32,11 @@ public class MainListeners implements Listener {
             return;
         }
 
-        if ((e.getCause() != EntityDamageEvent.DamageCause.SUFFOCATION)
-                && (e.getCause() == EntityDamageEvent.DamageCause.FALL)) return;
-
+        if (e.getCause() != EntityDamageEvent.DamageCause.SUFFOCATION) return;
+        // Should fix issue with fall damage while riding pet...
         if (e.getEntity() instanceof Player) {
-            Player p = (Player) e.getEntity();
-            PetOwner owner = PetOwner.getPetOwner(p);
+            Player player = (Player) e.getEntity();
+            PetOwner owner = PetOwner.getPetOwner(player);
             if (owner == null) return;
             if (!owner.hasPet()) return;
             if (!owner.getPet().isVehicle()) return;
