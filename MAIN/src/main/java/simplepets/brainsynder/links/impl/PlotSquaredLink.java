@@ -121,7 +121,7 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
         try {
             return Reflection.getMethod(clazz, method, params);
         }catch (Exception e){
-            Bukkit.getLogger().severe("Count not get method '"+method+"' because: ");
+            Bukkit.getLogger().severe("Could not get method '"+method+"' because: ");
             e.printStackTrace();
             return null;
         }
@@ -131,7 +131,7 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
         try {
             return Class.forName(packageName+"."+className);
         }catch (Exception e){
-            Bukkit.getLogger().severe("Count not get class '"+className+"' because: ");
+            Bukkit.getLogger().severe("Could not get class '"+className+"' because: ");
             e.printStackTrace();
             return null;
         }
@@ -145,7 +145,7 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
             try {
                 return method.invoke(instance, parameters);
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Count not invoke method '"+method.getName()+"' because: ");
+                Bukkit.getLogger().severe("Could not invoke method '"+method.getName()+"' because: ");
                 e.printStackTrace();
                 return null;
             }

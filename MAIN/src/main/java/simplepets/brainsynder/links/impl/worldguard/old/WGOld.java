@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import simple.brainsynder.utils.Reflection;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.impl.worldguard.WGInterface;
 
 import java.lang.reflect.Method;
@@ -57,8 +58,7 @@ public class WGOld implements WGInterface {
         try {
             return Reflection.getMethod(clazz, method, params);
         }catch (Exception e){
-            Bukkit.getLogger().severe("Count not get method '"+method+"' because: ");
-            e.printStackTrace();
+            Bukkit.getLogger().severe("Could not get method '"+method+"'");
             return null;
         }
     }
@@ -67,8 +67,7 @@ public class WGOld implements WGInterface {
         try {
             return Class.forName(className);
         }catch (Exception e){
-            Bukkit.getLogger().severe("Count not get class '"+className+"' because: ");
-            e.printStackTrace();
+            Bukkit.getLogger().severe("Could not get class '"+className+"'");
             return null;
         }
     }
@@ -81,8 +80,7 @@ public class WGOld implements WGInterface {
             try {
                 return method.invoke(instance, parameters);
             } catch (Exception e) {
-                Bukkit.getLogger().severe("Count not invoke method '"+method.getName()+"' because: ");
-                e.printStackTrace();
+                PetCore.get().debug(2, "Could not invoke method '"+method.getName()+"'");
                 return null;
             }
         }
