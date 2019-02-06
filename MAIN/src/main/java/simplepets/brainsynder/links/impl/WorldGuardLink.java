@@ -24,22 +24,22 @@ public class WorldGuardLink extends PluginLink implements IWorldGuardLink {
     public boolean onHook() {
         ClassLoader loader = PetCore.get().getLoader();
         try {
-            Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin", false, loader);
-            // Server uses old WorldGuard API
-            PetCore.get().debug("Server is using the old WorldGuard API");
-            wgInterface = new WGOld();
-        }catch (Exception e) {
+            Class.forName("com.sk89q.worldguard.WorldGuard", false, loader);
+            // Server uses new WorldGuard API
+            PetCore.get().debug("Server is using the new WorldGuard API");
+            wgInterface = new WGLatest();
+        }catch (Exception e2) {
             try {
-                Class.forName("com.sk89q.worldguard.WorldGuard", false, loader);
-                // Server uses new WorldGuard API
-                PetCore.get().debug("Server is using the new WorldGuard API");
-                wgInterface = new WGLatest();
-            }catch (Exception e2) {
+                Class.forName("com.sk89q.worldguard.bukkit.WorldGuardPlugin", false, loader);
+                // Server uses old WorldGuard API
+                PetCore.get().debug("Server is using the old WorldGuard API");
+                wgInterface = new WGOld();
+            }catch (Exception e) {
                 return false;
             }
         }
-
-        if ( (wgInterface != null) && (!wgInterface.initiate()) ) {
+        if (wgInterface == null) return false;
+        if (!wgInterface.initiate()) {
             PetCore.get().debug("An Error occurred when initiating WGInterface");
             return false;
         }
