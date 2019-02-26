@@ -54,8 +54,8 @@
             <url>http://maven.sk89q.com/repo/</url>
         </repository>
         <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
+            <id>essx-repo</id>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>jitpack.io</id>
@@ -91,7 +91,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>SimpleAPI</artifactId>
-            <version>3.8-SNAPSHOT</version>
+            <version>3.8.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
