@@ -2,7 +2,7 @@ package simplepets.brainsynder.menu.menuItems.sizes;
 
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.ISizable;
+import simplepets.brainsynder.api.entity.misc.ISizable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;
@@ -27,7 +27,7 @@ public class Size2 extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        items.add(new ItemBuilder(Material.SLIME_BLOCK).setTexture("&6&lSize: &e2"));
+        items.add(new ItemBuilder(Material.SLIME_BLOCK).withName("&6&lSize: &e2"));
         return items;
     }
 
