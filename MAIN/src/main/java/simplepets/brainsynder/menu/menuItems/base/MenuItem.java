@@ -25,6 +25,9 @@ public abstract class MenuItem {
     public String getName() {
         return getClass().getSimpleName();
     }
+    public String getTargetName() {
+        return getClass().getSimpleName().toLowerCase();
+    }
 
     public int getVersion() {
         return 18;
