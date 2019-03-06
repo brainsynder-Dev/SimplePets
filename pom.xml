@@ -90,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>simple.brainsynder</groupId>
-            <artifactId>SimpleAPI</artifactId>
+            <artifactId>API</artifactId>
             <version>3.8.3-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>

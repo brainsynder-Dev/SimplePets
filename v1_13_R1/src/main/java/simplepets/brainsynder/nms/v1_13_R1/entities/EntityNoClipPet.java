@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.v1_13_R1.entities;
 
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.World;
-import simplepets.brainsynder.api.entity.IEntityNoClipPet;
+import simplepets.brainsynder.api.entity.misc.IEntityNoClipPet;
 import simplepets.brainsynder.api.pet.IPet;
 
 public abstract class EntityNoClipPet extends EntityPet implements IEntityNoClipPet {

@@ -1,6 +1,6 @@
 package simplepets.brainsynder.api.entity.passive;
 
-import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 
 public interface IEntityZombieHorsePet extends IHorseAbstract {
 }

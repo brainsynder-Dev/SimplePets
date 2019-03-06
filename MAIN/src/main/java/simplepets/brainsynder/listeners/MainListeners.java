@@ -16,7 +16,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IImpossaPet;
+import simplepets.brainsynder.api.entity.misc.IImpossaPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.Utilities;

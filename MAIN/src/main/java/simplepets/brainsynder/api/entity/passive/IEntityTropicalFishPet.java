@@ -1,6 +1,6 @@
 package simplepets.brainsynder.api.entity.passive;
 
-import simplepets.brainsynder.api.entity.IEntityFishPet;
+import simplepets.brainsynder.api.entity.misc.IEntityFishPet;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.TropicalPattern;
 

@@ -1,5 +1,6 @@
-package simplepets.brainsynder.api.entity;
+package simplepets.brainsynder.api.entity.misc;
 
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 public interface IEntityWizard extends IEntityPet {

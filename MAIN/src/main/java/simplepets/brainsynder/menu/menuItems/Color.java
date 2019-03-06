@@ -2,8 +2,8 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.json.simple.JSONArray;
-import simplepets.brainsynder.api.entity.IColorable;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IColorable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;

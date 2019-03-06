@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.v1_11_R1.entities.list;
 
 import net.minecraft.server.v1_11_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.api.entity.IFlyablePet;
+import simplepets.brainsynder.api.entity.misc.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.EntityPet;

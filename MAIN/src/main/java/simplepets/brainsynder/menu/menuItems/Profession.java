@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
+import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -97,5 +98,10 @@ public class Profession extends MenuItemAbstract {
                 wrapper = var.getProfession();
             var.setProfession(ProfessionWrapper.getPrevious(wrapper));
         }
+    }
+
+    @Override
+    public boolean isSupported() {
+        return ServerVersion.isEqualOld(ServerVersion.v1_13_R2);
     }
 }

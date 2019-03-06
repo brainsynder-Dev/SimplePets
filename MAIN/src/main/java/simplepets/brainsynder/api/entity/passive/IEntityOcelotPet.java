@@ -1,9 +1,9 @@
 package simplepets.brainsynder.api.entity.passive;
 
-import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.entity.misc.ITameable;
 
 public interface IEntityOcelotPet extends ITameable {
-    int getCatType();
+    default int getCatType() { return 0; }
 
-    void setCatType(int i);
+    default void setCatType(int i) {}
 }

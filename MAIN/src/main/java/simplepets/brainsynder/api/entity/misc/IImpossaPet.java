@@ -1,4 +1,4 @@
-package simplepets.brainsynder.api.entity;
+package simplepets.brainsynder.api.entity.misc;
 
 import simplepets.brainsynder.wrapper.EntityWrapper;
 

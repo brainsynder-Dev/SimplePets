@@ -5,7 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simplepets.brainsynder.api.entity.IImpossaPet;
+import simplepets.brainsynder.api.entity.misc.IImpossaPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 

@@ -1,8 +1,8 @@
 package simplepets.brainsynder.api.entity.passive;
 
 
-import simplepets.brainsynder.api.entity.IColorable;
-import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.entity.misc.IColorable;
+import simplepets.brainsynder.api.entity.misc.ITameable;
 
 public interface IEntityWolfPet extends ITameable,
         IColorable {

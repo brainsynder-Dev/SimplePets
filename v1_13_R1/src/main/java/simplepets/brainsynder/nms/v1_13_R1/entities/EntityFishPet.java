@@ -4,7 +4,7 @@ import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.World;
-import simplepets.brainsynder.api.entity.IEntityFishPet;
+import simplepets.brainsynder.api.entity.misc.IEntityFishPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 

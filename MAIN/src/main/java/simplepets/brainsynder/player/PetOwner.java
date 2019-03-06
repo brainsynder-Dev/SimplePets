@@ -18,7 +18,7 @@ import simple.brainsynder.utils.Base64Wrapper;
 import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
-import simplepets.brainsynder.api.entity.ITameable;
+import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.api.event.pet.PetRemoveEvent;
 import simplepets.brainsynder.api.pet.IPet;

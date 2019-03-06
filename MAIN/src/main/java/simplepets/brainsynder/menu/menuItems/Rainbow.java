@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IRainbow;
+import simplepets.brainsynder.api.entity.misc.IRainbow;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;

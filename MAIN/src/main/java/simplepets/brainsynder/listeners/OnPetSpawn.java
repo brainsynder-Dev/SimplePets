@@ -8,7 +8,7 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IImpossaPet;
+import simplepets.brainsynder.api.entity.misc.IImpossaPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.links.IPlotSquaredLink;
 import simplepets.brainsynder.links.IWorldBorderLink;

@@ -10,10 +10,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
+import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.event.pet.PetHatEvent;
 import simplepets.brainsynder.api.event.pet.PetPreSpawnEvent;
 import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
@@ -87,8 +88,11 @@ public class Pet implements IPet {
             for (Class<? extends MenuItem> item : type.getPetData().getItemClasses()) {
                 MenuItem item1 = getItem(item);
                 if (item1 != null)
-                    if (item1.isSupported())
+                    if (item1.isSupported()) {
                         items.add(item1);
+                    }else{
+                        PetCore.get().debug(type.getConfigName()+" DataItem '"+item1.getName()+"' as it is not supported for this version ("+ ServerVersion.getVersion().name() +").");
+                    }
             }
         }
         this.items = items;

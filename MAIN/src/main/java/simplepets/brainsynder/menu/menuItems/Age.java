@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
-import simplepets.brainsynder.api.entity.IAgeablePet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.ItemBuilder;

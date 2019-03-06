@@ -2,7 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;

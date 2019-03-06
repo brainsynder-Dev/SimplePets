@@ -1,6 +1,6 @@
 package simplepets.brainsynder.api.entity.passive;
 
-import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 import simplepets.brainsynder.wrapper.HorseStyleType;

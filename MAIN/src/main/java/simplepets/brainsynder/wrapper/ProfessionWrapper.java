@@ -1,23 +1,20 @@
 package simplepets.brainsynder.wrapper;
 
 import simple.brainsynder.utils.ServerVersion;
-import simplepets.brainsynder.reflection.ReflectionUtil;
 
 public enum ProfessionWrapper {
-    FARMER(1, 18, false),
-    LIBRARIAN(2, 18, false),
-    PRIEST(3, 18, false),
-    BLACKSMITH(4, 18, false),
-    BUTCHER(5, 18, false),
-    NITWIT(6, 111, false);
+    FARMER(1, ServerVersion.v1_8_R3),
+    LIBRARIAN(2, ServerVersion.v1_8_R3),
+    PRIEST(3, ServerVersion.v1_8_R3),
+    BLACKSMITH(4, ServerVersion.v1_8_R3),
+    BUTCHER(5, ServerVersion.v1_8_R3),
+    NITWIT(6, ServerVersion.v1_11_R1);
 
-    private boolean zombie;
     private int id;
-    private int version;
+    private ServerVersion version;
 
-    ProfessionWrapper(int id, int version, boolean zombie) {
+    ProfessionWrapper(int id, ServerVersion version) {
         this.id = id;
-        this.zombie = zombie;
         this.version = version;
     }
 
@@ -93,46 +90,10 @@ public enum ProfessionWrapper {
     }
 
     public boolean isSupported() {
-        return (ReflectionUtil.getVersionInt() >= this.version);
-    }
-
-    public boolean isZombie() {
-        return this.zombie;
+        return ServerVersion.isEqualNew(version);
     }
 
     public int getId() {
         return id;
     }
-
-    public enum ZombieProfession {
-        NORMAL(0),
-        HUSK(7);
-        private int id;
-
-        ZombieProfession(int id) {
-            this.id = id;
-        }
-
-
-        public static ZombieProfession getPrevious(ZombieProfession current) {
-            return current == NORMAL ? HUSK : NORMAL;
-        }
-
-        public int getId() {
-            return id;
-        }
-
-        public static ZombieProfession getNext(ZombieProfession current) {
-            return current == NORMAL ? HUSK : NORMAL;
-        }
-
-        public static ZombieProfession getProfession(String name) {
-            for (ZombieProfession wrapper : values()) {
-                if (wrapper.name().equalsIgnoreCase(name)) return wrapper;
-            }
-
-            return NORMAL;
-        }
-    }
-
 }

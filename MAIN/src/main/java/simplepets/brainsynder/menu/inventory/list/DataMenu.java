@@ -75,6 +75,7 @@ public class DataMenu extends CustomInventory {
             IStorage<MenuItem> items = pet.getItems().copy();
             while (items.hasNext()) {
                 MenuItem item = items.next();
+                if (!item.isSupported()) continue;
                 try {
                     ItemStack stack = item.getItem().build();
                     if (!inv.contains(stack)) {

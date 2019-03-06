@@ -5,7 +5,7 @@ import net.minecraft.server.v1_13_R1.DataWatcherObject;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.api.entity.IHorseAbstract;
+import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
@@ -64,18 +64,20 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
 
     @Override
     public boolean isSaddled() {
-        return getHorseVisual(4);
+        return getFlag(4);
     }
 
     public void setSaddled(boolean flag) {
-        this.setHorseVisual(4, flag);
+        setFlag(4, flag);
     }
 
-    public boolean getHorseVisual(int i) {
+    @Override
+    public boolean getFlag(int i) {
         return (this.datawatcher.get(STATUS) & i) != 0;
     }
 
-    public void setHorseVisual(int i, boolean flag) {
+    @Override
+    public void setFlag(int i, boolean flag) {
         byte b0 = this.datawatcher.get(STATUS);
         if (flag) {
             this.datawatcher.set(STATUS, (byte) (b0 | i));

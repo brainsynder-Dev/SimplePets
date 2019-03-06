@@ -5,8 +5,8 @@ import net.minecraft.server.v1_13_R2.DataWatcherObject;
 import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import simple.brainsynder.nbt.StorageTagCompound;
-import simplepets.brainsynder.api.entity.IAgeablePet;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
