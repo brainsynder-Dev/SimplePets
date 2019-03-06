@@ -121,7 +121,7 @@ public class Utilities {
     public static Material fetchMaterial(String... names) {
         for (String name : names) {
             try {
-                return Material.valueOf(name);
+                return converter.findMaterial(name);
             } catch (Exception ignored) {
             }
         }
