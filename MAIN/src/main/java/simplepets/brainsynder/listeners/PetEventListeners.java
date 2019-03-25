@@ -6,6 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
+import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.storage.IStorage;
 import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
@@ -17,7 +18,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.storage.files.EconomyFile;
-import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.util.List;
 
@@ -70,21 +70,33 @@ public class PetEventListeners implements Listener {
         IStorage<PetTypeStorage> types = event.getShownPetTypes().copy();
         PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
         JSONArray petArray = petOwner.getOwnedPets();
+        List<String> lore = economyFile.getStringList((economyFile.getBoolean("Pay-Per-Use.Enabled") ? "Pay-Per-Use.Lore-Lines" : "Lore-Lines"));
+
         while (types.hasNext()) {
             PetTypeStorage storage = types.next();
             PetDefault type = storage.getType();
             ItemBuilder maker = ItemBuilder.fromJSON(storage.getType().getItemBuilder().toJSON());
-            String price = ((economyFile.getPrice(type) == -1) ? economyFile.getString("Price-Free") : String.valueOf(economyFile.getPrice(type)));
+            String price = String.valueOf(economyFile.getPrice(type));
+            PetCore.get().debug("Price for "+type.getConfigName()+" '"+price+"'");
+            if (price.equals("-1")) price = economyFile.getString("Price-Free");
 
-            if (event.getPlayer().hasPermission("Pets.economy.bypass")) price = economyFile.getString("Price-Bypass");
-            if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
-                for (String line : economyFile.getStringList("Pay-Per-Use.Lore-Lines"))
-                    maker.addLore(line.replace("%cost%", price));
-            } else {
-                boolean contains = petArray.contains(type.getConfigName());
-                for (String line : economyFile.getStringList("Lore-Lines"))
-                    maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));
+            try {
+                if (price.isEmpty()) {
+                    PetCore.get().debug("Price is empty for: 'Pet." + type.getConfigName() + ".Price'");
+                    items.add(maker.build());
+                    continue;
+                }
+                Double.parseDouble(price);
+            }catch (Exception e){
+                PetCore.get().debug("Price is invalid for: 'Pet." + type.getConfigName() + ".Price'");
+                items.add(maker.build());
+                continue;
             }
+
+            if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pets.economy.bypass")) price = economyFile.getString("Bypass.Price");
+            boolean contains = petArray.contains(type.getConfigName());
+            for (String line : lore)
+                maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));
             items.add(maker.build());
             storage.setItem(maker);
         }

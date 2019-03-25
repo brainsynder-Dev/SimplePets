@@ -17,6 +17,8 @@ public class EconomyFile extends FileMaker {
         setDefault("PurchaseSuccessful", "{prefix} &7You have Successfully Purchased the %type% Pet.");
         setDefault("InsufficientFunds", "{prefix} &cYou do not have enough money to buy this pet, you need to have %price%");
         setDefault("Price-Free", "Free");
+        setDefault("Bypass.Price", "BYPASSED");
+        setDefault("Bypass.Hide-Price-If-Bypassed", true);
         setDefault("Pay-Per-Use.Enabled", false);
         setDefault("Pay-Per-Use.Paid", "{prefix} &7You have Successfully Paid for the %type% Pet.");
         setDefault("Pay-Per-Use.Lore-Lines", Collections.singletonList("&6Price: &e%cost%"));
