@@ -5,7 +5,8 @@ import simplepets.brainsynder.PetCore;
 
 public enum Errors {
 
-    API_OUT_OF_DATE("SimplePets >> Notice: Your Version of SimpleAPI is OutOfDate, Please update SimpleAPI https://www.spigotmc.org/resources/24671/",
+    API_NEWER("Notice: Your Version of SimpleAPI ({cur}) is newer then the recommended version ({rec}) (Conflicts are possible)"),
+    API_OUT_OF_DATE("Notice: Your Version of SimpleAPI ({old}) is OutOfDate, Please update SimpleAPI ({new}) https://www.spigotmc.org/resources/24671/",
             "Disabling SimplePets..."),
     NO_SPIGOT("-------------------------------------------",
             "          Error Type: CRITICAL",
@@ -47,6 +48,13 @@ public enum Errors {
         errMsg = s;
     }
 
+    public Errors replace (ReturnValue<String> value) {
+        for (int i = 0; i< errMsg.length; i++) {
+            String string = errMsg[i];
+            errMsg[i] = value.run(string);
+        }
+        return this;
+    }
 
     public void print() {
         print(false);
@@ -55,11 +63,15 @@ public enum Errors {
     public void print(boolean debug) {
         for (String line : errMsg) {
             if (debug) {
-                PetCore.get().debug(line);
+                PetCore.get().debug(-1, line);
                 continue;
             }
 
             System.out.println(line);
         }
+    }
+
+    public interface ReturnValue<T> {
+        T run(T var1);
     }
 }

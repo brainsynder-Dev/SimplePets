@@ -141,12 +141,29 @@ public class PetCore extends JavaPlugin {
 
     private boolean errorCheck() {
         try {
-            double ver = Double.parseDouble(getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion().replace("-SNAPSHOT",""));
-            if (ver < 3.8) {
-                Errors.API_OUT_OF_DATE.print();
+            int[] target = new int[]{3, 8, 5};
+            String version = getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion().replace("-SNAPSHOT", "");
+            String[] found = version.replace(".", "-").split("-");
+            int a = Integer.parseInt(found[0]);
+            int b = Integer.parseInt(found[1]);
+            int c = ((found.length == 3) ? Integer.parseInt(found[2]) : 0);
+
+            if ((target[0] > a) || (target[1] > b) || (target[2] > c)) {
+                Errors.API_OUT_OF_DATE.replace(s -> s
+                        .replace("{old}", version)
+                        .replace("{new}", target[0] + "." + target[1] + "." + target[2])
+                ).print(true);
                 return false;
             }
-        }catch (NumberFormatException ignored){}
+            if ((target[0] < a) || (target[1] < b) || (target[2] < c))
+                Errors.API_NEWER.replace(s -> s
+                        .replace("{cur}", version)
+                        .replace("{rec}", target[0] + "." + target[1] + "." + target[2])
+                ).print(true);
+
+        } catch (Exception e) {
+            debug("Could not validate SimpleAPI version with required version");
+        }
 
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
@@ -269,6 +286,7 @@ public class PetCore extends JavaPlugin {
 
     public void debug(int level, String message) {
         if (level >= 3) level = 2;
+        ChatColor prefix = ((level == -1) ? ChatColor.RED : ChatColor.GOLD);
         ChatColor color = ChatColor.WHITE;
         switch (level) {
             case 1:
@@ -279,17 +297,18 @@ public class PetCore extends JavaPlugin {
                 break;
         }
         if (configuration == null) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
             return;
         }
         if (!configuration.isSet("Debug.Enabled")) {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
             return;
         }
-        if (!configuration.getBoolean("Debug.Enabled")) return;
-        if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
-
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "[SimplePets Debug] " + color + message);
+        if (level != -1) {
+            if (!configuration.getBoolean("Debug.Enabled")) return;
+            if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
+        }
+        Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
     }
 
     public void reload(int type) {
