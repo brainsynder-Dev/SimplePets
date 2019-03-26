@@ -5,8 +5,8 @@ import simplepets.brainsynder.PetCore;
 
 public enum Errors {
 
-    API_NEWER("Notice: Your Version of SimpleAPI ({cur}) is newer then the recommended version ({rec}) (Conflicts are possible)"),
-    API_OUT_OF_DATE("Notice: Your Version of SimpleAPI ({old}) is OutOfDate, Please update SimpleAPI ({new}) https://www.spigotmc.org/resources/24671/",
+    API_NEWER("Your Version of SimpleAPI ({cur}) is newer then the recommended version ({rec}) (conflicts are a possibility)"),
+    API_OUT_OF_DATE("Your Version of SimpleAPI ({old}) is OutOfDate, Please update SimpleAPI to at least {new} https://www.spigotmc.org/resources/24671/",
             "Disabling SimplePets..."),
     NO_SPIGOT("-------------------------------------------",
             "          Error Type: CRITICAL",

@@ -107,7 +107,7 @@ public class PetCore extends JavaPlugin {
                 linkRetriever.initiate();
                 WorldEditLink.init();
             }
-        }.runTaskLater(this, 20*10);
+        }.runTaskLater(this, 20 * 10);
         reloadSpawner();
         spawner.init();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
@@ -117,7 +117,7 @@ public class PetCore extends JavaPlugin {
     private void registerEvents() {
         debug("Registering Listeners...");
         try {
-            new CommandRegistry (this).register(new PetCommand());
+            new CommandRegistry(this).register(new PetCommand());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -183,7 +183,7 @@ public class PetCore extends JavaPlugin {
                 Errors.JAVA_WARNING_CRITICAL.print();
                 return false;
             }
-            debug("Using Java: "+version);
+            debug("Using Java: " + version);
         }
 
         fetchSupportedVersions();
@@ -209,7 +209,7 @@ public class PetCore extends JavaPlugin {
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
                     if (!mySQL.hasColumn(connection, "SavedPets"))
                         mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                }catch (Exception e){
+                } catch (Exception e) {
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
                 }
@@ -220,13 +220,13 @@ public class PetCore extends JavaPlugin {
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms."+version.name()+".entities.SpawnUtil");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".entities.SpawnUtil");
             if (clazz == null) return;
             if (ISpawner.class.isAssignableFrom(clazz)) {
-                spawner = (ISpawner)clazz.getConstructor().newInstance();
-                debug("Successfully Linked to "+version.name()+" SpawnUtil Class");
+                spawner = (ISpawner) clazz.getConstructor().newInstance();
+                debug("Successfully Linked to " + version.name() + " SpawnUtil Class");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             debug("Could not link to a SpawnUtil Class... Possible Wrong version?");
         }
     }
@@ -252,7 +252,7 @@ public class PetCore extends JavaPlugin {
         if (typeManager != null) {
             typeManager.unLoad();
         }
-        linkRetriever.cleanup();
+        if (linkRetriever != null) linkRetriever.cleanup();
         disabling = true;
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner == null) continue;
@@ -286,7 +286,7 @@ public class PetCore extends JavaPlugin {
 
     public void debug(int level, String message) {
         if (level >= 3) level = 2;
-        ChatColor prefix = ((level == -1) ? ChatColor.RED : ChatColor.GOLD);
+        ChatColor prefix = ((level == -1) ? ChatColor.AQUA : ChatColor.GOLD);
         ChatColor color = ChatColor.WHITE;
         switch (level) {
             case 1:
@@ -336,7 +336,7 @@ public class PetCore extends JavaPlugin {
                         connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
                         if (!mySQL.hasColumn(connection, "SavedPets"))
                             mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         debug("Unable to create default SQL tables Error:");
                         e.printStackTrace();
                     }
@@ -347,7 +347,7 @@ public class PetCore extends JavaPlugin {
 
     // GETTERS
 
-    private void fetchSupportedVersions () {
+    private void fetchSupportedVersions() {
         supportedVersions.clear();
         String current = Reflection.getVersion();
         boolean supported = false;
@@ -357,13 +357,15 @@ public class PetCore extends JavaPlugin {
             try {
                 Class<?> clazz = Class.forName(packageName.replace("<VER>", version.name()), false, getClassLoader());
                 if (clazz != null) supportedVersions.add(version.name());
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
         if (!supported) {
             try {
                 Class<?> clazz = Class.forName(packageName.replace("<VER>", current), false, getClassLoader());
                 if (clazz != null) supportedVersions.add(current);
-            }catch (Exception e){}
+            } catch (Exception e) {
+            }
         }
 
         if (!supportedVersions.isEmpty())
@@ -378,15 +380,25 @@ public class PetCore extends JavaPlugin {
         return needsDataPermissions;
     }
 
-    public boolean isDisabling() {return this.disabling;}
+    public boolean isDisabling() {
+        return this.disabling;
+    }
 
-    public Config getConfiguration() {return this.configuration;}
+    public Config getConfiguration() {
+        return this.configuration;
+    }
 
-    public Messages getMessages() {return this.messages;}
+    public Messages getMessages() {
+        return this.messages;
+    }
 
-    public MySQL getMySQL() {return this.mySQL;}
+    public MySQL getMySQL() {
+        return this.mySQL;
+    }
 
-    public Commands getCommands() {return commands;}
+    public Commands getCommands() {
+        return commands;
+    }
 
     public String getDefaultPetName(PetDefault petType, Player player) {
         return translateName(petType.getDefaultName()).replace("%player%", player.getName());
@@ -490,7 +502,7 @@ public class PetCore extends JavaPlugin {
         return true;
     }
 
-    public ClassLoader getLoader () {
+    public ClassLoader getLoader() {
         return getClassLoader();
     }
 }
