@@ -1,12 +1,12 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
+import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
@@ -72,7 +72,7 @@ public class Profession extends MenuItemAbstract {
         item = new ItemBuilder(Material.ENCHANTED_BOOK);
         item.withName("&6Priest");
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 2).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 2);
         item.withName("&6NitWit");
         items.add(item);
         return items;

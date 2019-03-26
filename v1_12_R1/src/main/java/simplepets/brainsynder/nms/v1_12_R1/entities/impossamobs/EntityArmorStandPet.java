@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
+import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -21,7 +22,6 @@ import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
-import simplepets.brainsynder.utils.ItemBuilder;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -198,7 +198,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void setOwner(boolean flag) {
         minime = flag;
         if (flag) {
-            ItemBuilder builder = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+            ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
             getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
             getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
             getEntity().setBoots(new ItemBuilder(Utilities.findMaterial("GOLD_BOOTS")).build());

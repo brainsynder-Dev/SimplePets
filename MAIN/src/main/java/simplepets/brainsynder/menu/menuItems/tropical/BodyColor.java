@@ -2,12 +2,11 @@ package simplepets.brainsynder.menu.menuItems.tropical;
 
 import org.apache.commons.lang.WordUtils;
 import org.json.simple.JSONArray;
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class BodyColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, color.getWoolData()).toBuilder(1);
+            ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, color.getWoolData());
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

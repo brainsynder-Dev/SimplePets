@@ -2,12 +2,11 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.json.simple.JSONArray;
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPufferFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.PufferState;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class PufferSize extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
         item.setTexture("http://textures.minecraft.net/texture/17152876bc3a96dd2a2299245edb3beef647c8a56ac8853a687c3e7b5d8bb");
         item.withName(" ");
         item.addLore("&6Previous: &7%prev_state%",

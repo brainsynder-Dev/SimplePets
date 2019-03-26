@@ -2,12 +2,11 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityWizard;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 import java.util.ArrayList;
@@ -55,22 +54,22 @@ public class Spell extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 0).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 0);
         item.withName(WordUtils.capitalize(WizardSpell.BLINDNESS.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 12).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 12);
         item.withName(WordUtils.capitalize(WizardSpell.DISAPPEAR.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 3).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 3);
         item.withName(WordUtils.capitalize(WizardSpell.FANGS.name().toLowerCase().replace('_', ' ')));
         items.add(item);
         item = new ItemBuilder(Material.BARRIER);
         item.withName(WordUtils.capitalize(WizardSpell.NONE.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 8).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 8);
         item.withName(WordUtils.capitalize(WizardSpell.SUMMON_VEX.name().toLowerCase().replace('_', ' ')));
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.INK_SACK, 14).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 14);
         item.withName(WordUtils.capitalize(WizardSpell.WOLOLO.name().toLowerCase().replace('_', ' ')));
         items.add(item);
         return items;

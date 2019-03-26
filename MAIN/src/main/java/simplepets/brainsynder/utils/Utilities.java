@@ -10,11 +10,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONObject;
+import simple.brainsynder.api.ItemBuilder;
+import simple.brainsynder.nms.DataConverter;
+import simple.brainsynder.utils.MatType;
 import simple.brainsynder.utils.Reflection;
 import simple.brainsynder.utils.ServerVersion;
+import simple.brainsynder.utils.SkullType;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
-import simplepets.brainsynder.nms.DataConverter;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -36,17 +39,7 @@ public class Utilities {
     private static Map<String, Long> startTimeMap = new HashMap<>();
 
     public static void init () {
-        ServerVersion version = ServerVersion.getVersion();
-        try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".utils.DataConverterHandler", false, PetCore.get().getClass().getClassLoader());
-            if (clazz != null) {
-                converter = (DataConverter) clazz.newInstance();
-                PetCore.get().debug("Successfully found DataConversions for " + version.name());
-            }
-        }catch (Exception e){
-            converter = new DataConverter();
-            PetCore.get().debug("Using pre-1.13 DataConversions for " + version.name());
-        }
+        converter = Reflection.getConverter();
     }
 
     public static List<Material> getBlacklistedMaterials() {
@@ -64,11 +57,11 @@ public class Utilities {
         return materials;
     }
 
-    public static Data getSkullMaterial(SkullType type) {
+    public static DataConverter.Data getSkull(SkullType type) {
         return converter.getSkullMaterial(type);
     }
 
-    public static Data getColoredMaterial(MatType type, int data) {
+    public static DataConverter.Data getColored(MatType type, int data) {
         return converter.getColoredMaterial(type, data);
     }
 
@@ -90,17 +83,17 @@ public class Utilities {
 
         try {
             MatType type = MatType.valueOf(material.name().replace("LEGACY_", ""));
-            Data data1 = getColoredMaterial(type, data);
-            json.put("material", data1.material.name());
-            if (data1.data == -1) json.remove("data");
+            DataConverter.Data data1 = getColored(type, data);
+            json.put("material", data1.getMaterial().name());
+            if (data1.getData() == -1) json.remove("data");
             return ItemBuilder.fromJSON(json);
         }catch (Exception ignored){}
 
         if (json.containsKey("skullData")) {
             try {
-                Data data1 = getSkullMaterial(SkullType.values()[data]);
-                json.put("material", data1.material.name());
-                if (data1.data == -1) json.remove("data");
+                DataConverter.Data data1 = getSkull(simple.brainsynder.utils.SkullType.values()[data]);
+                json.put("material", data1.getMaterial().name());
+                if (data1.getData() == -1) json.remove("data");
                 return ItemBuilder.fromJSON(json);
             }catch (Exception ignored){}
         }
@@ -316,47 +309,5 @@ public class Utilities {
             return null;
         }
         return config.getItemStack("i", null);
-    }
-
-    public static class Data {
-        public Material material;
-        public int data = -1;
-
-        public Data(Material material, int data) {
-            this.material = material;
-            this.data = data;
-        }
-
-        public ItemBuilder toBuilder(int amount) {
-            return new ItemBuilder(material, amount).withData(data);
-        }
-    }
-
-    public enum SkullType {
-        SKELETON,
-        WITHER,
-        ZOMBIE,
-        PLAYER,
-        CREEPER,
-        DRAGON
-    }
-
-    public enum MatType {
-        STAINED_GLASS_PANE,
-        WOOL,
-        STAINED_CLAY("TERRACOTTA"),
-        INK_SACK;
-        private String name;
-
-        MatType () {
-            this.name = name();
-        }
-        MatType (String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
-        }
     }
 }

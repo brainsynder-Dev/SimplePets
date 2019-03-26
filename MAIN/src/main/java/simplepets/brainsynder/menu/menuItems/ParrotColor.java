@@ -1,11 +1,10 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.ParrotVariant;
 
 import java.util.ArrayList;
@@ -50,19 +49,19 @@ public class ParrotColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 11).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 11);
         item.withName("&9Blue");
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 9).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 9);
         item.withName("&3Cyan");
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 8).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 8);
         item.withName("&7Gray");
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 13).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 13);
         item.withName("&2Green");
         items.add(item);
-        item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 14).toBuilder(1);
+        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 14);
         item.withName("&cRed");
         items.add(item);
 

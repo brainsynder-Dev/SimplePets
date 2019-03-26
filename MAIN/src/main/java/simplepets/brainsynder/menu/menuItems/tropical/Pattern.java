@@ -2,12 +2,11 @@ package simplepets.brainsynder.menu.menuItems.tropical;
 
 import org.apache.commons.lang.WordUtils;
 import org.json.simple.JSONArray;
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.TropicalPattern;
 
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class Pattern extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
         item.setTexture("http://textures.minecraft.net/texture/36d149e4d499929672e2768949e6477959c21e65254613b327b538df1e4df");
         item.withName(" ");
         item.addLore("&6Previous: &7%prev_state%",

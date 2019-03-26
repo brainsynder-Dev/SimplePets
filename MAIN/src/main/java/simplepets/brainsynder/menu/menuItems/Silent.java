@@ -1,10 +1,9 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,7 @@ public class Silent extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
         item.withName("&6Silent: &e%value%");
 
         // Has Sound

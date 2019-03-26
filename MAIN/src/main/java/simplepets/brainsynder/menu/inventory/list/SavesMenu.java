@@ -6,6 +6,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.nbt.*;
 import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.PetCore;
@@ -15,7 +16,6 @@ import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.utils.ItemBuilder;
 
 import java.io.File;
 import java.util.*;

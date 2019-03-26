@@ -1,13 +1,12 @@
 package simplepets.brainsynder.pet.types;
 
+import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPigmanPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class PigmanDefault extends PetDefault {
@@ -17,7 +16,7 @@ public class PigmanDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return Utilities.getSkullMaterial(Utilities.SkullType.PLAYER).toBuilder(1)
+        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
                 .setTexture("http://textures.minecraft.net/texture/74e9c6e98582ffd8ff8feb3322cd1849c43fb16b158abb11ca7b42eda7743eb")
                 .withName("&f&lPigman Pet");
     }

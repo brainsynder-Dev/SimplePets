@@ -1,11 +1,10 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +34,7 @@ public class Angry extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = Utilities.getColoredMaterial(Utilities.MatType.WOOL, 14).toBuilder(1);
+        ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, 14);
         item.withName("&6Angry: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }

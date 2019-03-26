@@ -1,8 +1,8 @@
 package simplepets.brainsynder.storage;
 
 import org.bukkit.inventory.ItemStack;
+import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.ItemBuilder;
 
 public class PetTypeStorage {
     private PetDefault type;
