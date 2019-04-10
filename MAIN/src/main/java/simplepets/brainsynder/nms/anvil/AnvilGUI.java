@@ -20,7 +20,6 @@ public class AnvilGUI {
             if (IAnvilGUI.class.isAssignableFrom(clazz)) {
                 Constructor<?> constructor = clazz.getConstructor(Plugin.class, Player.class, IAnvilClickEvent.class);
                 gui = (IAnvilGUI)constructor.newInstance(plugin, player, handler);
-                PetCore.get().debug("Successfully found AnvilGUI Handler for "+version.name());
             }
         }catch (Exception e){
             PetCore.get().debug("Could not link to a version for HandleAnvilGUI. Possibly an Unsupported NMS version.");
