@@ -42,6 +42,7 @@ public class LinkRetriever {
     }
 
     public void cleanup () {
+        if (loaders == null) return;
         if (loaders.isEmpty()) return;
         loaders.forEach(IPluginLink::onUnhook);
         loaders.clear();
