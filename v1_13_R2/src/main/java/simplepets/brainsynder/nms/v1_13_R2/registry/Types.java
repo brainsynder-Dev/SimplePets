@@ -15,8 +15,8 @@ public class Types {
     public static EntityTypes<EntityCodPet> COD = CustomTypes.a(8,"pet_cod", CustomTypes.a.a(EntityCodPet.class, EntityCodPet::new));
     public static EntityTypes<EntityCowPet> COW = CustomTypes.a(9,"pet_cow", CustomTypes.a.a(EntityCowPet.class, EntityCowPet::new));
     public static EntityTypes<EntityCreeperPet> CREEPER = CustomTypes.a(10,"pet_creeper", CustomTypes.a.a(EntityCreeperPet.class, EntityCreeperPet::new));
+    public static EntityTypes<EntityDonkeyPet> DONKEY = CustomTypes.a(11,"pet_donkey", CustomTypes.a.a(EntityDonkeyPet.class, EntityDonkeyPet::new));
     public static EntityTypes<EntityDolphinPet> DOLPHIN = CustomTypes.a(12,"pet_dolphin", CustomTypes.a.a(EntityDolphinPet.class, EntityDolphinPet::new));
-    // TODO: DONKEY
     public static EntityTypes<EntityDrownedPet> DROWNED = CustomTypes.a(14,"pet_drowned", CustomTypes.a.a(EntityDrownedPet.class, EntityDrownedPet::new));
     public static EntityTypes<EntityElderGuardianPet> ELDER_GUARDIAN = CustomTypes.a(15,"pet_elder_guardian", CustomTypes.a.a(EntityElderGuardianPet.class, EntityElderGuardianPet::new));
     public static EntityTypes<EntityEndermanPet> ENDERMAN = CustomTypes.a(18,"pet_enderman", CustomTypes.a.a(EntityEndermanPet.class, EntityEndermanPet::new));
