@@ -9,7 +9,6 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityGuardianPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
@@ -23,13 +22,6 @@ public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
     static {
         MOVING = DataWatcher.a(EntityGuardianPet.class, DataWatcherWrapper.BOOLEAN);
         TARGET_ENTITY = DataWatcher.a(EntityGuardianPet.class, DataWatcherWrapper.INT);
-    }
-
-    public EntityGuardianPet(World world) {
-        super(Types.GUARDIAN, world);
-    }
-    public EntityGuardianPet(World world, IPet pet) {
-        super(Types.GUARDIAN, world, pet);
     }
     public EntityGuardianPet(EntityTypes<?> type, World world) {
         super(type, world);

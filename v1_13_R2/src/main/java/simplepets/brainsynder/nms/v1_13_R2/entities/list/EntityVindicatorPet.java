@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import org.bukkit.entity.LivingEntity;
 import simple.brainsynder.nbt.StorageTagCompound;
@@ -7,7 +8,6 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntityIllagerAbstractPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 
 /**
  * NMS: {@link net.minecraft.server.v1_13_R2.EntityVindicator}
@@ -16,11 +16,11 @@ import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEntityVindicatorPet {
     private boolean johnny = false;
 
-    public EntityVindicatorPet(World world) {
-        super(Types.VINDICATOR, world);
+    public EntityVindicatorPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityVindicatorPet(World world, IPet pet) {
-        super(Types.VINDICATOR, world, pet);
+    public EntityVindicatorPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     @Override

@@ -2,12 +2,12 @@ package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
 import net.minecraft.server.v1_13_R2.DataWatcher;
 import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityFishPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
@@ -18,11 +18,11 @@ import simplepets.brainsynder.wrapper.TropicalPattern;
  */
 public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropicalFishPet {
     private static final DataWatcherObject<Integer> VARIANT;
-    public EntityTropicalFishPet(World world, IPet pet) {
-        super(Types.TROPICAL_FISH, world, pet);
+    public EntityTropicalFishPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
-    public EntityTropicalFishPet(World world) {
-        super(Types.TROPICAL_FISH, world);
+    public EntityTropicalFishPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
 
     @Override

@@ -82,7 +82,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return pet.getPetType().getEntityType();
     }
 

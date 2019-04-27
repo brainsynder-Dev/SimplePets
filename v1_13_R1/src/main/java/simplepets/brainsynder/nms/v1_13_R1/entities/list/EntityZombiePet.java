@@ -9,7 +9,6 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.6F, length = 1.8F)
@@ -22,12 +21,6 @@ public class EntityZombiePet extends AgeableEntityPet implements IEntityZombiePe
         ARMS_RAISED = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityZombiePet(World world) {
-        super(Types.ZOMBIE, world);
-    }
-    public EntityZombiePet(World world, IPet pet) {
-        super(Types.ZOMBIE, world, pet);
-    }
     public EntityZombiePet(EntityTypes<?> type, World world) {
         super(type, world);
     }

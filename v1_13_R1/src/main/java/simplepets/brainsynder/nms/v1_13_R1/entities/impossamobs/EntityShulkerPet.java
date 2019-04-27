@@ -187,8 +187,8 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     }
 
     @Override
-    public EntityWrapper getEntityType() {
-        return pet.getEntityType();
+    public EntityWrapper getPetEntityType() {
+        return pet.getPetEntityType();
     }
 
     public boolean isCustom() {return this.isCustom;}

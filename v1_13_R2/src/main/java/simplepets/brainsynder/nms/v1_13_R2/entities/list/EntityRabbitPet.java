@@ -6,7 +6,6 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.AgeableEntityPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.RabbitType;
 
@@ -24,11 +23,11 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     private boolean onGroundLastTick = false;
     private int delay = 0;
 
-    public EntityRabbitPet(World world) {
-        super(Types.RABBIT, world);
+    public EntityRabbitPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityRabbitPet(World world, IPet pet) {
-        super(Types.RABBIT, world, pet);
+    public EntityRabbitPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
         h = new ControllerJumpRabbit(this);
     }
 

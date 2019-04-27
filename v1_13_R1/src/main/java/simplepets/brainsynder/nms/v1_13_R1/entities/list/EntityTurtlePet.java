@@ -1,14 +1,10 @@
 package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
-import net.minecraft.server.v1_13_R1.BlockPosition;
-import net.minecraft.server.v1_13_R1.DataWatcher;
-import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.World;
+import net.minecraft.server.v1_13_R1.*;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityTurtlePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 @Size(width = 0.9F, length = 1.3F)
@@ -20,11 +16,11 @@ public class EntityTurtlePet extends AgeableEntityPet implements IEntityTurtlePe
     private static final DataWatcherObject<Boolean> bI;
     private static final DataWatcherObject<Boolean> bJ;
 
-    public EntityTurtlePet(World world, IPet pet) {
-        super(Types.TURTLE, world, pet);
+    public EntityTurtlePet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
-    public EntityTurtlePet(World world) {
-        super(Types.TURTLE, world);
+    public EntityTurtlePet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
 
     @Override

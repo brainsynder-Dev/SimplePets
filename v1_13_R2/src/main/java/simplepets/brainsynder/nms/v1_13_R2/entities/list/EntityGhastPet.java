@@ -2,13 +2,13 @@ package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
 import net.minecraft.server.v1_13_R2.DataWatcher;
 import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityGhastPet;
 import simplepets.brainsynder.api.entity.misc.IFlyablePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
@@ -23,12 +23,12 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet,
         ATTACKING = DataWatcher.a(EntityGhastPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityGhastPet(World world) {
-        super(Types.GHAST, world);
+    public EntityGhastPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
 
-    public EntityGhastPet(World world, IPet pet) {
-        super(Types.GHAST, world, pet);
+    public EntityGhastPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     @Override

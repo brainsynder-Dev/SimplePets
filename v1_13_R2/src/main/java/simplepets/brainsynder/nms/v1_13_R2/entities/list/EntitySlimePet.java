@@ -9,7 +9,6 @@ import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 /**
@@ -24,14 +23,6 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     }
 
     private int jumpDelay;
-
-    public EntitySlimePet(World world) {
-        super(Types.SLIME, world);
-    }
-    public EntitySlimePet(World world, IPet pet) {
-        super(Types.SLIME, world, pet);
-        jumpDelay = random.nextInt(15) + 10;
-    }
 
     public EntitySlimePet(EntityTypes<?> type, World world) {
         super(type, world);

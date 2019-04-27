@@ -2,16 +2,15 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
 import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
+import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.World;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.AgeableEntityPet;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
-
 @Size(width = 0.6F, length = 1.8F)
 public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntityZombieVillagerPet {
     private static final DataWatcherObject<Integer> VILLAGER_TYPE;
@@ -28,11 +27,11 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
         PROFESSION = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityZombieVillagerPet(World world) {
-        super(Types.ZOMBIE_VILLAGER, world);
+    public EntityZombieVillagerPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityZombieVillagerPet(World world, IPet pet) {
-        super(Types.ZOMBIE_VILLAGER, world, pet);
+    public EntityZombieVillagerPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     @Override

@@ -1,15 +1,11 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
-import net.minecraft.server.v1_13_R2.DataWatcher;
-import net.minecraft.server.v1_13_R2.DataWatcherObject;
-import net.minecraft.server.v1_13_R2.IBlockData;
-import net.minecraft.server.v1_13_R2.World;
+import net.minecraft.server.v1_13_R2.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 
 import java.util.Optional;
@@ -27,12 +23,12 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
         SCREAMING = DataWatcher.a(EntityEndermanPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityEndermanPet(World world) {
-        super(Types.ENDERMAN, world);
+    public EntityEndermanPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
 
-    public EntityEndermanPet(World world, IPet pet) {
-        super(Types.ENDERMAN, world, pet);
+    public EntityEndermanPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     @Override

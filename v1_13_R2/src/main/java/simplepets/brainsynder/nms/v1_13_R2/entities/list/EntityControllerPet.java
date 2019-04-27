@@ -29,13 +29,13 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private boolean moving = false;
     private FieldAccessor<Boolean> fieldAccessor;
 
-    public EntityControllerPet(World world, IPet pet) {
-        super(world, pet);
+    public EntityControllerPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
         this.pet = pet;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
     }
-    public EntityControllerPet(World world) {
-        super(world);
+    public EntityControllerPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
 
     //  @Override

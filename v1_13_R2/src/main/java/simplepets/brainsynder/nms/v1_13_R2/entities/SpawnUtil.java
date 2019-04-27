@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities;
 
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
@@ -17,6 +18,7 @@ import simplepets.brainsynder.nms.v1_13_R2.entities.impossamobs.EntityArmorStand
 import simplepets.brainsynder.nms.v1_13_R2.entities.impossamobs.EntityGhostStandPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.list.EntityControllerPet;
+import simplepets.brainsynder.nms.v1_13_R2.utils.EntityUtils;
 import simplepets.brainsynder.pet.types.ArmorStandDefault;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
@@ -47,7 +49,8 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawn(Location l, IPet pet, String className) {
         try {
             World mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-            EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(World.class, IPet.class).newInstance(mcWorld, pet);
+            EntityTypes<?> types = EntityUtils.getType(pet.getEntityType());
+            EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
             customEntity.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
 

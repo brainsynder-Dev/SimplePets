@@ -8,7 +8,6 @@ import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityTameablePet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.movements.ParrotController;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.ParrotVariant;
@@ -24,11 +23,11 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
 
 
-    public EntityParrotPet(World world) {
-        super(Types.PARROT, world);
+    public EntityParrotPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityParrotPet(World world, IPet pet) {
-        super(Types.PARROT, world, pet);
+    public EntityParrotPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
         moveController = new ParrotController(this);
         this.setSize(0.5F, 0.9F);
     }

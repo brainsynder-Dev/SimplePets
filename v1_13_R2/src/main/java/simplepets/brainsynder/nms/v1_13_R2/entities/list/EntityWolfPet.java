@@ -1,16 +1,12 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
-import net.minecraft.server.v1_13_R2.DataWatcher;
-import net.minecraft.server.v1_13_R2.DataWatcherObject;
-import net.minecraft.server.v1_13_R2.EnumColor;
-import net.minecraft.server.v1_13_R2.World;
+import net.minecraft.server.v1_13_R2.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.EntityTameablePet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R2.utils.DataWatcherWrapper;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
@@ -30,11 +26,11 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityWolfPet(World world) {
-        super(Types.WOLF, world);
+    public EntityWolfPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityWolfPet(World world, IPet pet) {
-        super(Types.WOLF, world, pet);
+    public EntityWolfPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     protected void registerDatawatchers() {

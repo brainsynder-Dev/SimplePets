@@ -1,15 +1,11 @@
 package simplepets.brainsynder.nms.v1_13_R1.entities.list;
 
-import net.minecraft.server.v1_13_R1.DataWatcher;
-import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.EnumColor;
-import net.minecraft.server.v1_13_R1.World;
+import net.minecraft.server.v1_13_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.branch.EntityHorseChestedAbstractPet;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 import simplepets.brainsynder.wrapper.EntityWrapper;
@@ -27,11 +23,11 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
         VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityLlamaPet(World world) {
-        super(Types.LLAMA, world);
+    public EntityLlamaPet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityLlamaPet(World world, IPet pet) {
-        super(Types.LLAMA, world, pet);
+    public EntityLlamaPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     protected void registerDatawatchers() {
@@ -80,7 +76,7 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.LLAMA;
     }
 }

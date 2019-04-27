@@ -1,11 +1,11 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
+import net.minecraft.server.v1_13_R2.EntityTypes;
 import net.minecraft.server.v1_13_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityZombieHorsePet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R2.entities.branch.EntityHorseChestedAbstractPet;
-import simplepets.brainsynder.nms.v1_13_R2.registry.Types;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 /**
@@ -13,15 +13,15 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
  */
 @Size(width = 1.4F, length = 1.6F)
 public class EntityZombieHorsePet extends EntityHorseChestedAbstractPet implements IEntityZombieHorsePet {
-    public EntityZombieHorsePet(World world) {
-        super(Types.ZOMBIE_HORSE, world);
+    public EntityZombieHorsePet(EntityTypes<?> type, World world) {
+        super(type, world);
     }
-    public EntityZombieHorsePet(World world, IPet pet) {
-        super(Types.ZOMBIE_HORSE, world, pet);
+    public EntityZombieHorsePet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.ZOMBIE_HORSE;
     }
 }

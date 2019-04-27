@@ -4,7 +4,6 @@ import net.minecraft.server.v1_13_R1.*;
 import simplepets.brainsynder.api.entity.hostile.IEntityDolphinPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.entities.EntityPet;
-import simplepets.brainsynder.nms.v1_13_R1.registry.Types;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 
 public class EntityDolphinPet extends EntityPet implements IEntityDolphinPet {
@@ -12,13 +11,13 @@ public class EntityDolphinPet extends EntityPet implements IEntityDolphinPet {
     private static final DataWatcherObject<Boolean> HAS_FISH;
     private static final DataWatcherObject<Integer> MOIST;
 
-    public EntityDolphinPet(World world, IPet pet) {
-        super(Types.DOLPHIN, world, pet);
+    public EntityDolphinPet(EntityTypes<?> type, World world, IPet pet) {
+        super(type, world, pet);
         this.lookController = new ControllerLookDolphin(this, 10);
     }
 
-    public EntityDolphinPet(World world) {
-        super(Types.DOLPHIN,world);
+    public EntityDolphinPet(EntityTypes<?> type, World world) {
+        super(type,world);
         this.lookController = new ControllerLookDolphin(this, 10);
     }
 
