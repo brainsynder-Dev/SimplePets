@@ -187,13 +187,13 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public ItemBuilder getDataItemByName(String name, int index) {
+        Map<String, MenuItem> menuItemMap = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
         if (_DATA_ITEMS_ != null) {
             if (_DATA_ITEMS_.containsKey(name)) {
                 JSONArray items = ((JSONArray) _DATA_ITEMS_.get(name));
                 if (items.isEmpty()) {
-                    Map<String, MenuItem> dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
-                    if (dataArrays.containsKey(name)) {
-                        items = ReflectionUtil.getItemsArray(dataArrays.get(name));
+                    if (menuItemMap.containsKey(name)) {
+                        items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
                         _DATA_ITEMS_.put(name, items);
                         set("data-items", _DATA_ITEMS_);
                         save();
@@ -203,9 +203,8 @@ public abstract class PetDefault extends JSONFile {
                 return ItemBuilder.fromJSON((JSONObject) items.get(index));
             }else{
                 try {
-                    Map<String, MenuItem> dataArrays = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
-                    if (dataArrays.containsKey(name)) {
-                        JSONArray items = ReflectionUtil.getItemsArray(dataArrays.get(name));
+                    if (menuItemMap.containsKey(name)) {
+                        JSONArray items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
                         _DATA_ITEMS_.put(name, items);
                         set("data-items", _DATA_ITEMS_);
                         save();
@@ -213,6 +212,33 @@ public abstract class PetDefault extends JSONFile {
                         return ItemBuilder.fromJSON((JSONObject) items.get(index));
                     }
                 } catch (NullPointerException ignored) { // In case there is no pet data
+                }
+            }
+        }
+
+        PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
+        JSONArray items;
+
+        if (_DATA_ITEMS_.containsKey(name)) {
+            items = ((JSONArray) _DATA_ITEMS_.get(name));
+        }else{
+            items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
+        }
+
+
+        if (menuItemMap.containsKey(name)) {
+            _DATA_ITEMS_.put(name, items);
+            set("data-items", _DATA_ITEMS_);
+            save();
+            return ItemBuilder.fromJSON((JSONObject) items.get(index));
+        }else{
+            for (MenuItem menuItem : menuItemMap.values()) {
+                if (menuItem.getTargetName().equals(name)) {
+                    items = ReflectionUtil.getItemsArray(menuItem);
+                    _DATA_ITEMS_.put(name, items);
+                    set("data-items", _DATA_ITEMS_);
+                    save();
+                    return ItemBuilder.fromJSON((JSONObject) items.get(index));
                 }
             }
         }
@@ -234,6 +260,6 @@ public abstract class PetDefault extends JSONFile {
         return null;
     }
     public boolean isSupported() {
-        return (getAllowedVersion().getIntVersion() <= ServerVersion.getVersion().getIntVersion());
+        return ServerVersion.isEqualNew(getAllowedVersion());
     }
 }
