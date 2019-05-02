@@ -17,6 +17,7 @@ public class Saddle extends MenuItemAbstract {
     public Saddle(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
+
     public Saddle(PetDefault type) {
         super(type);
     }
@@ -47,23 +48,12 @@ public class Saddle extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
-        try {
-            if (entityPet instanceof IEntityPigPet) {
-                IEntityPigPet pig = (IEntityPigPet) entityPet;
-                if (pig.hasSaddle()) {
-                    pig.setSaddled(false);
-                } else {
-                    pig.setSaddled(true);
-                }
-            } else if (entityPet instanceof IHorseAbstract) {
-                IHorseAbstract var = (IHorseAbstract) entityPet;
-                if (var.isSaddled()) {
-                    var.setSaddled(false);
-                } else {
-                    var.setSaddled(true);
-                }
-            }
-        } catch (Exception e) {
+        if (entityPet instanceof IEntityPigPet) {
+            IEntityPigPet pig = (IEntityPigPet) entityPet;
+            pig.setSaddled(!pig.hasSaddle());
+        } else if (entityPet instanceof IHorseAbstract) {
+            IHorseAbstract var = (IHorseAbstract) entityPet;
+            var.setSaddled(!var.isSaddled());
         }
     }
 }

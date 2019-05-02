@@ -27,6 +27,6 @@ public class MuleDefault extends PetDefault {
 
     @Override
     public PetData getPetData() {
-        return PetData.MULE;
+        return PetData.MULE_DONKEY;
     }
 }

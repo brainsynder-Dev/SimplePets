@@ -29,16 +29,11 @@ public class CatDefault extends PetDefault {
 
     @Override
     public PetData getPetData() {
-        return PetData.OCELOT;
+        return PetData.CAT;
     }
 
     @Override
     public ServerVersion getAllowedVersion() {
         return ServerVersion.v1_14_R1;
-    }
-
-    @Override
-    public boolean isSupported() {
-        return ServerVersion.isEqualNew(ServerVersion.v1_14_R1);
     }
 }

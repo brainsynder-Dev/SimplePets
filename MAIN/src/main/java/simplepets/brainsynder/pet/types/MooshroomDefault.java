@@ -17,7 +17,7 @@ public class MooshroomDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.RED_MUSHROOM).withName("&f&lMooShroom Pet");
+        return new ItemBuilder(Material.RED_MUSHROOM).withName("&f&lMooshroom Pet");
     }
 
     @Override
@@ -27,6 +27,6 @@ public class MooshroomDefault extends PetDefault {
 
     @Override
     public PetData getPetData() {
-        return PetData.AGE;
+        return PetData.MOOSHROOM;
     }
 }

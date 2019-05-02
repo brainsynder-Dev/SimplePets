@@ -1,8 +1,18 @@
 package simplepets.brainsynder.api.entity.hostile;
 
+import simplepets.brainsynder.wrapper.villager.VillagerData;
+
 public interface IEntityZombieVillagerPet extends IEntityZombiePet {
 
-    default boolean isShaking () { return false; }
+    /**
+     * This gets used for 1.14+
+     */
+    default VillagerData getVillagerData () {
+        return null;
+    }
 
-    default void setShaking (boolean value) {}
+    /**
+     * This gets used for 1.14+
+     */
+    default void setVillagerData (VillagerData data){}
 }

@@ -8,7 +8,7 @@ public class VersionNMS extends ReflectionUtil {
 
     public void registerPets() {
         ServerVersion version = ServerVersion.getVersion();
-        if (version.getIntVersion() > ServerVersion.v1_12_R1.getIntVersion()) return;
+        if (ServerVersion.isEqualNew(ServerVersion.v1_12_R1)) return;
         PetCore.get().debug("Registering Pets...");
         try {
             Class<?> clazz = Class.forName("simplepets.brainsynder.nms." + version.name() + ".registry.Registry");

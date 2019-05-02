@@ -15,10 +15,10 @@ public enum EntityWrapper {
     ARMOR_STAND,
     DONKEY,
     MULE,
-    EVOKER("evocation_illager"),
+    EVOKER("evocation_illager", "evoker"),
     VEX,
-    VINDICATOR("vindication_illager"),
-    ILLUSIONER("illusion_illager"),
+    VINDICATOR("vindication_illager", "vindicator"),
+    ILLUSIONER("illusion_illager", "illusioner"),
     CREEPER,
     SKELETON,
     SPIDER,
@@ -48,7 +48,7 @@ public enum EntityWrapper {
     MUSHROOM_COW("mooshroom"),
     SNOWMAN,
     OCELOT,
-    IRON_GOLEM("villager_golem"),
+    IRON_GOLEM("villager_golem", "iron_golem"),
     HORSE,
     RABBIT,
     POLAR_BEAR,
@@ -64,15 +64,30 @@ public enum EntityWrapper {
     DROWNED,
     DOLPHIN,
     PUFFER_FISH,
-    TROPICAL_FISH;
+    TROPICAL_FISH,
 
-    private String name;
+    // 1.14 Mobs
+    TRADER_LLAMA,
+    PANDA,
+    CAT,
+    PILLAGER,
+    RAVAGER,
+    WANDERING_TRADER,
+    FOX;
+
+    private String name, typeName;
 
     EntityWrapper(String name) {
         this.name = name;
+        typeName = name;
+    }
+    EntityWrapper(String name, String typeName) {
+        this.name = name;
+        this.typeName = typeName;
     }
     EntityWrapper() {
         this.name = name().toLowerCase();
+        typeName = name;
     }
 
     public static EntityWrapper getByName(String name) {
@@ -90,6 +105,10 @@ public enum EntityWrapper {
         } catch (Exception ignored) {
         }
         return EntityType.UNKNOWN;
+    }
+
+    public String getTypeName() {
+        return typeName;
     }
 
     public String getName() {

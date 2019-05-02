@@ -1,0 +1,59 @@
+package simplepets.brainsynder.menu.menuItems;
+
+import org.apache.commons.lang.WordUtils;
+import simple.brainsynder.api.ItemBuilder;
+import simple.brainsynder.utils.ServerVersion;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.passive.IEntityMooshroomPet;
+import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
+import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.wrapper.MooshroomType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MooshroomColor extends MenuItemAbstract<IEntityMooshroomPet> {
+
+    public MooshroomColor(PetDefault type, IEntityPet entityPet) {
+        super(type, entityPet);
+    }
+    public MooshroomColor(PetDefault type) {
+        super(type);
+    }
+
+    @Override
+    public ItemBuilder getItem() {
+        return type.getDataItemByName(getTargetName(), entityPet.getMooshroomType().ordinal());
+    }
+
+    @Override
+    public List<ItemBuilder> getDefaultItems() {
+        List<ItemBuilder> items = new ArrayList<>();
+        for (MooshroomType type : MooshroomType.values()) {
+            ItemBuilder builder = type.getIcon();
+            builder.withName("&6Color: &e"+ WordUtils.capitalize(type.name().toLowerCase()));
+            items.add(builder);
+        }
+        return items;
+    }
+
+    @Override
+    public void onLeftClick() {
+        entityPet.setMooshroomType(MooshroomType.getNext(entityPet.getMooshroomType()));
+    }
+
+    @Override
+    public void onRightClick() {
+        entityPet.setMooshroomType(MooshroomType.getPrevious(entityPet.getMooshroomType()));
+    }
+
+    @Override
+    public String getTargetName() {
+        return "type";
+    }
+
+    @Override
+    public boolean isSupported() {
+        return ServerVersion.isEqualNew(ServerVersion.v1_14_R1);
+    }
+}

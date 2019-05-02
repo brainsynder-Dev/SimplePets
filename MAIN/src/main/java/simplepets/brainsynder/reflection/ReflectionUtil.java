@@ -114,8 +114,8 @@ public class ReflectionUtil {
             JSONArray as = new JSONArray();
             MenuItem menuItem = initiateClass(fillConstructor(cl, PetDefault.class), type);
             try {
-                for (ItemBuilder i : menuItem.getDefaultItems()) {
-                    as.add(i.toJSON());
+                for (Object object : menuItem.getDefaultItems()) {
+                    as.add(((ItemBuilder)object).toJSON());
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
@@ -135,8 +135,8 @@ public class ReflectionUtil {
     public static JSONArray getItemsArray (MenuItem menuItem) {
         JSONArray as = new JSONArray();
         try {
-            for (ItemBuilder i : menuItem.getDefaultItems()) {
-                as.add(i.toJSON());
+            for (Object object : menuItem.getDefaultItems()) {
+                as.add(((ItemBuilder)object).toJSON());
             }
         } catch (NullPointerException ignored) {
         }

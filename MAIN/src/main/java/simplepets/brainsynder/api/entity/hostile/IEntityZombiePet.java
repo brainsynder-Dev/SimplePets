@@ -9,4 +9,7 @@ public interface IEntityZombiePet extends IAgeablePet, IEntityVillagerPet {
     default void setArmsRaised(boolean flag) {}
     default boolean isArmsRaised() { return false; }
 
+    default boolean isShaking () { return false; }
+    default void setShaking (boolean value) {}
+
 }

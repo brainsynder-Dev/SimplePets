@@ -2,7 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
+import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.Utilities;
@@ -22,8 +22,8 @@ public class Shaking extends MenuItemAbstract {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("shaking", 0);
-        if (entityPet instanceof IEntityZombieVillagerPet) {
-            IEntityZombieVillagerPet var = (IEntityZombieVillagerPet) entityPet;
+        if (entityPet instanceof IEntityZombiePet) {
+            IEntityZombiePet var = (IEntityZombiePet) entityPet;
             item.withName(item.getName().replace("%value%", String.valueOf(var.isShaking())));
         }
         return item;
@@ -38,8 +38,8 @@ public class Shaking extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
-        if (entityPet instanceof IEntityZombieVillagerPet) {
-            IEntityZombieVillagerPet var = (IEntityZombieVillagerPet) entityPet;
+        if (entityPet instanceof IEntityZombiePet) {
+            IEntityZombiePet var = (IEntityZombiePet) entityPet;
             if (var.isShaking()) {
                 var.setShaking(false);
             } else {
