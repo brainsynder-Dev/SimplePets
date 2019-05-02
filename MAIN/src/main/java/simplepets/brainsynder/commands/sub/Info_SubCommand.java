@@ -165,7 +165,7 @@ public class Info_SubCommand extends PetSubCommand {
 
         numbers.put("ride-speed", data.getRideSpeed());
         numbers.put("walk-speed", data.getSpeed());
-        json.put("booleans", numbers);
+        json.put("numbers", numbers);
 
         JSONArray array = new JSONArray();
         array.addAll(data.getCommands());

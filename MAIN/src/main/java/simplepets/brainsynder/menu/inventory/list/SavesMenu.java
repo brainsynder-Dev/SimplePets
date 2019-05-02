@@ -109,7 +109,7 @@ public class SavesMenu extends CustomInventory {
                         stack = storageMap.get(compound);
                     }else {
                         ItemBuilder builder = type.getItemBuilder().clone();
-                        builder.clearLore();
+                        if (builder.getRawMeta().hasLore()) builder.clearLore();
                         if (compound.hasKey("name") && (!compound.getString("name").equals("null")))
                             builder.withName(compound.getString("name"));
                         compound.getKeySet().forEach(key -> {

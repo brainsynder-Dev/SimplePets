@@ -55,8 +55,9 @@ public class ItemStorageMenu implements Listener {
         if (e.getView().getTopInventory().getHolder() == null)
             return;
         if (e.getView().getTopInventory().getHolder() instanceof ItemHandler) {
-            if (e.getView().getTopInventory().getTitle().contains("'s Item Storage")) {
-                String name = e.getView().getTopInventory().getTitle().replace("'s Item Storage", "");
+            String title = e.getView().getTitle();
+            if (title.contains("'s Item Storage")) {
+                String name = title.replace("'s Item Storage", "");
                 if (!name.equalsIgnoreCase(player.getName())) return;
                 InventoryStorage storage = new InventoryStorage(e.getInventory());
                 PetOwner.getPetOwner(player).setStoredInventory(storage.toJSON());
@@ -70,8 +71,9 @@ public class ItemStorageMenu implements Listener {
         if (e.getView().getTopInventory().getHolder() == null)
             return;
         if (e.getView().getTopInventory().getHolder() instanceof ItemHandler) {
-            if (e.getView().getTopInventory().getTitle().contains("'s Item Storage")) {
-                String name = e.getView().getTopInventory().getTitle().replace("'s Item Storage", "");
+            String title = e.getView().getTitle();
+            if (title.contains("'s Item Storage")) {
+                String name = title.replace("'s Item Storage", "");
                 if (!name.equalsIgnoreCase(player.getName())) {
                     e.setCancelled(true);
                     e.setResult(Event.Result.DENY);
