@@ -79,7 +79,7 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.LLAMA;
     }
 }

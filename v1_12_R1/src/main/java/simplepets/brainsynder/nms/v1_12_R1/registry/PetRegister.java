@@ -12,6 +12,7 @@ public enum PetRegister implements IEntityRegistry<Entity> {
     CHICKEN(NMSUtils.Type.CHICKEN, EntityWrapper.CHICKEN, EntityChickenPet.class, EntityChicken.class),
     COW(NMSUtils.Type.COW, EntityWrapper.COW, EntityCowPet.class, EntityCow.class),
     CREEPER(NMSUtils.Type.CREEPER, EntityWrapper.CREEPER, EntityCreeperPet.class, EntityCreeper.class),
+    DONKEY(NMSUtils.Type.DONKEY, EntityWrapper.DONKEY, EntityDonkeyPet.class, EntityHorseDonkey.class),
     ENDERMAN(NMSUtils.Type.ENDERMAN, EntityWrapper.ENDERMAN, EntityEndermanPet.class, EntityEnderman.class),
     GIANT(NMSUtils.Type.GIANT, EntityWrapper.GIANT, EntityGiantPet.class, EntityGiantZombie.class),
     HORSE(NMSUtils.Type.HORSE, EntityWrapper.HORSE, EntityHorsePet.class, EntityHorse.class),

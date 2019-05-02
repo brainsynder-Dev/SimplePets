@@ -83,8 +83,8 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     @Override
-    public EntityWrapper getEntityType() {
-        return pet.getEntityType();
+    public EntityWrapper getPetEntityType() {
+        return pet.getPetEntityType();
     }
 
     @Override

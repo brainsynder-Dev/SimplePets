@@ -17,7 +17,7 @@ public class EntitySkeletonHorsePet extends EntityHorseChestedAbstractPet implem
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.SKELETON_HORSE;
     }
 }

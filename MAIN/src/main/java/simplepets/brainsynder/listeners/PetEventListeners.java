@@ -77,7 +77,6 @@ public class PetEventListeners implements Listener {
             PetDefault type = storage.getType();
             ItemBuilder maker = ItemBuilder.fromJSON(storage.getType().getItemBuilder().toJSON());
             String price = String.valueOf(economyFile.getPrice(type));
-            PetCore.get().debug("Price for "+type.getConfigName()+" '"+price+"'");
             if (price.equals("-1")) price = economyFile.getString("Price-Free");
 
             try {

@@ -18,7 +18,7 @@ public class CodDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Utilities.fetchMaterial("COD")).withName("&f&lCod Pet");
+        return new ItemBuilder(Utilities.findMaterial("COD")).withName("&f&lCod Pet");
     }
 
     @Override

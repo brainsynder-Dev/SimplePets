@@ -44,7 +44,7 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.ARMOR_STAND;
     }
 

@@ -17,7 +17,7 @@ public class EntityZombieHorsePet extends EntityHorseChestedAbstractPet implemen
     }
 
     @Override
-    public EntityWrapper getEntityType() {
+    public EntityWrapper getPetEntityType() {
         return EntityWrapper.ZOMBIE_HORSE;
     }
 }
