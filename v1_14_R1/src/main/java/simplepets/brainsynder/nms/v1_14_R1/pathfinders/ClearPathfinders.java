@@ -15,14 +15,14 @@ public class ClearPathfinders extends ReflectionUtil {
             Object nms_entity = ((CraftEntity) e).getHandle();
             if (nms_entity instanceof EntityInsentient) {
                 final Entity creature = (Entity) nms_entity;
-                Set goalB = (Set) getPrivateField("b", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).goalSelector);
-                goalB.clear();
                 Set goalC = (Set) getPrivateField("c", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).goalSelector);
                 goalC.clear();
-                Set targetB = (Set) getPrivateField("b", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).targetSelector);
-                targetB.clear();
+                Set goalD = (Set) getPrivateField("d", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).goalSelector);
+                goalD.clear();
                 Set targetC = (Set) getPrivateField("c", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).targetSelector);
                 targetC.clear();
+                Set targetD = (Set) getPrivateField("d", getNmsClass("PathfinderGoalSelector"), ((EntityInsentient) creature).targetSelector);
+                targetD.clear();
                 ((EntityInsentient) creature).goalSelector.a(0, new PathfinderGoalFloat(((EntityInsentient) creature)));
             }
         } catch (Exception ex) {
