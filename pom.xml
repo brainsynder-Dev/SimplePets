@@ -9,7 +9,7 @@
     <artifactId>SimplePets</artifactId>
     <packaging>pom</packaging>
     <name>SimplePets</name>
-    <version>4.1.3-SNAPSHOT</version>
+    <version>4.1.4-SNAPSHOT</version>
     <url>http://ci.pluginwiki.us</url>
 
     <properties>

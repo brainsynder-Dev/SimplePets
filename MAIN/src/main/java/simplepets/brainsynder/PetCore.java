@@ -93,7 +93,7 @@ public class PetCore extends JavaPlugin {
         registerEvents();
         int v = ServerVersion.getVersion().getIntVersion();
         if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            debug("This version is not supported, be sure you are between 1.11 and 1.13.2");
+            debug("This version is not supported, be sure you are between 1.11 and 1.14");
             setEnabled(false);
             return;
         }
