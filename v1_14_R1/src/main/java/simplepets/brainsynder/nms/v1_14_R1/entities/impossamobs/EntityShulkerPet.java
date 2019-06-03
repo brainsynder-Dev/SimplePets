@@ -33,7 +33,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     public EntityShulkerPet(EntityTypes<? extends EntityShulker> entitytypes, World world, EntityControllerPet pet) {
         super(entitytypes, world);
         this.pet = pet;
-        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
     }
 
     public static Shulker spawn(Location location, EntityControllerPet pet) {
