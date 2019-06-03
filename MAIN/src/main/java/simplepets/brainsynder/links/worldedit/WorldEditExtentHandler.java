@@ -3,8 +3,8 @@ package simplepets.brainsynder.links.worldedit;
 import com.sk89q.worldedit.entity.Entity;
 import com.sk89q.worldedit.event.extent.EditSessionEvent;
 import com.sk89q.worldedit.extension.platform.Actor;
+import com.sk89q.worldedit.extent.AbstractDelegateExtent;
 import com.sk89q.worldedit.extent.Extent;
-import com.sk89q.worldedit.extent.logging.AbstractLoggingExtent;
 import com.sk89q.worldedit.util.eventbus.Subscribe;
 import org.bukkit.Location;
 import simplepets.brainsynder.api.pet.IPet;
@@ -28,7 +28,7 @@ public class WorldEditExtentHandler {
     }
 }
 
-class PetExtent extends AbstractLoggingExtent {
+class PetExtent extends AbstractDelegateExtent {
     PetExtent(Actor actor, Extent extent) {
         super(extent);
         PetOwner owner = PetOwner.getPetOwner(actor.getUniqueId());
