@@ -8,9 +8,9 @@ import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.player.PetOwner;
 
 @ICommand(
-        name = "hat",
+        name = "ride",
         usage = "&r &r &6[] &7/pet ride",
-        description = "Toggles your pet on/off your head"
+        description = "Toggles if you are riding your pet"
 )
 public class Ride_SubCommand extends PetSubCommand {
     @Override
