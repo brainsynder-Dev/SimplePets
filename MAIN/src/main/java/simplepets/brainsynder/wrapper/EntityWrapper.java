@@ -46,7 +46,7 @@ public enum EntityWrapper {
     SQUID,
     WOLF,
     MUSHROOM_COW("mooshroom"),
-    SNOWMAN,
+    SNOWMAN("snowman", "snow_golem"),
     OCELOT,
     IRON_GOLEM("villager_golem", "iron_golem"),
     HORSE,
