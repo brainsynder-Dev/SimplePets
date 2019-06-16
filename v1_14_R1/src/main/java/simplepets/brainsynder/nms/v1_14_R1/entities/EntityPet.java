@@ -144,16 +144,16 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     private void glowHandler(boolean glow) {
         try {
-            EntityPet pet = this;
+            Entity pet = this;
             if (this instanceof IEntityControllerPet) {
                 org.bukkit.entity.Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
-                pet = (EntityPet) ((CraftEntity) ent).getHandle();
+                pet = ((CraftEntity) ent).getHandle();
             }
             handleInvisible(glow, pet);
         } catch (IllegalAccessException ignored) {}
     }
 
-    private void handleInvisible (boolean glow, EntityCreature pet) throws IllegalAccessException {
+    private void handleInvisible (boolean glow, Entity pet) throws IllegalAccessException {
         DataWatcher toCloneDataWatcher = pet.getDataWatcher();
         DataWatcher newDataWatcher = new DataWatcher(pet);
 
