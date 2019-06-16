@@ -23,6 +23,7 @@ import simplepets.brainsynder.pet.types.ArmorStandDefault;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
+import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +50,7 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawn(Location l, IPet pet, String className) {
         try {
             World mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-            EntityTypes<?> types = EntityUtils.getType(pet.getEntityType());
+            EntityTypes<?> types = EntityUtils.getType((className.equals("EntityControllerPet")) ? EntityWrapper.ZOMBIE : pet.getEntityType());
             EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
             customEntity.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
