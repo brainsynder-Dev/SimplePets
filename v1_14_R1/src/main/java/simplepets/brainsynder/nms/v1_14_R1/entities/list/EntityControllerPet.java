@@ -30,7 +30,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public EntityControllerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
         super(type, world, pet);
         this.pet = pet;
-        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "bg", Boolean.TYPE);
+        fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
     }
     public EntityControllerPet(EntityTypes<? extends EntityCreature> type, World world) {
         super(type, world);
