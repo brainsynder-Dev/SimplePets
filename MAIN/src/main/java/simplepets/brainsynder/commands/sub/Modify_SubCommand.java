@@ -52,6 +52,14 @@ public class Modify_SubCommand extends PetSubCommand {
 
         StorageTagCompound compound;
         String json = messageMaker(args, 1).replace(" ", "~");
+
+        // This should help fix the issue with booleans not working for the command.
+        if (json.toLowerCase().contains(":true")){
+            json = json.replaceAll("(?i):true", ":1b");
+        }if (json.toLowerCase().contains(":false")){
+            json = json.replaceAll("(?i):false", ":0b");
+        }
+
         try {
             compound = JsonToNBT.getTagFromJson(json);
         } catch (NBTException e) {
