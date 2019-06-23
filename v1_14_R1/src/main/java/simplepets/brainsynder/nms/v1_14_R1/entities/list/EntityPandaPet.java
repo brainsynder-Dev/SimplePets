@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
 import net.minecraft.server.v1_14_R1.*;
+import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
@@ -49,6 +50,19 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
     }
     public EntityPandaPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
         super(type, world, pet);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound compound = super.asCompound();
+        compound.setString("gene", getGene().name());
+        return compound;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("gene")) setGene(PandaGene.byName(object.getString("gene")));
+        super.applyCompound(object);
     }
 
     @Override
