@@ -56,12 +56,16 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
         compound.setString("gene", getGene().name());
+        compound.setBoolean("on-back", isLyingOnBack());
+        compound.setBoolean("sitting", isSitting());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("gene")) setGene(PandaGene.byName(object.getString("gene")));
+        if (object.hasKey("on-back")) setLyingOnBack(object.getBoolean("on-back"));
+        if (object.hasKey("sitting")) setLyingOnBack(object.getBoolean("sitting"));
         super.applyCompound(object);
     }
 
@@ -84,12 +88,12 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
     }
 
     @Override
-    public void setEating(boolean value) {
+    public void setSitting(boolean value) {
         datawatcher.set(EATING_TICKS, value ? 1 : 0);
     }
 
     @Override
-    public boolean isEating() {
+    public boolean isSitting() {
         return datawatcher.get(EATING_TICKS) > 0;
     }
 
