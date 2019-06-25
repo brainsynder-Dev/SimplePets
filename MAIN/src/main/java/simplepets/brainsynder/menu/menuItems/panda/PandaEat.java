@@ -24,7 +24,7 @@ public class PandaEat extends MenuItemAbstract<IEntityPandaPet> {
     public ItemBuilder getItem() {
         ItemBuilder builder = type.getDataItemByName(getTargetName(), 0);
         builder.withName(formatName(builder, (entity, name) -> {
-            name = name.replace("%value%", String.valueOf(entity.isEating()));
+            name = name.replace("%value%", String.valueOf(entity.isSitting()));
             return name;
         }));
         return builder;
@@ -41,7 +41,7 @@ public class PandaEat extends MenuItemAbstract<IEntityPandaPet> {
     public void onLeftClick() {
         if (entityPet instanceof IEntityPandaPet) {
             IEntityPandaPet panda = entityPet;
-            panda.setEating(!panda.isEating());
+            panda.setSitting(!panda.isSitting());
         }
     }
 

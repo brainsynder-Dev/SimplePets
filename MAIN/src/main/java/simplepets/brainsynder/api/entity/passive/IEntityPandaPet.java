@@ -9,8 +9,8 @@ public interface IEntityPandaPet extends IAgeablePet, IFlag {
     PandaGene getGene ();
     void setGene (PandaGene gene);
 
-    void setEating (boolean value);
-    boolean isEating();
+    void setSitting(boolean value);
+    boolean isSitting();
 
     void setSneezing (boolean value);
     default boolean isSneezing() {
