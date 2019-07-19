@@ -17,16 +17,19 @@ import java.util.Map;
 
 public class InventoryStorage implements ConfigurationSerializable {
     private Inventory inventory;
+    private String title = "UNKNOWN";
 
-    public InventoryStorage(Inventory inventory) {
+    public InventoryStorage(Inventory inventory, String title) {
         this.inventory = inventory;
+        this.title = title;
     }
 
     public InventoryStorage(Map<String, Object> config) {
         if (config.isEmpty()) {
             this.inventory = null;
         } else {
-            inventory = Bukkit.createInventory(null, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), (String) config.get("title"));
+            if (config.containsKey("title")) title = String.valueOf(config.get("title"));
+            inventory = Bukkit.createInventory(null, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), title);
             Map<String, Object> items = ((MemorySection) config.get("items")).getValues(false);
             if (!items.isEmpty()) {
                 for (String slot : items.keySet()) {
@@ -86,7 +89,7 @@ public class InventoryStorage implements ConfigurationSerializable {
         JSONObject map = new JSONObject();
         if (inventory == null) return map;
 
-        map.put("title", inventory.getTitle());
+        map.put("title", title);
         map.put("size", inventory.getSize());
         JSONArray items = new JSONArray();
         int slot = 0;
