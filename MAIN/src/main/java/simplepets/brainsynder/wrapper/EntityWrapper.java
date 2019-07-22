@@ -63,7 +63,7 @@ public enum EntityWrapper {
     PHANTOM,
     DROWNED,
     DOLPHIN,
-    PUFFER_FISH,
+    PUFFER_FISH("puffer_fish", "pufferfish"),
     TROPICAL_FISH,
 
     // 1.14 Mobs
