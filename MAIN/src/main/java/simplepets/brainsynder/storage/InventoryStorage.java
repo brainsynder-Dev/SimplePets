@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -82,11 +83,15 @@ public class InventoryStorage implements ConfigurationSerializable {
         return map;
     }
 
-    public JSONObject toJSON() {
+    public JSONObject toJSON(InventoryEvent event) {
         JSONObject map = new JSONObject();
         if (inventory == null) return map;
+        try {
+            map.put("title", inventory.getTitle());
+        } catch (NoSuchMethodError error) {
+            map.put("title", event.getView().getTitle());
+        }
 
-        map.put("title", inventory.getTitle());
         map.put("size", inventory.getSize());
         JSONArray items = new JSONArray();
         int slot = 0;

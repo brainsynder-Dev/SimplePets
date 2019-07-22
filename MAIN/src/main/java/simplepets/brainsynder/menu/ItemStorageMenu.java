@@ -60,7 +60,7 @@ public class ItemStorageMenu implements Listener {
                 String name = title.replace("'s Item Storage", "");
                 if (!name.equalsIgnoreCase(player.getName())) return;
                 InventoryStorage storage = new InventoryStorage(e.getInventory());
-                PetOwner.getPetOwner(player).setStoredInventory(storage.toJSON());
+                PetOwner.getPetOwner(player).setStoredInventory(storage.toJSON(e));
             }
         }
     }
