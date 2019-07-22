@@ -90,7 +90,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
 
     @Override
     public boolean isClosed() {
-        return (dX() == 0);
+        return (this.datawatcher.get(d) == 0);
     }
 
     @Override
