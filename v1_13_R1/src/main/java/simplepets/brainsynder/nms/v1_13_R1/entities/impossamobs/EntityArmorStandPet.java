@@ -51,7 +51,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
         EntityArmorStandPet stand = new EntityArmorStandPet(((CraftWorld) location.getWorld()).getHandle(), pet);
         stand.setSpecial(true);
-        stand.setSize(0.0F, 0.0F);
+     //   stand.setSize(0.0F, 0.0F);
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
         stand.setPosition(location.getX(), location.getY(), location.getZ());
         worldServer.addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);

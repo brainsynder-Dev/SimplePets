@@ -43,7 +43,8 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
         datawatcher.register(ARMS_RAISED, false);
         datawatcher.register(UNKNOWN, 0);
         datawatcher.register(CONVERTING, false);
-        datawatcher.register(VILLAGER_DATA, new net.minecraft.server.v1_14_R1.VillagerData(net.minecraft.server.v1_14_R1.VillagerType.c, VillagerProfession.NONE, 1));
+        datawatcher.register(VILLAGER_DATA, new net.minecraft.server.v1_14_R1.VillagerData(net.minecraft.server.v1_14_R1.VillagerType.PLAINS, VillagerProfession.NONE, 1));
+
     }
 
     @Override
@@ -97,35 +98,35 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
 
     private BiomeType getBiomeFromType (net.minecraft.server.v1_14_R1.VillagerType type) {
         BiomeType biome = BiomeType.PLAINS;
-        if (type == net.minecraft.server.v1_14_R1.VillagerType.a) {
+        if (type == net.minecraft.server.v1_14_R1.VillagerType.DESERT) {
             biome = BiomeType.DESERT;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.b) {
+        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.JUNGLE) {
             biome = BiomeType.JUNGLE;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.d) {
+        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SAVANNA) {
             biome = BiomeType.SAVANNA;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.e) {
+        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SNOW) {
             biome = BiomeType.SNOW;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.f) {
+        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SWAMP) {
             biome = BiomeType.SWAMP;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.g) {
+        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.TAIGA) {
             biome = BiomeType.TAIGA;
         }
         return biome;
     }
     private net.minecraft.server.v1_14_R1.VillagerType getTypeFromBiome (BiomeType type) {
-        net.minecraft.server.v1_14_R1.VillagerType biome = net.minecraft.server.v1_14_R1.VillagerType.c;
+        net.minecraft.server.v1_14_R1.VillagerType biome = net.minecraft.server.v1_14_R1.VillagerType.PLAINS;
         if (type == BiomeType.DESERT) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.a;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.DESERT;
         }else if (type == BiomeType.JUNGLE) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.b;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.JUNGLE;
         }else if (type == BiomeType.SAVANNA) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.d;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.SAVANNA;
         }else if (type == BiomeType.SNOW) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.e;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.SNOW;
         }else if (type == BiomeType.SWAMP) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.f;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.SWAMP;
         }else if (type == BiomeType.TAIGA) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.g;
+            biome = net.minecraft.server.v1_14_R1.VillagerType.TAIGA;
         }
         return biome;
     }
