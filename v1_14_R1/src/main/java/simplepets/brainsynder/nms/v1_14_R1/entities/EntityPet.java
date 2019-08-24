@@ -64,7 +64,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     public EntityPet(EntityTypes<? extends EntityCreature> type, World world) {
         super(type, world);
-        if (bukkitEntity != null) bukkitEntity.remove();
+        if (getBukkitEntity() != null) getBukkitEntity().remove();
     }
 
     @Override
@@ -182,6 +182,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     }
 
     public void repeatTask() {
+        CraftEntity bukkitEntity = getBukkitEntity();
         // This section handles the Auto-removal of pets after (tickDelay) Ticks of being stationary...
         if (autoRemove && (bukkitEntity != null)) {
             Location location = bukkitEntity.getLocation();
@@ -368,7 +369,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                     this.aG += this.aF; // this.limbSwing += this.limbSwingAmount;
                 }
             }
-
+            CraftEntity bukkitEntity = getBukkitEntity();
             if (pet == null) {
                 if (bukkitEntity != null)
                     bukkitEntity.remove();
@@ -407,8 +408,8 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     public void entityBaseTick() { // onEntityUpdate
         super.entityBaseTick();
         if (pet == null) {
-            if (bukkitEntity != null)
-                bukkitEntity.remove();
+            if (getBukkitEntity() != null)
+                getBukkitEntity().remove();
             return;
         }
         repeatTask();
