@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.entity.ambient;
 
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.api.entity.IDisplayEntity;
 
@@ -29,4 +30,12 @@ public interface IEntityArmorStandPet extends IDisplayEntity {
 
     boolean hasArms();
     void setArms(boolean flag);
+
+    // For future ArmorStand Customizations...
+    default void setHeadItem(ItemStack item) {}
+    default void setBodyItem(ItemStack item) {}
+    default void setLegItem(ItemStack item) {}
+    default void setFootItem(ItemStack item) {}
+    default void setRightArmItem(ItemStack item) {}
+    default void setLeftArmItem(ItemStack item) {}
 }
