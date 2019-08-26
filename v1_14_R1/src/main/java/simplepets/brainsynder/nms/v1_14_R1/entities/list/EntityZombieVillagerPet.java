@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
 import net.minecraft.server.v1_14_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
@@ -43,7 +44,7 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
         datawatcher.register(ARMS_RAISED, false);
         datawatcher.register(UNKNOWN, 0);
         datawatcher.register(CONVERTING, false);
-        datawatcher.register(VILLAGER_DATA, new net.minecraft.server.v1_14_R1.VillagerData(net.minecraft.server.v1_14_R1.VillagerType.PLAINS, VillagerProfession.NONE, 1));
+        datawatcher.register(VILLAGER_DATA, new net.minecraft.server.v1_14_R1.VillagerData(findType("c", "PLAINS"), VillagerProfession.NONE, 1));
 
     }
 
@@ -98,35 +99,35 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
 
     private BiomeType getBiomeFromType (net.minecraft.server.v1_14_R1.VillagerType type) {
         BiomeType biome = BiomeType.PLAINS;
-        if (type == net.minecraft.server.v1_14_R1.VillagerType.DESERT) {
+        if (type == findType("a", "DESERT")) {
             biome = BiomeType.DESERT;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.JUNGLE) {
+        }else if (type == findType("b", "JUNGLE")) {
             biome = BiomeType.JUNGLE;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SAVANNA) {
+        }else if (type == findType("d", "SAVANNA")) {
             biome = BiomeType.SAVANNA;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SNOW) {
+        }else if (type == findType("e", "SNOW")) {
             biome = BiomeType.SNOW;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.SWAMP) {
+        }else if (type == findType("f", "SWAMP")) {
             biome = BiomeType.SWAMP;
-        }else if (type == net.minecraft.server.v1_14_R1.VillagerType.TAIGA) {
+        }else if (type == findType("g", "TAIGA")) {
             biome = BiomeType.TAIGA;
         }
         return biome;
     }
     private net.minecraft.server.v1_14_R1.VillagerType getTypeFromBiome (BiomeType type) {
-        net.minecraft.server.v1_14_R1.VillagerType biome = net.minecraft.server.v1_14_R1.VillagerType.PLAINS;
+        net.minecraft.server.v1_14_R1.VillagerType biome = findType("c", "PLAINS");
         if (type == BiomeType.DESERT) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.DESERT;
+            biome = findType("a", "DESERT");
         }else if (type == BiomeType.JUNGLE) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.JUNGLE;
+            biome = findType("b", "JUNGLE");
         }else if (type == BiomeType.SAVANNA) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.SAVANNA;
+            biome = findType("d", "SAVANNA");
         }else if (type == BiomeType.SNOW) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.SNOW;
+            biome = findType("e", "SNOW");
         }else if (type == BiomeType.SWAMP) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.SWAMP;
+            biome = findType("f", "SWAMP");
         }else if (type == BiomeType.TAIGA) {
-            biome = net.minecraft.server.v1_14_R1.VillagerType.TAIGA;
+            biome = findType("g", "TAIGA");
         }
         return biome;
     }
@@ -188,5 +189,15 @@ public class EntityZombieVillagerPet extends AgeableEntityPet implements IEntity
     @Override
     public void setArmsRaised(boolean flag) {
         datawatcher.set(ARMS_RAISED, flag);
+    }
+
+
+    private net.minecraft.server.v1_14_R1.VillagerType findType (String... names) {
+        for (String value : names) {
+            try {
+                return Reflection.getNMSStaticField("VillagerType", value);
+            }catch (Throwable ignored){}
+        }
+        return null;
     }
 }
