@@ -48,7 +48,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
         EntityArmorStandPet stand = new EntityArmorStandPet(EntityTypes.ARMOR_STAND, ((CraftWorld) location.getWorld()).getHandle(), pet);
         stand.setSpecial(true);
-        //stand.setSize(0.0F, 0.0F);
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
         stand.setPosition(location.getX(), location.getY(), location.getZ());
         worldServer.addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -227,8 +226,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         }
     }
 
-    public boolean isSpecial() {return this.isSpecial;}
-
     public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
 
     private boolean isOwnerRiding() {
@@ -283,7 +280,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             this.lastYaw = this.yaw;
             this.pitch = (float) (owner.pitch * 0.5);
             this.setYawPitch(this.yaw, this.pitch);
-            //this.aL = this.aJ = this.yaw;
             this.aL = this.yaw;
             this.K = (float) 1.0;
         }

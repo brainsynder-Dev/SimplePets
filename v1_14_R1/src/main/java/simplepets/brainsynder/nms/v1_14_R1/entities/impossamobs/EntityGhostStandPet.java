@@ -11,7 +11,6 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet {
     private boolean isSpecial = false;
-    private IPet pet;
 
     public EntityGhostStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
         super(entitytypes, world);
@@ -19,14 +18,12 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
 
     private EntityGhostStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world, IPet pet) {
         super(entitytypes, world);
-        this.pet = pet;
     }
 
 
     public static ArmorStand spawn(Location location, IPet pet) {
         EntityGhostStandPet stand = new EntityGhostStandPet(EntityTypes.ARMOR_STAND, ((CraftWorld) location.getWorld()).getHandle(), pet);
         stand.isSpecial = true;
-        //stand.setSize(0.0F, 0.0F);
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
         stand.setPosition(location.getX(), location.getY(), location.getZ());
         worldServer.addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
@@ -72,9 +69,4 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
             return false;
         return super.damageEntity(damagesource, f);
     }
-
-    public boolean isSpecial() {return this.isSpecial;}
-
-    public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
-
 }
