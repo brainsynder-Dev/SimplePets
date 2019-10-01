@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import simple.brainsynder.api.ItemBuilder;
+import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -86,5 +87,10 @@ public class Ocelot extends MenuItemAbstract {
             }
             var.setCatType(typeID);
         }
+    }
+
+    @Override
+    public boolean isSupported() {
+        return ServerVersion.isEqualOld(ServerVersion.v1_13_R2);
     }
 }
