@@ -2,8 +2,10 @@ package simplepets.brainsynder.menu.menuItems;
 
 import org.bukkit.Material;
 import simple.brainsynder.api.ItemBuilder;
+import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
+import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 
@@ -48,5 +50,12 @@ public class Tame extends MenuItemAbstract {
                 pet.setTamed(true);
             }
         }
+    }
+
+    @Override
+    public boolean isSupported() {
+        if ((entityPet instanceof IEntityOcelotPet) && ServerVersion.isEqualNew(ServerVersion.v1_14_R1))
+            return false;
+        return super.isSupported();
     }
 }
