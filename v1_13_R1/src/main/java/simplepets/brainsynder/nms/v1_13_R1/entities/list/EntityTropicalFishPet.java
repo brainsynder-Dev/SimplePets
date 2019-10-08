@@ -4,6 +4,7 @@ import net.minecraft.server.v1_13_R1.DataWatcher;
 import net.minecraft.server.v1_13_R1.DataWatcherObject;
 import net.minecraft.server.v1_13_R1.EntityTypes;
 import net.minecraft.server.v1_13_R1.World;
+import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -74,6 +75,26 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
     }
     private int getRawData(DyeColorWrapper patternColor, DyeColorWrapper bodyColor, TropicalPattern type) {
         return patternColor.getWoolData() << 24 | bodyColor.getWoolData() << 16 | type.getDataValue();
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound compound = super.asCompound();
+        compound.setString("body", getBodyColor().name());
+        compound.setString("pattern", getPattern().name());
+        compound.setString("color", getPatternColor().name());
+        return compound;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound compound) {
+        super.applyCompound(compound);
+        if (compound.hasKey("body"))
+            setBodyColor(DyeColorWrapper.getByName(compound.getString("body")));
+        if (compound.hasKey("pattern"))
+            setPattern(TropicalPattern.getByName(compound.getString("pattern")));
+        if (compound.hasKey("color"))
+            setPatternColor(DyeColorWrapper.getByName(compound.getString("color")));
     }
 
     static {
