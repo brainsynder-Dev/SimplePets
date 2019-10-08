@@ -13,6 +13,12 @@
     <artifactId>v1_11_R1</artifactId>
 
     <build>
+        <resources>
+            <resource>
+                <directory>${project.parent.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -43,6 +49,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>simple.brainsynder</groupId>
+            <artifactId>v1_11_R1</artifactId>
+            <version>LATEST</version>
+        </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
             <artifactId>MAIN</artifactId>

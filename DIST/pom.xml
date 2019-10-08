@@ -17,7 +17,7 @@
         <module.info></module.info>
     </properties>
     <artifactId>DIST</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jar</packaging>
 
     <build>
         <plugins>
@@ -37,20 +37,47 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.1.0</version>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <outputDirectory>/tmp</outputDirectory>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>package-all</id>
                         <phase>package</phase>
                         <goals>
-                            <goal>single</goal>
+                            <goal>shade</goal>
                         </goals>
                         <configuration>
-                            <appendAssemblyId>false</appendAssemblyId>
-                            <descriptors>
-                                <descriptor>${project.basedir}/../src/main/resources/all-jar.xml</descriptor>
-                            </descriptors>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <includes>
+                                        <include>simple/brainsynder/api/**</include>
+                                        <include>simple/brainsynder/commands/annotations/**</include>
+                                        <include>simple/brainsynder/commands/*</include>
+                                        <include>simple/brainsynder/files/*</include>
+                                        <include>simple/brainsynder/math/**</include>
+                                        <include>simple/brainsynder/nbt/**</include>
+                                        <include>simple/brainsynder/nms/**</include>
+                                        <include>simple/brainsynder/reflection/**</include>
+                                        <include>simple/brainsynder/sound/**</include>
+                                        <include>simple/brainsynder/storage/**</include>
+                                        <include>simple/brainsynder/utils/*</include>
+                                        <include>simple/brainsynder/wrappers/**</include>
+                                        <include>simplepets/brainsynder/**</include>
+                                        <include>*.yml</include>
+                                    </includes>
+                                </filter>
+                            </filters>
+                            <relocations>
+                                <relocation>
+                                    <pattern>simple.brainsynder</pattern>
+                                    <shadedPattern>simplepets.brainsynder.internal.simpleapi</shadedPattern>
+                                </relocation>
+                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
