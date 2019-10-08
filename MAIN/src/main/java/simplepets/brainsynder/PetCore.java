@@ -3,7 +3,6 @@ package simplepets.brainsynder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.commands.CommandRegistry;
@@ -62,12 +61,6 @@ public class PetCore extends JavaPlugin {
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
         instance = this;
-        Plugin plugin = getServer().getPluginManager().getPlugin("SimpleAPI");
-        if (plugin == null) {
-            System.out.println("SimplePets >> Missing dependency (SimpleAPI) Must have the plugin in order to work the plugin");
-            new MissingAPI(this).runTaskTimer(this, 0, 20 * 60 * 2);
-            return;
-        }
         if (!errorCheck()) {
             setEnabled(false);
             return;
@@ -140,31 +133,6 @@ public class PetCore extends JavaPlugin {
     }
 
     private boolean errorCheck() {
-        try {
-            int[] target = new int[]{3, 8, 5};
-            String version = getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion().replace("-SNAPSHOT", "");
-            String[] found = version.replace(".", "-").split("-");
-            int a = Integer.parseInt(found[0]);
-            int b = Integer.parseInt(found[1]);
-            int c = ((found.length == 3) ? Integer.parseInt(found[2]) : 0);
-
-            if ((target[0] > a) || (target[1] > b) || (target[2] > c)) {
-                Errors.API_OUT_OF_DATE.replace(s -> s
-                        .replace("{old}", version)
-                        .replace("{new}", target[0] + "." + target[1] + "." + target[2])
-                ).print(true);
-                return false;
-            }
-            if ((target[0] < a) || (target[1] < b) || (target[2] < c))
-                Errors.API_NEWER.replace(s -> s
-                        .replace("{cur}", version)
-                        .replace("{rec}", target[0] + "." + target[1] + "." + target[2])
-                ).print(true);
-
-        } catch (Exception e) {
-            debug("Could not validate SimpleAPI version with required version");
-        }
-
         SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
         SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
