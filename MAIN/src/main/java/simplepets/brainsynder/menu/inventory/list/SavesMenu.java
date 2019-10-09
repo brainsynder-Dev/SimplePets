@@ -113,8 +113,17 @@ public class SavesMenu extends CustomInventory {
                         if (compound.hasKey("name") && (!compound.getString("name").equals("null")))
                             builder.withName(compound.getString("name"));
                         compound.getKeySet().forEach(key -> {
-                            if (!key.equals("name"))
-                                builder.addLore("  §e" + key + "§6: §7" + fetchValue(compound.getTag(key)));
+                            if (!key.equals("name")) {
+                                StorageBase base = compound.getTag(key);
+                                if (base instanceof StorageTagCompound) {
+                                    builder.addLore("  §e" + key + "§6:");
+                                    for (String keys : ((StorageTagCompound)base).getKeySet()) {
+                                        builder.addLore("  - §e" + keys + "§6: §7" + fetchValue(compound.getTag(keys)));
+                                    }
+                                }else{
+                                    builder.addLore("  §e" + key + "§6: §7" + fetchValue(base));
+                                }
+                            }
                         });
 
                         stack = builder.build();
