@@ -441,21 +441,21 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     }
 
     @Override
-    public boolean c(NBTTagCompound nbttagcompound){
+    public boolean c(NBTTagCompound nbttagcompound){// Calls e
         return false;
     }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound){
+    public boolean d(NBTTagCompound nbttagcompound){// Calls e
         return false;
     }
 
     @Override
-    public NBTTagCompound save(NBTTagCompound nbttagcompound){
+    public NBTTagCompound save(NBTTagCompound nbttagcompound){// Saving
         return nbttagcompound;
     }
 
     @Override
-    public void f(NBTTagCompound nbttagcompound){
+    public void f(NBTTagCompound nbttagcompound){// Loading
     }
 }

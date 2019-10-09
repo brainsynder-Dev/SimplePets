@@ -1,9 +1,12 @@
 package simplepets.brainsynder.api.entity.misc;
 
 public interface IHorseAbstract extends IAgeablePet, IFlag {
-    boolean isSaddled();
-
-    void setSaddled(boolean var1);
+    default boolean isSaddled(){
+        return getFlag(4);
+    }
+    default void setSaddled(boolean var1) {
+        setFlag(4, var1);
+    }
 
     default boolean isEating () {
         return getFlag(16);

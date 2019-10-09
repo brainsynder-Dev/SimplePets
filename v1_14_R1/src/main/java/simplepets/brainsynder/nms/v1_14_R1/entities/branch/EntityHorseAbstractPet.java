@@ -56,14 +56,6 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
     }
 
     @Override
-    public void repeatTask() {
-        super.repeatTask();
-        if (saddle) {
-            setFlag(4, true);
-        }
-    }
-
-    @Override
     public boolean isCollidable() {
         return false;
     }
@@ -73,9 +65,8 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
         return getFlag(4);
     }
 
+    @Override
     public void setSaddled(boolean flag) {
-        saddle = flag;
-        if (!getFlag(2)) setFlag(2, true);
         this.setFlag(4, flag);
         this.a(SoundEffects.ENTITY_HORSE_SADDLE, 0.5F, 1.0F);
         PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
@@ -101,7 +92,7 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
         if(flag){
             this.datawatcher.set(STATUS, (byte) (b0 | i));
         }else{
-            this.datawatcher.set(STATUS, (byte) (b0 & (i ^ 0xFFFFFFFF)));
+            this.datawatcher.set(STATUS, (byte) (b0 & (~i)));
         }
     }
 }
