@@ -26,6 +26,7 @@ import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.TypeManager;
 
 import java.util.*;
 
@@ -402,6 +403,18 @@ public class PetOwner {
     void play(Location location, ParticleMaker.Particle effect, int amount) {
         ParticleMaker maker = new ParticleMaker(effect, amount, 0.5, 0.5, 0.5);
         maker.sendToLocation(location);
+    }
+
+    public List<PetDefault> getOwnedPetList () {
+        List<PetDefault> list = new ArrayList<>();
+        if (!ownedPets.isEmpty()) {
+            TypeManager manager = PetCore.get().getTypeManager();
+            ownedPets.forEach(o -> {
+                PetDefault type = manager.getType(String.valueOf(o));
+                if (type != null) list.add(type);
+            });
+        }
+        return list;
     }
 
     public JSONArray getOwnedPets() {
