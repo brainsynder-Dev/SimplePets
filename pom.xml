@@ -61,6 +61,10 @@
                                     <artifact>*:*</artifact>
                                     <includes>
                                         <include>simple/brainsynder/api/**</include>
+                                        <include>simple/brainsynder/commands/annotations/**</include>
+                                        <include>simple/brainsynder/commands/*</include>
+                                        <include>simple/brainsynder/events/ActionMessageEvent.class</include>
+                                        <include>simple/brainsynder/events/SimpleApiEvent.class</include>
                                         <include>simple/brainsynder/files/*</include>
                                         <include>simple/brainsynder/math/**</include>
                                         <include>simple/brainsynder/nbt/**</include>
@@ -120,7 +124,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>3.8.8-SNAPSHOT</version>
+            <version>3.9-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

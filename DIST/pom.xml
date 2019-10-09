@@ -58,6 +58,9 @@
                                         <include>simple/brainsynder/api/**</include>
                                         <include>simple/brainsynder/commands/annotations/**</include>
                                         <include>simple/brainsynder/commands/*</include>
+                                        <include>simple/brainsynder/events/ActionMessageEvent.class</include>
+                                        <include>simple/brainsynder/events/SimpleApiEvent.class</include>
+                                        <include>simple/brainsynder/exceptions/SimpleAPIException.class</include>
                                         <include>simple/brainsynder/files/*</include>
                                         <include>simple/brainsynder/math/**</include>
                                         <include>simple/brainsynder/nbt/**</include>

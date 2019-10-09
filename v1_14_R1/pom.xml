@@ -52,7 +52,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>v1_14_R1</artifactId>
-            <version>LATEST</version>
+            <version>2</version>
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>

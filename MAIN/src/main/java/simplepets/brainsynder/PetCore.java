@@ -65,8 +65,8 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
+        Reflection.init();
         Utilities.init();
-
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
         if (!Bukkit.getOnlinePlayers().isEmpty()) {
