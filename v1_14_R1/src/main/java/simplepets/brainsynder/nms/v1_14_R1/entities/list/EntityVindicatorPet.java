@@ -1,9 +1,6 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
-import net.minecraft.server.v1_14_R1.EntityCreature;
-import net.minecraft.server.v1_14_R1.EntityTypes;
-import net.minecraft.server.v1_14_R1.World;
-import org.bukkit.entity.LivingEntity;
+import net.minecraft.server.v1_14_R1.*;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
@@ -45,11 +42,10 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     @Override
     public void setJohnny(boolean var) {
         johnny = var;
-        a(1, var);
         if (var) {
-            ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.IRON_AXE));
+            setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.IRON_AXE));
         } else {
-            ((LivingEntity) getEntity()).getEquipment().setItemInMainHand(new org.bukkit.inventory.ItemStack(org.bukkit.Material.AIR));
+            setSlot(EnumItemSlot.MAINHAND, new ItemStack(Items.AIR));
         }
     }
 }
