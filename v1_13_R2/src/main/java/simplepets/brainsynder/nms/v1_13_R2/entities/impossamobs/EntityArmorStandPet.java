@@ -203,7 +203,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
             getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
             getEntity().setBoots(new ItemBuilder(Utilities.findMaterial("GOLD_BOOTS")).build());
-            WebAPI.findTexture(getOwner().getUniqueId().toString(), texture -> {
+            WebAPI.findTexture(getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
                 builder.setTexture(texture);
                 if (isOwner()) getEntity().setHelmet(builder.build());
             });
