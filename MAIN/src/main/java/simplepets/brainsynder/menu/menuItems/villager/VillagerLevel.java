@@ -4,8 +4,7 @@ import org.bukkit.Material;
 import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
-import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
+import simplepets.brainsynder.api.entity.misc.IProfession;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.villager.VillagerData;
@@ -24,12 +23,8 @@ public class VillagerLevel extends MenuItemAbstract {
     @Override
     public ItemBuilder getItem() {
         VillagerData data = VillagerData.getDefault();
-        if (entityPet instanceof IEntityVillagerPet) {
-            IEntityVillagerPet var = (IEntityVillagerPet) entityPet;
-            data = var.getVillagerData();
-        }
-        if (entityPet instanceof IEntityZombieVillagerPet) {
-            IEntityZombieVillagerPet var = (IEntityZombieVillagerPet) entityPet;
+        if (entityPet instanceof IProfession) {
+            IProfession var = (IProfession) entityPet;
             data = var.getVillagerData();
         }
 
@@ -48,21 +43,8 @@ public class VillagerLevel extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
-        if (entityPet instanceof IEntityVillagerPet) {
-            IEntityVillagerPet var = (IEntityVillagerPet) entityPet;
-            VillagerData data = var.getVillagerData();
-            int level = data.getLevel();
-
-            if (level == 4) {
-                level = 1;
-            }else{
-                level++;
-            }
-            var.setVillagerData(data.withLevel(level));
-        }
-
-        if (entityPet instanceof IEntityZombieVillagerPet) {
-            IEntityZombieVillagerPet var = (IEntityZombieVillagerPet) entityPet;
+        if (entityPet instanceof IProfession) {
+            IProfession var = (IProfession) entityPet;
             VillagerData data = var.getVillagerData();
             int level = data.getLevel();
 
@@ -77,21 +59,8 @@ public class VillagerLevel extends MenuItemAbstract {
 
     @Override
     public void onRightClick() {
-        if (entityPet instanceof IEntityVillagerPet) {
-            IEntityVillagerPet var = (IEntityVillagerPet) entityPet;
-            VillagerData data = var.getVillagerData();
-            int level = data.getLevel();
-
-            if (level == 1) {
-                level = 4;
-            }else{
-                level--;
-            }
-            var.setVillagerData(data.withLevel(level));
-        }
-
-        if (entityPet instanceof IEntityZombieVillagerPet) {
-            IEntityZombieVillagerPet var = (IEntityZombieVillagerPet) entityPet;
+        if (entityPet instanceof IProfession) {
+            IProfession var = (IProfession) entityPet;
             VillagerData data = var.getVillagerData();
             int level = data.getLevel();
 
