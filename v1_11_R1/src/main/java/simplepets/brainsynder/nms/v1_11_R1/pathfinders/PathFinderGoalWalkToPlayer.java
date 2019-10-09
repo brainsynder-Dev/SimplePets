@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.v1_11_R1.pathfinders;
 
-import net.minecraft.server.v1_11_R1.PathEntity;
 import net.minecraft.server.v1_11_R1.PathfinderGoal;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +20,6 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
     protected double speed;
     public PetOwner owner;
     private boolean isFirst;
-    public Location location;
     private double teleportDistance = 10.0;
     private double stopDistance = 3.0;
     private List<Double> ints = Arrays.asList(1.9, -1.9);
@@ -40,38 +38,37 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
 
     @Override
     public boolean a() {
-        if (pet != null) {
-            if (owner.getPlayer().isOnline()) {
-                if (!owner.getPlayer().isInsideVehicle() && owner.hasPet()) {
-                    Location start = owner.getPlayer().getLocation();
-                    Entity petEntity = pet.getEntity();
-                    if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
-                        if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
-                            petEntity.teleport(start);
-                            return false;
-                        }
-                    } else {
-                        petEntity.teleport(start);
-                        return false;
-                    }
-                    int x = MathUtils.random(ints.size());
-                    int z = MathUtils.random(ints.size());
-
-                    if (isFirst) {
-                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-                        isFirst = false;
-                        this.c();
-                        return true;
-                    }
-                    if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
-                        location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-                    }
-                    this.c();
-                    return location != null;
-                }
+        if (pet == null) return false;
+        if (owner == null) return false;
+        if (owner.getPlayer() == null) return false;
+        if (!owner.getPlayer().isOnline()) return false;
+        if (owner.getPlayer().isInsideVehicle()) return false;
+        if (!owner.hasPet()) return false;
+        Location start = owner.getPlayer().getLocation();
+        Entity petEntity = pet.getEntity();
+        if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
+            if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
+                petEntity.teleport(start);
+                pet.setWalkToLocation(getWalkToLocation(start));
+                return false;
             }
+        } else {
+            petEntity.teleport(start);
+            pet.setWalkToLocation(getWalkToLocation(start));
+            return false;
         }
-        return false;
+
+        if (isFirst) {
+            if (pet.getWalkToLocation() == null)
+                pet.setWalkToLocation(getWalkToLocation(start));
+            isFirst = false;
+            this.c();
+            return true;
+        }
+        if ((pet.getEntity().getLocation().distance(start) >= stopDistance))
+            pet.setWalkToLocation(getWalkToLocation(start));
+        this.c();
+        return pet.getWalkToLocation() != null;
     }
 
     @Override
@@ -83,13 +80,31 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
     public void c() {
         if (owner.hasPet()) {
             if (owner.getPet().getEntity() != null) {
-                PetMoveEvent event = new PetMoveEvent(owner.getPet().getEntity(), PetMoveEvent.Cause.WALK);
-                Bukkit.getServer().getPluginManager().callEvent(event);
+                if (pet == null) {
+                    if (pet.getEntity() != null) pet.getEntity().remove();
+                    return;
+                }
+
+                if (pet.getOwner() == null) {
+                    if (pet.getEntity() != null) pet.getEntity().remove();
+                    return;
+                }
+
+                try {
+                    PetMoveEvent event = new PetMoveEvent(pet, PetMoveEvent.Cause.WALK);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                } catch (Throwable ignored) {
+                }
             }
-            EntityPet entityPet = (EntityPet) pet;
-            PathEntity path = entityPet.getNavigation().a(location.getX(), location.getY(), location.getZ());
-            entityPet.getNavigation().a(path, speed);
+            Location location = pet.getWalkToLocation();
+            ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ(), speed);
         }
+    }
+
+    private Location getWalkToLocation (Location start) {
+        int x = MathUtils.random(ints.size());
+        int z = MathUtils.random(ints.size());
+        return new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
     }
 }
 

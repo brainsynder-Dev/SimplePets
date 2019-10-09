@@ -55,8 +55,10 @@ public class Pet implements IPet {
         Bukkit.getServer().getPluginManager().callEvent(event);
         core.forceSpawn = true;
         Location spawnLoc = owner.getLocation();
+        Location walkTo = null;
         if (petOwner.hasPet()) {
             IPet oldPet = petOwner.getPet();
+            walkTo = oldPet.getEntity().getWalkToLocation();
             spawnLoc = oldPet.getEntity().getEntity().getLocation().clone();
             petOwner.removePet();
         }
@@ -80,6 +82,7 @@ public class Pet implements IPet {
             core.debug(2, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
             return;
         }
+        ent.setWalkToLocation(walkTo);
         core.forceSpawn = false;
         ent.getEntity().setMetadata("pet", new FixedMetadataValue(core, "pet"));
         this.ent = ent;

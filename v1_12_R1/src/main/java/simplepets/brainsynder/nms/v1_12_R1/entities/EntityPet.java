@@ -30,6 +30,7 @@ import java.util.Map;
 public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     private IPet pet;
+    private Location walkTo = null;
     private double walkSpeed = 0.6000000238418579, rideSpeed = 0.7000000238418579;
 
     private boolean floatDown = false,
@@ -101,6 +102,16 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         }
 
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     @Override

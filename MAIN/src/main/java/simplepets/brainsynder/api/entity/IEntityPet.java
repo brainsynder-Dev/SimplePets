@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.entity;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simple.brainsynder.nbt.StorageTagCompound;
@@ -38,4 +39,9 @@ public interface IEntityPet extends IImpossaPet {
     }
 
     default void setPetSilent(boolean silent) {}
+
+    // This will simply make it so when the pet get changed
+    // The location will stay the same and it wont keep walking.
+    void setWalkToLocation (Location location);
+    Location getWalkToLocation ();
 }

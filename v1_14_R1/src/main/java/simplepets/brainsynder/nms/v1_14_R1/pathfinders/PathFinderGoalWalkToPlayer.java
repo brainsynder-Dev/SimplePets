@@ -19,12 +19,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
-
     public IEntityPet pet;
     protected double speed;
     public PetOwner owner;
     private boolean isFirst;
-    public Location location;
     private double teleportDistance = 10.0;
     private double stopDistance = 3.0;
     private List<Double> ints = Arrays.asList(1.9, -1.9);
@@ -54,38 +52,26 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
         if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
             if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
                 petEntity.teleport(start);
+                pet.setWalkToLocation(getWalkToLocation(start));
                 return false;
             }
         } else {
             petEntity.teleport(start);
+            pet.setWalkToLocation(getWalkToLocation(start));
             return false;
-        }
-        int x = MathUtils.random(ints.size());
-        int z = MathUtils.random(ints.size());
-
-        if (pet instanceof IEntityParrotPet) {
-            if (owner.getPlayer().isFlying()) {
-                List<Block> checks = new ArrayList<>();
-                Location clone = start.clone();
-                for (int i = 1; i < ((int) stopDistance); i++) {
-                    Block below = clone.subtract(0, i, 0).getBlock();
-                    if ((below == null) || (below.getType() == Material.AIR)) checks.add(below);
-                }
-                if (!checks.isEmpty()) location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-            }
         }
 
         if (isFirst) {
-            location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+            if (pet.getWalkToLocation() == null)
+                pet.setWalkToLocation(getWalkToLocation(start));
             isFirst = false;
             this.c();
             return true;
         }
-        if ((pet.getEntity().getLocation().distance(start) >= stopDistance)) {
-            location = new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
-        }
+        if ((pet.getEntity().getLocation().distance(start) >= stopDistance))
+            pet.setWalkToLocation(getWalkToLocation(start));
         this.c();
-        return location != null;
+        return pet.getWalkToLocation() != null;
     }
 
     @Override
@@ -113,9 +99,30 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
                 } catch (Throwable ignored) {
                 }
             }
-            //  PathEntity path = ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ());
+            Location location = pet.getWalkToLocation();
             ((EntityPet) pet).getNavigation().a(location.getX(), location.getY(), location.getZ(), speed);
         }
+    }
+
+    private Location getWalkToLocation (Location start) {
+        int x = MathUtils.random(ints.size());
+        int z = MathUtils.random(ints.size());
+
+        if (pet instanceof IEntityParrotPet) {
+            if (owner.getPlayer().isFlying()) {
+                List<Block> checks = new ArrayList<>();
+                Location clone = start.clone();
+                for (int i = 1; i < ((int) stopDistance); i++) {
+                    Block below = clone.subtract(0, i, 0).getBlock();
+                    if ((below == null) || (below.getType() == Material.AIR)) checks.add(below);
+                }
+                if (!checks.isEmpty()) {
+                    return new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
+                }
+            }
+        }
+
+        return new Location(start.getWorld(), start.getX() + x, start.getY(), start.getZ() + z);
     }
 }
 

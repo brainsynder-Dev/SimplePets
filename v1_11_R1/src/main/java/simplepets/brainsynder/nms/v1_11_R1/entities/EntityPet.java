@@ -23,6 +23,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         IEntityPet {
     protected FieldAccessor<Boolean> fieldAccessor;
     private IPet pet;
+    private Location walkTo = null;
     private double walkSpeed, rideSpeed;
     private boolean floatDown;
 
@@ -48,6 +49,16 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", pet.getPetType().getConfigName());
         return object;
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     @Override
