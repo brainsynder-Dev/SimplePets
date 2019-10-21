@@ -53,6 +53,12 @@
                         <configuration>
                             <filters>
                                 <filter>
+                                    <artifact>simple.brainsynder:*</artifact>
+                                    <excludes>
+                                        <exclude>*.yml</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
                                     <artifact>*:*</artifact>
                                     <includes>
                                         <include>simple/brainsynder/api/**</include>
@@ -71,7 +77,7 @@
                                         <include>simple/brainsynder/utils/*</include>
                                         <include>simple/brainsynder/wrappers/**</include>
                                         <include>simplepets/brainsynder/**</include>
-                                        <include>*.yml</include>
+                                        <include>plugin.yml</include>
                                     </includes>
                                 </filter>
                             </filters>

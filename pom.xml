@@ -24,7 +24,7 @@
         <finalName>${project.parent.artifactId}${module.info}</finalName>
         <resources>
             <resource>
-                <directory>${project.basedir}/src/main/resources</directory>
+                <directory>${project.basedir}/MAIN/src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
                     <exclude>all-jar.xml</exclude>
@@ -56,7 +56,18 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>simple.brainsynder:API</exclude>
+                                </excludes>
+                            </artifactSet>
                             <filters>
+                                <filter>
+                                    <artifact>simple.brainsynder:*</artifact>
+                                    <excludes>
+                                        <exclude>*.yml</exclude>
+                                    </excludes>
+                                </filter>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <includes>
@@ -65,6 +76,7 @@
                                         <include>simple/brainsynder/commands/*</include>
                                         <include>simple/brainsynder/events/ActionMessageEvent.class</include>
                                         <include>simple/brainsynder/events/SimpleApiEvent.class</include>
+                                        <include>simple/brainsynder/exceptions/SimpleAPIException.class</include>
                                         <include>simple/brainsynder/files/*</include>
                                         <include>simple/brainsynder/math/**</include>
                                         <include>simple/brainsynder/nbt/**</include>
@@ -75,7 +87,7 @@
                                         <include>simple/brainsynder/utils/*</include>
                                         <include>simple/brainsynder/wrappers/**</include>
                                         <include>simplepets/brainsynder/**</include>
-                                        <include>*.yml</include>
+                                        <include>plugin.yml</include>
                                     </includes>
                                 </filter>
                             </filters>
