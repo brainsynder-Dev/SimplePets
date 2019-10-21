@@ -5,6 +5,7 @@ import net.minecraft.server.v1_14_R1.*;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -167,15 +168,30 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     private void handleInvisible (boolean glow, Entity pet) throws IllegalAccessException {
         DataWatcher toCloneDataWatcher = pet.getDataWatcher();
         DataWatcher newDataWatcher = new DataWatcher(pet);
+        String fieldName = "d";
 
-        Map<Integer, DataWatcher.Item<?>> currentMap = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, "d", true);
-        Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
-
-        for (Integer integer : currentMap.keySet()) {
-            newMap.put(integer, currentMap.get(integer).d());
+        Int2ObjectOpenHashMap<DataWatcher.Item<?>> currentHashMap = new Int2ObjectOpenHashMap<>();
+        try {
+            Map<Integer, DataWatcher.Item<?>> map = (Map<Integer, DataWatcher.Item<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
+            for (Integer integer : map.keySet()) {
+                currentHashMap.put(integer, map.get(integer).d());
+            }
+        }catch (Exception e){
+            fieldName = "entries";
+            try {
+                currentHashMap = (Int2ObjectOpenHashMap<DataWatcher.Item<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
+            }catch (Exception f){
+                // Failed to get any of the fields
+                return;
+            }
         }
 
-        DataWatcher.Item item = newMap.get(0);
+        Int2ObjectOpenHashMap<DataWatcher.Item<?>> newHashMap = new Int2ObjectOpenHashMap<>();
+        for (Integer integer : currentHashMap.keySet()) {
+            newHashMap.put(integer, currentHashMap.get(integer).d());
+        }
+
+        DataWatcher.Item item = newHashMap.get(0);
         byte initialBitMask = (Byte) item.b();
         byte bitMaskIndex = (byte) 6;
         isGlowing = glow;
@@ -184,7 +200,16 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         } else {
             item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
         }
-        FieldUtils.writeDeclaredField(newDataWatcher, "d", newMap, true);
+
+        if (fieldName.equals("d")) {
+            Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
+            for (Integer integer : newHashMap.keySet()) {
+                newMap.put(integer, newHashMap.get(integer).d());
+            }
+            FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newMap, true);
+        }else{
+            FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
+        }
 
         PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
 
