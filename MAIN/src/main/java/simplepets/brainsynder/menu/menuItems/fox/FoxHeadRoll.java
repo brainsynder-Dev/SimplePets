@@ -34,7 +34,7 @@ public class FoxHeadRoll extends MenuItemAbstract<IEntityFoxPet> {
         List<ItemBuilder> items = new ArrayList<>();
         items.add(ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
                 .setTexture("http://textures.minecraft.net/texture/d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a")
-                .withName("&6&lHead Roll: &e%value%"));
+                .withName("&6&lHead Tilt: &e%value%"));
         return items;
     }
 
@@ -53,6 +53,6 @@ public class FoxHeadRoll extends MenuItemAbstract<IEntityFoxPet> {
 
     @Override
     public String getTargetName() {
-        return "headRoll";
+        return "headTilt";
     }
 }
