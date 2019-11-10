@@ -1,14 +1,10 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.impossamobs;
 
-import net.minecraft.server.v1_11_R1.EntityShulker;
-import net.minecraft.server.v1_11_R1.EnumMoveType;
-import net.minecraft.server.v1_11_R1.World;
-import net.minecraft.server.v1_11_R1.WorldServer;
+import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
@@ -25,6 +21,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
     private boolean rainbow = false;
     private int toggle = 0;
     private boolean closed = true;
+    private Location walkTo = null;
     private DyeColorWrapper color = DyeColorWrapper.PURPLE;
     private EntityControllerPet pet;
 
@@ -46,6 +43,16 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         shulker.setPosition(location.getX(), location.getY(), location.getZ());
         worldServer.addEntity(shulker, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return ((Shulker) shulker.getBukkitEntity());
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     @Override

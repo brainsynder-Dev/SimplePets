@@ -28,6 +28,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean isSpecial = false;
     private EntityControllerPet pet;
     private Location previus;
+    private Location walkTo = null;
     private boolean moving = false;
     private boolean store = true;
     private boolean minime = false;
@@ -57,6 +58,16 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         compound.setBoolean("NoBasePlate", true);
         stand.a(compound);
         return ((ArmorStand) stand.getBukkitEntity());
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     @Override

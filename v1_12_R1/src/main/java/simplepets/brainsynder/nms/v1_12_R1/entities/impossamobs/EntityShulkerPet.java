@@ -7,8 +7,7 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
@@ -28,6 +27,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet {
     private boolean isCustom = false,rainbow = false;
     private int toggle = 0;
+    private Location walkTo = null;
     private DyeColorWrapper color = DyeColorWrapper.PURPLE;
     private EntityControllerPet pet;
     private FieldAccessor<Boolean> fieldAccessor;
@@ -77,6 +77,16 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         shulker.setPosition(location.getX(), location.getY(), location.getZ());
         worldServer.addEntity(shulker, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return ((Shulker) shulker.getBukkitEntity());
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     public void addPassenger(org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {

@@ -4,7 +4,6 @@ import net.minecraft.server.v1_14_R1.EntityTypes;
 import net.minecraft.server.v1_14_R1.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -14,9 +13,7 @@ import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.errors.SimplePetsException;
-import simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs.EntityArmorStandPet;
-import simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs.EntityGhostStandPet;
-import simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs.EntityShulkerPet;
+import simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs.*;
 import simplepets.brainsynder.nms.v1_14_R1.entities.list.EntityControllerPet;
 import simplepets.brainsynder.nms.v1_14_R1.utils.EntityUtils;
 import simplepets.brainsynder.pet.types.ArmorStandDefault;
@@ -75,7 +72,7 @@ public class SpawnUtil implements ISpawner {
                     Shulker shulker = EntityShulkerPet.spawn(l, (EntityControllerPet) customEntity);
                     shulker.setAI(false);
                     shulker.setCollidable(false);
-                    ((CraftEntity) stand).getHandle().passengers.add(0, ((CraftEntity) shulker).getHandle());
+                    stand.addPassenger(shulker);
                     ((IEntityControllerPet) customEntity).setDisplayEntity(stand);
                 }
             }

@@ -21,9 +21,7 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
-import simplepets.brainsynder.utils.AnimationCycle;
-import simplepets.brainsynder.utils.AnimationManager;
-import simplepets.brainsynder.utils.Utilities;
+import simplepets.brainsynder.utils.*;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
@@ -33,6 +31,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean moving = false;
     private boolean store = true;
     private boolean minime = false;
+    private Location walkTo = null;
     private AnimationCycle walking = null;
     private AnimationCycle arm_swing = null;
     private FieldAccessor<Boolean> fieldAccessor;
@@ -60,6 +59,16 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         compound.setBoolean("NoBasePlate", true);
         stand.a(compound);
         return ((ArmorStand) stand.getBukkitEntity());
+    }
+
+    @Override
+    public Location getWalkToLocation() {
+        return walkTo;
+    }
+
+    @Override
+    public void setWalkToLocation(Location location) {
+        walkTo = location;
     }
 
     public void setPassenger(int pos, org.bukkit.entity.Entity entity, org.bukkit.entity.Entity passenger) {
