@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.player.PetOwner;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Armor extends MenuItemAbstract {
+public class Armor extends MenuItemAbstract<IEntityArmorStandPet> {
     public Armor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
     }
@@ -34,6 +35,7 @@ public class Armor extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
+        if (!entityPet.isOwner()) return;
         PetCore.get().getInvLoaders().ARMOR.open(PetOwner.getPetOwner(entityPet.getOwner()));
     }
 }
