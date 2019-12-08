@@ -14,6 +14,7 @@ import java.util.Map;
 public class ItemLoaders {
     private Air AIR;
     public Placeholder PLACEHOLDER;
+    public RedPlaceholder RED_PLACEHOLDER;
     public Data DATA;
     private Map<String, Item> items = new HashMap<>();
 
@@ -38,6 +39,8 @@ public class ItemLoaders {
         add(new Data(Item.getLocation(core, Data.class)));
         add(new SavePet(Item.getLocation(core, SavePet.class)));
         add(new Saves(Item.getLocation(core, Saves.class)));
+        add(new RedPlaceholder(Item.getLocation(core, RedPlaceholder.class)));
+        add(new Update(Item.getLocation(core, Update.class)));
         add(new FlameOn(new File(customFolder, "flameon.json")));
 
         for (Item loader : items.values()) {
@@ -59,6 +62,7 @@ public class ItemLoaders {
 
         AIR = getLoader(Air.class);
         PLACEHOLDER = getLoader(Placeholder.class);
+        RED_PLACEHOLDER = getLoader(RedPlaceholder.class);
         DATA = getLoader(Data.class);
     }
 

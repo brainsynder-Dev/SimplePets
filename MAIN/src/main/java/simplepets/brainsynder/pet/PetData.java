@@ -54,7 +54,7 @@ public enum PetData {
     HORSE(AGE, HorseArmor.class, HorseColor.class, HorseStyle.class, Saddle.class, Eating.class),
     MULE_DONKEY(AGE, Eating.class, Chested.class, Saddle.class),
     HORSE_OTHER(AGE, Eating.class, Saddle.class),
-    ARMOR_STAND(SILENT, Clone.class, Stand.class),
+    ARMOR_STAND(SILENT, Armor.class, Stand.class),
     SHEEP(AGE, Color.class, Rainbow.class, Shear.class),
     PARROT(SILENT, ParrotColor.class, Rainbow.class, Sitting.class),
     WIZARD(SILENT, Spell.class),

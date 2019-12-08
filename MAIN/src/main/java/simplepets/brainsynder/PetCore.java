@@ -19,6 +19,7 @@ import simplepets.brainsynder.listeners.OnPetSpawn;
 import simplepets.brainsynder.listeners.PetEventListeners;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
+import simplepets.brainsynder.menu.inventory.listeners.ArmorListener;
 import simplepets.brainsynder.menu.inventory.listeners.DataListener;
 import simplepets.brainsynder.menu.inventory.listeners.SavesListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
@@ -122,6 +123,7 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SelectionListener(), this);
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new SavesListener(), this);
+        getServer().getPluginManager().registerEvents(new ArmorListener(), this);
     }
 
     private void createPluginInstances() {

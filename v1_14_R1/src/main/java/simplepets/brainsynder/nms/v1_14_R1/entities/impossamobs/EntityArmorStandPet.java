@@ -14,6 +14,7 @@ import org.bukkit.util.EulerAngle;
 import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.nbt.StorageTagCompound;
+import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -35,6 +36,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private AnimationCycle walking = null;
     private AnimationCycle arm_swing = null;
     private FieldAccessor<Boolean> fieldAccessor;
+    private ItemStack head, body, legs, boots, left_arm, right_arm;
 
     public EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
         super(entitytypes, world);
@@ -44,6 +46,12 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         super(entitytypes, world);
         this.pet = pet;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
+        head = new ItemStack(Material.AIR);
+        body = new ItemStack(Material.AIR);
+        legs = new ItemStack(Material.AIR);
+        boots = new ItemStack(Material.AIR);
+        left_arm = new ItemStack(Material.AIR);
+        right_arm = new ItemStack(Material.AIR);
     }
 
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
@@ -189,6 +197,16 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         StorageTagCompound object = pet.asCompound();
         object.setBoolean("small", isSmall());
         object.setBoolean("clone", isOwner());
+
+        StorageTagCompound items = new StorageTagCompound();
+        if (head != null) items.setString("head", parseItem(head));
+        if (body != null) items.setString("body", parseItem(body));
+        if (legs != null) items.setString("legs", parseItem(legs));
+        if (boots != null) items.setString("boots", parseItem(boots));
+        if (left_arm != null) items.setString("left_arm", parseItem(left_arm));
+        if (right_arm != null) items.setString("right_arm", parseItem(right_arm));
+        if (!items.hasNoTags()) object.setTag("items", items);
+
         return object;
     }
 
@@ -196,6 +214,15 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("small")) setSmall(object.getBoolean("small"));
         if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
+        if (object.hasKey("items")) {
+            StorageTagCompound items = object.getCompoundTag("items");
+            if (items.hasKey("head")) setHeadItem(parseString(items.getString("head")));
+            if (items.hasKey("body")) setBodyItem(parseString(items.getString("body")));
+            if (items.hasKey("legs")) setLegItem(parseString(items.getString("legs")));
+            if (items.hasKey("boots")) setFootItem(parseString(items.getString("boots")));
+            if (items.hasKey("left_arm")) setLeftArmItem(parseString(items.getString("left_arm")));
+            if (items.hasKey("right_arm")) setRightArmItem(parseString(items.getString("right_arm")));
+        }
         pet.applyCompound(object);
     }
 
@@ -235,6 +262,62 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                 setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
 
         }
+    }
+
+    @Override
+    public void setHeadItem(ItemStack item) {
+        this.head = item;
+        getEntity().getEquipment().setHelmet((item));
+    }
+    @Override
+    public void setBodyItem(ItemStack item) {
+        this.body = item;
+        getEntity().getEquipment().setChestplate((item));
+    }
+    @Override
+    public void setLegItem(ItemStack item) {
+        this.legs = item;
+        getEntity().getEquipment().setLeggings((item));
+    }
+    @Override
+    public void setFootItem(ItemStack item) {
+        this.boots = item;
+        getEntity().getEquipment().setBoots((item));
+    }
+    @Override
+    public void setLeftArmItem(ItemStack item) {
+        this.left_arm = item;
+        getEntity().getEquipment().setItemInOffHand((item));
+    }
+    @Override
+    public void setRightArmItem(ItemStack item) {
+        this.right_arm = item;
+        getEntity().getEquipment().setItemInMainHand((item));
+    }
+
+    @Override
+    public ItemStack getHeadItem() {
+        return head;
+    }
+    @Override
+    public ItemStack getBodyItem() {
+        return body;
+    }
+    @Override
+    public ItemStack getLegItem() {
+        return legs;
+    }
+    @Override
+    public ItemStack getFootItem() {
+        return boots;
+    }
+    @Override
+    public ItemStack getLeftArmItem() {
+        return left_arm;
+    }
+    @Override
+    public ItemStack getRightArmItem() {
+        return right_arm;
     }
 
     public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }
@@ -384,5 +467,13 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         if (item == null) return new ItemStack(Material.AIR);
         if (item.getType() == Material.AIR) return new ItemStack(Material.AIR);
         return item;
+    }
+
+    private String parseItem (ItemStack stack) {
+        return Base64Wrapper.encodeString(PetCore.get().getUtilities().itemToString(stack));
+    }
+
+    private ItemStack parseString (String string) {
+        return PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(string));
     }
 }

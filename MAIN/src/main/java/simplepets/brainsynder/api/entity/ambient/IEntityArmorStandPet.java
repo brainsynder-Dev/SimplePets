@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.entity.ambient;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.api.entity.IDisplayEntity;
@@ -38,4 +39,22 @@ public interface IEntityArmorStandPet extends IDisplayEntity {
     default void setFootItem(ItemStack item) {}
     default void setRightArmItem(ItemStack item) {}
     default void setLeftArmItem(ItemStack item) {}
+    default ItemStack getHeadItem () {
+        return new ItemStack(Material.AIR);
+    }
+    default ItemStack getBodyItem () {
+        return new ItemStack(Material.AIR);
+    }
+    default ItemStack getLegItem () {
+        return new ItemStack(Material.AIR);
+    }
+    default ItemStack getFootItem () {
+        return new ItemStack(Material.AIR);
+    }
+    default ItemStack getRightArmItem () {
+        return new ItemStack(Material.AIR);
+    }
+    default ItemStack getLeftArmItem () {
+        return new ItemStack(Material.AIR);
+    }
 }
