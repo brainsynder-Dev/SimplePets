@@ -25,7 +25,7 @@ public class ArmorMenu extends CustomInventory {
     @Override
     public void loadDefaults() {
         defaults.put("title", "&a&lArmorStand Armor");
-        defaults.put("status", "CAN NOT BE MODIFIED");
+        defaults.put("status", "CAN NOT MODIFY THE LAYOUT OF THE ARMOR");
 
         Map<Integer, String> object = new HashMap<>();
         object.put(1, "storage");
