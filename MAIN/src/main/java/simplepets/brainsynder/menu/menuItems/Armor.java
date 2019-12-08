@@ -35,7 +35,7 @@ public class Armor extends MenuItemAbstract<IEntityArmorStandPet> {
 
     @Override
     public void onLeftClick() {
-        if (!entityPet.isOwner()) return;
+        if (entityPet.isOwner()) return;
         PetCore.get().getInvLoaders().ARMOR.open(PetOwner.getPetOwner(entityPet.getOwner()));
     }
 }
