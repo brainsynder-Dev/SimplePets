@@ -21,6 +21,7 @@ public class TypeManager {
 
         register(new ArmorStandDefault(plugin));
         register(new BatDefault(plugin));
+        register(new BeeDefault(plugin));
         register(new BlazeDefault(plugin));
         register(new CatDefault(plugin));
         register(new CaveSpiderDefault(plugin));

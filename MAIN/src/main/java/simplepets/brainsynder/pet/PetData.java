@@ -2,6 +2,9 @@ package simplepets.brainsynder.pet;
 
 import simplepets.brainsynder.menu.menuItems.*;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
+import simplepets.brainsynder.menu.menuItems.bee.BeeAngry;
+import simplepets.brainsynder.menu.menuItems.bee.Nectar;
+import simplepets.brainsynder.menu.menuItems.bee.Stung;
 import simplepets.brainsynder.menu.menuItems.cat.CatCollar;
 import simplepets.brainsynder.menu.menuItems.cat.CatColor;
 import simplepets.brainsynder.menu.menuItems.cat.CatTilt;
@@ -33,6 +36,7 @@ public enum PetData {
     MOOSHROOM(AGE, MooshroomColor.class),
     ARMS(SILENT, Arms.class),
     BAT(SILENT, Hang.class),
+    BEE(AGE, BeeAngry.class, Nectar.class, Stung.class),
     WITHER(SILENT, WitherShield.class, WitherSize.class),
     BLAZE(SILENT, Burning.class),
     GHAST_SCREAM(SILENT, GhastScream.class),

@@ -117,6 +117,7 @@
         <module>v1_13_R1</module>
         <module>v1_13_R2</module>
         <module>v1_14_R1</module>
+        <module>v1_15_R1</module>
         <module>DIST</module>
     </modules>
 
@@ -136,7 +137,7 @@
         <dependency>
             <groupId>simple.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>3.9-SNAPSHOT</version>
+            <version>4.0.3-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

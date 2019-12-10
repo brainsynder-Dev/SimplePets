@@ -73,7 +73,11 @@ public enum EntityWrapper {
     PILLAGER,
     RAVAGER,
     WANDERING_TRADER,
-    FOX;
+    FOX,
+
+    // 1.15 Mob
+    BEE
+    ;
 
     private String name, typeName;
 
