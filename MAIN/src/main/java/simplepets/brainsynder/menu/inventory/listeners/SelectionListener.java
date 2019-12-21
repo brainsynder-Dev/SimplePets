@@ -44,7 +44,7 @@ public class SelectionListener implements Listener {
             IStorage<PetTypeStorage> storage = menu.getPetMap().getKey(p.getName()).copy();
             while (storage.hasNext()) {
                 final PetTypeStorage type = storage.next();
-                if (type.getItem().isSimilar(e.getCurrentItem())) {
+                if (type.getItem().getItemMeta().getDisplayName().equals(e.getCurrentItem().getItemMeta().getDisplayName())) {
                     if (!type.getType().hasPermission(p)) return;
                     PetInventorySelectTypeEvent event = new PetInventorySelectTypeEvent(type.getType(), p);
                     Bukkit.getServer().getPluginManager().callEvent(event);
