@@ -2,6 +2,7 @@ package simplepets.brainsynder.pet.types;
 
 import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.sound.SoundMaker;
+import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
@@ -34,5 +35,10 @@ public class BeeDefault extends PetDefault {
     @Override
     public boolean canFlyDefault() {
         return true;
+    }
+
+    @Override
+    public ServerVersion getAllowedVersion() {
+        return ServerVersion.v1_15_R1;
     }
 }
