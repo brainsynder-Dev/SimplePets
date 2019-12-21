@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPufferFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.PufferState;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "SMALL", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/PufferState.java")
 public class PufferSize extends MenuItemAbstract {
     public PufferSize(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

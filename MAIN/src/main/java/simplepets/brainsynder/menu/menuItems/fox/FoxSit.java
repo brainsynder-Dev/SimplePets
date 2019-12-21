@@ -7,10 +7,12 @@ import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.Utilities;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class FoxSit extends MenuItemAbstract<IEntityFoxPet> {
 
     public FoxSit(PetDefault type, IEntityPet entityPet) {

@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IProfession;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.villager.VillagerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(type = "Integer", def = "1", target = "1,2,3,4")
 public class VillagerLevel extends MenuItemAbstract {
     public VillagerLevel(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "WHITE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/DyeColorWrapper.java")
 public class BodyColor extends MenuItemAbstract {
     public BodyColor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

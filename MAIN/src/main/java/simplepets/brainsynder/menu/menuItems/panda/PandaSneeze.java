@@ -7,10 +7,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class PandaSneeze extends MenuItemAbstract<IEntityPandaPet> {
 
     public PandaSneeze(PetDefault type, IEntityPet entityPet) {

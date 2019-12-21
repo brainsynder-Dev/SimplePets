@@ -6,11 +6,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class BeeAngry extends MenuItemAbstract<IEntityBeePet> {
     public BeeAngry(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);
@@ -22,7 +24,7 @@ public class BeeAngry extends MenuItemAbstract<IEntityBeePet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName(getTargetName(), 0);
-        if (item != null) item.withName(item.getName().replace("%value%", String.valueOf(entityPet.hasNectar())));
+        if (item != null) item.withName(item.getName().replace("%value%", String.valueOf(entityPet.isAngry())));
         return item;
     }
 
@@ -36,7 +38,7 @@ public class BeeAngry extends MenuItemAbstract<IEntityBeePet> {
 
     @Override
     public void onLeftClick() {
-        entityPet.setHasNectar(!entityPet.hasNectar());
+        entityPet.setAngry(!entityPet.isAngry());
     }
 
     @Override

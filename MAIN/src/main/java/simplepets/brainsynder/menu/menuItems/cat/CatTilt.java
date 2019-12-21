@@ -6,10 +6,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class CatTilt extends MenuItemAbstract<IEntityCatPet> {
 
     public CatTilt(PetDefault type, IEntityPet entityPet) {

@@ -5,11 +5,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class Tilt extends MenuItemAbstract {
 
 

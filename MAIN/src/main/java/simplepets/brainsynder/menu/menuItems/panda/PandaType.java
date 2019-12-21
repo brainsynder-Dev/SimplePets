@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.PandaGene;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "NORMAL", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/PandaGene.java")
 public class PandaType extends MenuItemAbstract<IEntityPandaPet> {
 
     public PandaType(PetDefault type, IEntityPet entityPet) {

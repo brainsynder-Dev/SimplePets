@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityWizard;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.WizardSpell;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "NONE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/WizardSpell.java")
 public class Spell extends MenuItemAbstract {
 
     public Spell(PetDefault type, IEntityPet entityPet) {

@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.utils.Utilities;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "NONE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/HorseArmorType.java")
 public class HorseArmor extends MenuItemAbstract {
     public HorseArmor(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

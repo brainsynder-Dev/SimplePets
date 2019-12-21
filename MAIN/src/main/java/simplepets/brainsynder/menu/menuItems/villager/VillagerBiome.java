@@ -8,12 +8,14 @@ import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.villager.BiomeType;
 import simplepets.brainsynder.wrapper.villager.VillagerData;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "PLAINS", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/villager/BiomeType.java")
 public class VillagerBiome extends MenuItemAbstract {
     public VillagerBiome(PetDefault type, IEntityPet entityPet) {
         super(type, entityPet);

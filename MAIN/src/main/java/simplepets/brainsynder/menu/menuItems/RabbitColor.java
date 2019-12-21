@@ -7,11 +7,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.RabbitType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "BROWN", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/RabbitType.java")
 public class RabbitColor extends MenuItemAbstract {
 
     public RabbitColor(PetDefault type, IEntityPet entityPet) {

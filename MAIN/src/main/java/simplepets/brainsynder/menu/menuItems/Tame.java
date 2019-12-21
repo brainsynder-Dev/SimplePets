@@ -8,11 +8,13 @@ import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@ValueType(type = "boolean", def = "false")
 public class Tame extends MenuItemAbstract {
 
 

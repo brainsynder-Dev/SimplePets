@@ -6,10 +6,12 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(type = "Integer", def = "0", target = "0,1,2,3")
 public class Ocelot extends MenuItemAbstract {
 
     public Ocelot(PetDefault type, IEntityPet entityPet) {

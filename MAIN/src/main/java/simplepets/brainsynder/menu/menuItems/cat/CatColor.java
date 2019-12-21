@@ -5,11 +5,13 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.CatType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@ValueType(def = "WHITE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/CatType.java")
 public class CatColor extends MenuItemAbstract<IEntityCatPet> {
 
     public CatColor(PetDefault type, IEntityPet entityPet) {
