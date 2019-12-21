@@ -49,7 +49,6 @@ public class PetSubCommand extends SubCommand {
             if (!type.isSupported()) continue;
             list.add(type.getConfigName());
         }
-        Bukkit.broadcastMessage("Cached Types:"+list.size());
         return list;
     }
 }
