@@ -45,13 +45,13 @@ public class EntityUtils {
     }
 
     private static void initStores () {
-        VillagerType DESERT = findType("a", "DESERT"),
-                JUNGLE = findType("b", "JUNGLE"),
-                PLAINS = findType("c", "PLAINS"),
-                SAVANNA = findType("d", "SAVANNA"),
-                SNOW = findType("e", "SNOW"),
-                SWAMP = findType("f", "SWAMP"),
-                TAIGA = findType("g", "TAIGA");
+        VillagerType DESERT = VillagerType.DESERT,
+                JUNGLE = VillagerType.JUNGLE,
+                PLAINS = VillagerType.PLAINS,
+                SAVANNA = VillagerType.SAVANNA,
+                SNOW = VillagerType.SNOW,
+                SWAMP = VillagerType.SWAMP,
+                TAIGA = VillagerType.TAIGA;
 
         if (stored.isEmpty()) {
             stored.put(BiomeType.DESERT, DESERT);

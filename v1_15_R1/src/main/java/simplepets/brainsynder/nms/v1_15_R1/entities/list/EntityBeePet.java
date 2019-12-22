@@ -32,7 +32,7 @@ public class EntityBeePet extends AgeableEntityPet implements IEntityBeePet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(FLAGS, (byte) 0);
+        this.datawatcher.register(FLAGS, (byte) 4);
         this.datawatcher.register(ANGER, 0);
     }
 
@@ -65,11 +65,21 @@ public class EntityBeePet extends AgeableEntityPet implements IEntityBeePet {
 
     @Override
     public void setFlag(int i, boolean flag) {
-        super.setFlag(i, flag);
+        byte value = datawatcher.get(FLAGS);
+        if (flag) {
+            value = (byte)(value | i);
+        } else {
+            value = (byte)(value & ~i);
+        }
+
+        if (value != datawatcher.get(FLAGS)) {
+            this.datawatcher.set(FLAGS, value);
+            //Bukkit.broadcastMessage("Bee DataWatcher: "+datawatcher.get(FLAGS));
+        }
     }
 
     @Override
     public boolean getFlag(int i) {
-        return super.getFlag(i);
+        return (this.datawatcher.get(FLAGS) & i) != 0;
     }
 }

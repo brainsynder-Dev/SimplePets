@@ -76,7 +76,7 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
 
     @Override
     public boolean b() { // Executed when the mob isn't working with its path
-        return !((EntityPet) pet).getNavigation().n();
+        return !((EntityPet) pet).getNavigation().m();
     }
 
     @Override
