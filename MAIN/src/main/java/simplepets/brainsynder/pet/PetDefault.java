@@ -257,7 +257,7 @@ public abstract class PetDefault extends JSONFile {
         return "Pet.type."+fileName.replace("_", "");
     }
     public PetData getPetData() {
-        return null;
+        return PetData.SILENT;
     }
     public boolean isSupported() {
         return ServerVersion.isEqualNew(getAllowedVersion());
