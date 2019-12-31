@@ -31,7 +31,7 @@ public class PetEventListeners implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSelect(PetSelectTypeEvent event) {
         if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
-            if (event.getPlayer().hasPermission("Pets.economy.bypass")) return;
+            if (event.getPlayer().hasPermission("Pet.economy.bypass")) return;
 
             double price = economyFile.getPrice(event.getPetType());
             if (price == -1) return;
@@ -92,7 +92,7 @@ public class PetEventListeners implements Listener {
                 continue;
             }
 
-            if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pets.economy.bypass")) price = economyFile.getString("Bypass.Price");
+            if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pet.economy.bypass")) price = economyFile.getString("Bypass.Price");
             boolean contains = petArray.contains(type.getConfigName());
             for (String line : lore)
                 maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));

@@ -23,7 +23,7 @@ public class Storage extends Item {
     @Override
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (PetCore.get().getConfiguration().getBoolean("PetItemStorage.Enable")) {
-            if (PetCore.hasPerm(owner.getPlayer(), "pet.itemstorage")) {
+            if (PetCore.hasPerm(owner.getPlayer(), "Pet.itemstorage")) {
                 ItemStorageMenu.loadFromPlayer(owner.getPlayer());
             } else {
                 owner.getPlayer().sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
