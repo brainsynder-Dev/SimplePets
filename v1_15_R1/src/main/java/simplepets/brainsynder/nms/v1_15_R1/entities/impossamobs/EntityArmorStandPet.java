@@ -197,6 +197,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         StorageTagCompound object = pet.asCompound();
         object.setBoolean("small", isSmall());
         object.setBoolean("clone", isOwner());
+        if (isInvisible()) object.setBoolean("invisible", isInvisible());
 
         StorageTagCompound items = new StorageTagCompound();
         if (head != null) items.setString("head", parseItem(head));
@@ -214,6 +215,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("small")) setSmall(object.getBoolean("small"));
         if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
+        if (object.hasKey("invisible")) setInvisible(object.getBoolean("invisible"));
         if (object.hasKey("items")) {
             StorageTagCompound items = object.getCompoundTag("items");
             if (items.hasKey("head")) setHeadItem(parseString(items.getString("head")));
