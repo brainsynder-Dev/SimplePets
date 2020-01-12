@@ -1,11 +1,15 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
-import net.minecraft.server.v1_14_R1.*;
+import net.minecraft.server.v1_14_R1.EntityCreature;
+import net.minecraft.server.v1_14_R1.EntityTypes;
+import net.minecraft.server.v1_14_R1.PacketPlayOutEntityTeleport;
+import net.minecraft.server.v1_14_R1.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
@@ -62,8 +66,10 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 }
                 updateName(entity);
                 reloadLocation();
-                if (((CraftPlayer) p).getHandle().isInvisible() != entity.isInvisible())
-                    entity.setInvisible(!entity.isInvisible());
+                if (!canIgnoreVanish()) {
+                    if (((CraftPlayer) p).getHandle().isInvisible() != entity.isInvisible())
+                        entity.setInvisible(!entity.isInvisible());
+                }
             }
         }
     }

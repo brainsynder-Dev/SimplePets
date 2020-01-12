@@ -45,6 +45,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world, EntityControllerPet pet) {
         super(entitytypes, world);
         this.pet = pet;
+        pet.setIgnoreVanish(true);
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
         head = new ItemStack(Material.AIR);
         body = new ItemStack(Material.AIR);

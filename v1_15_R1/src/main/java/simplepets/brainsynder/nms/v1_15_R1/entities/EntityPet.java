@@ -34,7 +34,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             isGlowing = false,
             autoRemove = true,
             hideName = true,
-            silent = false;
+            silent = false, ignoreVanish = false;
     private int standTime = 0,
             blockX = 0,
             blockZ = 0,
@@ -132,6 +132,14 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     public Player getOwner() {
         if (pet == null) return null;
         return pet.getOwner();
+    }
+
+    public void setIgnoreVanish(boolean ignoreVanish) {
+        this.ignoreVanish = ignoreVanish;
+    }
+
+    public boolean canIgnoreVanish() {
+        return ignoreVanish;
     }
 
     @Override
@@ -263,14 +271,16 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             boolean shifting = p.isSneaking();
             if (hideName) pet.getVisableEntity().getEntity().setCustomNameVisible((!shifting));
 
-            boolean ownerVanish = ((CraftPlayer) p).getHandle().isInvisible();
-            if (ownerVanish != this.isInvisible()) {
-                if (isGlowing && (!ownerVanish)) glowHandler(false);
-                this.setInvisible(!this.isInvisible());
-            } else {
-                if (ownerVanish && canGlow)
-                    if (((CraftPlayer) p).getHandle().isInvisible())
-                        glowHandler(true);
+            if (!canIgnoreVanish()) {
+                boolean ownerVanish = ((CraftPlayer) p).getHandle().isInvisible();
+                if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
+                    if (isGlowing && (!ownerVanish)) glowHandler(false);  // If the pet is glowing & owner is not vanished
+                    this.setInvisible(!this.isInvisible());
+                } else {
+                    if (ownerVanish && canGlow)
+                        if (((CraftPlayer) p).getHandle().isInvisible())
+                            glowHandler(true);
+                }
             }
 
             if (pet.isHat()) {

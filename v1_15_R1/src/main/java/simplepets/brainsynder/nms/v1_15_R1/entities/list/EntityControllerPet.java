@@ -66,8 +66,9 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 }
                 updateName(entity);
                 reloadLocation();
-                if (((CraftPlayer) p).getHandle().isInvisible() != entity.isInvisible())
-                    entity.setInvisible(!entity.isInvisible());
+                if (!canIgnoreVanish()) {
+                    if (((CraftPlayer) p).getHandle().isInvisible() != entity.isInvisible()) entity.setInvisible(!entity.isInvisible());
+                }
             }
         }
     }
