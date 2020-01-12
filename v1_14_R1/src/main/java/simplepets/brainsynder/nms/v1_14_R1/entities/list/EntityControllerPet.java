@@ -56,8 +56,10 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {
                 net.minecraft.server.v1_14_R1.Entity entity = ((CraftEntity) displayEntity).getHandle();
-                if (!displayEntity.getPassengers().isEmpty())
+                if (!displayEntity.getPassengers().isEmpty()) {
+                    if (displayRider == null) displayRider = displayEntity.getPassengers().get(0);
                     entity = ((CraftEntity) displayRider).getHandle();
+                }
                 updateName(entity);
                 reloadLocation();
                 if (((CraftPlayer) p).getHandle().isInvisible() != entity.isInvisible())
