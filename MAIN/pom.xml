@@ -9,6 +9,7 @@
         <artifactId>SimplePets</artifactId>
         <version>4.2.1-SNAPSHOT</version>
     </parent>
+    <version>${module.version}</version>
     <packaging>jar</packaging>
 
     <artifactId>MAIN</artifactId>

@@ -1,6 +1,6 @@
 name: SimplePets
 main: simplepets.brainsynder.PetCore
-version: ${project.version}
+version: ${module.version}
 softdepend: [WorldGuard, WorldEdit, Vault, PlotSquared]
 loadbefore: [Citizens, mcMMO, ProtocolSupport]
 authors: [brainsynder, Thatsmusic99]
