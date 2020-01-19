@@ -372,7 +372,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             this.setYawPitch(this.yaw, this.pitch);
             this.aL = this.aD = this.yaw;
             this.H = 1.0F;
-            strafe = (float) (owner.bb * 0.5);
+            strafe = (float) (owner.aZ * 0.5);
             forward = owner.bb;
             if (forward <= 0.0) {
                 forward *= 0.25;
@@ -391,7 +391,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                     if (forward > 0.0F) {
                         float f = MathHelper.sin((float) (this.yaw * 0.017453292));
                         float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
-                        setMot(getMot().add( (-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0) ));
+                        setMot(getMot().add( (-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0) )); // This would be 0 anyways?
                     }
                     this.aC = this.aD; // this.prevLimbSwingAmount = this.limbSwingAmount;
                     double d0 = this.locX() - this.lastX;
