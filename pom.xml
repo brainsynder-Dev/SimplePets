@@ -17,6 +17,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-parent</module.info>
+        <!--suppress UnresolvedMavenProperty -->
+        <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+        <module.version>4.2.2 (build ${jenkins.buildNumber})</module.version>
     </properties>
 
     <build>
@@ -32,6 +35,23 @@
             </resource>
         </resources>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>2.7</version>
+                <configuration>
+                    <properties>
+                        <property>
+                            <name>module.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>simplepets.brainsynder</groupId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                    </properties>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
