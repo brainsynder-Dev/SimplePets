@@ -363,7 +363,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                 if (fieldAccessor.hasField(owner)) {
                     if (fieldAccessor.get(owner)) {
                         if (isOnGround(this)) {
-                            setMot(getMot().x, 1, getMot().z);
+                            setMot(getMot().x, 0.5, getMot().z);
                         } else {
                             if (pet.getPet().getPetType().canFly(pet.getOwner())) {
                                 setMot(getMot().x, 0.3, getMot().z);
@@ -379,6 +379,14 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             this.setYawPitch(this.yaw, this.pitch);
             this.aL = this.yaw;
             this.K = (float) 1.0;
+            float strafe = (float) (owner.bb * 0.5);
+            float forward = owner.bd;
+            if (forward <= 0.0) {
+                forward *= 0.25;
+            }
+            Vec3D vec = new Vec3D(strafe, vec3D.y, forward);
+            this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            pet.move(vec, fieldAccessor);
         }
     }
 

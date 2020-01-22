@@ -35,7 +35,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private boolean minime = false;
     private AnimationCycle walking = null;
     private AnimationCycle arm_swing = null;
-    private FieldAccessor<Boolean> fieldAccessor;
+    protected FieldAccessor<Boolean> fieldAccessor;
     private ItemStack head, body, legs, boots, left_arm, right_arm;
 
     public EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
@@ -363,7 +363,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                 if (fieldAccessor.hasField(owner)) {
                     if (fieldAccessor.get(owner)) {
                         if (isOnGround(this)) {
-                            setMot(getMot().x, 1, getMot().z);
+                            setMot(getMot().x, 0.5, getMot().z);
                         } else {
                             if (pet.getPet().getPetType().canFly(pet.getOwner())) {
                                 setMot(getMot().x, 0.3, getMot().z);
@@ -379,6 +379,15 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             this.setYawPitch(this.yaw, this.pitch);
             this.aU = this.yaw;
             this.H = (float) 1.0;
+            float strafe = (float) (owner.aZ * 0.5);
+            float forward = owner.bb;
+            if (forward <= 0.0) {
+                forward *= 0.25;
+            }
+            Vec3D vec = new Vec3D(strafe, vec3D.y, forward);
+            this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            pet.move(vec, fieldAccessor);
+        //    super.e(vec);
         }
     }
 

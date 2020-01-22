@@ -312,7 +312,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         if (sound != null) sound.playSound(getEntity());
     }
 
-    private boolean isOwnerRiding() {
+    protected boolean isOwnerRiding() {
         if (pet == null) return false;
         if (getOwner() == null) return false;
         if (passengers.size() == 0)

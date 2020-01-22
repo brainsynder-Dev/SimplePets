@@ -1,9 +1,7 @@
 package simplepets.brainsynder.nms.v1_15_R1.entities.list;
 
-import net.minecraft.server.v1_15_R1.EntityCreature;
-import net.minecraft.server.v1_15_R1.EntityTypes;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntityTeleport;
-import net.minecraft.server.v1_15_R1.World;
+import net.minecraft.server.v1_15_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
@@ -15,9 +13,13 @@ import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
+import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.storage.PetTypeStorage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +73,17 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 }
             }
         }
+        PetDefault type = getVisibleEntity().getPet().getPetType();
+        double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
+        double rideSpeed = type.getRideSpeed();
+        double walkSpeed = type.getSpeed();
+        if (isOwnerRiding()) {
+            if (current != rideSpeed)
+                getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(rideSpeed);
+        } else {
+            if (current != walkSpeed)
+                getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(walkSpeed);
+        }
     }
     
     public void updateName(net.minecraft.server.v1_15_R1.Entity entity) {
@@ -78,6 +91,21 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             setCustomNameVisible(false);
             entity.setCustomName(getCustomName());
         }
+    }
+
+    @Override
+    protected boolean isOwnerRiding() {
+        if (displayEntity == null || getVisibleEntity() == null) return false;
+        if (getOwner() == null) return false;
+        if (displayEntity.getPassengers().size() == 0)
+            return false;
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        for (Entity passenger : displayEntity.getPassengers()) {
+            if (passenger.getUniqueId().equals(owner.getUniqueID())) {
+                return true;
+            }
+        }
+        return false;
     }
     
     @Override
@@ -105,7 +133,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             e.setMetadata("NO_DAMAGE", new FixedMetadataValue(PetCore.get(), "NO_DAMAGE"));
         }
     }
-    
+
     @Override
     public void remove() {
         getBukkitEntity().remove();
@@ -185,7 +213,63 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         }
         return this;
     }
-    
+
+    private boolean isOnGround(net.minecraft.server.v1_15_R1.Entity entity) {
+        org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid();
+    }
+
+    public void move(Vec3D vec3D, FieldAccessor<Boolean> fieldAccessor) {
+        float strafe = (float) vec3D.x;
+        float vertical = (float) vec3D.y;
+        float forward = (float) vec3D.z;
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        reloadLocation();
+        if (fieldAccessor != null) {
+            if (fieldAccessor.hasField(owner)) {
+                if (fieldAccessor.get(owner)) {
+                    if (this.isOnGround(this)) {
+                        setMot(getMot().x, 0.5, getMot().z);
+                    } else {
+                        if (getVisibleEntity().getPet().getPetType().canFly(getVisibleEntity().getOwner())) {
+                            setMot(getMot().x, 0.3, getMot().z);
+                        }
+                    }
+                }
+            }
+        }
+        this.yaw = owner.yaw;
+        this.lastYaw = this.yaw;
+        this.pitch = (float) (owner.pitch * 0.5);
+        this.setYawPitch(this.yaw, this.pitch);
+        this.aL = this.aD = this.yaw;
+        this.H = (float) 1.0;
+        this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+        if (!world.isClientSide) {
+            super.e(new Vec3D(strafe, vertical, forward));
+        }
+        if (getVisibleEntity().getPet() == null) {
+            if (displayEntity != null) {
+                displayEntity.remove();
+                this.remove();
+            }
+            return;
+        }
+
+        if (getVisibleEntity().getPet().getOwner() == null) {
+            if (displayEntity != null) {
+                displayEntity.remove();
+                this.remove();
+            }
+                return;
+            }
+            try {
+                PetMoveEvent event = new PetMoveEvent(getVisibleEntity(), PetMoveEvent.Cause.RIDE);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+            }catch (Throwable ignored) {}
+
+    }
+
     public boolean isMoving() {
         return this.moving;
     }

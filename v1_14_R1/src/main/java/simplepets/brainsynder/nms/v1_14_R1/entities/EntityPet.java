@@ -25,7 +25,7 @@ import simplepets.brainsynder.wrapper.EntityWrapper;
 import java.util.Map;
 
 public abstract class EntityPet extends EntityCreature implements IEntityPet {
-    private IPet pet;
+    protected IPet pet;
     private Location walkTo = null;
     private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
 
