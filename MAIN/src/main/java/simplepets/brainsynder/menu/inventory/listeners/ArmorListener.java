@@ -36,6 +36,7 @@ public class ArmorListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof ArmorHolder)) return;
         ArmorMenu menu = PetCore.get().getInvLoaders().ARMOR;
+        PetCore.get().getItemLoaders().getLoader("update").onClick(PetOwner.getPetOwner((Player) e.getPlayer()), menu);
         menu.reset(PetOwner.getPetOwner((Player) e.getPlayer()));
     }
 }
