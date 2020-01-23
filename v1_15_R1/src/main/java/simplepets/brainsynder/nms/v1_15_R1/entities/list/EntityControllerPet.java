@@ -56,6 +56,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public void repeatTask() {
         super.repeatTask();
         if (!this.isInvisible()) this.setInvisible(true);
+        if (!isSilent()) this.setSilent(true);
         if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() instanceof ShulkerDefault));
         Player p = getPet().getOwner();
         
