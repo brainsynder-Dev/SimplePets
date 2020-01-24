@@ -47,7 +47,6 @@ public class Debug_SubCommand extends PetSubCommand {
         info.put("raw_version", bkV);
         info.put("bukkit_version", Bukkit.getBukkitVersion());
         info.put("nms_version", ServerVersion.getVersion().name());
-        info.put("simpleapi", Bukkit.getServer().getPluginManager().getPlugin("SimpleAPI").getDescription().getVersion());
         info.put("simplepets", PetCore.get().getDescription().getVersion());
 
         json.put("info", info);
