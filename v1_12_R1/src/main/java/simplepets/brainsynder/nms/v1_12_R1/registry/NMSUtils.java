@@ -154,7 +154,7 @@ public class NMSUtils {
     public static void registerEntity(final int id, final String name, final Type type,
                                       final Class<? extends Entity> customClass, final Biome... biomes) {
         final MinecraftKey key = new MinecraftKey(name);
-        getRegistry().a(id, key, customClass);
+        EntityTypes.b.a(id, key, customClass);
         EntityTypes.d.add(key);
         if (biomes.length == 0 || type.isSpecial()) {
             return;
@@ -197,7 +197,7 @@ public class NMSUtils {
     public static void registerEntity(final String name, final Type type, final Class<? extends Entity> customClass,
                                       boolean biomes) {
         final MinecraftKey key = new MinecraftKey(name);
-        getRegistry().a(type.getId(), key, customClass);
+        EntityTypes.b.a(type.getId(), key, customClass);
         EntityTypes.d.add(key);
         if (!biomes || type.isSpecial()) {
             return;
