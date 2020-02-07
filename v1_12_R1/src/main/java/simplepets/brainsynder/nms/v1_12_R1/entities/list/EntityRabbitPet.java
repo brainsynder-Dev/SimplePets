@@ -12,6 +12,8 @@ import simplepets.brainsynder.wrapper.RabbitType;
 @Size(width = 0.6F, length = 0.7F)
 public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> RABBIT_TYPE;
+    private int by;
+    private int bz;
 
     static {
         RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherWrapper.INT);
@@ -56,9 +58,21 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         this.datawatcher.set(RABBIT_TYPE, type.getId());
     }
 
+    // jump
     protected void cu() {
         super.cu();
-        this.world.broadcastEntityEffect(this, (byte) 1);
+        double d0 = this.moveController.c();
+        if (d0 > 0.0D) {
+            double d1 = this.motX * this.motX + this.motZ * this.motZ;
+            if (d1 < 0.010000000000000002D) {
+                this.b(0.0F, 0.0F, 1.0F, 0.1F);
+            }
+        }
+
+        if (!this.world.isClientSide) {
+            this.world.broadcastEntityEffect(this, (byte)1);
+        }
+
     }
 
     private void reset() {
@@ -77,28 +91,24 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     @Override
     public void repeatTask() {
         super.repeatTask();
-        if (this.onGround) {
-            if (!this.onGroundLastTick) {
-                this.l(false);
-                this.reset();
-            }
+        this.onGroundLastTick = this.onGround;
+    }
 
-            ControllerJumpRabbit jumpController = (ControllerJumpRabbit) this.g;
-            if (!jumpController.c()) {
-                if (this.delay == 0) {
-                    PathEntity pathentity = getNavigation().l();
-                    if (pathentity != null && pathentity.e() < pathentity.d()) {
-                        Vec3D vec3d = pathentity.a(this);
-                        this.a(vec3d.x, vec3d.z);
-                        this.de();
-                    }
-                }
-            } else if (!jumpController.d()) {
-                ((ControllerJumpRabbit) this.g).a(true);
-            }
+    public void c(double d0) {
+        this.getNavigation().a(d0);
+        this.moveController.a(this.moveController.d(), this.moveController.e(), this.moveController.f(), d0);
+    }
+
+    public void n() {
+        super.n();
+        if (this.by != this.bz) {
+            ++this.by;
+        } else if (this.bz != 0) {
+            this.by = 0;
+            this.bz = 0;
+            this.l(false);
         }
 
-        this.onGroundLastTick = this.onGround;
     }
 
     public void M() {
@@ -106,10 +116,35 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         if (this.delay > 0) {
             --this.delay;
         }
+
+        if (this.onGround) {
+            if (!this.onGroundLastTick) {
+                this.l(false);
+                this.reset();
+            }
+
+            ControllerJumpRabbit entityrabbit_controllerjumprabbit = (ControllerJumpRabbit)this.g;
+            if (!entityrabbit_controllerjumprabbit.c()) {
+                if (this.moveController.b() && this.delay == 0) {
+                    PathEntity pathentity = this.navigation.l();
+                    Vec3D vec3d = new Vec3D(this.moveController.d(), this.moveController.e(), this.moveController.f());
+                    if (pathentity != null && pathentity.e() < pathentity.d()) {
+                        vec3d = pathentity.a(this);
+                    }
+
+                    this.a(vec3d.x, vec3d.z);
+                    this.reseter();
+                }
+            } else if (!entityrabbit_controllerjumprabbit.d()) {
+                ((ControllerJumpRabbit)this.g).a(true);
+            }
+        }
     }
 
     public void reseter() {
         this.l(true);
+        this.bz = 10;
+        this.by = 0;
     }
 
     private static class ControllerJumpRabbit extends ControllerJump {
@@ -137,6 +172,38 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
             if (this.a) {
                 this.rabbitPet.reseter();
                 this.a = false;
+            }
+
+        }
+    }
+
+    private static class ControllerMoveRabbit extends ControllerMove {
+        private final EntityRabbitPet i;
+        private double j;
+
+        public ControllerMoveRabbit(EntityRabbitPet entityrabbit) {
+            super(entityrabbit);
+            this.i = entityrabbit;
+        }
+
+        public void a() {
+            if (this.i.onGround && !this.i.bd && !((EntityRabbit.ControllerJumpRabbit)this.i.g).c()) {
+                this.i.c(0.0D);
+            } else if (this.b()) {
+                this.i.c(this.j);
+            }
+
+            super.a();
+        }
+
+        public void a(double d0, double d1, double d2, double d3) {
+            if (this.i.isInWater()) {
+                d3 = 1.5D;
+            }
+
+            super.a(d0, d1, d2, d3);
+            if (d3 > 0.0D) {
+                this.j = d3;
             }
 
         }
