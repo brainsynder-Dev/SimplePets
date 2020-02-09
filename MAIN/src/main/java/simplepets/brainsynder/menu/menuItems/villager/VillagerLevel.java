@@ -36,10 +36,11 @@ public class VillagerLevel extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        items.add(new ItemBuilder(Material.IRON_INGOT).withName("&6&lLevel: &e1"));
-        items.add(new ItemBuilder(Material.GOLD_INGOT).withName("&6&lLevel: &e2"));
-        items.add(new ItemBuilder(Material.DIAMOND).withName("&6&lLevel: &e3"));
-        items.add(new ItemBuilder(Material.EMERALD).withName("&6&lLevel: &e4"));
+        items.add(new ItemBuilder(Material.STONE).withName("&6&lLevel: &eNovice"));
+        items.add(new ItemBuilder(Material.IRON_INGOT).withName("&6&lLevel: &eApprentice"));
+        items.add(new ItemBuilder(Material.GOLD_INGOT).withName("&6&lLevel: &eJourneyman"));
+        items.add(new ItemBuilder(Material.EMERALD).withName("&6&lLevel: &eExpert"));
+        items.add(new ItemBuilder(Material.DIAMOND).withName("&6&lLevel: &eMaster"));
         return items;
     }
 
@@ -66,7 +67,7 @@ public class VillagerLevel extends MenuItemAbstract {
             VillagerData data = var.getVillagerData();
             int level = data.getLevel();
 
-            if (level == 1) {
+            if (level == 0) {
                 level = 4;
             }else{
                 level--;
