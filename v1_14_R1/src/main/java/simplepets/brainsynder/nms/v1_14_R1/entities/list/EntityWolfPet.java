@@ -16,12 +16,12 @@ import simplepets.brainsynder.wrapper.DyeColorWrapper;
  */
 @Size(width = 0.6F, length = 0.8F)
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
-    private static final DataWatcherObject<Float> DATA_HEALTH;
+   // private static final DataWatcherObject<Float> DATA_HEALTH;
     private static final DataWatcherObject<Boolean> BEGGING;
     private static final DataWatcherObject<Integer> COLLAR_COLOR;
 
     static {
-        DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.FLOAT);
+    //    DATA_HEALTH = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.FLOAT);
         BEGGING = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.BOOLEAN);
         COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
     }
@@ -35,7 +35,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(DATA_HEALTH, this.getHealth());
+    //    this.datawatcher.register(DATA_HEALTH, this.getHealth());
         this.datawatcher.register(BEGGING, Boolean.FALSE);
         this.datawatcher.register(COLLAR_COLOR, EnumColor.RED.getColorIndex());
     }
@@ -89,12 +89,12 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     @Override
     public DyeColorWrapper getColor() {
-        return DyeColorWrapper.getByDyeData((byte) ((int) getDataWatcher().get(COLLAR_COLOR)));
+        return DyeColorWrapper.getByWoolData((byte) ((int) getDataWatcher().get(COLLAR_COLOR)));
     }
 
     public void setColor(DyeColorWrapper dc) {
         if (isTamed()) {
-            this.datawatcher.set(COLLAR_COLOR, (int) dc.getDyeData());
+            this.datawatcher.set(COLLAR_COLOR, (int) dc.getWoolData());
             PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
         }
     }
