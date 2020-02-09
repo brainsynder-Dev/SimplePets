@@ -1,6 +1,11 @@
 package simplepets.brainsynder.nms.v1_15_R1.entities.list;
 
 import net.minecraft.server.v1_15_R1.*;
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftVillager;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Villager;
 import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
@@ -20,9 +25,11 @@ import simplepets.brainsynder.wrapper.villager.VillagerType;
  */
 @Size(width = 0.6F, length = 1.8F)
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
+    private static final DataWatcherObject<Integer> SHAKE_TIMER_UNUSED; 
     private static final DataWatcherObject<net.minecraft.server.v1_15_R1.VillagerData> VILLAGER_DATA;
 
     static {
+        SHAKE_TIMER_UNUSED = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.INT);
         VILLAGER_DATA = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.DATA);
     }
 
@@ -71,8 +78,9 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
     @Override
     public void setVillagerData(VillagerData data) {
         net.minecraft.server.v1_15_R1.VillagerType biome = EntityUtils.getTypeFromBiome(data.getBiome());
-
         datawatcher.set(VILLAGER_DATA, new net.minecraft.server.v1_15_R1.VillagerData(biome, EntityUtils.getProfession(data.getType()), data.getLevel()));
         PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
     }
+
+
 }
