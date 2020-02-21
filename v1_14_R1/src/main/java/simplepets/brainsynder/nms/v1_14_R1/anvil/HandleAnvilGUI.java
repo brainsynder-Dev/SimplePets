@@ -67,7 +67,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
             this.inv.setItem(slot.getSlot(), this.items.get(slot));
         }
 
-        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, new ChatMessage(Blocks.ANVIL.l() + ".name")));
+        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, new ChatMessage(PetCore.get().getMessages().getString("Anvil-Rename.Name"))));
         p.activeContainer = container;
 /*
         FieldAccessor<Integer> field = FieldAccessor.getField(Container.class, "windowID", Integer.TYPE);

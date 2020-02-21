@@ -67,7 +67,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
         }
 
         int c = p.nextContainerCounter();
-        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage(Blocks.ANVIL.m() + ".name")));
+        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow(c, "minecraft:anvil", new ChatMessage(PetCore.get().getMessages().getString("Anvil-Rename.Name"))));
         p.activeContainer = container;
         p.activeContainer.windowId = c;
         p.activeContainer.addSlotListener(p);
