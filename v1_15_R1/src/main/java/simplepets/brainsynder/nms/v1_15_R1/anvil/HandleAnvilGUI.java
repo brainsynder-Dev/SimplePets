@@ -19,12 +19,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.utils.Valid;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.nms.anvil.AnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.anvil.IAnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.IAnvilGUI;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HandleAnvilGUI implements IAnvilGUI {
     private Player player;
@@ -56,8 +60,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
      * For some reason, this fixed the issue with it not working on 1.12.2..... but broke it on 1.12......
      */
     public void open() {
-        this.levels = this.player.getLevel();
-        this.exp = this.player.getExp();
         EntityPlayer p = ((CraftPlayer) this.player).getHandle();
         int c = p.nextContainerCounter();
         AnvilContainer container = new AnvilContainer(c, p);
@@ -67,22 +69,19 @@ public class HandleAnvilGUI implements IAnvilGUI {
             this.inv.setItem(slot.getSlot(), this.items.get(slot));
         }
 
-        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, new ChatMessage(Blocks.ANVIL.l() + ".name")));
+        p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, new ChatMessage(PetCore.get().getMessages().getString("Anvil-Rename.Name"))));
         p.activeContainer = container;
 /*
         FieldAccessor<Integer> field = FieldAccessor.getField(Container.class, "windowID", Integer.TYPE);
         field.set(p.activeContainer, c);
 */
         p.activeContainer.addSlotListener(p);
-        this.player.setLevel(50);
     }
 
     private void destroy() {
         Valid.notNull(this.player, "Player is null");
         Valid.notNull(this.exp, "exp is null");
         Valid.notNull(this.levels, "levels is null");
-        this.player.setExp(this.exp);
-        this.player.setLevel(this.levels);
         this.items = null;
         HandlerList.unregisterAll(this.listener);
         this.listener = null;
@@ -96,6 +95,12 @@ public class HandleAnvilGUI implements IAnvilGUI {
 
         @Override public boolean canUse(EntityHuman entityhuman) {
             return true;
+        }
+
+        @Override
+        public void e() {
+            super.e();
+            this.levelCost.set(0);
         }
     }
 
@@ -111,17 +116,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
                     if (meta.hasDisplayName()) {
                         name = meta.getDisplayName();
                     }
-                }
-
-                if (player != null && (player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.SURVIVAL && player.getLevel() > 0)) {
-                    new BukkitRunnable() {
-                        public void run() {
-                            if (player != null) {
-                                player.setLevel(player.getLevel());
-                                player.setExp(player.getExp());
-                            }
-                        }
-                    }.runTaskLater(plugin, 2L);
                 }
 
                 AnvilClickEvent clickEvent = new AnvilClickEvent(event.getInventory(), AnvilSlot.bySlot(slot), name, event.getInventory().getItem(2));
