@@ -2,7 +2,6 @@ package simplepets.brainsynder.nms.v1_11_R1.anvil;
 
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,8 +16,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import simple.brainsynder.utils.Valid;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.nms.anvil.AnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.anvil.IAnvilClickEvent;
@@ -32,8 +31,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
     private Map<AnvilSlot, ItemStack> items = new HashMap<AnvilSlot, ItemStack>();
     private Inventory inv;
     private HandleAnvilGUI.LIST listener;
-    private int levels = 0;
-    private float exp = 0.0F;
     private Plugin plugin;
     private IAnvilClickEvent handler;
 
@@ -54,8 +51,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
     }
 
     public void open() {
-        this.levels = this.player.getLevel();
-        this.exp = this.player.getExp();
         EntityPlayer p = ((CraftPlayer) this.player).getHandle();
         HandleAnvilGUI.AnvilContainer container = new HandleAnvilGUI.AnvilContainer(p);
         this.inv = container.getBukkitView().getTopInventory();
@@ -69,15 +64,10 @@ public class HandleAnvilGUI implements IAnvilGUI {
         p.activeContainer = container;
         p.activeContainer.windowId = c;
         p.activeContainer.addSlotListener(p);
-        if (levels < 5) this.player.setLevel(5);
     }
 
     private void destroy() {
         Valid.notNull(this.player, "Player is null");
-        Valid.notNull(this.exp, "exp is null");
-        Valid.notNull(this.levels, "levels is null");
-        this.player.setExp(this.exp);
-        this.player.setLevel(this.levels);
         this.items = null;
         HandlerList.unregisterAll(this.listener);
         this.listener = null;
@@ -90,6 +80,12 @@ public class HandleAnvilGUI implements IAnvilGUI {
 
         public boolean a(EntityHuman entityhuman) {
             return true;
+        }
+
+        @Override
+        public void e() {
+            super.e();
+            this.a = 0;
         }
     }
 
@@ -108,17 +104,6 @@ public class HandleAnvilGUI implements IAnvilGUI {
                     if (meta.hasDisplayName()) {
                         name = meta.getDisplayName();
                     }
-                }
-
-                if (HandleAnvilGUI.this.player != null && (HandleAnvilGUI.this.player.getGameMode() == GameMode.ADVENTURE || HandleAnvilGUI.this.player.getGameMode() == GameMode.SURVIVAL && HandleAnvilGUI.this.player.getLevel() > 0)) {
-                    (new BukkitRunnable() {
-                        public void run() {
-                            if (HandleAnvilGUI.this.player != null) {
-                                HandleAnvilGUI.this.player.setLevel(HandleAnvilGUI.this.player.getLevel());
-                                HandleAnvilGUI.this.player.setExp(HandleAnvilGUI.this.player.getExp());
-                            }
-                        }
-                    }).runTaskLater(HandleAnvilGUI.this.plugin, 2L);
                 }
 
                 AnvilClickEvent clickEvent = new AnvilClickEvent(event.getInventory(), AnvilSlot.bySlot(slot), name, event.getInventory().getItem(2));
