@@ -20,9 +20,11 @@ import simplepets.brainsynder.wrapper.villager.VillagerType;
  */
 @Size(width = 0.6F, length = 1.8F)
 public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillagerPet {
+    private static final DataWatcherObject<Integer> HEAD_ROLLING_TIME_LEFT;
     private static final DataWatcherObject<net.minecraft.server.v1_15_R1.VillagerData> VILLAGER_DATA;
 
     static {
+        HEAD_ROLLING_TIME_LEFT = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.INT);
         VILLAGER_DATA = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.DATA);
     }
 

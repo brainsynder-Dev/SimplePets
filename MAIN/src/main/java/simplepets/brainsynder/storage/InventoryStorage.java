@@ -12,6 +12,7 @@ import org.json.simple.JSONObject;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,8 +51,7 @@ public class InventoryStorage implements ConfigurationSerializable {
                 Map<String, Object> items = (Map<String, Object>) config.get("items");
                 if (!items.isEmpty()) {
                     for (String slot : items.keySet()) {
-                        if (Integer.parseInt(slot) >= (inventory.getSize()-1)) break;
-
+                        if (Integer.parseInt(slot) > (inventory.getSize())) break;
                         ItemStack item = (ItemStack) items.get(slot);
                         inventory.setItem(Integer.parseInt(slot), item);
                     }

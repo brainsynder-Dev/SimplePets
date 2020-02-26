@@ -38,6 +38,8 @@ public class Messages extends FileMaker {
         setDefault("Pet-RenameViaAnvil", "{prefix} &7Type your pets new name in the anvil, then click the item on the right when complete.");
         setDefault("Pet-RenameFailure", "{prefix} &cSorry, but your pets name could not be changed to: &7{name}");
         setDefault("Player-No-Pet", "{prefix} &7%player% does not have a pet.");
+
+        setDefault("Anvil-Rename.Name", "Rename Pet");
     }
 
     @Override
