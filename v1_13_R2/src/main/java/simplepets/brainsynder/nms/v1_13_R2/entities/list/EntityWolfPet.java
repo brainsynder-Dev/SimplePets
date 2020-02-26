@@ -89,12 +89,12 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     @Override
     public DyeColorWrapper getColor() {
-        return DyeColorWrapper.getByDyeData((byte) ((int) getDataWatcher().get(COLLAR_COLOR)));
+        return DyeColorWrapper.getByWoolData((byte) ((int) getDataWatcher().get(COLLAR_COLOR)));
     }
 
     public void setColor(DyeColorWrapper dc) {
         if (isTamed()) {
-            this.datawatcher.set(COLLAR_COLOR, (int) dc.getDyeData());
+            this.datawatcher.set(COLLAR_COLOR, (int) dc.getWoolData());
             PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
         }
     }

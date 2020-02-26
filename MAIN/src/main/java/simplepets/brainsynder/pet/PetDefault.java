@@ -118,6 +118,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public boolean canHat(Player player) {
+        if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats")) return false;
         if (_HAT_) {
             if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
             if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
@@ -128,6 +129,7 @@ public abstract class PetDefault extends JSONFile {
 
     public boolean canMount(Player player) {
         if (this instanceof ShulkerDefault) return false;
+        if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts")) return false;
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
