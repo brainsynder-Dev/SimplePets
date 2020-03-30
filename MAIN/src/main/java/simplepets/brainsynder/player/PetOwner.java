@@ -196,7 +196,7 @@ public class PetOwner {
                 return;
             }
             name = event.getNewName();
-            if (event.canUseColor()) {
+            if (event.canUseColor() && player.hasPermission("Pet.name.color")) {
                 name = ChatColor.translateAlternateColorCodes('&', event.canUseMagic() ? name : name.replace("&k", "k"));
             }
             player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
