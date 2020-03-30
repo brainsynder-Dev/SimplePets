@@ -57,23 +57,6 @@ public class MainListeners implements Listener {
         if (handle instanceof IImpossaPet) e.setCancelled(true);
     }
 
-
-    @EventHandler
-    public void onChat(AsyncPlayerChatEvent event) {
-        PetOwner owner = PetOwner.getPetOwner(event.getPlayer());
-        if (owner == null) return;
-        if (!owner.isRenaming()) return;
-        if (event.getMessage().equalsIgnoreCase("cancel")) {
-            event.getPlayer().sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
-        } else if (event.getMessage().equalsIgnoreCase("reset")) {
-            owner.setPetName(null, true);
-        } else {
-            owner.setPetName(event.getMessage(), false);
-        }
-        owner.setRenaming(false);
-        event.setCancelled(true);
-    }
-
     @EventHandler
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
         Object handle = ReflectionUtil.getEntityHandle(e.getRightClicked());
