@@ -67,7 +67,7 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
         rideSpeed = pet.getPetType().getRideSpeed();
         hideName = PetCore.get().getConfiguration().getBoolean("PetToggles.HideNameOnShift");
         tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
-        autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove");
+        autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove.Enabled");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
         floatDown = pet.getPetType().canFloat();
     }
