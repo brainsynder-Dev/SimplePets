@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simple.brainsynder.math.MathUtils;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.nms.v1_11_R1.entities.EntityPet;
@@ -31,8 +32,8 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal  {
         owner = PetOwner.getPetOwner(p);
         if (owner.getPet().getVisableEntity().isBig()) {
             ints = Arrays.asList(2.9, -2.9);
-            stopDistance = 7.0;
-            teleportDistance = 20.0;
+            stopDistance = PetCore.get().getConfig().getDouble("Pathfinding.Stopping-Distance");
+            teleportDistance = PetCore.get().getConfig().getDouble("Pathfinding.Min-Distance-For-Teleport");
         }
     }
 

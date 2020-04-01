@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.conversations.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -47,22 +48,19 @@ public class PetOwner {
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    private Player player = null;
-    private UUID uuid = null;
+    private Player player;
+    private UUID uuid;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
     private OwnerFile file = null;
-    /**
-     * This little boolean is for checking if a player is renaming their pet via chat.
-     */
-    private boolean renaming = false;
     /**
      * Handles Pet respawning when the player teleports, dies, etc...
      */
     private StorageTagCompound petToRespawn = null;
     private JSONObject storedInventory = null;
     private List<StorageTagCompound> savedPets = new ArrayList<>();
+
 
     private PetOwner(Player player) {
         Valid.notNull(player, "Player can not be null");
@@ -198,7 +196,7 @@ public class PetOwner {
                 return;
             }
             name = event.getNewName();
-            if (event.canUseColor()) {
+            if (event.canUseColor() && player.hasPermission("Pet.name.color")) {
                 name = ChatColor.translateAlternateColorCodes('&', event.canUseMagic() ? name : name.replace("&k", "k"));
             }
             player.sendMessage(PetCore.get().getMessages().getString("Pet-Name-Changed", true).replace("%petname%", name).replace("%player%", player.getName()));
@@ -315,12 +313,22 @@ public class PetOwner {
             player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaAnvil", true));
             return;
         }
-        if (renaming) {
-            renaming = false;
-            return;
-        }
-        renaming = true;
-        player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat", true));
+        ConversationFactory factory = new ConversationFactory(PetCore.get());
+        factory.withLocalEcho(false)
+                .withFirstPrompt(new PetRenamePrompt())
+                .addConversationAbandonedListener(event -> {
+            if (event.gracefulExit()) {
+                String name = event.getContext().getSessionData("name").toString(); // It's a string prompt for a reason
+                if (name.equalsIgnoreCase("cancel")) {
+                    player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameViaChat-Cancel", true));
+                } else if (name.equalsIgnoreCase("reset")) {
+                    setPetName(null, true);
+                } else {
+                    setPetName(name, false);
+                }
+            }
+        });
+        factory.buildConversation(this.player).begin();
     }
 
     public void respawnPetFully() {
@@ -454,15 +462,20 @@ public class PetOwner {
         return this.file;
     }
 
-    public boolean isRenaming() {
-        return this.renaming;
-    }
-
-    public void setRenaming(boolean renaming) {
-        this.renaming = renaming;
-    }
-
     public void setPetToRespawn(StorageTagCompound petToRespawn) {
         this.petToRespawn = petToRespawn;
+    }
+
+    private static class PetRenamePrompt extends StringPrompt {
+        @Override
+        public String getPromptText(ConversationContext context) {
+            return PetCore.get().getMessages().getString("Pet-RenameViaChat", true);
+        }
+
+        @Override
+        public Prompt acceptInput(ConversationContext context, String answer) {
+            context.setSessionData("name", answer);
+            return END_OF_CONVERSATION;
+        }
     }
 }
