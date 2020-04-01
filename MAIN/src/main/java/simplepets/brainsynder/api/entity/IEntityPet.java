@@ -1,9 +1,9 @@
 package simplepets.brainsynder.api.entity;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.misc.IImpossaPet;
 import simplepets.brainsynder.api.pet.IPet;
 

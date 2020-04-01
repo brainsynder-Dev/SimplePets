@@ -1,9 +1,9 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;

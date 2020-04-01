@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,7 +14,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;

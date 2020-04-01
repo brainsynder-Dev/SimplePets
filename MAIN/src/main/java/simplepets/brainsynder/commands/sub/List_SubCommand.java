@@ -1,11 +1,10 @@
 package simplepets.brainsynder.commands.sub;
 
+import lib.brainsynder.commands.annotations.ICommand;
+import lib.brainsynder.nms.Tellraw;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import simple.brainsynder.commands.annotations.ICommand;
-import simple.brainsynder.nms.ITellraw;
-import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
@@ -41,7 +40,7 @@ public class List_SubCommand extends PetSubCommand {
     private void fetchList (CommandSender sender, Commands commands, TypeManager manager) {
         int i = 1;
         StringBuilder builder = new StringBuilder();
-        ITellraw tellraw = Reflection.getTellraw("");
+        Tellraw tellraw = Tellraw.getInstance("");
         for (PetDefault type : manager.getTypes()) {
             tellraw.then(type.getConfigName());
             if (type.isSupported()) {

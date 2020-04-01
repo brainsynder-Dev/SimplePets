@@ -1,12 +1,7 @@
 package simplepets.brainsynder.nms.v1_15_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_15_R1.*;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftVillager;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;

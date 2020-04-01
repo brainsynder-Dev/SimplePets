@@ -1,12 +1,12 @@
 package simplepets.brainsynder.commands.sub;
 
+import lib.brainsynder.commands.annotations.ICommand;
+import lib.brainsynder.nbt.JsonToNBT;
+import lib.brainsynder.nbt.NBTException;
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import simple.brainsynder.commands.annotations.ICommand;
-import simple.brainsynder.nbt.JsonToNBT;
-import simple.brainsynder.nbt.NBTException;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_12_R1.entities.impossamobs;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,9 +8,9 @@ import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;

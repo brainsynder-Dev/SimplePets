@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.branch;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_14_R1.*;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.api.entity.misc.IEntityWizard;
 import simplepets.brainsynder.api.pet.IPet;

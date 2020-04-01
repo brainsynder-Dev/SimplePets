@@ -1,10 +1,10 @@
 package simplepets.brainsynder.commands;
 
+import lib.brainsynder.commands.ParentCommand;
+import lib.brainsynder.commands.annotations.ICommand;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import simple.brainsynder.commands.ParentCommand;
-import simple.brainsynder.commands.annotations.ICommand;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
 import simplepets.brainsynder.commands.annotations.Permission;

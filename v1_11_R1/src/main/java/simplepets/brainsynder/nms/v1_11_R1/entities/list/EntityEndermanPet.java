@@ -1,8 +1,8 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.list;
 
 import com.google.common.base.Optional;
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_11_R1.*;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.EntityPet;

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_13_R2.*;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.api.pet.IPet;

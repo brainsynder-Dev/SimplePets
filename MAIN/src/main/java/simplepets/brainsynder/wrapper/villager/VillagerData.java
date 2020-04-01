@@ -1,6 +1,6 @@
 package simplepets.brainsynder.wrapper.villager;
 
-import simple.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagCompound;
 
 /**
  * Will store the Villager information (1.14+)

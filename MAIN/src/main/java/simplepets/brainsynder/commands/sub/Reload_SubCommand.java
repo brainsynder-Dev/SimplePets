@@ -1,7 +1,7 @@
 package simplepets.brainsynder.commands.sub;
 
+import lib.brainsynder.commands.annotations.ICommand;
 import org.bukkit.command.CommandSender;
-import simple.brainsynder.commands.annotations.ICommand;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;

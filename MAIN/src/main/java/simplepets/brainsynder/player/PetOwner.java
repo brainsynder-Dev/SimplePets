@@ -1,10 +1,14 @@
 package simplepets.brainsynder.player;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.conversations.*;
+import org.bukkit.conversations.ConversationContext;
+import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.conversations.Prompt;
+import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -13,7 +17,6 @@ import org.json.simple.JSONObject;
 import simple.brainsynder.api.ParticleMaker;
 import simple.brainsynder.nbt.JsonToNBT;
 import simple.brainsynder.nbt.NBTException;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simple.brainsynder.utils.Base64Wrapper;
 import simple.brainsynder.utils.Valid;

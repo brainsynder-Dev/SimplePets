@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_15_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,7 +10,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -19,7 +19,6 @@ import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.storage.PetTypeStorage;
 
 import java.util.ArrayList;
 import java.util.List;

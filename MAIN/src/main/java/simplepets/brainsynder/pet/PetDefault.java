@@ -1,11 +1,11 @@
 package simplepets.brainsynder.pet;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;

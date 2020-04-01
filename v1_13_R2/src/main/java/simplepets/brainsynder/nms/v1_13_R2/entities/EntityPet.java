@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms.v1_13_R2.entities;
 
 import com.google.common.collect.Maps;
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_13_R2.*;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
@@ -8,7 +9,6 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.sound.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;

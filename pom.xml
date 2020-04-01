@@ -151,13 +151,17 @@
             <id>cubekrowd-repo</id>
             <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
         </repository>
+        <repository>
+            <id>bs-repo</id>
+            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>simple.brainsynder</groupId>
+            <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>4.0.3-SNAPSHOT</version>
+            <version>0.1-B8</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

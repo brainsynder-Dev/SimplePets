@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_14_R1.*;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -102,7 +102,7 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
         super.jump();
         double d0 = this.moveController.c();
         if (d0 > 0.0D) {
-            double d1 = b((Vec3D)this.getMot());
+            double d1 = b(this.getMot());
             if (d1 < 0.01D) {
                 this.a(0.1F, new Vec3D(0.0D, 0.0D, 1.0D));
             }

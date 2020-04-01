@@ -1,12 +1,16 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.impossamobs;
 
-import net.minecraft.server.v1_11_R1.*;
+import lib.brainsynder.nbt.StorageTagCompound;
+import net.minecraft.server.v1_11_R1.EntityShulker;
+import net.minecraft.server.v1_11_R1.EnumMoveType;
+import net.minecraft.server.v1_11_R1.World;
+import net.minecraft.server.v1_11_R1.WorldServer;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.list.EntityControllerPet;

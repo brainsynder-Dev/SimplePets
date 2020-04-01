@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,7 +8,6 @@ import org.bukkit.craftbukkit.v1_11_R1.entity.CraftCreature;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -272,8 +272,8 @@ public abstract class EntityPet extends EntityCreature implements IAnimal,
                     if (forwMot > 0.0F) {
                         float f3 = MathHelper.sin(this.yaw * 0.017453292F);
                         float f4 = MathHelper.cos(this.yaw * 0.017453292F);
-                        this.motX += (double) (-0.4F * f3 * 0.0F);
-                        this.motZ += (double) (0.4F * f4 * 0.0F);
+                        this.motX += -0.4F * f3 * 0.0F;
+                        this.motZ += 0.4F * f4 * 0.0F;
                     }
                 }
                 this.aF = this.aG;

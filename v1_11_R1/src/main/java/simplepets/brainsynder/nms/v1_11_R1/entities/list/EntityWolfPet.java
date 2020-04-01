@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_11_R1.*;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.EntityTameablePet;
@@ -108,7 +108,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
                 for (int j = 0; j < i; ++j) {
                     float f1 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
                     float f2 = (this.random.nextFloat() * 2.0F - 1.0F) * this.width * 0.5F;
-                    this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f1, (double) (f + 0.8F), this.locZ + (double) f2, this.motX, this.motY, this.motZ);
+                    this.world.addParticle(EnumParticle.WATER_SPLASH, this.locX + (double) f1, f + 0.8F, this.locZ + (double) f2, this.motX, this.motY, this.motZ);
                 }
             }
         }

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.player;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
@@ -8,7 +9,6 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import simple.brainsynder.nbt.JsonToNBT;
 import simple.brainsynder.nbt.NBTException;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.MySQL;

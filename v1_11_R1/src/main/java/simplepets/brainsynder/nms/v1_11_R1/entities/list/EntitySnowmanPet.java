@@ -1,10 +1,10 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_11_R1.DataWatcher;
 import net.minecraft.server.v1_11_R1.DataWatcherObject;
 import net.minecraft.server.v1_11_R1.DataWatcherRegistry;
 import net.minecraft.server.v1_11_R1.World;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.EntityPet;

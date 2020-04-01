@@ -1,14 +1,13 @@
 package simplepets.brainsynder;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.commands.CommandRegistry;
+import lib.brainsynder.metric.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import simple.brainsynder.commands.CommandRegistry;
-import simple.brainsynder.utils.Reflection;
-import simple.brainsynder.utils.ServerVersion;
-import simple.brainsynder.utils.SpigotPluginHandler;
 import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.links.LinkRetriever;
@@ -62,11 +61,15 @@ public class PetCore extends JavaPlugin {
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
         instance = this;
+        if (ServerVersion.isOlder(ServerVersion.v1_11_R1)) {
+            debug("This version is not supported, be sure you are between 1.11 and 1.14");
+            setEnabled(false);
+            return;
+        }
         if (!errorCheck()) {
             setEnabled(false);
             return;
         }
-        Reflection.init();
         Utilities.init();
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
@@ -85,12 +88,6 @@ public class PetCore extends JavaPlugin {
         createPluginInstances();
         new VersionNMS().registerPets();
         registerEvents();
-        int v = ServerVersion.getVersion().getIntVersion();
-        if ((v < 18) || (ServerVersion.getVersion() == ServerVersion.UNKNOWN)) {
-            debug("This version is not supported, be sure you are between 1.11 and 1.14");
-            setEnabled(false);
-            return;
-        }
         itemLoaders.initiate();
         invLoaders.initiate();
 
@@ -135,8 +132,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private boolean errorCheck() {
-        SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
-        SpigotPluginHandler.registerPlugin(spigotPluginHandler);
+        new Metrics(this);
 
         try {
             Class.forName("org.spigotmc.event.entity.EntityMountEvent");
@@ -319,7 +315,7 @@ public class PetCore extends JavaPlugin {
 
     private void fetchSupportedVersions() {
         supportedVersions.clear();
-        String current = Reflection.getVersion();
+        String current = ServerVersion.getVersion().name();
         boolean supported = false;
         String packageName = "simplepets.brainsynder.nms.<VER>.anvil.HandleAnvilGUI";
         for (ServerVersion version : ServerVersion.values()) {

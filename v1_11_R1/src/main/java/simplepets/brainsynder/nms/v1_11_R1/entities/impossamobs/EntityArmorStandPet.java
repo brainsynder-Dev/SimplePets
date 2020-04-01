@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_11_R1.entities.impossamobs;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_11_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,14 +15,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
 import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
-import simple.brainsynder.nbt.StorageTagCompound;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_11_R1.entities.list.EntityControllerPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
-import simplepets.brainsynder.utils.*;
+import simplepets.brainsynder.utils.AnimationCycle;
+import simplepets.brainsynder.utils.AnimationManager;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
