@@ -120,9 +120,9 @@ public abstract class PetDefault extends JSONFile {
     public boolean canHat(Player player) {
         if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats")) return false;
         if (_HAT_) {
-            if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
-            return PetCore.hasPerm(player, getPermission() + ".hat");
+            if (!PetCore.hasPerm(player, "Pet.PetToHat")) return false;
+            if (PetCore.hasPerm(player, getPermission() + ".hat")) return true;
+            return PetCore.hasPerm(player, getPermission() + ".*");
         }
         return false;
     }
