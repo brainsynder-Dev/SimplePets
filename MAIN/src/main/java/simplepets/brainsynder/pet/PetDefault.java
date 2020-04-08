@@ -132,9 +132,9 @@ public abstract class PetDefault extends JSONFile {
         if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts")) return false;
 
         if (_MOUNT_) {
-            if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
-            return PetCore.hasPerm(player, getPermission() + ".mount");
+            if (!PetCore.hasPerm(player, "Pet.PetToMount")) return false;
+            if (PetCore.hasPerm(player, getPermission() + ".mount")) return true;
+            return PetCore.hasPerm(player, getPermission() + ".*");
         }
         return false;
     }
