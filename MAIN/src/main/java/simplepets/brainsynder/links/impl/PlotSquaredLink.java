@@ -1,8 +1,8 @@
 package simplepets.brainsynder.links.impl;
 
+import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.IPlotSquaredLink;
 import simplepets.brainsynder.player.PetOwner;

@@ -1,12 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.HorseArmorType;
 
@@ -55,13 +54,13 @@ public class HorseArmor extends MenuItemAbstract {
         ItemBuilder item = new ItemBuilder(Material.BARRIER);
         item.withName("&6No HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Utilities.fetchMaterial("IRON_BARDING", "IRON_HORSE_ARMOR"));
+        item = new ItemBuilder(Material.IRON_HORSE_ARMOR);
         item.withName("&6Iron HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Utilities.fetchMaterial("GOLD_BARDING", "GOLDEN_HORSE_ARMOR"));
+        item = new ItemBuilder(Material.GOLDEN_HORSE_ARMOR);
         item.withName("&6Gold HorseArmor");
         items.add(item);
-        item = new ItemBuilder(Utilities.fetchMaterial("DIAMOND_BARDING", "DIAMOND_HORSE_ARMOR"));
+        item = new ItemBuilder(Material.DIAMOND_HORSE_ARMOR);
         item.withName("&6Diamond HorseArmor");
         items.add(item);
         return items;

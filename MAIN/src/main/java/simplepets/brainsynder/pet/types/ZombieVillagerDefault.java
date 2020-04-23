@@ -1,7 +1,8 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
@@ -16,7 +17,7 @@ public class ZombieVillagerDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/e5e08a8776c1764c3fe6a6ddd412dfcb87f41331dad479ac96c21df4bf3ac89c")
                 .withName("&f&lZombie Villager Pet");
     }

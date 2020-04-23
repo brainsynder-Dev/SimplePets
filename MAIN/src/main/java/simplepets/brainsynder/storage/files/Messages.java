@@ -13,7 +13,7 @@ public class Messages extends FileMaker {
         setDefault("No-Permission", "{prefix} &cYou do not have permission.");
         setDefault("Reload-Complete", "{prefix} &7Inventory and Files have been reloaded.");
         setDefault("Unknown-commands", "{prefix} &7Unknown SimplePets commands.");
-        setDefault("Player-Not-Found", "{prefix} &7%player% is not valid.");
+        setDefault("Player-Not-Found", "{prefix} &7%player% is not Validate.");
         setDefault("Pet-Remove-Self-Removed", "{prefix} &7Your pet was removed.");
         setDefault("Pet-Remove-Self-No-Pet", "{prefix} &7You do not have a pet to remove.");
         setDefault("Pet-Remove-Other-Remover", "{prefix} &7%player%'s pet was successfully removed.");

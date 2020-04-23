@@ -1,7 +1,8 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
@@ -16,7 +17,7 @@ public class VindicatorDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/4f6fb89d1c631bd7e79fe185ba1a6705425f5c31a5ff626521e395d4a6f7e2")
                 .withName("&f&lVindicator Pet");
     }

@@ -1,6 +1,6 @@
 package simplepets.brainsynder.wrapper;
 
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
 
 public enum ProfessionWrapper {
     FARMER(1, ServerVersion.v1_8_R3),
@@ -10,8 +10,8 @@ public enum ProfessionWrapper {
     BUTCHER(5, ServerVersion.v1_8_R3),
     NITWIT(6, ServerVersion.v1_11_R1);
 
-    private int id;
-    private ServerVersion version;
+    private final int id;
+    private final ServerVersion version;
 
     ProfessionWrapper(int id, ServerVersion version) {
         this.id = id;

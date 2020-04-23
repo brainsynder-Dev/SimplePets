@@ -1,7 +1,8 @@
 package simplepets.brainsynder.menu.items.list;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ObjectPager;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.ListPager;
+import org.bukkit.Material;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.list.SavesMenu;
 import simplepets.brainsynder.menu.inventory.list.SelectionMenu;
@@ -18,7 +19,7 @@ public class NextPage extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .withName("&6&l&m----&6&l>")
                 .addLore("&7Click Here to go","&7the next page")
                 .setTexture("http://textures.minecraft.net/texture/c2f910c47da042e4aa28af6cc81cf48ac6caf37dab35f88db993accb9dfe516");
@@ -41,7 +42,7 @@ public class NextPage extends Item {
     public void onClick(PetOwner owner, CustomInventory inventory) {
         if (inventory instanceof SelectionMenu) {
             SelectionMenu menu = (SelectionMenu)inventory;
-            ObjectPager<PetTypeStorage> pages = menu.getPages(owner);
+            ListPager<PetTypeStorage> pages = menu.getPages(owner);
             int current = menu.getCurrentPage(owner);
 
             if (pages == null) return;

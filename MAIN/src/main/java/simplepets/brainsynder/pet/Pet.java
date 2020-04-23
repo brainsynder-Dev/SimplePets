@@ -1,5 +1,9 @@
 package simplepets.brainsynder.pet;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.sounds.SoundMaker;
+import lib.brainsynder.storage.IStorage;
+import lib.brainsynder.storage.StorageList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -7,10 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import simple.brainsynder.sound.SoundMaker;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -32,12 +32,12 @@ import java.util.UUID;
 public class Pet implements IPet {
     private IEntityPet ent;
     private Player owner;
-    private PetDefault type;
+    private final PetDefault type;
     private boolean isHidden = false;
     private boolean isHat = false;
     private IStorage<MenuItem> items;
     private boolean vehicle;
-    private PetCore instance;
+    private final PetCore instance;
 
     public Pet(UUID player, PetDefault type, PetCore core) {
         this.type = type;

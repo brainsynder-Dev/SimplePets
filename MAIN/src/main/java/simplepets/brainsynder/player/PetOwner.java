@@ -1,6 +1,12 @@
 package simplepets.brainsynder.player;
 
+import lib.brainsynder.nbt.JsonToNBT;
+import lib.brainsynder.nbt.NBTException;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.particle.Particle;
+import lib.brainsynder.particle.ParticleMaker;
+import lib.brainsynder.sounds.SoundMaker;
+import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,17 +15,12 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.api.ParticleMaker;
-import simple.brainsynder.nbt.JsonToNBT;
-import simple.brainsynder.nbt.NBTException;
-import simple.brainsynder.sound.SoundMaker;
-import simple.brainsynder.utils.Base64Wrapper;
-import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
@@ -35,7 +36,7 @@ import simplepets.brainsynder.pet.TypeManager;
 import java.util.*;
 
 public class PetOwner {
-    private static Map<UUID, PetOwner> ownerMap = new HashMap<>();
+    private static final Map<UUID, PetOwner> ownerMap = new HashMap<>();
     /**
      * JSONArray contains all the pets the player has owned while Vault was Enabled.
      */
@@ -51,8 +52,8 @@ public class PetOwner {
     /**
      * Will return an instance of the Player (Pets Owner)
      */
-    private Player player;
-    private UUID uuid;
+    private final Player player;
+    private final UUID uuid;
     /**
      * Returns the OwnerFile, Where all the information is stored.
      */
@@ -66,7 +67,7 @@ public class PetOwner {
 
 
     private PetOwner(Player player) {
-        Valid.notNull(player, "Player can not be null");
+        Validate.notNull(player, "Player can not be null");
         this.player = player;
         uuid = player.getUniqueId();
         reloadData();
@@ -81,12 +82,12 @@ public class PetOwner {
      * @return PetOwner Instance
      */
     public static PetOwner getPetOwner(String name) {
-        Valid.notNull(name, "PlayerName can not be null");
+        Validate.notNull(name, "PlayerName can not be null");
         return getPetOwner(Bukkit.getPlayerExact(name));
     }
 
     public static PetOwner getPetOwner(UUID uuid) {
-        Valid.notNull(uuid, "UUID can not be null");
+        Validate.notNull(uuid, "UUID can not be null");
         if (ownerMap.containsKey(uuid)) return ownerMap.get(uuid);
         return null;
     }
@@ -193,7 +194,7 @@ public class PetOwner {
             PetNameChangeEvent event = new PetNameChangeEvent(player, name, color, k);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
-                play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
+                play(player.getEyeLocation(), Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
                 SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
                 player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameFailure", true).replace("{name}", ChatColor.translateAlternateColorCodes('&', name)));
                 return;
@@ -218,7 +219,7 @@ public class PetOwner {
 
         pet.getEntity().getEntity().setCustomName(name.replace("%player%", player.getName()));
         if (PetCore.get().getConfiguration().getBoolean("ShowParticles") && (!override)) {
-            play(pet.getEntity().getEntity().getLocation(), ParticleMaker.Particle.VILLAGER_HAPPY, 1.0F, 1.0F, 1.0F);
+            play(pet.getEntity().getEntity().getLocation(), Particle.VILLAGER_HAPPY, 1.0F, 1.0F, 1.0F);
         }
     }
 
@@ -266,7 +267,7 @@ public class PetOwner {
             PetRemoveEvent removeEvent = new PetRemoveEvent((Pet) pet);
             Bukkit.getServer().getPluginManager().callEvent(removeEvent);
             if (removeEvent.isCancelled()) {
-                play(player.getEyeLocation(), ParticleMaker.Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
+                play(player.getEyeLocation(), Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
                 SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
                 return;
             }
@@ -275,7 +276,7 @@ public class PetOwner {
             }
 
             if (PetCore.get().getConfiguration().getBoolean("ShowParticles")) {
-                play(pet.getEntity().getEntity().getLocation(), ParticleMaker.Particle.LAVA, 1.0F, 1.0F, 1.0F);
+                play(pet.getEntity().getEntity().getLocation(), Particle.LAVA, 1.0F, 1.0F, 1.0F);
             }
             if (pet.getEntity() instanceof IEntityControllerPet) {
                 ((IEntityControllerPet) pet.getEntity()).remove();
@@ -406,12 +407,12 @@ public class PetOwner {
         return (petToRespawn != null) && (pet == null);
     }
 
-    private void play(Location location, ParticleMaker.Particle effect, float offsetX, float offsetY, float offsetZ) {
+    private void play(Location location, Particle effect, float offsetX, float offsetY, float offsetZ) {
         ParticleMaker maker = new ParticleMaker(effect, 20, offsetX, offsetY, offsetZ);
         maker.sendToLocation(location);
     }
 
-    void play(Location location, ParticleMaker.Particle effect, int amount) {
+    void play(Location location, Particle effect, int amount) {
         ParticleMaker maker = new ParticleMaker(effect, amount, 0.5, 0.5, 0.5);
         maker.sendToLocation(location);
     }

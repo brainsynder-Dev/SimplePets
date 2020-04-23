@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -35,7 +36,7 @@ public class Clone extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
         item.withName("&6IsClone: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
@@ -44,11 +45,7 @@ public class Clone extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet bat = (IEntityArmorStandPet) entityPet;
-            if (bat.isOwner()) {
-                bat.setOwner(false);
-            } else {
-                bat.setOwner(true);
-            }
+            bat.setOwner(!bat.isOwner());
         }
     }
 }

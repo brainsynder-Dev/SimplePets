@@ -2,6 +2,8 @@ package simplepets.brainsynder.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -9,13 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.json.simple.JSONObject;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.nms.DataConverter;
-import simple.brainsynder.utils.MatType;
-import simple.brainsynder.utils.Reflection;
-import simple.brainsynder.utils.ServerVersion;
-import simple.brainsynder.utils.SkullType;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
 import simplepets.brainsynder.player.PetOwner;
@@ -35,12 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Utilities {
-    private static DataConverter converter;
-    private static Map<String, Long> startTimeMap = new HashMap<>();
-
-    public static void init () {
-        converter = Reflection.getConverter();
-    }
+    private static final Map<String, Long> startTimeMap = new HashMap<>();
 
     public static List<Material> getBlacklistedMaterials() {
         List<Material> materials = new ArrayList<>();
@@ -55,70 +45,6 @@ public class Utilities {
         }
 
         return materials;
-    }
-
-    public static DataConverter.Data getSkull(SkullType type) {
-        return converter.getSkullMaterial(type);
-    }
-
-    public static DataConverter.Data getColored(MatType type, int data) {
-        return converter.getColoredMaterial(type, data);
-    }
-
-    /**
-     * Translates the name to a {@link org.bukkit.Material}
-     *
-     * @param name The new/old {@link org.bukkit.Material} name
-     * @return
-     */
-    public static Material findMaterial(String name) {
-        return converter.findMaterial(name);
-
-    }
-
-    public static ItemBuilder translate113 (ItemBuilder builder, JSONObject json) {
-        if (ServerVersion.getVersion().getIntVersion() < ServerVersion.v1_13_R1.getIntVersion()) return builder;
-        Material material = findMaterial(String.valueOf(json.get("material")));
-        int data = Integer.parseInt(String.valueOf(json.getOrDefault("data", "0")));
-
-        try {
-            MatType type = MatType.valueOf(material.name().replace("LEGACY_", ""));
-            DataConverter.Data data1 = getColored(type, data);
-            json.put("material", data1.getMaterial().name());
-            if (data1.getData() == -1) json.remove("data");
-            return ItemBuilder.fromJSON(json);
-        }catch (Exception ignored){}
-
-        if (json.containsKey("skullData")) {
-            try {
-                DataConverter.Data data1 = getSkull(simple.brainsynder.utils.SkullType.values()[data]);
-                json.put("material", data1.getMaterial().name());
-                if (data1.getData() == -1) json.remove("data");
-                return ItemBuilder.fromJSON(json);
-            }catch (Exception ignored){}
-        }
-
-        if (json.containsKey("entity")) {
-            try {
-                material = findMaterial(json.get("entity")+"_SPAWN_EGG");
-                json.put("material", material.name());
-                json.remove("data");
-                json.remove("entity");
-                return ItemBuilder.fromJSON(json);
-            }catch (Exception ignored){}
-        }
-
-        return builder;
-    }
-
-    public static Material fetchMaterial(String... names) {
-        for (String name : names) {
-            try {
-                return converter.findMaterial(name);
-            } catch (Exception ignored) {
-            }
-        }
-        return Material.AIR;
     }
 
     /**

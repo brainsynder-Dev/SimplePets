@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
@@ -46,11 +46,7 @@ public class Tame extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof ITameable) {
             ITameable pet = (ITameable) entityPet;
-            if (pet.isTamed()) {
-                pet.setTamed(false);
-            } else {
-                pet.setTamed(true);
-            }
+            pet.setTamed(!pet.isTamed());
         }
     }
 

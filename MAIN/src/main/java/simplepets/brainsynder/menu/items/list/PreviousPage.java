@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.items.list;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.inventory.list.DataMenu;
@@ -17,7 +18,7 @@ public class PreviousPage extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .withName("&6&l<&m----")
                 .addLore("&7Click Here to go", "&7the previous page")
                 .setTexture("http://textures.minecraft.net/texture/f2599bd986659b8ce2c4988525c94e19ddd39fad08a38284a197f1b70675acc");

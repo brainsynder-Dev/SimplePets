@@ -1,7 +1,8 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
@@ -16,7 +17,7 @@ public class OcelotDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/5657cd5c2989ff97570fec4ddcdc6926a68a3393250c1be1f0b114a1db1")
                 .withName("&f&lOcelot Pet");
     }

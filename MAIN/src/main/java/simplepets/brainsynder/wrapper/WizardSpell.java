@@ -1,6 +1,6 @@
 package simplepets.brainsynder.wrapper;
 
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
 
 public enum WizardSpell {
     NONE(0, 0.0D, 0.0D, 0.0D),

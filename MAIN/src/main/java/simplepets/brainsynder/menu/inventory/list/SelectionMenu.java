@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.inventory.list;
 
+import lib.brainsynder.storage.IStorage;
+import lib.brainsynder.storage.StorageList;
+import lib.brainsynder.utils.ListPager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
-import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;
@@ -25,7 +25,7 @@ import java.util.*;
 
 public class SelectionMenu extends CustomInventory {
     private List<PetDefault> availableTypes;
-    private Map<String, ObjectPager<PetTypeStorage>> pagerMap;
+    private Map<String, ListPager<PetTypeStorage>> pagerMap;
     private PetMap<String, IStorage<PetTypeStorage>> petMap;
 
     public SelectionMenu(File file) {
@@ -115,7 +115,7 @@ public class SelectionMenu extends CustomInventory {
             return;
         }
 
-        ObjectPager<PetTypeStorage> pages = new ObjectPager<>(maxPets, petTypes.toArrayList());
+        ListPager<PetTypeStorage> pages = new ListPager<>(maxPets, petTypes.toArrayList());
         pagerMap.put(player.getName(), pages);
 
         getSlots().forEach((slot, item) -> {
@@ -138,7 +138,7 @@ public class SelectionMenu extends CustomInventory {
         return petMap;
     }
 
-    public ObjectPager<PetTypeStorage> getPages(PetOwner owner) {
+    public ListPager<PetTypeStorage> getPages(PetOwner owner) {
         Player player = Bukkit.getPlayer(owner.getUuid());
         if (pagerMap.containsKey(player.getName()))
             return pagerMap.get(player.getName());

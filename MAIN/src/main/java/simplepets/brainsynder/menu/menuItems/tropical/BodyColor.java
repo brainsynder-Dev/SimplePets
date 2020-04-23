@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.menuItems.tropical;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
-import org.json.simple.JSONArray;
-import simple.brainsynder.api.ItemBuilder;
+import org.bukkit.inventory.meta.ItemMeta;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -36,8 +36,8 @@ public class BodyColor extends MenuItemAbstract {
             DyeColorWrapper next = DyeColorWrapper.getNext(wrapper);
             List<String> lore = new ArrayList<>();
 
-            for (Object s : (JSONArray) item.toJSON().get("lore")) {
-                String str = String.valueOf(s);
+            List<String> currentLore = item.getMetaValue(ItemMeta.class, ItemMeta::getLore);
+            for (String str : currentLore) {
                 lore.add(str.replace("%prev_color%", "§" + prev.getChatChar())
                 .replace("%prev_name%", WordUtils.capitalize(prev.name().toLowerCase().replace("_", " ")))
                 .replace("%curr_color%", "§" + wrapper.getChatChar())
@@ -55,7 +55,7 @@ public class BodyColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.WOOL, color.getWoolData());
+            ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, color.getWoolData());
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

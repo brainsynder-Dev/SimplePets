@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;

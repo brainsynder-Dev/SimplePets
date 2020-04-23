@@ -1,9 +1,9 @@
 package simplepets.brainsynder.links.worldedit;
 
 import com.sk89q.worldedit.WorldEdit;
+import lib.brainsynder.ServerVersion;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 
 public class WorldEditLink {

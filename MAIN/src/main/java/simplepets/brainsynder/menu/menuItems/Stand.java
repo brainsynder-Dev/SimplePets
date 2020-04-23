@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
@@ -55,18 +55,10 @@ public class Stand extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet pet = (IEntityArmorStandPet) entityPet;
-            if (pet.isSmall()) {
-                pet.setSmall(false);
-            } else {
-                pet.setSmall(true);
-            }
+            pet.setSmall(!pet.isSmall());
         } else if (entityPet instanceof IEntityPolarBearPet) {
             IEntityPolarBearPet pet = (IEntityPolarBearPet) entityPet;
-            if (pet.isStanding()) {
-                pet.setStandingUp(false);
-            } else {
-                pet.setStandingUp(true);
-            }
+            pet.setStandingUp(!pet.isStanding());
         }
     }
 }

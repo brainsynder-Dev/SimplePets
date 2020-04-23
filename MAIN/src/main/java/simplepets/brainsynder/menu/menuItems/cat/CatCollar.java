@@ -1,6 +1,6 @@
 package simplepets.brainsynder.menu.menuItems.cat;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;

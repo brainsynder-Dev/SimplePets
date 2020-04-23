@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.items;
 
+import lib.brainsynder.json.JsonArray;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.json.simple.JSONArray;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public abstract class CustomItem extends Item {
 
     public void runCommands (PetOwner owner) {
         if (!hasKey(COMMANDS)) return;
-        JSONArray array = getArray(COMMANDS);
+        JsonArray array = (JsonArray) getValue(COMMANDS);
 
         String loc = "";
 

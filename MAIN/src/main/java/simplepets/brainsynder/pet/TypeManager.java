@@ -86,7 +86,7 @@ public class TypeManager {
         register(new ZombieVillagerDefault(plugin));
 
         Collection<String> sortKeys = new TreeSet<>(Collator.getInstance());
-        items.values().forEach(data -> sortKeys.add(data.getString("sort_key", false)));
+        items.values().forEach(data -> sortKeys.add(data.getString("sort_key")));
         sortKeys.forEach(key -> sortedItems.add(fromSortKey(key)));
     }
 
@@ -119,7 +119,7 @@ public class TypeManager {
 
     private PetDefault fromSortKey(String key) {
         for (PetDefault item : items.values()) {
-            if (item.getString("sort_key", false).equals(key)) return item;
+            if (item.getString("sort_key").equals(key)) return item;
         }
         return null;
     }

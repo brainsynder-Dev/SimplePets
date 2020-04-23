@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -48,16 +48,16 @@ public class Ocelot extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 11);
+        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 11);
         item.withName("&6Wild Cat");
         items.add(item);
-        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 0);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 0);
         item.withName("&6Black Cat");
         items.add(item);
-        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 14);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 14);
         item.withName("&6Orange Cat");
         items.add(item);
-        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 7);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 7);
         item.withName("&6Siamese Cat");
         items.add(item);
         return items;

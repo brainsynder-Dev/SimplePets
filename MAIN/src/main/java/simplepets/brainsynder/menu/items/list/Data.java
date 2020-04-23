@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.items.list;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
@@ -15,7 +16,7 @@ public class Data extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .withName("&cPet Data")
                 .addLore("&7Click Here to open","&7the Pet Data Menu")
                 .setTexture("http://textures.minecraft.net/texture/8514d225b262d847c7e557b474327dcef758c2c5882e41ee6d8c5e9cd3bc914");

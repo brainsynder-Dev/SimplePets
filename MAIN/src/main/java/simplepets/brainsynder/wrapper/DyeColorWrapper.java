@@ -1,7 +1,8 @@
 package simplepets.brainsynder.wrapper;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
-import simple.brainsynder.api.ItemBuilder;
+import org.bukkit.Material;
 
 public enum DyeColorWrapper {
     WHITE(0, 15, 'f', "cbd29e73f5aec159486d88eaee909ae0227f32b5f1f8f41342eb030909dd65e"),
@@ -21,10 +22,10 @@ public enum DyeColorWrapper {
     RED(14, 1, 'c', "97c1f1ead4d531caa4a5b0d69edbce29af789a2550e5ddbd23775be05e2df2c4"),
     BLACK(15, 0, '0', "9ddebbb062f6a385a91ca05f18f5c0acbe33e2d06ee9e7416cef6ee43dfe2fb");
 
-    private String texture;
-    private byte woolData;
-    private byte dyeData;
-    private char chatChar;
+    private final String texture;
+    private final byte woolData;
+    private final byte dyeData;
+    private final char chatChar;
 
     DyeColorWrapper(int woolData, int dyeData, char chatChar, String texture) {
         this.woolData = (byte) woolData;
@@ -72,7 +73,7 @@ public enum DyeColorWrapper {
     }
 
     public ItemBuilder getIcon () {
-        ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
         builder.withName("&6Color: &e"+WordUtils.capitalizeFully(name().toLowerCase().replace("_", "")));
         builder.setTexture(texture);
         return builder;

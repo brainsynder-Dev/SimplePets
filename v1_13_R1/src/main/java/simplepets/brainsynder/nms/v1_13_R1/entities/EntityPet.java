@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.sounds.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;

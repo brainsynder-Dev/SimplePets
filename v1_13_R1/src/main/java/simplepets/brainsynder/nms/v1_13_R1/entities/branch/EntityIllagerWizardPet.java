@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.v1_13_R1.entities.branch;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_13_R1.*;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.sounds.SoundMaker;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_13_R1.utils.DataWatcherWrapper;
 import simplepets.brainsynder.wrapper.WizardSpell;

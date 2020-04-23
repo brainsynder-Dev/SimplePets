@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems.bee;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.SkullType;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -30,7 +29,7 @@ public class BeeAngry extends MenuItemAbstract<IEntityBeePet> {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(SkullType.PLAYER)
+        ItemBuilder item = new ItemBuilder (org.bukkit.Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/e400223f1fa54741d421d7e8046409d5f3e15c7f4364b1b739940208f3b686d4");
         item.withName("&6Angry: &e%value%");
         return new ArrayList<>(Collections.singleton(item));

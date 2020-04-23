@@ -1,7 +1,8 @@
 package simplepets.brainsynder.wrapper;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
-import simple.brainsynder.api.ItemBuilder;
+import org.bukkit.Material;
 
 public enum CatType {
     TABBY ("16df72c34e7fdad4bea41d96678b72f29f606e2ca75e3590a278932714be98"),
@@ -16,13 +17,13 @@ public enum CatType {
     JELLIE ("a0db41376ca57df10fcb1539e86654eecfd36d3fe75e8176885e93185df280a5"),
     ALL_BLACK ("22c1e81ff03e82a3e71e0cd5fbec607e11361089aa47f290d46c8a2c07460d92");
 
-    private String texture;
+    private final String texture;
     CatType (String texture) {
         this.texture = "http://textures.minecraft.net/texture/"+texture;
     }
 
     public ItemBuilder getIcon () {
-        ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
         builder.setTexture(texture);
         builder.withName("&6Type: &e"+ WordUtils.capitalizeFully(name().toLowerCase().replace("_", " ")));
         return builder;

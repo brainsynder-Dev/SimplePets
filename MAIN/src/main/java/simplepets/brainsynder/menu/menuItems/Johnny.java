@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -44,11 +44,7 @@ public class Johnny extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet pet = (IEntityVindicatorPet) entityPet;
-            if (pet.isJohnny()) {
-                pet.setJohnny(false);
-            } else {
-                pet.setJohnny(true);
-            }
+            pet.setJohnny(!pet.isJohnny());
         }
     }
 }

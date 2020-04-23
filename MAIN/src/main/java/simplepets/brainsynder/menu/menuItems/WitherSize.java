@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class WitherSize extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Utilities.fetchMaterial("NETHER_BRICK_ITEM", "NETHER_BRICK"));
+        ItemBuilder item = new ItemBuilder(Material.NETHER_BRICK);
         item.withName("&6Small: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
@@ -42,11 +42,7 @@ public class WitherSize extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet pet = (IEntityWitherPet) entityPet;
-            if (pet.isSmall()) {
-                pet.setSmall(false);
-            } else {
-                pet.setSmall(true);
-            }
+            pet.setSmall(!pet.isSmall());
         }
     }
 }

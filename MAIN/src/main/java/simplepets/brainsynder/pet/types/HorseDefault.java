@@ -1,7 +1,8 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
@@ -16,7 +17,7 @@ public class HorseDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/5c6d5abbf68ccb2386bf16af25ac38d8b77bb0e043152461bd97f3f630dbb8bc")
                 .withName("&f&lHorse Pet");
     }

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -43,11 +43,7 @@ public class WitherShield extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet pet = (IEntityWitherPet) entityPet;
-            if (pet.isShielded()) {
-                pet.setShielded(false);
-            } else {
-                pet.setShielded(true);
-            }
+            pet.setShielded(!pet.isShielded());
         }
     }
 }

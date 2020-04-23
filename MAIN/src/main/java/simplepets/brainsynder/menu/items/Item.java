@@ -1,14 +1,16 @@
 package simplepets.brainsynder.menu.items;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.files.JsonFile;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.nbt.StorageTagTools;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.storage.files.base.JSONFile;
 
 import java.io.File;
 
-public class Item extends JSONFile {
+public class Item extends JsonFile {
     private boolean tried = false;
     public static final String COMMANDS = "CommandsOnClick";
 
@@ -31,18 +33,18 @@ public class Item extends JSONFile {
     public void loadDefaults() {
         setDefault("enabled", true);
         if (getDefaultItem() != null)
-        setDefault("item", getDefaultItem().toJSON());
+        setDefault("item", StorageTagTools.toJsonObject(getDefaultItem().toCompound()));
     }
 
     public ItemBuilder getItemBuilder () {
-        if (hasKey("item")) return ItemBuilder.fromJSON(getObject("item"));
+        if (hasKey("item")) return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
         if (!tried) {
             reload();
             tried = true;
             return getItemBuilder();
         }
 
-        return ItemBuilder.getColored(simple.brainsynder.utils.MatType.STAINED_GLASS_PANE, 14);
+        return lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_GLASS_PANE, 14);
     }
 
     /**
@@ -55,7 +57,7 @@ public class Item extends JSONFile {
     public ItemBuilder getDefaultItem (){ return null; }
 
     public String namespace () {
-        if (hasKey("namespace")) return getString("namespace", false);
+        if (hasKey("namespace")) return getString("namespace");
         return getClass().getSimpleName().toLowerCase();
     }
 

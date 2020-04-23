@@ -1,11 +1,11 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
@@ -54,7 +54,7 @@ public class HorseStyle extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = new ItemBuilder(Utilities.fetchMaterial("LEASH", "LEAD"));
+        ItemBuilder item = new ItemBuilder(Material.LEAD);
         item.withName("&6None");
         items.add(item.clone());
         item.withName("&6Black Spots");

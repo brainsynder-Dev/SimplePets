@@ -1,8 +1,10 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
@@ -10,6 +12,7 @@ import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@SupportedVersion(version = ServerVersion.v1_13_R1)
 public class TropicalFishDefault extends PetDefault {
     public TropicalFishDefault(PetCore plugin) {
         super(plugin, "tropical_fish", SoundMaker.ENTITY_TROPICAL_FISH_AMBIENT, EntityWrapper.TROPICAL_FISH);
@@ -17,14 +20,9 @@ public class TropicalFishDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        return new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/36d149e4d499929672e2768949e6477959c21e65254613b327b538df1e4df")
                 .withName("&f&lTropicalFish Pet");
-    }
-
-    @Override
-    public ServerVersion getAllowedVersion() {
-        return ServerVersion.v1_13_R1;
     }
 
     @Override

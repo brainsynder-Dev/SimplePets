@@ -1,6 +1,6 @@
 package simplepets.brainsynder.nms;
 
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 

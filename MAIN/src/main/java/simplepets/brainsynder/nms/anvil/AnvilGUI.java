@@ -1,9 +1,9 @@
 package simplepets.brainsynder.nms.anvil;
 
+import lib.brainsynder.ServerVersion;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.PetCore;
 
 import java.lang.reflect.Constructor;

@@ -1,9 +1,9 @@
 package simplepets.brainsynder.api.event.inventory;
 
+import lib.brainsynder.storage.IStorage;
+import lib.brainsynder.storage.StorageList;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.storage.PetTypeStorage;
 
@@ -11,7 +11,7 @@ import java.util.List;
 
 public class PetInventoryOpenEvent extends CancellablePetEvent {
     private IStorage<PetTypeStorage> shownPetTypes = new StorageList<>();
-    private Player player;
+    private final Player player;
     private IStorage<ItemStack> items = new StorageList<>();
 
     public PetInventoryOpenEvent(IStorage<PetTypeStorage> petTypes, Player player) {

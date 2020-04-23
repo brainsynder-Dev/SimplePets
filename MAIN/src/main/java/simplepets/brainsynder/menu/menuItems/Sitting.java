@@ -1,13 +1,13 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class Sitting extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = new ItemBuilder(Utilities.fetchMaterial("WOOD_STAIRS", "OAK_STAIRS"));
+        ItemBuilder item = new ItemBuilder(Material.OAK_STAIRS);
         item.withName("&6Sitting: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
@@ -44,11 +44,7 @@ public class Sitting extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            if (var.isSitting()) {
-                var.setSitting(false);
-            } else {
-                var.setSitting(true);
-            }
+            var.setSitting(!var.isSitting());
         }
     }
 

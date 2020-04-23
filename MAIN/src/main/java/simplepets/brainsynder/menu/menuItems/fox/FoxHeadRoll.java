@@ -1,7 +1,8 @@
 package simplepets.brainsynder.menu.menuItems.fox;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -34,7 +35,7 @@ public class FoxHeadRoll extends MenuItemAbstract<IEntityFoxPet> {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        items.add(ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER)
+        items.add(new ItemBuilder(Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a")
                 .withName("&6&lHead Tilt: &e%value%"));
         return items;

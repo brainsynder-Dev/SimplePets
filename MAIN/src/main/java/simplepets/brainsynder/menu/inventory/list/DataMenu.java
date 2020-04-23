@@ -1,12 +1,12 @@
 package simplepets.brainsynder.menu.inventory.list;
 
+import lib.brainsynder.storage.IStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.menu.holders.PetDataHolder;

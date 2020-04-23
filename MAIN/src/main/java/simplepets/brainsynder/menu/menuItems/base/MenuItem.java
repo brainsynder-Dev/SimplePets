@@ -1,16 +1,16 @@
 package simplepets.brainsynder.menu.menuItems.base;
 
+import lib.brainsynder.VersionRestricted;
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.entity.Player;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.MIRename;
 
 import java.util.List;
 
-public abstract class MenuItem<E extends IEntityPet> {
+public abstract class MenuItem<E extends IEntityPet> implements VersionRestricted {
     protected E entityPet = null;
     protected PetDefault type;
 
@@ -28,14 +28,6 @@ public abstract class MenuItem<E extends IEntityPet> {
     }
     public String getTargetName() {
         return getClass().getSimpleName().toLowerCase();
-    }
-
-    public int getVersion() {
-        return 18;
-    }
-
-    public boolean isSupported() {
-        return (ReflectionUtil.getVersionInt() >= getVersion());
     }
 
     public E getEntityPet() {

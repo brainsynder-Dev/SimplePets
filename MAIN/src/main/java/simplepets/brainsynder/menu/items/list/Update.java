@@ -1,9 +1,8 @@
 package simplepets.brainsynder.menu.items.list;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.SkullType;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.holders.ArmorHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
@@ -20,7 +19,7 @@ public class Update extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return ItemBuilder.getSkull(SkullType.PLAYER).setTexture("http://textures.minecraft.net/texture/bc8def67a12622ead1decd3d89364257b531896d87e469813131ca235b5c7").withName("&e&lUpdate ArmorStand");
+        return new ItemBuilder (org.bukkit.Material.PLAYER_HEAD).setTexture("http://textures.minecraft.net/texture/bc8def67a12622ead1decd3d89364257b531896d87e469813131ca235b5c7").withName("&e&lUpdate ArmorStand");
     }
 
     @Override

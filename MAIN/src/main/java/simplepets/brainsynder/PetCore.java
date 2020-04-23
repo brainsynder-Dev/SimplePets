@@ -56,7 +56,7 @@ public class PetCore extends JavaPlugin {
     private EconomyFile ecomony;
 
     private ISpawner spawner;
-    private Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
+    private final Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
@@ -70,7 +70,6 @@ public class PetCore extends JavaPlugin {
             setEnabled(false);
             return;
         }
-        Utilities.init();
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
         if (!Bukkit.getOnlinePlayers().isEmpty()) {

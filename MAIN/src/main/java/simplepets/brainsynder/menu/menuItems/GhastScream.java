@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityGhastPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -34,7 +35,7 @@ public class GhastScream extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
         item.withName("&6Screaming: &e%value%");
         item.setTexture("http://textures.minecraft.net/texture/8b6a72138d69fbbd2fea3fa251cabd87152e4f1c97e5f986bf685571db3cc0");
         return new ArrayList<>(Collections.singleton(item));
@@ -44,11 +45,7 @@ public class GhastScream extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityGhastPet) {
             IEntityGhastPet pet = (IEntityGhastPet) entityPet;
-            if (pet.isScreaming()) {
-                pet.setScreaming(false);
-            } else {
-                pet.setScreaming(true);
-            }
+            pet.setScreaming(!pet.isScreaming());
         }
     }
 }

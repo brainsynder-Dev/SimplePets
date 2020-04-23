@@ -1,12 +1,12 @@
 package simplepets.brainsynder.storage.files.base;
 
+import lib.brainsynder.storage.IStorage;
+import lib.brainsynder.storage.StorageList;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
 
 import java.io.File;
 import java.io.IOException;

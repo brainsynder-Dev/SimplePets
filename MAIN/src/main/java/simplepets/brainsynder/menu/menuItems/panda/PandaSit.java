@@ -1,12 +1,12 @@
 package simplepets.brainsynder.menu.menuItems.panda;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class PandaSit extends MenuItemAbstract<IEntityPandaPet> {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        items.add(new ItemBuilder(Utilities.fetchMaterial("WOOD_STAIRS", "OAK_STAIRS")).withName("&6&lSitting: &e%value%"));
+        items.add(new ItemBuilder(Material.OAK_STAIRS).withName("&6&lSitting: &e%value%"));
         return items;
     }
 

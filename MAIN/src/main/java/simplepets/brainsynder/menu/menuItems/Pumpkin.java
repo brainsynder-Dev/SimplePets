@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -20,11 +20,6 @@ public class Pumpkin extends MenuItemAbstract {
     }
     public Pumpkin(PetDefault type) {
         super(type);
-    }
-
-    @Override
-    public int getVersion() {
-        return 19;
     }
 
     @Override
@@ -48,11 +43,7 @@ public class Pumpkin extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
-            if (var.hasPumpkin()) {
-                var.setHasPumpkin(false);
-            } else {
-                var.setHasPumpkin(true);
-            }
+            var.setHasPumpkin(!var.hasPumpkin());
         }
     }
 }

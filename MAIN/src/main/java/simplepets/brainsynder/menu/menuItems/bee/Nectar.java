@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems.bee;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.SkullType;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -30,7 +29,7 @@ public class Nectar extends MenuItemAbstract<IEntityBeePet> {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(SkullType.PLAYER)
+        ItemBuilder item = new ItemBuilder (org.bukkit.Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/b727d0ab03f5cd022f8705d3f7f133ca4920eae8e1e47b5074433a137e691e4e");
         item.withName("&6Has Nectar: &e%value%");
         return new ArrayList<>(Collections.singleton(item));

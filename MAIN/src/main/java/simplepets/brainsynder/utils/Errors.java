@@ -1,6 +1,6 @@
 package simplepets.brainsynder.utils;
 
-import simple.brainsynder.utils.Reflection;
+import org.bukkit.Bukkit;
 import simplepets.brainsynder.PetCore;
 
 public enum Errors {
@@ -23,7 +23,7 @@ public enum Errors {
     UNSUPPORTED_VERSION_CRITICAL("-------------------------------------------",
             "          Error Type: CRITICAL",
             "    An Internal Version Error Occurred",
-            "SimplePets Does not support " + Reflection.getVersion() + ", Please Update your server.",
+            "SimplePets Does not support " + Bukkit.getServer().getClass().getPackage().getName().substring(23) + ", Please Update your server.",
             "-------------------------------------------"),
     UNSUPPORTED_VERSION_WEAK("-------------------------------------------",
             "          Error Type: WARNING",

@@ -1,8 +1,9 @@
 package simplepets.brainsynder.menu.menuItems.panda;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
-import simple.brainsynder.utils.SkullType;
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -12,6 +13,7 @@ import simplepets.brainsynder.utils.ValueType;
 import java.util.ArrayList;
 import java.util.List;
 
+@SupportedVersion(version = ServerVersion.v1_14_R1)
 @ValueType(type = "boolean", def = "false")
 public class PandaSneeze extends MenuItemAbstract<IEntityPandaPet> {
 
@@ -35,7 +37,7 @@ public class PandaSneeze extends MenuItemAbstract<IEntityPandaPet> {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder builder = ItemBuilder.getSkull(SkullType.PLAYER);
+        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
         builder.setTexture("http://textures.minecraft.net/texture/5c2d25e956337d82791fa0e6617a40086f02d6ebfbfd5a6459889cf206fca787");
         builder.withName("&6&lSneezing: &e%value%");
         items.add(builder);
@@ -45,11 +47,6 @@ public class PandaSneeze extends MenuItemAbstract<IEntityPandaPet> {
     @Override
     public void onLeftClick() {
         entityPet.setSneezing(!entityPet.isSneezing());
-    }
-
-    @Override
-    public boolean isSupported() {
-        return ServerVersion.isEqualNew(ServerVersion.v1_14_R1);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -44,11 +44,7 @@ public class Hang extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityBatPet) {
             IEntityBatPet bat = (IEntityBatPet) entityPet;
-            if (bat.isHanging()) {
-                bat.setHanging(false);
-            } else {
-                bat.setHanging(true);
-            }
+            bat.setHanging(!bat.isHanging());
         }
     }
 }

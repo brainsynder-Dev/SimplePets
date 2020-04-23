@@ -1,14 +1,14 @@
 package simplepets.brainsynder.listeners;
 
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.storage.IStorage;
+import lib.brainsynder.storage.StorageList;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.storage.IStorage;
-import simple.brainsynder.storage.StorageList;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
@@ -22,7 +22,7 @@ import simplepets.brainsynder.storage.files.EconomyFile;
 import java.util.List;
 
 public class PetEventListeners implements Listener {
-    private EconomyFile economyFile;
+    private final EconomyFile economyFile;
 
     public PetEventListeners() {
         economyFile = PetCore.get().getEcomony();
@@ -75,7 +75,7 @@ public class PetEventListeners implements Listener {
         while (types.hasNext()) {
             PetTypeStorage storage = types.next();
             PetDefault type = storage.getType();
-            ItemBuilder maker = ItemBuilder.fromJSON(storage.getType().getItemBuilder().toJSON());
+            ItemBuilder maker = storage.getType().getItemBuilder().clone();
             String price = String.valueOf(economyFile.getPrice(type));
             if (price.equals("-1")) price = economyFile.getString("Price-Free");
 

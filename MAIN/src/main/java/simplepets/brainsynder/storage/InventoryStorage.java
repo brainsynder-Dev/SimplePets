@@ -1,5 +1,6 @@
 package simplepets.brainsynder.storage;
 
+import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.MemorySection;
@@ -9,15 +10,13 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 public class InventoryStorage implements ConfigurationSerializable {
-    private Inventory inventory;
+    private final Inventory inventory;
     private String title = "UNKNOWN";
 
     public InventoryStorage(Inventory inventory, String title) {
@@ -46,7 +45,8 @@ public class InventoryStorage implements ConfigurationSerializable {
         if (config.isEmpty()) {
             this.inventory = null;
         } else {
-            inventory = Bukkit.createInventory(holder, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), String.valueOf(config.get("title")));
+            if (config.containsKey("title")) title = String.valueOf(config.get("title"));
+            inventory = Bukkit.createInventory(holder, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), title);
             if (config.containsKey("items")) {
                 Map<String, Object> items = (Map<String, Object>) config.get("items");
                 if (!items.isEmpty()) {
@@ -73,7 +73,7 @@ public class InventoryStorage implements ConfigurationSerializable {
         Map map = new HashMap();
         if (inventory == null) return map;
 
-        map.put("title", inventory.getTitle());
+        map.put("title", title);
         map.put("size", inventory.getSize());
         Map<Integer, Object> items = new HashMap();
         int slot = 0;

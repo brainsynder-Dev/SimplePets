@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityMooshroomPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;

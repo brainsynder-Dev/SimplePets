@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -44,11 +44,7 @@ public class Scream extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityEndermanPet) {
             IEntityEndermanPet pet = (IEntityEndermanPet) entityPet;
-            if (pet.isScreaming()) {
-                pet.setScreaming(false);
-            } else {
-                pet.setScreaming(true);
-            }
+            pet.setScreaming(!pet.isScreaming());
         }
     }
 }

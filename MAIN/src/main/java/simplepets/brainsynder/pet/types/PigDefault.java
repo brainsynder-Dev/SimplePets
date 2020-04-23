@@ -1,13 +1,13 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class PigDefault extends PetDefault {
@@ -17,7 +17,7 @@ public class PigDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Utilities.fetchMaterial("PORK", "PORKCHOP")).withName("&f&lPig Pet");
+        return new ItemBuilder(Material.PORKCHOP).withName("&f&lPig Pet");
     }
 
     @Override

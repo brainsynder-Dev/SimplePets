@@ -1,8 +1,9 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
-import org.json.simple.JSONArray;
-import simple.brainsynder.api.ItemBuilder;
+import org.bukkit.Material;
+import org.bukkit.inventory.meta.ItemMeta;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPufferFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -36,8 +37,8 @@ public class PufferSize extends MenuItemAbstract {
             PufferState next = PufferState.getNext(typeID);
 
             List<String> lore = new ArrayList<>();
-            for (Object s : (JSONArray) item.toJSON().get("lore")) {
-                String str = String.valueOf(s);
+            List<String> currentLore = item.getMetaValue(ItemMeta.class, ItemMeta::getLore);
+            for (String str : currentLore) {
                 lore.add(str.replace("%prev_state%", WordUtils.capitalize(prev.name().toLowerCase().replace("_", " ")))
                         .replace("%curr_state%", WordUtils.capitalize(typeID.name().toLowerCase().replace("_", " ")))
                         .replace("%next_state%", WordUtils.capitalize(next.name().toLowerCase().replace("_", " "))));
@@ -51,7 +52,7 @@ public class PufferSize extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
         item.setTexture("http://textures.minecraft.net/texture/17152876bc3a96dd2a2299245edb3beef647c8a56ac8853a687c3e7b5d8bb");
         item.withName(" ");
         item.addLore("&6Previous: &7%prev_state%",

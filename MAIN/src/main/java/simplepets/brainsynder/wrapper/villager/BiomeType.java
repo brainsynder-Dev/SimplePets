@@ -1,9 +1,8 @@
 package simplepets.brainsynder.wrapper.villager;
 
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nms.DataConverter;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.nms.materials.types.DirtType;
-import simplepets.brainsynder.utils.Utilities;
 
 /**
  * This is used to handle the 1.14 Villager Biome Types
@@ -11,13 +10,13 @@ import simplepets.brainsynder.utils.Utilities;
 public enum BiomeType {
     DESERT(new ItemBuilder(Material.SAND)),
     JUNGLE(new ItemBuilder(Material.VINE)),
-    PLAINS(new ItemBuilder(Utilities.fetchMaterial("GRASS", "GRASS_BLOCK"))),
-    SAVANNA(ItemBuilder.getMaterial(DirtType.PODZOL)),
+    PLAINS(new ItemBuilder(DataConverter.getMaterial("GRASS", "GRASS_BLOCK"))),
+    SAVANNA(new ItemBuilder(Material.PODZOL)),
     SNOW(new ItemBuilder(Material.SNOW_BLOCK)),
     SWAMP(new ItemBuilder(Material.SLIME_BLOCK)),
     TAIGA(new ItemBuilder(Material.MOSSY_COBBLESTONE));
 
-    private ItemBuilder icon;
+    private final ItemBuilder icon;
     BiomeType (ItemBuilder icon) {
         this.icon = icon;
     }

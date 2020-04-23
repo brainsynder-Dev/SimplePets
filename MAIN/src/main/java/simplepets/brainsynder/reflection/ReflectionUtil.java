@@ -1,12 +1,13 @@
 package simplepets.brainsynder.reflection;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonArray;
+import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.nbt.StorageTagTools;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.PetDefault;
 
@@ -20,12 +21,7 @@ import java.util.Map;
 
 public class ReflectionUtil {
     public static int getVersionInt() {
-        String vString = Reflection.getVersion().replace("v", "");
-        if (!vString.isEmpty()) {
-            String[] array = vString.split("_");
-            return Integer.parseInt(array[0] + array[1]);
-        }
-        return 18;
+        return ServerVersion.getVersion().getIntVersion();
     }
 
     public static Constructor getConstructor (Class<?> clazz, Class<?>... params) {
@@ -108,19 +104,19 @@ public class ReflectionUtil {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
     }
 
-    public static JSONObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetDefault type) {
-        JSONObject a = new JSONObject();
+    public static JsonObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetDefault type) {
+        JsonObject a = new JsonObject();
         for (Class<? extends MenuItem> cl : c) {
-            JSONArray as = new JSONArray();
+            JsonArray as = new JsonArray();
             MenuItem menuItem = initiateClass(fillConstructor(cl, PetDefault.class), type);
             try {
                 for (Object object : menuItem.getDefaultItems()) {
-                    as.add(((ItemBuilder)object).toJSON());
+                    as.add(StorageTagTools.toJsonObject(((ItemBuilder)object).toCompound()));
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-            a.put(menuItem.getTargetName(), as);
+            a.add(menuItem.getTargetName(), as);
         }
         return a;
     }
@@ -132,11 +128,11 @@ public class ReflectionUtil {
         return map;
     }
 
-    public static JSONArray getItemsArray (MenuItem menuItem) {
-        JSONArray as = new JSONArray();
+    public static JsonArray getItemsArray (MenuItem menuItem) {
+        JsonArray as = new JsonArray();
         try {
             for (Object object : menuItem.getDefaultItems()) {
-                as.add(((ItemBuilder)object).toJSON());
+                as.add(StorageTagTools.toJsonObject(((ItemBuilder)object).toCompound()));
             }
         } catch (NullPointerException ignored) {
         }

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems.sizes;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ISizable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;

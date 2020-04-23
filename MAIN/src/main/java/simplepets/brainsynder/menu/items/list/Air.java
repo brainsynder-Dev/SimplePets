@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.items.list;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.menu.items.Item;
 
 import java.io.File;
@@ -13,7 +13,7 @@ public class Air extends Item {
 
     @Override
     public void loadDefaults() {
-        defaults.put("_COMMENT_", "This not editable simply because you can not modify air :P");
+        defaults.add("_COMMENT_", "This not editable simply because you can not modify air :P");
         super.loadDefaults();
     }
 

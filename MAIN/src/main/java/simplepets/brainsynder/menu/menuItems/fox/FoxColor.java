@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems.fox;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -34,7 +35,7 @@ public class FoxColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
         items.add(builder.clone().withName("&6Type: &eRed")
                 .setTexture("http://textures.minecraft.net/texture/d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a"));
         items.add(builder.clone().withName("&6Type: &eWhite")

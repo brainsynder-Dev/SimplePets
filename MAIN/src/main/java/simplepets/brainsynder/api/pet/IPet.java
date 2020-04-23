@@ -1,7 +1,7 @@
 package simplepets.brainsynder.api.pet;
 
+import lib.brainsynder.storage.IStorage;
 import org.bukkit.entity.Player;
-import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.PetDefault;

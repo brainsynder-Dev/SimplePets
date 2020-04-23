@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs;
 
+import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
@@ -12,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.ItemBuilder;
 import simple.brainsynder.api.WebAPI;
 import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
@@ -238,7 +238,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void setOwner(boolean flag) {
         minime = flag;
         if (flag) {
-            ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+            ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
             getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
             getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
             getEntity().setBoots(new ItemBuilder(Material.GOLDEN_BOOTS).build());

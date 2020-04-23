@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems.bee;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.SkullType;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -31,7 +30,7 @@ public class Stung extends MenuItemAbstract<IEntityBeePet> {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(SkullType.PLAYER)
+        ItemBuilder item = new ItemBuilder (org.bukkit.Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/fa2cb74c13245d3ce9bacc8b1600af02fd7c91f501feaf97364e1f8b6f04f47f");
         item.withName("&6Has Stinger: &e%value%");
         return new ArrayList<>(Collections.singleton(item));

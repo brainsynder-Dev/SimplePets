@@ -1,17 +1,19 @@
 package simplepets.brainsynder.pet;
 
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.VersionRestricted;
+import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonArray;
+import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.sounds.SoundMaker;
 import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.types.ShulkerDefault;
 import simplepets.brainsynder.reflection.ReflectionUtil;
-import simplepets.brainsynder.storage.files.base.JSONFile;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.io.File;
@@ -19,17 +21,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class PetDefault extends JSONFile {
+public abstract class PetDefault extends JsonFile implements VersionRestricted {
     private ItemBuilder _BUILDER_;
-    private SoundMaker sound, _SOUND_ = null;
+    private final SoundMaker sound;
+    private SoundMaker _SOUND_ = null;
     private boolean _FLY_, _HAT_, _MOUNT_, _ENABLED_, _FLOAT_DOWN_;
     private double _RIDE_SPEED_, _SPEED_;
-    private JSONArray _COMMANDS_ = new JSONArray();
-    private String fileName, _DISPLAY_NAME_,SUMMON_NAME;
-    private JSONObject _DATA_ITEMS_ = new JSONObject();
+    private JsonArray _COMMANDS_ = new JsonArray();
+    private final String fileName;
+    private String _DISPLAY_NAME_;
+    private String SUMMON_NAME;
+    private JsonObject _DATA_ITEMS_ = new JsonObject();
 
-    private EntityWrapper type;
-    private PetCore plugin;
+    private final EntityWrapper type;
+    private final PetCore plugin;
 
     public PetDefault(PetCore plugin, String name, SoundMaker sound, EntityWrapper type) {
         super(new File(new File(plugin.getDataFolder().toString()+File.separator+"Pets"), name+".json"), false);
@@ -52,12 +57,12 @@ public abstract class PetDefault extends JSONFile {
         setDefault("ride_speed", 0.2700000238418579);
         setDefault("speed", 0.6000000238418579D);
 
-        setDefault("item", getDefaultItem().toJSON());
+        setDefault("item", StorageTagTools.toJsonObject(getDefaultItem().toCompound()));
    //     setDefault("summon_name", WordUtils.capitalizeFully(fileName.replace("_", " ")));
 
-        setDefault("on_summon", new JSONArray());
+        setDefault("on_summon", new JsonArray());
         try {
-            JSONObject dataArrays = ReflectionUtil.getMenuItemsJSON(getPetData().getItemClasses(), this);
+            JsonObject dataArrays = ReflectionUtil.getMenuItemsJSON(getPetData().getItemClasses(), this);
             setDefault("data-items", dataArrays);
         } catch (NullPointerException ignored) { // In case there is no pet data
         }
@@ -68,7 +73,7 @@ public abstract class PetDefault extends JSONFile {
     }
 
     public void load () {
-        _BUILDER_ = ItemBuilder.fromJSON(getObject("item"));
+        _BUILDER_ = ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
 
         _ENABLED_ = getBoolean("enabled");
         _FLY_ = getBoolean("fly");
@@ -79,15 +84,15 @@ public abstract class PetDefault extends JSONFile {
         _RIDE_SPEED_ = getDouble("ride_speed");
         _SPEED_ = getDouble("speed");
 
-        _DISPLAY_NAME_ = getString("display_name",false);
-        SUMMON_NAME = getString("summon_name",false);
+        _DISPLAY_NAME_ = getString("display_name");
+        SUMMON_NAME = getString("summon_name");
 
-        _COMMANDS_ = getArray("on_summon");
+        _COMMANDS_ = (JsonArray) getValue("on_summon");
 
-        _DATA_ITEMS_ = getObject("data-items");
+        _DATA_ITEMS_ = (JsonObject) getValue("data-items");
 
         if (hasKey("sound")) {
-            String sound = getString("sound", false);
+            String sound = getString("sound");
             if (!sound.equalsIgnoreCase("off")) _SOUND_ = SoundMaker.valueOf(sound);
         }
     }
@@ -191,27 +196,27 @@ public abstract class PetDefault extends JSONFile {
     public ItemBuilder getDataItemByName(String name, int index) {
         Map<String, MenuItem> menuItemMap = ReflectionUtil.getMenuItems(getPetData().getItemClasses(), this);
         if (_DATA_ITEMS_ != null) {
-            if (_DATA_ITEMS_.containsKey(name)) {
-                JSONArray items = ((JSONArray) _DATA_ITEMS_.get(name));
+            if (_DATA_ITEMS_.names().contains(name)) {
+                JsonArray items = ((JsonArray) _DATA_ITEMS_.get(name));
                 if (items.isEmpty()) {
                     if (menuItemMap.containsKey(name)) {
                         items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
-                        _DATA_ITEMS_.put(name, items);
+                        _DATA_ITEMS_.add(name, items);
                         set("data-items", _DATA_ITEMS_);
                         save();
                         PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
                     }
                 }
-                return ItemBuilder.fromJSON((JSONObject) items.get(index));
+                return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) items.get(index)));
             }else{
                 try {
                     if (menuItemMap.containsKey(name)) {
-                        JSONArray items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
-                        _DATA_ITEMS_.put(name, items);
+                        JsonArray items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
+                        _DATA_ITEMS_.add(name, items);
                         set("data-items", _DATA_ITEMS_);
                         save();
                         PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
-                        return ItemBuilder.fromJSON((JSONObject) items.get(index));
+                        return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) items.get(index)));
                     }
                 } catch (NullPointerException ignored) { // In case there is no pet data
                 }
@@ -219,28 +224,28 @@ public abstract class PetDefault extends JSONFile {
         }
 
         PetCore.get().debug(getName()+" Could not find the DataItem '"+name+"', adding item defaults");
-        JSONArray items;
+        JsonArray items;
 
-        if (_DATA_ITEMS_.containsKey(name)) {
-            items = ((JSONArray) _DATA_ITEMS_.get(name));
+        if (_DATA_ITEMS_.names().contains(name)) {
+            items = ((JsonArray) _DATA_ITEMS_.get(name));
         }else{
             items = ReflectionUtil.getItemsArray(menuItemMap.get(name));
         }
 
 
         if (menuItemMap.containsKey(name)) {
-            _DATA_ITEMS_.put(name, items);
+            _DATA_ITEMS_.add(name, items);
             set("data-items", _DATA_ITEMS_);
             save();
-            return ItemBuilder.fromJSON((JSONObject) items.get(index));
+            return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) items.get(index)));
         }else{
             for (MenuItem menuItem : menuItemMap.values()) {
                 if (menuItem.getTargetName().equals(name)) {
                     items = ReflectionUtil.getItemsArray(menuItem);
-                    _DATA_ITEMS_.put(name, items);
+                    _DATA_ITEMS_.add(name, items);
                     set("data-items", _DATA_ITEMS_);
                     save();
-                    return ItemBuilder.fromJSON((JSONObject) items.get(index));
+                    return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) items.get(index)));
                 }
             }
         }
@@ -260,8 +265,5 @@ public abstract class PetDefault extends JSONFile {
     }
     public PetData getPetData() {
         return PetData.SILENT;
-    }
-    public boolean isSupported() {
-        return ServerVersion.isEqualNew(getAllowedVersion());
     }
 }

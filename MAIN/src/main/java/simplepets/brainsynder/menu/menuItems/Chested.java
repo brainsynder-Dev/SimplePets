@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IChestedAbstractPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -44,11 +44,7 @@ public class Chested extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IChestedAbstractPet) {
             IChestedAbstractPet chested = (IChestedAbstractPet) entityPet;
-            if (chested.isChested()) {
-                chested.setChested(false);
-            } else {
-                chested.setChested(true);
-            }
+            chested.setChested(!chested.isChested());
         }
     }
 }

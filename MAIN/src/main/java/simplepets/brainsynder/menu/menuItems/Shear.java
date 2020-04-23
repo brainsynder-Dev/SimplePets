@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -44,11 +44,7 @@ public class Shear extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntitySheepPet) {
             IEntitySheepPet pet = (IEntitySheepPet) entityPet;
-            if (pet.isSheared()) {
-                pet.setSheared(false);
-            } else {
-                pet.setSheared(true);
-            }
+            pet.setSheared(!pet.isSheared());
         }
     }
 }

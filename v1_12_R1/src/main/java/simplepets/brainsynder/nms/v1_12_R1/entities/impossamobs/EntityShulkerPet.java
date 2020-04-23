@@ -11,7 +11,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.sounds.SoundMaker;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;

@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -34,7 +35,7 @@ public class Tilt extends MenuItemAbstract {
 
     @Override
     public List<ItemBuilder> getDefaultItems() {
-        ItemBuilder item = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.SKELETON);
+        ItemBuilder item = new ItemBuilder(Material.SKELETON_SKULL);
         item.withName("&6Head Tilted: &e%value%");
         return new ArrayList<>(Collections.singleton(item));
     }
@@ -43,11 +44,7 @@ public class Tilt extends MenuItemAbstract {
     public void onLeftClick() {
         if (entityPet instanceof IEntityWolfPet) {
             IEntityWolfPet pet = (IEntityWolfPet) entityPet;
-            if (pet.isHeadTilted()) {
-                pet.setHeadTilted(false);
-            } else {
-                pet.setHeadTilted(true);
-            }
+            pet.setHeadTilted(!pet.isHeadTilted());
         }
     }
 }

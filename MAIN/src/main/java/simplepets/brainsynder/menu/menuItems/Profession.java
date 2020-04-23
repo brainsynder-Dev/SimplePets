@@ -1,13 +1,13 @@
 package simplepets.brainsynder.menu.menuItems;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nms.DataConverter;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
@@ -65,7 +65,7 @@ public class Profession extends MenuItemAbstract {
         item = new ItemBuilder(Material.COOKED_BEEF);
         item.withName("&6Butcher");
         items.add(item);
-        item = new ItemBuilder(Utilities.fetchMaterial("SEEDS","WHEAT_SEEDS"));
+        item = new ItemBuilder(DataConverter.getMaterial("SEEDS","WHEAT_SEEDS"));
         item.withName("&6Farmer");
         items.add(item);
         item = new ItemBuilder(Material.BOOK);
@@ -74,7 +74,7 @@ public class Profession extends MenuItemAbstract {
         item = new ItemBuilder(Material.ENCHANTED_BOOK);
         item.withName("&6Priest");
         items.add(item);
-        item = ItemBuilder.getColored(simple.brainsynder.utils.MatType.INK_SACK, 2);
+        item = DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, 2);
         item.withName("&6NitWit");
         items.add(item);
         return items;

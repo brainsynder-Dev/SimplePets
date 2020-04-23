@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.inventory.listeners;
 
+import lib.brainsynder.storage.IStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -8,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.scheduler.BukkitRunnable;
-import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventorySelectTypeEvent;
 import simplepets.brainsynder.menu.holders.SelectionHolder;

@@ -6,8 +6,8 @@
 package simplepets.brainsynder.wrapper;
 
 import com.google.common.collect.Maps;
+import lib.brainsynder.ServerVersion;
 import org.bukkit.Material;
-import simple.brainsynder.utils.ServerVersion;
 
 import java.util.ArrayList;
 import java.util.List;

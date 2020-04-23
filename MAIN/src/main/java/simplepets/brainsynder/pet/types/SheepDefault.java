@@ -1,13 +1,13 @@
 package simplepets.brainsynder.pet.types;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.sound.SoundMaker;
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.sounds.SoundMaker;
+import org.bukkit.Material;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 public class SheepDefault extends PetDefault {
@@ -17,7 +17,7 @@ public class SheepDefault extends PetDefault {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Utilities.fetchMaterial("WOOL", "WHITE_WOOL")).withName("&f&lSheep Pet");
+        return new ItemBuilder(Material.WHITE_WOOL).withName("&f&lSheep Pet");
     }
 
     @Override

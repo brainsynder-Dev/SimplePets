@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems.cat;
 
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.SkullType;
+import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -34,7 +33,7 @@ public class CatTilt extends MenuItemAbstract<IEntityCatPet> {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        items.add(ItemBuilder.getSkull(SkullType.PLAYER).withName("&6Head Up: &e%value%"));
+        items.add(new ItemBuilder (org.bukkit.Material.PLAYER_HEAD).withName("&6Head Up: &e%value%"));
         return items;
     }
 

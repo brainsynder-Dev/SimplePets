@@ -1,15 +1,15 @@
 package simplepets.brainsynder.player;
 
+import lib.brainsynder.nbt.JsonToNBT;
+import lib.brainsynder.nbt.NBTException;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
-import simple.brainsynder.nbt.JsonToNBT;
-import simple.brainsynder.nbt.NBTException;
-import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.storage.files.PlayerStorage;
@@ -25,7 +25,7 @@ public class OwnerFile {
     private static final String SELECT_PETS = "SELECT * FROM `SimplePets` WHERE `UUID`=?";
     private static final String UPDATE = "UPDATE `SimplePets` SET `UnlockedPets`=?, `PetName`=?, `NeedsRespawn`=?, `SavedPets`=? WHERE `UUID`=?";
     private static final String INSERT = "INSERT INTO `SimplePets` (`UUID`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES(?,?,?,?,?,?)";
-    private PetOwner owner;
+    private final PetOwner owner;
 
     OwnerFile(PetOwner owner) {
         this.owner = owner;
@@ -234,7 +234,7 @@ public class OwnerFile {
         }
         if (file.hasKey("NeedsRespawn")) {
             StorageTagCompound compound = file.getCompoundTag("NeedsRespawn");
-            file.removeTag("NeedsRespawn");
+            file.remove("NeedsRespawn");
             file.save();
             if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
         }

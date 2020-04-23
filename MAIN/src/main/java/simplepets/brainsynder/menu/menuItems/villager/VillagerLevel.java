@@ -1,8 +1,8 @@
 package simplepets.brainsynder.menu.menuItems.villager;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.utils.ServerVersion;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IProfession;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;

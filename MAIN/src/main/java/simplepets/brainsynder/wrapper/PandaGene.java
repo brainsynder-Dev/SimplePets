@@ -1,6 +1,7 @@
 package simplepets.brainsynder.wrapper;
 
-import simple.brainsynder.api.ItemBuilder;
+import lib.brainsynder.item.ItemBuilder;
+import org.bukkit.Material;
 
 public enum PandaGene {
     NORMAL ("dca096eea506301bea6d4b17ee1605625a6f5082c71f74a639cc940439f47166"),
@@ -11,13 +12,13 @@ public enum PandaGene {
     WEAK ("5c2d25e956337d82791fa0e6617a40086f02d6ebfbfd5a6459889cf206fca787"),
     AGGRESSIVE ("83fe1e782ae96a30336a03ef74681ce3a6905fcc673fa56c046aaee6aa28307d");
 
-    private String texture;
+    private final String texture;
     PandaGene (String texture) {
         this.texture = "http://textures.minecraft.net/texture/"+texture;
     }
 
     public ItemBuilder getIcon () {
-        ItemBuilder builder = ItemBuilder.getSkull(simple.brainsynder.utils.SkullType.PLAYER);
+        ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
         builder.setTexture(texture);
         return builder;
     }

@@ -2,11 +2,11 @@ package simplepets.brainsynder.links.impl.worldguard.old;
 
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.managers.RegionManager;
+import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
-import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.impl.worldguard.WGInterface;
 

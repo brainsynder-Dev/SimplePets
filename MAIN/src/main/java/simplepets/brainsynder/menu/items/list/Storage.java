@@ -1,7 +1,7 @@
 package simplepets.brainsynder.menu.items.list;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simple.brainsynder.api.ItemBuilder;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.CustomInventory;

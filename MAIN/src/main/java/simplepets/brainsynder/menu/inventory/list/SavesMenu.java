@@ -1,14 +1,14 @@
 package simplepets.brainsynder.menu.inventory.list;
 
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nbt.*;
+import lib.brainsynder.utils.ListPager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import simple.brainsynder.api.ItemBuilder;
-import simple.brainsynder.nbt.*;
-import simple.brainsynder.utils.ObjectPager;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.holders.SavesHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
@@ -21,7 +21,7 @@ import java.io.File;
 import java.util.*;
 
 public class SavesMenu extends CustomInventory {
-    private Map<String, ObjectPager<StorageTagCompound>> pagerMap;
+    private Map<String, ListPager<StorageTagCompound>> pagerMap;
     private Map<String, Map<StorageTagCompound, ItemStack>> itemMap;
 
     public SavesMenu(File file) {
@@ -85,7 +85,7 @@ public class SavesMenu extends CustomInventory {
             placeHolder--;
         }
 
-        ObjectPager<StorageTagCompound> pages = new ObjectPager<>(maxPets, new ArrayList<>(owner.getSavedPets()));
+        ListPager<StorageTagCompound> pages = new ListPager<>(maxPets, new ArrayList<>(owner.getSavedPets()));
 
         if (pagerMap.containsKey(player.getName())) {
             pages = pagerMap.get(player.getName());
@@ -109,7 +109,7 @@ public class SavesMenu extends CustomInventory {
                         stack = storageMap.get(compound);
                     }else {
                         ItemBuilder builder = type.getItemBuilder().clone();
-                        if (builder.getRawMeta().hasLore()) builder.clearLore();
+                        builder.clearLore();
                         if (compound.hasKey("name") && (!compound.getString("name").equals("null")))
                             builder.withName(compound.getString("name"));
                         compound.getKeySet().forEach(key -> {
@@ -178,7 +178,7 @@ public class SavesMenu extends CustomInventory {
         pagerMap.remove(player.getName());
     }
 
-    public ObjectPager<StorageTagCompound> getPages(PetOwner owner) {
+    public ListPager<StorageTagCompound> getPages(PetOwner owner) {
         Player player = Bukkit.getPlayer(owner.getUuid());
         if (pagerMap.containsKey(player.getName()))
             return pagerMap.get(player.getName());

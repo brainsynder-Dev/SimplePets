@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.inventory.listeners;
 
+import lib.brainsynder.storage.IStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -7,7 +8,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import simple.brainsynder.storage.IStorage;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.pet.PetDataChangeEvent;
 import simplepets.brainsynder.menu.holders.PetDataHolder;
@@ -39,7 +39,7 @@ public class DataListener implements Listener {
                 item.onClick(owner, menu);
                 return;
             }
-            IStorage<MenuItem> menuItems = owner.getPet().getItems().copy();
+            IStorage<MenuItem> menuItems = owner.getPet().getItems();
             if (!menuItems.isEmpty()) {
                 while (menuItems.hasNext()) {
                     MenuItemAbstract menuItem = (MenuItemAbstract) menuItems.next();
