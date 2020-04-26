@@ -37,7 +37,23 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
                 // Server uses new P2 API
                 PetCore.get().debug("Server is using the new PlotSquared API");
             }catch (Exception e2) {
-                return false;
+                try {
+                    packageName = "com.plotsquared.core";
+                    mainClass = Class.forName(packageName+"."+main, false, loader);
+                    // Server uses newer P2 API
+                    PetCore.get().debug("Server is using the newer PlotSquared API");
+                    ps = invoke(getMethod(mainClass, "get"), null);
+                    // Objects are different here
+                    Class<?> loc = getClass("location.Location");
+                    plotArea = getMethod(mainClass, "getApplicablePlotArea", loc);
+                    getPlot = getMethod(getClass("plot.PlotArea"), "getPlot", loc);
+                    hasOwner = getMethod(getClass("plot.Plot"), "hasOwner");
+                    isDenied = getMethod(getClass("plot.Plot"), "isDenied", UUID.class);
+                    locCon = ReflectionUtil.getConstructor(loc, String.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+                    return true;
+                } catch (Exception ex) {
+                    return false;
+                }
             }
         }
         ps = invoke(getMethod(mainClass, "get"), null);
@@ -87,6 +103,7 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
 
     private boolean fetchValue (String section, PetOwner owner, Location at) {
         if (!isHooked()) return true;
+        // Creates new location
         Object loc = Reflection.initiateClass(locCon, at.getWorld().getName(), at.getBlockX(), at.getBlockY(), at.getBlockZ());
         Object area = invoke(plotArea, ps, loc);
         if (area == null) return true;
