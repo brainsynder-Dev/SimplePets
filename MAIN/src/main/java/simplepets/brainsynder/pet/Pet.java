@@ -17,6 +17,7 @@ import simplepets.brainsynder.api.event.pet.PetHatEvent;
 import simplepets.brainsynder.api.event.pet.PetPreSpawnEvent;
 import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.menu.menuItems.Silent;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
@@ -113,7 +114,7 @@ public class Pet implements IPet {
     private MenuItem getItem(Class<? extends MenuItem> clazz) {
         try {
             IEntityPet entity = ent;
-            if (ent instanceof IEntityControllerPet)
+            if (ent instanceof IEntityControllerPet && clazz != Silent.class)
                 entity = ((IEntityControllerPet) ent).getVisibleEntity();
             return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetType.class, IEntityPet.class), type, entity);
         } catch (Exception e) {
