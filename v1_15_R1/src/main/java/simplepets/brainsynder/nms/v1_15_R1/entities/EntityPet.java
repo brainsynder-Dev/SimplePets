@@ -394,7 +394,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             super.e(vec);
             if (!world.isClientSide) {
-//                if (this instanceof IEntityHorsePet) {
+                if (this instanceof IEntityHorsePet) {
                     Location location = getBukkitEntity().getLocation();
                     setPosition(location.getX(), location.getY(), location.getZ());
                     PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
@@ -423,7 +423,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
                     this.aD += (f5 - this.aD) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
                     this.aE += this.aD; // this.limbSwing += this.limbSwingAmount;
-//                }
+                }
             }
             CraftEntity bukkitEntity = getBukkitEntity();
             if (pet == null) {
