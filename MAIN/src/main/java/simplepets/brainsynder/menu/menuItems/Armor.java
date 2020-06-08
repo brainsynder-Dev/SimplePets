@@ -6,7 +6,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class Armor extends MenuItemAbstract<IEntityArmorStandPet> {
-    public Armor(PetDefault type, IEntityPet entityPet) {
+    public Armor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Armor(PetDefault type) {
+    public Armor(PetType type) {
         super(type);
     }
 

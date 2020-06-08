@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.v1_15_R1.anvil;
 
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,28 +17,23 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
-import simple.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.nms.anvil.AnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.nms.anvil.IAnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.IAnvilGUI;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class HandleAnvilGUI implements IAnvilGUI {
-    private Player player;
+    private final Player player;
     private HashMap<AnvilSlot, ItemStack> items = new HashMap();
     private Inventory inv;
     private LIST listener;
-    private int levels = 0;
-    private float exp = 0.0F;
-    private Plugin plugin;
-    private IAnvilClickEvent handler;
+    private final int levels = 0;
+    private final float exp = 0.0F;
+    private final Plugin plugin;
+    private final IAnvilClickEvent handler;
 
     public HandleAnvilGUI(Plugin plugin, Player player, IAnvilClickEvent handler) {
         this.player = player;
@@ -79,9 +74,9 @@ public class HandleAnvilGUI implements IAnvilGUI {
     }
 
     private void destroy() {
-        Valid.notNull(this.player, "Player is null");
-        Valid.notNull(this.exp, "exp is null");
-        Valid.notNull(this.levels, "levels is null");
+        Validate.notNull(this.player, "Player is null");
+        Validate.notNull(this.exp, "exp is null");
+        Validate.notNull(this.levels, "levels is null");
         this.items = null;
         HandlerList.unregisterAll(this.listener);
         this.listener = null;

@@ -7,7 +7,7 @@ import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
 import java.io.File;
@@ -23,7 +23,7 @@ import java.util.Arrays;
 )
 @Permission(permission = "generator")
 public class Generator_SubCommand extends PetSubCommand {
-    private PetCommand parent;
+    private final PetCommand parent;
     public Generator_SubCommand(PetCommand parent) {
         this.parent = parent;
         registerCompletion(1, Arrays.asList("permissions","types"));
@@ -64,7 +64,7 @@ public class Generator_SubCommand extends PetSubCommand {
     }
 
     private class Logger {
-        private String fileName;
+        private final String fileName;
 
         public Logger(String fileName) {
             this.fileName = fileName;
@@ -88,9 +88,9 @@ public class Generator_SubCommand extends PetSubCommand {
         }
     }
 
-    private MenuItem getItem(PetDefault type, Class<? extends MenuItem> clazz) {
+    private MenuItem getItem(PetType type, Class<? extends MenuItem> clazz) {
         try {
-            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetDefault.class), type);
+            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetType.class), type);
         } catch (Exception e) {
             return null;
         }

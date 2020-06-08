@@ -5,17 +5,17 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ISizable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Size2 extends MenuItemAbstract {
 
-    public Size2(PetDefault type, IEntityPet entityPet) {
+    public Size2(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Size2(PetDefault type) {
+    public Size2(PetType type) {
         super(type);
     }
 

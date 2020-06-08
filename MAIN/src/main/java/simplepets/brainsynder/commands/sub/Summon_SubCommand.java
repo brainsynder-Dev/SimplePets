@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
 import simplepets.brainsynder.commands.PetSubCommand;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 
 @ICommand(
@@ -32,7 +32,7 @@ public class Summon_SubCommand extends PetSubCommand {
             return;
         }
         TypeManager manager = PetCore.get().getTypeManager();
-        PetDefault type = manager.getType(args[0]);
+        PetType type = manager.getType(args[0]);
         if (type == null) {
             sender.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));
             return;

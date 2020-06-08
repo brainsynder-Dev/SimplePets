@@ -6,7 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.entity.misc.ISkeletonAbstract;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import java.util.List;
 
 @ValueType(type = "boolean", def = "false")
 public class Arms extends MenuItemAbstract {
-    public Arms(PetDefault type, IEntityPet entityPet) {
+    public Arms(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Arms(PetDefault type) {
+    public Arms(PetType type) {
         super(type);
     }
 

@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.inventory;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.items.Item;
@@ -17,7 +18,7 @@ public class CustomInventory extends JSONFile {
     private String title;
     private boolean enabled = true;
     protected Map<String, Integer> pageSave = new HashMap<>();
-    private Map<Integer, Item> slots = new HashMap<>();
+    private final Map<Integer, Item> slots = new HashMap<>();
 
     public CustomInventory(File file) {
         super(file);
@@ -56,6 +57,9 @@ public class CustomInventory extends JSONFile {
             }
         }
     }
+
+    // When a player clicks a slot that is not a menu item (EG: Air or pre-determined slots (for armor on the ArmorStand))
+    public void onClick(int slot, ItemStack item, Player player){}
 
     public int getCurrentPage(PetOwner owner) {
         Player player = Bukkit.getPlayer(owner.getUuid());

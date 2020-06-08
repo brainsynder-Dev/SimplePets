@@ -6,7 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -16,10 +16,10 @@ import java.util.List;
 @ValueType(type = "boolean", def = "false")
 public class Powered extends MenuItemAbstract {
 
-    public Powered(PetDefault type, IEntityPet entityPet) {
+    public Powered(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Powered(PetDefault type) {
+    public Powered(PetType type) {
         super(type);
     }
 

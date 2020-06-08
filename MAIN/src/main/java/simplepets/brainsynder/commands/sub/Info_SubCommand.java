@@ -17,7 +17,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.Commands;
 import simplepets.brainsynder.utils.Utilities;
@@ -147,7 +147,7 @@ public class Info_SubCommand extends PetSubCommand {
         return json;
     }
 
-    private JSONObject getPetTypeData (PetDefault data) {
+    private JSONObject getPetTypeData (PetType data) {
         JSONObject json = new JSONObject();
         JSONObject strings = new JSONObject();
         JSONObject numbers = new JSONObject();

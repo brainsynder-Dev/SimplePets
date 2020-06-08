@@ -15,8 +15,8 @@ import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
-import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.pet.types.ShulkerDefault;
+import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.types.ShulkerPet;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
@@ -24,9 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntityControllerPet extends EntityZombiePet implements IEntityControllerPet {
-    private List<Entity> entities = new ArrayList<>();
+    private final List<Entity> entities = new ArrayList<>();
     private Entity displayEntity, displayRider = null;
-    private boolean moving = false;
+    private final boolean moving = false;
     
     public EntityControllerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
         super(type, world, pet);
@@ -56,7 +56,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         super.repeatTask();
         if (!this.isInvisible()) this.setInvisible(true);
         if (!isSilent()) this.setSilent(true);
-        if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() instanceof ShulkerDefault));
+        if (getPet() != null) if (isBaby()) setBaby((getPet().getPetType() instanceof ShulkerPet));
         Player p = getPet().getOwner();
         
         if (this.displayEntity != null) {
@@ -75,7 +75,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             }
         }
 
-        PetDefault type = getVisibleEntity().getPet().getPetType();
+        PetType type = getVisibleEntity().getPet().getPetType();
         double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
         double rideSpeed = type.getRideSpeed();
         double walkSpeed = type.getSpeed();

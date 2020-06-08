@@ -1,8 +1,8 @@
 package simplepets.brainsynder.player;
 
-import lib.brainsynder.nbt.JsonToNBT;
-import lib.brainsynder.nbt.NBTException;
-import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.json.Json;
+import lib.brainsynder.json.JsonArray;
+import lib.brainsynder.nbt.*;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -12,11 +12,15 @@ import org.json.simple.JSONValue;
 import org.json.simple.parser.ParseException;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.MySQL;
+import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.storage.files.PlayerStorage;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 
@@ -124,7 +128,9 @@ public class OwnerFile {
         boolean canSave = false;
         PlayerStorage file = PetCore.get().getPlayerStorage(p);
         if (!owner.getOwnedPets().isEmpty()) {
-            file.setJSONArray("PurchasedPets", owner.getOwnedPets());
+            StorageTagList list = new StorageTagList();
+            owner.getOwnedPets().forEach(pet -> list.appendTag(new StorageTagString(pet.getName())));
+            file.setTag("PurchasedPets", list);
             canSave = true;
         }
         if ((!savePet) && !owner.getSavedPetsArray().isEmpty()) {
@@ -190,6 +196,12 @@ public class OwnerFile {
                             if ((data.containsKey("UnlockedPets"))
                                     && (data.get("UnlockedPets") != null)
                                     && (!String.valueOf(data.get("UnlockedPets")).isEmpty())) {
+                                try {
+                                    StorageTagList list = JsonToNBT.parse("").toList();
+                                }catch (NBTException e){
+                                    //TODO
+                                }
+
                                 JSONArray array = (JSONArray) ((JSONObject) data.get("UnlockedPets")).get("StoredPets");
                                 owner.setRawOwned(array);
                             }
@@ -220,9 +232,26 @@ public class OwnerFile {
 
         PlayerStorage file = PetCore.get().getPlayerStorage(p);
         try {
-            owner.setRawOwned(file.getJSONArray("PurchasedPets"));
+            TypeManager manager = PetCore.get().getTypeManager();
+            List<PetType> types = new ArrayList<>();
+            if (file.getTag("PurchasedPets") instanceof StorageTagList) {
+                // Was saved as StorageTagList
+                StorageTagList stored = (StorageTagList) file.getTag("PurchasedPets");
+                stored.getList().forEach(base -> types.add(manager.getType(((StorageTagString)base).getString())));
+            }else{
+                // Was saved in the old format
+                String raw = file.getString("PurchasedPets");
+                String decoded = Base64Wrapper.decodeString(raw);
+                JsonArray array = (JsonArray) Json.parse(decoded);
+                array.values().forEach(jsonValue -> {
+                    String name = jsonValue.asString();
+                    types.add(manager.getType(name));
+                });
+            }
+
+            owner.setRawOwned(types);
         } catch (Exception e) {
-            owner.setRawOwned(new JSONArray());
+            owner.setRawOwned(new ArrayList<>());
         }
         if (file.hasKey("ItemStorage")) {
             JSONObject storage = file.getJSONObject("ItemStorage");

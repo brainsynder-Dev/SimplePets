@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.HorseStyleType;
 
@@ -14,10 +14,10 @@ import java.util.List;
 
 @ValueType(def = "NONE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/HorseStyleType.java")
 public class HorseStyle extends MenuItemAbstract {
-    public HorseStyle(PetDefault type, IEntityPet entityPet) {
+    public HorseStyle(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public HorseStyle(PetDefault type) {
+    public HorseStyle(PetType type) {
         super(type);
     }
 

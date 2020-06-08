@@ -1,8 +1,12 @@
 package simplepets.brainsynder.menu.inventory.list;
 
+import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
@@ -12,6 +16,7 @@ import simplepets.brainsynder.menu.holders.ArmorHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.Messages;
 
 import java.io.File;
 import java.util.*;
@@ -69,13 +74,56 @@ public class ArmorMenu extends CustomInventory {
         IEntityPet pet = owner.getPet().getVisableEntity();
 
         IEntityArmorStandPet stand = (IEntityArmorStandPet) pet;
-        inv.setItem(13, stand.getHeadItem());
-        inv.setItem(21, stand.getLeftArmItem());
-        inv.setItem(22, stand.getBodyItem());
-        inv.setItem(23, stand.getRightArmItem());
-        inv.setItem(31, stand.getLegItem());
-        inv.setItem(40, stand.getFootItem());
+
+        Messages messages = PetCore.get().getMessages();
+        inv.setItem(13, addLore(messages, stand.getHeadItem()));
+        inv.setItem(21, addLore(messages, stand.getLeftArmItem()));
+        inv.setItem(22, addLore(messages, stand.getBodyItem()));
+        inv.setItem(23, addLore(messages, stand.getRightArmItem()));
+        inv.setItem(31, addLore(messages, stand.getLegItem()));
+        inv.setItem(40, addLore(messages, stand.getFootItem()));
         player.openInventory(inv);
+    }
+
+    @Override
+    public void onClick(int slot, ItemStack item, Player player) {
+        PetOwner owner = PetOwner.getPetOwner(player);
+        if (!owner.hasPet()) return;
+        IEntityPet pet = owner.getPet().getVisableEntity();
+        if (!(pet instanceof IEntityArmorStandPet)) return;
+        IEntityArmorStandPet stand = (IEntityArmorStandPet) pet;
+        boolean update = false;
+
+        switch (slot) {
+            case 13:
+                stand.setHeadItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+            case 21:
+                stand.setLeftArmItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+            case 22:
+                stand.setBodyItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+            case 23:
+                stand.setRightArmItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+            case 31:
+                stand.setLegItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+            case 40:
+                stand.setFootItem(new ItemStack(Material.AIR));
+                update = true;
+                break;
+        }
+
+        // Only update the inventory if it is a armor slot
+        if (update) open(owner);
+
     }
 
     public void update(PetOwner owner) {
@@ -97,11 +145,25 @@ public class ArmorMenu extends CustomInventory {
 
         if (!(pet instanceof IEntityArmorStandPet)) return;
         IEntityArmorStandPet stand = (IEntityArmorStandPet) pet;
-        inv.setItem(13, stand.getHeadItem());
-        inv.setItem(21, stand.getLeftArmItem());
-        inv.setItem(22, stand.getBodyItem());
-        inv.setItem(23, stand.getRightArmItem());
-        inv.setItem(31, stand.getLegItem());
-        inv.setItem(40, stand.getFootItem());
+        Messages messages = PetCore.get().getMessages();
+        inv.setItem(13, addLore(messages, stand.getHeadItem()));
+        inv.setItem(21, addLore(messages, stand.getLeftArmItem()));
+        inv.setItem(22, addLore(messages, stand.getBodyItem()));
+        inv.setItem(23, addLore(messages, stand.getRightArmItem()));
+        inv.setItem(31, addLore(messages, stand.getLegItem()));
+        inv.setItem(40, addLore(messages, stand.getFootItem()));
+    }
+
+    private ItemStack addLore (Messages messages, ItemStack stack) {
+        Material material = stack.getType();
+        if (material == Material.AIR) return stack;
+        ItemBuilder builder = ItemBuilder.fromItem(stack);
+        List<String> lore = builder.getMetaValue(ItemMeta.class, ItemMeta::getLore);
+        if (lore == null) lore = new ArrayList<>();
+
+        List<String> addition = messages.getStringList("ArmorMenu.ClickToRemove");
+        lore.addAll(addition);
+
+        return builder.withLore(lore).build();
     }
 }

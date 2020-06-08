@@ -2,13 +2,13 @@ package simplepets.brainsynder.storage;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.inventory.ItemStack;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 public class PetTypeStorage {
-    private final PetDefault type;
+    private final PetType type;
     private ItemBuilder item;
 
-    public PetTypeStorage(PetDefault type) {
+    public PetTypeStorage(PetType type) {
         this.type = type;
         this.item = type.getItemBuilder();
     }
@@ -17,7 +17,7 @@ public class PetTypeStorage {
         return (type == storage.type) && (item.isSimilar(storage.item.build()));
     }
 
-    public PetDefault getType() {return this.type;}
+    public PetType getType() {return this.type;}
 
     public ItemStack getItem() {return this.item.build();}
 

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.storage.files;
 
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.storage.files.base.FileMaker;
 
 import java.util.Arrays;
@@ -24,12 +24,12 @@ public class EconomyFile extends FileMaker {
         setDefault("Pay-Per-Use.Lore-Lines", Collections.singletonList("&6Price: &e%cost%"));
         setDefault("Lore-Lines", Arrays.asList("&6Price: &e%cost%", "&6Purchased: &e%contains%"));
 
-        for (PetDefault type : PetCore.get().getTypeManager().getTypes()) {
+        for (PetType type : PetCore.get().getTypeManager().getTypes()) {
             setDefault("Pet." + type.getConfigName() + ".Price", 2000.0);
         }
     }
 
-    public double getPrice(PetDefault type) {
+    public double getPrice(PetType type) {
         if (isSet("Pet." + type.getConfigName() + ".Price"))
             return getDouble("Pet." + type.getConfigName() + ".Price");
         return -1;

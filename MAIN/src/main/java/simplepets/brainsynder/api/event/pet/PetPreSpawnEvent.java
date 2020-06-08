@@ -3,14 +3,14 @@ package simplepets.brainsynder.api.event.pet;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.event.SimplePetEvent;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 public class PetPreSpawnEvent extends SimplePetEvent {
-    private Player player;
-    private Location spawnLocation;
-    private PetDefault petType;
+    private final Player player;
+    private final Location spawnLocation;
+    private final PetType petType;
 
-    public PetPreSpawnEvent(Player player, Location spawnLocation, PetDefault type) {
+    public PetPreSpawnEvent(Player player, Location spawnLocation, PetType type) {
         super(PetEventType.PRE_SPAWN);
         this.player = player;
         this.spawnLocation = spawnLocation;
@@ -21,5 +21,5 @@ public class PetPreSpawnEvent extends SimplePetEvent {
 
     public Location getSpawnLocation() {return this.spawnLocation;}
 
-    public PetDefault getPetType() {return this.petType;}
+    public PetType getPetType() {return this.petType;}
 }

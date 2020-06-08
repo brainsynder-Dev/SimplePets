@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_15_R1.pathfinders;
 
+import lib.brainsynder.math.MathUtils;
 import net.minecraft.server.v1_15_R1.PathfinderGoal;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -7,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import simple.brainsynder.math.MathUtils;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;

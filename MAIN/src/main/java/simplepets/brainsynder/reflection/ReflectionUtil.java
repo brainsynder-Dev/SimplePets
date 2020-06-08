@@ -9,7 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -104,11 +104,11 @@ public class ReflectionUtil {
         return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
     }
 
-    public static JsonObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetDefault type) {
+    public static JsonObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetType type) {
         JsonObject a = new JsonObject();
         for (Class<? extends MenuItem> cl : c) {
             JsonArray as = new JsonArray();
-            MenuItem menuItem = initiateClass(fillConstructor(cl, PetDefault.class), type);
+            MenuItem menuItem = initiateClass(fillConstructor(cl, PetType.class), type);
             try {
                 for (Object object : menuItem.getDefaultItems()) {
                     as.add(StorageTagTools.toJsonObject(((ItemBuilder)object).toCompound()));
@@ -121,10 +121,10 @@ public class ReflectionUtil {
         return a;
     }
 
-    public static Map<String, MenuItem> getMenuItems (List<Class<? extends MenuItem>> c, PetDefault type) {
+    public static Map<String, MenuItem> getMenuItems (List<Class<? extends MenuItem>> c, PetType type) {
         Map<String, MenuItem> map = new HashMap<>();
         for (Class<? extends MenuItem> cl : c)
-            map.put(cl.getSimpleName().toLowerCase(), initiateClass(fillConstructor(cl, PetDefault.class), type));
+            map.put(cl.getSimpleName().toLowerCase(), initiateClass(fillConstructor(cl, PetType.class), type));
         return map;
     }
 

@@ -52,42 +52,21 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>lib.brainsynder</pattern>
+                                    <shadedPattern>simplepets.brainsynder.internal.bslib</shadedPattern>
+                                </relocation>
+                            </relocations>
                             <filters>
-                                <filter>
-                                    <artifact>simple.brainsynder:*</artifact>
-                                    <excludes>
-                                        <exclude>*.yml</exclude>
-                                    </excludes>
-                                </filter>
                                 <filter>
                                     <artifact>*:*</artifact>
                                     <includes>
-                                        <include>simple/brainsynder/api/**</include>
-                                        <include>simple/brainsynder/commands/annotations/**</include>
-                                        <include>simple/brainsynder/commands/*</include>
-                                        <include>simple/brainsynder/events/ActionMessageEvent.class</include>
-                                        <include>simple/brainsynder/events/SimpleApiEvent.class</include>
-                                        <include>simple/brainsynder/exceptions/SimpleAPIException.class</include>
-                                        <include>simple/brainsynder/files/*</include>
-                                        <include>simple/brainsynder/math/**</include>
-                                        <include>simple/brainsynder/nbt/**</include>
-                                        <include>simple/brainsynder/nms/**</include>
-                                        <include>simple/brainsynder/reflection/**</include>
-                                        <include>simple/brainsynder/sound/**</include>
-                                        <include>simple/brainsynder/storage/**</include>
-                                        <include>simple/brainsynder/utils/*</include>
-                                        <include>simple/brainsynder/wrappers/**</include>
                                         <include>simplepets/brainsynder/**</include>
                                         <include>plugin.yml</include>
                                     </includes>
                                 </filter>
                             </filters>
-                            <relocations>
-                                <relocation>
-                                    <pattern>simple.brainsynder</pattern>
-                                    <shadedPattern>simplepets.brainsynder.internal.simpleapi</shadedPattern>
-                                </relocation>
-                            </relocations>
                         </configuration>
                     </execution>
                 </executions>
@@ -101,22 +80,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>MAIN</artifactId>
             <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>v1_14_R1</artifactId>
             <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>v1_15_R1</artifactId>
             <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

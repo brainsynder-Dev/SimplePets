@@ -6,9 +6,9 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.pet.types.ArmorStandDefault;
-import simplepets.brainsynder.pet.types.PolarBearDefault;
+import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.pet.types.ArmorStandPet;
+import simplepets.brainsynder.pet.types.PolarBearPet;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -19,10 +19,10 @@ import java.util.List;
 public class Stand extends MenuItemAbstract {
 
 
-    public Stand(PetDefault type, IEntityPet entityPet) {
+    public Stand(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Stand(PetDefault type) {
+    public Stand(PetType type) {
         super(type);
     }
 
@@ -42,9 +42,9 @@ public class Stand extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         ItemBuilder item = new ItemBuilder(Material.ARMOR_STAND);
-        if (type instanceof ArmorStandDefault) {
+        if (type instanceof ArmorStandPet) {
             item.withName("&6Small: &e%value%");
-        } else if (type instanceof PolarBearDefault) {
+        } else if (type instanceof PolarBearPet) {
             item = new ItemBuilder(Material.IRON_LEGGINGS);
             item.withName("&6Standing: &e%value%");
         }

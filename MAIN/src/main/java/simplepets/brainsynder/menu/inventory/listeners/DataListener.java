@@ -1,6 +1,5 @@
 package simplepets.brainsynder.menu.inventory.listeners;
 
-import lib.brainsynder.storage.IStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -17,6 +16,9 @@ import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.Utilities;
+
+import java.util.List;
 
 public class DataListener implements Listener {
     @EventHandler
@@ -39,14 +41,15 @@ public class DataListener implements Listener {
                 item.onClick(owner, menu);
                 return;
             }
-            IStorage<MenuItem> menuItems = owner.getPet().getItems();
+            List<MenuItem> menuItems = owner.getPet().getItems();
             if (!menuItems.isEmpty()) {
-                while (menuItems.hasNext()) {
-                    MenuItemAbstract menuItem = (MenuItemAbstract) menuItems.next();
+                Utilities utilities = PetCore.get().getUtilities();
+                for (MenuItem itemAbstract : menuItems) {
+                    MenuItemAbstract menuItem = (MenuItemAbstract) itemAbstract;
                     PetDataChangeEvent.ClickType type = PetDataChangeEvent.ClickType.LEFT_CLICK;
                     if (e.getClick().toString().toLowerCase().contains("right"))
                         type = PetDataChangeEvent.ClickType.RIGHT_CLICK;
-                    if (menuItem.getItem().isSimilar(e.getCurrentItem())) {
+                    if (utilities.isSimilar(menuItem.getItem().build(), e.getCurrentItem())) {
                         PetDataChangeEvent event = new PetDataChangeEvent(menuItem, type);
                         Bukkit.getServer().getPluginManager().callEvent(event);
                         if (!event.isCancelled()) {

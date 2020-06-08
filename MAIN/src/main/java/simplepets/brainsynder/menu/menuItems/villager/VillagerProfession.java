@@ -7,7 +7,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.villager.VillagerData;
 import simplepets.brainsynder.wrapper.villager.VillagerType;
@@ -17,10 +17,10 @@ import java.util.List;
 
 @ValueType(def = "NONE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/villager/VillagerType.java")
 public class VillagerProfession extends MenuItemAbstract {
-    public VillagerProfession(PetDefault type, IEntityPet entityPet) {
+    public VillagerProfession(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public VillagerProfession(PetDefault type) {
+    public VillagerProfession(PetType type) {
         super(type);
     }
 

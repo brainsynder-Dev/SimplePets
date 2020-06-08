@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import simple.brainsynder.utils.Valid;
+import lib.brainsynder.utils.Valid;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.nms.anvil.AnvilClickEvent;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;

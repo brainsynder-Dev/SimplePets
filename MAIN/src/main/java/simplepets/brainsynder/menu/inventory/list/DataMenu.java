@@ -1,6 +1,5 @@
 package simplepets.brainsynder.menu.inventory.list;
 
-import lib.brainsynder.storage.IStorage;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -72,9 +71,8 @@ public class DataMenu extends CustomInventory {
 
         if (owner.hasPet()) {
             IPet pet = owner.getPet();
-            IStorage<MenuItem> items = pet.getItems().copy();
-            while (items.hasNext()) {
-                MenuItem item = items.next();
+            List<MenuItem> items = new ArrayList<>(pet.getItems());
+            for (MenuItem item : items) {
                 if (!item.isSupported()) continue;
                 try {
                     ItemStack stack = item.getItem().build();
@@ -110,9 +108,8 @@ public class DataMenu extends CustomInventory {
 
         if (owner.hasPet()) {
             IPet pet = owner.getPet();
-            IStorage<MenuItem> items = pet.getItems().copy();
-            while (items.hasNext()) {
-                MenuItem item = items.next();
+            List<MenuItem> items = new ArrayList<>(pet.getItems());
+            for (MenuItem item : items) {
                 try {
                     ItemStack stack = item.getItem().build();
                     if (!inv.contains(stack)) {

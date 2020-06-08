@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitchPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @ValueType(type = "boolean", def = "false")
 public class Potion extends MenuItemAbstract {
-    public Potion(PetDefault type, IEntityPet entityPet) {
+    public Potion(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Potion(PetDefault type) {
+    public Potion(PetType type) {
         super(type);
     }
 

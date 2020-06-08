@@ -4,7 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @ValueType(type = "boolean", def = "false")
 public class Silent extends MenuItemAbstract {
-    public Silent(PetDefault type, IEntityPet entityPet) {
+    public Silent(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Silent(PetDefault type) {
+    public Silent(PetType type) {
         super(type);
     }
 

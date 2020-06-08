@@ -15,7 +15,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IFlyablePet;
-import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.player.PetOwner;
@@ -348,7 +347,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         if (passengers == null) {
             this.H = (float) 0.5;
             this.aM = (float) 0.02;
-            super.a(vec3D);
+            super.e(vec3D);
         } else {
             if (this.pet == null) {
                 this.H = (float) 0.5;
@@ -378,22 +377,24 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             }
             this.yaw = owner.yaw;
             this.lastYaw = this.yaw;
-            this.pitch = (float) (owner.pitch * 0.5);
+            this.pitch = owner.pitch * 0.5F;
             this.setYawPitch(this.yaw, this.pitch);
-            this.aL = this.aD = this.yaw;
-            this.H = 1.0F;
-            strafe = (float) (owner.aZ * 0.5);
+            this.aI = this.yaw;
+            this.aK = this.aI;
+            strafe = owner.aZ * 0.5F;
             forward = owner.bb;
-            if (forward <= 0.0) {
-                forward *= 0.25;
+            if (forward <= 0.0F) {
+                forward *= 0.25F;
             }
+            //this.aL = this.aD = this.yaw;
+            //this.H = 1.0F;
 
             Vec3D vec = new Vec3D(strafe, vertical, forward);
             //if (!(this instanceof IEntityHorsePet)) vec3D.vec3D.x *= 0.75;
             this.o((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             super.e(vec);
             if (!world.isClientSide) {
-                if (this instanceof IEntityHorsePet) {
+//                if (this instanceof IEntityHorsePet) {
                     Location location = getBukkitEntity().getLocation();
                     setPosition(location.getX(), location.getY(), location.getZ());
                     PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
@@ -403,6 +404,15 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                         float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
                         setMot(getMot().add( (-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0) )); // This would be 0 anyways?
                     }
+
+                    this.aM = this.dt() * 0.1F;
+                    if (this.cj()) {
+                        this.o((float)this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+                        super.e(new Vec3D(strafe, vertical, forward));
+                    } else if (owner instanceof EntityHuman) {
+                        this.setMot(Vec3D.a);
+                    }
+
                     this.aC = this.aD; // this.prevLimbSwingAmount = this.limbSwingAmount;
                     double d0 = this.locX() - this.lastX;
                     double d1 = this.locZ() - this.lastZ;
@@ -413,7 +423,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
                     this.aD += (f5 - this.aD) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
                     this.aE += this.aD; // this.limbSwing += this.limbSwingAmount;
-                }
+//                }
             }
             CraftEntity bukkitEntity = getBukkitEntity();
             if (pet == null) {

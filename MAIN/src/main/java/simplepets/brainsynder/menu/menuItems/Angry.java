@@ -4,7 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.List;
 @ValueType(type = "boolean", def = "false")
 public class Angry extends MenuItemAbstract {
 
-    public Angry(PetDefault type, IEntityPet entityPet) {
+    public Angry(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Angry(PetDefault type) {
+    public Angry(PetType type) {
         super(type);
     }
 

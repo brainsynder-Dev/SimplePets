@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @ValueType(type = "boolean", def = "false")
 public class Shaking extends MenuItemAbstract {
-    public Shaking(PetDefault type, IEntityPet entityPet) {
+    public Shaking(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Shaking(PetDefault type) {
+    public Shaking(PetType type) {
         super(type);
     }
 

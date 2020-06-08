@@ -1,24 +1,26 @@
 package simplepets.brainsynder.menu.menuItems.fox;
 
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SupportedVersion(version = ServerVersion.v1_14_R1)
 @ValueType(type = "boolean", def = "false")
 public class FoxSleep extends MenuItemAbstract<IEntityFoxPet> {
 
-    public FoxSleep(PetDefault type, IEntityPet entityPet) {
+    public FoxSleep(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public FoxSleep(PetDefault type) {
+    public FoxSleep(PetType type) {
         super(type);
     }
 

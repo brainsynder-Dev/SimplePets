@@ -4,7 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityLlamaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -12,10 +12,10 @@ import java.util.List;
 
 @ValueType(def = "CREAMY", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/LlamaColor.java")
 public class LlamaColor extends MenuItemAbstract {
-    public LlamaColor(PetDefault type, IEntityPet entityPet) {
+    public LlamaColor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public LlamaColor(PetDefault type) {
+    public LlamaColor(PetType type) {
         super(type);
     }
 

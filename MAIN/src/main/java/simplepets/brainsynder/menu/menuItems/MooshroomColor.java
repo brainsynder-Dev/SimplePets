@@ -6,7 +6,7 @@ import org.apache.commons.lang.WordUtils;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityMooshroomPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.MooshroomType;
 
@@ -16,10 +16,10 @@ import java.util.List;
 @ValueType(def = "RED", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/MooshroomType.java")
 public class MooshroomColor extends MenuItemAbstract<IEntityMooshroomPet> {
 
-    public MooshroomColor(PetDefault type, IEntityPet entityPet) {
+    public MooshroomColor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public MooshroomColor(PetDefault type) {
+    public MooshroomColor(PetType type) {
         super(type);
     }
 

@@ -12,78 +12,78 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 
 public class TypeManager {
-    private LinkedList<PetDefault> sortedItems;
-    private LinkedHashMap<String, PetDefault> items;
+    private LinkedList<PetType> sortedItems;
+    private LinkedHashMap<String, PetType> items;
 
     public TypeManager (PetCore plugin) {
         items = new LinkedHashMap<>();
         sortedItems = new LinkedList<> ();
 
-        register(new ArmorStandDefault(plugin));
-        register(new BatDefault(plugin));
-        register(new BeeDefault(plugin));
-        register(new BlazeDefault(plugin));
-        register(new CatDefault(plugin));
-        register(new CaveSpiderDefault(plugin));
-        register(new ChickenDefault(plugin));
-        register(new CodDefault(plugin));
-        register(new CowDefault(plugin));
-        register(new CreeperDefault(plugin));
-        register(new DrownedDefault(plugin));
-        register(new DolphinDefault(plugin));
-        register(new DonkeyDefault(plugin));
-        register(new ElderGuardianDefault(plugin));
-        register(new EndermanDefault(plugin));
-        register(new EndermiteDefault(plugin));
-        register(new EvokerDefault(plugin));
-        register(new FoxDefault(plugin));
-        register(new GhastDefault(plugin));
-        register(new GiantDefault(plugin));
-        register(new GuardianDefault(plugin));
-        register(new HorseDefault(plugin));
-        register(new HuskDefault(plugin));
-        register(new IllusionerDefault(plugin));
-        register(new IronGolemDefault(plugin));
-        register(new LlamaDefault(plugin));
-        register(new MagmaCubeDefault(plugin));
-        register(new MooshroomDefault(plugin));
-        register(new MuleDefault(plugin));
-        register(new OcelotDefault(plugin));
-        register(new PandaDefault(plugin));
-        register(new ParrotDefault(plugin));
-        register(new PhantomDefault(plugin));
-        register(new PigDefault(plugin));
-        register(new PigmanDefault(plugin));
-        register(new PillagerDefault(plugin));
-        register(new PolarBearDefault(plugin));
-        register(new PufferFishDefault(plugin));
-        register(new RabbitDefault(plugin));
-        register(new RavagerDefault(plugin));
-        register(new SalmonDefault(plugin));
-        register(new SheepDefault(plugin));
-        register(new ShulkerDefault(plugin));
-        register(new SilverfishDefault(plugin));
-        register(new SkeletonDefault(plugin));
-        register(new SkeletonHorseDefault(plugin));
-        register(new SlimeDefault(plugin));
-        register(new SnowmanDefault(plugin));
-        register(new SpiderDefault(plugin));
-        register(new SquidDefault(plugin));
-        register(new StrayDefault(plugin));
-        register(new TraderLlamaDefault(plugin));
-        register(new TropicalFishDefault (plugin));
-        register(new TurtleDefault (plugin));
-        register(new VexDefault(plugin));
-        register(new VillagerDefault(plugin));
-        register(new VindicatorDefault(plugin));
-        register(new WanderingTraderDefault(plugin));
-        register(new WitchDefault(plugin));
-        register(new WitherDefault(plugin));
-        register(new WitherSkeletonDefault(plugin));
-        register(new WolfDefault(plugin));
-        register(new ZombieDefault(plugin));
-        register(new ZombieHorseDefault(plugin));
-        register(new ZombieVillagerDefault(plugin));
+        register(new ArmorStandPet(plugin));
+        register(new BatPet(plugin));
+        register(new BeePet(plugin));
+        register(new BlazePet(plugin));
+        register(new CatPet(plugin));
+        register(new CaveSpiderPet(plugin));
+        register(new ChickenPet(plugin));
+        register(new CodPet(plugin));
+        register(new CowPet(plugin));
+        register(new CreeperPet(plugin));
+        register(new DrownedPet(plugin));
+        register(new DolphinPet(plugin));
+        register(new DonkeyPet(plugin));
+        register(new ElderGuardianPet(plugin));
+        register(new EndermanPet(plugin));
+        register(new EndermitePet(plugin));
+        register(new EvokerPet(plugin));
+        register(new FoxPet(plugin));
+        register(new GhastPet(plugin));
+        register(new GiantPet(plugin));
+        register(new GuardianPet(plugin));
+        register(new HorsePet(plugin));
+        register(new HuskPet(plugin));
+        register(new IllusionerPet(plugin));
+        register(new IronGolemPet(plugin));
+        register(new LlamaPet(plugin));
+        register(new MagmaCubePet(plugin));
+        register(new MooshroomPet(plugin));
+        register(new MulePet(plugin));
+        register(new OcelotPet(plugin));
+        register(new PandaPet(plugin));
+        register(new ParrotPet(plugin));
+        register(new PhantomPet(plugin));
+        register(new PigPet(plugin));
+        register(new PigmanPet(plugin));
+        register(new PillagerPet(plugin));
+        register(new PolarBearPet(plugin));
+        register(new PufferFishPet(plugin));
+        register(new RabbitPet(plugin));
+        register(new RavagerPet(plugin));
+        register(new SalmonPet(plugin));
+        register(new SheepPet(plugin));
+        register(new ShulkerPet(plugin));
+        register(new SilverfishPet(plugin));
+        register(new SkeletonPet(plugin));
+        register(new SkeletonHorsePet(plugin));
+        register(new SlimePet(plugin));
+        register(new SnowmanPet(plugin));
+        register(new SpiderPet(plugin));
+        register(new SquidPet(plugin));
+        register(new StrayPet(plugin));
+        register(new TraderLlamaPet(plugin));
+        register(new TropicalFishPet(plugin));
+        register(new TurtlePet(plugin));
+        register(new VexPet(plugin));
+        register(new VillagerPet(plugin));
+        register(new VindicatorPet(plugin));
+        register(new WanderingTraderPet(plugin));
+        register(new WitchPet(plugin));
+        register(new WitherPet(plugin));
+        register(new WitherSkeletonPet(plugin));
+        register(new WolfPet(plugin));
+        register(new ZombiePet(plugin));
+        register(new ZombieHorsePet(plugin));
+        register(new ZombieVillagerPet(plugin));
 
         Collection<String> sortKeys = new TreeSet<>(Collator.getInstance());
         items.values().forEach(data -> sortKeys.add(data.getString("sort_key")));
@@ -97,7 +97,7 @@ public class TypeManager {
         sortedItems = null;
     }
 
-    private void register (PetDefault item) {
+    private void register (PetType item) {
         if (!item.isSupported()) return;
         item.setDefault("sort_key", item.getConfigName());
         item.setDefault("sound", item.getDefaultSound().name());
@@ -110,25 +110,25 @@ public class TypeManager {
         items.put(item.getConfigName(), item);
     }
 
-    public PetDefault getType(ItemStack itemstack) {
-        for (PetDefault item : items.values()) {
+    public PetType getType(ItemStack itemstack) {
+        for (PetType item : items.values()) {
             if (item.getItemBuilder().isSimilar(itemstack)) return item;
         }
         return null;
     }
 
-    private PetDefault fromSortKey(String key) {
-        for (PetDefault item : items.values()) {
+    private PetType fromSortKey(String key) {
+        for (PetType item : items.values()) {
             if (item.getString("sort_key").equals(key)) return item;
         }
         return null;
     }
 
-    public PetDefault getType(String name) {
+    public PetType getType(String name) {
         return items.getOrDefault(name, null);
     }
 
-    public Collection<PetDefault> getTypes () {
+    public Collection<PetType> getTypes () {
         return sortedItems;
     }
 }

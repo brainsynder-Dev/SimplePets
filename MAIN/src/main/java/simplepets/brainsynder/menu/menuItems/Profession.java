@@ -7,7 +7,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
@@ -16,10 +16,10 @@ import java.util.List;
 
 @ValueType(def = "FARMER", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/ProfessionWrapper.java")
 public class Profession extends MenuItemAbstract {
-    public Profession(PetDefault type, IEntityPet entityPet) {
+    public Profession(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Profession(PetDefault type) {
+    public Profession(PetType type) {
         super(type);
     }
 

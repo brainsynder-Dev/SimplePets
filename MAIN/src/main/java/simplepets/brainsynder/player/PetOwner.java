@@ -30,17 +30,16 @@ import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
-import simplepets.brainsynder.pet.PetDefault;
-import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.pet.PetType;
 
 import java.util.*;
 
 public class PetOwner {
     private static final Map<UUID, PetOwner> ownerMap = new HashMap<>();
     /**
-     * JSONArray contains all the pets the player has owned while Vault was Enabled.
+     * List contains all the pets the player has owned while Vault was Enabled.
      */
-    private JSONArray ownedPets = new JSONArray();
+    private List<PetType> ownedPets;
     /**
      * Players Pet name, Will return null if empty.
      */
@@ -68,6 +67,7 @@ public class PetOwner {
 
     private PetOwner(Player player) {
         Validate.notNull(player, "Player can not be null");
+        ownedPets = new ArrayList<>();
         this.player = player;
         uuid = player.getUniqueId();
         reloadData();
@@ -126,7 +126,7 @@ public class PetOwner {
         this.petName = name;
     }
 
-    void setRawOwned(JSONArray ownedPets) {
+    void setRawOwned(List<PetType> ownedPets) {
         this.ownedPets = ownedPets;
     }
 
@@ -254,9 +254,14 @@ public class PetOwner {
         return (pet != null);
     }
 
-    public void addPurchasedPet(String petName) {
-        if (!ownedPets.contains(petName))
-            ownedPets.add(petName);
+    public void addPurchasedPet(String name) {
+        PetType pet = PetCore.get().getTypeManager().getType(petName);
+        addPurchasedPet(pet);
+    }
+
+    public void addPurchasedPet(PetType pet) {
+        if (!ownedPets.contains(pet))
+            ownedPets.add(pet);
     }
 
     /**
@@ -366,7 +371,7 @@ public class PetOwner {
         if (!hasPetToRespawn()) return;
         if (!petToRespawn.hasKey("PetType")) return;
 
-        PetDefault type = PetCore.get().getTypeManager().getType(petToRespawn.getString("PetType"));
+        PetType type = PetCore.get().getTypeManager().getType(petToRespawn.getString("PetType"));
         type.setPet(player);
 
         new BukkitRunnable() {
@@ -386,7 +391,7 @@ public class PetOwner {
             removePet();
         }
 
-        PetDefault type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
+        PetType type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
         type.setPet(player);
 
         new BukkitRunnable() {
@@ -417,19 +422,7 @@ public class PetOwner {
         maker.sendToLocation(location);
     }
 
-    public List<PetDefault> getOwnedPetList () {
-        List<PetDefault> list = new ArrayList<>();
-        if (!ownedPets.isEmpty()) {
-            TypeManager manager = PetCore.get().getTypeManager();
-            ownedPets.forEach(o -> {
-                PetDefault type = manager.getType(String.valueOf(o));
-                if (type != null) list.add(type);
-            });
-        }
-        return list;
-    }
-
-    public JSONArray getOwnedPets() {
+    public List<PetType> getOwnedPets() {
         return this.ownedPets;
     }
 

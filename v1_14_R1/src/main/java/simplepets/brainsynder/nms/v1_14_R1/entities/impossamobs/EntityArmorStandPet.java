@@ -2,6 +2,8 @@ package simplepets.brainsynder.nms.v1_14_R1.entities.impossamobs;
 
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.web.PlayerData;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,8 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.WebAPI;
-import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -242,7 +242,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
             getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
             getEntity().setBoots(new ItemBuilder(Material.GOLDEN_BOOTS).build());
-            WebAPI.findTexture(getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
+            PlayerData.findTexture(PlayerData.Value.DECODED, getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
                 builder.setTexture(texture);
                 if (isOwner()) getEntity().setHelmet(builder.build());
             });

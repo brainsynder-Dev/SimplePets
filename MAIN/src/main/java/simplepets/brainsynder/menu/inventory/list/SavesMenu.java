@@ -14,7 +14,7 @@ import simplepets.brainsynder.menu.holders.SavesHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.list.Air;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 
 import java.io.File;
@@ -102,7 +102,7 @@ public class SavesMenu extends CustomInventory {
         if (!pages.isEmpty()) {
             pages.getPage(page).forEach(compound -> {
 
-                PetDefault type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
+                PetType type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
                 if (type != null) {
                     ItemStack stack;
                     if (storageMap.containsKey(compound)) {

@@ -1,18 +1,19 @@
 package simplepets.brainsynder.api.pet;
 
-import lib.brainsynder.storage.IStorage;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.wrapper.EntityWrapper;
+
+import java.util.List;
 
 public interface IPet {
     Player getOwner();
 
     void removePet(boolean var1);
 
-    PetDefault getPetType();
+    PetType getPetType();
 
     EntityWrapper getEntityType();
 
@@ -20,7 +21,7 @@ public interface IPet {
 
     IEntityPet getVisableEntity();
 
-    IStorage<MenuItem> getItems();
+    List<MenuItem> getItems();
 
     boolean isHat();
 

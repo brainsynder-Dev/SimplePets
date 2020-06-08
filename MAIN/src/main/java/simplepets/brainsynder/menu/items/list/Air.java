@@ -14,7 +14,6 @@ public class Air extends Item {
     @Override
     public void loadDefaults() {
         defaults.add("_COMMENT_", "This not editable simply because you can not modify air :P");
-        super.loadDefaults();
     }
 
     @Override
@@ -25,5 +24,10 @@ public class Air extends Item {
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder(Material.AIR);
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

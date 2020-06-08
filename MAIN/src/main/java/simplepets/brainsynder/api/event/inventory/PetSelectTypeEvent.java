@@ -2,20 +2,20 @@ package simplepets.brainsynder.api.event.inventory;
 
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 public class PetSelectTypeEvent extends CancellablePetEvent {
 
-    private PetDefault petType;
-    private Player player;
+    private final PetType petType;
+    private final Player player;
 
-    public PetSelectTypeEvent(PetEventType eventType, PetDefault type, Player player) {
+    public PetSelectTypeEvent(PetEventType eventType, PetType type, Player player) {
         super(eventType);
         this.petType = type;
         this.player = player;
     }
 
-    public PetDefault getPetType() {return this.petType;}
+    public PetType getPetType() {return this.petType;}
 
     public Player getPlayer() {return this.player;}
 }

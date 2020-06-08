@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -15,11 +15,11 @@ import java.util.List;
 @ValueType(type = "boolean", def = "false")
 public class Johnny extends MenuItemAbstract {
 
-    public Johnny(PetDefault type) {
+    public Johnny(PetType type) {
         super(type);
     }
 
-    public Johnny(PetDefault type, IEntityPet entityPet) {
+    public Johnny(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 

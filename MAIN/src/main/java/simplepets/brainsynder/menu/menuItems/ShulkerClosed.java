@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import java.util.List;
 @ValueType(type = "boolean", def = "true")
 public class ShulkerClosed extends MenuItemAbstract {
 
-    public ShulkerClosed(PetDefault type, IEntityPet entityPet) {
+    public ShulkerClosed(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public ShulkerClosed(PetDefault type) {
+    public ShulkerClosed(PetType type) {
         super(type);
     }
 

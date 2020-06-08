@@ -4,7 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.HorseColorType;
 
@@ -13,10 +13,10 @@ import java.util.List;
 
 @ValueType(def = "WHITE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/HorseColorType.java")
 public class HorseColor extends MenuItemAbstract {
-    public HorseColor(PetDefault type, IEntityPet entityPet) {
+    public HorseColor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public HorseColor(PetDefault type) {
+    public HorseColor(PetType type) {
         super(type);
     }
 

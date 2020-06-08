@@ -2,6 +2,8 @@ package simplepets.brainsynder.nms.v1_15_R1.entities.impossamobs;
 
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.web.PlayerData;
 import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,8 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.EulerAngle;
-import simple.brainsynder.api.WebAPI;
-import simple.brainsynder.utils.Base64Wrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -36,7 +36,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private AnimationCycle walking = null;
     private AnimationCycle arm_swing = null;
     protected FieldAccessor<Boolean> fieldAccessor;
-    private ItemStack head, body, legs, boots, left_arm, right_arm;
 
     public EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
         super(entitytypes, world);
@@ -47,12 +46,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         this.pet = pet;
         pet.setIgnoreVanish(true);
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
-        head = new ItemStack(Material.AIR);
-        body = new ItemStack(Material.AIR);
-        legs = new ItemStack(Material.AIR);
-        boots = new ItemStack(Material.AIR);
-        left_arm = new ItemStack(Material.AIR);
-        right_arm = new ItemStack(Material.AIR);
     }
 
     public static ArmorStand spawn(Location location, EntityControllerPet pet) {
@@ -201,12 +194,12 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         if (isInvisible()) object.setBoolean("invisible", isInvisible());
 
         StorageTagCompound items = new StorageTagCompound();
-        if (head != null) items.setString("head", parseItem(head));
-        if (body != null) items.setString("body", parseItem(body));
-        if (legs != null) items.setString("legs", parseItem(legs));
-        if (boots != null) items.setString("boots", parseItem(boots));
-        if (left_arm != null) items.setString("left_arm", parseItem(left_arm));
-        if (right_arm != null) items.setString("right_arm", parseItem(right_arm));
+        if (getHeadItem() != null) items.setString("head", parseItem(getHeadItem()));
+        if (getBodyItem() != null) items.setString("body", parseItem(getBodyItem()));
+        if (getLegItem() != null) items.setString("legs", parseItem(getLegItem()));
+        if (getFootItem() != null) items.setString("boots", parseItem(getFootItem()));
+        if (getLeftArmItem() != null) items.setString("left_arm", parseItem(getLeftArmItem()));
+        if (getRightArmItem() != null) items.setString("right_arm", parseItem(getRightArmItem()));
         if (!items.hasNoTags()) object.setTag("items", items);
 
         return object;
@@ -242,7 +235,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
             getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
             getEntity().setBoots(new ItemBuilder(Material.GOLDEN_BOOTS).build());
-            WebAPI.findTexture(getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
+            PlayerData.findTexture(PlayerData.Value.DECODED, getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
                 builder.setTexture(texture);
                 if (isOwner()) getEntity().setHelmet(builder.build());
             });
@@ -269,58 +262,52 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     @Override
     public void setHeadItem(ItemStack item) {
-        this.head = item;
-        getEntity().getEquipment().setHelmet((item));
+        setSlot(EnumItemSlot.HEAD, item);
     }
     @Override
     public void setBodyItem(ItemStack item) {
-        this.body = item;
-        getEntity().getEquipment().setChestplate((item));
+        setSlot(EnumItemSlot.CHEST, item);
     }
     @Override
     public void setLegItem(ItemStack item) {
-        this.legs = item;
-        getEntity().getEquipment().setLeggings((item));
+        setSlot(EnumItemSlot.LEGS, item);
     }
     @Override
     public void setFootItem(ItemStack item) {
-        this.boots = item;
-        getEntity().getEquipment().setBoots((item));
+        setSlot(EnumItemSlot.FEET, item);
     }
     @Override
     public void setLeftArmItem(ItemStack item) {
-        this.left_arm = item;
-        getEntity().getEquipment().setItemInOffHand((item));
+        setSlot(EnumItemSlot.OFFHAND, item);
     }
     @Override
     public void setRightArmItem(ItemStack item) {
-        this.right_arm = item;
-        getEntity().getEquipment().setItemInMainHand((item));
+        setSlot(EnumItemSlot.MAINHAND, item);
     }
 
     @Override
     public ItemStack getHeadItem() {
-        return head;
+        return getItems(EnumItemSlot.HEAD);
     }
     @Override
     public ItemStack getBodyItem() {
-        return body;
+        return getItems(EnumItemSlot.CHEST);
     }
     @Override
     public ItemStack getLegItem() {
-        return legs;
+        return getItems(EnumItemSlot.LEGS);
     }
     @Override
     public ItemStack getFootItem() {
-        return boots;
+        return getItems(EnumItemSlot.FEET);
     }
     @Override
     public ItemStack getLeftArmItem() {
-        return left_arm;
+        return getItems(EnumItemSlot.OFFHAND);
     }
     @Override
     public ItemStack getRightArmItem() {
-        return right_arm;
+        return getItems(EnumItemSlot.MAINHAND);
     }
 
     public void setSpecial(boolean isSpecial) {this.isSpecial = isSpecial; }

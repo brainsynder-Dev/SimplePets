@@ -9,7 +9,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
 import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.commands.sub.*;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
 
@@ -48,7 +48,7 @@ public class PetCommand extends ParentCommand<PetSubCommand> {
                     PetCore.get().getInvLoaders().SELECTION.open(PetOwner.getPetOwner(p));
                 } else {
                     TypeManager manager = PetCore.get().getTypeManager();
-                    PetDefault type = manager.getType(args[0]);
+                    PetType type = manager.getType(args[0]);
 
                     if (type == null) {
                         sender.sendMessage(PetCore.get().getMessages().getString("Invalid-PetType", true));

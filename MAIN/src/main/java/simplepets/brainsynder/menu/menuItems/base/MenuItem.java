@@ -5,21 +5,21 @@ import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.MIRename;
 
 import java.util.List;
 
 public abstract class MenuItem<E extends IEntityPet> implements VersionRestricted {
     protected E entityPet = null;
-    protected PetDefault type;
+    protected PetType type;
 
-    MenuItem(PetDefault type, E entityPet) {
+    MenuItem(PetType type, E entityPet) {
         this.entityPet = entityPet;
         this.type = type;
     }
 
-    MenuItem(PetDefault type) {
+    MenuItem(PetType type) {
         this.type = type;
     }
 

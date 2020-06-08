@@ -27,7 +27,9 @@ public class ArmorListener implements Listener {
                 e.setCancelled(true);
                 e.setResult(Event.Result.DENY);
                 item.onClick(owner, menu);
+                return;
             }
+            menu.onClick(e.getRawSlot(), e.getCurrentItem(), p);
         }
     }
 
@@ -36,7 +38,7 @@ public class ArmorListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof ArmorHolder)) return;
         ArmorMenu menu = PetCore.get().getInvLoaders().ARMOR;
-        PetCore.get().getItemLoaders().getLoader("update").onClick(PetOwner.getPetOwner((Player) e.getPlayer()), menu);
+        //PetCore.get().getItemLoaders().getLoader("update").onClick(PetOwner.getPetOwner((Player) e.getPlayer()), menu);
         menu.reset(PetOwner.getPetOwner((Player) e.getPlayer()));
     }
 }

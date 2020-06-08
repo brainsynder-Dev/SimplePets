@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.annotations.Permission;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +44,7 @@ public class PetSubCommand extends SubCommand {
 
     public List<String> getPetTypes () {
         List<String> list = new ArrayList<>();
-        for (PetDefault type : PetCore.get().getTypeManager().getTypes()) {
+        for (PetType type : PetCore.get().getTypeManager().getTypes()) {
             if (!type.isEnabled()) continue;
             if (!type.isSupported()) continue;
             list.add(type.getConfigName());

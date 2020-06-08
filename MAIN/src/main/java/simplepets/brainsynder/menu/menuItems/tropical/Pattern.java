@@ -7,7 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.TropicalPattern;
 
@@ -16,11 +16,11 @@ import java.util.List;
 
 @ValueType(def = "KOB", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/TropicalPattern.java")
 public class Pattern extends MenuItemAbstract {
-    public Pattern(PetDefault type, IEntityPet entityPet) {
+    public Pattern(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
 
-    public Pattern(PetDefault type) {
+    public Pattern(PetType type) {
         super(type);
     }
 

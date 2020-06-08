@@ -24,7 +24,7 @@ import simplepets.brainsynder.menu.inventory.listeners.SavesListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
 import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.*;
@@ -365,7 +365,7 @@ public class PetCore extends JavaPlugin {
         return commands;
     }
 
-    public String getDefaultPetName(PetDefault petType, Player player) {
+    public String getDefaultPetName(PetType petType, Player player) {
         return translateName(petType.getDefaultName()).replace("%player%", player.getName());
     }
 

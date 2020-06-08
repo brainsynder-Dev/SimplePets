@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.storage.files.Commands;
 
@@ -41,7 +41,7 @@ public class List_SubCommand extends PetSubCommand {
         int i = 1;
         StringBuilder builder = new StringBuilder();
         Tellraw tellraw = Tellraw.getInstance("");
-        for (PetDefault type : manager.getTypes()) {
+        for (PetType type : manager.getTypes()) {
             tellraw.then(type.getConfigName());
             if (type.isSupported()) {
                 builder.append(type.getConfigName());

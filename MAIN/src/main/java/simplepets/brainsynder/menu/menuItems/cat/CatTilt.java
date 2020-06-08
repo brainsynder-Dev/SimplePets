@@ -1,22 +1,25 @@
 package simplepets.brainsynder.menu.menuItems.cat;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SupportedVersion(version = ServerVersion.v1_14_R1)
 @ValueType(type = "boolean", def = "false")
 public class CatTilt extends MenuItemAbstract<IEntityCatPet> {
 
-    public CatTilt(PetDefault type, IEntityPet entityPet) {
+    public CatTilt(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public CatTilt(PetDefault type) {
+    public CatTilt(PetType type) {
         super(type);
     }
 

@@ -7,7 +7,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
@@ -16,10 +16,10 @@ import java.util.List;
 
 @ValueType(def = "WHITE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/DyeColorWrapper.java")
 public class PatternColor extends MenuItemAbstract {
-    public PatternColor(PetDefault type, IEntityPet entityPet) {
+    public PatternColor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public PatternColor(PetDefault type) {
+    public PatternColor(PetType type) {
         super(type);
     }
 

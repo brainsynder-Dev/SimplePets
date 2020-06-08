@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -16,10 +16,10 @@ import java.util.List;
 public class Hang extends MenuItemAbstract {
 
 
-    public Hang(PetDefault type, IEntityPet entityPet) {
+    public Hang(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Hang(PetDefault type) {
+    public Hang(PetType type) {
         super(type);
     }
 

@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.v1_14_R1.utils;
 
+import lib.brainsynder.reflection.Reflection;
 import net.minecraft.server.v1_14_R1.*;
-import simple.brainsynder.utils.Reflection;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 import simplepets.brainsynder.wrapper.villager.BiomeType;
 
@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EntityUtils {
-    private static Map<BiomeType, VillagerType> stored = new HashMap<>();
-    private static Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
+    private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
+    private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
 
     public static EntityTypes<?> getType (EntityWrapper wrapper) {
         return IRegistry.ENTITY_TYPE.get(new MinecraftKey(wrapper.getTypeName()));

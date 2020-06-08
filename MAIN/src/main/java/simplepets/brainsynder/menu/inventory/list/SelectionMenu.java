@@ -15,7 +15,7 @@ import simplepets.brainsynder.menu.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.menu.items.list.Air;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetMap;
 import simplepets.brainsynder.storage.PetTypeStorage;
@@ -24,7 +24,7 @@ import java.io.File;
 import java.util.*;
 
 public class SelectionMenu extends CustomInventory {
-    private List<PetDefault> availableTypes;
+    private List<PetType> availableTypes;
     private Map<String, ListPager<PetTypeStorage>> pagerMap;
     private PetMap<String, IStorage<PetTypeStorage>> petMap;
 
@@ -71,7 +71,7 @@ public class SelectionMenu extends CustomInventory {
 
         defaults.put("slots", array);
 
-        for (PetDefault type : PetCore.get().getTypeManager().getTypes()) {
+        for (PetType type : PetCore.get().getTypeManager().getTypes()) {
             if (type.isSupported() && type.isEnabled()) {
                 availableTypes.add(type);
             }
@@ -103,7 +103,7 @@ public class SelectionMenu extends CustomInventory {
 
         boolean removeNoPerms = PetCore.get().getConfiguration().getBoolean("Remove-Item-If-No-Permission");
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
-        for (PetDefault type : availableTypes) {
+        for (PetType type : availableTypes) {
             if (type.hasPermission(player)) {
                 petTypes.add(new PetTypeStorage(type));
             } else {

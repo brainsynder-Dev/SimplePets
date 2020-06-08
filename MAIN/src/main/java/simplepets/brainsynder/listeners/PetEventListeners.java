@@ -8,13 +8,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONArray;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.links.IVaultLink;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
 import simplepets.brainsynder.storage.files.EconomyFile;
@@ -40,8 +39,8 @@ public class PetEventListeners implements Listener {
             if (!vault.isHooked()) return;
 
             PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
-            JSONArray petArray = petOwner.getOwnedPets();
-            if (petArray.contains(event.getPetType().getConfigName())) return;
+            List<PetType> petArray = petOwner.getOwnedPets();
+            if (petArray.contains(event.getPetType())) return;
 
             double bal = vault.getBalance(event.getPlayer());
             if (bal < price) {
@@ -69,12 +68,12 @@ public class PetEventListeners implements Listener {
         IStorage<ItemStack> items = new StorageList<>();
         IStorage<PetTypeStorage> types = event.getShownPetTypes().copy();
         PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
-        JSONArray petArray = petOwner.getOwnedPets();
+        List<PetType> petArray = petOwner.getOwnedPets();
         List<String> lore = economyFile.getStringList((economyFile.getBoolean("Pay-Per-Use.Enabled") ? "Pay-Per-Use.Lore-Lines" : "Lore-Lines"));
 
         while (types.hasNext()) {
             PetTypeStorage storage = types.next();
-            PetDefault type = storage.getType();
+            PetType type = storage.getType();
             ItemBuilder maker = storage.getType().getItemBuilder().clone();
             String price = String.valueOf(economyFile.getPrice(type));
             if (price.equals("-1")) price = economyFile.getString("Price-Free");
@@ -93,7 +92,7 @@ public class PetEventListeners implements Listener {
             }
 
             if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pet.economy.bypass")) price = economyFile.getString("Bypass.Price");
-            boolean contains = petArray.contains(type.getConfigName());
+            boolean contains = petArray.contains(type);
             for (String line : lore)
                 maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));
             items.add(maker.build());

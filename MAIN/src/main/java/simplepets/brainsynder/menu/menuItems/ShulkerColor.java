@@ -8,7 +8,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IColorable;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
@@ -17,10 +17,10 @@ import java.util.List;
 
 @ValueType(def = "WHITE", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/DyeColorWrapper.java")
 public class ShulkerColor extends MenuItemAbstract {
-    public ShulkerColor(PetDefault type, IEntityPet entityPet) {
+    public ShulkerColor(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public ShulkerColor(PetDefault type) {
+    public ShulkerColor(PetType type) {
         super(type);
     }
 

@@ -3,6 +3,8 @@ package simplepets.brainsynder.storage.files;
 import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.storage.files.base.FileMaker;
 
+import java.util.Arrays;
+
 public class Messages extends FileMaker {
     public Messages(Plugin plugin, String fileName) {
         super(plugin, fileName);
@@ -40,6 +42,7 @@ public class Messages extends FileMaker {
         setDefault("Player-No-Pet", "{prefix} &7%player% does not have a pet.");
 
         setDefault("Anvil-Rename.Name", "Rename Pet");
+        setDefault("ArmorMenu.ClickToRemove", Arrays.asList("&c ", "&c&lCLICK TO REMOVE"));
     }
 
     @Override

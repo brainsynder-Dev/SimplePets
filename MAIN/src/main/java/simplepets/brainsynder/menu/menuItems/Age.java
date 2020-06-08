@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -14,10 +14,10 @@ import java.util.List;
 
 @ValueType(type = "boolean", def = "false")
 public class Age extends MenuItemAbstract {
-    public Age(PetDefault type, IEntityPet entityPet) {
+    public Age(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Age(PetDefault type) {
+    public Age(PetType type) {
         super(type);
     }
 

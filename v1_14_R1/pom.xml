@@ -51,9 +51,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>simple.brainsynder</groupId>
+            <groupId>lib.brainsynder</groupId>
             <artifactId>v1_14_R1</artifactId>
-            <version>3</version>
+            <version>0.1-B13</version>
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>

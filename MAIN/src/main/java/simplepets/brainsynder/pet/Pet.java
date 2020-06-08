@@ -2,8 +2,6 @@ package simplepets.brainsynder.pet;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.sounds.SoundMaker;
-import lib.brainsynder.storage.IStorage;
-import lib.brainsynder.storage.StorageList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,20 +24,21 @@ import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Pet implements IPet {
     private IEntityPet ent;
     private Player owner;
-    private final PetDefault type;
+    private final PetType type;
     private boolean isHidden = false;
     private boolean isHat = false;
-    private IStorage<MenuItem> items;
+    private List<MenuItem> items;
     private boolean vehicle;
     private final PetCore instance;
 
-    public Pet(UUID player, PetDefault type, PetCore core) {
+    public Pet(UUID player, PetType type, PetCore core) {
         this.type = type;
         this.instance = core;
         if (player == null) {
@@ -86,7 +85,7 @@ public class Pet implements IPet {
         core.forceSpawn = false;
         ent.getEntity().setMetadata("pet", new FixedMetadataValue(core, "pet"));
         this.ent = ent;
-        IStorage<MenuItem> items = new StorageList<>();
+        List<MenuItem> items = new ArrayList<>();
         if (type.getPetData() != null) {
             for (Class<? extends MenuItem> item : type.getPetData().getItemClasses()) {
                 MenuItem item1 = getItem(item);
@@ -116,13 +115,13 @@ public class Pet implements IPet {
             IEntityPet entity = ent;
             if (ent instanceof IEntityControllerPet)
                 entity = ((IEntityControllerPet) ent).getVisibleEntity();
-            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetDefault.class, IEntityPet.class), type, entity);
+            return ReflectionUtil.initiateClass(ReflectionUtil.fillConstructor(clazz, PetType.class, IEntityPet.class), type, entity);
         } catch (Exception e) {
             return null;
         }
     }
 
-    public IStorage<MenuItem> getItems() {
+    public List<MenuItem> getItems() {
         return items;
     }
 
@@ -217,7 +216,7 @@ public class Pet implements IPet {
         }
     }
 
-    public PetDefault getType() {
+    public PetType getType() {
         return type;
     }
 
@@ -251,7 +250,7 @@ public class Pet implements IPet {
     }
 
     @Override
-    public PetDefault getPetType() {
+    public PetType getPetType() {
         return type;
     }
 

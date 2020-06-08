@@ -8,7 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import simple.brainsynder.math.MathUtils;
+import lib.brainsynder.math.MathUtils;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitchPet;
 import simplepets.brainsynder.api.pet.IPet;

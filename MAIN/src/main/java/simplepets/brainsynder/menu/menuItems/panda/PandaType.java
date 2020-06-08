@@ -1,25 +1,27 @@
 package simplepets.brainsynder.menu.menuItems.panda;
 
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
 import org.apache.commons.lang.WordUtils;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 import simplepets.brainsynder.wrapper.PandaGene;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SupportedVersion(version = ServerVersion.v1_14_R1)
 @ValueType(def = "NORMAL", target = "https://github.com/brainsynder-Dev/SimplePets/blob/master/MAIN/src/main/java/simplepets/brainsynder/wrapper/PandaGene.java")
 public class PandaType extends MenuItemAbstract<IEntityPandaPet> {
 
-    public PandaType(PetDefault type, IEntityPet entityPet) {
+    public PandaType(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public PandaType(PetDefault type) {
+    public PandaType(PetType type) {
         super(type);
     }
 

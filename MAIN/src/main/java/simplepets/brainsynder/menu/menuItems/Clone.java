@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
-import simplepets.brainsynder.pet.PetDefault;
+import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -15,10 +15,10 @@ import java.util.List;
 @ValueType(type = "boolean", def = "false")
 public class Clone extends MenuItemAbstract {
 
-    public Clone(PetDefault type, IEntityPet entityPet) {
+    public Clone(PetType type, IEntityPet entityPet) {
         super(type, entityPet);
     }
-    public Clone(PetDefault type) {
+    public Clone(PetType type) {
         super(type);
     }
 
