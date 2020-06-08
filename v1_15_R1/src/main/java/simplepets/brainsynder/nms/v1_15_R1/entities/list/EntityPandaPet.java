@@ -99,7 +99,7 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
 
     @Override
     public void setSneezing(boolean value) {
-        this.setFlag(2, value);
+        this.setSpecialFlag(2, value);
         if (!value) {
             this.setSneezeProgress(0);
             PetCore.get().getInvLoaders().PET_DATA.update(PetOwner.getPetOwner(getOwner()));
@@ -114,12 +114,12 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
     }
 
     @Override
-    public boolean getFlag(int flag) {
+    public boolean getSpecialFlag(int flag) {
         return (datawatcher.get(PANDA_FLAGS) & flag) != 0x0;
     }
 
     @Override
-    public void setFlag(int i, boolean flag) {
+    public void setSpecialFlag(int i, boolean flag) {
         byte byte_1 = datawatcher.get(PANDA_FLAGS);
         if (flag) {
             datawatcher.set(PANDA_FLAGS, (byte)(byte_1 | i));

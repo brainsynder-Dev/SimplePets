@@ -9,16 +9,16 @@ public interface IEntityBeePet extends IAgeablePet, IFlag, IFlyablePet {
     void setAngry (boolean angry);
 
     default boolean hasNectar () {
-        return getFlag(8);
+        return getSpecialFlag(8);
     }
     default void setHasNectar (boolean hasNectar) {
-        setFlag(8, hasNectar);
+        setSpecialFlag(8, hasNectar);
     }
 
     default boolean hasStung () {
-        return getFlag(4);
+        return getSpecialFlag(4);
     }
     default void setHasStung (boolean hasStung) {
-        setFlag(4, hasStung);
+        setSpecialFlag(4, hasStung);
     }
 }

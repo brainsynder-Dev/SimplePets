@@ -64,20 +64,20 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
 
     @Override
     public boolean isSaddled() {
-        return getFlag(4);
+        return getSpecialFlag(4);
     }
 
     public void setSaddled(boolean flag) {
-        setFlag(4, flag);
+        setSpecialFlag(4, flag);
     }
 
     @Override
-    public boolean getFlag(int i) {
+    public boolean getSpecialFlag(int i) {
         return (this.datawatcher.get(STATUS) & i) != 0;
     }
 
     @Override
-    public void setFlag(int i, boolean flag) {
+    public void setSpecialFlag(int i, boolean flag) {
         byte b0 = this.datawatcher.get(STATUS);
         if (flag) {
             this.datawatcher.set(STATUS, (byte) (b0 | i));

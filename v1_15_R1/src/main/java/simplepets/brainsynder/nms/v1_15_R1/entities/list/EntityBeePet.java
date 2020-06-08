@@ -63,8 +63,8 @@ public class EntityBeePet extends AgeableEntityPet implements IEntityBeePet {
         datawatcher.set(ANGER, (angry) ? 25562256 : 0);
     }
 
-    @Override
-    public void setFlag(int i, boolean flag) {
+    // java you are a goddamn nightmare and i hate you so much - TM
+    public void setSpecialFlag(int i, boolean flag) {
         byte value = datawatcher.get(FLAGS);
         if (flag) {
             value = (byte)(value | i);
@@ -79,7 +79,7 @@ public class EntityBeePet extends AgeableEntityPet implements IEntityBeePet {
     }
 
     @Override
-    public boolean getFlag(int i) {
+    public boolean getSpecialFlag(int i) {
         return (this.datawatcher.get(FLAGS) & i) != 0;
     }
 }

@@ -83,12 +83,12 @@ public class EntityFoxPet extends AgeableEntityPet implements IEntityFoxPet {
     }
 
     @Override
-    public boolean getFlag(int i) {
+    public boolean getSpecialFlag(int i) {
         return (datawatcher.get(FOX_FLAGS) & i) != 0x0;
     }
 
     @Override
-    public void setFlag(int i, boolean flag) {
+    public void setSpecialFlag(int i, boolean flag) {
         if (flag) {
             this.datawatcher.set(FOX_FLAGS, (byte)(this.datawatcher.get(FOX_FLAGS) | i));
         } else {
@@ -101,54 +101,54 @@ public class EntityFoxPet extends AgeableEntityPet implements IEntityFoxPet {
     @Override
     public void setRollingHead(boolean value){
         if (value && isSleeping()) setSleeping(false);
-        setFlag(8, value);
+        setSpecialFlag(8, value);
     }
     @Override
     public void setCrouching(boolean value){
-        setFlag(4, value);
+        setSpecialFlag(4, value);
     }
     @Override
     public void setSitting(boolean value){
-        setFlag(1, value);
+        setSpecialFlag(1, value);
     }
     @Override
     public void setSleeping(boolean value){
         if (value && isWalking()) setWalking(false);
         if (value && isSitting()) setSitting(false);
         if (value && isCrouching()) setCrouching(false);
-        setFlag(32, value);
+        setSpecialFlag(32, value);
     }
     @Override
     public void setAggressive(boolean value){
-        setFlag(128, value);
+        setSpecialFlag(128, value);
     }
     @Override
     public void setWalking(boolean value){
-        setFlag(64, value);
+        setSpecialFlag(64, value);
     }
 
     @Override
     public boolean isRollingHead () {
-        return getFlag(8);
+        return getSpecialFlag(8);
     }
     @Override
     public boolean isCrouching () {
-        return getFlag(4);
+        return getSpecialFlag(4);
     }
     @Override
     public boolean isSitting () {
-        return getFlag(1);
+        return getSpecialFlag(1);
     }
     @Override
     public boolean isSleeping () {
-        return getFlag(32);
+        return getSpecialFlag(32);
     }
     @Override
     public boolean isAggressive () {
-        return getFlag(128);
+        return getSpecialFlag(128);
     }
     @Override
     public boolean isWalking () {
-        return getFlag(64);
+        return getSpecialFlag(64);
     }
 }
