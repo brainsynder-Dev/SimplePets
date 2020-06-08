@@ -41,61 +41,71 @@ permissions:
     Pet.type.passive:
         default: false
         children:
+            Pet.type.armorstand: true
             Pet.type.bat: true
+            Pet.type.bee: true
+            Pet.type.cat: true
             Pet.type.chicken: true
+            Pet.type.cod: true
             Pet.type.cow: true
-            Pet.type.giant: true
+            Pet.type.dolphin: true
+            Pet.type.donkey: true
+            Pet.type.fox: true
             Pet.type.horse: true
             Pet.type.irongolem: true
+            Pet.type.llama: true
             Pet.type.mooshroom: true
+            Pet.type.mule: true
             Pet.type.ocelot: true
+            Pet.type.panda: true
+            Pet.type.parrot: true
             Pet.type.pig: true
+            Pet.type.polarbear: true
+            Pet.type.pufferfish: true
             Pet.type.rabbit: true
+            Pet.type.salmon: true
             Pet.type.sheep: true
             Pet.type.snowman: true
-            Pet.type.villager: true
-            Pet.type.wolf: true
             Pet.type.squid: true
-            Pet.type.polarbear: true
-            Pet.type.llama: true
-            Pet.type.zombiehorse: true
-            Pet.type.skeletonhorse: true
-            Pet.type.armorstand: true
-            Pet.type.parrot: true
-            Pet.type.mule: true
-            Pet.type.dolphin: true
-            Pet.type.salmon: true
+            Pet.type.traderllama: true
             Pet.type.tropicalfish: true
             Pet.type.turtle: true
+            Pet.type.villager: true
+            Pet.type.wanderingtrader: true
+            Pet.type.wolf: true
+            Pet.type.zombiehorse: true
     Pet.type.hostile:
         default: false
         children:
             Pet.type.blaze: true
+            Pet.type.cavespider: true
             Pet.type.creeper: true
+            Pet.type.drowned: true
+            Pet.type.elderguardian: true
             Pet.type.enderman: true
+            Pet.type.endermite: true
+            Pet.type.evoker: true
+            Pet.type.ghast: true
+            Pet.type.giant: true
+            Pet.type.guardian: true
+            Pet.type.illusioner: true
+            Pet.type.magmacube: true
+            Pet.type.phantom: true
             Pet.type.pigman: true
+            Pet.type.pillager: true
+            Pet.type.ravager: true
+            Pet.type.shulker: true
             Pet.type.silverfish: true
             Pet.type.skeleton: true
-            Pet.type.spider: true
-            Pet.type.zombie: true
-            Pet.type.ghast: true
-            Pet.type.endermite: true
-            Pet.type.wither: true
-            Pet.type.witch: true
-            Pet.type.guardian: true
-            Pet.type.elderguardian: true
+            Pet.type.skeletonhorse: true
             Pet.type.slime: true
+            Pet.type.spider: true
             Pet.type.stray: true
             Pet.type.vex: true
-            Pet.type.evoker: true
             Pet.type.vindicator: true
-            Pet.type.husk: true
-            Pet.type.magmacube: true
+            Pet.type.witch: true
+            Pet.type.wither: true
             Pet.type.witherskeleton: true
-            Pet.type.shulker: true
-            Pet.type.cavespider: true
-            Pet.type.illusioner: true
-            Pet.type.drowned: true
-            Pet.type.phantom: true
-            Pet.type.pufferfish: true
+            Pet.type.zombie: true
             Pet.type.zombievillager: true
+            Pet.type.husk: true
