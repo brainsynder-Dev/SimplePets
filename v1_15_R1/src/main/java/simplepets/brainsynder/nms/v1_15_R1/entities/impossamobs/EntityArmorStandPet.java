@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_15_R1.entities.impossamobs;
 
+import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.Base64Wrapper;
@@ -14,6 +15,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
@@ -24,6 +26,8 @@ import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.wrapper.EntityWrapper;
+
+import java.lang.reflect.Field;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
     private boolean isSpecial = false;
@@ -135,6 +139,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
                     if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
                         if (inventory.getLeggings() == null) {
                             setSlot(EnumItemSlot.LEGS, new ItemBuilder(Material.IRON_LEGGINGS).build());
+                        } else {
                             setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
                         }
                     if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots()))) {
@@ -492,5 +497,24 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     private ItemStack parseString (String string) {
         return PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(string));
+    }
+
+    // TEMPORARY METHOD
+    // Since skull fetching doesn't seem to be working properly, I've stuck in my own method from HeadsPlus. -TM
+    public ItemStack getSkull() {
+        // Allows textures to be instantly set; they aren't usually set with the UUID
+        GameProfile profile = new GameProfile(getOwner().getUniqueId(), getOwner().getName());
+        ItemStack item = new ItemBuilder(Material.PLAYER_HEAD).build();
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        try {
+            Field profileF = meta.getClass().getDeclaredField("profile");
+            profileF.setAccessible(true);
+            profileF.set(meta, profile);
+            item.setItemMeta(meta);
+        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
+            // Print the stacktrace but continue without the texture
+            noSuchFieldException.printStackTrace();
+        }
+        return item;
     }
 }
