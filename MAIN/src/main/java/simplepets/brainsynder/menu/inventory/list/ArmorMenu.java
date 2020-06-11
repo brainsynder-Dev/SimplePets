@@ -96,33 +96,33 @@ public class ArmorMenu extends CustomInventory {
 
         switch (slot) {
             case 13:
-                stand.setHeadItem(new ItemStack(Material.AIR));
+                stand.setHeadItem(item);
                 update = true;
                 break;
             case 21:
-                stand.setLeftArmItem(new ItemStack(Material.AIR));
+                stand.setLeftArmItem(item);
                 update = true;
                 break;
             case 22:
-                stand.setBodyItem(new ItemStack(Material.AIR));
+                stand.setBodyItem(item);
                 update = true;
                 break;
             case 23:
-                stand.setRightArmItem(new ItemStack(Material.AIR));
+                stand.setRightArmItem(item);
                 update = true;
                 break;
             case 31:
-                stand.setLegItem(new ItemStack(Material.AIR));
+                stand.setLegItem(item);
                 update = true;
                 break;
             case 40:
-                stand.setFootItem(new ItemStack(Material.AIR));
+                stand.setFootItem(item);
                 update = true;
                 break;
         }
 
         // Only update the inventory if it is a armor slot
-        if (update) open(owner);
+        if (update) update(owner);
 
     }
 

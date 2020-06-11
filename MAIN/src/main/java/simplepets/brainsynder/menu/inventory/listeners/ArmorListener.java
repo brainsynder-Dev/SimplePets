@@ -6,10 +6,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.holders.ArmorHolder;
 import simplepets.brainsynder.menu.inventory.list.ArmorMenu;
 import simplepets.brainsynder.menu.items.Item;
+import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.player.PetOwner;
 
 public class ArmorListener implements Listener {
@@ -36,14 +38,14 @@ public class ArmorListener implements Listener {
         if (e.getWhoClicked() instanceof Player) {
             final Player p = (Player) e.getWhoClicked();
             PetOwner owner = PetOwner.getPetOwner(p);
-            Item item = PetCore.get().getItemLoaders().getLoader(e.getCurrentItem());
-            if (item != null) {
+            Item item = PetCore.get().getItemLoaders().getLoader(clickedItem);
+            if (item != null && !(item instanceof Air)) {
                 e.setCancelled(true);
                 e.setResult(Event.Result.DENY);
                 item.onClick(owner, menu);
                 return;
             }
-            menu.onClick(e.getRawSlot(), e.getCurrentItem(), p);
+            menu.onClick(e.getRawSlot(), clickedItem, p);
         }
     }
 
