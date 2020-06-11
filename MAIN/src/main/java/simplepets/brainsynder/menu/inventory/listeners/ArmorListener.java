@@ -1,13 +1,17 @@
 package simplepets.brainsynder.menu.inventory.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.holders.ArmorHolder;
 import simplepets.brainsynder.menu.inventory.list.ArmorMenu;
 import simplepets.brainsynder.menu.items.Item;
@@ -33,6 +37,9 @@ public class ArmorListener implements Listener {
             default:
                 clickedItem = e.getCurrentItem();
                 break;
+        }
+        if (e.getRawSlot() > 54) {
+            clickedItem = e.getCursor();
         }
         if (clickedItem == null) return;
         if (e.getWhoClicked() instanceof Player) {
