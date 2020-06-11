@@ -23,6 +23,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.api.event.pet.PetRemoveEvent;
@@ -282,6 +283,24 @@ public class PetOwner {
 
             if (PetCore.get().getConfiguration().getBoolean("ShowParticles")) {
                 play(pet.getEntity().getEntity().getLocation(), Particle.LAVA, 1.0F, 1.0F, 1.0F);
+            }
+            if (pet.getVisableEntity() instanceof IEntityArmorStandPet) {
+                IEntityArmorStandPet armorStandPet = (IEntityArmorStandPet) pet.getVisableEntity();
+                if (!armorStandPet.isOwner() && !armorStandPet.isRestricted()) {
+                    for (ItemStack item : Arrays.asList(armorStandPet.getHeadItem(),
+                            armorStandPet.getBodyItem(),
+                            armorStandPet.getLegItem(),
+                            armorStandPet.getFootItem(),
+                            armorStandPet.getLeftArmItem(),
+                            armorStandPet.getRightArmItem())) {
+                        if (item == null || item.getType() == Material.AIR) continue;
+                        if (player.getInventory().firstEmpty() == -1) {
+                            player.getWorld().dropItem(player.getLocation(), item);
+                        } else {
+                            player.getInventory().addItem(item);
+                        }
+                    }
+                }
             }
             if (pet.getEntity() instanceof IEntityControllerPet) {
                 ((IEntityControllerPet) pet.getEntity()).remove();
