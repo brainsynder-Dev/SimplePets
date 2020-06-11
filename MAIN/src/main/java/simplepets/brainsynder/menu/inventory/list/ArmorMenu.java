@@ -2,11 +2,13 @@ package simplepets.brainsynder.menu.inventory.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
@@ -119,6 +121,12 @@ public class ArmorMenu extends CustomInventory {
                 stand.setFootItem(item);
                 update = true;
                 break;
+            default:
+                ItemMeta meta = item.getItemMeta();
+                if (meta == null) break;
+                meta.setLore(removeLore(item));
+                item.setItemMeta(meta);
+                break;
         }
 
         // Only update the inventory if it is a armor slot
@@ -165,5 +173,33 @@ public class ArmorMenu extends CustomInventory {
         lore.addAll(addition);
 
         return builder.withLore(lore).build();
+    }
+
+    public static List<String> removeLore(ItemStack item) {
+        Messages msgs = PetCore.get().getMessages();
+        if (item.getType() == Material.AIR) return new ArrayList<>();
+        ItemBuilder builder = ItemBuilder.fromItem(item);
+        List<String> lore = builder.getMetaValue(ItemMeta.class, ItemMeta::getLore);
+        if (lore == null || lore.isEmpty()) return new ArrayList<>();
+        List<String> removal = msgs.getStringList("ArmorMenu.ClickToRemove");
+        remove: {
+            // Get the starting point for the actual lore
+            int size = lore.size() - removal.size();
+            for (int i = 0; i < removal.size(); i++) {
+                // If the lore does not match, break the loop
+                if (!stripColours(lore.get(size + i)).equals(stripColours(removal.get(i)))) {
+                    break remove;
+                }
+            }
+            // Using just
+            List<String> tempLore = lore;
+            tempLore.subList(size, lore.size()).clear();
+            lore = tempLore;
+        }
+        return lore;
+    }
+
+    private static String stripColours(String str) {
+        return ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&', str));
     }
 }
