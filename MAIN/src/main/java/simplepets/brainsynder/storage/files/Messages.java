@@ -43,6 +43,7 @@ public class Messages extends FileMaker {
 
         setDefault("Anvil-Rename.Name", "Rename Pet");
         setDefault("ArmorMenu.ClickToRemove", Arrays.asList("&c ", "&c&lCLICK TO REMOVE"));
+        setDefault("ArmorMenu.Restricted", "&cThis pet can not have items added or removed!");
     }
 
     @Override

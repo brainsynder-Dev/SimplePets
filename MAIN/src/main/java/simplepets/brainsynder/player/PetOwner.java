@@ -392,7 +392,7 @@ public class PetOwner {
         }
 
         PetType type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
-        type.setPet(player);
+        type.setPet(player, true);
 
         new BukkitRunnable() {
             @Override

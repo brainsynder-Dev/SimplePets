@@ -37,6 +37,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private AnimationCycle arm_swing = null;
     private FieldAccessor<Boolean> fieldAccessor;
     private ItemStack head, body, legs, boots, left_arm, right_arm;
+    private boolean restricted;
 
     public EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
         super(entitytypes, world);
@@ -420,6 +421,15 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         getEntity().setRightLegPose(angle);
     }
 
+    @Override
+    public boolean isRestricted() {
+        return restricted;
+    }
+
+    @Override
+    public void setRestricted(boolean flag) {
+        restricted = flag;
+    }
 
 
     @Override

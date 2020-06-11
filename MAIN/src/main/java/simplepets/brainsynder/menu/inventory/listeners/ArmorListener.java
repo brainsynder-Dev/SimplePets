@@ -52,6 +52,14 @@ public class ArmorListener implements Listener {
                 item.onClick(owner, menu);
                 return;
             }
+            IEntityPet pet = owner.getPet().getVisableEntity();
+            if (!(pet instanceof IEntityArmorStandPet)) return;
+            if (((IEntityArmorStandPet) pet).isRestricted()) {
+                p.sendMessage(PetCore.get().getMessages().getString("ArmorMenu.Restricted"));
+                e.setCancelled(true);
+                e.setResult(Event.Result.DENY);
+                return;
+            }
             menu.onClick(e.getRawSlot(), clickedItem, p);
         }
     }

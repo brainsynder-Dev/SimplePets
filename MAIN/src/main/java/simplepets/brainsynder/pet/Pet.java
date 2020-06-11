@@ -12,6 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.event.pet.PetHatEvent;
 import simplepets.brainsynder.api.event.pet.PetPreSpawnEvent;
@@ -39,7 +40,7 @@ public class Pet implements IPet {
     private boolean vehicle;
     private final PetCore instance;
 
-    public Pet(UUID player, PetType type, PetCore core) {
+    public Pet(UUID player, PetType type, PetCore core, boolean restricted) {
         this.type = type;
         this.instance = core;
         if (player == null) {
@@ -108,6 +109,12 @@ public class Pet implements IPet {
                     .replace("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
                     .replace("{type}", getPetType().getConfigName())
             ));
+        }
+        if (ent instanceof IEntityControllerPet) {
+            IEntityControllerPet controllerPet = (IEntityControllerPet) ent;
+            if (controllerPet.getVisibleEntity() instanceof IEntityArmorStandPet) {
+                ((IEntityArmorStandPet) controllerPet.getVisibleEntity()).setRestricted(restricted);
+            }
         }
     }
 

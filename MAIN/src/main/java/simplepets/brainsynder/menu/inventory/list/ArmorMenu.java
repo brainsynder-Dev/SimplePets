@@ -95,7 +95,6 @@ public class ArmorMenu extends CustomInventory {
         if (!(pet instanceof IEntityArmorStandPet)) return;
         IEntityArmorStandPet stand = (IEntityArmorStandPet) pet;
         boolean update = false;
-
         switch (slot) {
             case 13:
                 stand.setHeadItem(item);

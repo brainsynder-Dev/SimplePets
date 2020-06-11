@@ -69,7 +69,11 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     }
 
     public void setPet (Player player) {
-        new Pet(player.getUniqueId(), this, PetCore.get());
+        new Pet(player.getUniqueId(), this, PetCore.get(), false);
+    }
+
+    public void setPet(Player player, boolean restricted) {
+        new Pet(player.getUniqueId(), this, PetCore.get(), restricted);
     }
 
     public void load () {

@@ -32,6 +32,9 @@ public interface IEntityArmorStandPet extends IDisplayEntity {
     boolean hasArms();
     void setArms(boolean flag);
 
+    boolean isRestricted();
+    void setRestricted(boolean flag);
+
     // For future ArmorStand Customizations...
     default void setHeadItem(ItemStack item) {}
     default void setBodyItem(ItemStack item) {}
