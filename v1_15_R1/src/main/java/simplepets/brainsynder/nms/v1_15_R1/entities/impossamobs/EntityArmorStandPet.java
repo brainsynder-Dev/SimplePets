@@ -116,16 +116,36 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         // Handles Armor copying
         if (getOwner().isValid()) {
             if (!getOwner().isDead()) {
-                if (!minime) {
+                if (minime) {
                     org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
-                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
-                        setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
-                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
-                        setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet()))) {
+                        if (inventory.getHelmet() == null) {
+                            setSlot(EnumItemSlot.HEAD, getSkull());
+                        } else {
+                            setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
+                        }
+                    }
+                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate()))) {
+                        if (inventory.getChestplate() == null) {
+                            setSlot(EnumItemSlot.CHEST, new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
+                        } else {
+                            setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+                        }
+                    }
                     if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
-                        setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
-                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
-                        setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+                        if (inventory.getLeggings() == null) {
+                            setSlot(EnumItemSlot.LEGS, new ItemBuilder(Material.IRON_LEGGINGS).build());
+                            setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
+                        }
+                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots()))) {
+                        if (inventory.getBoots() == null) {
+                            setSlot(EnumItemSlot.FEET, new ItemBuilder(Material.GOLDEN_BOOTS).build());
+                        } else {
+                            setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+                        }
+
+                    }
+
                 }
             }
         }
@@ -245,8 +265,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(air);
             getEntity().setLeggings(air);
             getEntity().setBoots(air);
-
-
             org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
             if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
                 setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
@@ -449,7 +467,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return new net.minecraft.server.v1_15_R1.Vector3f((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
     }
     public ItemStack getItems(net.minecraft.server.v1_15_R1.EnumItemSlot enumitemslot) {
-        return toBukkit(getEquipment(enumitemslot));
+        return toBukkit(super.getEquipment(enumitemslot));
     }
     private ItemStack toBukkit (net.minecraft.server.v1_15_R1.ItemStack stack) {
         return CraftItemStack.asBukkitCopy(stack);
@@ -459,7 +477,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     public void setSlot(net.minecraft.server.v1_15_R1.EnumItemSlot enumitemslot, ItemStack itemstack) {
-        setEquipment(enumitemslot, toNMS(itemstack));
+        super.setSlot(enumitemslot, toNMS(itemstack));
     }
 
     private ItemStack checkItem(ItemStack item) {

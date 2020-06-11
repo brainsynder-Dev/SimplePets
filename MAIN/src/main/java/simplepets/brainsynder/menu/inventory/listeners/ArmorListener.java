@@ -18,7 +18,21 @@ public class ArmorListener implements Listener {
         if (e.getView().getTopInventory().getHolder() == null) return;
         if (!(e.getView().getTopInventory().getHolder() instanceof ArmorHolder)) return;
         ArmorMenu menu = PetCore.get().getInvLoaders().ARMOR;
-        if (e.getCurrentItem() == null) return;
+        ItemStack clickedItem;
+        switch (e.getRawSlot()) {
+            case 13:
+            case 21:
+            case 22:
+            case 23:
+            case 31:
+            case 40:
+                clickedItem = e.getCursor();
+                break;
+            default:
+                clickedItem = e.getCurrentItem();
+                break;
+        }
+        if (clickedItem == null) return;
         if (e.getWhoClicked() instanceof Player) {
             final Player p = (Player) e.getWhoClicked();
             PetOwner owner = PetOwner.getPetOwner(p);
