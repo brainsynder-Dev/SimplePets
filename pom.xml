@@ -113,7 +113,7 @@
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>0.1-B21</version>
+            <version>0.1-B22</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
