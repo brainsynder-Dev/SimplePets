@@ -125,36 +125,38 @@ public class OwnerFile {
             }
         }
 
-        boolean canSave = false;
-        PlayerStorage file = PetCore.get().getPlayerStorage(p);
-        if (!owner.getOwnedPets().isEmpty()) {
-            StorageTagList list = new StorageTagList();
-            owner.getOwnedPets().forEach(pet -> list.appendTag(new StorageTagString(pet.getName())));
-            file.setTag("PurchasedPets", list);
-            canSave = true;
-        }
-        if ((!savePet) && !owner.getSavedPetsArray().isEmpty()) {
-            file.setJSONArray("SavedPets", owner.getSavedPetsArray());
-            canSave = true;
-        }
-        if ((owner.getPetName() != null)
-                && (!owner.getPetName().equals("null"))
-                && (!owner.getPetName().equals("PetName"))) {
-            file.setString("PetName", owner.getPetName());
-            canSave = true;
-        }
+        PetCore.get().getPlayerStorage(p, file -> {
+            boolean canSave = false;
+            if (!owner.getOwnedPets().isEmpty()) {
+                StorageTagList list = new StorageTagList();
+                owner.getOwnedPets().forEach(pet -> list.appendTag(new StorageTagString(pet.getName())));
+                file.setTag("PurchasedPets", list);
+                canSave = true;
+            }
+            if ((!savePet) && !owner.getSavedPetsArray().isEmpty()) {
+                file.setJSONArray("SavedPets", owner.getSavedPetsArray());
+                canSave = true;
+            }
+            if ((owner.getPetName() != null)
+                    && (!owner.getPetName().equals("null"))
+                    && (!owner.getPetName().equals("PetName"))) {
+                file.setString("PetName", owner.getPetName());
+                canSave = true;
+            }
 
-        // This will only save if it is not saving pet data
-        if ((!savePet) && (owner.getStoredInventory() != null)) {
-            file.setJSONObject("ItemStorage", owner.getStoredInventory());
-            canSave = true;
-        }
-        // This will only save if it is saving pet data
-        if (savePet && owner.hasPet()) {
-            file.setTag("NeedsRespawn", owner.getPet().getEntity().asCompound());
-            canSave = true;
-        }
-        if (canSave) file.save();
+            // This will only save if it is not saving pet data
+            if ((!savePet) && (owner.getStoredInventory() != null)) {
+                file.setJSONObject("ItemStorage", owner.getStoredInventory());
+                canSave = true;
+            }
+            // This will only save if it is saving pet data
+            if (savePet && owner.hasPet()) {
+                file.setTag("NeedsRespawn", owner.getPet().getEntity().asCompound());
+                canSave = true;
+            }
+            if (canSave) file.save();
+        });
+
     }
 
     void reload() {
@@ -229,45 +231,50 @@ public class OwnerFile {
             });
             return;
         }
+        PetCore.get().getPlayerStorage(p, new PetCore.Call<PlayerStorage>() {
+            @Override
+            public void call(PlayerStorage file) {
+                TypeManager manager = PetCore.get().getTypeManager();
+                List<PetType> types = new ArrayList<>();
+                if (file.getTag("PurchasedPets") instanceof StorageTagList) {
+                    // Was saved as StorageTagList
+                    StorageTagList stored = (StorageTagList) file.getTag("PurchasedPets");
+                    stored.getList().forEach(base -> types.add(manager.getType(((StorageTagString)base).getString())));
+                }else{
+                    // Was saved in the old format
+                    String raw = file.getString("PurchasedPets");
+                    String decoded = Base64Wrapper.decodeString(raw);
+                    JsonArray array = (JsonArray) Json.parse(decoded);
+                    array.values().forEach(jsonValue -> {
+                        String name = jsonValue.asString();
+                        types.add(manager.getType(name));
+                    });
+                }
 
-        PlayerStorage file = PetCore.get().getPlayerStorage(p);
-        try {
-            TypeManager manager = PetCore.get().getTypeManager();
-            List<PetType> types = new ArrayList<>();
-            if (file.getTag("PurchasedPets") instanceof StorageTagList) {
-                // Was saved as StorageTagList
-                StorageTagList stored = (StorageTagList) file.getTag("PurchasedPets");
-                stored.getList().forEach(base -> types.add(manager.getType(((StorageTagString)base).getString())));
-            }else{
-                // Was saved in the old format
-                String raw = file.getString("PurchasedPets");
-                String decoded = Base64Wrapper.decodeString(raw);
-                JsonArray array = (JsonArray) Json.parse(decoded);
-                array.values().forEach(jsonValue -> {
-                    String name = jsonValue.asString();
-                    types.add(manager.getType(name));
-                });
+                owner.setRawOwned(types);
+                if (file.hasKey("ItemStorage")) {
+                    JSONObject storage = file.getJSONObject("ItemStorage");
+                    if (!storage.isEmpty()) owner.setStoredInventory(storage, false);
+                }
+                if (file.hasKey("SavedPets")) {
+                    JSONArray storage = file.getJSONArray("SavedPets");
+                    if (!storage.isEmpty()) owner.updateSavedPets(storage);
+                }
+                if (file.hasKey("NeedsRespawn")) {
+                    StorageTagCompound compound = file.getCompoundTag("NeedsRespawn");
+                    file.remove("NeedsRespawn");
+                    file.save();
+                    if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
+                }
+                owner.setRawPetName(file.getString("PetName"));
             }
 
-            owner.setRawOwned(types);
-        } catch (Exception e) {
-            owner.setRawOwned(new ArrayList<>());
-        }
-        if (file.hasKey("ItemStorage")) {
-            JSONObject storage = file.getJSONObject("ItemStorage");
-            if (!storage.isEmpty()) owner.setStoredInventory(storage, false);
-        }
-        if (file.hasKey("SavedPets")) {
-            JSONArray storage = file.getJSONArray("SavedPets");
-            if (!storage.isEmpty()) owner.updateSavedPets(storage);
-        }
-        if (file.hasKey("NeedsRespawn")) {
-            StorageTagCompound compound = file.getCompoundTag("NeedsRespawn");
-            file.remove("NeedsRespawn");
-            file.save();
-            if (compound.hasKey("PetType")) owner.setPetToRespawn(compound);
-        }
-        owner.setRawPetName(file.getString("PetName"));
+            @Override
+            public void onFail() {
+                owner.setRawOwned(new ArrayList<>());
+            }
+        });
+
     }
 
     private JSONObject parse(String string) {

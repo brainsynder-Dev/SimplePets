@@ -28,25 +28,43 @@ public class ItemStorageMenu implements Listener {
         return true;
     }
 
-    public static boolean loadFromName(Player player, String name) {
-        PetOwner owner = PetOwner.getPetOwner(name);
-        JSONObject json = null;
-        if (owner != null) {
-            json = owner.getStoredInventory();
-        }
+    public static void loadFromName(Player player, String name) {
+        PetCore.get().getPlayerStorageByName(name, new PetCore.Call<PlayerStorage>() {
+            @Override
+            public void call(PlayerStorage file) {
+                PetOwner owner = PetOwner.getPetOwner(name);
+                JSONObject json = null;
+                if (owner != null) {
+                    json = owner.getStoredInventory();
+                }
 
-        if (json == null) {
-            PlayerStorage file = PetCore.get().getPlayerStorageByName(name);
-            if (file == null) return false;
-            if (file.hasKey("ItemStorage")) {
-                json = file.getJSONObject("ItemStorage");
+                if (json == null) {
+                    if (file == null) {
+                        onFail();
+                        return;
+                    }
+                    if (file.hasKey("ItemStorage")) {
+                        json = file.getJSONObject("ItemStorage");
+                    }
+                }
+                if (json == null) {
+                    onFail();
+                    return;
+                }
+
+                InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), json);
+                // Opening inventories async does not work
+                Bukkit.getScheduler().runTask(PetCore.get(), () -> {
+                    player.openInventory(storage.getInventory());
+                });
             }
-        }
-        if (json == null) return false;
 
-        InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), json);
-        player.openInventory(storage.getInventory());
-        return true;
+            @Override
+            public void onFail() {
+                player.sendMessage(PetCore.get().getCommands().getString("Inv.No-Pet-Items-Other")
+                        .replace("%player%", name));
+            }
+        });
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

@@ -378,40 +378,52 @@ public class PetCore extends JavaPlugin {
         return name;
     }
 
-    public PlayerStorage getPlayerStorage(Player player) {
-        if (fileStorage.containsKey(player.getUniqueId()))
-            return fileStorage.get(player.getUniqueId());
-        PlayerStorage file = new PlayerStorage(player);
-        fileStorage.put(player.getUniqueId(), file);
-        return fileStorage.get(player.getUniqueId());
+    public void getPlayerStorage(Player player, Call<PlayerStorage> callback) {
+        // Ensure it's called async
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            PlayerStorage storage;
+            if (!fileStorage.containsKey(player.getUniqueId())) {
+                PlayerStorage file = new PlayerStorage(player);
+                fileStorage.put(player.getUniqueId(), file);
+            }
+            storage = fileStorage.get(player.getUniqueId());
+            if (storage == null) {
+                callback.onFail();
+            } else {
+                callback.call(storage);
+            }
+        });
+
     }
 
-    public PlayerStorage getPlayerStorageByName(String name) {
-        File folder = new File(getDataFolder().toString() + "/PlayerData/");
-        if (folder.isDirectory()) {
-            File[] files = folder.listFiles();
-            if (files != null && files.length != 0) {
-                CompletableFuture<PlayerStorage> future = CompletableFuture.supplyAsync(() -> {
+    public void getPlayerStorageByName(String name, Call<PlayerStorage> callback) {
+        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+            PlayerStorage storage = null;
+            File folder = new File(getDataFolder().toString() + "/PlayerData/");
+            if (folder.isDirectory()) {
+                File[] files = folder.listFiles();
+                if (files != null && files.length != 0) {
                     for (File file : files) {
                         if (file.getName().endsWith(".stc")) {
-                            PlayerStorage storage = new PlayerStorage(file);
-                            if (!storage.hasKey("username")) return null;
-
-                            if (storage.getString("username").equalsIgnoreCase(name)) {
-                                return new PlayerStorage(file);
+                            storage = new PlayerStorage(file);
+                            if (!storage.hasKey("username")) {
+                                callback.onFail();
+                                return;
+                            }
+                            if (!storage.getString("username").equalsIgnoreCase(name)) {
+                                callback.onFail();
+                                return;
                             }
                         }
                     }
-                    return null;
-                });
-
-                try {
-                    return future.get();
-                } catch (Exception ignored) {
                 }
             }
-        }
-        return null;
+            if (storage == null) {
+                callback.onFail();
+            } else {
+                callback.call(storage);
+            }
+        });
     }
 
     public ISpawner getSpawner() {
@@ -469,5 +481,11 @@ public class PetCore extends JavaPlugin {
 
     public ClassLoader getLoader() {
         return getClassLoader();
+    }
+
+    public interface Call<T> {
+        void call(T data);
+
+        default void onFail() {}
     }
 }

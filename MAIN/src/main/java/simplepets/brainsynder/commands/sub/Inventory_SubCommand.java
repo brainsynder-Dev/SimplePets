@@ -43,10 +43,7 @@ public class Inventory_SubCommand extends PetSubCommand {
                         return;
                     }
 
-                    if (!ItemStorageMenu.loadFromName(p, args[0])) {
-                        p.sendMessage(commands.getString("Inv.No-Pet-Items-Other")
-                                .replace("%player%", args[0]));
-                    }
+                    ItemStorageMenu.loadFromName(p, args[0]);
                 }
             } else {
                 PetCore.get().getInvLoaders().SELECTION.open(PetOwner.getPetOwner(p));
