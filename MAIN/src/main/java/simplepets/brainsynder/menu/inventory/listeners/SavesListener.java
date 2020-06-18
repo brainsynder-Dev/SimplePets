@@ -66,7 +66,7 @@ public class SavesListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SavesHolder)) return;
         SavesMenu menu = PetCore.get().getInvLoaders().SAVES;
-        PetOwner.getPetOwner((Player) e.getPlayer()).getFile().save(false);
+        PetOwner.getPetOwner((Player) e.getPlayer()).getFile().save(false, false);
         menu.reset(PetOwner.getPetOwner((Player) e.getPlayer()));
     }
 }

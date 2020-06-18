@@ -455,7 +455,7 @@ public class PetOwner {
 
     public void setStoredInventory(JSONObject storedInventory, boolean save) {
         this.storedInventory = storedInventory;
-        if (save) file.save(false);
+        if (save) file.save(false, false);
     }
 
     public UUID getUuid() {

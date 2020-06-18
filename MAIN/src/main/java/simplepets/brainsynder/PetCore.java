@@ -224,7 +224,7 @@ public class PetCore extends JavaPlugin {
             if (petOwner.getPlayer() == null) continue;
             if (!petOwner.getPlayer().isOnline()) continue;
             if (petOwner.hasPet()) petOwner.removePet();
-            petOwner.getFile().save(true);
+            petOwner.getFile().save(true, true);
         }
         if (getConfiguration() != null) {
             if (getConfiguration().getBoolean("MySQL.Enabled")) {
@@ -378,22 +378,29 @@ public class PetCore extends JavaPlugin {
         return name;
     }
 
-    public void getPlayerStorage(Player player, Call<PlayerStorage> callback) {
+    public void getPlayerStorage(Player player, boolean async, Call<PlayerStorage> callback) {
         // Ensure it's called async
-        Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
-            PlayerStorage storage;
-            if (!fileStorage.containsKey(player.getUniqueId())) {
-                PlayerStorage file = new PlayerStorage(player);
-                fileStorage.put(player.getUniqueId(), file);
-            }
-            storage = fileStorage.get(player.getUniqueId());
-            if (storage == null) {
-                callback.onFail();
-            } else {
-                callback.call(storage);
-            }
-        });
+        if (async) {
+            Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+                handlePlStorage(player, callback);
+            });
+        } else {
+            handlePlStorage(player, callback);
+        }
+    }
 
+    private void handlePlStorage(Player player, Call<PlayerStorage> callback) {
+        PlayerStorage storage;
+        if (!fileStorage.containsKey(player.getUniqueId())) {
+            PlayerStorage file = new PlayerStorage(player);
+            fileStorage.put(player.getUniqueId(), file);
+        }
+        storage = fileStorage.get(player.getUniqueId());
+        if (storage == null) {
+            callback.onFail();
+        } else {
+            callback.call(storage);
+        }
     }
 
     public void getPlayerStorageByName(String name, Call<PlayerStorage> callback) {

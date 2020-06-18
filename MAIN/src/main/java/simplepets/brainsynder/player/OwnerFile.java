@@ -37,10 +37,10 @@ public class OwnerFile {
     }
 
     public void save() {
-        save(true);
+        save(true, false);
     }
 
-    public void save(boolean savePet) {
+    public void save(boolean savePet, boolean disabling) {
         final Player p = owner.getPlayer();
         if (p == null) return;
         if (p.hasMetadata("npc") || p.hasMetadata("NPC")) return;
@@ -125,7 +125,7 @@ public class OwnerFile {
             }
         }
 
-        PetCore.get().getPlayerStorage(p, file -> {
+        PetCore.get().getPlayerStorage(p, !disabling, file -> {
             boolean canSave = false;
             if (!owner.getOwnedPets().isEmpty()) {
                 StorageTagList list = new StorageTagList();
@@ -231,7 +231,7 @@ public class OwnerFile {
             });
             return;
         }
-        PetCore.get().getPlayerStorage(p, new PetCore.Call<PlayerStorage>() {
+        PetCore.get().getPlayerStorage(p, false, new PetCore.Call<PlayerStorage>() {
             @Override
             public void call(PlayerStorage file) {
                 TypeManager manager = PetCore.get().getTypeManager();
