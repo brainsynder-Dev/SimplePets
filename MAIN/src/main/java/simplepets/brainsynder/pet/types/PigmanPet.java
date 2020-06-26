@@ -1,5 +1,7 @@
 package simplepets.brainsynder.pet.types;
 
+import lib.brainsynder.ServerVersion;
+import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.sounds.SoundMaker;
 import org.bukkit.Material;
@@ -10,6 +12,8 @@ import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@Deprecated
+@SupportedVersion(version = ServerVersion.v1_8_R3, maxVersion = ServerVersion.v1_15_R1)
 public class PigmanPet extends PetType {
     public PigmanPet(PetCore plugin) {
         super(plugin, "pigman", SoundMaker.ENTITY_ZOMBIE_PIG_AMBIENT, EntityWrapper.PIG_ZOMBIE);
