@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.misc.IFlyablePet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
@@ -50,10 +49,11 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         this.noclip = false;
         fieldAccessor = FieldAccessor.getField(EntityLiving.class, "jumping", Boolean.TYPE);
 
-        if (this instanceof IFlyablePet) {
-            this.getAttributeMap().b(GenericAttributes.FLYING_SPEED);
-            this.getAttributeInstance(GenericAttributes.FLYING_SPEED).setValue(0.4000000059604645D);
-        }
+        // Throws NPW on the setValue line for some reason....
+//        if (this instanceof IFlyablePet) {
+//            this.getAttributeMap().b(GenericAttributes.FLYING_SPEED);
+//            this.getAttributeInstance(GenericAttributes.FLYING_SPEED).setValue(0.4000000059604645D);
+//        }
         this.getAttributeInstance(GenericAttributes.MAX_HEALTH).setValue(20.0D);
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
