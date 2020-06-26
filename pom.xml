@@ -9,7 +9,7 @@
     <artifactId>SimplePets</artifactId>
     <packaging>pom</packaging>
     <name>SimplePets</name>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.3-SNAPSHOT</version>
     <url>http://ci.pluginwiki.us</url>
 
     <properties>
@@ -19,7 +19,7 @@
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
-        <module.version>4.2.2 (build ${jenkins.buildNumber})</module.version>
+        <module.version>4.3 (build ${jenkins.buildNumber})</module.version>
     </properties>
 
     <build>
@@ -114,7 +114,7 @@
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>0.1-B22</version>
+            <version>0.1-B29</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
