@@ -3,7 +3,7 @@ package simplepets.brainsynder.menu.menuItems;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
+import simplepets.brainsynder.api.entity.misc.IShaking;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.utils.ValueType;
@@ -24,8 +24,8 @@ public class Shaking extends MenuItemAbstract {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("shaking", 0);
-        if (entityPet instanceof IEntityZombiePet) {
-            IEntityZombiePet var = (IEntityZombiePet) entityPet;
+        if (entityPet instanceof IShaking) {
+            IShaking var = (IShaking) entityPet;
             item.withName(item.getName().replace("%value%", String.valueOf(var.isShaking())));
         }
         return item;
@@ -40,8 +40,8 @@ public class Shaking extends MenuItemAbstract {
 
     @Override
     public void onLeftClick() {
-        if (entityPet instanceof IEntityZombiePet) {
-            IEntityZombiePet var = (IEntityZombiePet) entityPet;
+        if (entityPet instanceof IShaking) {
+            IShaking var = (IShaking) entityPet;
             var.setShaking(!var.isShaking());
         }
     }

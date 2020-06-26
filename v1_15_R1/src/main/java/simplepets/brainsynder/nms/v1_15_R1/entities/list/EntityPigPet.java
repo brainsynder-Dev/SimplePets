@@ -36,7 +36,7 @@ public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("saddled", hasSaddle());
+        object.setBoolean("saddled", isSaddled());
         return object;
     }
 
@@ -46,7 +46,7 @@ public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
         super.applyCompound(object);
     }
 
-    public boolean hasSaddle() {
+    public boolean isSaddled() {
         return datawatcher.get(SADDLE);
     }
 
