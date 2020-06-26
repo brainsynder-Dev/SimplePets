@@ -32,7 +32,7 @@ public class EntityStriderPet extends AgeableEntityPet implements IEntityStrider
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(BOOST_TIME, 0);
-        this.datawatcher.register(COLD, false);
+        this.datawatcher.register(COLD, true);
         this.datawatcher.register(SADDLED, false);
     }
 

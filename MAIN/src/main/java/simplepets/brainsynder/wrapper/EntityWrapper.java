@@ -75,11 +75,19 @@ public enum EntityWrapper {
     WANDERING_TRADER,
     FOX,
 
-    // 1.15 Mob
-    BEE
+    // 1.15 Mobs
+    BEE,
+
+    // 1.16 Mobs
+    PIGLIN,
+    HOGLIN,
+    STRIDER,
+    ZOGLIN,
+    ZOMBIFIED_PIGLIN
     ;
 
-    private String name, typeName;
+    private final String name;
+    private final String typeName;
 
     EntityWrapper(String name) {
         this.name = name;

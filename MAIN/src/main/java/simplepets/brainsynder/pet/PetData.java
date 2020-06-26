@@ -67,9 +67,14 @@ public enum PetData {
     ZOMBIE(AGE, Arms.class, Shaking.class),
     ZOMBIE_VILLAGER(VILLAGER, Arms.class, Shaking.class),
     PUFFER_SIZE (SILENT, PufferSize.class),
-    TROPICAL_FISH (SILENT, BodyColor.class, Pattern.class, PatternColor.class);
+    TROPICAL_FISH (SILENT, BodyColor.class, Pattern.class, PatternColor.class),
 
-    private List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();
+    PIGLIN(AGE, Dancing.class, Shaking.class, Charging.class),
+    STRIDER(AGE, Saddle.class),
+    HOGLIN(AGE, Shaking.class),
+    ZOMBIE_PIGLIN(AGE, Arms.class);
+
+    private final List<Class<? extends MenuItem>> itemsClasses = new ArrayList<>();
 
 
     @SafeVarargs

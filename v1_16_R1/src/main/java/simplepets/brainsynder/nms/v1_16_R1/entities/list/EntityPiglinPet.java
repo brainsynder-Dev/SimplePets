@@ -31,7 +31,7 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, false);
+        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default
         this.datawatcher.register(CHARGING, false);
         this.datawatcher.register(DANCING, false);
     }
@@ -41,6 +41,7 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
         StorageTagCompound object = super.asCompound();
         object.setBoolean("charging", isCharging());
         object.setBoolean("dancing", isDancing());
+        object.setBoolean("shaking", isShaking());
         return object;
     }
 
@@ -48,6 +49,7 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("charging")) setCharging(object.getBoolean("charging"));
         if (object.hasKey("dancing")) setDancing(object.getBoolean("dancing"));
+        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking"));
         super.applyCompound(object);
     }
 
@@ -69,5 +71,15 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
     @Override
     public void setDancing(boolean dancing) {
         datawatcher.set(DANCING, dancing);
+    }
+
+    @Override
+    public boolean isShaking() {
+        return !datawatcher.get(IMMUNE_TO_ZOMBIFICATION);
+    }
+
+    @Override
+    public void setShaking(boolean value) {
+        datawatcher.set(IMMUNE_TO_ZOMBIFICATION, !value);
     }
 }
