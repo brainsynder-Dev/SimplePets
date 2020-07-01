@@ -1,10 +1,11 @@
 package simplepets.brainsynder.api.entity.passive;
 
+import simplepets.brainsynder.api.entity.misc.ISleeper;
 import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.wrapper.CatType;
 import simplepets.brainsynder.wrapper.DyeColorWrapper;
 
-public interface IEntityCatPet extends ITameable {
+public interface IEntityCatPet extends ITameable, ISleeper {
     CatType getCatType ();
     void setCatType (CatType type);
 

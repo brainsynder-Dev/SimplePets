@@ -11,7 +11,6 @@ import simplepets.brainsynder.menu.menuItems.cat.CatTilt;
 import simplepets.brainsynder.menu.menuItems.fox.FoxColor;
 import simplepets.brainsynder.menu.menuItems.fox.FoxHeadRoll;
 import simplepets.brainsynder.menu.menuItems.fox.FoxSit;
-import simplepets.brainsynder.menu.menuItems.fox.FoxSleep;
 import simplepets.brainsynder.menu.menuItems.panda.PandaSit;
 import simplepets.brainsynder.menu.menuItems.panda.PandaSleep;
 import simplepets.brainsynder.menu.menuItems.panda.PandaType;
@@ -45,10 +44,10 @@ public enum PetData {
     VILLAGER(AGE, Profession.class, VillagerProfession.class, VillagerBiome.class, VillagerLevel.class),
     PIG(AGE, Saddle.class),
     PANDA (AGE, PandaSleep.class, PandaType.class, PandaSit.class),
-    FOX (AGE, FoxColor.class, FoxSit.class, FoxSleep.class, FoxHeadRoll.class),
+    FOX (AGE, FoxColor.class, FoxSit.class, Sleep.class, FoxHeadRoll.class),
     RABBIT(AGE, RabbitColor.class),
     OCELOT(AGE, Ocelot.class, Sitting.class, Tame.class),
-    CAT(AGE, CatColor.class, CatCollar.class, CatTilt.class, Sitting.class, Tame.class),
+    CAT(AGE, CatColor.class, CatCollar.class, CatTilt.class, Sitting.class, Tame.class, Sleep.class),
     LLAMA(AGE, Chested.class,Color.class, LlamaColor.class),
     SIZE(SILENT, Size1.class, Size2.class, Size3.class, Size4.class),
     POLAR_BEAR(AGE, Stand.class),

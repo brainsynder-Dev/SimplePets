@@ -30,7 +30,7 @@ public class DataMenu extends CustomInventory {
         defaults.put("title", "&a&lPet Data Changer");
 
         Map<Integer, String> object = new HashMap<>();
-        Arrays.asList(21, 22, 23, 24, 25, 31, 33).forEach(slot -> object.put(slot, "air"));
+        Arrays.asList(21, 22, 23, 24, 25, 31, 32, 33).forEach(slot -> object.put(slot, "air"));
         object.put(1, "storage");
         object.put(5, "name");
         object.put(49, "ride");

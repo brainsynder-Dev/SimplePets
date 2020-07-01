@@ -89,4 +89,14 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     public void setHeadUp(boolean value) {
         datawatcher.set(HEAD_UP, value);
     }
+
+    @Override
+    public boolean isSleeping() {
+        return datawatcher.get(SLEEPING_WITH_OWNER);
+    }
+
+    @Override
+    public void setSleeping(boolean value) {
+        datawatcher.set(SLEEPING_WITH_OWNER, value);
+    }
 }
