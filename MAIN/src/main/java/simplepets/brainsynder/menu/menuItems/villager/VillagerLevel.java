@@ -51,7 +51,7 @@ public class VillagerLevel extends MenuItemAbstract {
             VillagerData data = var.getVillagerData();
             int level = data.getLevel();
 
-            if (level == 4) {
+            if (level == 5) {
                 level = 1;
             }else{
                 level++;
@@ -67,8 +67,8 @@ public class VillagerLevel extends MenuItemAbstract {
             VillagerData data = var.getVillagerData();
             int level = data.getLevel();
 
-            if (level == 0) {
-                level = 4;
+            if (level == 1) {
+                level = 5;
             }else{
                 level--;
             }
