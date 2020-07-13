@@ -135,8 +135,8 @@ public class PetCore extends JavaPlugin {
     }
 
     private boolean errorCheck() {
-        SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
-        SpigotPluginHandler.registerPlugin(spigotPluginHandler);
+    //    SpigotPluginHandler spigotPluginHandler = new SpigotPluginHandler(this, 14124, SpigotPluginHandler.MetricType.BSTATS);
+    //    SpigotPluginHandler.registerPlugin(spigotPluginHandler);
 
         try {
             Class.forName("org.spigotmc.event.entity.EntityMountEvent");
