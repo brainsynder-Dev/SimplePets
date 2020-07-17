@@ -91,5 +91,10 @@
             <artifactId>v1_15_R1</artifactId>
             <version>${module.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>v1_16_R1</artifactId>
+            <version>${module.version}</version>
+        </dependency>
     </dependencies>
 </project>
