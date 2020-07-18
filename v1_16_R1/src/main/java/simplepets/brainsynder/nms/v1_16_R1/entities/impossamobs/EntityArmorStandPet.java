@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.v1_16_R1.entities.impossamobs;
 
+import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.Base64Wrapper;
@@ -14,6 +15,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
@@ -24,6 +26,8 @@ import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.utils.AnimationCycle;
 import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.wrapper.EntityWrapper;
+
+import java.lang.reflect.Field;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
     private boolean isSpecial = false;
@@ -117,16 +121,37 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         // Handles Armor copying
         if (getOwner().isValid()) {
             if (!getOwner().isDead()) {
-                if (!minime) {
+                if (minime) {
                     org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
-                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
-                        setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
-                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
-                        setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet()))) {
+                        if (inventory.getHelmet() == null) {
+                            setSlot(EnumItemSlot.HEAD, getSkull());
+                        } else {
+                            setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
+                        }
+                    }
+                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate()))) {
+                        if (inventory.getChestplate() == null) {
+                            setSlot(EnumItemSlot.CHEST, new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
+                        } else {
+                            setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
+                        }
+                    }
                     if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
-                        setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
-                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
-                        setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+                        if (inventory.getLeggings() == null) {
+                            setSlot(EnumItemSlot.LEGS, new ItemBuilder(Material.IRON_LEGGINGS).build());
+                        } else {
+                            setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
+                        }
+                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots()))) {
+                        if (inventory.getBoots() == null) {
+                            setSlot(EnumItemSlot.FEET, new ItemBuilder(Material.GOLDEN_BOOTS).build());
+                        } else {
+                            setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
+                        }
+
+                    }
+
                 }
             }
         }
@@ -246,8 +271,6 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             getEntity().setChestplate(air);
             getEntity().setLeggings(air);
             getEntity().setBoots(air);
-
-
             org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
             if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
                 setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
@@ -460,7 +483,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return new net.minecraft.server.v1_16_R1.Vector3f((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
     }
     public ItemStack getItems(net.minecraft.server.v1_16_R1.EnumItemSlot enumitemslot) {
-        return toBukkit(getEquipment(enumitemslot));
+        return toBukkit(super.getEquipment(enumitemslot));
     }
     private ItemStack toBukkit (net.minecraft.server.v1_16_R1.ItemStack stack) {
         return CraftItemStack.asBukkitCopy(stack);
@@ -470,7 +493,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     }
 
     public void setSlot(net.minecraft.server.v1_16_R1.EnumItemSlot enumitemslot, ItemStack itemstack) {
-        setEquipment(enumitemslot, toNMS(itemstack));
+        super.setSlot(enumitemslot, toNMS(itemstack));
     }
 
     private ItemStack checkItem(ItemStack item) {
@@ -485,5 +508,24 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     private ItemStack parseString (String string) {
         return PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(string));
+    }
+
+    // TEMPORARY METHOD
+    // Since skull fetching doesn't seem to be working properly, I've stuck in my own method from HeadsPlus. -TM
+    public ItemStack getSkull() {
+        // Allows textures to be instantly set; they aren't usually set with the UUID
+        GameProfile profile = new GameProfile(getOwner().getUniqueId(), getOwner().getName());
+        ItemStack item = new ItemBuilder(Material.PLAYER_HEAD).build();
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        try {
+            Field profileF = meta.getClass().getDeclaredField("profile");
+            profileF.setAccessible(true);
+            profileF.set(meta, profile);
+            item.setItemMeta(meta);
+        } catch (NoSuchFieldException | IllegalAccessException noSuchFieldException) {
+            // Print the stacktrace but continue without the texture
+            noSuchFieldException.printStackTrace();
+        }
+        return item;
     }
 }

@@ -12,14 +12,14 @@ import simplepets.brainsynder.nms.v1_16_R1.utils.DataWatcherWrapper;
  * NMS: {@link net.minecraft.server.v1_16_R1.EntityPiglin}
  */
 public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPet {
-    private static final DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
     private static final DataWatcherObject<Boolean> CHARGING;
     private static final DataWatcherObject<Boolean> DANCING;
+    private static final DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
 
     static {
-        IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
         CHARGING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
         DANCING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
+        IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
     }
     public EntityPiglinPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
         super(type, world, pet);
@@ -31,9 +31,9 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default
         this.datawatcher.register(CHARGING, false);
         this.datawatcher.register(DANCING, false);
+        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shake by default
     }
 
     @Override
