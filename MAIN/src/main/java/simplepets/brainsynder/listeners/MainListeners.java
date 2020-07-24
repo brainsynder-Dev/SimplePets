@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,6 +18,8 @@ import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IImpossaPet;
+import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
+import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.Utilities;
@@ -143,30 +146,31 @@ public class MainListeners implements Listener {
         if (handle instanceof IEntityPet) {
             IEntityPet pet = (IEntityPet) handle;
             if (pet.getOwner().getName().equals(e.getEntity().getName())) {
-                pet.getPet().setVehicle(false, true);
-                Location loc = pet.getEntity().getLocation();
-                if (e.getEntity() instanceof Player) {
-                    List<Material> blocks = Utilities.getBlacklistedMaterials();
-                    if (blocks.contains(e.getEntity().getLocation().getBlock().getType())) {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                e.getEntity().teleport(pet.getEntity().getLocation());
-                            }
-                        }.runTaskLater(PetCore.get(), 3);
-                    } else {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                if (!loc.getWorld().getName().equals(e.getEntity().getLocation().getWorld().getName())) {
-                                    PetOwner.getPetOwner(pet.getOwner()).respawnPetFully(40);
-                                    return;
+                if (!pet.getPet().setVehicle(false, true)) {
+                    Location loc = pet.getEntity().getLocation();
+                    if (e.getEntity() instanceof Player) {
+                        List<Material> blocks = Utilities.getBlacklistedMaterials();
+                        if (blocks.contains(e.getEntity().getLocation().getBlock().getType())) {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    e.getEntity().teleport(pet.getEntity().getLocation());
                                 }
-                                if (loc.distanceSquared(e.getEntity().getLocation()) >= 5) {
-                                    pet.getEntities().forEach(entity -> entity.teleport(e.getEntity().getLocation()));
+                            }.runTaskLater(PetCore.get(), 3);
+                        } else {
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    if (!loc.getWorld().getName().equals(e.getEntity().getLocation().getWorld().getName())) {
+                                        PetOwner.getPetOwner(pet.getOwner()).respawnPetFully(40);
+                                        return;
+                                    }
+                                    if (loc.distanceSquared(e.getEntity().getLocation()) >= 5) {
+                                        pet.getEntities().forEach(entity -> entity.teleport(e.getEntity().getLocation()));
+                                    }
                                 }
-                            }
-                        }.runTaskLater(PetCore.get(), 10);
+                            }.runTaskLater(PetCore.get(), 10);
+                        }
                     }
                 }
             }
