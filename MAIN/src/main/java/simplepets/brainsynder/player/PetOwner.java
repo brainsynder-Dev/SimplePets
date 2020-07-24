@@ -256,7 +256,7 @@ public class PetOwner {
     }
 
     public void addPurchasedPet(String name) {
-        PetType pet = PetCore.get().getTypeManager().getType(petName);
+        PetType pet = PetCore.get().getTypeManager().getType(name);
         addPurchasedPet(pet);
     }
 
