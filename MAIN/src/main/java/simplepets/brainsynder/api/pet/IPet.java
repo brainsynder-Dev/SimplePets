@@ -29,7 +29,7 @@ public interface IPet {
 
     boolean isVehicle();
 
-    void setVehicle(boolean vehicle, boolean byEvent);
+    boolean setVehicle(boolean vehicle, boolean byEvent);
 
     void toggleRiding(boolean byEvent);
 

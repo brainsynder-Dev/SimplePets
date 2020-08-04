@@ -150,7 +150,7 @@ public class Pet implements IPet {
         return false;
     }
 
-    public void setVehicle(boolean value, boolean byEvent) {
+    public boolean setVehicle(boolean value, boolean byEvent) {
         if (!byEvent) {
             if (type.canMount(owner)) {
                 if (ent instanceof IHorseAbstract) {
@@ -159,10 +159,6 @@ public class Pet implements IPet {
                 }
 
                 if (getPet().getPassenger() != null) {
-                    PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.DISMOUNT);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
-                    if (event.isCancelled()) return;
-
                     if (ent instanceof IEntityControllerPet) {
                         ((IEntityControllerPet) ent).getDisplayEntity().eject();
                     } else {
@@ -177,7 +173,7 @@ public class Pet implements IPet {
                     if (isHat) {
                         PetHatEvent event = new PetHatEvent(this, PetHatEvent.Type.REMOVE);
                         Bukkit.getServer().getPluginManager().callEvent(event);
-                        if (event.isCancelled()) return;
+                        if (event.isCancelled()) return vehicle;
 
                         instance.getUtilities().removePassenger(owner, ent.getEntity());
                         setHat(false);
@@ -185,7 +181,7 @@ public class Pet implements IPet {
 
                     PetVehicleEvent event = new PetVehicleEvent(this, PetVehicleEvent.Type.MOUNT);
                     Bukkit.getServer().getPluginManager().callEvent(event);
-                    if (event.isCancelled()) return;
+                    if (event.isCancelled()) return vehicle;
 
                     value = true;
                     if (owner.getLocation().getBlock() != null) {
@@ -209,8 +205,13 @@ public class Pet implements IPet {
                     }.runTaskLater(PetCore.get(), 2L);
                 }
             }
+        } else {
+            PetVehicleEvent event = new PetVehicleEvent(this, value ? PetVehicleEvent.Type.MOUNT : PetVehicleEvent.Type.DISMOUNT);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) return vehicle;
         }
         vehicle = value;
+        return value;
     }
 
     public void setInvisible(boolean flag) {
