@@ -32,6 +32,7 @@ import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Config;
 
 import java.util.*;
 
@@ -180,8 +181,8 @@ public class PetOwner {
 
     public void setPetName(String name, boolean override) {
         boolean hasLimit = PetCore.get().getConfiguration().getBoolean("RenamePet.Limit-Number-Of-Characters");
-        boolean color = PetCore.get().getConfiguration().getBoolean("ColorCodes");
-        boolean k = PetCore.get().getConfiguration().getBoolean("Use&k");
+        boolean color = PetCore.get().getConfiguration().getBoolean(Config.COLOR);
+        boolean k = PetCore.get().getConfiguration().getBoolean(Config.MAGIC);
         if (name != null) name = name.replace("~", " ");
 
         if (!override) {

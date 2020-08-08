@@ -14,6 +14,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.types.ShulkerPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.storage.files.Config;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.io.File;
@@ -127,7 +128,7 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     }
 
     public boolean canHat(Player player) {
-        if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Hats")) return false;
+        if (!PetCore.get().getConfiguration().getBoolean(Config.HATS)) return false;
         if (_HAT_) {
             if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
             if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
@@ -138,7 +139,7 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
 
     public boolean canMount(Player player) {
         if (this instanceof ShulkerPet) return false;
-        if (!PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts")) return false;
+        if (!PetCore.get().getConfiguration().getBoolean(Config.MOUNTABLE)) return false;
 
         if (_MOUNT_) {
             if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;

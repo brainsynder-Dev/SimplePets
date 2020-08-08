@@ -76,7 +76,7 @@ public class PetEventListeners implements Listener {
             PetType type = storage.getType();
             ItemBuilder maker = storage.getType().getItemBuilder().clone();
             String price = String.valueOf(economyFile.getPrice(type));
-            if (price.equals("-1")) price = economyFile.getString("Price-Free");
+            if (price.equals("-1")) price = economyFile.getString("Price-Free", true);
 
             try {
                 if (price.isEmpty()) {
@@ -91,7 +91,7 @@ public class PetEventListeners implements Listener {
                 continue;
             }
 
-            if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pet.economy.bypass")) price = economyFile.getString("Bypass.Price");
+            if (economyFile.getBoolean("Bypass.Hide-Price-If-Bypassed") && event.getPlayer().hasPermission("Pet.economy.bypass")) price = String.valueOf(economyFile.get("Bypass.Price"));
             boolean contains = petArray.contains(type);
             for (String line : lore)
                 maker.addLore(line.replace("%cost%", price).replace("%contains%", String.valueOf(contains)));

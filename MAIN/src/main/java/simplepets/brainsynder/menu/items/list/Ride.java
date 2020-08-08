@@ -6,6 +6,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.Config;
 
 import java.io.File;
 
@@ -21,7 +22,7 @@ public class Ride extends Item {
 
     @Override
     public boolean addItemToInv(PetOwner owner, CustomInventory inventory) {
-        return PetCore.get().getConfiguration().getBoolean("Allow-Pets-Being-Mounts");
+        return PetCore.get().getConfiguration().getBoolean(Config.MOUNTABLE);
     }
 
     @Override

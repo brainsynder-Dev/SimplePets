@@ -9,7 +9,7 @@ import java.util.Collections;
 
 public class EconomyFile extends FileMaker {
     public EconomyFile() {
-        super(PetCore.get(), "PetEconomy.yml");
+        super(PetCore.get().getDataFolder(), "PetEconomy.yml");
     }
 
     public void loadDefaults() {
@@ -33,10 +33,5 @@ public class EconomyFile extends FileMaker {
         if (isSet("Pet." + type.getConfigName() + ".Price"))
             return getDouble("Pet." + type.getConfigName() + ".Price");
         return -1;
-    }
-
-    @Override
-    public String getString(String path) {
-        return super.getString(path, true);
     }
 }

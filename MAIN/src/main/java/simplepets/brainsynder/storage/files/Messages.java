@@ -7,7 +7,7 @@ import java.util.Arrays;
 
 public class Messages extends FileMaker {
     public Messages(Plugin plugin, String fileName) {
-        super(plugin, fileName);
+        super(plugin.getDataFolder(), fileName);
     }
 
     public void loadDefaults() {
@@ -46,8 +46,8 @@ public class Messages extends FileMaker {
         setDefault("ArmorMenu.Restricted", "&cThis pet can not have items added or removed!");
     }
 
-    @Override
-    public String getString(String path) {
-        return super.getString(path, true);
-    }
+//    @Override
+//    public String getString(String path) {
+//        return super.getString(path, true);
+//    }
 }

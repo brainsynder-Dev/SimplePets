@@ -8,22 +8,20 @@ import java.util.Collections;
 
 public class Config extends FileMaker {
     public Config(JavaPlugin plugin, String fileName) {
-        super(plugin, fileName);
+        super(plugin.getDataFolder(), fileName);
     }
 
     public void loadDefaults() {
-        setDefault("Needs-Pet-Permission-To-Open-GUI", true);
+        setDefault("Needs-Pet-Permission-To-Open-GUI", false);
         setDefault("Needs-Permission", true);
         setDefault("Remove-Item-If-No-Permission", true);
         setDefault("RemovePetsOnWorldChange", true);
         setDefault("UseVaultEconomy", false);
         setDefault("ShowParticles", true);
         setDefault("Complete-Mobspawning-Deny-Bypass", true);
-        setDefault("Use&k", false);
-        setDefault("ColorCodes", true);
         setDefault("PetItemStorage.Enable", true);
         setDefault("PetItemStorage.Inventory-Size", 27);
-        setDefault("OldPetRegistering", false); // TODO: Might Remove
+        // setDefault("OldPetRegistering", false); // This is no longer used in newer versions
         setDefault("Needs-Data-Permissions", true); // TODO: Reformat this value
         setDefault("Pathfinding.Min-Distance-For-Teleport", 20.0);
         setDefault("Pathfinding.Stopping-Distance", 7.0);
@@ -71,8 +69,10 @@ public class Config extends FileMaker {
         setDefault("PetToggles.HideNameOnShift", true);
         setDefault("PetToggles.AutoRemove.Enabled", true);
         setDefault("PetToggles.AutoRemove.TickDelay", 10000);
-        setDefault("Allow-Pets-Being-Mounts", true);
-        setDefault("Allow-Pets-Being-Hats", true);
+        setDefault(MOUNTABLE, true);
+        setDefault(HATS, true);
+        move("Allow-Pets-Being-Mounts", MOUNTABLE, logMove());
+        move("Allow-Pets-Being-Hats", HATS, logMove());
         setDefault("Respawn-Last-Pet-On-Login", true);
 
         setDefault("RenamePet.Enabled", true);
@@ -80,14 +80,15 @@ public class Config extends FileMaker {
         setDefault("RenamePet.Limit-Number-Of-Characters", false);
         setDefault("RenamePet.CharacterLimit", 10);
         setDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"));
+        setDefault(MAGIC, false);
+        setDefault(COLOR, true);
+        move("Use&k", MAGIC, logMove());
+        move("ColorCodes", COLOR, logMove());
     }
 
-    @Override
-    public void set(String tag, Object data, String... comments) {
-        try {
-            super.set(tag, data);
-        } catch (Exception e) {
-            super.set(tag, data);
-        }
-    }
+    public static final String
+            MOUNTABLE = "PetToggles.All-Pets-Mountable",
+            HATS = "PetToggles.All-Pets-Hat",
+            MAGIC = "RenamePet.Allow-&k",
+            COLOR = "RenamePet.Allow-ColorCodes";
 }

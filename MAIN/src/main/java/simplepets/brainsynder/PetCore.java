@@ -214,11 +214,10 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onDisable() {
-        if (typeManager != null) {
-            typeManager.unLoad();
-        }
+        if (typeManager != null) typeManager.unLoad();
         if (linkRetriever != null) linkRetriever.cleanup();
         disabling = true;
+
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner == null) continue;
             if (petOwner.getPlayer() == null) continue;
@@ -226,14 +225,15 @@ public class PetCore extends JavaPlugin {
             if (petOwner.hasPet()) petOwner.removePet();
             petOwner.getFile().save(true, true);
         }
-        if (getConfiguration() != null) {
-            if (getConfiguration().getBoolean("MySQL.Enabled")) {
-                if (mySQL != null) mySQL = null;
-            }
-        }
+
         try {
             Thread.sleep(20L);
-        } catch (InterruptedException ignored) {
+        } catch (InterruptedException ignored) {}
+
+        if (getConfiguration() != null) {
+            if (getConfiguration().getBoolean("MySQL.Enabled", false)) {
+                if (mySQL != null) mySQL = null;
+            }
         }
     }
 
@@ -245,11 +245,17 @@ public class PetCore extends JavaPlugin {
         return reloaded;
     }
 
+    public void debug(boolean sync, String message) {
+        debug(sync, 0, message);
+    }
     public void debug(String message) {
         debug(0, message);
     }
-
     public void debug(int level, String message) {
+        debug(true, level, message);
+    }
+
+    public void debug(boolean sync, int level, String message) {
         if (level >= 3) level = 2;
         ChatColor prefix = ((level == -1) ? ChatColor.AQUA : ChatColor.GOLD);
         ChatColor color = ChatColor.WHITE;
@@ -261,13 +267,25 @@ public class PetCore extends JavaPlugin {
                 color = ChatColor.RED;
                 break;
         }
-        if (configuration == null) {
-            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
-            return;
-        }
-        if (!configuration.isSet("Debug.Enabled")) {
-            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
-            return;
+        int finalLevel = level;
+        ChatColor finalColor = color;
+
+        Runnable runnable = () -> {
+            if (configuration == null) return;
+            if (!configuration.getBoolean("Debug.Enabled", false)) return;
+            if ((finalLevel != -1) && (!configuration.getStringList("Debug.Levels").contains(String.valueOf(finalLevel))))  return;
+            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + finalColor + message);
+        };
+
+        if (sync) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    runnable.run();
+                }
+            }.runTask(this);
+        }else{
+            runnable.run();
         }
         if (level != -1) {
             if (!configuration.getBoolean("Debug.Enabled")) return;
@@ -370,10 +388,10 @@ public class PetCore extends JavaPlugin {
     }
 
     public String translateName(String name) {
-        boolean color = getConfiguration().getBoolean("ColorCodes");
-        boolean k = getConfiguration().getBoolean("Use&k");
+        boolean color = getConfiguration().getBoolean(Config.COLOR);
+        boolean magic = getConfiguration().getBoolean(Config.MAGIC);
         if (color)
-            name = ChatColor.translateAlternateColorCodes('&', k ? name : name.replace("&k", "k"));
+            name = ChatColor.translateAlternateColorCodes('&', magic ? name : name.replace("&k", "k"));
 
         return name;
     }

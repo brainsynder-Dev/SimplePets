@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 public class Commands extends FileMaker {
     public Commands(JavaPlugin plugin, String fileName) {
-        super(plugin, fileName);
+        super(plugin.getDataFolder(), fileName);
     }
 
     public void loadDefaults() {
