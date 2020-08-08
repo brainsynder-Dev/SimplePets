@@ -23,6 +23,7 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.PetSpawner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.utils.DebugLevel;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
@@ -80,7 +81,7 @@ public class Pet implements IPet {
         IEntityPet ent = PetSpawner.spawnPet(spawnLoc, this, type.getEntityClass());
         if (ent == null) {
             SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
-            core.debug(2, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
+            core.debug(DebugLevel.ERROR, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
             return;
         }
         ent.setWalkToLocation(walkTo);

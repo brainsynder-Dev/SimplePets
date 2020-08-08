@@ -29,6 +29,7 @@ import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.MySQLHandler;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.*;
+import simplepets.brainsynder.utils.DebugLevel;
 import simplepets.brainsynder.utils.Errors;
 import simplepets.brainsynder.utils.ISpawner;
 import simplepets.brainsynder.utils.Utilities;
@@ -74,7 +75,7 @@ public class PetCore extends JavaPlugin {
         }
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
-        if (!Bukkit.getOnlinePlayers().isEmpty()) {
+        if (!Bukkit.getOnlinePlayers().isEmpty() || disabling) {
             reloaded = true;
             Errors.RELOAD_DETECTED.print();
             Bukkit.getOnlinePlayers().forEach(player -> {
@@ -278,36 +279,24 @@ public class PetCore extends JavaPlugin {
         return reloaded;
     }
 
-    public void debug(boolean sync, String message) {
-        debug(sync, 0, message);
-    }
     public void debug(String message) {
-        debug(0, message);
+        debug(message, true);
     }
-    public void debug(int level, String message) {
-        debug(true, level, message);
+    public void debug(String message, boolean sync) {
+        debug(DebugLevel.NORMAL, message, sync);
+    }
+    public void debug(DebugLevel level, String message) {
+        debug(level, message, true);
     }
 
-    public void debug(boolean sync, int level, String message) {
-        if (level >= 3) level = 2;
-        ChatColor prefix = ((level == -1) ? ChatColor.AQUA : ChatColor.GOLD);
-        ChatColor color = ChatColor.WHITE;
-        switch (level) {
-            case 1:
-                color = ChatColor.YELLOW;
-                break;
-            case 2:
-                color = ChatColor.RED;
-                break;
-        }
-        int finalLevel = level;
-        ChatColor finalColor = color;
-
+    public void debug(DebugLevel level, String message, boolean sync) {
         Runnable runnable = () -> {
-            if (configuration == null) return;
-            if (!configuration.getBoolean("Debug.Enabled", false)) return;
-            if ((finalLevel != -1) && (!configuration.getStringList("Debug.Levels").contains(String.valueOf(finalLevel))))  return;
-            Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + finalColor + message);
+            if (level != DebugLevel.DEBUG) {
+                if (configuration == null) return;
+                if (!configuration.getBoolean("Debug.Enabled", false)) return;
+                if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level.getLevel()))) return;
+            }
+            Bukkit.getConsoleSender().sendMessage(level.getPrefix() + "[SimplePets Debug] " + level.getColor() + message);
         };
 
         if (sync) {

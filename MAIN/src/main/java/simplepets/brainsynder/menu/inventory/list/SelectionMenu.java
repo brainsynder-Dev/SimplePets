@@ -19,6 +19,7 @@ import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetMap;
 import simplepets.brainsynder.storage.PetTypeStorage;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.io.File;
 import java.util.*;
@@ -123,14 +124,21 @@ public class SelectionMenu extends CustomInventory {
                 inv.setItem(slot, item.getItemBuilder().build());
         });
 
-        PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), player);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) return;
-        IStorage<ItemStack> types = event.getItems().copy();
-        while (types.hasNext()) {
-            inv.addItem(types.next());
+        if (!pages.isEmpty()) {
+            if (pages.exists(page)) {
+                PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), player);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                if (event.isCancelled()) return;
+                IStorage<ItemStack> types = event.getItems().copy();
+                while (types.hasNext()) {
+                    inv.addItem(types.next());
+                }
+                petMap.put(player.getName(), event.getShownPetTypes());
+            }else{
+                PetCore.get().debug(DebugLevel.MODERATE, "Page does not exist (Page "+page+" / "+pages.totalPages()+")");
+            }
+
         }
-        petMap.put(player.getName(), event.getShownPetTypes());
         player.openInventory(inv);
     }
 

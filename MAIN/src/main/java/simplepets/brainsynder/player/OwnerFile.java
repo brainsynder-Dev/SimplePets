@@ -13,6 +13,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.storage.files.PlayerStorage;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,12 +53,12 @@ public class OwnerFile {
         if (savePet) {
             if (PetCore.get().getConfiguration().getBoolean("MySQL.Enabled", false)) {
                 if (PetCore.get().isDisabling()) {
-                    PetCore.get().debug(false, "Could not save " + p.getName() + "'s Pet information because they did not log out before the plugin disabled...");
+                    PetCore.get().debug("Could not save " + p.getName() + "'s Pet information because they did not log out before the plugin disabled...", false);
                     return;
                 }
 
                 if (handler == null) {
-                    PetCore.get().debug(false, 2, "Unable to save data to SQL, sql variable seems to be missing...");
+                    PetCore.get().debug(DebugLevel.ERROR, "Unable to save data to SQL, sql variable seems to be missing...", false);
                     return;
                 }
 
@@ -111,7 +112,7 @@ public class OwnerFile {
             }
 
             if (handler == null) {
-                PetCore.get().debug(2, "Unable to load data from SQL, sql variable seems to be missing...");
+                PetCore.get().debug(DebugLevel.ERROR, "Unable to load data from SQL, sql variable seems to be missing...");
                 return;
             }
 
@@ -158,7 +159,6 @@ public class OwnerFile {
                 }
                 if (file.hasKey("SavedPets")) {
                     StorageTagList stored = new StorageTagList();
-                    PetCore.get().debug(2, file.getTag("SavedPets").toString());
                     if (file.getTag("SavedPets") instanceof StorageTagList) {
                         // Was saved as StorageTagList
                         stored = (StorageTagList) file.getTag("SavedPets");

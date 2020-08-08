@@ -62,12 +62,7 @@ public enum Errors {
 
     public void print(boolean debug) {
         for (String line : errMsg) {
-            if (debug) {
-                PetCore.get().debug(-1, line);
-                continue;
-            }
-
-            System.out.println(line);
+            PetCore.get().debug(DebugLevel.DEBUG, line);
         }
     }
 

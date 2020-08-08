@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.impl.worldguard.WGInterface;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.lang.reflect.Method;
 
@@ -80,7 +81,7 @@ public class WGOld implements WGInterface {
             try {
                 return method.invoke(instance, parameters);
             } catch (Exception e) {
-                PetCore.get().debug(2, "Could not invoke method '"+method.getName()+"'");
+                PetCore.get().debug(DebugLevel.ERROR, "Could not invoke method '"+method.getName()+"'");
                 return null;
             }
         }

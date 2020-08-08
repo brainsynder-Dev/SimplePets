@@ -8,6 +8,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.items.Item;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.base.JSONFile;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.io.File;
 import java.util.HashMap;
@@ -48,7 +49,7 @@ public class CustomInventory extends JSONFile {
                     int slot = Integer.parseInt(key);
                     Item item = PetCore.get().getItemLoaders().getLoader(String.valueOf(json.get("item")));
                     if (item == null) {
-                        PetCore.get().debug(2, "Could not retrieve the item for: " + key);
+                        PetCore.get().debug(DebugLevel.ERROR, "Could not retrieve the item for: " + key);
                         continue;
                     }
                     slots.put((slot - 1), item);

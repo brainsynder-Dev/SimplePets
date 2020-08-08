@@ -119,7 +119,7 @@ public class Utilities {
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#setPassenger");
+            PetCore.get().debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
         }
     }
@@ -132,7 +132,7 @@ public class Utilities {
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
-            PetCore.get().debug(2, "Could not run method IEntityPet#removePassenger");
+            PetCore.get().debug(DebugLevel.ERROR, "Could not run method IEntityPet#removePassenger");
             e.printStackTrace();
         }
     }

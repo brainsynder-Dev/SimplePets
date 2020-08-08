@@ -9,6 +9,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -31,7 +32,7 @@ public class MySQLHandler {
 
     public void save(PetOwner owner, boolean savePet) {
         if (sql == null) {
-            core.debug(false, 2, "Unable to save data to SQL, sql variable seems to be missing...");
+            core.debug(DebugLevel.ERROR, "Unable to save data to SQL, sql variable seems to be missing...", false);
             return;
         }
         Player player = owner.getPlayer();
@@ -85,19 +86,19 @@ public class MySQLHandler {
                     select.close();
                     result.close();
                 } catch (Exception e) {
-                    PetCore.get().debug(false, "Unable to save " + name + "'s Pet data.");
-                    PetCore.get().debug(false, "Data that failed to save: ");
-                    PetCore.get().debug(false, "- Name:" + name);
-                    PetCore.get().debug(false, "- UUID:" + uuid);
-                    PetCore.get().debug(false, "- PetName (Base64):" + Base64Wrapper.encodeString(finalPetName));
-                    PetCore.get().debug(false, "- PetData:" + finalNeedsRespawn);
-                    PetCore.get().debug(false, "- PurchasedPets (Base64):" + Base64Wrapper.encodeString(list.toString()));
-                    PetCore.get().debug(false, "- Error:");
+                    PetCore.get().debug("Unable to save " + name + "'s Pet data.", false);
+                    PetCore.get().debug("Data that failed to save: ", false);
+                    PetCore.get().debug("- Name:" + name, false);
+                    PetCore.get().debug("- UUID:" + uuid, false);
+                    PetCore.get().debug("- PetName (Base64):" + Base64Wrapper.encodeString(finalPetName), false);
+                    PetCore.get().debug("- PetData:" + finalNeedsRespawn, false);
+                    PetCore.get().debug("- PurchasedPets (Base64):" + Base64Wrapper.encodeString(list.toString()), false);
+                    PetCore.get().debug("- Error:", false);
                     e.printStackTrace();
                 }
             });
         } catch (Exception e) {
-            PetCore.get().debug(false, "Could not save " + player.getName() + "'s Pet data");
+            PetCore.get().debug("Could not save " + player.getName() + "'s Pet data", false);
             e.printStackTrace();
         }
 
@@ -105,7 +106,7 @@ public class MySQLHandler {
 
     public void load(PetOwner owner, String name) {
         if (sql == null) {
-            core.debug(2, "Unable to load data to SQL, sql variable seems to be missing...");
+            core.debug(DebugLevel.ERROR, "Unable to load data to SQL, sql variable seems to be missing...");
             return;
         }
         Player player = owner.getPlayer();
@@ -193,9 +194,9 @@ public class MySQLHandler {
             } catch (NBTException e) {
                 compound = new StorageTagCompound();
 
-                core.debug(2, "Failed to handle NeedsRespawn data : " + e.getMessage());
+                core.debug(DebugLevel.ERROR, "Failed to handle NeedsRespawn data : " + e.getMessage());
                 StackTraceElement[] trace = e.getStackTrace();
-                for (StackTraceElement traceElement : trace) core.debug(2, "at "+traceElement);
+                for (StackTraceElement traceElement : trace) core.debug(DebugLevel.ERROR, "at "+traceElement);
                 Throwable cause = e.getCause();
                 if (cause != null) {
                     handleThrowable(cause);
@@ -211,7 +212,7 @@ public class MySQLHandler {
         int m = trace.length - 1;
         while (m >= 0) m--;
         // Print our stack trace
-        for (int i = 0; i <= m; i++) core.debug(2, "at "+trace[i]);
+        for (int i = 0; i <= m; i++) core.debug(DebugLevel.ERROR, "at "+trace[i]);
 
         Throwable cause = throwable.getCause();
         if (cause != null) handleThrowable(cause);
