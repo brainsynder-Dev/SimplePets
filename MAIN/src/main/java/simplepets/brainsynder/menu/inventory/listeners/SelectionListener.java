@@ -39,6 +39,8 @@ public class SelectionListener implements Listener {
             }
 
             if (!menu.getPetMap().containsKey(p.getName())) {
+                e.setCancelled(true);
+                p.closeInventory();
                 return;
             }
             IStorage<PetTypeStorage> storage = menu.getPetMap().getKey(p.getName()).copy();

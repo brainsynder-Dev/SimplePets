@@ -1,12 +1,10 @@
 package simplepets.brainsynder.player;
 
-import lib.brainsynder.nbt.JsonToNBT;
-import lib.brainsynder.nbt.NBTException;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.particle.Particle;
 import lib.brainsynder.particle.ParticleMaker;
 import lib.brainsynder.sounds.SoundMaker;
-import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -19,8 +17,6 @@ import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
@@ -63,7 +59,7 @@ public class PetOwner {
      * Handles Pet respawning when the player teleports, dies, etc...
      */
     private StorageTagCompound petToRespawn = null;
-    private JSONObject storedInventory = null;
+    private StorageTagCompound storedInventory = null;
     private List<StorageTagCompound> savedPets = new ArrayList<>();
 
 
@@ -141,16 +137,9 @@ public class PetOwner {
         setPetName(name, false);
     }
 
-    void updateSavedPets(JSONArray array) {
-        if (array.isEmpty()) return;
-
-        array.forEach(obj -> {
-            String json = Base64Wrapper.decodeString(String.valueOf(obj));
-            try {
-                savedPets.add(JsonToNBT.getTagFromJson(json));
-            } catch (NBTException ignored) {
-            }
-        });
+    void updateSavedPets(StorageTagList list) {
+        if (list.getList().isEmpty()) return;
+        list.getList().forEach(storageBase -> savedPets.add((StorageTagCompound) storageBase));
     }
 
     public boolean containsPetSave(StorageTagCompound compound) {
@@ -169,13 +158,9 @@ public class PetOwner {
         return savedPets;
     }
 
-    JSONArray getSavedPetsArray() {
-        JSONArray array = new JSONArray();
-        if (!savedPets.isEmpty()) {
-            savedPets.forEach(compound -> {
-                array.add(Base64Wrapper.encodeString(compound.toString()));
-            });
-        }
+    StorageTagList getSavedPetsArray() {
+        StorageTagList array = new StorageTagList();
+        if (!savedPets.isEmpty()) savedPets.forEach(array::appendTag);
         return array;
     }
 
@@ -442,19 +427,26 @@ public class PetOwner {
         maker.sendToLocation(location);
     }
 
+    @Deprecated
+    public List<String> getOwnedPetsString() {
+        List<String> list = new ArrayList<>();
+        ownedPets.forEach(petType -> list.add(petType.getName()));
+        return list;
+    }
+
     public List<PetType> getOwnedPets() {
         return this.ownedPets;
     }
 
-    public JSONObject getStoredInventory() {
+    public StorageTagCompound getStoredInventory() {
         return storedInventory;
     }
 
-    public void setStoredInventory(JSONObject storedInventory) {
+    public void setStoredInventory(StorageTagCompound storedInventory) {
         setStoredInventory(storedInventory, true);
     }
 
-    public void setStoredInventory(JSONObject storedInventory, boolean save) {
+    public void setStoredInventory(StorageTagCompound storedInventory, boolean save) {
         this.storedInventory = storedInventory;
         if (save) file.save(false, false);
     }

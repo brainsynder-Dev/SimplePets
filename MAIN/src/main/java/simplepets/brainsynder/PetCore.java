@@ -26,6 +26,7 @@ import simplepets.brainsynder.menu.items.ItemLoaders;
 import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.player.MySQLHandler;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.*;
 import simplepets.brainsynder.utils.Errors;
@@ -50,6 +51,7 @@ public class PetCore extends JavaPlugin {
     private Messages messages;
     private Utilities utilities = null;
     private MySQL mySQL = null;
+    private MySQLHandler sqlHandler = null;
     private LinkRetriever linkRetriever;
     private TypeManager typeManager;
     private Commands commands;
@@ -160,7 +162,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private void handleSQL() {
-        if (getConfiguration().getBoolean("MySQL.Enabled")) {
+        if (getConfiguration().getBoolean("MySQL.Enabled", false)) {
             String host = getConfiguration().getString("MySQL.Host", false);
             String port = getConfiguration().getString("MySQL.Port", false);
             String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
@@ -171,9 +173,40 @@ public class PetCore extends JavaPlugin {
             debug("Creating SQL table if there is none...");
             CompletableFuture.runAsync(() -> {
                 try (Connection connection = mySQL.getSource().getConnection()) {
-                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
-                    if (!mySQL.hasColumn(connection, "SavedPets"))
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT);");
+                    StringBuilder builder = new StringBuilder();
+                    if (!mySQL.hasColumn(connection, "UUID")) {
+                        mySQL.addColumn(connection, "UUID", "TEXT");
+                        builder.append(", UUID");
+                    }
+                    if (!mySQL.hasColumn(connection, "name")) {
+                        mySQL.addColumn(connection, "name", "TEXT");
+                        builder.append(", name");
+                    }
+                    if (!mySQL.hasColumn(connection, "UnlockedPets")) {
+                        mySQL.addColumn(connection, "UnlockedPets", "MEDIUMTEXT");
+                        builder.append(", UnlockedPets");
+                    }
+                    if (!mySQL.hasColumn(connection, "PetName")) {
+                        mySQL.addColumn(connection, "PetName", "TEXT");
+                        builder.append(", PetName");
+                    }
+                    if (!mySQL.hasColumn(connection, "NeedsRespawn")) {
+                        mySQL.addColumn(connection, "NeedsRespawn", "MEDIUMTEXT");
+                        builder.append(", NeedsRespawn");
+                    }
+                    if (!mySQL.hasColumn(connection, "SavedPets")) {
                         mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
+                        builder.append(", SavedPets");
+                    }
+
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            sqlHandler = new MySQLHandler(instance, mySQL);
+                            if (!builder.toString().isEmpty()) debug("Database is missing column(s) adding: " + builder.toString().replaceFirst(", ", ""));
+                        }
+                    }.runTask(instance);
                 } catch (Exception e) {
                     debug("Unable to create default SQL tables Error:");
                     e.printStackTrace();
@@ -287,11 +320,6 @@ public class PetCore extends JavaPlugin {
         }else{
             runnable.run();
         }
-        if (level != -1) {
-            if (!configuration.getBoolean("Debug.Enabled")) return;
-            if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level))) return;
-        }
-        Bukkit.getConsoleSender().sendMessage(prefix + "[SimplePets Debug] " + color + message);
     }
 
     public void reload(int type) {
@@ -305,27 +333,7 @@ public class PetCore extends JavaPlugin {
             typeManager = new TypeManager(this);
         }
 
-        if ((type == 1) || (type == 2)) {
-            if (getConfiguration().isSet("MySQL.Enabled")) {
-                if (!getConfiguration().getBoolean("MySQL.Enabled")) return;
-                String host = getConfiguration().getString("MySQL.Host", false);
-                String port = getConfiguration().getString("MySQL.Port", false);
-                String databaseName = getConfiguration().getString("MySQL.DatabaseName", false);
-                String username = getConfiguration().getString("MySQL.Login.Username", false);
-                String password = getConfiguration().getString("MySQL.Login.Password", false);
-                mySQL = new MySQL(host, port, databaseName, username, password);
-                CompletableFuture.runAsync(() -> {
-                    try (Connection connection = mySQL.getSource().getConnection()) {
-                        connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT,`UnlockedPets` MEDIUMTEXT,`PetName` TEXT,`NeedsRespawn` MEDIUMTEXT);");
-                        if (!mySQL.hasColumn(connection, "SavedPets"))
-                            mySQL.addColumn(connection, "SavedPets", "LONGTEXT");
-                    } catch (Exception e) {
-                        debug("Unable to create default SQL tables Error:");
-                        e.printStackTrace();
-                    }
-                });
-            }
-        }
+        if ((type == 1) || (type == 2)) handleSQL();
     }
 
     // GETTERS
@@ -377,6 +385,10 @@ public class PetCore extends JavaPlugin {
 
     public MySQL getMySQL() {
         return this.mySQL;
+    }
+
+    public MySQLHandler getSqlHandler() {
+        return sqlHandler;
     }
 
     public Commands getCommands() {

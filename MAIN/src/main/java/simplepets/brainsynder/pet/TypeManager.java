@@ -12,11 +12,15 @@ import java.util.LinkedList;
 import java.util.TreeSet;
 
 public class TypeManager {
+    private LinkedList<PetType> rawSort;
     private LinkedList<PetType> sortedItems;
+    private LinkedHashMap<String, PetType> rawList;
     private LinkedHashMap<String, PetType> items;
 
     public TypeManager (PetCore plugin) {
+        rawList = new LinkedHashMap<>();
         items = new LinkedHashMap<>();
+        rawSort = new LinkedList<> ();
         sortedItems = new LinkedList<> ();
 
         register(new ArmorStandPet(plugin));
@@ -94,21 +98,30 @@ public class TypeManager {
         Collection<String> sortKeys = new TreeSet<>(Collator.getInstance());
         items.values().forEach(data -> sortKeys.add(data.getString("sort_key")));
         sortKeys.forEach(key -> sortedItems.add(fromSortKey(key)));
+
+        Collection<String> rawSortKeys = new TreeSet<>(Collator.getInstance());
+        rawList.values().forEach(data -> rawSortKeys.add(data.getConfigName()));
+        rawSortKeys.forEach(key -> rawSort.add(fromSortKey(key)));
     }
 
     public void unLoad () {
+        if (rawList != null) rawList.clear();
+        rawList = null;
         if (items != null) items.clear();
         items = null;
         if (sortedItems != null) sortedItems.clear();
         sortedItems = null;
+        if (rawSort != null) rawSort.clear();
+        rawSort = null;
     }
 
     private void register (PetType item) {
-        if (!item.isSupported()) return;
         item.setDefault("sort_key", item.getConfigName());
         item.setDefault("sound", item.getDefaultSound().name());
         item.setDefault("display_name", "&a&l%player%'s " + item.getConfigName() + " Pet");
         item.setDefault("summon_name", WordUtils.capitalizeFully(item.getConfigName().replace("_", " ")));
+        rawList.put(item.getConfigName(), item);
+        if (!item.isSupported()) return;
         item.loadDefaults();
         item.save();
         item.reload();
@@ -127,14 +140,22 @@ public class TypeManager {
         for (PetType item : items.values()) {
             if (item.getString("sort_key").equals(key)) return item;
         }
+        for (PetType item : rawList.values()) {
+            if (item.getConfigName().equals(key)) return item;
+        }
         return null;
     }
 
     public PetType getType(String name) {
-        return items.getOrDefault(name, null);
+        return items.getOrDefault(name, rawList.getOrDefault(name, null));
     }
 
     public Collection<PetType> getTypes () {
         return sortedItems;
+    }
+
+    @Deprecated
+    public LinkedList<PetType> getRawTypes() {
+        return rawSort;
     }
 }

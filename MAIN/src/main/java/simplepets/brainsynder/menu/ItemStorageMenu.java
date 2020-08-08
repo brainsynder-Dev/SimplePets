@@ -1,5 +1,10 @@
 package simplepets.brainsynder.menu;
 
+import lib.brainsynder.nbt.JsonToNBT;
+import lib.brainsynder.nbt.NBTException;
+import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagString;
+import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -10,7 +15,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.InventoryStorage;
@@ -21,7 +25,7 @@ public class ItemStorageMenu implements Listener {
         PetOwner owner = PetOwner.getPetOwner(player);
         Inventory inventory = Bukkit.createInventory(new ItemHandler(), PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), player.getName() + "'s Item Storage");
         if (owner.getStoredInventory() != null) {
-            InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), owner.getStoredInventory());
+            InventoryStorage storage = InventoryStorage.fromCompound(new ItemHandler(), owner.getStoredInventory());
             inventory = storage.getInventory();
         }
         player.openInventory(inventory);
@@ -33,26 +37,35 @@ public class ItemStorageMenu implements Listener {
             @Override
             public void call(PlayerStorage file) {
                 PetOwner owner = PetOwner.getPetOwner(name);
-                JSONObject json = null;
+                StorageTagCompound compound = null;
                 if (owner != null) {
-                    json = owner.getStoredInventory();
+                    compound = owner.getStoredInventory();
                 }
 
-                if (json == null) {
+                if (compound == null) {
                     if (file == null) {
                         onFail();
                         return;
                     }
+
                     if (file.hasKey("ItemStorage")) {
-                        json = file.getJSONObject("ItemStorage");
+                        if (file.getTag("ItemStorage") instanceof StorageTagString) {
+                            try {
+                                compound = JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(file.getString("ItemStorage")));
+                            } catch (NBTException e) {
+                                compound = null;
+                            }
+                        }else{
+                            compound = file.getCompoundTag("ItemStorage");
+                        }
                     }
                 }
-                if (json == null) {
+                if (compound == null) {
                     onFail();
                     return;
                 }
 
-                InventoryStorage storage = InventoryStorage.fromJSON(new ItemHandler(), json);
+                InventoryStorage storage = InventoryStorage.fromCompound(new ItemHandler(), compound);
                 // Opening inventories async does not work
                 Bukkit.getScheduler().runTask(PetCore.get(), () -> {
                     player.openInventory(storage.getInventory());
@@ -78,7 +91,7 @@ public class ItemStorageMenu implements Listener {
                 String name = title.replace("'s Item Storage", "");
                 if (!name.equalsIgnoreCase(player.getName())) return;
                 InventoryStorage storage = new InventoryStorage(e.getInventory(), title);
-                PetOwner.getPetOwner(player).setStoredInventory(storage.toJSON());
+                PetOwner.getPetOwner(player).setStoredInventory(storage.toCompound());
             }
         }
     }

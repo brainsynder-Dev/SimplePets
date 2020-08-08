@@ -1,5 +1,8 @@
 package simplepets.brainsynder.storage;
 
+import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagList;
+import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -8,8 +11,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 
 import java.util.HashMap;
@@ -48,12 +49,12 @@ public class InventoryStorage implements ConfigurationSerializable {
             if (config.containsKey("title")) title = String.valueOf(config.get("title"));
             inventory = Bukkit.createInventory(holder, PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), title);
             if (config.containsKey("items")) {
-                Map<String, Object> items = (Map<String, Object>) config.get("items");
+                Map<Integer, Object> items = (Map<Integer, Object>) config.get("items");
                 if (!items.isEmpty()) {
-                    for (String slot : items.keySet()) {
-                        if (Integer.parseInt(slot) > (inventory.getSize())) break;
+                    for (Integer slot : items.keySet()) {
+                        if (slot > (inventory.getSize())) break;
                         ItemStack item = (ItemStack) items.get(slot);
-                        inventory.setItem(Integer.parseInt(slot), item);
+                        inventory.setItem(slot, item);
                     }
                 }
             }
@@ -85,39 +86,47 @@ public class InventoryStorage implements ConfigurationSerializable {
         return map;
     }
 
-    public JSONObject toJSON() {
-        JSONObject map = new JSONObject();
-        if (inventory == null) return map;
+    public StorageTagCompound toCompound() {
+        StorageTagCompound compound = new StorageTagCompound();
+        if (inventory == null) return compound;
 
-        map.put("title", title);
-        map.put("size", inventory.getSize());
-        JSONArray items = new JSONArray();
+        compound.setString("title", title);
+        compound.setInteger("size", inventory.getSize());
+        StorageTagList items = new StorageTagList();
         int slot = 0;
         for (ItemStack item : inventory.getContents()) {
             if ((item != null) && (item.getType() != Material.AIR)) {
-                JSONObject json = new JSONObject();
-                json.put("slot", String.valueOf(slot));
-                json.put("stack", Base64Wrapper.encodeString(String.valueOf(PetCore.get().getUtilities().itemToString(item))));
-                items.add(json);
+                StorageTagCompound json = new StorageTagCompound();
+                json.setInteger("slot", slot);
+                json.setItemStack("stack", item);
+                items.appendTag(json);
             }
             slot++;
         }
-        map.put("items", items);
-        return map;
+        compound.setTag("items", items);
+        return compound;
     }
 
-    public static InventoryStorage fromJSON (InventoryHolder holder, JSONObject json) {
+    public static InventoryStorage fromCompound (InventoryHolder holder, StorageTagCompound compound) {
         Map<String, Object> map = new HashMap<>();
-        Map<String, Object> items = new HashMap();
-        map.put("title", json.get("title"));
-        map.put("size", json.getOrDefault("size", 27));
-        if (json.containsKey("items")) {
-            JSONArray array = (JSONArray) json.get("items");
-            if (!array.isEmpty()) {
-                for (Object obj : array) {
-                    JSONObject inner = (JSONObject) obj;
-                    items.put(String.valueOf(inner.get("slot")), PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(String.valueOf(inner.get("stack")))));
-                }
+        Map<Integer, Object> items = new HashMap();
+        map.put("title", compound.getString("title"));
+        map.put("size", compound.getInteger("size", 27));
+        if (compound.hasKey("items")) {
+            StorageTagList array = (StorageTagList) compound.getTag("items");
+            if (!array.getList().isEmpty()) {
+                array.getList().forEach(storageBase -> {
+                    StorageTagCompound item = (StorageTagCompound) storageBase;
+                    ItemStack stack;
+
+                    if (item.getTag("stack") instanceof StorageTagString) {
+                        stack = PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(String.valueOf(item.getString("stack"))));
+                    }else{
+                        stack = item.getItemStack("stack");
+                    }
+
+                    items.put(item.getInteger("slot"), stack);
+                });
             }
         }
         map.put("items", items);
