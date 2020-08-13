@@ -92,9 +92,9 @@
 
     <modules>
         <module>MAIN</module>
-        <module>v1_14_R1</module>
         <module>v1_15_R1</module>
         <module>v1_16_R1</module>
+        <module>v1_16_R2</module>
         <module>DIST</module>
     </modules>
 
@@ -114,7 +114,7 @@
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>0.1-B35</version>
+            <version>0.1-B38</version>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>

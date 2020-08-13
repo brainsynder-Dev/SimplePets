@@ -64,8 +64,8 @@ public class PetCore extends JavaPlugin {
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
         instance = this;
-        if (ServerVersion.isOlder(ServerVersion.v1_11_R1)) {
-            debug("This version is not supported, be sure you are between 1.11 and 1.14");
+        if (ServerVersion.isOlder(ServerVersion.v1_14_R1)) {
+            debug(DebugLevel.DEBUG, "This version is not supported, be sure you are between 1.15 and 1.16.2");
             setEnabled(false);
             return;
         }

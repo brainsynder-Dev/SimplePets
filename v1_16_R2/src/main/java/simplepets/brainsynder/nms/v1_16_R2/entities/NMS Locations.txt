@@ -1,0 +1,50 @@
+# This was 'Mapped' out for 1.15
+
+Fields:
+    EntityPet:
+        a(float,float,float):
+            H   -   Entity.class  -  Above `noclip`
+            aM  -  EntityLiving.class  -  Above `killer`
+            aA  -  EntityLiving.class  -  Search for `009999999776482582D`
+            aU  -  EntityLiving.class  -  Search for `tickPotionEffects()` (Second line down)
+            jumping  -  EntityLiving.class  -  Below `lastDamage` # Jump
+            aZ  -  EntityLiving.class  -  Below `jumping`         # Side motion
+            ba  -  EntityLiving.class  -  Below `aZ`         # Vertical motion
+            bb  -  EntityLiving.class  -  Below `ba`         # Forward motion
+            aC  -  EntityLiving.class  -  Search for `maxNoDamageTicks` (Third line up)
+            aD  -  EntityLiving.class  -  Search for `maxNoDamageTicks` (Second line up)
+            aE  -  EntityLiving.class  -  Search for `maxNoDamageTicks` (It will be above it)
+    EntityShulkerPet:
+        a(int):
+            c - EntityShulker.class - Search for `nbttagcompound.getByte("Peek")`
+    ParrotController:
+        a():
+            b - ControllerMove.class - Search for `final EntityInsentient ` (One Below)
+            c - ControllerMove.class - Search for `final EntityInsentient ` (Two Below)
+            d - ControllerMove.class - Search for `final EntityInsentient ` (Three Below)
+            e - ControllerMove.class - Search for `final EntityInsentient ` (Four Below)
+
+
+Methods:
+    EntityPet:
+        a(float,float,float) - EntityLiving.class:
+            o(float) - EntityInsentient.class - Method is formatted like:
+                # public void o(float f) {
+                #     super.o(f);
+                #     this.r(f);
+                # }
+        SoundEffect D() - EntityInsentient.class - Search for `Item getLoot()`(method) (Above)
+        x_() - EntityLiving.class - Search for `this.datawatcher.register`
+        W() - Entity - Search for `tick()`(method) (Will be after the `setFlag` call)
+        f(double,double,double) - Entity - Search for `this.impulse = true;`
+        NBT Saving - Entity.class - Search for `NBTTagCompound nbttagcompound`
+            Needed so the pets will not get saved in the world
+    EntityShulkerPet:
+        a(int) - EntityShulker.class - Search for `getAttributeInstance(GenericAttributes`
+        dB() - EntityShulker.class - Search for `return (Byte)this.datawatcher`
+        a(Tag<FluidType>) - Entity.class - Search for `Tag<FluidType> `
+            (Should have an instance check below)
+    ParrotController:
+        a() - ControllerMove.class - Search for `== ControllerMove.Operation.STRAFE`
+        s(float) - EntityInsentient.class - Search for `this.bi = `
+        r(float) - EntityInsentient.class - Search for `this.bj = `
