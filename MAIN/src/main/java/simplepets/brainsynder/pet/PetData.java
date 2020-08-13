@@ -32,6 +32,7 @@ import java.util.List;
 public enum PetData {
     SILENT(Silent.class),
     AGE(SILENT, Age.class),
+    SHAKING(SILENT, Shaking.class),
     MOOSHROOM(AGE, MooshroomColor.class),
     ARMS(SILENT, Arms.class),
     BAT(SILENT, Hang.class),

@@ -83,7 +83,10 @@ public enum EntityWrapper {
     HOGLIN,
     STRIDER,
     ZOGLIN,
-    ZOMBIFIED_PIGLIN
+    ZOMBIFIED_PIGLIN,
+
+    // 1.16.2 Mobs
+    PIGLIN_BRUTE
     ;
 
     private final String name;

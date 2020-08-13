@@ -95,6 +95,8 @@ public class TypeManager {
         register(new ZoglinPet(plugin));
         register(new PigZombiePet(plugin));
 
+        register(new PiglinBrutePet(plugin));
+
         Collection<String> sortKeys = new TreeSet<>(Collator.getInstance());
         items.values().forEach(data -> sortKeys.add(data.getString("sort_key")));
         sortKeys.forEach(key -> sortedItems.add(fromSortKey(key)));
