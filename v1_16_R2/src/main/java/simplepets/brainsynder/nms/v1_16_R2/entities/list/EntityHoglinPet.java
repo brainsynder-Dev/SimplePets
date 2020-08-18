@@ -17,7 +17,7 @@ public class EntityHoglinPet extends AgeableEntityPet implements IEntityHoglinPe
     private static final DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
 
     static {
-        IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
+        IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglinPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
     public EntityHoglinPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
