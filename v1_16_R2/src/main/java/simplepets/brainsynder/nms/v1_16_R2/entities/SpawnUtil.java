@@ -1,12 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities;
 
-import net.minecraft.server.v1_16_R2.EntityTypes;
-import net.minecraft.server.v1_16_R2.World;
+import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Shulker;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
@@ -52,9 +50,8 @@ public class SpawnUtil implements ISpawner {
             EntityTypes<?> types = EntityUtils.getType((className.equals("EntityControllerPet")) ? EntityWrapper.ZOMBIE : pet.getEntityType());
             EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
-            customEntity.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-
-            mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            customEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+            mcWorld.addEntity(customEntity);
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
                     ArmorStand stand = EntityArmorStandPet.spawn(l, ((EntityControllerPet) customEntity));
@@ -90,4 +87,5 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawnEntityPet(Location l, IPet pet, String className) {
         return spawn(l, pet, className);
     }
+
 }
