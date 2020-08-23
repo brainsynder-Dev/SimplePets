@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Shulker;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
@@ -51,7 +52,7 @@ public class SpawnUtil implements ISpawner {
             EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
             customEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-            mcWorld.addEntity(customEntity);
+            mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
                     ArmorStand stand = EntityArmorStandPet.spawn(l, ((EntityControllerPet) customEntity));
