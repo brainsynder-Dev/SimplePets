@@ -1,7 +1,6 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities;
 
-import net.minecraft.server.v1_16_R2.EntityTypes;
-import net.minecraft.server.v1_16_R2.World;
+import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.entity.ArmorStand;
@@ -52,8 +51,7 @@ public class SpawnUtil implements ISpawner {
             EntityTypes<?> types = EntityUtils.getType((className.equals("EntityControllerPet")) ? EntityWrapper.ZOMBIE : pet.getEntityType());
             EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
-            customEntity.setLocation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-
+            customEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
             mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
@@ -90,4 +88,5 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawnEntityPet(Location l, IPet pet, String className) {
         return spawn(l, pet, className);
     }
+
 }

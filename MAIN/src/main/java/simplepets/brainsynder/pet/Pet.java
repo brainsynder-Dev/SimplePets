@@ -105,11 +105,13 @@ public class Pet implements IPet {
 
         List<String> commands = type.getCommands();
         if (!commands.isEmpty()) {
-            commands.forEach(command -> Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command
-                    .replace("{player}", getOwner().getName())
-                    .replace("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
-                    .replace("{type}", getPetType().getConfigName())
-            ));
+            commands.forEach(command -> {
+                command = command.substring(1, command.length() - 1)
+                        .replace("{player}", getOwner().getName())
+                        .replace("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
+                        .replace("{type}", getPetType().getConfigName());
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+            });
         }
         if (ent instanceof IEntityControllerPet) {
             IEntityControllerPet controllerPet = (IEntityControllerPet) ent;
