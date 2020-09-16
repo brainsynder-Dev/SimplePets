@@ -16,7 +16,7 @@ public class FileMaker extends YamlFile {
     }
 
     public String getString(String tag, boolean color) {
-        String value = getString(tag);
+        String value = super.getString(tag);
         if (value == null) return "";
         if (value.equals(tag)) return tag;
 
