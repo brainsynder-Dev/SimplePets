@@ -55,7 +55,7 @@ public class ArmorListener implements Listener {
             IEntityPet pet = owner.getPet().getVisableEntity();
             if (!(pet instanceof IEntityArmorStandPet)) return;
             if (((IEntityArmorStandPet) pet).isRestricted()) {
-                p.sendMessage(PetCore.get().getMessages().getString("ArmorMenu.Restricted"));
+                p.sendMessage(PetCore.get().getMessages().getString("ArmorMenu.Restricted", true));
                 e.setCancelled(true);
                 e.setResult(Event.Result.DENY);
                 return;

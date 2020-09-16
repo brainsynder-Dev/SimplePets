@@ -112,7 +112,7 @@ public class SelectionMenu extends CustomInventory {
             }
         }
         if ((petTypes.getSize() == 0) && (PetCore.get().getConfiguration().getBoolean("Needs-Pet-Permission-To-Open-GUI"))) {
-            player.sendMessage(PetCore.get().getMessages().getString("No-Permission"));
+            player.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
             return;
         }
 

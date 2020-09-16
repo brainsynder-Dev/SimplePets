@@ -49,7 +49,7 @@ public class Pet implements IPet {
         }
         this.owner = Bukkit.getPlayer(player);
         if (!type.hasPermission(owner)) {
-            owner.sendMessage(core.getMessages().getString("No-Pet-Permission"));
+            owner.sendMessage(core.getMessages().getString("No-Pet-Permission", true));
             return;
         }
         PetOwner petOwner = PetOwner.getPetOwner(this.owner);
