@@ -476,6 +476,48 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         return PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(string));
     }
 
+    private void handleCloning() {
+        org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
+        ItemStack head = checkItem(inventory.getHelmet());
+        ItemStack chest = checkItem(inventory.getChestplate());
+        ItemStack legs = checkItem(inventory.getLeggings());
+        ItemStack boots = checkItem(inventory.getBoots());
+
+        if (head.getType() == Material.AIR) {
+            head = getSkull();
+        }
+
+        if (!getItems(EnumItemSlot.HEAD).isSimilar(head)) {
+            setSlot(EnumItemSlot.HEAD, head);
+        }
+
+        if (chest.getType() == Material.AIR) {
+            chest = new ItemBuilder(Material.DIAMOND_CHESTPLATE).build();
+        }
+
+        if (!getItems(EnumItemSlot.CHEST).isSimilar(chest)) {
+            setSlot(EnumItemSlot.CHEST, chest);
+        }
+
+        // hey this one doesn't have brackets
+        if (legs.getType() == Material.AIR) {
+            legs = new ItemBuilder(Material.IRON_LEGGINGS).build();
+        }
+
+        if (!getItems(EnumItemSlot.LEGS).isSimilar(legs)) {
+            setSlot(EnumItemSlot.LEGS, legs);
+        }
+
+        if (boots.getType() == Material.AIR) {
+            boots = new ItemBuilder(Material.GOLDEN_BOOTS).build();
+        }
+
+        if (!getItems(EnumItemSlot.FEET).isSimilar(boots)) {
+            setSlot(EnumItemSlot.FEET, boots);
+        }
+
+    }
+
     // TEMPORARY METHOD
     // Since skull fetching doesn't seem to be working properly, I've stuck in my own method from HeadsPlus. -TM
     public ItemStack getSkull() {
