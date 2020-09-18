@@ -52,6 +52,11 @@ public class ArmorListener implements Listener {
                 item.onClick(owner, menu);
                 return;
             }
+            if (owner.getPet() == null) {
+                e.setCancelled(true);
+                p.closeInventory();
+                return;
+            }
             IEntityPet pet = owner.getPet().getVisableEntity();
             if (!(pet instanceof IEntityArmorStandPet)) return;
             if (((IEntityArmorStandPet) pet).isRestricted()) {
