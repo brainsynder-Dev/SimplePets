@@ -482,6 +482,8 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         ItemStack chest = checkItem(inventory.getChestplate());
         ItemStack legs = checkItem(inventory.getLeggings());
         ItemStack boots = checkItem(inventory.getBoots());
+        ItemStack mainHand = checkItem(inventory.getItemInMainHand());
+        ItemStack offHand = checkItem(inventory.getItemInOffHand());
 
         if (head.getType() == Material.AIR) {
             head = getSkull();
@@ -516,6 +518,21 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             setSlot(EnumItemSlot.FEET, boots);
         }
 
+        if (mainHand.getType() != Material.AIR) {
+            if (!getItems(EnumItemSlot.MAINHAND).isSimilar(mainHand)) {
+                setSlot(EnumItemSlot.MAINHAND, mainHand);
+            }
+        } else {
+            setSlot(EnumItemSlot.MAINHAND, new ItemStack(Material.AIR));
+        }
+
+        if (offHand.getType() != Material.AIR) {
+            if (!getItems(EnumItemSlot.OFFHAND).isSimilar(offHand)) {
+                setSlot(EnumItemSlot.OFFHAND, offHand);
+            }
+        } else {
+            setSlot(EnumItemSlot.OFFHAND, new ItemStack(Material.AIR));
+        }
     }
 
     // TEMPORARY METHOD
