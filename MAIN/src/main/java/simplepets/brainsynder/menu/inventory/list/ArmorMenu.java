@@ -129,7 +129,9 @@ public class ArmorMenu extends CustomInventory {
         }
 
         // Only update the inventory if it is a armor slot
-        if (update) update(owner);
+        if (update) {
+            Bukkit.getScheduler().runTask(PetCore.get(), () -> update(owner));
+        }
 
     }
 
