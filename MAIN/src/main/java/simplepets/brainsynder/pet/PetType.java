@@ -78,7 +78,13 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     }
 
     public void load () {
-        _BUILDER_ = ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
+        try {
+            _BUILDER_ = ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
+        } catch (IllegalArgumentException ex) {
+            PetCore.get().getLogger().warning("Error thrown when creating item for " + fileName + ", please check the " + fileName + ".json file in the Pets folder.");
+            _BUILDER_ = getDefaultItem();
+        }
+
 
         _ENABLED_ = getBoolean("enabled");
         _FLY_ = getBoolean("fly");

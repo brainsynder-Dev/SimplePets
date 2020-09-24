@@ -37,7 +37,15 @@ public class Item extends JsonFile {
     }
 
     public ItemBuilder getItemBuilder () {
-        if (hasKey("item")) return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
+        if (hasKey("item")) {
+            try {
+                return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
+            } catch (IllegalArgumentException ex) {
+                PetCore.get().getLogger().warning("Error thrown when creating item for " + namespace() + ".");
+                return getDefaultItem();
+            }
+
+        }
         if (!tried) {
             reload();
             tried = true;
