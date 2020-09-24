@@ -238,7 +238,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
             cachedItems.add(checkItem(CraftItemStack.asBukkitCopy(getItemInMainHand())));
             cachedItems.add(checkItem(CraftItemStack.asBukkitCopy(getItemInOffHand())));
             handleCloning();
-        } else {
+        } else if (cachedItems.size() > 5) {
             setHeadItem(cachedItems.get(0));
             setBodyItem(cachedItems.get(1));
             setLegItem(cachedItems.get(2));
