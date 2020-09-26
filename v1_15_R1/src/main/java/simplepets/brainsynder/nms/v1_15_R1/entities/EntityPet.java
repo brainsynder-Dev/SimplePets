@@ -9,7 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
@@ -514,5 +516,14 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     @Override
     public void f(NBTTagCompound nbttagcompound){// Loading
+    }
+
+    public CraftEntity getBukkitEntity() {
+        return new CraftLivingEntity(world.getServer(), this) {
+            @Override
+            public EntityType getType() {
+                return getPetEntityType().toEntityType();
+            }
+        };
     }
 }
