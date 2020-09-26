@@ -411,7 +411,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                         this.n((float)this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
                         super.g(new Vec3D(strafe, vertical, forward));
                     } else if (owner instanceof EntityHuman) {
-                        this.setMot(Vec3D.a);
+                        this.setMot(new Vec3D(0, 0, 0));
                     }
 
                     this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
