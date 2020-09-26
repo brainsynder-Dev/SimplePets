@@ -499,10 +499,24 @@ public class PetCore extends JavaPlugin {
     }
 
     public static boolean hasPerm(Player p, String perm) {
+        return hasPerm(p, perm, false) == 1;
+    }
+
+    public static int hasPerm(Player p, String perm, boolean strict) {
         if (get().configuration.getBoolean("Needs-Permission")) {
-            return p.hasPermission(perm);
+            if (strict) {
+                for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+                    if (info.getPermission().equalsIgnoreCase(perm)) {
+                        return info.getValue() ? 1 : 0;
+                    }
+                }
+                return -1;
+            } else {
+                return p.hasPermission(perm) ? 1 : 0;
+            }
+        } else {
+            return 1;
         }
-        return true;
     }
 
     public ClassLoader getLoader() {

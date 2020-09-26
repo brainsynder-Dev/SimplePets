@@ -136,9 +136,13 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     public boolean canHat(Player player) {
         if (!PetCore.get().getConfiguration().getBoolean(Config.HATS)) return false;
         if (_HAT_) {
-            if (PetCore.hasPerm(player, "Pet.PetToHat")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
-            return PetCore.hasPerm(player, getPermission() + ".hat");
+            int permHat = PetCore.hasPerm(player, getPermission() + ".hat", true);
+            if (permHat == -1) {
+                int perm1 = PetCore.hasPerm(player, "Pet.PetToHat", true);
+                if (perm1 > -1) return perm1 == 1;
+                if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
+            }
+            return permHat == 1;
         }
         return false;
     }
@@ -148,18 +152,26 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
         if (!PetCore.get().getConfiguration().getBoolean(Config.MOUNTABLE)) return false;
 
         if (_MOUNT_) {
-            if (PetCore.hasPerm(player, "Pet.PetToMount")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
-            return PetCore.hasPerm(player, getPermission() + ".mount");
+            int permMount = PetCore.hasPerm(player, getPermission() + ".mount", true);
+            if (permMount == -1) {
+                int perm1 = PetCore.hasPerm(player, "Pet.PetToMount", true);
+                if (perm1 > -1) return perm1 == 1;
+                if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
+            }
+            return permMount == 1;
         }
         return false;
     }
 
     public boolean canFly(Player player) {
         if (_FLY_) {
-            if (PetCore.hasPerm(player, "Pet.FlyAll")) return true;
-            if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
-            return PetCore.hasPerm(player, getPermission() + ".fly");
+            int flyPerm = PetCore.hasPerm(player, getPermission() + ".fly", true);
+            if (flyPerm == -1) {
+                int perm1 = PetCore.hasPerm(player, "Pet.FlyAll", true);
+                if (perm1 > -1) return perm1 == 1;
+                if (PetCore.hasPerm(player, getPermission() + ".*")) return true;
+            }
+            return flyPerm == 1;
         }
         return false;
     }
