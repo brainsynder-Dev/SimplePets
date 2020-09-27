@@ -58,7 +58,7 @@ public class ArmorListener implements Listener {
         if (e.getWhoClicked() instanceof Player) {
             final Player p = (Player) e.getWhoClicked();
             PetOwner owner = PetOwner.getPetOwner(p);
-            if (!slots.contains(e.getRawSlot())) {
+            if (!slots.contains(e.getRawSlot()) && e.getRawSlot() < 54) {
                 Item item = PetCore.get().getItemLoaders().getLoader(clickedItem);
                 if (item != null && !(item instanceof Air)) {
                     e.setCancelled(true);
