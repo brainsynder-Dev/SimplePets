@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.inventory.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -49,8 +50,8 @@ public class ArmorListener implements Listener {
             clickedItem = e.getCurrentItem();
             if (e.getRawSlot() > 54) {
                 slot = e.getView().getTopInventory().firstEmpty();
-            } else {
-                slot = e.getView().getBottomInventory().firstEmpty();
+            } else if (e.getView().getBottomInventory().firstEmpty() != -1) {
+                clickedItem = new ItemStack(Material.AIR);
             }
         }
         if (clickedItem == null) return;
