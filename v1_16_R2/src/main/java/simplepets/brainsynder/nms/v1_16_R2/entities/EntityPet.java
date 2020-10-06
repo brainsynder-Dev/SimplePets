@@ -9,7 +9,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftPlayer;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
@@ -411,7 +413,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                         this.n((float)this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
                         super.g(new Vec3D(strafe, vertical, forward));
                     } else if (owner instanceof EntityHuman) {
-                        this.setMot(Vec3D.a);
+                        this.setMot(new Vec3D(0, 0, 0));
                     }
 
                     this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
@@ -506,5 +508,15 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     @Override
     public void load(NBTTagCompound nbttagcompound){// Loading
+    }
+
+    // this literally fixed the shit with p2 and i'm so fucking mad
+    public CraftEntity getBukkitEntity() {
+        return new CraftLivingEntity(world.getServer(), this) {
+            @Override
+            public EntityType getType() {
+                return getPetEntityType().toEntityType();
+            }
+        };
     }
 }

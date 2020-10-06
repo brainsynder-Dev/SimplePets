@@ -6,6 +6,7 @@ import lib.brainsynder.metric.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.commands.PetCommand;
@@ -174,7 +175,7 @@ public class PetCore extends JavaPlugin {
             debug("Creating SQL table if there is none...");
             CompletableFuture.runAsync(() -> {
                 try (Connection connection = mySQL.getSource().getConnection()) {
-                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` TEXT,`name` TEXT);");
+                    connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` VARCHAR(128),`name` TEXT, PRIMARY KEY (`UUID`));");
                     StringBuilder builder = new StringBuilder();
                     if (!mySQL.hasColumn(connection, "UUID")) {
                         mySQL.addColumn(connection, "UUID", "TEXT");
@@ -499,10 +500,24 @@ public class PetCore extends JavaPlugin {
     }
 
     public static boolean hasPerm(Player p, String perm) {
+        return hasPerm(p, perm, false) == 1;
+    }
+
+    public static int hasPerm(Player p, String perm, boolean strict) {
         if (get().configuration.getBoolean("Needs-Permission")) {
-            return p.hasPermission(perm);
+            if (strict) {
+                for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
+                    if (info.getPermission().equalsIgnoreCase(perm)) {
+                        return info.getValue() ? 1 : 0;
+                    }
+                }
+                return -1;
+            } else {
+                return p.hasPermission(perm) ? 1 : 0;
+            }
+        } else {
+            return 1;
         }
-        return true;
     }
 
     public ClassLoader getLoader() {

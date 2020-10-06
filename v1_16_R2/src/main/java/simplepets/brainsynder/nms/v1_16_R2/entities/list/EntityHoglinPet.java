@@ -14,7 +14,8 @@ import simplepets.brainsynder.nms.v1_16_R2.utils.DataWatcherWrapper;
  */
 @Size(width = 1.3964844F, length = 1.4F)
 public class EntityHoglinPet extends AgeableEntityPet implements IEntityHoglinPet {
-    private static final DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
+    private static DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
+    private static boolean registered = false;
 
     static {
         IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglinPet.class, DataWatcherWrapper.BOOLEAN);
@@ -30,6 +31,10 @@ public class EntityHoglinPet extends AgeableEntityPet implements IEntityHoglinPe
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
+        if (!registered) {
+            IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
+            registered = true;
+        }
         this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default
     }
 

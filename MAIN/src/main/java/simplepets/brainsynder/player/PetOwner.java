@@ -251,10 +251,13 @@ public class PetOwner {
             ownedPets.add(pet);
     }
 
+    public void removePet() {
+        removePet(false);
+    }
     /**
      * Removes the players current pet, if the player does not have a pet method will do nothing.
      */
-    public void removePet() {
+    public void removePet(boolean teleport) {
         if (hasPet()) {
             PetRemoveEvent removeEvent = new PetRemoveEvent((Pet) pet);
             Bukkit.getServer().getPluginManager().callEvent(removeEvent);
@@ -270,7 +273,7 @@ public class PetOwner {
             if (PetCore.get().getConfiguration().getBoolean("ShowParticles")) {
                 play(pet.getEntity().getEntity().getLocation(), Particle.LAVA, 1.0F, 1.0F, 1.0F);
             }
-            if (pet.getVisableEntity() instanceof IEntityArmorStandPet) {
+            if (pet.getVisableEntity() instanceof IEntityArmorStandPet && !teleport) {
                 IEntityArmorStandPet armorStandPet = (IEntityArmorStandPet) pet.getVisableEntity();
                 if (!armorStandPet.isOwner() && !armorStandPet.isRestricted()) {
                     for (ItemStack item : Arrays.asList(armorStandPet.getHeadItem(),
@@ -355,7 +358,7 @@ public class PetOwner {
         if (pet.getVisableEntity() == null) return;
         if (hasPetToRespawn()) return;
         setPetToRespawn(pet.getVisableEntity().asCompound());
-        removePet();
+        removePet(true);
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -393,7 +396,7 @@ public class PetOwner {
     public void respawnPet(StorageTagCompound compound) {
         if (!compound.hasKey("PetType")) return;
         if (hasPet()) {
-            removePet();
+            removePet(true);
         }
 
         PetType type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));

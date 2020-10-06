@@ -41,6 +41,10 @@ public class DataListener implements Listener {
                 item.onClick(owner, menu);
                 return;
             }
+            if (owner.getPet() == null) {
+                e.setCancelled(true);
+                return;
+            }
             List<MenuItem> menuItems = owner.getPet().getItems();
             if (!menuItems.isEmpty()) {
                 Utilities utilities = PetCore.get().getUtilities();

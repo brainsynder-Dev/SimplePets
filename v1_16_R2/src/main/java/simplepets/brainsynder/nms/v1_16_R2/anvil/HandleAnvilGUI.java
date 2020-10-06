@@ -63,7 +63,7 @@ public class HandleAnvilGUI implements IAnvilGUI {
         for (AnvilSlot slot : this.items.keySet()) {
             this.inv.setItem(slot.getSlot(), this.items.get(slot));
         }
-        IChatBaseComponent message = new ChatMessage(PetCore.get().getMessages().getString("Anvil-Rename.Name"));
+        IChatBaseComponent message = new ChatMessage(PetCore.get().getMessages().getString("Anvil-Rename.Name", true));
         p.playerConnection.sendPacket(new PacketPlayOutOpenWindow (c, Containers.ANVIL, message));
         container.setTitle(message);
         p.activeContainer = container;

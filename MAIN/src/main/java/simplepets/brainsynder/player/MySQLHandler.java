@@ -144,17 +144,21 @@ public class MySQLHandler {
                                 && (data.get("UnlockedPets") != null)
                                 && (!data.get("UnlockedPets").asString().isEmpty())) {
                             List<PetType> types = new ArrayList<>();
-                            try {
-                                StorageTagList list = JsonToNBT.parse(data.get("UnlockedPets").asString()).toList();
-                                list.getList().forEach(base -> {
-                                    StorageTagString string = (StorageTagString) base;
-                                    PetType type = manager.getType(string.getString());
-                                    if (type != null) types.add(type);
-                                });
-                                owner.setRawOwned(types);
-                            } catch (NBTException e) {
-                                e.printStackTrace();
+                            String pets = data.get("UnlockedPets").asString();
+                            JsonToNBT nbt = JsonToNBT.parse(pets);
+                            StorageTagList list;
+                            if (pets.startsWith("[")) {
+                                list = nbt.toList();
+                            } else {
+                                StorageTagCompound compound = nbt.toCompound();
+                                list = compound.getTagList("StoredPets", compound.getTagId("StoredPets"));
                             }
+                            list.getList().forEach(base -> {
+                                StorageTagString string = (StorageTagString) base;
+                                PetType type = manager.getType(string.getString());
+                                if (type != null) types.add(type);
+                            });
+                            owner.setRawOwned(types);
                         }
 
                         if ((data.names().contains("PetName"))

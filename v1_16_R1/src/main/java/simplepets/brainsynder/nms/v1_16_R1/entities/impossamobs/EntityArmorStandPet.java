@@ -28,6 +28,8 @@ import simplepets.brainsynder.utils.AnimationManager;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmorStandPet {
     private boolean isSpecial = false;
@@ -41,6 +43,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     private AnimationCycle arm_swing = null;
     protected FieldAccessor<Boolean> fieldAccessor;
     private boolean restricted;
+    private final List<ItemStack> cachedItems = new ArrayList<>();
 
     public EntityArmorStandPet(EntityTypes<? extends EntityArmorStand> entitytypes, World world) {
         super(entitytypes, world);
@@ -122,36 +125,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         if (getOwner().isValid()) {
             if (!getOwner().isDead()) {
                 if (minime) {
-                    org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
-                    if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet()))) {
-                        if (inventory.getHelmet() == null) {
-                            setSlot(EnumItemSlot.HEAD, getSkull());
-                        } else {
-                            setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
-                        }
-                    }
-                    if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate()))) {
-                        if (inventory.getChestplate() == null) {
-                            setSlot(EnumItemSlot.CHEST, new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
-                        } else {
-                            setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
-                        }
-                    }
-                    if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
-                        if (inventory.getLeggings() == null) {
-                            setSlot(EnumItemSlot.LEGS, new ItemBuilder(Material.IRON_LEGGINGS).build());
-                        } else {
-                            setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
-                        }
-                    if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots()))) {
-                        if (inventory.getBoots() == null) {
-                            setSlot(EnumItemSlot.FEET, new ItemBuilder(Material.GOLDEN_BOOTS).build());
-                        } else {
-                            setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
-                        }
-
-                    }
-
+                    handleCloning();
                 }
             }
         }
@@ -257,30 +231,21 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
     public void setOwner(boolean flag) {
         minime = flag;
         if (flag) {
-            ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD);
-            getEntity().setChestplate(new ItemBuilder(Material.DIAMOND_CHESTPLATE).build());
-            getEntity().setLeggings(new ItemBuilder(Material.IRON_LEGGINGS).build());
-            getEntity().setBoots(new ItemBuilder(Material.GOLDEN_BOOTS).build());
-            PlayerData.findTexture(PlayerData.Value.DECODED, getOwner().getUniqueId().toString(), PetCore.get(), texture -> {
-                builder.setTexture(texture);
-                if (isOwner()) getEntity().setHelmet(builder.build());
-            });
-        }else{
-            ItemStack air = new ItemStack(Material.AIR);
-            getEntity().setHelmet(air);
-            getEntity().setChestplate(air);
-            getEntity().setLeggings(air);
-            getEntity().setBoots(air);
-            org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
-            if (!getItems(EnumItemSlot.HEAD).isSimilar(checkItem(inventory.getHelmet())))
-                setSlot(EnumItemSlot.HEAD, checkItem(inventory.getHelmet()));
-            if (!getItems(EnumItemSlot.CHEST).isSimilar(checkItem(inventory.getChestplate())))
-                setSlot(EnumItemSlot.CHEST, checkItem(inventory.getChestplate()));
-            if (!getItems(EnumItemSlot.LEGS).isSimilar(checkItem(inventory.getLeggings())))
-                setSlot(EnumItemSlot.LEGS, checkItem(inventory.getLeggings()));
-            if (!getItems(EnumItemSlot.FEET).isSimilar(checkItem(inventory.getBoots())))
-                setSlot(EnumItemSlot.FEET, checkItem(inventory.getBoots()));
-
+            cachedItems.add(checkItem(getHeadItem()));
+            cachedItems.add(checkItem(getBodyItem()));
+            cachedItems.add(checkItem(getLegItem()));
+            cachedItems.add(checkItem(getFootItem()));
+            cachedItems.add(checkItem(CraftItemStack.asBukkitCopy(getItemInMainHand())));
+            cachedItems.add(checkItem(CraftItemStack.asBukkitCopy(getItemInOffHand())));
+            handleCloning();
+        } else if (cachedItems.size() > 5) {
+            setHeadItem(cachedItems.get(0));
+            setBodyItem(cachedItems.get(1));
+            setLegItem(cachedItems.get(2));
+            setFootItem(cachedItems.get(3));
+            setRightArmItem(cachedItems.get(4));
+            setLeftArmItem(cachedItems.get(5));
+            cachedItems.clear();
         }
     }
 
@@ -508,6 +473,65 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     private ItemStack parseString (String string) {
         return PetCore.get().getUtilities().stringToItem(Base64Wrapper.decodeString(string));
+    }
+
+    private void handleCloning() {
+        org.bukkit.inventory.PlayerInventory inventory = getOwner().getInventory();
+        ItemStack head = checkItem(inventory.getHelmet());
+        ItemStack chest = checkItem(inventory.getChestplate());
+        ItemStack legs = checkItem(inventory.getLeggings());
+        ItemStack boots = checkItem(inventory.getBoots());
+        ItemStack mainHand = checkItem(inventory.getItemInMainHand());
+        ItemStack offHand = checkItem(inventory.getItemInOffHand());
+
+        if (head.getType() == Material.AIR) {
+            head = getSkull();
+        }
+
+        if (!getItems(EnumItemSlot.HEAD).isSimilar(head)) {
+            setSlot(EnumItemSlot.HEAD, head);
+        }
+
+        if (chest.getType() == Material.AIR) {
+            chest = new ItemBuilder(Material.DIAMOND_CHESTPLATE).build();
+        }
+
+        if (!getItems(EnumItemSlot.CHEST).isSimilar(chest)) {
+            setSlot(EnumItemSlot.CHEST, chest);
+        }
+
+        // hey this one doesn't have brackets
+        if (legs.getType() == Material.AIR) {
+            legs = new ItemBuilder(Material.IRON_LEGGINGS).build();
+        }
+
+        if (!getItems(EnumItemSlot.LEGS).isSimilar(legs)) {
+            setSlot(EnumItemSlot.LEGS, legs);
+        }
+
+        if (boots.getType() == Material.AIR) {
+            boots = new ItemBuilder(Material.GOLDEN_BOOTS).build();
+        }
+
+        if (!getItems(EnumItemSlot.FEET).isSimilar(boots)) {
+            setSlot(EnumItemSlot.FEET, boots);
+        }
+
+        if (mainHand.getType() != Material.AIR) {
+            if (!getItems(EnumItemSlot.MAINHAND).isSimilar(mainHand)) {
+                setSlot(EnumItemSlot.MAINHAND, mainHand);
+            }
+        } else {
+            setSlot(EnumItemSlot.MAINHAND, new ItemStack(Material.AIR));
+        }
+
+        if (offHand.getType() != Material.AIR) {
+            if (!getItems(EnumItemSlot.OFFHAND).isSimilar(offHand)) {
+                setSlot(EnumItemSlot.OFFHAND, offHand);
+            }
+        } else {
+            setSlot(EnumItemSlot.OFFHAND, new ItemStack(Material.AIR));
+        }
     }
 
     // TEMPORARY METHOD
