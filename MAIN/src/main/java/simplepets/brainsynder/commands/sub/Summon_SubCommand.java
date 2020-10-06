@@ -9,7 +9,9 @@ import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.utils.AdditionalData;
 
+@AdditionalData(otherPermissions = "Pet.commands.summon.other")
 @ICommand(
         name = "summon",
         usage = "&r &r &6[] &7/pet summon <pet> [player]",

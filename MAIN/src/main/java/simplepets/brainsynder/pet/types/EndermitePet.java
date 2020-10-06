@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermitePet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class EndermitePet extends PetType {
     public EndermitePet(PetCore plugin) {
         super(plugin, "endermite", SoundMaker.ENTITY_ENDERMITE_AMBIENT, EntityWrapper.ENDERMITE);

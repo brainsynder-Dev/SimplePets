@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySkeletonHorsePet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class SkeletonHorsePet extends PetType {
     public SkeletonHorsePet(PetCore plugin) {
         super(plugin, "skeleton_horse", SoundMaker.ENTITY_SKELETON_HORSE_AMBIENT, EntityWrapper.SKELETON_HORSE);

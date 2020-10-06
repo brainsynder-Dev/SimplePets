@@ -10,8 +10,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityHoglinPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 @SupportedVersion(version = ServerVersion.v1_16_R1)
 public class HoglinPet extends PetType {
     public HoglinPet(PetCore plugin) {

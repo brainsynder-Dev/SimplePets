@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class VindicatorPet extends PetType {
     public VindicatorPet(PetCore plugin) {
         super(plugin, "vindicator", SoundMaker.ENTITY_VINDICATION_ILLAGER_AMBIENT, EntityWrapper.VINDICATOR);

@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.AdditionalData;
 
+@AdditionalData(otherPermissions = "Pet.commands.remove.other")
 @ICommand(
         name = "remove",
         usage = "&r &r &6[] &7/pet remove [player]",

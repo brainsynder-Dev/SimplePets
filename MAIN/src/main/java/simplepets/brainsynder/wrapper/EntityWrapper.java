@@ -105,6 +105,10 @@ public enum EntityWrapper {
         typeName = name;
     }
 
+    public boolean isPassive () {
+        return (name.contains("fish") || name.contains("HORSE") || name.contains("llama"));
+    }
+
     public static EntityWrapper getByName(String name) {
         for (EntityWrapper entityWrapper : values()) {
             if (entityWrapper.name.equalsIgnoreCase(name)) {

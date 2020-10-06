@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityStrayPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class StrayPet extends PetType {
     public StrayPet(PetCore plugin) {
         super(plugin, "stray", SoundMaker.ENTITY_SKELETON_AMBIENT, EntityWrapper.STRAY);

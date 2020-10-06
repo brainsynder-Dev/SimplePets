@@ -10,8 +10,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPhantomPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 @SupportedVersion(version = ServerVersion.v1_13_R1)
 public class PhantomPet extends PetType {
     public PhantomPet(PetCore plugin) {

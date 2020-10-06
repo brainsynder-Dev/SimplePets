@@ -8,7 +8,9 @@ import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.Commands;
+import simplepets.brainsynder.utils.AdditionalData;
 
+@AdditionalData(otherPermissions = "Pet.commands.inv.other")
 @ICommand(
         name = "inv",
         alias = {"inventory"},

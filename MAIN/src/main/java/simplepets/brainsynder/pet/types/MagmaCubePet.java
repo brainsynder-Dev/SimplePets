@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityMagmaCubePet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class MagmaCubePet extends PetType {
     public MagmaCubePet(PetCore plugin) {
         super(plugin, "magma_cube", SoundMaker.ENTITY_MAGMACUBE_SQUISH, EntityWrapper.MAGMA_CUBE);

@@ -15,6 +15,7 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.types.ShulkerPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.storage.files.Config;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.io.File;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@AdditionalData
 public abstract class PetType extends JsonFile implements VersionRestricted {
     private ItemBuilder _BUILDER_;
     private final SoundMaker sound;
@@ -288,5 +290,11 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     }
     public PetData getPetData() {
         return PetData.SILENT;
+    }
+
+    public AdditionalData getAdditionalData () {
+        AdditionalData data = null;
+        if (getClass().isAnnotationPresent(AdditionalData.class)) data = getClass().getAnnotation(AdditionalData.class);
+        return data;
     }
 }

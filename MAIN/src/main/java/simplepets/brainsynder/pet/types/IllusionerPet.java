@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityIllusionerPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class IllusionerPet extends PetType {
     public IllusionerPet(PetCore plugin) {
         super(plugin, "illusioner", SoundMaker.ENTITY_ILLUSION_ILLAGER_AMBIENT, EntityWrapper.ILLUSIONER);

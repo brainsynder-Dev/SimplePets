@@ -10,9 +10,11 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPigmanPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 @Deprecated
+@AdditionalData(passive = false)
 @SupportedVersion(version = ServerVersion.v1_8_R3, maxVersion = ServerVersion.v1_15_R1)
 public class PigmanPet extends PetType {
     public PigmanPet(PetCore plugin) {

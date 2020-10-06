@@ -20,6 +20,7 @@ import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.Commands;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Arrays;
@@ -31,6 +32,7 @@ import java.util.concurrent.CompletableFuture;
         description = "Collects information on a players pet/data"
 )
 @Permission(permission = "info")
+@AdditionalData(otherPermissions = "pet.commands.info.debug")
 public class Info_SubCommand extends PetSubCommand {
     public Info_SubCommand() {
         registerCompletion(1, getOnlinePlayers());

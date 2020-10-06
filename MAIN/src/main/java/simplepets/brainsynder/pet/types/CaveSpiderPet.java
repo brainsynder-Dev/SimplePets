@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCaveSpiderPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class CaveSpiderPet extends PetType {
     public CaveSpiderPet(PetCore plugin) {
         super(plugin, "cave_spider", SoundMaker.ENTITY_SPIDER_AMBIENT, EntityWrapper.CAVE_SPIDER);

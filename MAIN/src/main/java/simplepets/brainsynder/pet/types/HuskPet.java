@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityHuskPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class HuskPet extends PetType {
     public HuskPet(PetCore plugin) {
         super(plugin, "husk", SoundMaker.ENTITY_ZOMBIE_AMBIENT, EntityWrapper.HUSK);

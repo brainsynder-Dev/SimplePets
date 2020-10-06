@@ -10,13 +10,17 @@ import simplepets.brainsynder.menu.menuItems.Armor;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.reflection.ReflectionUtil;
+import simplepets.brainsynder.utils.AdditionalData;
+import simplepets.brainsynder.utils.DebugLevel;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @ICommand(
         name = "generator",
@@ -45,6 +49,8 @@ public class Generator_SubCommand extends PetSubCommand {
             }else{
                 if (args[1].equalsIgnoreCase("git")) {
                     generateGitHubPermissions();
+                }else if (args[1].equalsIgnoreCase("plugin")) {
+                    generatePluginPerms(sender);
                 }else{
                     generatePermissions ();
                 }
@@ -100,6 +106,102 @@ public class Generator_SubCommand extends PetSubCommand {
             return;
         }
         sendUsage(sender);
+    }
+
+    /*
+    Pet.type.passive:
+        default: false
+        children:
+            Pet.type.armorstand: true
+    Pet.type.armorstand.*:
+        default: false
+        children:
+            pet.type.armorstand.armor: true
+     */
+    public void generatePluginPerms (CommandSender sender) {
+        StringBuilder def = new StringBuilder();
+        def.append("        default: false").append("\n").append("        children:").append("\n");
+
+        StringBuilder master = new StringBuilder();
+        StringBuilder hostile = new StringBuilder();
+        StringBuilder passive = new StringBuilder();
+        StringBuilder allAllowData = new StringBuilder();
+        StringBuilder commandBuilder = new StringBuilder();
+        List<StringBuilder> pets = new ArrayList<>();
+        List<StringBuilder> other = new ArrayList<>();
+        PetCore core = PetCore.get();
+
+        parent.getSubCommands().forEach(command -> {
+            if (command.needsPermission()) commandBuilder.append("            ").append(command.getPermission()).append(": true\n");
+            if (command.getClass().isAnnotationPresent(AdditionalData.class)) {
+                AdditionalData data = command.getClass().getAnnotation(AdditionalData.class);
+                for (String permission : data.otherPermissions()) {
+                    commandBuilder.append("            ").append(permission).append(": true\n");
+                }
+            }
+        });
+        master
+                .append("    pet.commands.*:").append("\n")
+                .append(def).append(commandBuilder);
+
+        // Generate Pet Permissions
+        core.getTypeManager().getRawTypes().forEach(type -> {
+            PetCore.get().debug(DebugLevel.DEBUG, "Type: "+type.getConfigName());
+            boolean isPassive = ((type.getAdditionalData() == null) || type.getAdditionalData().passive());
+            if (isPassive) {
+                passive.append("            ").append(type.getPermission()).append(".*: true\n");
+            }else{
+                hostile.append("            ").append(type.getPermission()).append(".*: true\n");
+            }
+            allAllowData.append("            ").append(type.getPermission()).append(".data.*: true\n");
+
+            StringBuilder builder = new StringBuilder();
+            StringBuilder allData = new StringBuilder();
+
+            allData.append("    ").append(type.getPermission()).append(".data.*:").append("\n");
+            allData.append(def);
+
+            builder.append("    ").append(type.getPermission()).append(".*:");
+            if (!type.isSupported()) builder.append("  # Only Supported from ").append(type.toSupportString());
+            builder.append("\n");
+
+            builder.append(def);
+            builder.append("            ").append(type.getPermission()).append(".fly: true\n");
+            builder.append("            ").append(type.getPermission()).append(".hat: true\n");
+            builder.append("            ").append(type.getPermission()).append(".mount: true\n");
+            for (Class<? extends MenuItem> item : type.getPetData().getItemClasses()) {
+                MenuItem item1 = getItem(type, item);
+                if (item1 != null) {
+                    allData.append("            ").append(item1.getPermission()).append(": true\n");
+                    builder.append("            ").append(item1.getPermission()).append(": true\n");
+                }
+            }
+            other.add(allData);
+            pets.add(builder);
+        });
+
+
+        master
+                .append("    Pet.type.*:").append("\n")
+                .append(def)
+                .append("            Pet.type.passive: true").append("\n")
+                .append("            Pet.type.hostile: true").append("\n")
+                .append("    Pet.type.passive:").append("\n")
+                .append(def)
+                .append(passive)
+                .append("    Pet.type.hostile:").append("\n")
+                .append(def)
+                .append(hostile)
+                .append("    Pet.type.*.data:").append("\n")
+                .append(def)
+                .append(allAllowData);
+
+        pets.forEach(master::append);
+        other.forEach(master::append);
+
+        new Logger("PluginYAML Permissions").log(new File(core.getDataFolder().toString() + File.separator + "Generated Files" + File.separator), master.toString().toLowerCase());
+        sender.sendMessage("Pet Types have been generated into a file");
+
     }
 
     private class Logger {

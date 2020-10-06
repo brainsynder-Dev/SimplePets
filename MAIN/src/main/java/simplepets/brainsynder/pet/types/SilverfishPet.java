@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntitySilverfishPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class SilverfishPet extends PetType {
     public SilverfishPet(PetCore plugin) {
         super(plugin, "silverfish", SoundMaker.ENTITY_SILVERFISH_AMBIENT, EntityWrapper.SILVERFISH);

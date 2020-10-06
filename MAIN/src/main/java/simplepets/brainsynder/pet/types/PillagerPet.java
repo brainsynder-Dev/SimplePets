@@ -9,8 +9,10 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityPillagerPet;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 @SupportedVersion(version = ServerVersion.v1_14_R1)
 public class PillagerPet extends PetType {
     public PillagerPet(PetCore plugin) {

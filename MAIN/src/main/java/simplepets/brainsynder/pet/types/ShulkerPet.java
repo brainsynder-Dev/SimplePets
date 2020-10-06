@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class ShulkerPet extends PetType {
     public ShulkerPet(PetCore plugin) {
         super(plugin, "shulker", SoundMaker.ENTITY_SHULKER_AMBIENT, EntityWrapper.SHULKER);

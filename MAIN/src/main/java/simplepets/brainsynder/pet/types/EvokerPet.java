@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEvokerPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class EvokerPet extends PetType {
     public EvokerPet(PetCore plugin) {
         super(plugin, "evoker", SoundMaker.ENTITY_EVOCATION_ILLAGER_AMBIENT, EntityWrapper.EVOKER);

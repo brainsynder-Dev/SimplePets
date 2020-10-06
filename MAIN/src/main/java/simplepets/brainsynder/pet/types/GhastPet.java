@@ -8,8 +8,10 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityGhastPet;
 import simplepets.brainsynder.pet.PetData;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.utils.AdditionalData;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
+@AdditionalData(passive = false)
 public class GhastPet extends PetType {
     public GhastPet(PetCore plugin) {
         super(plugin, "ghast", SoundMaker.ENTITY_GHAST_AMBIENT, EntityWrapper.GHAST);

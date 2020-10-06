@@ -24,7 +24,6 @@ import simplepets.brainsynder.menu.inventory.listeners.DataListener;
 import simplepets.brainsynder.menu.inventory.listeners.SavesListener;
 import simplepets.brainsynder.menu.inventory.listeners.SelectionListener;
 import simplepets.brainsynder.menu.items.ItemLoaders;
-import simplepets.brainsynder.nms.VersionNMS;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.MySQLHandler;
@@ -89,7 +88,6 @@ public class PetCore extends JavaPlugin {
         typeManager = new TypeManager(this);
         loadConfig();
         createPluginInstances();
-        new VersionNMS().registerPets();
         registerEvents();
         itemLoaders.initiate();
         invLoaders.initiate();
@@ -145,6 +143,7 @@ public class PetCore extends JavaPlugin {
         }
 
         double version = getJavaVersion();
+        debug("Using Java: " + version);
         if (version == 0.0) {
             Errors.JAVA_WARNING_WEAK.print();
         } else {
@@ -152,7 +151,6 @@ public class PetCore extends JavaPlugin {
                 Errors.JAVA_WARNING_CRITICAL.print();
                 return false;
             }
-            debug("Using Java: " + version);
         }
 
         fetchSupportedVersions();
