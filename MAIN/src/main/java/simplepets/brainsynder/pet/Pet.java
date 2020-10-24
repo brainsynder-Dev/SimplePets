@@ -67,21 +67,21 @@ public class Pet implements IPet {
         }
         boolean allow = core.getLinkRetriever().canSpawnPet(petOwner, spawnLoc);
         if (!allow) {
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
             owner.sendMessage(core.getMessages().getString("No-Spawning", true));
             return;
         }
         if (core.getConfiguration().getBoolean("Worlds.Enabled")) {
             String world = spawnLoc.getWorld().getName();
             if (!core.getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(world)) {
-                SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+                SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
                 owner.sendMessage(core.getMessages().getString("No-Spawning", true));
                 return;
             }
         }
         IEntityPet ent = PetSpawner.spawnPet(spawnLoc, this, type.getEntityClass());
         if (ent == null) {
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
             core.debug(DebugLevel.ERROR, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
             return;
         }
