@@ -55,6 +55,7 @@ public class Pet implements IPet {
         PetOwner petOwner = PetOwner.getPetOwner(this.owner);
         PetPreSpawnEvent event = new PetPreSpawnEvent(owner, null, type);
         Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
         core.forceSpawn = true;
         Location spawnLoc = owner.getLocation();
         Location walkTo = null;
