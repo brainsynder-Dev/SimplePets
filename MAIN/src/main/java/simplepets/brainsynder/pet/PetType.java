@@ -15,6 +15,7 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 import simplepets.brainsynder.pet.types.ShulkerPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.storage.files.Config;
+import simplepets.brainsynder.utils.Capitalise;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.io.File;
@@ -290,4 +291,5 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
     public PetData getPetData() {
         return PetData.SILENT;
     }
+
 }
