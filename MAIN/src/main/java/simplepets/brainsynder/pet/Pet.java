@@ -64,7 +64,7 @@ public class Pet implements IPet {
             spawnLoc = oldPet.getEntity().getEntity().getLocation().clone();
             petOwner.removePet();
         }
-        boolean allow = core.getLinkRetriever().canSpawnPet(spawnLoc);
+        boolean allow = core.getLinkRetriever().canSpawnPet(petOwner, spawnLoc);
         if (!allow) {
             SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
             owner.sendMessage(core.getMessages().getString("No-Spawning", true));
