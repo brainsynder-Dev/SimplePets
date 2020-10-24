@@ -39,11 +39,11 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
 
     public PetType(PetCore plugin, String name, SoundMaker sound, EntityWrapper type) {
         super(new File(new File(plugin.getDataFolder().toString()+File.separator+"Pets"), name+".json"), false);
-        if (isSupported()) reload();
         this.fileName = name;
         this.plugin = plugin;
         this.sound = sound;
         this.type = type;
+        if (isSupported()) reload();
     }
 
     @Override
@@ -59,7 +59,8 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
         setDefault("speed", 0.6000000238418579D);
 
         setDefault("item", StorageTagTools.toJsonObject(getDefaultItem().toCompound()));
-   //     setDefault("summon_name", WordUtils.capitalizeFully(fileName.replace("_", " ")));
+        setDefault("summon_name", Capitalise.capitalize(fileName.replace("_", " ")));
+        setDefault("display_name", "&a&l%player%'s " + fileName.replace("_", " ") + " pet");
 
         setDefault("on_summon", new JsonArray());
         try {
