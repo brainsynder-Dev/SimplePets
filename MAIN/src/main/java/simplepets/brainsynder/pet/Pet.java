@@ -55,6 +55,7 @@ public class Pet implements IPet {
         PetOwner petOwner = PetOwner.getPetOwner(this.owner);
         PetPreSpawnEvent event = new PetPreSpawnEvent(owner, null, type);
         Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) return;
         core.forceSpawn = true;
         Location spawnLoc = owner.getLocation();
         Location walkTo = null;
@@ -64,23 +65,23 @@ public class Pet implements IPet {
             spawnLoc = oldPet.getEntity().getEntity().getLocation().clone();
             petOwner.removePet();
         }
-        boolean allow = core.getLinkRetriever().canSpawnPet(spawnLoc);
+        boolean allow = core.getLinkRetriever().canSpawnPet(petOwner, spawnLoc);
         if (!allow) {
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
             owner.sendMessage(core.getMessages().getString("No-Spawning", true));
             return;
         }
         if (core.getConfiguration().getBoolean("Worlds.Enabled")) {
             String world = spawnLoc.getWorld().getName();
             if (!core.getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(world)) {
-                SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+                SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
                 owner.sendMessage(core.getMessages().getString("No-Spawning", true));
                 return;
             }
         }
         IEntityPet ent = PetSpawner.spawnPet(spawnLoc, this, type.getEntityClass());
         if (ent == null) {
-            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getLocation(), 0.5F, 0.5F);
+            SoundMaker.BLOCK_ANVIL_LAND.playSound(owner.getPlayer(), 0.5F, 0.5F);
             core.debug(DebugLevel.ERROR, "Pet was unable to summon... (Entity is null, issue occurred in ISpawner class)");
             return;
         }

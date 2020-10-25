@@ -61,9 +61,16 @@ public class PetCore extends JavaPlugin {
     private ISpawner spawner;
     private final Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
+    @Override
+    public void onLoad() {
+        instance = this;
+        linkRetriever = new LinkRetriever();
+        linkRetriever.initiate();
+    }
+
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
-        instance = this;
+
         if (ServerVersion.isOlder(ServerVersion.v1_14_R1)) {
             debug(DebugLevel.DEBUG, "This version is not supported, be sure you are between 1.15 and 1.16.2");
             setEnabled(false);
@@ -96,7 +103,7 @@ public class PetCore extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                linkRetriever.initiate();
+           //     linkRetriever.initiate();
                 WorldEditLink.init();
             }
         }.runTaskLater(this, 20 * 10);
@@ -129,7 +136,6 @@ public class PetCore extends JavaPlugin {
         utilities = new Utilities();
         itemLoaders = new ItemLoaders();
         invLoaders = new InvLoaders();
-        linkRetriever = new LinkRetriever();
     }
 
     private boolean errorCheck() {
@@ -289,6 +295,7 @@ public class PetCore extends JavaPlugin {
     }
 
     public void debug(DebugLevel level, String message, boolean sync) {
+        if (!isEnabled()) return;
         Runnable runnable = () -> {
             if (level != DebugLevel.DEBUG) {
                 if (configuration == null) return;

@@ -27,7 +27,7 @@ public class LinkRetriever {
                 if (!link.isHooked()) {
                     try {
                         Plugin dependency = Bukkit.getPluginManager().getPlugin(link.getDependencyName());
-                        if (dependency != null && dependency.isEnabled()) {
+                        if (dependency != null) {
                             link.setHooked(link.onHook());
                             if (link.isHooked()) {
                                 PetCore.get().debug(dependency.getName() + " Successfully linked");

@@ -182,7 +182,7 @@ public class PetOwner {
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 play(player.getEyeLocation(), Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
-                SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
+                SoundMaker.BLOCK_ANVIL_LAND.playSound(player, 0.5F, 0.5F);
                 player.sendMessage(PetCore.get().getMessages().getString("Pet-RenameFailure", true).replace("{name}", ChatColor.translateAlternateColorCodes('&', name)));
                 return;
             }
@@ -263,7 +263,7 @@ public class PetOwner {
             Bukkit.getServer().getPluginManager().callEvent(removeEvent);
             if (removeEvent.isCancelled()) {
                 play(player.getEyeLocation(), Particle.VILLAGER_ANGRY, 0.5F, 0.5F, 0.5F);
-                SoundMaker.BLOCK_ANVIL_LAND.playSound(player.getLocation(), 0.5F, 0.5F);
+                SoundMaker.BLOCK_ANVIL_LAND.playSound(player, 0.5F, 0.5F);
                 return;
             }
             if (pet.getEntity().getEntity().getPassenger() instanceof Player) {
