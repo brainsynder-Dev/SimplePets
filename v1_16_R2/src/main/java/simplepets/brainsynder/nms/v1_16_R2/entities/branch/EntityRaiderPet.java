@@ -15,11 +15,11 @@ public abstract class EntityRaiderPet extends EntityPet {
         CELEBRATING = DataWatcher.a(EntityRaiderPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityRaiderPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityRaiderPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public EntityRaiderPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityRaiderPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
     }
 

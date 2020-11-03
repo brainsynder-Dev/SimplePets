@@ -1,6 +1,6 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R2.CraftWorld;
 import org.bukkit.entity.ArmorStand;
@@ -16,12 +16,10 @@ import simplepets.brainsynder.nms.v1_16_R2.entities.impossamobs.EntityArmorStand
 import simplepets.brainsynder.nms.v1_16_R2.entities.impossamobs.EntityGhostStandPet;
 import simplepets.brainsynder.nms.v1_16_R2.entities.impossamobs.EntityShulkerPet;
 import simplepets.brainsynder.nms.v1_16_R2.entities.list.EntityControllerPet;
-import simplepets.brainsynder.nms.v1_16_R2.utils.EntityUtils;
 import simplepets.brainsynder.pet.types.ArmorStandPet;
 import simplepets.brainsynder.pet.types.ShulkerPet;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.ISpawner;
-import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,17 +43,20 @@ public class SpawnUtil implements ISpawner {
         return spawn(l, pet, className);
     }
 
-    public IEntityPet spawn(Location l, IPet pet, String className) {
+    public IEntityPet spawn(Location location, IPet pet, String className) {
         try {
-            World mcWorld = ((CraftWorld) l.getWorld()).getHandle();
-            EntityTypes<?> types = EntityUtils.getType((className.equals("EntityControllerPet")) ? EntityWrapper.ZOMBIE : pet.getEntityType());
-            EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
+            World mcWorld = ((CraftWorld) location.getWorld()).getHandle();
+            EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(World.class, IPet.class).newInstance(mcWorld, pet);
             customEntity.setInvisible(false);
-            customEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
+            customEntity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+            if (!location.getChunk().isLoaded()) {
+                location.getChunk().load();
+            }
+
             mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
-                    ArmorStand stand = EntityArmorStandPet.spawn(l, ((EntityControllerPet) customEntity));
+                    ArmorStand stand = EntityArmorStandPet.spawn(location, ((EntityControllerPet) customEntity));
                     stand.setGravity(false);
                     stand.setArms(true);
                     stand.setCollidable(false);
@@ -65,11 +66,11 @@ public class SpawnUtil implements ISpawner {
                     stand.setRightArmPose(new EulerAngle(0.0D, 0.0D, 0.0D));
                     ((IEntityControllerPet) customEntity).setDisplayEntity(stand);
                 } else if (pet.getPetType() instanceof ShulkerPet) {
-                    ArmorStand stand = EntityGhostStandPet.spawn(l, pet);
+                    ArmorStand stand = EntityGhostStandPet.spawn(location, pet);
                     stand.setGravity(false);
                     stand.setCollidable(false);
                     stand.setSmall(true);
-                    Shulker shulker = EntityShulkerPet.spawn(l, (EntityControllerPet) customEntity);
+                    Shulker shulker = EntityShulkerPet.spawn(location, (EntityControllerPet) customEntity);
                     shulker.setAI(false);
                     shulker.setCollidable(false);
                     stand.addPassenger(shulker);
@@ -88,5 +89,4 @@ public class SpawnUtil implements ISpawner {
     public IEntityPet spawnEntityPet(Location l, IPet pet, String className) {
         return spawn(l, pet, className);
     }
-
 }

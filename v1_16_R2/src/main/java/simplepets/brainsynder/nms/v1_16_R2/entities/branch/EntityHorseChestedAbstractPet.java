@@ -17,11 +17,11 @@ public abstract class EntityHorseChestedAbstractPet extends EntityHorseAbstractP
     }
 
 
-    public EntityHorseChestedAbstractPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityHorseChestedAbstractPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public EntityHorseChestedAbstractPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityHorseChestedAbstractPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type,world, pet);
     }
 

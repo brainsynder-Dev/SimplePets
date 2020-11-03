@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
@@ -27,12 +30,12 @@ public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
         INVULNERABILITY_TIME = DataWatcher.a(EntityWitherPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityWitherPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityWitherPet(World world) {
+        super(EntityTypes.WITHER, world);
     }
 
-    public EntityWitherPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityWitherPet(World world, IPet pet) {
+        super(EntityTypes.WITHER, world, pet);
     }
 
     @Override

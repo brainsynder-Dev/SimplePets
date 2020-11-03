@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
-import net.minecraft.server.v1_16_R2.EntityCreature;
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
@@ -13,10 +12,10 @@ import simplepets.brainsynder.nms.v1_16_R2.entities.branch.EntitySkeletonAbstrac
  */
 @Size(width = 0.7F, length = 2.4F)
 public class EntityWitherSkeletonPet extends EntitySkeletonAbstractPet implements IEntityWitherSkeletonPet {
-    public EntityWitherSkeletonPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityWitherSkeletonPet(World world) {
+        super(EntityTypes.WITHER_SKELETON, world);
     }
-    public EntityWitherSkeletonPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityWitherSkeletonPet(World world, IPet pet) {
+        super(EntityTypes.WITHER_SKELETON, world, pet);
     }
 }

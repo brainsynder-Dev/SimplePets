@@ -25,11 +25,11 @@ public abstract class EntityHorseAbstractPet extends AgeableEntityPet implements
         OWNER_UNIQUE_ID = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherWrapper.UUID);
     }
 
-    public EntityHorseAbstractPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityHorseAbstractPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public EntityHorseAbstractPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityHorseAbstractPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
     }
 

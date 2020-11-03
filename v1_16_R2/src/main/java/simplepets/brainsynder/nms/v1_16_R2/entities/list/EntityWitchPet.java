@@ -2,7 +2,10 @@ package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftCreature;
@@ -25,12 +28,12 @@ public class EntityWitchPet extends EntityPet implements IEntityWitchPet {
         IS_DRINKING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityWitchPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityWitchPet(World world) {
+        super(EntityTypes.WITCH, world);
     }
 
-    public EntityWitchPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityWitchPet(World world, IPet pet) {
+        super(EntityTypes.WITCH, world, pet);
     }
 
     protected void registerDatawatchers() {

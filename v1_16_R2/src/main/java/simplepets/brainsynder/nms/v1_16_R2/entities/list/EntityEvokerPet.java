@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
-import net.minecraft.server.v1_16_R2.EntityCreature;
 import net.minecraft.server.v1_16_R2.EntityTypes;
 import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
@@ -13,10 +12,10 @@ import simplepets.brainsynder.nms.v1_16_R2.entities.branch.EntityIllagerWizardPe
  */
 @Size(width = 0.6F, length = 1.95F)
 public class EntityEvokerPet extends EntityIllagerWizardPet implements IEntityEvokerPet {
-    public EntityEvokerPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityEvokerPet(World world) {
+        super(EntityTypes.EVOKER, world);
     }
-    public EntityEvokerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityEvokerPet(World world, IPet pet) {
+        super(EntityTypes.EVOKER, world, pet);
     }
 }

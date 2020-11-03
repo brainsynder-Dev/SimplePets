@@ -27,11 +27,11 @@ public class EntityMooshroomPet extends AgeableEntityPet implements IEntityMoosh
         datawatcher.register(TYPE, MooshroomType.RED.name());
     }
 
-    public EntityMooshroomPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityMooshroomPet(World world, IPet pet) {
+        super(EntityTypes.MOOSHROOM, world, pet);
     }
-    public EntityMooshroomPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityMooshroomPet(World world) {
+        super(EntityTypes.MOOSHROOM, world);
     }
 
     @Override

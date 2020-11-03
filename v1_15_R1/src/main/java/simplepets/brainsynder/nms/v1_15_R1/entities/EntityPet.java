@@ -224,6 +224,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
 
         ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
+        this.aK = (this.aI = this.yaw);
 
     }
 

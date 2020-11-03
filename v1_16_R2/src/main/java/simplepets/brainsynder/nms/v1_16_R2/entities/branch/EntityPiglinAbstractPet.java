@@ -18,10 +18,10 @@ public class EntityPiglinAbstractPet extends EntityPet implements IShaking {
         IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinAbstractPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityPiglinAbstractPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityPiglinAbstractPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
     }
-    public EntityPiglinAbstractPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityPiglinAbstractPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 

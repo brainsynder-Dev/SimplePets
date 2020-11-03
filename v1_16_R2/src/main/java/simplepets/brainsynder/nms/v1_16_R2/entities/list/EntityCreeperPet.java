@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -23,12 +26,12 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
         IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityCreeperPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityCreeperPet(World world) {
+        super(EntityTypes.CREEPER, world);
     }
 
-    public EntityCreeperPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityCreeperPet(World world, IPet pet) {
+        super(EntityTypes.CREEPER, world, pet);
     }
 
     @Override

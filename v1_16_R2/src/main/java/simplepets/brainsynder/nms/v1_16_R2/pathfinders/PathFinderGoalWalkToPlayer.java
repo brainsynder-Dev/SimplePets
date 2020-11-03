@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R2.entity.CraftCreature;
+import org.bukkit.craftbukkit.v1_16_R2.entity.CraftMob;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
@@ -27,18 +27,20 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
     private boolean isFirst;
     private double teleportDistance = 10.0;
     private double stopDistance = 3.0;
-    private List<Double> ints = Arrays.asList(1.9, -1.9);
+    private final List<Double> ints;
 
     PathFinderGoalWalkToPlayer(IEntityPet entitycreature, Player p, double speed) {
         this.pet = entitycreature;
         this.speed = speed;
         isFirst = true;
+        double distance = PetCore.get().getConfiguration().getDouble("Pathfinding.Distance-to-Player", 1.9);
         owner = PetOwner.getPetOwner(p);
         if (owner.getPet().getVisableEntity().isBig()) {
-            ints = Arrays.asList(2.9, -2.9);
-            stopDistance = PetCore.get().getConfig().getDouble("Pathfinding.Stopping-Distance");
-            teleportDistance = PetCore.get().getConfig().getDouble("Pathfinding.Min-Distance-For-Teleport");
+            distance = PetCore.get().getConfiguration().getDouble("Pathfinding.Distance-to-Player_LargePets", 2.9);
+            stopDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Stopping-Distance");
+            teleportDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Min-Distance-For-Teleport");
         }
+        ints = Arrays.asList(distance, -distance);
     }
 
     @Override
@@ -53,12 +55,12 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
         Entity petEntity = pet.getEntity();
         if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
             if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
-                ((CraftCreature) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
+                ((CraftMob) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
                 pet.setWalkToLocation(getWalkToLocation(start));
                 return false;
             }
         } else {
-            ((CraftCreature) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
+            ((CraftMob) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
             pet.setWalkToLocation(getWalkToLocation(start));
             return false;
         }

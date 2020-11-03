@@ -21,12 +21,12 @@ public class EntityBeePet extends AgeableEntityPet implements IEntityBeePet {
         ANGER = DataWatcher.a(EntityBeePet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityBeePet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityBeePet(World world) {
+        super(EntityTypes.BEE, world);
     }
 
-    public EntityBeePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityBeePet(World world, IPet pet) {
+        super(EntityTypes.BEE, world, pet);
     }
 
     @Override

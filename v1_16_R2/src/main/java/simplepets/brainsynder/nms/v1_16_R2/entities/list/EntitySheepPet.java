@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
@@ -25,12 +28,12 @@ public class EntitySheepPet extends AgeableEntityPet implements IEntitySheepPet 
         DYE_COLOR = DataWatcher.a(EntitySheepPet.class, DataWatcherWrapper.BYTE);
     }
 
-    public EntitySheepPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntitySheepPet(World world) {
+        super(EntityTypes.SHEEP, world);
     }
 
-    public EntitySheepPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntitySheepPet(World world, IPet pet) {
+        super(EntityTypes.SHEEP, world, pet);
     }
 
     @Override

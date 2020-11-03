@@ -23,12 +23,12 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
         SCREAMING = DataWatcher.a(EntityEndermanPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityEndermanPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityEndermanPet(World world) {
+        super(EntityTypes.ENDERMAN, world);
     }
 
-    public EntityEndermanPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityEndermanPet(World world, IPet pet) {
+        super(EntityTypes.ENDERMAN, world, pet);
     }
 
     @Override

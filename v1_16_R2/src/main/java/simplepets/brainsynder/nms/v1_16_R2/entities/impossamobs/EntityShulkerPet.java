@@ -43,7 +43,7 @@ public class EntityShulkerPet extends EntityShulker implements IEntityShulkerPet
         shulker.setNoAI(false);
         shulker.setSilent(true);
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
-        shulker.setPosition(location.getX(), location.getY(), location.getZ());
+        shulker.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         worldServer.addEntity(shulker, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return ((Shulker) shulker.getBukkitEntity());
     }

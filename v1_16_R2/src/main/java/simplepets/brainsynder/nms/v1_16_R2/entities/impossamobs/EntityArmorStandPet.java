@@ -4,7 +4,6 @@ import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.Base64Wrapper;
-import lib.brainsynder.web.PlayerData;
 import net.minecraft.server.v1_16_R2.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,7 +59,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         EntityArmorStandPet stand = new EntityArmorStandPet(EntityTypes.ARMOR_STAND, ((CraftWorld) location.getWorld()).getHandle(), pet);
         stand.setSpecial(true);
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
-        stand.setPosition(location.getX(), location.getY(), location.getZ());
+        stand.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         worldServer.addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         NBTTagCompound compound = new NBTTagCompound();
         compound.setBoolean("invulnerable", true);

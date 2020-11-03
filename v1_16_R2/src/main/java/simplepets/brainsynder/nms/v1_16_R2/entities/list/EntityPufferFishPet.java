@@ -1,6 +1,9 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityPufferFishPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -15,11 +18,11 @@ import simplepets.brainsynder.wrapper.PufferState;
 public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferFishPet {
     private static final DataWatcherObject<Integer> PUFF_STATE;
 
-    public EntityPufferFishPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPufferFishPet(World world, IPet pet) {
+        super(EntityTypes.PUFFERFISH, world, pet);
     }
-    public EntityPufferFishPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPufferFishPet(World world) {
+        super(EntityTypes.PUFFERFISH, world);
     }
 
     @Override

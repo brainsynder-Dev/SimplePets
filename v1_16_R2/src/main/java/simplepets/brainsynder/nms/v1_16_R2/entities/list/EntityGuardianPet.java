@@ -21,11 +21,17 @@ public class EntityGuardianPet extends EntityPet implements IEntityGuardianPet {
         TARGET_ENTITY = DataWatcher.a(EntityGuardianPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityGuardianPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityGuardianPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
-    public EntityGuardianPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityGuardianPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
+    }
+    public EntityGuardianPet(World world) {
+        super(EntityTypes.GUARDIAN, world);
+    }
+    public EntityGuardianPet(World world, IPet pet) {
+        super(EntityTypes.GUARDIAN, world, pet);
     }
 
     @Override

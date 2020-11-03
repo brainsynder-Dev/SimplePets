@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.entity.hostile.IEntityPiglinPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_16_R2.entities.branch.EntityPiglinAbstractPet;
@@ -21,11 +24,11 @@ public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityP
         CHARGING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
         DANCING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
     }
-    public EntityPiglinPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPiglinPet(World world, IPet pet) {
+        super(EntityTypes.PIGLIN, world, pet);
     }
-    public EntityPiglinPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPiglinPet(World world) {
+        super(EntityTypes.PIGLIN, world);
     }
 
     @Override

@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.entity.passive.IEntityStriderPet;
 import simplepets.brainsynder.api.pet.IPet;
 import simplepets.brainsynder.nms.v1_16_R2.entities.AgeableEntityPet;
@@ -21,11 +24,11 @@ public class EntityStriderPet extends AgeableEntityPet implements IEntityStrider
         COLD = DataWatcher.a(EntityStriderPet.class, DataWatcherWrapper.BOOLEAN);
         SADDLED = DataWatcher.a(EntityStriderPet.class, DataWatcherWrapper.BOOLEAN);
     }
-    public EntityStriderPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityStriderPet(World world, IPet pet) {
+        super(EntityTypes.STRIDER, world, pet);
     }
-    public EntityStriderPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityStriderPet(World world) {
+        super(EntityTypes.STRIDER, world);
     }
 
     @Override

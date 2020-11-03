@@ -14,13 +14,13 @@ public class EntityDolphinPet extends EntityPet implements IEntityDolphinPet {
     private static final DataWatcherObject<Boolean> HAS_FISH;
     private static final DataWatcherObject<Integer> MOIST;
 
-    public EntityDolphinPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityDolphinPet(World world, IPet pet) {
+        super(EntityTypes.DOLPHIN, world, pet);
         this.lookController = new ControllerLookDolphin(this, 10);
     }
 
-    public EntityDolphinPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type,world);
+    public EntityDolphinPet(World world) {
+        super(EntityTypes.DOLPHIN,world);
         this.lookController = new ControllerLookDolphin(this, 10);
     }
 

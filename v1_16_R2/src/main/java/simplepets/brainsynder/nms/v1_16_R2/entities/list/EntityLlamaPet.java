@@ -26,11 +26,17 @@ public class EntityLlamaPet extends EntityHorseChestedAbstractPet implements IEn
         VARIANT = DataWatcher.a(EntityLlamaPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityLlamaPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityLlamaPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
-    public EntityLlamaPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityLlamaPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
+    }
+    public EntityLlamaPet(World world) {
+        super(EntityTypes.LLAMA, world);
+    }
+    public EntityLlamaPet(World world, IPet pet) {
+        super(EntityTypes.LLAMA, world, pet);
     }
 
     protected void registerDatawatchers() {

@@ -26,11 +26,11 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityWolfPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityWolfPet(World world) {
+        super(EntityTypes.WOLF, world);
     }
-    public EntityWolfPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityWolfPet(World world, IPet pet) {
+        super(EntityTypes.WOLF, world, pet);
     }
 
     protected void registerDatawatchers() {

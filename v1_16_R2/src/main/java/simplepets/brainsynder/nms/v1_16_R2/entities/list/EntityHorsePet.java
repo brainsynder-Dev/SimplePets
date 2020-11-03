@@ -28,11 +28,11 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
         HORSE_VARIANT = DataWatcher.a(EntityHorsePet.class, DataWatcherWrapper.INT);
     }
 
-    public EntityHorsePet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityHorsePet(World world) {
+        super(EntityTypes.HORSE, world);
     }
-    public EntityHorsePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityHorsePet(World world, IPet pet) {
+        super(EntityTypes.HORSE, world, pet);
     }
 
     @Override

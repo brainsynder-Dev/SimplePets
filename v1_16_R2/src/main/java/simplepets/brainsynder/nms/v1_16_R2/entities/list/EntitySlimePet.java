@@ -21,11 +21,18 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
 
     private int jumpDelay;
 
-    public EntitySlimePet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntitySlimePet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
-    public EntitySlimePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntitySlimePet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
+        jumpDelay = random.nextInt(15) + 10;
+    }
+    public EntitySlimePet(World world) {
+        super(EntityTypes.SLIME, world);
+    }
+    public EntitySlimePet(World world, IPet pet) {
+        super(EntityTypes.SLIME, world, pet);
         jumpDelay = random.nextInt(15) + 10;
     }
 

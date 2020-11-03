@@ -18,11 +18,11 @@ public abstract class EntitySkeletonAbstractPet extends EntityPet implements ISk
     }
 
 
-    public EntitySkeletonAbstractPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntitySkeletonAbstractPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public EntitySkeletonAbstractPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntitySkeletonAbstractPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
     }
 

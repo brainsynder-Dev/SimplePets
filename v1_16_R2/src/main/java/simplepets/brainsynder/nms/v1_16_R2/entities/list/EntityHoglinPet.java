@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityHoglinPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -21,18 +24,18 @@ public class EntityHoglinPet extends AgeableEntityPet implements IEntityHoglinPe
         IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglinPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityHoglinPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityHoglinPet(World world, IPet pet) {
+        super(EntityTypes.HOGLIN, world, pet);
     }
-    public EntityHoglinPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityHoglinPet(World world) {
+        super(EntityTypes.HOGLIN, world);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         if (!registered) {
-            IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
+            IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglinPet.class, DataWatcherWrapper.BOOLEAN);
             registered = true;
         }
         this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default

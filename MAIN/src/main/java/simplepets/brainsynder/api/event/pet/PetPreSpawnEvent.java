@@ -6,6 +6,9 @@ import org.bukkit.event.Cancellable;
 import simplepets.brainsynder.api.event.SimplePetEvent;
 import simplepets.brainsynder.pet.PetType;
 
+/**
+ * This Event is called before all the checks are run for spawning a pet
+ */
 public class PetPreSpawnEvent extends SimplePetEvent implements Cancellable {
     private final Player player;
     private final Location spawnLocation;
@@ -13,7 +16,6 @@ public class PetPreSpawnEvent extends SimplePetEvent implements Cancellable {
     private boolean cancelled = false;
 
     public PetPreSpawnEvent(Player player, Location spawnLocation, PetType type) {
-        super(PetEventType.PRE_SPAWN);
         this.player = player;
         this.spawnLocation = spawnLocation;
         this.petType = type;

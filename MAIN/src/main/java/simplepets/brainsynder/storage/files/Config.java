@@ -23,6 +23,8 @@ public class Config extends FileMaker {
         setDefault("PetItemStorage.Inventory-Size", 27);
         // setDefault("OldPetRegistering", false); // This is no longer used in newer versions
         setDefault("Needs-Data-Permissions", true); // TODO: Reformat this value
+        setDefault("Pathfinding.Distance-to-Player", 1.9);
+        setDefault("Pathfinding.Distance-to-Player_LargePets", 2.9);
         setDefault("Pathfinding.Min-Distance-For-Teleport", 20.0);
         setDefault("Pathfinding.Stopping-Distance", 7.0);
 

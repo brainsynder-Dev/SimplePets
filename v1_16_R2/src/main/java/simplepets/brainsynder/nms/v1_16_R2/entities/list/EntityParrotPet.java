@@ -26,11 +26,11 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
 
 
-    public EntityParrotPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityParrotPet(World world) {
+        super(EntityTypes.PARROT, world);
     }
-    public EntityParrotPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityParrotPet(World world, IPet pet) {
+        super(EntityTypes.PARROT, world, pet);
         moveController = new ParrotController(this);
         //this.setSize(0.5F, 0.9F);
     }

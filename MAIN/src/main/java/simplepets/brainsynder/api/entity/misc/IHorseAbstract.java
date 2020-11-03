@@ -21,4 +21,7 @@ public interface IHorseAbstract extends IAgeablePet, IFlag {
         if (value) setEating(false);
         setSpecialFlag(32, value);
     }
+    default void setRearing (boolean value) {
+        setSpecialFlag(64, value);
+    }
 }

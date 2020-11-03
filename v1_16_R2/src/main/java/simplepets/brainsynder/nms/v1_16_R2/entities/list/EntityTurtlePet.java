@@ -19,11 +19,11 @@ public class EntityTurtlePet extends AgeableEntityPet implements IEntityTurtlePe
     private static final DataWatcherObject<Boolean> bI;
     private static final DataWatcherObject<Boolean> bJ;
 
-    public EntityTurtlePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityTurtlePet(World world, IPet pet) {
+        super(EntityTypes.TURTLE, world, pet);
     }
-    public EntityTurtlePet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityTurtlePet(World world) {
+        super(EntityTypes.TURTLE, world);
     }
 
     @Override

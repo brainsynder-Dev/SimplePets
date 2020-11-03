@@ -29,12 +29,12 @@ public class EntityVillagerPet extends AgeableEntityPet implements IEntityVillag
         VILLAGER_DATA = DataWatcher.a(EntityVillagerPet.class, DataWatcherWrapper.DATA);
     }
 
-    public EntityVillagerPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityVillagerPet(World world) {
+        super(EntityTypes.VILLAGER, world);
     }
 
-    public EntityVillagerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityVillagerPet(World world, IPet pet) {
+        super(EntityTypes.VILLAGER, world, pet);
     }
 
     @Override

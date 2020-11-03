@@ -1,0 +1,25 @@
+Entity Pet Class:
+
+Methods:
+F() = playAmbientSound()
+g(Vec3D) = travel(Vec3D)
+dM() = getSpeed()
+
+a(EntityLiving,boolean) = startRiding() (Entity)
+f(double,double,double) = absMoveTo (Entity)
+
+cr() = isControlledByLocalInstance (Entity)
+q(float) = setSpeed (Entity)
+a_(NBT) = saveAsPassenger() (Entity)
+d(NBT) = save() (Entity)
+save(NBT) = saveWithoutID() (Entity)
+
+Fields:
+aA = yBodyRot
+aC = yHeadRot
+aR = xxa ? (below jumping)
+aT = zza ? (2nd one below aR)
+aE = flyingSpeed
+
+a = ? (Vec3D)
+

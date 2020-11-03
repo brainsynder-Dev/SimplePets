@@ -25,11 +25,11 @@ public class EntityRabbitPet extends AgeableEntityPet implements IEntityRabbitPe
     private boolean onGroundLastTick = false;
     private int delay = 0;
 
-    public EntityRabbitPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityRabbitPet(World world) {
+        super(EntityTypes.RABBIT, world);
     }
-    public EntityRabbitPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityRabbitPet(World world, IPet pet) {
+        super(EntityTypes.RABBIT, world, pet);
         bi = new ControllerJumpRabbit(this);
         moveController = new ControllerMoveRabbit(this);
     }

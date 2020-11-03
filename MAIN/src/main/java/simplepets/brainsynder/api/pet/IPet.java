@@ -11,17 +11,17 @@ import java.util.List;
 public interface IPet {
     Player getOwner();
 
-    void removePet(boolean var1);
-
     PetType getPetType();
 
     EntityWrapper getEntityType();
 
+    List<MenuItem> getItems();
+
+    void removePet(boolean var1);
+
     IEntityPet getEntity();
 
     IEntityPet getVisableEntity();
-
-    List<MenuItem> getItems();
 
     boolean isHat();
 

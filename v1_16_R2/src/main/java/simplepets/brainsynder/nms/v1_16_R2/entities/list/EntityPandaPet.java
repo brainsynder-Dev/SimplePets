@@ -45,11 +45,11 @@ public class EntityPandaPet extends AgeableEntityPet implements IEntityPandaPet 
         datawatcher.register(EATING_TICKS, 0);
     }
 
-    public EntityPandaPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPandaPet(World world) {
+        super(EntityTypes.PANDA, world);
     }
-    public EntityPandaPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPandaPet(World world, IPet pet) {
+        super(EntityTypes.PANDA, world, pet);
     }
 
     @Override

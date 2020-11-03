@@ -7,7 +7,7 @@
     <parent>
         <groupId>simplepets.brainsynder</groupId>
         <artifactId>SimplePets</artifactId>
-        <version>4.3-SNAPSHOT</version>
+        <version>4.4-SNAPSHOT</version>
     </parent>
     <version>${module.version}</version>
 

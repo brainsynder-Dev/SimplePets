@@ -9,8 +9,7 @@ public class PetSelectTypeEvent extends CancellablePetEvent {
     private final PetType petType;
     private final Player player;
 
-    public PetSelectTypeEvent(PetEventType eventType, PetType type, Player player) {
-        super(eventType);
+    public PetSelectTypeEvent(PetType type, Player player) {
         this.petType = type;
         this.player = player;
     }

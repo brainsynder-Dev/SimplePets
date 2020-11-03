@@ -25,7 +25,7 @@ public class EntityGhostStandPet extends EntityArmorStand implements IImpossaPet
         EntityGhostStandPet stand = new EntityGhostStandPet(EntityTypes.ARMOR_STAND, ((CraftWorld) location.getWorld()).getHandle(), pet);
         stand.isSpecial = true;
         WorldServer worldServer = ((CraftWorld) location.getWorld()).getHandle();
-        stand.setPosition(location.getX(), location.getY(), location.getZ());
+        stand.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
         worldServer.addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         NBTTagCompound compound = new NBTTagCompound();
         compound.setBoolean("invulnerable", true);

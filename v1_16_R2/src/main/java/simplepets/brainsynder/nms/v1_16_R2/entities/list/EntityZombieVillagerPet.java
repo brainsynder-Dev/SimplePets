@@ -26,11 +26,11 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
         VILLAGER_DATA = DataWatcher.a(EntityZombieVillagerPet.class, DataWatcherWrapper.DATA);
     }
 
-    public EntityZombieVillagerPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityZombieVillagerPet(World world) {
+        super(EntityTypes.ZOMBIE_VILLAGER, world);
     }
-    public EntityZombieVillagerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityZombieVillagerPet(World world, IPet pet) {
+        super(EntityTypes.ZOMBIE_VILLAGER, world, pet);
     }
 
     @Override

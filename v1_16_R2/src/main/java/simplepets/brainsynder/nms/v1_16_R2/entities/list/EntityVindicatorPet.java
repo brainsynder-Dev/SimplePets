@@ -14,11 +14,11 @@ import simplepets.brainsynder.nms.v1_16_R2.entities.branch.EntityIllagerAbstract
 public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEntityVindicatorPet {
     private boolean johnny = false;
 
-    public EntityVindicatorPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityVindicatorPet(World world) {
+        super(EntityTypes.VINDICATOR, world);
     }
-    public EntityVindicatorPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityVindicatorPet(World world, IPet pet) {
+        super(EntityTypes.VINDICATOR, world, pet);
     }
 
     @Override

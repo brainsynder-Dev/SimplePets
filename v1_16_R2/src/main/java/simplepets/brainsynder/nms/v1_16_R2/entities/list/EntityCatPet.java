@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -36,11 +39,11 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
         datawatcher.register(COLLAR_COLOR, (int) DyeColorWrapper.WHITE.getWoolData());
     }
 
-    public EntityCatPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityCatPet(World world, IPet pet) {
+        super(EntityTypes.CAT, world, pet);
     }
-    public EntityCatPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityCatPet(World world) {
+        super(EntityTypes.CAT, world);
     }
 
     @Override

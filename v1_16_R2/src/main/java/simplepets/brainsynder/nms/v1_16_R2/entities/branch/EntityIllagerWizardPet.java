@@ -21,12 +21,12 @@ public abstract class EntityIllagerWizardPet extends EntityIllagerAbstractPet im
     private int counter;
     private WizardSpell spell;
 
-    public EntityIllagerWizardPet(EntityTypes<? extends EntityCreature> type, World var1) {
+    public EntityIllagerWizardPet(EntityTypes<? extends EntityInsentient> type, World var1) {
         super(type, var1);
         this.spell = WizardSpell.NONE;
     }
 
-    public EntityIllagerWizardPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityIllagerWizardPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
         this.spell = WizardSpell.NONE;
     }

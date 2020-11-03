@@ -262,7 +262,6 @@ public class Pet implements IPet {
         getPet().remove();
     }
 
-    @Override
     public PetType getPetType() {
         return type;
     }

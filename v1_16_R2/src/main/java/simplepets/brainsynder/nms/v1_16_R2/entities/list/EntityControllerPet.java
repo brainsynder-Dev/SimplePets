@@ -28,12 +28,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private Entity displayEntity, displayRider = null;
     private final boolean moving = false;
     
-    public EntityControllerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityControllerPet(World world, IPet pet) {
+        super(world, pet);
     }
     
-    public EntityControllerPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityControllerPet(World world) {
+        super(world);
     }
     
     @Override

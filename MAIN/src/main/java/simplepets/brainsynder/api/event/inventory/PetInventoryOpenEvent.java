@@ -19,7 +19,6 @@ public class PetInventoryOpenEvent extends CancellablePetEvent {
     }
 
     public PetInventoryOpenEvent(List<PetTypeStorage> petTypes, Player player) {
-        super(PetEventType.INVENTORY_OPEN);
         this.shownPetTypes = new StorageList<>(petTypes);
         this.player = player;
         if (shownPetTypes != null)

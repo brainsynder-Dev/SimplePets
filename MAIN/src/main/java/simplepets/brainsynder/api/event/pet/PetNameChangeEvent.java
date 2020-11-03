@@ -5,12 +5,11 @@ import simplepets.brainsynder.api.event.CancellablePetEvent;
 
 public class PetNameChangeEvent extends CancellablePetEvent {
     private String newName;
-    private Player player;
-    private boolean useColor;
-    private boolean useMagic;
+    private final Player player;
+    private final boolean useColor;
+    private final boolean useMagic;
 
     public PetNameChangeEvent(Player player, String newName, boolean useColor, boolean useMagic) {
-        super(PetEventType.NAME_CHANGE);
         this.newName = newName;
         this.player = player;
         this.useColor = useColor;

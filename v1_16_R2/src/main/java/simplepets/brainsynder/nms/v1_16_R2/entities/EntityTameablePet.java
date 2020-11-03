@@ -18,11 +18,11 @@ public class EntityTameablePet extends AgeableEntityPet implements ITameable {
         OWNER = DataWatcher.a(EntityTameablePet.class, DataWatcherWrapper.UUID);
     }
 
-    public EntityTameablePet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityTameablePet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public EntityTameablePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityTameablePet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
     }
 

@@ -1,6 +1,9 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityPillagerPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -24,10 +27,10 @@ public class EntityPillagerPet extends EntityIllagerAbstractPet implements IEnti
         datawatcher.register(CHARGING, false);
     }
 
-    public EntityPillagerPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPillagerPet(World world) {
+        super(EntityTypes.PILLAGER, world);
     }
-    public EntityPillagerPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPillagerPet(World world, IPet pet) {
+        super(EntityTypes.PILLAGER, world, pet);
     }
 }

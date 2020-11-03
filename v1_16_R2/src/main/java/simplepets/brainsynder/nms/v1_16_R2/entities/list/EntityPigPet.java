@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -19,12 +22,12 @@ public class EntityPigPet extends AgeableEntityPet implements IEntityPigPet {
         SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityPigPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPigPet(World world) {
+        super(EntityTypes.PIG, world);
     }
 
-    public EntityPigPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPigPet(World world, IPet pet) {
+        super(EntityTypes.PIG, world, pet);
     }
 
     @Override

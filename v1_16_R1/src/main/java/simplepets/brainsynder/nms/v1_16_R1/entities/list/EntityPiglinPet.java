@@ -9,7 +9,7 @@ import simplepets.brainsynder.nms.v1_16_R1.utils.DataWatcherWrapper;
 
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R1.EntityPiglin}
+ * NMS: {@link net.minecraft.server.v1_16_R1.EntityPiglin.ArmPose}
  */
 public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPet {
     private static final DataWatcherObject<Boolean> CHARGING;
@@ -32,8 +32,8 @@ public class EntityPiglinPet extends AgeableEntityPet implements IEntityPiglinPe
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.datawatcher.register(CHARGING, false);
-        this.datawatcher.register(DANCING, false);
         this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shake by default
+        this.datawatcher.register(DANCING, false);
     }
 
     @Override

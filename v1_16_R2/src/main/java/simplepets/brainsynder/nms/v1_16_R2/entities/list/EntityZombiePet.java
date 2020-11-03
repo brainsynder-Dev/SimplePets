@@ -24,11 +24,17 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
         DROWN_CONVERTING = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public EntityZombiePet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityZombiePet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
-    public EntityZombiePet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityZombiePet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world, pet);
+    }
+    public EntityZombiePet(World world) {
+        super(EntityTypes.ZOMBIE, world);
+    }
+    public EntityZombiePet(World world, IPet pet) {
+        super(EntityTypes.ZOMBIE, world, pet);
     }
 
     @Override

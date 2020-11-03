@@ -4,11 +4,10 @@ import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.pet.Pet;
 
 public class PetVehicleEvent extends CancellablePetEvent {
-    private Pet pet;
-    private Type eventType;
+    private final Pet pet;
+    private final Type eventType;
 
     public PetVehicleEvent(Pet pet, Type type) {
-        super(PetEventType.VEHICLE);
         this.pet = pet;
         eventType = type;
     }

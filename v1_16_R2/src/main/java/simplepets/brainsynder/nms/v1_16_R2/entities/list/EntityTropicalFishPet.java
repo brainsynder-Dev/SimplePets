@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -16,11 +19,11 @@ import simplepets.brainsynder.wrapper.TropicalPattern;
  */
 public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropicalFishPet {
     private static final DataWatcherObject<Integer> VARIANT;
-    public EntityTropicalFishPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityTropicalFishPet(World world, IPet pet) {
+        super(EntityTypes.TROPICAL_FISH, world, pet);
     }
-    public EntityTropicalFishPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityTropicalFishPet(World world) {
+        super(EntityTypes.TROPICAL_FISH, world);
     }
 
     @Override

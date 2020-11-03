@@ -6,6 +6,6 @@ import simplepets.brainsynder.pet.PetType;
 public class PetCommandSummonEvent extends PetSelectTypeEvent {
 
     public PetCommandSummonEvent(PetType type, Player p) {
-        super(PetEventType.SUMMON, type, p);
+        super(type, p);
     }
 }

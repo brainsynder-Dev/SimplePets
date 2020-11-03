@@ -14,11 +14,11 @@ public abstract class AgeableEntityPet extends EntityPet implements IAgeablePet 
         BABY = DataWatcher.a(AgeableEntityPet.class, DataWatcherWrapper.BOOLEAN);
     }
 
-    public AgeableEntityPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public AgeableEntityPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
     }
 
-    public AgeableEntityPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public AgeableEntityPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type,world, pet);
     }
 

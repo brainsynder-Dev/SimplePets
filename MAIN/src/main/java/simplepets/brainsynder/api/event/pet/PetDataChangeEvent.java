@@ -4,11 +4,10 @@ import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.menu.menuItems.base.MenuItem;
 
 public class PetDataChangeEvent extends CancellablePetEvent {
-    private MenuItem menuItem;
-    private ClickType clickType;
+    private final MenuItem menuItem;
+    private final ClickType clickType;
 
     public PetDataChangeEvent(MenuItem item, ClickType clickType) {
-        super(PetEventType.DATA_CHANGE);
         menuItem = item;
         this.clickType = clickType;
     }

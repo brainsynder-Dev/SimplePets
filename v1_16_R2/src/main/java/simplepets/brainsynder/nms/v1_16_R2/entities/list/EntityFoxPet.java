@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
@@ -40,11 +43,11 @@ public class EntityFoxPet extends AgeableEntityPet implements IEntityFoxPet {
         datawatcher.register(FOX_FLAGS, (byte)0);
     }
 
-    public EntityFoxPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityFoxPet(World world, IPet pet) {
+        super(EntityTypes.FOX, world, pet);
     }
-    public EntityFoxPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityFoxPet(World world) {
+        super(EntityTypes.FOX, world);
     }
 
     @Override

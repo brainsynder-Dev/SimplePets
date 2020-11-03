@@ -1,7 +1,10 @@
 package simplepets.brainsynder.nms.v1_16_R2.entities.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R2.*;
+import net.minecraft.server.v1_16_R2.DataWatcher;
+import net.minecraft.server.v1_16_R2.DataWatcherObject;
+import net.minecraft.server.v1_16_R2.EntityTypes;
+import net.minecraft.server.v1_16_R2.World;
 import simplepets.brainsynder.api.Size;
 import simplepets.brainsynder.api.entity.hostile.IEntityPhantomPet;
 import simplepets.brainsynder.api.pet.IPet;
@@ -15,11 +18,11 @@ import simplepets.brainsynder.nms.v1_16_R2.utils.DataWatcherWrapper;
 public class EntityPhantomPet extends EntityPet implements IEntityPhantomPet {
     private static final DataWatcherObject<Integer> SIZE;
 
-    public EntityPhantomPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
-        super(type, world, pet);
+    public EntityPhantomPet(World world, IPet pet) {
+        super(EntityTypes.PHANTOM, world, pet);
     }
-    public EntityPhantomPet(EntityTypes<? extends EntityCreature> type, World world) {
-        super(type, world);
+    public EntityPhantomPet(World world) {
+        super(EntityTypes.PHANTOM, world);
     }
 
     @Override

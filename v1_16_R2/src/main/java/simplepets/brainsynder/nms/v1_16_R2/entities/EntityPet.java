@@ -2,10 +2,14 @@ package simplepets.brainsynder.nms.v1_16_R2.entities;
 
 import com.google.common.collect.Maps;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.particle.DustOptions;
+import lib.brainsynder.particle.Particle;
+import lib.brainsynder.particle.ParticleMaker;
 import lib.brainsynder.sounds.SoundMaker;
 import net.minecraft.server.v1_16_R2.*;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.craftbukkit.v1_16_R2.entity.CraftEntity;
@@ -19,13 +23,14 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.nms.v1_16_R2.entities.list.EntityStriderPet;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.FieldAccessor;
 import simplepets.brainsynder.wrapper.EntityWrapper;
 
 import java.util.Map;
 
-public abstract class EntityPet extends EntityCreature implements IEntityPet {
+public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private IPet pet;
     private Location walkTo = null;
     private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
@@ -43,7 +48,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             tickDelay = 10000;
     private FieldAccessor<Boolean> fieldAccessor;
 
-    public EntityPet(EntityTypes<? extends EntityCreature> type, World world, IPet pet) {
+    public EntityPet(EntityTypes<? extends EntityInsentient> type, World world, IPet pet) {
         super(type, world);
         this.pet = pet;
         this.collides = false;
@@ -66,9 +71,9 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         floatDown = pet.getPetType().canFloat();
     }
 
-    public EntityPet(EntityTypes<? extends EntityCreature> type, World world) {
+    public EntityPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
-        if (getBukkitEntity() != null) getBukkitEntity().remove();
+        if (pet == null) getBukkitEntity().remove();
     }
 
     @Override
@@ -120,7 +125,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     /**
      * Handles the registration of DataWatchers
-     *
+     * <p>
      * Search for: this.datawatcher.register
      * Class: EntityLiving
      */
@@ -172,25 +177,26 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                 pet = ((CraftEntity) ent).getHandle();
             }
             handleInvisible(glow, pet);
-        } catch (IllegalAccessException ignored) {}
+        } catch (IllegalAccessException ignored) {
+        }
     }
 
-    private void handleInvisible (boolean glow, Entity pet) throws IllegalAccessException {
+    private void handleInvisible(boolean glow, Entity pet) throws IllegalAccessException {
         DataWatcher toCloneDataWatcher = pet.getDataWatcher();
         DataWatcher newDataWatcher = new DataWatcher(pet);
         String fieldName = "d";
 
         Int2ObjectOpenHashMap<DataWatcher.Item<?>> currentHashMap = new Int2ObjectOpenHashMap<>();
         try {
-            Map<Integer, DataWatcher.Item<?>> map = (Map<Integer, DataWatcher.Item<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
+            Map<Integer, DataWatcher.Item<?>> map = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
             for (Integer integer : map.keySet()) {
                 currentHashMap.put(integer, map.get(integer).d());
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             fieldName = "entries";
             try {
-                currentHashMap = (Int2ObjectOpenHashMap<DataWatcher.Item<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
-            }catch (Exception f){
+                currentHashMap = (Int2ObjectOpenHashMap<DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
+            } catch (Exception f) {
                 // Failed to get any of the fields
                 return;
             }
@@ -217,7 +223,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                 newMap.put(integer, newHashMap.get(integer).d());
             }
             FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newMap, true);
-        }else{
+        } else {
             FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
         }
 
@@ -226,6 +232,9 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         ((CraftPlayer) getOwner()).getHandle().playerConnection.sendPacket(metadataPacket);
 
     }
+
+    ParticleMaker lime = new ParticleMaker(Particle.REDSTONE).setCount(2).setDustOptions(new DustOptions(Color.LIME, 1F));
+    ParticleMaker purple = new ParticleMaker(Particle.REDSTONE).setCount(2).setDustOptions(new DustOptions(Color.PURPLE, 1F));
 
     public void repeatTask() {
         CraftEntity bukkitEntity = getBukkitEntity();
@@ -263,7 +272,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         if (pet.isVehicle()) {
             if (floatDown) {
                 if (!isOnGround(this)) {
-                    setMot(getMot().x, getMot().y*0.4, getMot().z);
+                    setMot(getMot().x, getMot().y * 0.4, getMot().z);
                 }
             }
         }
@@ -276,7 +285,8 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
             if (!canIgnoreVanish()) {
                 boolean ownerVanish = ((CraftPlayer) p).getHandle().isInvisible();
                 if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
-                    if (isGlowing && (!ownerVanish)) glowHandler(false);  // If the pet is glowing & owner is not vanished
+                    if (isGlowing && (!ownerVanish))
+                        glowHandler(false);  // If the pet is glowing & owner is not vanished
                     this.setInvisible(!this.isInvisible());
                 } else {
                     if (ownerVanish && canGlow)
@@ -291,6 +301,8 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
             double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
+                lime.sendToLocation(p.getLocation().add(0, 1.7, 0));
+                purple.sendToLocation(bukkitEntity.getLocation().add(0, 2, 0));
                 if (current != rideSpeed)
                     getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(rideSpeed);
             } else {
@@ -302,14 +314,14 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     /**
      * Handles the Ambient Sound playing
-     *
+     * <p>
      * Search for: SoundEffect soundeffect = this.
      * Class: {@link net.minecraft.server.v1_16_R2.EntityInsentient}
      */
     @Override
     public void F() {
         if (pet == null) return;
-        if (silent) return ;
+        if (silent) return;
         SoundMaker sound = pet.getPetType().getSound();
         if (sound != null) sound.playSound(getEntity());
     }
@@ -330,92 +342,117 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     /**
      * This method handles the Pet riding
-     *
+     * <p>
      * NMS Translations (Thanks Forge):
-     *   a(float,float,float) = travel(float,float,float)
-     *   aF = prevLimbSwingAmount
-     *   aG = limbSwingAmount
-     *   aR = jumpMovementFactor
-     *
+     * a(float,float,float) = travel(float,float,float)
+     * aF = prevLimbSwingAmount
+     * aG = limbSwingAmount
+     * aR = jumpMovementFactor
+     * <p>
      * Search for: !this.isInWater() || this instanceof EntityHuman && ((EntityHuman)this).abilities.isFlying
      * Class: {@link net.minecraft.server.v1_16_R2.EntityLiving}
      */
+
+    private double liquidFloat = 0.4;
     @Override
     //public void a(float strafe, float vertical, float forward) {
     public void g(Vec3D vec3D) {
+        if (!this.isVehicle()) {
+            super.g(vec3D);
+            return;
+        }
+
+        CraftEntity bukkitEntity = getBukkitEntity();
+        if (pet == null) {
+            if (bukkitEntity != null)
+                bukkitEntity.remove();
+            return;
+        }
+
+        if (getOwner() == null) {
+            if (bukkitEntity != null)
+                bukkitEntity.remove();
+            return;
+        }
+        Location location = bukkitEntity.getLocation();
+        //setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch()); // Prevents pets from moving... no idea why...
         double strafe = vec3D.x;
         double vertical = vec3D.y;
         double forward = vec3D.z;
 
-        if (passengers == null) {
-            this.G = (float) 0.5;
-            this.aL = (float) 0.02;
-            super.g(vec3D);
-        } else {
-            if (this.pet == null) {
-                this.G = (float) 0.5;
-                this.aL = (float) 0.02;
-                super.g(vec3D);
-                return;
+        if (passengers == null) return;
+        if ((this.pet == null) || (!isOwnerRiding())) return;
+
+        if (this.onGround && this.isFlying) {
+            isFlying = false;
+            this.fallDistance = 0;
+        }
+
+        EntityLiving passenger = (EntityLiving) this.getPassengers().get(0);
+
+        // Will make pets float near the surface of the water
+        if (this.a(TagsFluid.WATER)) {
+            // Allows pets to bob on the water surface (like a player would)
+            this.setMot(this.getMot().add(0, liquidFloat, 0));
+            if (liquidFloat >= 0.4){
+                liquidFloat = liquidFloat-0.05;
+            }else if (liquidFloat <= 0.05){
+                liquidFloat = liquidFloat+0.05;
             }
-            if (!isOwnerRiding()) {
-                this.G = (float) 0.5;
-                this.aL = (float) 0.02;
-                super.g(vec3D);
-                return;
-            }
-            EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
-            if (fieldAccessor != null) {
-                if (fieldAccessor.hasField(owner)) {
-                    if (fieldAccessor.get(owner)) {
-                        if (isOnGround(this)) {
-                            setMot(getMot().x, 0.5, getMot().z);
-                        } else {
-                            if (pet.getPetType().canFly(pet.getOwner())) {
-                                setMot(getMot().x, 0.3, getMot().z);
-                            }
+        }else if ((this instanceof EntityStriderPet) && this.a(TagsFluid.LAVA)) {
+            // Allows Strider to walk on lava, without getting kicked off
+            this.setMot(this.getMot().a(0.5D).add(0.0D, 0.05D, 0.0D));
+        }
+
+        PacketPlayOutEntityTeleport petPacket = new PacketPlayOutEntityTeleport(this);
+        PacketPlayOutEntityTeleport playerPacket = new PacketPlayOutEntityTeleport(this);
+        EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
+        if (fieldAccessor != null) {
+            if (fieldAccessor.hasField(owner)) {
+                if (fieldAccessor.get(owner)) {
+                    if (isOnGround(this)) {
+                        setMot(getMot().x, 0.5, getMot().z);
+                    } else {
+                        if (pet.getPetType().canFly(pet.getOwner())) {
+                            setMot(getMot().x, 0.3, getMot().z);
                         }
                     }
                 }
             }
-            this.yaw = owner.yaw;
-            this.lastYaw = this.yaw;
-            this.pitch = owner.pitch * 0.5F;
-            this.setYawPitch(this.yaw, this.pitch);
-            this.aA = this.yaw;
-            this.aC = this.aA;
-            strafe = owner.aR * 0.5F;
-            forward = owner.aT;
-            if (forward <= 0.0F) {
-                forward *= 0.25F;
+        }
+        this.yaw = owner.yaw;
+        this.lastYaw = this.yaw;
+        this.pitch = owner.pitch * 0.5F;
+        this.setYawPitch(this.yaw, this.pitch);
+        this.aA = this.yaw;
+        this.aC = this.aA;
+        strafe = owner.aR * 0.5F;
+        forward = owner.aT;
+        if (forward <= 0.0F) {
+            forward *= 0.25F;
+        }
+
+        //if (!(this instanceof IEntityHorsePet)) vec3D.vec3D.x *= 0.75;
+        if (this instanceof IEntityHorsePet) {
+            if (forward > 0.0F) {
+                float f = MathHelper.sin((float) (this.yaw * 0.017453292));
+                float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
+                setMot(getMot().add((-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0))); // This would be 0 anyways?
             }
-            //this.aL = this.aD = this.yaw;
-            //this.H = 1.0F;
 
-            Vec3D vec = new Vec3D(strafe, vertical, forward);
-            //if (!(this instanceof IEntityHorsePet)) vec3D.vec3D.x *= 0.75;
-            this.n((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-            super.g(vec);
-            if (!world.isClientSide) {
-                if (this instanceof IEntityHorsePet) {
-                    Location location = getBukkitEntity().getLocation();
-                    setPosition(location.getX(), location.getY(), location.getZ());
-                    PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
-                    owner.playerConnection.sendPacket(packet);
-                    if (forward > 0.0F) {
-                        float f = MathHelper.sin((float) (this.yaw * 0.017453292));
-                        float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
-                        setMot(getMot().add( (-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0) )); // This would be 0 anyways?
-                    }
+            this.aE = this.dM() * 0.1F;
+            this.q((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            super.g(new Vec3D(strafe, vertical, forward));
+            location = bukkitEntity.getLocation();
+            //setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+//                if (this.cr()) {
+//                    this.q((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+//                    super.g(new Vec3D(strafe, vertical, forward));
+//                } else if (owner instanceof EntityHuman) {
+//                    this.setMot(new Vec3D(0, 0, 0));
+//                }
 
-                    this.aL = this.dM() * 0.1F;
-                    if (this.cj()) {
-                        this.n((float)this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-                        super.g(new Vec3D(strafe, vertical, forward));
-                    } else if (owner instanceof EntityHuman) {
-                        this.setMot(new Vec3D(0, 0, 0));
-                    }
-
+/*
                     this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
                     double d0 = this.locX() - this.lastX;
                     double d1 = this.locZ() - this.lastZ;
@@ -426,26 +463,287 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
                     this.aC += (f5 - this.aC) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
                     this.aD += this.aC; // this.limbSwing += this.limbSwingAmount;
-                }
-            }
-            CraftEntity bukkitEntity = getBukkitEntity();
-            if (pet == null) {
-                if (bukkitEntity != null)
-                    bukkitEntity.remove();
-                return;
-            }
+*/
+            this.a(this, false);
+//                    owner.playerConnection.sendPacket(petPacket);
+//                    owner.playerConnection.sendPacket(playerPacket);
+        } else {
+            this.q((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            super.g(new Vec3D(strafe, vertical, forward));
+        }
 
-            if (getOwner() == null) {
-                if (bukkitEntity != null)
-                    bukkitEntity.remove();
-                return;
-            }
-            try {
-                PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-            }catch (Throwable ignored) {}
+        try {
+            PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+        } catch (Throwable ignored) {
         }
     }
+
+    //TODO: Horse code
+/*    public void g(Vec3D vec3d) {
+        if (this.isAlive()) {
+            if (this.isVehicle() && this.er()) {
+                EntityLiving entityliving = (EntityLiving)this.getRidingPassenger();
+                this.yaw = entityliving.yaw;
+                this.lastYaw = this.yaw;
+                this.pitch = entityliving.pitch * 0.5F;
+                this.setYawPitch(this.yaw, this.pitch);
+                this.aA = this.yaw;
+                this.aC = this.aA;
+                float f = entityliving.aR * 0.5F;
+                float f1 = entityliving.aT;
+                if (f1 <= 0.0F) {
+                    f1 *= 0.25F;
+                    this.bv = 0;
+                }
+
+                if (this.onGround && this.jumpPower == 0.0F && !this.canSlide) {
+                    f = 0.0F;
+                    f1 = 0.0F;
+                }
+
+                if (this.jumpPower > 0.0F && !this.eY() && this.onGround) {
+                    double d0 = b(GenericAttributes.JUMP_STRENGTH) * (double)this.jumpPower * (double)this.getBlockJumpFactor();
+                    double d1;
+                    if (this.hasEffect(MobEffects.JUMP)) {
+                        d1 = d0 + (double)((float)(this.getEffect(MobEffects.JUMP).getAmplifier() + 1) * 0.1F);
+                    } else {
+                        d1 = d0;
+                    }
+
+                    Vec3D vec3d1 = this.getMot();
+                    this.setMot(vec3d1.x, d1, vec3d1.z);
+                    this.v(true);
+                    this.impulse = true;
+                    if (f1 > 0.0F) {
+                        float f2 = MathHelper.sin(this.yaw * 0.017453292F);
+                        float f3 = MathHelper.cos(this.yaw * 0.017453292F);
+                        this.setMot(this.getMot().add((double)(-0.4F * f2 * this.jumpPower), 0.0D, (double)(0.4F * f3 * this.jumpPower)));
+                    }
+
+                    this.jumpPower = 0.0F;
+                }
+
+                this.aE = this.dM() * 0.1F;
+                if (this.cr()) {
+                    this.q((float)this.b(GenericAttributes.MOVEMENT_SPEED));
+                    super.g(new Vec3D((double)f, vec3d.y, (double)f1));
+                } else if (entityliving instanceof EntityHuman) {
+                    this.setMot(Vec3D.a);
+                }
+
+                if (this.onGround) {
+                    this.jumpPower = 0.0F;
+                    this.v(false);
+                }
+
+                this.a(this, false);
+            } else {
+                this.aE = 0.02F;
+                super.g(vec3d);
+            }
+        }
+
+    }*/
+    protected float jumpPower;
+    private boolean canSlide;
+    protected int bv;
+    protected boolean bq;
+
+    public boolean eY() {
+        return this.bq;
+    }
+
+    public void v(boolean flag) {
+        this.bq = flag;
+    }
+
+    protected boolean isFlying = false;
+/*
+
+    //TODO: Spigot Code
+    protected boolean hasRider = false;
+    protected float jumpPower = 0;
+
+    @Override
+    public void g(Vec3D vec3d) {
+        if (!this.isVehicle()) {
+            super.g(vec3d);
+            return;
+        }
+
+        if (this.onGround && this.isFlying) {
+            isFlying = false;
+            this.fallDistance = 0;
+        }
+
+        EntityLiving passenger = (EntityLiving) this.getPassengers().get(0);
+
+        if (this.a(TagsFluid.WATER)) {
+            this.setMot(this.getMot().add(0, 0.4, 0));
+        }
+
+        // apply pitch & yaw
+        this.lastYaw = (this.yaw = passenger.yaw);
+        this.pitch = passenger.pitch * 0.5F;
+        setYawPitch(this.yaw, this.pitch);
+        this.aC = (this.aA = this.yaw);
+
+        // get motion from passenger (player)
+        double motionSideways = passenger.aR * 0.5F;
+        double motionForward = passenger.aT;
+
+        // backwards is slower
+        if (motionForward <= 0.0F) {
+            motionForward *= 0.25F;
+        }
+        // sideways is slower too but not as slow as backwards
+        motionSideways *= 0.85F;
+
+        float speed = 0.22222F * (1F + (5));
+        double jumpHeight = jumpPower;
+        ride(motionSideways, motionForward, vec3d.y, speed); // apply motion
+
+        // throw player move event
+        if (this instanceof EntityGiantPet) {
+            double delta = Math.pow(this.locX() - this.lastX, 2.0D) + Math.pow(this.locY() - this.lastY, 2.0D)
+                    + Math.pow(this.locZ() - this.lastZ, 2.0D);
+            float deltaAngle = Math.abs(this.yaw - lastYaw) + Math.abs(this.pitch - lastPitch);
+            if (delta > 0.00390625D || deltaAngle > 10.0F) {
+                Location to = getBukkitEntity().getLocation();
+                Location from = new Location(world.getWorld(), this.lastX, this.lastY, this.lastZ, this.lastYaw,
+                        this.lastPitch);
+                if (from.getX() != Double.MAX_VALUE) {
+                    Location oldTo = to.clone();
+                    PlayerMoveEvent event = new PlayerMoveEvent((Player) passenger.getBukkitEntity(), from, to);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        passenger.getBukkitEntity().teleport(from);
+                        return;
+                    }
+                    if ((!oldTo.equals(event.getTo())) && (!event.isCancelled())) {
+                        passenger.getBukkitEntity().teleport(event.getTo(), PlayerTeleportEvent.TeleportCause.UNKNOWN);
+                        return;
+                    }
+                }
+            }
+        }
+
+        if (fieldAccessor != null && this.isVehicle()) {
+            boolean doJump = false;
+            if (this instanceof IJumpable) {
+                if (this.jumpPower > 0.0F) {
+                    doJump = true;
+                    this.jumpPower = 0.0F;
+                } else if (!this.onGround && fieldAccessor != null) {
+                    doJump = fieldAccessor.get(passenger);
+                }
+            } else {
+                if (fieldAccessor != null) {
+                    doJump = fieldAccessor.get(passenger);
+                }
+            }
+
+            if (doJump) {
+                if (onGround) {
+                    jumpHeight = new BigDecimal(jumpHeight).setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+                    Double jumpVelocity = 0.8;
+                    jumpVelocity = jumpVelocity == null ? 0.44161199999510264 : jumpVelocity;
+                    if (this instanceof IJumpable) {
+                        getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(jumpVelocity);
+                    }
+                    this.setMot(this.getMot().x, jumpVelocity, this.getMot().z);
+                }
+            }
+
+        }
+        super.g(vec3d);
+    }
+
+    private void ride(double motionSideways, double motionForward, double motionUpwards, float speedModifier) {
+        double locY;
+        float f2;
+        float speed;
+        float swimSpeed;
+
+        if (this.a(TagsFluid.WATER, 0.014D)) {
+            locY = this.locY();
+            speed = 0.8F;
+            swimSpeed = 0.02F;
+
+            this.a(swimSpeed, new Vec3D(motionSideways, motionUpwards, motionForward));
+            this.move(EnumMoveType.SELF, this.getMot());
+            double motX = this.getMot().x * speed;
+            double motY = this.getMot().y * 0.800000011920929D;
+            double motZ = this.getMot().z * speed;
+            motY -= 0.02D;
+            if (this.positionChanged && this.e(this.getMot().x,
+                    this.getMot().y + 0.6000000238418579D - this.locY() + locY, this.getMot().z)) {
+                motY = 0.30000001192092896D;
+            }
+            this.setMot(motX, motY, motZ);
+        } else if (this.a(TagsFluid.LAVA, 0.014D)) {
+            locY = this.locY();
+            this.a(0.02F, new Vec3D(motionSideways, motionUpwards, motionForward));
+            this.move(EnumMoveType.SELF, this.getMot());
+            double motX = this.getMot().x * 0.5D;
+            double motY = this.getMot().y * 0.5D;
+            double motZ = this.getMot().z * 0.5D;
+            motY -= 0.02D;
+            if (this.positionChanged && this.e(this.getMot().x,
+                    this.getMot().y + 0.6000000238418579D - this.locY() + locY, this.getMot().z)) {
+                motY = 0.30000001192092896D;
+            }
+            this.setMot(motX, motY, motZ);
+        } else {
+            float friction = 0.91F;
+
+            speed = speedModifier * (0.16277136F / (friction * friction * friction));
+
+            this.a(speed, new Vec3D(motionSideways, motionUpwards, motionForward));
+            friction = 0.91F;
+
+            double motX = this.getMot().x;
+            double motY = this.getMot().y;
+            double motZ = this.getMot().z;
+
+            if (this.isClimbing()) {
+                swimSpeed = 0.15F;
+                motX = MathHelper.a(motX, -swimSpeed, swimSpeed);
+                motZ = MathHelper.a(motZ, -swimSpeed, swimSpeed);
+                this.fallDistance = 0.0F;
+                if (motY < -0.15D) {
+                    motY = -0.15D;
+                }
+            }
+
+            Vec3D mot = new Vec3D(motX, motY, motZ);
+
+            this.move(EnumMoveType.SELF, mot);
+            if (this.positionChanged && this.isClimbing()) {
+                motY = 0.2D;
+            }
+
+            motY -= 0.08D;
+
+            motY *= 0.9800000190734863D;
+            motX *= friction;
+            motZ *= friction;
+
+            this.setMot(motX, motY, motZ);
+        }
+
+        this.au = this.av;
+        locY = this.locX() - this.lastX;
+        double d1 = this.locZ() - this.lastZ;
+        f2 = MathHelper.sqrt(locY * locY + d1 * d1) * 4.0F;
+        if (f2 > 1.0F) {
+            f2 = 1.0F;
+        }
+
+        this.av += (f2 - this.av) * 0.4F;
+        this.aw += this.av;
+    }*/
 
     @Override
     public void move(EnumMoveType enummovetype, Vec3D vec3d) {
@@ -453,13 +751,14 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
         try {
             PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.WALK);
             Bukkit.getServer().getPluginManager().callEvent(event);
-        }catch (Throwable ignored) {}
+        } catch (Throwable ignored) {
+        }
     }
 
 
     /**
      * Runs per-tick
-     *
+     * <p>
      * Search for: ("entityBaseTick");
      * Class: Entity
      */
@@ -479,7 +778,7 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
 
     /**
      * Used to stop the pet from moving when its pushed
-     *
+     * <p>
      * Search for: this.impulse = true;
      * Class: Entity
      */
@@ -492,22 +791,22 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
      * Pets should NEVER be saved in the world
      */
     @Override
-    public boolean a_(NBTTagCompound nbttagcompound){// Calls e
+    public boolean a_(NBTTagCompound nbttagcompound) {// Calls e
         return false;
     }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound){// Calls e
+    public boolean d(NBTTagCompound nbttagcompound) {// Calls e
         return false;
     }
 
     @Override
-    public NBTTagCompound save(NBTTagCompound nbttagcompound){// Saving
+    public NBTTagCompound save(NBTTagCompound nbttagcompound) {// Saving
         return nbttagcompound;
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound){// Loading
+    public void load(NBTTagCompound nbttagcompound) {// Loading
     }
 
     // this literally fixed the shit with p2 and i'm so fucking mad
