@@ -320,6 +320,11 @@ public class PetCore extends JavaPlugin {
     }
 
     public void reload(int type) {
+        configuration.reload();
+        commands.reload();
+        messages.reload();
+        ecomony.reload();
+
         needsPermissions = configuration.getBoolean("Needs-Permission");
         needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
         if ((type == 0) || (type == 2)) {
@@ -331,6 +336,7 @@ public class PetCore extends JavaPlugin {
         }
 
         if ((type == 1) || (type == 2)) handleSQL();
+
     }
 
     // GETTERS
