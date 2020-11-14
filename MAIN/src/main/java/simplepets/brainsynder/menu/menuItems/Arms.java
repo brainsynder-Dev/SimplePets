@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.entity.misc.ISkeletonAbstract;
@@ -28,10 +27,10 @@ public class Arms extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("arms", 0);
         if (entityPet instanceof IEntityZombiePet) {
             IEntityZombiePet var = (IEntityZombiePet) entityPet;
-            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isArmsRaised())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
         }else if (entityPet instanceof ISkeletonAbstract) {
             ISkeletonAbstract var = (ISkeletonAbstract) entityPet;
-            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isArmsRaised())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
         }
         return item;
     }

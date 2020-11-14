@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySheepPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -29,7 +28,7 @@ public class Shear extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("shear", 0);
         if (entityPet instanceof IEntitySheepPet) {
             IEntitySheepPet var = (IEntitySheepPet) entityPet;
-            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isSheared())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isSheared())));
         }
         return item;
     }

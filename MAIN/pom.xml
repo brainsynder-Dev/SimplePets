@@ -44,10 +44,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <repository>
-            <id>IntellectualSites</id>
-            <url>https://mvn.intellectualsites.com/content/repositories/releases/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -76,11 +72,6 @@
             <artifactId>WorldBorder</artifactId>
             <version>d8d1b28b5747c416d68f5ac78d2f1356bc3e7423</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.intellectualsites.fawe</groupId>
-            <artifactId>FAWE-Bukkit</artifactId>
-            <version>1.16-380</version>
         </dependency>
         <dependency>
             <groupId>com.sk89q.worldguard</groupId>

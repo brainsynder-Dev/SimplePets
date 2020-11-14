@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -29,7 +28,7 @@ public class Eating extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IHorseAbstract) {
                 IHorseAbstract var = (IHorseAbstract) entityPet;
-                item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isEating())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isEating())));
             }
         }
         return item;

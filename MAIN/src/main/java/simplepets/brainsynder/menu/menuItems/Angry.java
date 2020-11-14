@@ -1,7 +1,6 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -28,7 +27,7 @@ public class Angry extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IEntityWolfPet) {
                 IEntityWolfPet var = (IEntityWolfPet) entityPet;
-                item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isAngry())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isAngry())));
 
             }
         }

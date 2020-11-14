@@ -3,7 +3,6 @@ package simplepets.brainsynder.menu.menuItems.fox;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -28,7 +27,7 @@ public class FoxAngry extends MenuItemAbstract<IEntityFoxPet> {
     public ItemBuilder getItem() {
         ItemBuilder builder = type.getDataItemByName(getTargetName(), 0);
         builder.withName(formatName(builder, (entity, name) -> {
-            name = name.replace("%value%", PetCore.get().getMessages().getTrueOrFalse(entity.isAggressive()));
+            name = name.replace("%value%", String.valueOf(entity.isAggressive()));
             return name;
         }));
         return builder;

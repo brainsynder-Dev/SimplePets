@@ -3,7 +3,6 @@ package simplepets.brainsynder.menu.menuItems.bee;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -27,7 +26,7 @@ public class Nectar extends MenuItemAbstract<IEntityBeePet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("nectar", 0);
-        if (item != null) item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(entityPet.hasNectar())));
+        if (item != null) item.withName(item.getName().replace("%value%", String.valueOf(entityPet.hasNectar())));
         return item;
     }
 

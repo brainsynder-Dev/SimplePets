@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.entity.misc.ISaddle;
@@ -31,10 +30,10 @@ public class Saddle extends MenuItemAbstract {
         try {
             if (entityPet instanceof ISaddle) {
                 ISaddle var = (ISaddle) entityPet;
-                item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isSaddled())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isSaddled())));
             } else if (entityPet instanceof IHorseAbstract) {
                 IHorseAbstract var = (IHorseAbstract) entityPet;
-                item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isSaddled())));
+                item.withName(item.getName().replace("%value%", String.valueOf(var.isSaddled())));
             }
         } catch (Exception e) {
             item.withName("&6Has Saddle: &cERROR");

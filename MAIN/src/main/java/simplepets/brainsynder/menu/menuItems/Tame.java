@@ -3,7 +3,6 @@ package simplepets.brainsynder.menu.menuItems;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
@@ -31,7 +30,7 @@ public class Tame extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("tame", 0);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isTamed())));
+            item.withName(item.getName().replace("%value%", String.valueOf(var.isTamed())));
         }
         return item;
     }

@@ -402,11 +402,11 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
                     setPosition(location.getX(), location.getY(), location.getZ());
                     PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
                     owner.playerConnection.sendPacket(packet);
-             /*       if (forward > 0.0F) {
+                    if (forward > 0.0F) {
                         float f = MathHelper.sin((float) (this.yaw * 0.017453292));
                         float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
                         setMot(getMot().add( (-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0) )); // This would be 0 anyways?
-                    } */
+                    }
 
                     this.aM = this.dt() * 0.1F;
                     if (this.cj()) {

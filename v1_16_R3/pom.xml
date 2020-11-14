@@ -48,11 +48,11 @@
     </properties>
 
     <dependencies>
-     <!--   <dependency>
+        <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>v1_16_R3</artifactId>
             <version>0.1-B43</version>
-        </dependency> -->
+        </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
             <artifactId>MAIN</artifactId>
@@ -60,10 +60,11 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
             <version>1.16.4-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/craftbukkit-1.16.4-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
 

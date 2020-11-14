@@ -33,6 +33,7 @@ public class Silent extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         ItemBuilder item = new ItemBuilder(Material.PLAYER_HEAD);
+        item.withName("&6Silent: &e%value%");
 
         // Has Sound
         item.setTexture("http://textures.minecraft.net/texture/5461518b74d5f7016f72294756fc68c5471110cc97f3bb093e0c6ed94a9e3");
@@ -42,7 +43,6 @@ public class Silent extends MenuItemAbstract {
         item.setTexture("http://textures.minecraft.net/texture/b1f327c3f349158d209b4867d68ffb1890bc57a01ba9483e3fffe4ec7fdea0b0");
         items.add(item.clone());
 
-        item.withName("&6Silent: &e%value%");
         return items;
     }
 

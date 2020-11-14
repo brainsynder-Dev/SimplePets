@@ -66,7 +66,7 @@
             <artifactId>craftbukkit</artifactId>
             <version>1.15-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/../libs/craftbukkit-1.15.1-R0.1-SNAPSHOT.jar</systemPath>
+            <systemPath>${project.basedir}/../libs/craftbukkit-1.15-R0.1-SNAPSHOT.jar</systemPath>
         </dependency>
     </dependencies>
 </project>
