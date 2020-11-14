@@ -66,12 +66,11 @@ public class PetCore extends JavaPlugin {
     public void onLoad() {
         instance = this;
         linkRetriever = new LinkRetriever();
-        linkRetriever.initiate();
+        linkRetriever.earlyInitiate();
     }
 
     public void onEnable() {
         Utilities.findDelay(getClass(), "startup", false);
-
         if (ServerVersion.isOlder(ServerVersion.v1_14_R1)) {
             debug(DebugLevel.DEBUG, "This version is not supported, be sure you are between 1.15 and 1.16.2");
             setEnabled(false);
@@ -111,6 +110,7 @@ public class PetCore extends JavaPlugin {
         }.runTaskLater(this, 20 * 10);
         reloadSpawner();
         spawner.init();
+        linkRetriever.initiate();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + Utilities.findDelay(getClass(), "startup", false) + "ms to load");
     }
