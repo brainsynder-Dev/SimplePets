@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -27,7 +28,7 @@ public class Age extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IAgeablePet) {
                 IAgeablePet var = (IAgeablePet) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isBaby())));
+                item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isBaby())));
             }
         }
         return item;

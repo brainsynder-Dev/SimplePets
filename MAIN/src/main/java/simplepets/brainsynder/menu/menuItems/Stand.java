@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
@@ -31,10 +32,10 @@ public class Stand extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("stand", 0);
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isSmall())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isSmall())));
         } else if (entityPet instanceof IEntityPolarBearPet) {
             IEntityPolarBearPet var = (IEntityPolarBearPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isStanding())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isStanding())));
         }
         return item;
     }

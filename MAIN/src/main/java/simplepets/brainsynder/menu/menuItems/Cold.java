@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityStriderPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -24,7 +25,7 @@ public class Cold extends MenuItemAbstract<IEntityStriderPet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("cold", 0);
-        item.withName(item.getName().replace("%value%", String.valueOf(entityPet.isCold())));
+        item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(entityPet.isCold())));
         return item;
     }
 

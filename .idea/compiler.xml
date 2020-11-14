@@ -6,11 +6,31 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="SimplePets" />
+        <module name="v1_16_R1" />
+        <module name="v1_15_R1" />
+        <module name="v1_16_R2" />
+        <module name="v1_16_R3" />
+        <module name="DIST" />
+        <module name="v1_11_R1" />
+        <module name="MAIN" />
+        <module name="v1_13_R2" />
+        <module name="v1_12_R1" />
+        <module name="v1_13_R1" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SimplePets" target="1.8" />
+      <module name="DIST" target="1.8" />
+      <module name="MAIN" target="8" />
+      <module name="SimplePets" target="8" />
+      <module name="v1_11_R1" target="8" />
+      <module name="v1_12_R1" target="8" />
+      <module name="v1_13_R1" target="8" />
+      <module name="v1_13_R2" target="8" />
+      <module name="v1_14_R1" target="8" />
+      <module name="v1_15_R1" target="8" />
+      <module name="v1_16_R1" target="8" />
+      <module name="v1_16_R2" target="8" />
+      <module name="v1_16_R3" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

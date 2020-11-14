@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.menuItems.cat;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -27,7 +28,7 @@ public class CatTilt extends MenuItemAbstract<IEntityCatPet> {
     public ItemBuilder getItem() {
         ItemBuilder builder = type.getDataItemByName(getTargetName(), 0);
         builder.withName(formatName(builder, (entity, name) -> {
-            name = name.replace("%value%", String.valueOf(entity.isHeadUp()));
+            name = name.replace("%value%", PetCore.get().getMessages().getTrueOrFalse(entity.isHeadUp()));
             return name;
         }));
         return builder;

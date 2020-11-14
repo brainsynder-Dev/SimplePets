@@ -4,6 +4,7 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -28,7 +29,7 @@ public class PandaSleep extends MenuItemAbstract<IEntityPandaPet> {
     public ItemBuilder getItem() {
         ItemBuilder builder = type.getDataItemByName(getTargetName(), 0);
         builder.withName(formatName(builder, (entity, name) -> {
-            name = name.replace("%value%", String.valueOf(entity.isLyingOnBack()));
+            name = name.replace("%value%", PetCore.get().getMessages().getTrueOrFalse(entity.isLyingOnBack()));
             return name;
         }));
         return builder;

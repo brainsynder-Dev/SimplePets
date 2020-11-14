@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IShaking;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -26,7 +27,7 @@ public class Shaking extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("shaking", 0);
         if (entityPet instanceof IShaking) {
             IShaking var = (IShaking) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isShaking())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isShaking())));
         }
         return item;
     }

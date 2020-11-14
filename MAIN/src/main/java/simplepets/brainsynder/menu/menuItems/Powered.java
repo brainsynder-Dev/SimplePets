@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
@@ -28,11 +29,11 @@ public class Powered extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("powered", 0);
         if (entityPet instanceof IEntityCreeperPet) {
             IEntityCreeperPet var = (IEntityCreeperPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isPowered())));
         }
         if (entityPet instanceof IEntityVexPet) {
             IEntityVexPet var = (IEntityVexPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isPowered())));
         }
         return item;
     }

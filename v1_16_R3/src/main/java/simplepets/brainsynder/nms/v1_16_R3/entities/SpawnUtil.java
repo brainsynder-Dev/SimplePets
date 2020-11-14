@@ -53,7 +53,7 @@ public class SpawnUtil implements ISpawner {
             EntityPet customEntity = (EntityPet) petMap.get(className).getDeclaredConstructor(EntityTypes.class, World.class, IPet.class).newInstance(types, mcWorld, pet);
             customEntity.setInvisible(false);
             customEntity.setPositionRotation(l.getX(), l.getY(), l.getZ(), l.getYaw(), l.getPitch());
-            mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            System.out.println(mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM));
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
                     ArmorStand stand = EntityArmorStandPet.spawn(l, ((EntityControllerPet) customEntity));

@@ -2,7 +2,17 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/DIST/DIST.iml" filepath="$PROJECT_DIR$/DIST/DIST.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MAIN/MAIN.iml" filepath="$PROJECT_DIR$/MAIN/MAIN.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/SimplePets.iml" filepath="$PROJECT_DIR$/.idea/SimplePets.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_11_R1/v1_11_R1.iml" filepath="$PROJECT_DIR$/v1_11_R1/v1_11_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_12_R1/v1_12_R1.iml" filepath="$PROJECT_DIR$/v1_12_R1/v1_12_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_13_R1/v1_13_R1.iml" filepath="$PROJECT_DIR$/v1_13_R1/v1_13_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_13_R2/v1_13_R2.iml" filepath="$PROJECT_DIR$/v1_13_R2/v1_13_R2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_15_R1/v1_15_R1.iml" filepath="$PROJECT_DIR$/v1_15_R1/v1_15_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_16_R1/v1_16_R1.iml" filepath="$PROJECT_DIR$/v1_16_R1/v1_16_R1.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_16_R2/v1_16_R2.iml" filepath="$PROJECT_DIR$/v1_16_R2/v1_16_R2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/v1_16_R3/v1_16_R3.iml" filepath="$PROJECT_DIR$/v1_16_R3/v1_16_R3.iml" />
     </modules>
   </component>
 </project>

@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVindicatorPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -28,7 +29,7 @@ public class Johnny extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("johnny", 0);
         if (entityPet instanceof IEntityVindicatorPet) {
             IEntityVindicatorPet var = (IEntityVindicatorPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isJohnny())));
+            item.withName(item.getName().replace("%value%", PetCore.get().getMessages().getTrueOrFalse(var.isJohnny())));
         }
         return item;
     }
