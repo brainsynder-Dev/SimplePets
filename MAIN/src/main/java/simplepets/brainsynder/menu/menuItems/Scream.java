@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Scream extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("scream", 0);
         if (entityPet instanceof IEntityEndermanPet) {
             IEntityEndermanPet var = (IEntityEndermanPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isScreaming())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isScreaming())));
         }
         return item;
     }

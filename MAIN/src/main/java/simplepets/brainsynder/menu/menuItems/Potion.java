@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitchPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Potion extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("potion", 0);
         if (entityPet instanceof IEntityWitchPet) {
             IEntityWitchPet var = (IEntityWitchPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isDrinkingPotion())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isDrinkingPotion())));
         }
         return item;
     }

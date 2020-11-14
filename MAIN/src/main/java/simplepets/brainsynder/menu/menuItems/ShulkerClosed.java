@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityShulkerPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class ShulkerClosed extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("shulkerclosed", 0);
         if (getEntityPet() instanceof IEntityShulkerPet) {
             IEntityShulkerPet var = (IEntityShulkerPet) getEntityPet();
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isClosed())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isClosed())));
         }
         return item;
     }

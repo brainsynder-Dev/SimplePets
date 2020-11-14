@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IChestedAbstractPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class Chested extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IChestedAbstractPet) {
                 IChestedAbstractPet var = (IChestedAbstractPet) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isChested())));
+                item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isChested())));
             }
         }
         return item;

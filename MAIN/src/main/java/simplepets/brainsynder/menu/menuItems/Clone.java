@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Clone extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IEntityArmorStandPet) {
                 IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isOwner())));
+                item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isOwner())));
             }
         }
         return item;

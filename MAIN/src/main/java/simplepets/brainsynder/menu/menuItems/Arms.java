@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.entity.misc.ISkeletonAbstract;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,10 +28,10 @@ public class Arms extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("arms", 0);
         if (entityPet instanceof IEntityZombiePet) {
             IEntityZombiePet var = (IEntityZombiePet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isArmsRaised())));
         }else if (entityPet instanceof ISkeletonAbstract) {
             ISkeletonAbstract var = (ISkeletonAbstract) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isArmsRaised())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isArmsRaised())));
         }
         return item;
     }

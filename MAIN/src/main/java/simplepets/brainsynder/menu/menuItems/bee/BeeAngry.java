@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class BeeAngry extends MenuItemAbstract<IEntityBeePet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName(getTargetName(), 0);
-        if (item != null) item.withName(item.getName().replace("%value%", String.valueOf(entityPet.isAngry())));
+        if (item != null) item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(entityPet.isAngry())));
         return item;
     }
 

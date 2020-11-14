@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBatPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Hang extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("hang", 0);
         if (entityPet instanceof IEntityBatPet) {
             IEntityBatPet var = (IEntityBatPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isHanging())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isHanging())));
         }
         return item;
     }

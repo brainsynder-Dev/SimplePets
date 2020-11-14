@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class Stung extends MenuItemAbstract<IEntityBeePet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("stung", 0);
-        if (item != null) item.withName(item.getName().replace("%value%", String.valueOf(!entityPet.hasStung())));
+        if (item != null) item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(!entityPet.hasStung())));
 
         return item;
     }

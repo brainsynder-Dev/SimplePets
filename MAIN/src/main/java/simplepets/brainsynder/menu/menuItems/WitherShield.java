@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityWitherPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class WitherShield extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("withershield", 0);
         if (entityPet instanceof IEntityWitherPet) {
             IEntityWitherPet var = (IEntityWitherPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isShielded())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isShielded())));
         }
         return item;
     }

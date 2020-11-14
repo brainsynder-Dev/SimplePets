@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class Pumpkin extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("pumpkin", 0);
         if (entityPet instanceof IEntitySnowmanPet) {
             IEntitySnowmanPet var = (IEntitySnowmanPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.hasPumpkin())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.hasPumpkin())));
         }
         return item;
     }

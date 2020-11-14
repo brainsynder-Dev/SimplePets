@@ -2,10 +2,12 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class Age extends MenuItemAbstract {
         if (item != null) {
             if (entityPet instanceof IAgeablePet) {
                 IAgeablePet var = (IAgeablePet) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isBaby())));
+                item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isBaby())));
             }
         }
         return item;

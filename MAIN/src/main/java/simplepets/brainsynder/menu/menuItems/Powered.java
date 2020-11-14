@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,11 +29,11 @@ public class Powered extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("powered", 0);
         if (entityPet instanceof IEntityCreeperPet) {
             IEntityCreeperPet var = (IEntityCreeperPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isPowered())));
         }
         if (entityPet instanceof IEntityVexPet) {
             IEntityVexPet var = (IEntityVexPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isPowered())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isPowered())));
         }
         return item;
     }
