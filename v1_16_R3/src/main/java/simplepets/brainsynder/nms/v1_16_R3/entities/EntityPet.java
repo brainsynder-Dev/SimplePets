@@ -72,6 +72,26 @@ public abstract class EntityPet extends EntityCreature implements IEntityPet {
     }
 
     @Override
+    public void setWalkSpeed(double walkSpeed) {
+        this.walkSpeed = walkSpeed;
+    }
+
+    @Override
+    public double getWalkSpeed() {
+        return walkSpeed;
+    }
+
+    @Override
+    public void setRideSpeed(double rideSpeed) {
+        this.rideSpeed = rideSpeed;
+    }
+
+    @Override
+    public double getRideSpeed() {
+        return rideSpeed;
+    }
+
+    @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", pet.getPetType().getConfigName());

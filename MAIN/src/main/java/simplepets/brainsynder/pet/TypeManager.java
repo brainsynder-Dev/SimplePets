@@ -4,6 +4,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.pet.types.*;
+import simplepets.brainsynder.utils.TimerUtil;
 
 import java.text.Collator;
 import java.util.Collection;
@@ -23,6 +24,7 @@ public class TypeManager {
         rawSort = new LinkedList<> ();
         sortedItems = new LinkedList<> ();
 
+        TimerUtil.findDelay(getClass(), "Register Pets");
         register(new ArmorStandPet(plugin));
         register(new BatPet(plugin));
         register(new BeePet(plugin));
@@ -96,7 +98,9 @@ public class TypeManager {
         register(new PigZombiePet(plugin));
 
         register(new PiglinBrutePet(plugin));
+        TimerUtil.findDelay(getClass(), "Register Pets");
 
+        TimerUtil.findDelay(getClass(), "Sorting Pets");
         Collection<String> sortKeys = new TreeSet<>(Collator.getInstance());
         items.values().forEach(data -> sortKeys.add(data.getString("sort_key")));
         sortKeys.forEach(key -> sortedItems.add(fromSortKey(key)));
@@ -104,9 +108,11 @@ public class TypeManager {
         Collection<String> rawSortKeys = new TreeSet<>(Collator.getInstance());
         rawList.values().forEach(data -> rawSortKeys.add(data.getConfigName()));
         rawSortKeys.forEach(key -> rawSort.add(fromSortKey(key)));
+        TimerUtil.findDelay(getClass(), "Sorting Pets");
     }
 
     public void unLoad () {
+        TimerUtil.findDelay(getClass(), "Unloading Pets");
         if (rawList != null) rawList.clear();
         rawList = null;
         if (items != null) items.clear();
@@ -115,6 +121,7 @@ public class TypeManager {
         sortedItems = null;
         if (rawSort != null) rawSort.clear();
         rawSort = null;
+        TimerUtil.findDelay(getClass(), "Unloading Pets");
     }
 
     private void register (PetType item) {

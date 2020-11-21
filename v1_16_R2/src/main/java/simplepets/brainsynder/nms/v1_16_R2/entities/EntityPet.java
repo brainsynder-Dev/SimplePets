@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IJump;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.pet.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
@@ -33,7 +34,9 @@ import java.util.Map;
 public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private IPet pet;
     private Location walkTo = null;
-    private double walkSpeed = 0.6000000238418579, rideSpeed = 0.4000000238418579;
+    private double walkSpeed = 0.6000000138418579;
+    private double rideSpeed = 0.2000000238418579;
+    private final double flySpeed = 0.4000000059604645D; // Default Fly speed for Parrots
 
     private boolean floatDown = false,
             canGlow = true,
@@ -74,6 +77,26 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     public EntityPet(EntityTypes<? extends EntityInsentient> type, World world) {
         super(type, world);
         if (pet == null) getBukkitEntity().remove();
+    }
+
+    @Override
+    public void setWalkSpeed(double walkSpeed) {
+        this.walkSpeed = walkSpeed;
+    }
+
+    @Override
+    public double getWalkSpeed() {
+        return walkSpeed;
+    }
+
+    @Override
+    public void setRideSpeed(double rideSpeed) {
+        this.rideSpeed = rideSpeed;
+    }
+
+    @Override
+    public double getRideSpeed() {
+        return rideSpeed;
     }
 
     @Override
@@ -301,8 +324,9 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 
             double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
-                lime.sendToLocation(p.getLocation().add(0, 1.7, 0));
-                purple.sendToLocation(bukkitEntity.getLocation().add(0, 2, 0));
+                // These were used to debug the pet riding
+                //lime.sendToLocation(p.getLocation().add(0, 1.7, 0));
+                //purple.sendToLocation(bukkitEntity.getLocation().add(0, 2, 0));
                 if (current != rideSpeed)
                     getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(rideSpeed);
             } else {
@@ -407,19 +431,19 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         PacketPlayOutEntityTeleport petPacket = new PacketPlayOutEntityTeleport(this);
         PacketPlayOutEntityTeleport playerPacket = new PacketPlayOutEntityTeleport(this);
         EntityPlayer owner = ((CraftPlayer) getOwner()).getHandle();
-        if (fieldAccessor != null) {
-            if (fieldAccessor.hasField(owner)) {
-                if (fieldAccessor.get(owner)) {
-                    if (isOnGround(this)) {
-                        setMot(getMot().x, 0.5, getMot().z);
-                    } else {
-                        if (pet.getPetType().canFly(pet.getOwner())) {
-                            setMot(getMot().x, 0.3, getMot().z);
-                        }
-                    }
-                }
-            }
-        }
+//        if (fieldAccessor != null) {
+//            if (fieldAccessor.hasField(owner)) {
+//                if (fieldAccessor.get(owner)) {
+//                    if (isOnGround(this)) {
+//                        setMot(getMot().x, 0.5, getMot().z);
+//                    } else {
+//                        if (pet.getPetType().canFly(pet.getOwner())) {
+//                            setMot(getMot().x, 0.3, getMot().z);
+//                        }
+//                    }
+//                }
+//            }
+//        }
         this.yaw = owner.yaw;
         this.lastYaw = this.yaw;
         this.pitch = owner.pitch * 0.5F;
@@ -443,6 +467,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
             this.aE = this.dM() * 0.1F;
             this.q((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             super.g(new Vec3D(strafe, vertical, forward));
+            doJump(owner);
             location = bukkitEntity.getLocation();
             //setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
 //                if (this.cr()) {
@@ -470,12 +495,43 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         } else {
             this.q((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
             super.g(new Vec3D(strafe, vertical, forward));
+            doJump(owner);
         }
 
         try {
             PetMoveEvent event = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
             Bukkit.getServer().getPluginManager().callEvent(event);
         } catch (Throwable ignored) {
+        }
+    }
+
+    private void doJump (Entity passenger) {
+        if (fieldAccessor != null && this.isVehicle()) {
+            boolean doJump = false;
+
+            if (this instanceof IJump) {
+                if (this.jumpPower > 0.0F) {
+                    doJump = true;
+                    this.jumpPower = 0.0F;
+                } else if (!this.onGround && fieldAccessor != null) {
+                    doJump = fieldAccessor.get(passenger);
+                }
+            } else {
+                if (fieldAccessor != null) {
+                    doJump = fieldAccessor.get(passenger);
+                }
+            }
+
+            if (doJump) {
+                if (onGround) {
+                    Double jumpVelocity = 0.8;
+                    jumpVelocity = jumpVelocity == null ? 0.44161199999510264 : jumpVelocity;
+                    if (this instanceof IJump) {
+                        getAttributeInstance(GenericAttributes.JUMP_STRENGTH).setValue(jumpVelocity);
+                    }
+                    this.setMot(this.getMot().x, jumpVelocity, this.getMot().z);
+                }
+            }
         }
     }
 

@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftCreature;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
@@ -53,12 +53,12 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
         Entity petEntity = pet.getEntity();
         if (petEntity.getWorld().getName().equals(start.getWorld().getName())) {
             if ((petEntity.getLocation().distance(start) >= teleportDistance)) {
-                ((CraftCreature) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
+                ((CraftEntity)petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
                 pet.setWalkToLocation(getWalkToLocation(start));
                 return false;
             }
         } else {
-            ((CraftCreature) petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
+            ((CraftEntity)petEntity).getHandle().setPositionRotation(start.getX(), start.getY(), start.getZ(), start.getYaw(), start.getPitch());
             pet.setWalkToLocation(getWalkToLocation(start));
             return false;
         }

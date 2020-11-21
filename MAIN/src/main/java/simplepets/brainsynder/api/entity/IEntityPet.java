@@ -12,6 +12,16 @@ import java.util.List;
 import java.util.UUID;
 
 public interface IEntityPet extends IImpossaPet {
+    default double getWalkSpeed (){
+        return 0;
+    }
+    default void setWalkSpeed(double speed){}
+
+    default double getRideSpeed(){
+        return 0;
+    }
+    default void setRideSpeed(double speed){}
+
     Player getOwner();
 
     IPet getPet();

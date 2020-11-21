@@ -6,6 +6,7 @@ import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.links.impl.*;
 import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.utils.TimerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,11 +43,13 @@ public class LinkRetriever {
     }
 
     public void cleanup () {
+        TimerUtil.findDelay(getClass(), "Unloading Plugin Links");
         if (loaders == null) return;
         if (loaders.isEmpty()) return;
         loaders.forEach(IPluginLink::onUnhook);
         loaders.clear();
         loaders = null;
+        TimerUtil.findDelay(getClass(), "Unloading Plugin Links");
     }
 
     public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {

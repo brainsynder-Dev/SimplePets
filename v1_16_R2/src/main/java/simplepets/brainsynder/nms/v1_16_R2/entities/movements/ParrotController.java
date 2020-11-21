@@ -79,7 +79,7 @@ public class ParrotController extends ControllerMove {
                 var10 = (float) (speed * entity.getAttributeInstance(GenericAttributes.FLYING_SPEED).getValue());
             }
 
-            entity.n(var10);
+            entity.q(var10); // Fixes parrots now moving around
             double var11 = MathHelper.sqrt(var1 * var1 + var5 * var5);
             float var13 = (float) (-(MathHelper.d(var3, var11) * 57.2957763671875D));
             entity.pitch = this.a(entity.pitch, var13, 10.0F);

@@ -57,9 +57,11 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
         setDefault("mount", true);
         setDefault("float_down", false);
         setDefault("fly", canFlyDefault());
+        setDefault("sort_key", fileName);
 
-        setDefault("ride_speed", 0.2700000238418579);
-        setDefault("speed", 0.6000000238418579D);
+        setDefault("ride_speed", 0.2500000138418579);
+        setDefault("speed", 0.6000000138418579);
+        setDefault("fly_speed", 0.4000000059604645);
 
         setDefault("item", StorageTagTools.toJsonObject(getDefaultItem().toCompound()));
         setDefault("summon_name", Capitalise.capitalize(fileName.replace("_", " ")));

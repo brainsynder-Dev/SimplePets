@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
@@ -25,13 +24,9 @@ import java.lang.reflect.Constructor;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Utilities {
-    private static final Map<String, Long> startTimeMap = new HashMap<>();
-
     public static List<Material> getBlacklistedMaterials() {
         List<Material> materials = new ArrayList<>();
         for (Material material : Material.values()) {
@@ -45,37 +40,6 @@ public class Utilities {
         }
 
         return materials;
-    }
-
-    /**
-     * Finds how many Milliseconds it took to run a task
-     *
-     * @param clazz    - Class where the task is being called from
-     * @param taskName - A name to give the task (use the same name for start/finish)
-     */
-    public static long findDelay(Class clazz, String taskName) {
-        return findDelay(clazz, taskName, true);
-    }
-
-    /**
-     * Finds how many Milliseconds it took to run a task
-     *
-     * @param clazz    - Class where the task is being called from
-     * @param taskName - A name to give the task (use the same name for start/finish)
-     * @param output   - Should the data be broadcast to the server?
-     */
-    public static long findDelay(Class clazz, String taskName, boolean output) {
-        String key = clazz.getSimpleName() + "|" + taskName;
-        if (startTimeMap.containsKey(key)) {
-            long start = startTimeMap.get(key);
-            long end = System.nanoTime();
-            long diff = (end - start) / 1000000;
-            if (output) Bukkit.broadcastMessage(key + " -   Took: " + diff + "ms");
-            startTimeMap.remove(key);
-            return diff;
-        }
-        startTimeMap.put(key, System.nanoTime());
-        return 0;
     }
 
     public static String saveTextToHastebin(String text) {

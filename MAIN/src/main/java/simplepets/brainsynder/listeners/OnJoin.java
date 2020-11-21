@@ -24,6 +24,13 @@ public class OnJoin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
+        if (PetCore.get().getConfiguration().getBoolean("Check-For-New-Builds", true) && (PetCore.get().getLatestBuild() != -1)) {
+            if (player.hasPermission("pet.update")) {
+                player.sendMessage("§6[SimplePets Update] §7There is a new build available on the jenkins");
+                player.sendMessage("§6[SimplePets Update]§7 http://ci.pluginwiki.us/job/" + PetCore.get().getJenkinsProperties().getProperty("repo") + "/" + PetCore.get().getLatestBuild() + "/");
+            }
+        }
+
         if (!PetCore.get().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login")) return;
         try {
             PetOwner owner = PetOwner.getPetOwner(player);

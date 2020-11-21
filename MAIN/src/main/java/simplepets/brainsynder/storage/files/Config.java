@@ -12,6 +12,7 @@ public class Config extends FileMaker {
     }
 
     public void loadDefaults() {
+        setDefault("Check-For-New-Builds", true);
         setDefault("Needs-Pet-Permission-To-Open-GUI", false);
         setDefault("Needs-Permission", true);
         setDefault("Remove-Item-If-No-Permission", true);
