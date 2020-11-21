@@ -14,11 +14,30 @@ import java.util.List;
 public class LinkRetriever {
     private List<IPluginLink> loaders;
 
+    public void earlyInitiate() {
+        if (loaders == null) loaders = new ArrayList<>();
+        if (!loaders.isEmpty()) loaders.clear();
+        WorldGuardLink link = new WorldGuardLink();
+        loaders.add(link);
+        if (!link.isHooked()) {
+            try {
+                Plugin dependency = Bukkit.getPluginManager().getPlugin(link.getDependencyName());
+                if (dependency != null) {
+                    link.setHooked(link.onHook());
+                    if (link.isHooked()) {
+                        PetCore.get().debug("WorldGuard Successfully linked");
+                    }else{
+                        PetCore.get().debug("WorldGuard Could not be linked");
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+    }
+
     public void initiate() {
         if (loaders == null) loaders = new ArrayList<>();
         if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
-        loaders.add(new WorldGuardLink());
         loaders.add(new VaultLink());
         loaders.add(new WorldBorderLink());
 

@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityStriderPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ public class Cold extends MenuItemAbstract<IEntityStriderPet> {
     @Override
     public ItemBuilder getItem() {
         ItemBuilder item = type.getDataItemByName("cold", 0);
-        item.withName(item.getName().replace("%value%", String.valueOf(entityPet.isCold())));
+        item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(entityPet.isCold())));
         return item;
     }
 

@@ -1,6 +1,7 @@
 package simplepets.brainsynder.storage.files;
 
 import org.bukkit.plugin.Plugin;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.storage.files.base.FileMaker;
 
 import java.util.Arrays;
@@ -44,6 +45,13 @@ public class Messages extends FileMaker {
         setDefault("Anvil-Rename.Name", "Rename Pet");
         setDefault("ArmorMenu.ClickToRemove", Arrays.asList("&c ", "&c&lCLICK TO REMOVE"));
         setDefault("ArmorMenu.Restricted", "&cThis pet can not have items added or removed!");
+
+        setDefault("Data-Menu.True", "&etrue");
+        setDefault("Data-Menu.False", "&efalse");
+    }
+
+    public static String getTrueOrFalse(boolean b) {
+        return b ? PetCore.get().getMessages().getString("Data-Menu.True") : PetCore.get().getMessages().getString("Data-Menu.False");
     }
 
 //    @Override

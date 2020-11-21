@@ -9,6 +9,7 @@ import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.types.ArmorStandPet;
 import simplepets.brainsynder.pet.types.PolarBearPet;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -31,10 +32,10 @@ public class Stand extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("stand", 0);
         if (entityPet instanceof IEntityArmorStandPet) {
             IEntityArmorStandPet var = (IEntityArmorStandPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isSmall())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isSmall())));
         } else if (entityPet instanceof IEntityPolarBearPet) {
             IEntityPolarBearPet var = (IEntityPolarBearPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isStanding())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isStanding())));
         }
         return item;
     }

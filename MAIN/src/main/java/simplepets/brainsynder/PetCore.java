@@ -75,7 +75,7 @@ public class PetCore extends JavaPlugin {
     public void onLoad() {
         instance = this;
         linkRetriever = new LinkRetriever();
-        linkRetriever.initiate();
+        linkRetriever.earlyInitiate();
     }
 
     public void onEnable() {
@@ -123,6 +123,7 @@ public class PetCore extends JavaPlugin {
         }.runTaskLater(this, 20 * 10);
         reloadSpawner();
         spawner.init();
+        linkRetriever.initiate();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
         debug("Took " + TimerUtil.findDelay(getClass(), "startup") + "ms to load");
 
@@ -359,6 +360,11 @@ public class PetCore extends JavaPlugin {
     }
 
     public void reload(int type) {
+        configuration.reload();
+        commands.reload();
+        messages.reload();
+        ecomony.reload();
+
         needsPermissions = configuration.getBoolean("Needs-Permission");
         needsDataPermissions = configuration.getBoolean("Needs-Data-Permissions");
         if ((type == 0) || (type == 2)) {
@@ -370,6 +376,7 @@ public class PetCore extends JavaPlugin {
         }
 
         if ((type == 1) || (type == 2)) handleSQL();
+
     }
 
     // GETTERS

@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Burning extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("burning", 0);
         if (entityPet instanceof IEntityBlazePet) {
             IEntityBlazePet var = (IEntityBlazePet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isBurning())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isBurning())));
         }
         return item;
     }

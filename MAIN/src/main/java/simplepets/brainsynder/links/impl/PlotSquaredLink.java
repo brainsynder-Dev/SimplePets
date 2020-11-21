@@ -104,6 +104,7 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
     private boolean fetchValue (String section, PetOwner owner, Location at) {
         if (!isHooked()) return true;
         Object loc = Reflection.initiateClass(locCon, at.getWorld().getName(), at.getBlockX(), at.getBlockY(), at.getBlockZ());
+
         Object area = invoke(plotArea, ps, loc);
         if (area == null) return true;
         Object plot = invoke(getPlot, area, loc);
@@ -116,12 +117,13 @@ public class PlotSquaredLink extends PluginLink implements IPlotSquaredLink {
             return PetCore.get().getConfiguration().getBoolean("PlotSquared.On-Roads."+section);
         }
 
-        if (!(boolean) invoke(hasOwner, plot))
-            return PetCore.get().getConfiguration().getBoolean("PlotSquared.On-Unclaimed-Plots."+section);
+        if (!(boolean) invoke(hasOwner, plot)) {
+            return PetCore.get().getConfiguration().getBoolean("PlotSquared.On-Unclaimed-Plots." + section);
+        }
 
-        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied."+section) && (owner != null))
-            return !(boolean)invoke(isDenied, plot, owner.getPlayer().getUniqueId());
-
+        if (PetCore.get().getConfiguration().getBoolean("PlotSquared.Block-If-Denied."+section) && (owner != null)) {
+            return !(boolean) invoke(isDenied, plot, owner.getPlayer().getUniqueId());
+        }
         return true;
     }
 

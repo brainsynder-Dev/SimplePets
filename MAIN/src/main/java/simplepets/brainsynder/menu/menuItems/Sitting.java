@@ -8,6 +8,7 @@ import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Sitting extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("sitting", 0);
         if (entityPet instanceof ITameable) {
             ITameable var = (ITameable) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isSitting())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isSitting())));
         }
         return item;
     }

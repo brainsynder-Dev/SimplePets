@@ -8,6 +8,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class FoxHeadRoll extends MenuItemAbstract<IEntityFoxPet> {
     public ItemBuilder getItem() {
         ItemBuilder builder = type.getDataItemByName(getTargetName(), 0);
         builder.withName(formatName(builder, (entity, name) -> {
-            name = name.replace("%value%", String.valueOf(entity.isRollingHead()));
+            name = name.replace("%value%", Messages.getTrueOrFalse(entity.isRollingHead()));
             return name;
         }));
         return builder;

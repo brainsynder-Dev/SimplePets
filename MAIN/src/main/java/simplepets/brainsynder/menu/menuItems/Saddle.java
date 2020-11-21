@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.entity.misc.ISaddle;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -30,10 +31,10 @@ public class Saddle extends MenuItemAbstract {
         try {
             if (entityPet instanceof ISaddle) {
                 ISaddle var = (ISaddle) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isSaddled())));
+                item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isSaddled())));
             } else if (entityPet instanceof IHorseAbstract) {
                 IHorseAbstract var = (IHorseAbstract) entityPet;
-                item.withName(item.getName().replace("%value%", String.valueOf(var.isSaddled())));
+                item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isSaddled())));
             }
         } catch (Exception e) {
             item.withName("&6Has Saddle: &cERROR");

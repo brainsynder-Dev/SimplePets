@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
 import simplepets.brainsynder.pet.PetType;
+import simplepets.brainsynder.storage.files.Messages;
 import simplepets.brainsynder.utils.ValueType;
 
 import java.util.ArrayList;
@@ -28,7 +29,7 @@ public class Tilt extends MenuItemAbstract {
         ItemBuilder item = type.getDataItemByName("tilt", 0);
         if (entityPet instanceof IEntityWolfPet) {
             IEntityWolfPet var = (IEntityWolfPet) entityPet;
-            item.withName(item.getName().replace("%value%", String.valueOf(var.isHeadTilted())));
+            item.withName(item.getName().replace("%value%", Messages.getTrueOrFalse(var.isHeadTilted())));
         }
         return item;
     }
