@@ -1,21 +1,20 @@
 package simplepets.brainsynder.commands.sub;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParser;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.annotations.ICommand;
+import lib.brainsynder.files.JsonFile;
+import lib.brainsynder.json.JsonArray;
+import lib.brainsynder.json.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.utils.Utilities;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -33,36 +32,37 @@ public class Debug_SubCommand extends PetSubCommand {
     public void run(CommandSender sender) {
         // Collects & formats the servers Java version
         sender.sendMessage("§eFetching Debug Information...");
-        JSONObject json = new JSONObject();
-        JSONObject info = new JSONObject();
+        JsonObject json = new JsonObject();
+        JsonObject info = new JsonObject();
 
         // Fetches the Java version of the server
         String version = System.getProperty("java.version");
         int pos = version.indexOf('.');
         pos = version.indexOf('.', pos + 1);
-        info.put("java", version.substring(0, pos));
+        info.add("java", version.substring(0, pos));
 
         String bkV = Bukkit.getVersion();
-        info.put("reloaded", PetCore.get().wasReloaded());
-        info.put("raw_version", bkV);
-        info.put("bukkit_version", Bukkit.getBukkitVersion());
-        info.put("nms_version", ServerVersion.getVersion().name());
-        info.put("simplepets", PetCore.get().getDescription().getVersion());
+        info.add("reloaded", PetCore.get().wasReloaded());
+        info.add("latest-build", (PetCore.get().getLatestBuild() == -1));
+        info.add("raw_version", bkV);
+        info.add("bukkit_version", Bukkit.getBukkitVersion());
+        info.add("nms_version", ServerVersion.getVersion().name());
+        info.add("simplepets", PetCore.get().getDescription().getVersion());
 
-        json.put("info", info);
+        json.add("info", info);
 
         if (bkV.toLowerCase().contains("paper")) {
-            json.put("type", "PaperSpigot");
+            json.add("type", "PaperSpigot");
         }else if (bkV.toLowerCase().contains("taco")) {
-            json.put("type", "TacoSpigot");
+            json.add("type", "TacoSpigot");
         }else if (bkV.toLowerCase().contains("spigot")) {
-            json.put("type", "Spigot");
+            json.add("type", "Spigot");
         }else{
-            json.put("type", "CraftBukkit/Bukkit");
+            json.add("type", "CraftBukkit/Bukkit");
         }
 
         // Fetches the plugins the server uses (used for finding conflicts)
-        JSONArray array = new JSONArray();
+        JsonArray array = new JsonArray();
         List<String> plugins = new ArrayList<>();
         Arrays.asList(Bukkit.getPluginManager().getPlugins()).forEach(plugin -> {
             if (plugin.isEnabled()) {
@@ -72,12 +72,10 @@ public class Debug_SubCommand extends PetSubCommand {
             }
         });
         plugins.sort(Comparator.naturalOrder());
-        array.addAll(plugins);
-        json.put("plugins", array);
+        plugins.forEach(array::add);
+        json.add("plugins", array);
 
-        String JSON = json.toJSONString();
-        Gson gson = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-        String jsonString = gson.toJson(new JsonParser().parse(JSON));
+        String jsonString = json.asString();
         CompletableFuture.runAsync(() -> {
             String url = Utilities.saveTextToHastebin(jsonString);
             new BukkitRunnable() {
@@ -86,11 +84,19 @@ public class Debug_SubCommand extends PetSubCommand {
                     if (url != null) {
                         sender.sendMessage(ChatColor.GOLD + url);
                     }else{
-                        sender.sendMessage("§cFailed to upload data to Hastebin... Outputting data to Console/Logs...");
+                        sender.sendMessage("§cFailed to upload data to Hastebin... Outputting data to Debug.json (in the SimplePets folder)...");
+
+                        File file = new File(PetCore.get().getDataFolder(), "Debug.json");
+                        if (file.exists()) file.delete();
+                        JsonFile jsonFile = new JsonFile(file, true);
+                        json.forEach(member -> jsonFile.set(member.getName(), member.getValue()));
+                        jsonFile.save();
                         System.out.println(jsonString);
                     }
                 }
             }.runTask(PetCore.get());
         });
     }
+
+
 }
