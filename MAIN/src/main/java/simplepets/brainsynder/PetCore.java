@@ -2,7 +2,10 @@ package simplepets.brainsynder;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
+import lib.brainsynder.json.Json;
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.metric.bukkit.Metrics;
+import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -29,12 +32,10 @@ import simplepets.brainsynder.pet.TypeManager;
 import simplepets.brainsynder.player.MySQLHandler;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.*;
-import simplepets.brainsynder.utils.DebugLevel;
-import simplepets.brainsynder.utils.Errors;
-import simplepets.brainsynder.utils.ISpawner;
-import simplepets.brainsynder.utils.Utilities;
+import simplepets.brainsynder.utils.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -44,7 +45,11 @@ public class PetCore extends JavaPlugin {
     private static PetCore instance;
     private final List<String> supportedVersions = new ArrayList<>();
     public boolean forceSpawn;
-    private boolean disabling = false, reloaded = false, needsPermissions = true, needsDataPermissions = true;
+    private boolean disabling = false;
+    private boolean reloaded = false;
+    private boolean needsPermissions = true;
+    private boolean needsDataPermissions = true;
+    private final boolean needsUpdate = false;
 
     private ItemLoaders itemLoaders;
     private InvLoaders invLoaders;
@@ -61,6 +66,11 @@ public class PetCore extends JavaPlugin {
     private ISpawner spawner;
     private final Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
+
+    private BukkitRunnable updateTask;
+
+    private final int latestBuild = -1;
+
     @Override
     public void onLoad() {
         instance = this;
@@ -69,17 +79,21 @@ public class PetCore extends JavaPlugin {
     }
 
     public void onEnable() {
-        Utilities.findDelay(getClass(), "startup", false);
+        TimerUtil.findDelay(getClass(), "startup");
 
-        if (ServerVersion.isOlder(ServerVersion.v1_14_R1)) {
-            debug(DebugLevel.DEBUG, "This version is not supported, be sure you are between 1.15 and 1.16.2");
+        fetchSupportedVersions();
+
+        if (ServerVersion.isOlder(ServerVersion.v1_15_R1)) {
+            debug(DebugLevel.DEBUG, "This version is not supported, be sure you are " + supportedVersions.toString());
             setEnabled(false);
             return;
         }
         if (!errorCheck()) {
+            TimerUtil.findDelay(getClass(), "ErrorCheck");
             setEnabled(false);
             return;
         }
+        TimerUtil.findDelay(getClass(), "ErrorCheck");
         // Oh no... Someone is reloading the server/plugin
         // ALERT THE OPS !!!
         if (!Bukkit.getOnlinePlayers().isEmpty() || disabling) {
@@ -103,23 +117,38 @@ public class PetCore extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-           //     linkRetriever.initiate();
+                //     linkRetriever.initiate();
                 WorldEditLink.init();
             }
         }.runTaskLater(this, 20 * 10);
         reloadSpawner();
         spawner.init();
         if (getConfiguration().isSet("MySQL.Enabled")) handleSQL();
-        debug("Took " + Utilities.findDelay(getClass(), "startup", false) + "ms to load");
+        debug("Took " + TimerUtil.findDelay(getClass(), "startup") + "ms to load");
+
+        // Handle Update checking
+        if (!configuration.getBoolean("Check-For-New-Builds", true)) return;
+        checkUpdate();
+
+        updateTask = new BukkitRunnable() {
+            @Override
+            public void run() {
+                checkUpdate();
+            }
+        };
+        updateTask.runTaskTimer(this, 0, 20 * 60 * 60 * 2); // Runs every 2 hours
     }
 
     private void registerEvents() {
         debug("Registering Listeners...");
+        TimerUtil.findDelay(getClass(), "Registering Command");
         try {
             new CommandRegistry(this).register(new PetCommand());
         } catch (Exception e) {
             e.printStackTrace();
         }
+        TimerUtil.findDelay(getClass(), "Registering Command");
+        TimerUtil.findDelay(getClass(), "Registering Listeners");
         getServer().getPluginManager().registerEvents(new MainListeners(), this);
         getServer().getPluginManager().registerEvents(new OnJoin(), this);
         getServer().getPluginManager().registerEvents(new ItemStorageMenu(), this);
@@ -129,6 +158,7 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new SavesListener(), this);
         getServer().getPluginManager().registerEvents(new ArmorListener(), this);
+        TimerUtil.findDelay(getClass(), "Registering Listeners");
     }
 
     private void createPluginInstances() {
@@ -139,6 +169,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private boolean errorCheck() {
+        TimerUtil.findDelay(getClass(), "ErrorCheck");
         new Metrics(this);
 
         try {
@@ -159,7 +190,6 @@ public class PetCore extends JavaPlugin {
             }
         }
 
-        fetchSupportedVersions();
         if (supportedVersions.isEmpty()) {
             Errors.UNSUPPORTED_VERSION_CRITICAL.print();
             return false;
@@ -168,6 +198,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private void handleSQL() {
+        TimerUtil.findDelay(getClass(), "MySQL");
         if (getConfiguration().getBoolean("MySQL.Enabled", false)) {
             String host = getConfiguration().getString("MySQL.Host", false);
             String port = getConfiguration().getString("MySQL.Port", false);
@@ -210,7 +241,8 @@ public class PetCore extends JavaPlugin {
                         @Override
                         public void run() {
                             sqlHandler = new MySQLHandler(instance, mySQL);
-                            if (!builder.toString().isEmpty()) debug("Database is missing column(s) adding: " + builder.toString().replaceFirst(", ", ""));
+                            if (!builder.toString().isEmpty())
+                                debug("Database is missing column(s) adding: " + builder.toString().replaceFirst(", ", ""));
                         }
                     }.runTask(instance);
                 } catch (Exception e) {
@@ -219,6 +251,7 @@ public class PetCore extends JavaPlugin {
                 }
             });
         }
+        TimerUtil.findDelay(getClass(), "MySQL");
     }
 
     private void reloadSpawner() {
@@ -236,6 +269,7 @@ public class PetCore extends JavaPlugin {
     }
 
     private void loadConfig() {
+        TimerUtil.findDelay(getClass(), "Loading Config Files");
         debug("Loading Config.yml...");
         configuration = new Config(this, "Config.yml");
         configuration.loadDefaults();
@@ -250,6 +284,7 @@ public class PetCore extends JavaPlugin {
         debug("Loading PetEconomy.yml...");
         ecomony = new EconomyFile();
         ecomony.loadDefaults();
+        TimerUtil.findDelay(getClass(), "Loading Config Files");
     }
 
     public void onDisable() {
@@ -257,6 +292,7 @@ public class PetCore extends JavaPlugin {
         if (linkRetriever != null) linkRetriever.cleanup();
         disabling = true;
 
+        TimerUtil.findDelay(getClass(), "Saving PlayerData");
         for (PetOwner petOwner : PetOwner.values()) {
             if (petOwner == null) continue;
             if (petOwner.getPlayer() == null) continue;
@@ -264,10 +300,13 @@ public class PetCore extends JavaPlugin {
             if (petOwner.hasPet()) petOwner.removePet();
             petOwner.getFile().save(true, true);
         }
+        TimerUtil.findDelay(getClass(), "Saving PlayerData");
+        TimerUtil.outputTimings();
 
         try {
             Thread.sleep(20L);
-        } catch (InterruptedException ignored) {}
+        } catch (InterruptedException ignored) {
+        }
 
         if (getConfiguration() != null) {
             if (getConfiguration().getBoolean("MySQL.Enabled", false)) {
@@ -287,9 +326,11 @@ public class PetCore extends JavaPlugin {
     public void debug(String message) {
         debug(message, true);
     }
+
     public void debug(String message, boolean sync) {
         debug(DebugLevel.NORMAL, message, sync);
     }
+
     public void debug(DebugLevel level, String message) {
         debug(level, message, true);
     }
@@ -297,12 +338,12 @@ public class PetCore extends JavaPlugin {
     public void debug(DebugLevel level, String message, boolean sync) {
         if (!isEnabled()) return;
         Runnable runnable = () -> {
-            if (level != DebugLevel.DEBUG) {
+            if ((level != DebugLevel.DEBUG) && (level != DebugLevel.UPDATE)) {
                 if (configuration == null) return;
                 if (!configuration.getBoolean("Debug.Enabled", false)) return;
                 if (!configuration.getStringList("Debug.Levels").contains(String.valueOf(level.getLevel()))) return;
             }
-            Bukkit.getConsoleSender().sendMessage(level.getPrefix() + "[SimplePets Debug] " + level.getColor() + message);
+            Bukkit.getConsoleSender().sendMessage(level.getPrefix() + "[SimplePets " + level.getString() + "] " + level.getColor() + message);
         };
 
         if (sync) {
@@ -312,7 +353,7 @@ public class PetCore extends JavaPlugin {
                     runnable.run();
                 }
             }.runTask(this);
-        }else{
+        } else {
             runnable.run();
         }
     }
@@ -334,6 +375,7 @@ public class PetCore extends JavaPlugin {
     // GETTERS
 
     private void fetchSupportedVersions() {
+        TimerUtil.findDelay(getClass(), "SupportedVersions");
         supportedVersions.clear();
         String current = ServerVersion.getVersion().name();
         boolean supported = false;
@@ -356,6 +398,7 @@ public class PetCore extends JavaPlugin {
 
         if (!supportedVersions.isEmpty())
             debug("Found support for version(s): " + supportedVersions.toString());
+        TimerUtil.findDelay(getClass(), "SupportedVersions");
     }
 
     public boolean needsPermissions() {
@@ -533,5 +576,45 @@ public class PetCore extends JavaPlugin {
         void call(T data);
 
         default void onFail() {}
+    }
+
+    private void checkUpdate() {
+        debug(DebugLevel.UPDATE, "Checking for new builds...");
+        Properties properties = getJenkinsProperties();
+        int build = Integer.parseInt(properties.getProperty("buildnumber"));
+        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + properties.getProperty("repo"), this, string -> {
+            JsonObject main = (JsonObject) Json.parse(string);
+            if (!main.isEmpty()) {
+                if (main.names().contains("error")) {
+                    debug(DebugLevel.ERROR, "Failed to check for update, Status (" + main.getString("status", "500") + ") Cause: " + main.getString("error", ""));
+                    return;
+                }
+
+                int latestBuild = main.getInt("build", -1);
+
+                // New build found
+                if (latestBuild > build) {
+                    debug(DebugLevel.UPDATE, "You are " + (latestBuild - build) + " build(s) behind the latest.");
+                    debug(DebugLevel.UPDATE, "http://ci.pluginwiki.us/job/" + properties.getProperty("repo") + "/" + latestBuild + "/");
+                } else {
+                    debug(DebugLevel.UPDATE, "No new builds were found");
+                }
+            }
+        });
+    }
+
+    public Properties getJenkinsProperties() {
+        Properties prop = null;
+        try {
+            prop = new Properties();
+            prop.load(getClass().getResourceAsStream("/jenkins.properties"));
+        } catch (IOException fnfe) {
+            fnfe.printStackTrace();
+        }
+        return prop;
+    }
+
+    public int getLatestBuild() {
+        return latestBuild;
     }
 }
