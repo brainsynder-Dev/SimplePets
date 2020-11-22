@@ -129,8 +129,6 @@ public class PetCore extends JavaPlugin {
 
         // Handle Update checking
         if (!configuration.getBoolean("Check-For-New-Builds", true)) return;
-        checkUpdate();
-
         updateTask = new BukkitRunnable() {
             @Override
             public void run() {
