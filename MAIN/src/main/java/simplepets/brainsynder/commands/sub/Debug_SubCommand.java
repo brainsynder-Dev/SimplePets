@@ -7,6 +7,7 @@ import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.json.WriterConfig;
+import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,7 +19,10 @@ import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @ICommand(
@@ -48,12 +52,12 @@ public class Debug_SubCommand extends PetSubCommand {
         info.add("nms_version", ServerVersion.getVersion().name());
         info.add("simplepets", PetCore.get().getDescription().getVersion());
 
-        Properties properties = PetCore.get().getJenkinsProperties();
-        int build = Integer.parseInt(properties.getProperty("buildnumber"));
-        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + properties.getProperty("repo"), PetCore.get(), string -> {
+        UpdateResult result = PetCore.get().getUpdateUtils().getResult();
+        int build = result.getCurrentBuild();
+        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + result.getRepo(), PetCore.get(), string -> {
             JsonObject jenkins = new JsonObject();
-            jenkins.add("repo", PetCore.get().getJenkinsProperties().getProperty("repo"));
-            jenkins.add("plugin_build_number", Integer.parseInt(PetCore.get().getJenkinsProperties().getProperty("buildnumber")));
+            jenkins.add("repo", result.getRepo());
+            jenkins.add("plugin_build_number", build);
 
             JsonObject main = (JsonObject) Json.parse(string);
             if (!main.isEmpty()) {

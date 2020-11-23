@@ -2,10 +2,10 @@ package simplepets.brainsynder;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
-import lib.brainsynder.json.Json;
-import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.json.WriterConfig;
 import lib.brainsynder.metric.bukkit.Metrics;
-import lib.brainsynder.web.WebConnector;
+import lib.brainsynder.update.UpdateResult;
+import lib.brainsynder.update.UpdateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -35,10 +35,10 @@ import simplepets.brainsynder.storage.files.*;
 import simplepets.brainsynder.utils.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class PetCore extends JavaPlugin {
 
@@ -66,10 +66,8 @@ public class PetCore extends JavaPlugin {
     private ISpawner spawner;
     private final Map<UUID, PlayerStorage> fileStorage = new HashMap<>();
 
-
-    private BukkitRunnable updateTask;
-
-    private final int latestBuild = -1;
+    private UpdateUtils updateUtils;
+    private UpdateResult updateResult;
 
     @Override
     public void onLoad() {
@@ -128,14 +126,23 @@ public class PetCore extends JavaPlugin {
         debug("Took " + TimerUtil.findDelay(getClass(), "startup") + "ms to load");
 
         // Handle Update checking
+        updateResult = new UpdateResult().setPreStart(() -> debug(DebugLevel.UPDATE, "Checking for new builds..."))
+                .setFailParse(members -> debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
+                .setNoNewBuilds(() -> debug(DebugLevel.UPDATE, "No new builds were found"))
+                .setOnError(() -> debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
+                .setNewBuild(members -> {
+                    int latestBuild = members.getInt("build", -1);
+
+                    // New build found
+                    if (latestBuild > updateResult.getCurrentBuild()) {
+                        debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
+                        debug(DebugLevel.UPDATE, "http://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
+                    }
+                });
+        updateUtils = new UpdateUtils(this, updateResult);
+
         if (!configuration.getBoolean("Check-For-New-Builds", true)) return;
-        updateTask = new BukkitRunnable() {
-            @Override
-            public void run() {
-                checkUpdate();
-            }
-        };
-        updateTask.runTaskTimer(this, 0, 20 * 60 * 60 * 2); // Runs every 2 hours
+        updateUtils.startUpdateTask(12, TimeUnit.HOURS); // Runs the update check every 12 hours
     }
 
     private void registerEvents() {
@@ -290,6 +297,7 @@ public class PetCore extends JavaPlugin {
         if (typeManager != null) typeManager.unLoad();
         if (linkRetriever != null) linkRetriever.cleanup();
         disabling = true;
+        if (updateUtils != null) updateUtils.stopTask();
 
         TimerUtil.findDelay(getClass(), "Saving PlayerData");
         for (PetOwner petOwner : PetOwner.values()) {
@@ -583,43 +591,7 @@ public class PetCore extends JavaPlugin {
         default void onFail() {}
     }
 
-    private void checkUpdate() {
-        debug(DebugLevel.UPDATE, "Checking for new builds...");
-        Properties properties = getJenkinsProperties();
-        int build = Integer.parseInt(properties.getProperty("buildnumber"));
-        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + properties.getProperty("repo"), this, string -> {
-            JsonObject main = (JsonObject) Json.parse(string);
-            if (!main.isEmpty()) {
-                if (main.names().contains("error")) {
-                    debug(DebugLevel.ERROR, "Failed to check for update, Status (" + main.getString("status", "500") + ") Cause: " + main.getString("error", ""));
-                    return;
-                }
-
-                int latestBuild = main.getInt("build", -1);
-
-                // New build found
-                if (latestBuild > build) {
-                    debug(DebugLevel.UPDATE, "You are " + (latestBuild - build) + " build(s) behind the latest.");
-                    debug(DebugLevel.UPDATE, "http://ci.pluginwiki.us/job/" + properties.getProperty("repo") + "/" + latestBuild + "/");
-                } else {
-                    debug(DebugLevel.UPDATE, "No new builds were found");
-                }
-            }
-        });
-    }
-
-    public Properties getJenkinsProperties() {
-        Properties prop = null;
-        try {
-            prop = new Properties();
-            prop.load(getClass().getResourceAsStream("/jenkins.properties"));
-        } catch (IOException fnfe) {
-            fnfe.printStackTrace();
-        }
-        return prop;
-    }
-
-    public int getLatestBuild() {
-        return latestBuild;
+    public UpdateUtils getUpdateUtils() {
+        return updateUtils;
     }
 }
