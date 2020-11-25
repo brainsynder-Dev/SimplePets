@@ -5,6 +5,7 @@ import simplepets.brainsynder.storage.files.base.FileMaker;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 public class Config extends FileMaker {
     public Config(JavaPlugin plugin, String fileName) {
@@ -12,7 +13,9 @@ public class Config extends FileMaker {
     }
 
     public void loadDefaults() {
-        setDefault("Check-For-New-Builds", true);
+        setDefault("Update-Checking.Enabled", true);
+        setDefault("Update-Checking.unit", TimeUnit.HOURS.name());
+        setDefault("Update-Checking.time", 12);
         setDefault("Needs-Pet-Permission-To-Open-GUI", false);
         setDefault("Needs-Permission", true);
         setDefault("Remove-Item-If-No-Permission", true);

@@ -141,8 +141,19 @@ public class PetCore extends JavaPlugin {
                 });
         updateUtils = new UpdateUtils(this, updateResult);
 
-        if (!configuration.getBoolean("Check-For-New-Builds", true)) return;
-        updateUtils.startUpdateTask(12, TimeUnit.HOURS); // Runs the update check every 12 hours
+        if (!configuration.getBoolean("Update-Checking.Enabled", true)) return;
+        int time = configuration.getInt("Update-Checking.time", 12);
+        TimeUnit unit;
+
+        String timeunit = configuration.getString("Update-Checking.unit", "HOURS");
+        try {
+            unit = TimeUnit.valueOf(timeunit);
+        }catch (Exception e) {
+            unit = TimeUnit.HOURS;
+            debug(DebugLevel.ERROR, "Could not find unit for '"+timeunit+"'");
+        }
+
+        updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
     }
 
     private void registerEvents() {
