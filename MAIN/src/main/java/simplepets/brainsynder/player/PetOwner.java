@@ -400,6 +400,14 @@ public class PetOwner {
         }
 
         PetType type = PetCore.get().getTypeManager().getType(compound.getString("PetType"));
+        if (!type.hasPermission(player)) return;
+
+        // If economy is enabled check if the player owns the pet type
+        if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) {
+            List<PetType> petArray = getOwnedPets();
+            if (!petArray.contains(type)) return;
+        }
+
         type.setPet(player, true);
 
         new BukkitRunnable() {
