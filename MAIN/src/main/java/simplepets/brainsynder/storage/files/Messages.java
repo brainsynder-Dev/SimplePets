@@ -12,42 +12,42 @@ public class Messages extends FileMaker {
     }
 
     public void loadDefaults() {
-        setDefault("prefix", "&eSimplePets &6>>");
-        setDefault("No-Permission", "{prefix} &cYou do not have permission.");
-        setDefault("Reload-Complete", "{prefix} &7Inventory and Files have been reloaded.");
-        setDefault("Unknown-commands", "{prefix} &7Unknown SimplePets commands.");
-        setDefault("Player-Not-Found", "{prefix} &7%player% is not Validate.");
-        setDefault("Pet-Remove-Self-Removed", "{prefix} &7Your pet was removed.");
-        setDefault("Pet-Remove-Self-No-Pet", "{prefix} &7You do not have a pet to remove.");
-        setDefault("Pet-Remove-Other-Remover", "{prefix} &7%player%'s pet was successfully removed.");
-        setDefault("Pet-Remove-Other-Target", "{prefix} &7%player% removed your pet.");
-        setDefault("Pet-Remove-Other-No-Pet", "{prefix} &7%player% does not have a pet to remove.");
-        setDefault("Invalid-PetType", "{prefix} &cInvalid pet type.");
-        setDefault("No-Pet-Permission", "{prefix} &cYou do not have permission to this pet.");
-        setDefault("Select-Pet", "{prefix} &7You have selected the &e%pet% &7Pet.");
-        setDefault("Select-Pet-Other", "{prefix} &7%player% force selected the pet %pet% for you.");
-        setDefault("Select-Pet-Sender", "{prefix} &7You have set %player%'s pet to %pet%");
+        addDefault("prefix", "&eSimplePets &6>>");
+        addDefault("No-Permission", "{prefix} &cYou do not have permission.");
+        addDefault("Reload-Complete", "{prefix} &7Inventory and Files have been reloaded.");
+        addDefault("Unknown-commands", "{prefix} &7Unknown SimplePets commands.");
+        addDefault("Player-Not-Found", "{prefix} &7%player% is not Validate.");
+        addDefault("Pet-Remove-Self-Removed", "{prefix} &7Your pet was removed.");
+        addDefault("Pet-Remove-Self-No-Pet", "{prefix} &7You do not have a pet to remove.");
+        addDefault("Pet-Remove-Other-Remover", "{prefix} &7%player%'s pet was successfully removed.");
+        addDefault("Pet-Remove-Other-Target", "{prefix} &7%player% removed your pet.");
+        addDefault("Pet-Remove-Other-No-Pet", "{prefix} &7%player% does not have a pet to remove.");
+        addDefault("Invalid-PetType", "{prefix} &cInvalid pet type.");
+        addDefault("No-Pet-Permission", "{prefix} &cYou do not have permission to this pet.");
+        addDefault("Select-Pet", "{prefix} &7You have selected the &e%pet% &7Pet.");
+        addDefault("Select-Pet-Other", "{prefix} &7%player% force selected the pet %pet% for you.");
+        addDefault("Select-Pet-Sender", "{prefix} &7You have set %player%'s pet to %pet%");
 
-        setDefault("Other-No-Pet-Permission", "{prefix} &7%player% does not have permission to this pet.");
-        setDefault("Type-Not-Supported", "{prefix} &7This pet type is not supported in this version.");
-        setDefault("Type-Not-Enabled", "{prefix} &7This pet is currently disabled.");
-        setDefault("Pet-Name-Changed", "{prefix} &7Your pets name was changed to: &r%petname%");
-        setDefault("Menu-Name", "&a&lSelect a Pet:");
-        setDefault("Data-Menu.PetCore-Name", "&a&lPet Data Changer");
-        setDefault("No-Spawning", "{prefix} &cPets are not allowed to be spawned in this region.");
-        setDefault("Pet-No-Enter", "{prefix} &cPets are not allowed in this region.");
-        setDefault("Pet-RenameViaChat", "{prefix} &7Type your pets new name in chat:");
-        setDefault("Pet-RenameViaChat-Cancel", "{prefix} &cPet renaming has been canceled");
-        setDefault("Pet-RenameViaAnvil", "{prefix} &7Type your pets new name in the anvil, then click the item on the right when complete.");
-        setDefault("Pet-RenameFailure", "{prefix} &cSorry, but your pets name could not be changed to: &7{name}");
-        setDefault("Player-No-Pet", "{prefix} &7%player% does not have a pet.");
+        addDefault("Other-No-Pet-Permission", "{prefix} &7%player% does not have permission to this pet.");
+        addDefault("Type-Not-Supported", "{prefix} &7This pet type is not supported in this version.");
+        addDefault("Type-Not-Enabled", "{prefix} &7This pet is currently disabled.");
+        addDefault("Pet-Name-Changed", "{prefix} &7Your pets name was changed to: &r%petname%");
+        addDefault("Menu-Name", "&a&lSelect a Pet:");
+        addDefault("Data-Menu.PetCore-Name", "&a&lPet Data Changer");
+        addDefault("No-Spawning", "{prefix} &cPets are not allowed to be spawned in this region.");
+        addDefault("Pet-No-Enter", "{prefix} &cPets are not allowed in this region.");
+        addDefault("Pet-RenameViaChat", "{prefix} &7Type your pets new name in chat:");
+        addDefault("Pet-RenameViaChat-Cancel", "{prefix} &cPet renaming has been canceled");
+        addDefault("Pet-RenameViaAnvil", "{prefix} &7Type your pets new name in the anvil, then click the item on the right when complete.");
+        addDefault("Pet-RenameFailure", "{prefix} &cSorry, but your pets name could not be changed to: &7{name}");
+        addDefault("Player-No-Pet", "{prefix} &7%player% does not have a pet.");
 
-        setDefault("Anvil-Rename.Name", "Rename Pet");
-        setDefault("ArmorMenu.ClickToRemove", Arrays.asList("&c ", "&c&lCLICK TO REMOVE"));
-        setDefault("ArmorMenu.Restricted", "&cThis pet can not have items added or removed!");
+        addDefault("Anvil-Rename.Name", "Rename Pet");
+        addDefault("ArmorMenu.ClickToRemove", Arrays.asList("&c ", "&c&lCLICK TO REMOVE"));
+        addDefault("ArmorMenu.Restricted", "&cThis pet can not have items added or removed!");
 
-        setDefault("Data-Menu.True", "&etrue");
-        setDefault("Data-Menu.False", "&efalse");
+        addDefault("Data-Menu.True", "&etrue");
+        addDefault("Data-Menu.False", "&efalse");
     }
 
     public static String getTrueOrFalse(boolean b) {

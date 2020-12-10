@@ -7,7 +7,7 @@ import simplepets.brainsynder.PetCore;
 import java.io.File;
 import java.util.function.BiConsumer;
 
-public class FileMaker extends YamlFile {
+public abstract class FileMaker extends YamlFile {
     private final PetCore core;
 
     public FileMaker(File folder, String fileName) {

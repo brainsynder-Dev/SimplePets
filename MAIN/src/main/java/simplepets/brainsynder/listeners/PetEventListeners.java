@@ -45,19 +45,19 @@ public class PetEventListeners implements Listener {
             double bal = vault.getBalance(event.getPlayer());
             if (bal < price) {
                 event.setCancelled(true);
-                event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)));
+                event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
                 return;
             }
 
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
                 vault.withdrawPlayer(event.getPlayer(), price);
-                event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%type%", event.getPetType().getConfigName()));
+                event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
                 return;
             }
 
             petOwner.addPurchasedPet(event.getPetType().getConfigName());
             vault.withdrawPlayer(event.getPlayer(), price);
-            event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%type%", event.getPetType().getConfigName()));
+            event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
         }
     }
 

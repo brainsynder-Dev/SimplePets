@@ -33,11 +33,12 @@ public class PathFinderGoalWalkToPlayer extends PathfinderGoal {
         this.pet = entitycreature;
         this.speed = speed;
         isFirst = true;
+        stopDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Stopping-Distance", 3.0);
         double distance = PetCore.get().getConfiguration().getDouble("Pathfinding.Distance-to-Player", 1.9);
         owner = PetOwner.getPetOwner(p);
         if (owner.getPet().getVisableEntity().isBig()) {
             distance = PetCore.get().getConfiguration().getDouble("Pathfinding.Distance-to-Player_LargePets", 2.9);
-            stopDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Stopping-Distance");
+            stopDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Stopping-Distance_LargePets");
             teleportDistance = PetCore.get().getConfiguration().getDouble("Pathfinding.Min-Distance-For-Teleport");
         }
         ints = Arrays.asList(distance, -distance);

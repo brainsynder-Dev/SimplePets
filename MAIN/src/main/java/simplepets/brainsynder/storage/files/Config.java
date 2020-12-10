@@ -1,5 +1,6 @@
 package simplepets.brainsynder.storage.files;
 
+import lib.brainsynder.utils.Utilities;
 import org.bukkit.plugin.java.JavaPlugin;
 import simplepets.brainsynder.storage.files.base.FileMaker;
 
@@ -13,81 +14,84 @@ public class Config extends FileMaker {
     }
 
     public void loadDefaults() {
-        setDefault("Update-Checking.Enabled", true);
-        setDefault("Update-Checking.unit", TimeUnit.HOURS.name());
-        setDefault("Update-Checking.time", 12);
-        setDefault("Needs-Pet-Permission-To-Open-GUI", false);
-        setDefault("Needs-Permission", true);
-        setDefault("Remove-Item-If-No-Permission", true);
-        setDefault("RemovePetsOnWorldChange", true);
-        setDefault("UseVaultEconomy", false);
-        setDefault("ShowParticles", true);
-        setDefault("Complete-Mobspawning-Deny-Bypass", true);
-        setDefault("PetItemStorage.Enable", true);
-        setDefault("PetItemStorage.Inventory-Size", 27);
-        // setDefault("OldPetRegistering", false); // This is no longer used in newer versions
-        setDefault("Needs-Data-Permissions", true); // TODO: Reformat this value
-        setDefault("Pathfinding.Distance-to-Player", 1.9);
-        setDefault("Pathfinding.Distance-to-Player_LargePets", 2.9);
-        setDefault("Pathfinding.Min-Distance-For-Teleport", 20.0);
-        setDefault("Pathfinding.Stopping-Distance", 7.0);
+        addDefault("Update-Checking.Enabled", true, "Would you like to check for new jenkins builds?\nDefault: true");
+        addSectionHeader("Update-Checking.unit", Utilities.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");
+        addDefault("Update-Checking.unit", TimeUnit.HOURS.name());
+        addDefault("Update-Checking.time", 12);
+        addDefault("Needs-Pet-Permission-To-Open-GUI", false, "Enabling this would require players to have access to at least 1 pets permission\nDefault: false");
+        addDefault("Needs-Permission", true, "Disabling this would grant ALL players access to pets (they wont need permissions)\nDefault: true");
+        addDefault("Remove-Item-If-No-Permission", true, "Disabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
+        addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
+        addDefault("UseVaultEconomy", false, "Enabling this would allow players to buy pets via Vault/Economy\nDefault: false");
+        addDefault("ShowParticles", true, "Disabling this would make it so there is no particles when a player renames/removes/spawns a pet\nDefault: true");
+        addDefault("Complete-Mobspawning-Deny-Bypass", true, "Disabling this would allow other plugins to deny the pets from spawning\nDefault: true");
+        addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
+        addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
+        // addDefault("OldPetRegistering", false); // This is no longer used in newer versions
+        addDefault("Needs-Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
+        addDefault("Pathfinding.Distance-to-Player", 1.9, "How far away can the pets stand near the player?\nDefault: 1.9");
+        addDefault("Pathfinding.Distance-to-Player_LargePets", 2.9, "How far away can the large pets (Giants/Ghast) stand near the player?\nDefault: 2.9");
+        addDefault("Pathfinding.Min-Distance-For-Teleport", 20.0, "How far away from the player does the pet have to be before it teleports closer?\nDefault: 20");
+        addDefault("Pathfinding.Stopping-Distance", 3.0, "How far away can the pet be before it will stop walking near the player?\nDefault: 3");
+        addDefault("Pathfinding.Stopping-Distance_LargePets", 7.0, "How far away can the large pet (Giant/Ghast) be before it will stop walking near the player?\nDefault: 7");
 
-        setDefault("Worlds.Enabled", false);
-        setDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
+        addDefault("Worlds.Enabled", false, "Enabling this will make it so pets only work in the worlds that are listed in 'Allowed-Worlds'\nDefault: false");
+        addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
 
-        setDefault("WorldGuard.BypassPermission", "region.bypass");
-        setDefault("WorldGuard.Spawning.Always-Allowed", true);
-        setDefault("WorldGuard.Spawning.Blocked-Regions", Collections.singletonList("pvp"));
-        setDefault("WorldGuard.Pet-Entering.Always-Allowed", true);
-        setDefault("WorldGuard.Pet-Entering.Blocked-Regions", Collections.singletonList("pvp"));
-        setDefault("WorldGuard.Pet-Riding.Always-Allowed", true);
-        setDefault("WorldGuard.Pet-Riding.Blocked-Regions", Collections.singletonList("pvp"));
+        addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to support WorldGuard flags\nFlag Names:\n- allow-pet-spawn\n- allow-pet-enter\n- allow-pet-riding");
+        addDefault("WorldGuard.BypassPermission", "region.bypass", "This is the bypass permission for WorldGuard\nDefault: region.bypass");
+        remove("WorldGuard.Spawning.Always-Allowed");
+        remove("WorldGuard.Spawning.Blocked-Regions");
+        remove("WorldGuard.Pet-Entering.Always-Allowed");
+        remove("WorldGuard.Pet-Entering.Blocked-Regions");
+        remove("WorldGuard.Pet-Riding.Always-Allowed");
+        remove("WorldGuard.Pet-Riding.Blocked-Regions");
 
-        setDefault("PlotSquared.BypassPermission", "plots.admin");
-        setDefault("PlotSquared.On-Unclaimed-Plots.Move", true);
-        setDefault("PlotSquared.On-Unclaimed-Plots.Spawn", true);
-        setDefault("PlotSquared.On-Unclaimed-Plots.Riding", true);
-        setDefault("PlotSquared.On-Roads.Move", true);
-        setDefault("PlotSquared.On-Roads.Spawn", true);
-        setDefault("PlotSquared.On-Roads.Riding", true);
-        setDefault("PlotSquared.Block-If-Denied.Move", true);
-        setDefault("PlotSquared.Block-If-Denied.Spawn", true);
-        setDefault("PlotSquared.Block-If-Denied.Riding", true);
+        addDefault("PlotSquared.BypassPermission", "plots.admin", "This is the bypass permission for PlotSquared\nDefault: plots.admin");
+        addDefault("PlotSquared.On-Unclaimed-Plots.Move", true, "Are pets allowed to move on unclaimed plots?\nDefault: true");
+        addDefault("PlotSquared.On-Unclaimed-Plots.Spawn", true, "Are pets allowed to be spawned on unclaimed plots?\nDefault: true");
+        addDefault("PlotSquared.On-Unclaimed-Plots.Riding", true, "Are players allowed to ride pets on unclaimed plots?\nDefault: true");
+        addDefault("PlotSquared.On-Roads.Move", true, "Are pets allowed to move on the roads?\nDefault: true");
+        addDefault("PlotSquared.On-Roads.Spawn", true, "Are pets allowed to be spawned while on roads\nDefault: true");
+        addDefault("PlotSquared.On-Roads.Riding", true, "Are players allowed to ride pets while on a road\nDefault: true");
+        addDefault("PlotSquared.Block-If-Denied.Move", true, "Are pets allowed to move on a plot their owner is blocked on?\nDefault: true");
+        addDefault("PlotSquared.Block-If-Denied.Spawn", true, "Are pets allowed to be spawned on plots their owner is blocked on?\n(Is this even needed? Its not like they can get on the plot anyway XD)\n\nDefault: true");
+        addDefault("PlotSquared.Block-If-Denied.Riding", true, "Can player ride their pets onto plots they are denied on?\nDefault: true");
 
-        setDefault("WorldBorder.Block-If-Denied.Move", true);
-        setDefault("WorldBorder.Block-If-Denied.Spawn", true);
-        setDefault("WorldBorder.Block-If-Denied.Riding", true);
+        addDefault("WorldBorder.Block-If-Denied.Move", true, "Are pets allowed to move when inside a WorldBorder?\nDefault: true");
+        addDefault("WorldBorder.Block-If-Denied.Spawn", true, "Can pets be spawned in a WorldBorder?\nDefault: true");
+        addDefault("WorldBorder.Block-If-Denied.Riding", true, "Can a player ride a pet in a WorldBorder?\nDefault: true");
 
-        setDefault("MySQL.Enabled", false);
-        setDefault("MySQL.Host", "host");
-        setDefault("MySQL.Port", "3306");
-        setDefault("MySQL.DatabaseName", "insert_DatabaseName");
-        setDefault("MySQL.Login.Username", "username");
-        setDefault("MySQL.Login.Password", "password");
-        setDefault("MySQL.Options.UseSSL", false);
-        setDefault("MySQL.Options.AutoReconnect", false);
+        addDefault("MySQL.Enabled", false, "Would you like to use MySQL to save player/pet data?\nDefault: false");
+        addDefault("MySQL.Host", "host");
+        addDefault("MySQL.Port", "3306");
+        addDefault("MySQL.DatabaseName", "insert_DatabaseName", "Example: SimplePets");
+        addDefault("MySQL.Login.Username", "username");
+        addDefault("MySQL.Login.Password", "password");
+        addDefault("MySQL.Options.UseSSL", false);
+        addDefault("MySQL.Options.AutoReconnect", false, "Enabling this will make the plugin attempt to reconnect to the database\nDefault: false");
 
-        setDefault("Debug.Enabled", false);
-        setDefault("Debug.Levels", Arrays.asList("0", "1", "2"));
+        addDefault("Debug.Enabled", false, "Would you like to view Debug information in the console/logs?\nIt can help us see where issues are.\nDefault: false");
+        addDefault("Debug.Levels", Arrays.asList("0", "1", "2"), "What level of debug info would you like to see?\n0 = Normal Info\n1 = Moderate Info (Warnings)\n2 = Critical/Errors (No explanation here i hope...)");
 
         // TODO: Reformat these value
-        setDefault("PetToggles.GlowWhenVanished", true);
-        setDefault("PetToggles.HideNameOnShift", true);
-        setDefault("PetToggles.AutoRemove.Enabled", true);
-        setDefault("PetToggles.AutoRemove.TickDelay", 10000);
-        setDefault(MOUNTABLE, true);
-        setDefault(HATS, true);
+        addDefault("PetToggles.GlowWhenVanished", true, "When the owner is vanished should the owner see their pet with the glow effect?\nDefault: true");
+        addDefault("PetToggles.HideNameOnShift", true, "Should pet names be hidden when their owner sneaks?\nDefault: true");
+        addDefault("PetToggles.AutoRemove.Enabled", true, "Disabling this will make it so pets wont be automatically removed if the player is afk\nDefault: true");
+        addDefault("PetToggles.AutoRemove.TickDelay", 10000, "What should the wait be?\nThis is in ticks (20 ticks = 1 second)\nDefault: 10000");
+        addDefault(MOUNTABLE, true, "Are all pets able to be rideable?\nDefault: true");
+        addDefault(HATS, true, "Are all pets able to be worn as hats?\nDefault: true");
         move("Allow-Pets-Being-Mounts", MOUNTABLE, logMove());
         move("Allow-Pets-Being-Hats", HATS, logMove());
-        setDefault("Respawn-Last-Pet-On-Login", true);
+        addDefault("Respawn-Last-Pet-On-Login", true, "When a player logs back in should their pet be spawned in as well?\nNOTE: If the player removed their pet before logging out then it wont respawn.\nDefault: true");
 
-        setDefault("RenamePet.Enabled", true);
-        setDefault("RenamePet.ViaAnvil", true);
-        setDefault("RenamePet.Limit-Number-Of-Characters", false);
-        setDefault("RenamePet.CharacterLimit", 10);
-        setDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"));
-        setDefault(MAGIC, false);
-        setDefault(COLOR, true);
+        addDefault("RenamePet.Enabled", true, "Should players be able to rename pets?\nDefault: true");
+        addDefault("RenamePet.ViaAnvil", true, "Should pet names be changed in an anvil?\ntrue = Anvil\nfalse = Chat\nDefault: true");
+        addDefault("RenamePet.Limit-Number-Of-Characters", false, "Should the name have a limited number of characters?\nDefault: false");
+        addDefault("RenamePet.CharacterLimit", 10, "What should the character limit be set to?\nDefault: 10");
+        addDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"), "Are there words you don't want in a pets name?");
+        addDefault(MAGIC, false, "Are pet names allowed to have the &k color code?\nDefault: false");
+        addDefault(COLOR, true, "Are pet names allowed to be colored?\nDefault: true");
         move("Use&k", MAGIC, logMove());
         move("ColorCodes", COLOR, logMove());
     }
