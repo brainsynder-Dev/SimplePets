@@ -79,5 +79,17 @@
             <version>7.0.4-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.Realizedd</groupId>
+            <artifactId>TokenManager</artifactId>
+            <version>3.2.4</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

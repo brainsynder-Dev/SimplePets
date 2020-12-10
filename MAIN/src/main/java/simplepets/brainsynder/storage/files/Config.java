@@ -22,7 +22,11 @@ public class Config extends FileMaker {
         addDefault("Needs-Permission", true, "Disabling this would grant ALL players access to pets (they wont need permissions)\nDefault: true");
         addDefault("Remove-Item-If-No-Permission", true, "Disabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
         addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
-        addDefault("UseVaultEconomy", false, "Enabling this would allow players to buy pets via Vault/Economy\nDefault: false");
+
+        addDefault(ECONOMY_TOGGLE, false, "Enabling this would allow players to buy pets via Vault/TokenManager\nDefault: false");
+        addDefault(ECONOMY_TYPE, "UNKNOWN", "What type of economy do you have?\nEconomy Types:\n- UNKNOWN\n- VAULT\n- TOKEN_MANAGER\nDefault: 'UNKNOWN'");
+        move("UseVaultEconomy", ECONOMY_TOGGLE);
+
         addDefault("ShowParticles", true, "Disabling this would make it so there is no particles when a player renames/removes/spawns a pet\nDefault: true");
         addDefault("Complete-Mobspawning-Deny-Bypass", true, "Disabling this would allow other plugins to deny the pets from spawning\nDefault: true");
         addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
@@ -100,5 +104,7 @@ public class Config extends FileMaker {
             MOUNTABLE = "PetToggles.All-Pets-Mountable",
             HATS = "PetToggles.All-Pets-Hat",
             MAGIC = "RenamePet.Allow-&k",
-            COLOR = "RenamePet.Allow-ColorCodes";
+            COLOR = "RenamePet.Allow-ColorCodes",
+            ECONOMY_TOGGLE = "Economy.Enabled",
+            ECONOMY_TYPE = "Economy.Type";
 }

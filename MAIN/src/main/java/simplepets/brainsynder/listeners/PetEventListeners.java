@@ -12,30 +12,50 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
-import simplepets.brainsynder.links.IVaultLink;
+import simplepets.brainsynder.links.EconomyLink;
+import simplepets.brainsynder.links.impl.TokenManagerLink;
+import simplepets.brainsynder.links.impl.VaultLink;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
+import simplepets.brainsynder.storage.files.Config;
 import simplepets.brainsynder.storage.files.EconomyFile;
+import simplepets.brainsynder.utils.DebugLevel;
+import simplepets.brainsynder.utils.EconomyType;
 
 import java.util.List;
 
 public class PetEventListeners implements Listener {
     private final EconomyFile economyFile;
+    private Class<? extends EconomyLink> clazz = null;
 
     public PetEventListeners() {
         economyFile = PetCore.get().getEcomony();
+
+        String type = PetCore.get().getConfiguration().getString(Config.ECONOMY_TYPE, "UNKNOWN");
+        try {
+            EconomyType economyType = Enum.valueOf(EconomyType.class, type);
+            if (economyType == EconomyType.VAULT) clazz = VaultLink.class;
+            if (economyType == EconomyType.TOKEN_MANAGER) clazz = TokenManagerLink.class;
+        }catch (Exception e) {
+            PetCore.get().debug(DebugLevel.ERROR, type+" is an invalid economy type.");
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSelect(PetSelectTypeEvent event) {
-        if (PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) {
+        if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE)) {
             if (event.getPlayer().hasPermission("Pet.economy.bypass")) return;
 
             double price = economyFile.getPrice(event.getPetType());
             if (price == -1) return;
 
-            IVaultLink vault = PetCore.get().getLinkRetriever().getPluginLink(IVaultLink.class);
+
+            if (clazz == null) return;
+
+
+
+            EconomyLink vault = PetCore.get().getLinkRetriever().getPluginLink(clazz);
             if (!vault.isHooked()) return;
 
             PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
@@ -63,7 +83,7 @@ public class PetEventListeners implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void openMenuSelector(PetInventoryOpenEvent event) {
-        if (!PetCore.get().getConfiguration().getBoolean("UseVaultEconomy")) return;
+        if (!PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE)) return;
 
         IStorage<ItemStack> items = new StorageList<>();
         IStorage<PetTypeStorage> types = event.getShownPetTypes().copy();

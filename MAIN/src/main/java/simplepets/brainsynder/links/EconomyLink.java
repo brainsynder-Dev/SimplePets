@@ -1,9 +1,9 @@
 package simplepets.brainsynder.links;
 
-import net.milkbowl.vault.Vault;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
-public interface IVaultLink extends IPluginLink<Vault> {
+public interface EconomyLink<T extends Plugin> extends IPluginLink<T> {
     double getBalance(Player player);
 
     void depositPlayer(Player player, double amount);

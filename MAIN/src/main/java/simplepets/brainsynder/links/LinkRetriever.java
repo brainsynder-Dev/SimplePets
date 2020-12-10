@@ -39,6 +39,7 @@ public class LinkRetriever {
         if (!loaders.isEmpty()) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new VaultLink());
+        loaders.add(new TokenManagerLink());
         loaders.add(new WorldBorderLink());
 
         loaders.forEach(pluginLink -> {
