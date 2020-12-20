@@ -26,8 +26,18 @@ public class Config extends FileMaker {
 
         addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
 
-        addDefault(ECONOMY_TOGGLE, false, "Enabling this would allow players to buy pets via Vault/TokenManager\nDefault: false");
-        addDefault(ECONOMY_TYPE, "UNKNOWN", "What type of economy do you have?\nEconomy Types:\n- UNKNOWN\n- VAULT\n- TOKEN_MANAGER\nDefault: 'UNKNOWN'");
+        addDefault(ECONOMY_TOGGLE, false,
+                "Enabling this would allow players to buy pets via Vault/TokenManager\n" +
+                        "NOTE: If 'Needs-Permission' is set to true the players will still need the permission for the pet\n" +
+                        "Default: false");
+        addDefault(ECONOMY_TYPE, "UNKNOWN",
+                "What type of economy do you have?\n" +
+                        "Economy Types:\n" +
+                        "- UNKNOWN (Will act like all pets are free)\n" +
+                        "- VAULT https://www.spigotmc.org/resources/34315/\n" +
+                        "- TOKEN_MANAGER https://www.spigotmc.org/resources/8610/\n" +
+                        "- GEMS_ECONOMY https://www.spigotmc.org/resources/19655/\n" +
+                        "Default: 'UNKNOWN'");
 
         addDefault("ShowParticles", true, "Disabling this would make it so there is no particles when a player renames/removes/spawns a pet\nDefault: true");
         addDefault("Complete-Mobspawning-Deny-Bypass", true, "Disabling this would allow other plugins to deny the pets from spawning\nDefault: true");

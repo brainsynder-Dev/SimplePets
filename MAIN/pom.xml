@@ -68,6 +68,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
+            <groupId>me.xanium</groupId>
+            <artifactId>GemsEconomy</artifactId>
+            <version>4.9</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/../libs/GemsEconomy-4.9.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>com.github.Brettflan</groupId>
             <artifactId>WorldBorder</artifactId>
             <version>d8d1b28b5747c416d68f5ac78d2f1356bc3e7423</version>

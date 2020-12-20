@@ -13,8 +13,9 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.links.EconomyLink;
-import simplepets.brainsynder.links.impl.TokenManagerLink;
-import simplepets.brainsynder.links.impl.VaultLink;
+import simplepets.brainsynder.links.impl.economy.GemEconomyLink;
+import simplepets.brainsynder.links.impl.economy.TokenManagerLink;
+import simplepets.brainsynder.links.impl.economy.VaultLink;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
@@ -37,6 +38,7 @@ public class PetEventListeners implements Listener {
             EconomyType economyType = Enum.valueOf(EconomyType.class, type);
             if (economyType == EconomyType.VAULT) clazz = VaultLink.class;
             if (economyType == EconomyType.TOKEN_MANAGER) clazz = TokenManagerLink.class;
+            if (economyType == EconomyType.GEMS_ECONOMY) clazz = GemEconomyLink.class;
         }catch (Exception e) {
             PetCore.get().debug(DebugLevel.ERROR, type+" is an invalid economy type.");
         }
@@ -49,20 +51,16 @@ public class PetEventListeners implements Listener {
 
             double price = economyFile.getPrice(event.getPetType());
             if (price == -1) return;
-
-
             if (clazz == null) return;
 
-
-
-            EconomyLink vault = PetCore.get().getLinkRetriever().getPluginLink(clazz);
-            if (!vault.isHooked()) return;
+            EconomyLink economy = PetCore.get().getLinkRetriever().getPluginLink(clazz);
+            if (!economy.isHooked()) return;
 
             PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
             List<PetType> petArray = petOwner.getOwnedPets();
             if (petArray.contains(event.getPetType())) return;
 
-            double bal = vault.getBalance(event.getPlayer());
+            double bal = economy.getBalance(event.getPlayer());
             if (bal < price) {
                 event.setCancelled(true);
                 event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
@@ -70,13 +68,13 @@ public class PetEventListeners implements Listener {
             }
 
             if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
-                vault.withdrawPlayer(event.getPlayer(), price);
+                economy.withdrawPlayer(event.getPlayer(), price);
                 event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
                 return;
             }
 
             petOwner.addPurchasedPet(event.getPetType().getConfigName());
-            vault.withdrawPlayer(event.getPlayer(), price);
+            economy.withdrawPlayer(event.getPlayer(), price);
             event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
         }
     }

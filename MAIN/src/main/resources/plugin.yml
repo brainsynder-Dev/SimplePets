@@ -1,7 +1,7 @@
 name: SimplePets
 main: simplepets.brainsynder.PetCore
 version: ${module.version}
-softdepend: [WorldGuard, WorldEdit, Vault, PlotSquared, TokenManager]
+softdepend: [WorldGuard, WorldEdit, Vault, PlotSquared, TokenManager, GemsEconomy]
 loadbefore: [Citizens, mcMMO, ProtocolSupport]
 authors: [brainsynder, Thatsmusic99]
 api-version: 1.13
