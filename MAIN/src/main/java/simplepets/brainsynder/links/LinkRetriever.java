@@ -4,7 +4,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.links.impl.*;
+import simplepets.brainsynder.links.impl.PlotSquaredLink;
+import simplepets.brainsynder.links.impl.PluginLink;
+import simplepets.brainsynder.links.impl.WorldBorderLink;
+import simplepets.brainsynder.links.impl.WorldGuardLink;
+import simplepets.brainsynder.links.impl.economy.GemEconomyLink;
+import simplepets.brainsynder.links.impl.economy.TokenManagerLink;
+import simplepets.brainsynder.links.impl.economy.VaultLink;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.TimerUtil;
 
@@ -40,6 +46,7 @@ public class LinkRetriever {
         loaders.add(new PlotSquaredLink());
         loaders.add(new VaultLink());
         loaders.add(new TokenManagerLink());
+        loaders.add(new GemEconomyLink());
         loaders.add(new WorldBorderLink());
 
         loaders.forEach(pluginLink -> {
