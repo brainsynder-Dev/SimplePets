@@ -28,7 +28,7 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     public void onCreatureSpawnUnBlock(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
-        if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
+        if (event.isCancelled() && ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
                     || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
@@ -50,7 +50,7 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     public void onCreatureSpawnUnBlock(EntitySpawnEvent event) {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
-        if (ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet && event.isCancelled()) {
+        if (event.isCancelled() && ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
                     || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
