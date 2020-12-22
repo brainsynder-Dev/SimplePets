@@ -34,6 +34,8 @@ public class Config extends FileMaker {
                 "What type of economy do you have?\n" +
                         "Economy Types:\n" +
                         "- UNKNOWN (Will act like all pets are free)\n" +
+                        "- EXPERIENCE_LEVEL (Will use the players experience levels as payment)\n" +
+                        "- EXPERIENCE_POINTS (Will use the players experience points as payment [level 30 = 1395])\n" +
                         "- VAULT https://www.spigotmc.org/resources/34315/\n" +
                         "- TOKEN_MANAGER https://www.spigotmc.org/resources/8610/\n" +
                         "- GEMS_ECONOMY https://www.spigotmc.org/resources/19655/\n" +

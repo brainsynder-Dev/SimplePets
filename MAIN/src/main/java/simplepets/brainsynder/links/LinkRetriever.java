@@ -8,9 +8,7 @@ import simplepets.brainsynder.links.impl.PlotSquaredLink;
 import simplepets.brainsynder.links.impl.PluginLink;
 import simplepets.brainsynder.links.impl.WorldBorderLink;
 import simplepets.brainsynder.links.impl.WorldGuardLink;
-import simplepets.brainsynder.links.impl.economy.GemEconomyLink;
-import simplepets.brainsynder.links.impl.economy.TokenManagerLink;
-import simplepets.brainsynder.links.impl.economy.VaultLink;
+import simplepets.brainsynder.links.impl.economy.*;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.utils.TimerUtil;
 
@@ -67,6 +65,8 @@ public class LinkRetriever {
                 }
             }
         });
+        loaders.add(new EXPEconomy());
+        loaders.add(new EXPLevelEconomy());
     }
 
     public void cleanup () {

@@ -13,9 +13,7 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.links.EconomyLink;
-import simplepets.brainsynder.links.impl.economy.GemEconomyLink;
-import simplepets.brainsynder.links.impl.economy.TokenManagerLink;
-import simplepets.brainsynder.links.impl.economy.VaultLink;
+import simplepets.brainsynder.links.impl.economy.*;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.PetTypeStorage;
@@ -39,6 +37,8 @@ public class PetEventListeners implements Listener {
             if (economyType == EconomyType.VAULT) clazz = VaultLink.class;
             if (economyType == EconomyType.TOKEN_MANAGER) clazz = TokenManagerLink.class;
             if (economyType == EconomyType.GEMS_ECONOMY) clazz = GemEconomyLink.class;
+            if (economyType == EconomyType.EXPERIENCE_LEVEL) clazz = EXPLevelEconomy.class;
+            if (economyType == EconomyType.EXPERIENCE_POINTS) clazz = EXPEconomy.class;
         }catch (Exception e) {
             PetCore.get().debug(DebugLevel.ERROR, type+" is an invalid economy type.");
         }
