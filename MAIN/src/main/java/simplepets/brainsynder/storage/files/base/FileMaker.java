@@ -8,7 +8,7 @@ import java.io.File;
 import java.util.function.BiConsumer;
 
 public abstract class FileMaker extends YamlFile {
-    private final PetCore core;
+    private PetCore core;
 
     public FileMaker(File folder, String fileName) {
         super(folder, fileName);
@@ -31,6 +31,7 @@ public abstract class FileMaker extends YamlFile {
     }
 
     protected BiConsumer<String, String> logMove () {
+        if (core == null) core = PetCore.get();
         return (oldKey, newKey) -> {
             String name = getClass().getSimpleName().replace("File", "");
             core.debug("["+name+"] Moving '"+oldKey+"' to '"+newKey+"'");

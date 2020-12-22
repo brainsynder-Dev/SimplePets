@@ -18,21 +18,31 @@ public class Config extends FileMaker {
         addSectionHeader("Update-Checking.unit", Utilities.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");
         addDefault("Update-Checking.unit", TimeUnit.HOURS.name());
         addDefault("Update-Checking.time", 12);
+
         addDefault("Needs-Pet-Permission-To-Open-GUI", false, "Enabling this would require players to have access to at least 1 pets permission\nDefault: false");
         addDefault("Needs-Permission", true, "Disabling this would grant ALL players access to pets (they wont need permissions)\nDefault: true");
+        addDefault("Needs-Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
         addDefault("Remove-Item-If-No-Permission", true, "Disabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
+
         addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
 
-        addDefault(ECONOMY_TOGGLE, false, "Enabling this would allow players to buy pets via Vault/TokenManager\nDefault: false");
-        addDefault(ECONOMY_TYPE, "UNKNOWN", "What type of economy do you have?\nEconomy Types:\n- UNKNOWN\n- VAULT\n- TOKEN_MANAGER\nDefault: 'UNKNOWN'");
-        move("UseVaultEconomy", ECONOMY_TOGGLE);
+        addDefault(ECONOMY_TOGGLE, false,
+                "Enabling this would allow players to buy pets via Vault/TokenManager\n" +
+                        "NOTE: If 'Needs-Permission' is set to true the players will still need the permission for the pet\n" +
+                        "Default: false");
+        addDefault(ECONOMY_TYPE, "UNKNOWN",
+                "What type of economy do you have?\n" +
+                        "Economy Types:\n" +
+                        "- UNKNOWN (Will act like all pets are free)\n" +
+                        "- VAULT https://www.spigotmc.org/resources/34315/\n" +
+                        "- TOKEN_MANAGER https://www.spigotmc.org/resources/8610/\n" +
+                        "- GEMS_ECONOMY https://www.spigotmc.org/resources/19655/\n" +
+                        "Default: 'UNKNOWN'");
 
         addDefault("ShowParticles", true, "Disabling this would make it so there is no particles when a player renames/removes/spawns a pet\nDefault: true");
         addDefault("Complete-Mobspawning-Deny-Bypass", true, "Disabling this would allow other plugins to deny the pets from spawning\nDefault: true");
         addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
         addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
-        // addDefault("OldPetRegistering", false); // This is no longer used in newer versions
-        addDefault("Needs-Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
         addDefault("Pathfinding.Distance-to-Player", 1.9, "How far away can the pets stand near the player?\nDefault: 1.9");
         addDefault("Pathfinding.Distance-to-Player_LargePets", 2.9, "How far away can the large pets (Giants/Ghast) stand near the player?\nDefault: 2.9");
         addDefault("Pathfinding.Min-Distance-For-Teleport", 20.0, "How far away from the player does the pet have to be before it teleports closer?\nDefault: 20");
@@ -44,12 +54,6 @@ public class Config extends FileMaker {
 
         addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to support WorldGuard flags\nFlag Names:\n- allow-pet-spawn\n- allow-pet-enter\n- allow-pet-riding");
         addDefault("WorldGuard.BypassPermission", "region.bypass", "This is the bypass permission for WorldGuard\nDefault: region.bypass");
-        remove("WorldGuard.Spawning.Always-Allowed");
-        remove("WorldGuard.Spawning.Blocked-Regions");
-        remove("WorldGuard.Pet-Entering.Always-Allowed");
-        remove("WorldGuard.Pet-Entering.Blocked-Regions");
-        remove("WorldGuard.Pet-Riding.Always-Allowed");
-        remove("WorldGuard.Pet-Riding.Blocked-Regions");
 
         addDefault("PlotSquared.BypassPermission", "plots.admin", "This is the bypass permission for PlotSquared\nDefault: plots.admin");
         addDefault("PlotSquared.On-Unclaimed-Plots.Move", true, "Are pets allowed to move on unclaimed plots?\nDefault: true");
@@ -85,8 +89,6 @@ public class Config extends FileMaker {
         addDefault("PetToggles.AutoRemove.TickDelay", 10000, "What should the wait be?\nThis is in ticks (20 ticks = 1 second)\nDefault: 10000");
         addDefault(MOUNTABLE, true, "Are all pets able to be rideable?\nDefault: true");
         addDefault(HATS, true, "Are all pets able to be worn as hats?\nDefault: true");
-        move("Allow-Pets-Being-Mounts", MOUNTABLE, logMove());
-        move("Allow-Pets-Being-Hats", HATS, logMove());
         addDefault("Respawn-Last-Pet-On-Login", true, "When a player logs back in should their pet be spawned in as well?\nNOTE: If the player removed their pet before logging out then it wont respawn.\nDefault: true");
 
         addDefault("RenamePet.Enabled", true, "Should players be able to rename pets?\nDefault: true");
@@ -96,8 +98,23 @@ public class Config extends FileMaker {
         addDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"), "Are there words you don't want in a pets name?");
         addDefault(MAGIC, false, "Are pet names allowed to have the &k color code?\nDefault: false");
         addDefault(COLOR, true, "Are pet names allowed to be colored?\nDefault: true");
+        updateSections();
+    }
+
+    private void updateSections () {
         move("Use&k", MAGIC, logMove());
         move("ColorCodes", COLOR, logMove());
+        move("Allow-Pets-Being-Mounts", MOUNTABLE, logMove());
+        move("Allow-Pets-Being-Hats", HATS, logMove());
+        remove("WorldGuard.Spawning.Always-Allowed");
+        remove("WorldGuard.Spawning.Blocked-Regions");
+        remove("WorldGuard.Pet-Entering.Always-Allowed");
+        remove("WorldGuard.Pet-Entering.Blocked-Regions");
+        remove("WorldGuard.Pet-Riding.Always-Allowed");
+        remove("WorldGuard.Pet-Riding.Blocked-Regions");
+        remove("OldPetRegistering");
+        move("UseVaultEconomy", ECONOMY_TOGGLE);
+
     }
 
     public static final String
@@ -106,5 +123,6 @@ public class Config extends FileMaker {
             MAGIC = "RenamePet.Allow-&k",
             COLOR = "RenamePet.Allow-ColorCodes",
             ECONOMY_TOGGLE = "Economy.Enabled",
-            ECONOMY_TYPE = "Economy.Type";
+            ECONOMY_TYPE = "Economy.Type",
+            NEEDS_PERM_GUI = "Economy.Type";
 }

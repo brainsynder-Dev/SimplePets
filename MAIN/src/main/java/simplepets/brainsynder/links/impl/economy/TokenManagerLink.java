@@ -1,4 +1,4 @@
-package simplepets.brainsynder.links.impl;
+package simplepets.brainsynder.links.impl.economy;
 
 import me.realized.tokenmanager.TokenManagerPlugin;
 import me.realized.tokenmanager.api.TokenManager;
@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.links.EconomyLink;
+import simplepets.brainsynder.links.impl.PluginLink;
 
 import java.util.OptionalLong;
 

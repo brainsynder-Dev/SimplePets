@@ -1,4 +1,4 @@
-package simplepets.brainsynder.links.impl;
+package simplepets.brainsynder.links.impl.economy;
 
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import simplepets.brainsynder.links.EconomyLink;
+import simplepets.brainsynder.links.impl.PluginLink;
 
 public class VaultLink extends PluginLink<Vault> implements EconomyLink<Vault> {
     private Economy econ = null;
