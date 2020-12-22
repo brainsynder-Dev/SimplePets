@@ -50,8 +50,6 @@ public class ArmorListener implements Listener {
             clickedItem = e.getCurrentItem();
             if (e.getRawSlot() > 54) {
                 slot = e.getView().getTopInventory().firstEmpty();
-            } else if (e.getView().getBottomInventory().firstEmpty() != -1) {
-                clickedItem = new ItemStack(Material.AIR);
             }
         }
         if (clickedItem == null) return;
