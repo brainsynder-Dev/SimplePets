@@ -110,7 +110,8 @@ public class Pet implements IPet {
                 command = command.substring(1, command.length() - 1)
                         .replace("{player}", getOwner().getName())
                         .replace("{location}", getPet().getLocation().getX() + " " + getPet().getLocation().getY() + " " + getPet().getLocation().getZ())
-                        .replace("{type}", getPetType().getConfigName());
+                        .replace("{type}", getPetType().getConfigName())
+                        .replace("\\", "");
                 Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
             });
         }
