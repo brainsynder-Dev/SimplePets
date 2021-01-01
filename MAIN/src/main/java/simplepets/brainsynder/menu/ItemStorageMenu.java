@@ -23,7 +23,7 @@ import simplepets.brainsynder.storage.files.PlayerStorage;
 public class ItemStorageMenu implements Listener {
     public static boolean loadFromPlayer(Player player) {
         PetOwner owner = PetOwner.getPetOwner(player);
-        Inventory inventory = Bukkit.createInventory(new ItemHandler(), PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size"), player.getName() + "'s Item Storage");
+        Inventory inventory = Bukkit.createInventory(new ItemHandler(), PetCore.get().getConfiguration().getInt("PetItemStorage.Inventory-Size", 27), player.getName() + "'s Item Storage");
         if (owner.getStoredInventory() != null) {
             InventoryStorage storage = InventoryStorage.fromCompound(new ItemHandler(), owner.getStoredInventory());
             inventory = storage.getInventory();
