@@ -59,8 +59,8 @@ public class OnJoin implements Listener {
             if (owner == null) return;
             if (owner.hasPet()) owner.removePet();
         } else {
-            if (ReflectionUtil.getEntityHandle(e.getEntity()) instanceof IEntityPet) {
-                IEntityPet pet = (IEntityPet) ReflectionUtil.getEntityHandle(e.getEntity());
+            if (PetCore.getHandle(e.getEntity()) instanceof IEntityPet) {
+                IEntityPet pet = (IEntityPet) PetCore.getHandle(e.getEntity());
                 PetOwner owner = PetOwner.getPetOwner(pet.getOwner());
                 if (owner == null) return;
                 if (owner.hasPet()) {

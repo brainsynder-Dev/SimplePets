@@ -200,12 +200,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     
     @Override
     public IEntityPet getVisibleEntity() {
-        Object handle = ReflectionUtil.getEntityHandle(displayEntity);
+        Object handle = PetCore.getHandle(displayEntity);
         if (handle instanceof IEntityPet) {
             return (IEntityPet) handle;
         } else {
             if (displayEntity.getPassenger() != null) {
-                Object h = ReflectionUtil.getEntityHandle(displayEntity.getPassenger());
+                Object h = PetCore.getHandle(displayEntity.getPassenger());
                 if (h instanceof IEntityPet) {
                     return (IEntityPet) h;
                 }

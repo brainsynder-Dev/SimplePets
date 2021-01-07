@@ -21,14 +21,14 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCreatureSpawn(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
-        event.setCancelled(ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet);
+        event.setCancelled(PetCore.getHandle(e) instanceof IImpossaPet);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(CreatureSpawnEvent event) {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
-        if (event.isCancelled() && ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
+        if (event.isCancelled() && core.getSpawner().getHandle(e) instanceof IImpossaPet) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
                     || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
@@ -43,14 +43,14 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onCreatureSpawn(EntitySpawnEvent event) {
         Entity e = event.getEntity();
-        event.setCancelled(ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet);
+        event.setCancelled(PetCore.get().getSpawner().getHandle(e) instanceof IImpossaPet);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onCreatureSpawnUnBlock(EntitySpawnEvent event) {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
-        if (event.isCancelled() && ReflectionUtil.getEntityHandle(e) instanceof IImpossaPet) {
+        if (event.isCancelled() && PetCore.getHandle(e) instanceof IImpossaPet) {
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
                     || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
                     || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())

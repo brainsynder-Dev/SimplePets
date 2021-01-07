@@ -29,7 +29,7 @@ import java.util.List;
 public class MainListeners implements Listener {
     @EventHandler
     public void onhurt(EntityDamageEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        Object handle = PetCore.getHandle(e.getEntity());
         if (handle instanceof IImpossaPet) {
             e.setCancelled(true);
             return;
@@ -50,19 +50,19 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onhurt(EntityDamageByEntityEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        Object handle = PetCore.getHandle(e.getEntity());
         if (handle instanceof IImpossaPet) e.setCancelled(true);
     }
 
     @EventHandler
     public void onhurt(EntityDamageByBlockEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getEntity());
+        Object handle = PetCore.getHandle(e.getEntity());
         if (handle instanceof IImpossaPet) e.setCancelled(true);
     }
 
     @EventHandler
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getRightClicked());
+        Object handle = PetCore.getHandle(e.getRightClicked());
         if (handle instanceof IEntityPet) {
             e.setCancelled(true);
             IEntityPet entityPet = (IEntityPet) handle;
@@ -74,7 +74,7 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onInteract(EntityMountEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getMount());
+        Object handle = PetCore.getHandle(e.getMount());
         if (handle instanceof IEntityPet) {
             IEntityPet entityPet = (IEntityPet) handle;
             e.setCancelled(!entityPet.getPet().isVehicle());
@@ -84,7 +84,7 @@ public class MainListeners implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInteract(PlayerInteractAtEntityEvent e) {
         if (!(e.getRightClicked() instanceof Player)) {
-            Object handle = ReflectionUtil.getEntityHandle(e.getRightClicked());
+            Object handle = PetCore.getHandle(e.getRightClicked());
             if (handle instanceof IEntityPet) {
                 e.setCancelled(true);
                 IEntityPet entityPet = (IEntityPet) handle;
@@ -142,7 +142,7 @@ public class MainListeners implements Listener {
 
     @EventHandler
     public void onExit(EntityDismountEvent e) {
-        Object handle = ReflectionUtil.getEntityHandle(e.getDismounted());
+        Object handle = PetCore.getHandle(e.getEntity());
         if (handle instanceof IEntityPet) {
             IEntityPet pet = (IEntityPet) handle;
             if (pet.getOwner().getName().equals(e.getEntity().getName())) {

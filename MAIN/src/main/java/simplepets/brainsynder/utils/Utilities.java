@@ -115,7 +115,7 @@ public class Utilities {
         if (ServerVersion.getVersion() == ServerVersion.v1_8_R3) return;
         Class<?> outMount = ReflectionUtil.getNmsClass("PacketPlayOutMount");
         Constructor<?> constructor = ReflectionUtil.fillConstructor(outMount, ReflectionUtil.getNmsClass("Entity"));
-        Object packet = ReflectionUtil.initiateClass(constructor, ReflectionUtil.getEntityHandle(entity));
+        Object packet = ReflectionUtil.initiateClass(constructor, PetCore.getHandle(entity));
         ReflectionUtil.sendPacket(packet, player);
     }
 
@@ -146,7 +146,7 @@ public class Utilities {
     }
 
     public void showPet(Player player) {
-        managePetVisibility(player, "PacketPlayOutSpawnEntityLiving", ReflectionUtil.getNmsClass("EntityLiving"), ReflectionUtil.getEntityHandle(PetOwner.getPetOwner(player).getPet().getEntity().getEntity()));
+        managePetVisibility(player, "PacketPlayOutSpawnEntityLiving", ReflectionUtil.getNmsClass("EntityLiving"), PetCore.getHandle(PetOwner.getPetOwner(player).getPet().getEntity().getEntity()));
     }
 
     private void managePetVisibility(Player p, String nmsClass, Class<?> o1, Object o2) {

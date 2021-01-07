@@ -4,7 +4,9 @@ import net.minecraft.server.v1_16_R1.EntityTypes;
 import net.minecraft.server.v1_16_R1.World;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R1.entity.CraftEntity;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.util.EulerAngle;
@@ -89,5 +91,10 @@ public class SpawnUtil implements ISpawner {
     @Override
     public IEntityPet spawnEntityPet(Location l, IPet pet, String className) {
         return spawn(l, pet, className);
+    }
+
+    @Override
+    public Object getHandle(Entity entity) {
+        return ((CraftEntity) entity).getHandle();
     }
 }

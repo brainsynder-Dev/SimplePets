@@ -99,11 +99,6 @@ public class ReflectionUtil {
         return Bukkit.getServer().getClass().getPackage().getName().substring(23);
     }
 
-
-    public static Object getEntityHandle(Entity entity) {
-        return invokeMethod(getMethod(getCBCClass("entity.CraftEntity"), "getHandle"), entity);
-    }
-
     public static JsonObject getMenuItemsJSON(List<Class<? extends MenuItem>> c, PetType type) {
         JsonObject a = new JsonObject();
         for (Class<? extends MenuItem> cl : c) {

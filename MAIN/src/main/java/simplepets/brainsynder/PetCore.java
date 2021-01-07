@@ -8,6 +8,7 @@ import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -590,6 +591,10 @@ public class PetCore extends JavaPlugin {
         } else {
             return 1;
         }
+    }
+
+    public static Object getHandle(Entity e) {
+        return get().getSpawner().getHandle(e);
     }
 
     public ClassLoader getLoader() {

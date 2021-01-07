@@ -288,7 +288,7 @@ public class Pet implements IPet {
 
     public boolean isHat() {
         if ((owner.getPassenger() != null)
-                && (ReflectionUtil.getEntityHandle(owner.getPassenger()) instanceof IEntityPet)) {
+                && (PetCore.getHandle(owner.getPassenger()) instanceof IEntityPet)) {
             if (!isHat) isHat = true;
             return true;
         }
