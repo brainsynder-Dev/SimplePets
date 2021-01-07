@@ -190,6 +190,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
         StorageTagCompound object = pet.asCompound();
         object.setBoolean("small", isSmall());
         object.setBoolean("clone", isOwner());
+        object.setBoolean("restricted", restricted);
         if (isInvisible()) object.setBoolean("invisible", isInvisible());
 
         StorageTagCompound items = new StorageTagCompound();
@@ -206,6 +207,7 @@ public class EntityArmorStandPet extends EntityArmorStand implements IEntityArmo
 
     @Override
     public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("restricted")) setRestricted(object.getBoolean("restricted"));
         if (object.hasKey("small")) setSmall(object.getBoolean("small"));
         if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
         if (object.hasKey("invisible")) setInvisible(object.getBoolean("invisible"));

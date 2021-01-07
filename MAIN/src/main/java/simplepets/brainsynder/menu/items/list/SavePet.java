@@ -31,6 +31,7 @@ public class SavePet extends Item {
             StorageTagCompound compound = owner.getPet().getVisableEntity().asCompound();
             if (!owner.containsPetSave(compound)) {
                 List<StorageTagCompound> list = owner.getSavedPets();
+                compound.setBoolean("restricted", true);
                 list.add(compound);
                 owner.setSavedPets(list);
                 if (inventory instanceof SavesMenu) {

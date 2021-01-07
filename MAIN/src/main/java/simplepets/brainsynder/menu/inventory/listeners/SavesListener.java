@@ -55,6 +55,9 @@ public class SavesListener implements Listener {
                         }.runTaskLater(PetCore.get(), 2);
                         return;
                     }
+                    if (compound.getString("PetType").equals("armor_stand")) {
+                        compound.setBoolean("restricted", true);
+                    }
                     owner.respawnPet(compound);
                 }
             });
