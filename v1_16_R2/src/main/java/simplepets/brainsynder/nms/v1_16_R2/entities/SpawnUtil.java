@@ -55,7 +55,10 @@ public class SpawnUtil implements ISpawner {
                 location.getChunk().load();
             }
 
-            mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+            if (!mcWorld.addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+                PetCore.get().getLogger().warning("Failed to spawn pet " + className);
+            }
+
             if (customEntity instanceof IEntityControllerPet) {
                 if (pet.getPetType() instanceof ArmorStandPet) {
                     ArmorStand stand = EntityArmorStandPet.spawn(location, ((EntityControllerPet) customEntity));
