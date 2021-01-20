@@ -68,7 +68,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         walkSpeed = pet.getPetType().getSpeed();
         rideSpeed = pet.getPetType().getRideSpeed();
         hideName = PetCore.get().getConfiguration().getBoolean("PetToggles.HideNameOnShift");
-        tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay");
+        tickDelay = PetCore.get().getConfiguration().getInt("PetToggles.AutoRemove.TickDelay", 10000);
         autoRemove = PetCore.get().getConfiguration().getBoolean("PetToggles.AutoRemove.Enabled");
         canGlow = PetCore.get().getConfiguration().getBoolean("PetToggles.GlowWhenVanished");
         floatDown = pet.getPetType().canFloat();
