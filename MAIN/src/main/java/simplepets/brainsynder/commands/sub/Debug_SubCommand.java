@@ -49,7 +49,7 @@ public class Debug_SubCommand extends PetSubCommand {
 
         UpdateResult result = PetCore.get().getUpdateUtils().getResult();
         int build = result.getCurrentBuild();
-        WebConnector.getInputStreamString("http://pluginwiki.us/version/builds.json", PetCore.get(), string -> {
+        WebConnector.getInputStreamString("https://pluginwiki.us/version/builds.json", PetCore.get(), string -> {
             JsonObject jenkins = new JsonObject();
             jenkins.add("repo", result.getRepo());
             jenkins.add("plugin_build_number", build);
@@ -67,6 +67,7 @@ public class Debug_SubCommand extends PetSubCommand {
                     }
                 }
             }catch (Exception e) {
+                jenkins.add("parsed_string", string);
                 jenkins.add("error_parsing_json", e.getMessage());
             }
             info.add("jenkins", jenkins);
