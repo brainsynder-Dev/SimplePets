@@ -54,21 +54,25 @@ public class Debug_SubCommand extends PetSubCommand {
 
         UpdateResult result = PetCore.get().getUpdateUtils().getResult();
         int build = result.getCurrentBuild();
-        WebConnector.getInputStreamString("http://pluginwiki.us/version/?repo=" + result.getRepo(), PetCore.get(), string -> {
+        WebConnector.getInputStreamString("http://pluginwiki.us/version/builds.json", PetCore.get(), string -> {
             JsonObject jenkins = new JsonObject();
             jenkins.add("repo", result.getRepo());
             jenkins.add("plugin_build_number", build);
 
-            JsonObject main = (JsonObject) Json.parse(string);
-            if (!main.isEmpty()) {
-                if (main.names().contains("build")) {
-                    int latestBuild = main.getInt("build", -1);
+            try {
+                JsonObject main = (JsonObject) Json.parse(string);
+                if (!main.isEmpty()) {
+                    if (main.names().contains(result.getRepo())) {
+                        int latestBuild = main.getInt(result.getRepo(), -1);
 
-                    // New build found
-                    if (latestBuild > build) jenkins.add("number_of_builds_behind", (latestBuild - build));
+                        // New build found
+                        if (latestBuild > build) jenkins.add("number_of_builds_behind", (latestBuild - build));
 
-                    jenkins.add("jenkins_build_number", latestBuild);
+                        jenkins.add("jenkins_build_number", latestBuild);
+                    }
                 }
+            }catch (Exception e) {
+                jenkins.add("error_parsing_json", e.getMessage());
             }
             info.add("jenkins", jenkins);
 
