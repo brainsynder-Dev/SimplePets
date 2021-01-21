@@ -6,24 +6,19 @@ import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
-import lib.brainsynder.json.WriterConfig;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.annotations.Permission;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @ICommand(
         name = "debug",
@@ -102,26 +97,12 @@ public class Debug_SubCommand extends PetSubCommand {
             plugins.forEach(array::add);
             json.add("plugins", array);
 
-            String jsonString = json.toString(WriterConfig.PRETTY_PRINT);
-            CompletableFuture.runAsync(() -> {
-                String url = Utilities.saveTextToHastebin(jsonString);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (url != null) {
-                            sender.sendMessage(ChatColor.GOLD + url);
-                        }else{
-                            sender.sendMessage("§cFailed to upload data to Hastebin... Outputting data to Debug.json (in the SimplePets folder)...");
-
-                            File file = new File(PetCore.get().getDataFolder(), "Debug.json");
-                            if (file.exists()) file.delete();
-                            JsonFile jsonFile = new JsonFile(file, true);
-                            json.forEach(member -> jsonFile.set(member.getName(), member.getValue()));
-                            jsonFile.save();
-                        }
-                    }
-                }.runTask(PetCore.get());
-            });
+            sender.sendMessage("§cSaved Debug data to 'Debug.json' (in the SimplePets folder)...");
+            File file = new File(PetCore.get().getDataFolder(), "Debug.json");
+            if (file.exists()) file.delete();
+            JsonFile jsonFile = new JsonFile(file, true);
+            json.forEach(member -> jsonFile.set(member.getName(), member.getValue()));
+            jsonFile.save();
         });
     }
 
