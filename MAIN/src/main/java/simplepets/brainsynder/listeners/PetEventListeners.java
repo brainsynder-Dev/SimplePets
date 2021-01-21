@@ -53,29 +53,31 @@ public class PetEventListeners implements Listener {
             if (price == -1) return;
             if (clazz == null) return;
 
-            EconomyLink economy = PetCore.get().getLinkRetriever().getPluginLink(clazz);
-            if (!economy.isHooked()) return;
+            PetCore.get().getLinkRetriever().getPluginLink(clazz).ifPresent(economy -> {
+                if (!economy.isHooked()) return;
 
-            PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
-            List<PetType> petArray = petOwner.getOwnedPets();
-            if (petArray.contains(event.getPetType())) return;
+                PetOwner petOwner = PetOwner.getPetOwner(event.getPlayer());
+                List<PetType> petArray = petOwner.getOwnedPets();
+                if (petArray.contains(event.getPetType())) return;
 
-            double bal = economy.getBalance(event.getPlayer());
-            if (bal < price) {
-                event.setCancelled(true);
-                event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
-                return;
-            }
+                double bal = economy.getBalance(event.getPlayer());
+                if (bal < price) {
+                    event.setCancelled(true);
+                    event.getPlayer().sendMessage(economyFile.getString("InsufficientFunds", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
+                    return;
+                }
 
-            if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
+                if (economyFile.getBoolean("Pay-Per-Use.Enabled")) {
+                    economy.withdrawPlayer(event.getPlayer(), price);
+                    event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
+                    return;
+                }
+
+                petOwner.addPurchasedPet(event.getPetType().getConfigName());
                 economy.withdrawPlayer(event.getPlayer(), price);
-                event.getPlayer().sendMessage(economyFile.getString("Pay-Per-Use.Paid", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
-                return;
-            }
+                event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
 
-            petOwner.addPurchasedPet(event.getPetType().getConfigName());
-            economy.withdrawPlayer(event.getPlayer(), price);
-            event.getPlayer().sendMessage(economyFile.getString("PurchaseSuccessful", true).replace("%price%", String.valueOf(price)).replace("%type%", event.getPetType().getConfigName()));
+            });
         }
     }
 

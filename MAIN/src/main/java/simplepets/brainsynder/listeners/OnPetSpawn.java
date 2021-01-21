@@ -16,6 +16,8 @@ import simplepets.brainsynder.links.IWorldGuardLink;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.reflection.ReflectionUtil;
 
+import java.util.Optional;
+
 public class OnPetSpawn extends ReflectionUtil implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -29,10 +31,15 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
         if (event.isCancelled() && core.getSpawner().getHandle(e) instanceof IImpossaPet) {
+            Optional<IWorldGuardLink> worldGuard = core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class);
+            Optional<IPlotSquaredLink> plotSquared = core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class);
+            Optional<IWorldBorderLink> worldBorder = core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class);
+
+
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
-                    || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class).allowPetSpawn(event.getLocation())) {
+                    || (worldGuard.isPresent() && worldGuard.get().allowPetSpawn(event.getLocation()))
+                    || (plotSquared.isPresent() && plotSquared.get().allowPetSpawn(event.getLocation()))
+                    || (worldBorder.isPresent() && worldBorder.get().allowPetSpawn(event.getLocation()))) {
                 event.setCancelled(false);
 
             }
@@ -51,10 +58,14 @@ public class OnPetSpawn extends ReflectionUtil implements Listener {
         Entity e = event.getEntity();
         PetCore core = PetCore.get();
         if (event.isCancelled() && PetCore.getHandle(e) instanceof IImpossaPet) {
+            Optional<IWorldGuardLink> worldGuard = core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class);
+            Optional<IPlotSquaredLink> plotSquared = core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class);
+            Optional<IWorldBorderLink> worldBorder = core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class);
+
             if (core.getConfiguration().getBoolean("Complete-Mobspawning-Deny-Bypass")
-                    || core.getLinkRetriever().getProtectionLink(IWorldGuardLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IPlotSquaredLink.class).allowPetSpawn(event.getLocation())
-                    || core.getLinkRetriever().getProtectionLink(IWorldBorderLink.class).allowPetSpawn(event.getLocation())) {
+                    || (worldGuard.isPresent() && worldGuard.get().allowPetSpawn(event.getLocation()))
+                    || (plotSquared.isPresent() && plotSquared.get().allowPetSpawn(event.getLocation()))
+                    || (worldBorder.isPresent() && worldBorder.get().allowPetSpawn(event.getLocation()))) {
                 event.setCancelled(false);
             }
         }

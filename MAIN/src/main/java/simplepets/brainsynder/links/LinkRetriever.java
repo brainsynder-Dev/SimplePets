@@ -14,6 +14,7 @@ import simplepets.brainsynder.utils.TimerUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LinkRetriever {
     private List<IPluginLink> loaders;
@@ -79,22 +80,22 @@ public class LinkRetriever {
         TimerUtil.findDelay(getClass(), "Unloading Plugin Links");
     }
 
-    public <T extends IProtectionLink> T getProtectionLink(Class<T> clazz) {
+    public <T extends IProtectionLink> Optional<T> getProtectionLink(Class<T> clazz) {
         return getLink(clazz);
     }
 
-    public <T extends IPluginLink> T getPluginLink(Class<T> clazz) {
+    public <T extends IPluginLink> Optional<T> getPluginLink(Class<T> clazz) {
         return getLink(clazz);
     }
 
-    private <T extends IPluginLink> T getLink(Class<T> c) {
+    private <T extends IPluginLink> Optional<T> getLink(Class<T> c) {
         checkLoaders();
         for (IPluginLink loader : loaders) {
             if (c.isAssignableFrom(loader.getClass())) {
-                return (T) loader;
+                return Optional.of((T) loader);
             }
         }
-        return null;
+        return Optional.empty();
     }
 
     public boolean canSpawnPet(Location location) {
