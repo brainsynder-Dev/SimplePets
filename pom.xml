@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--suppress ALL -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -8,9 +7,14 @@
     <groupId>simplepets.brainsynder</groupId>
     <artifactId>SimplePets</artifactId>
     <packaging>pom</packaging>
-    <name>SimplePets</name>
-    <version>4.2.1-SNAPSHOT</version>
-    <url>http://ci.pluginwiki.us</url>
+    <version>1.0-SNAPSHOT</version>
+
+    <modules>
+        <module>API</module>
+        <module>MAIN</module>
+        <module>v1_16_R3</module>
+        <module>DIST</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -18,8 +22,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-parent</module.info>
         <!--suppress UnresolvedMavenProperty -->
+        <jenkins.name>${env.JOB_NAME}</jenkins.name>
+        <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
-        <module.version>4.2.2 (build ${jenkins.buildNumber})</module.version>
+        <module.version>5.0 (build ${jenkins.buildNumber})</module.version>
+        <bslib.version>0.1-B57</bslib.version>
     </properties>
 
     <build>
@@ -49,6 +56,14 @@
                                 </dependency>
                             </dependencies>
                         </property>
+                        <property>
+                            <name>bslib.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>simplepets.brainsynder</groupId>
+                                </dependency>
+                            </dependencies>
+                        </property>
                     </properties>
                 </configuration>
             </plugin>
@@ -60,110 +75,22 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
-                <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <shadedArtifactAttached>true</shadedArtifactAttached>
-                    <outputDirectory>/tmp</outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <artifactSet>
-                                <excludes>
-                                    <exclude>simple.brainsynder:API</exclude>
-                                </excludes>
-                            </artifactSet>
-                            <filters>
-                                <filter>
-                                    <artifact>simple.brainsynder:*</artifact>
-                                    <excludes>
-                                        <exclude>*.yml</exclude>
-                                    </excludes>
-                                </filter>
-                                <filter>
-                                    <artifact>*:*</artifact>
-                                    <includes>
-                                        <include>simple/brainsynder/api/**</include>
-                                        <include>simple/brainsynder/commands/annotations/**</include>
-                                        <include>simple/brainsynder/commands/*</include>
-                                        <include>simple/brainsynder/events/ActionMessageEvent.class</include>
-                                        <include>simple/brainsynder/events/SimpleApiEvent.class</include>
-                                        <include>simple/brainsynder/exceptions/SimpleAPIException.class</include>
-                                        <include>simple/brainsynder/files/*</include>
-                                        <include>simple/brainsynder/math/**</include>
-                                        <include>simple/brainsynder/nbt/**</include>
-                                        <include>simple/brainsynder/nms/**</include>
-                                        <include>simple/brainsynder/reflection/**</include>
-                                        <include>simple/brainsynder/sound/**</include>
-                                        <include>simple/brainsynder/storage/**</include>
-                                        <include>simple/brainsynder/utils/*</include>
-                                        <include>simple/brainsynder/wrappers/**</include>
-                                        <include>simplepets/brainsynder/**</include>
-                                        <include>plugin.yml</include>
-                                    </includes>
-                                </filter>
-                            </filters>
-                            <relocations>
-                                <relocation>
-                                    <pattern>simple.brainsynder</pattern>
-                                    <shadedPattern>simplepets.brainsynder.internal.simpleapi</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                                    <resource>${project.basedir}/src/main/resources/</resource>
-                                    <file>plugin.yml</file>
-                                </transformer>
-                            </transformers>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
-
-    <modules>
-        <module>MAIN</module>
-        <module>v1_11_R1</module>
-        <module>v1_12_R1</module>
-        <module>v1_13_R1</module>
-        <module>v1_13_R2</module>
-        <module>v1_14_R1</module>
-        <module>v1_15_R1</module>
-        <module>DIST</module>
-    </modules>
 
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
-            <id>cubekrowd-repo</id>
-            <url>https://mavenrepo.cubekrowd.net/artifactory/repo/</url>
+            <id>bs-repo</id>
+            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>simple.brainsynder</groupId>
+            <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
-            <version>4.0.3-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.11.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
+            <version>${bslib.version}</version>
         </dependency>
     </dependencies>
 </project>
