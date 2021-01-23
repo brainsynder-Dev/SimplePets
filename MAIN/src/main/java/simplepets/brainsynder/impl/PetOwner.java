@@ -10,6 +10,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.user.PetNameChangeEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -113,6 +114,11 @@ public class PetOwner implements PetUser {
 
         nameMap.put(type, name);
         getPetEntity(type).ifPresent(entity -> {
+
+            PetNameChangeEvent event = new PetNameChangeEvent(PetOwner.this, entity, name);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) return;
+
             entity.setPetName(name);
         });
     }

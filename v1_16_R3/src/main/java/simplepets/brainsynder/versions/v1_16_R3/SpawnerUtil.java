@@ -1,11 +1,13 @@
 package simplepets.brainsynder.versions.v1_16_R3;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
@@ -59,6 +61,12 @@ public class SpawnerUtil implements ISpawnUtil {
             customEntity.setInvisible(false);
             customEntity.setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             customEntity.setPersistent();
+
+            // Call the spawn event
+            PetEntitySpawnEvent event = new PetEntitySpawnEvent(user, customEntity);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) return Optional.empty();
+
             if (!location.getChunk().isLoaded()) location.getChunk().load();
 
             if (((CraftWorld)location.getWorld()).getHandle().addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {

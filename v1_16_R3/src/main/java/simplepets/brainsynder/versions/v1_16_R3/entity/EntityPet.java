@@ -6,6 +6,7 @@ import lib.brainsynder.sounds.SoundMaker;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.server.v1_16_R3.*;
 import org.apache.commons.lang.reflect.FieldUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
@@ -18,6 +19,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
+import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -88,9 +90,14 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
                 name = config.get().getDisplayName();
             }
         }
+        String newName = name.replace("%player%", user.getPlayer().getName());
 
+        EntityNameChangeEvent event = new EntityNameChangeEvent(this, newName);
+        Bukkit.getServer().getPluginManager().callEvent(event);
 
-        petName = translateName(name.replace("%player%", user.getPlayer().getName()));
+        petName = ChatColor.translateAlternateColorCodes('&', event.getPrefix())
+                + translateName(event.getName())
+                + ChatColor.translateAlternateColorCodes('&', event.getSuffix());
         getBukkitEntity().setCustomNameVisible(true);
         getBukkitEntity().setCustomName(petName);
     }
