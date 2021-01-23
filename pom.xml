@@ -12,6 +12,8 @@
     <modules>
         <module>API</module>
         <module>MAIN</module>
+        <module>v1_16_R3</module>
+        <module>DIST</module>
     </modules>
 
     <properties>
