@@ -9,6 +9,13 @@ public class EntityNameChangeEvent extends SimplePetEvent {
     private String prefix = "";
     private String suffix = "";
 
+    /**
+     * This event gets called when the name of the entity gets changed.
+     * It can be from the saved data, user changing the name, or the modify command
+     *
+     * @param entity - The entity that is getting targeted
+     * @param name - The new name of the pet
+     */
     public EntityNameChangeEvent(IEntityPet entity, String name) {
         this.entity = entity;
         this.name = name;
