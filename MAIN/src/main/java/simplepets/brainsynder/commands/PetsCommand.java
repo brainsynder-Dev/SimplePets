@@ -4,10 +4,7 @@ import lib.brainsynder.commands.ParentCommand;
 import lib.brainsynder.commands.annotations.ICommand;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.commands.list.ListCommand;
-import simplepets.brainsynder.commands.list.ModifyCommand;
-import simplepets.brainsynder.commands.list.RemoveCommand;
-import simplepets.brainsynder.commands.list.SummonCommand;
+import simplepets.brainsynder.commands.list.*;
 
 @ICommand(
         name = "pet",
@@ -23,6 +20,10 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new ModifyCommand(plugin));
         registerSub(new RemoveCommand(plugin));
         registerSub(new ListCommand(plugin));
+
+        ReportCommand reportCommand = new ReportCommand(plugin);
+        plugin.getServer().getPluginManager().registerEvents(reportCommand, plugin);
+        registerSub(reportCommand);
     }
 
     @Override
