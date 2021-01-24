@@ -9,6 +9,7 @@ import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.pet.PetConfigManager;
+import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.IPetsPlugin;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
@@ -20,6 +21,9 @@ import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.listeners.ChunkUnloadListener;
 import simplepets.brainsynder.listeners.JoinLeaveListeners;
 import simplepets.brainsynder.managers.UserManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class PetCore extends JavaPlugin implements IPetsPlugin {
     private static PetCore instance;
@@ -45,7 +49,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         USER_MANAGER = new UserManager(this);
         PET_CONFIG = new PetConfiguration(this);
 
-        new Metrics(this);
+        handleMetrics();
 
         try {
             new CommandRegistry<>(this).register(new PetsCommand(this));
@@ -125,6 +129,30 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
     }
 
+    private Map<String, Integer> getActivePets() {
+        Map<String, Integer> users = new HashMap<>();
+
+        SimplePets.getUserManager().getAllUsers().forEach(user -> {
+            user.getPetEntities().forEach(entityPet -> {
+                PetType type = entityPet.getPetType();
+
+                String name = type.getName();
+                if (!users.containsKey(name)) {
+                    users.put(name, 1);
+                } else {
+                    users.put(name, users.get(name) + 1);
+                }
+            });
+        });
+
+        return users;
+    }
+
+
+    private void handleMetrics () {
+        Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
+    }
 
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
