@@ -33,6 +33,7 @@ public class ArmorListener implements Listener {
         ArmorMenu menu = PetCore.get().getInvLoaders().ARMOR;
         ItemStack clickedItem;
         int slot = e.getRawSlot();
+        boolean emptying = false;
         switch (e.getRawSlot()) {
             case 13:
             case 21:
@@ -50,6 +51,8 @@ public class ArmorListener implements Listener {
             clickedItem = e.getCurrentItem();
             if (e.getRawSlot() > 54) {
                 slot = e.getView().getTopInventory().firstEmpty();
+            } else {
+                emptying = true;
             }
         }
         if (clickedItem == null) return;
@@ -65,7 +68,6 @@ public class ArmorListener implements Listener {
                     return;
                 }
             }
-
             if (owner.getPet() == null) {
                 e.setCancelled(true);
                 Bukkit.getScheduler().runTask(PetCore.get(), p::closeInventory);
@@ -78,6 +80,10 @@ public class ArmorListener implements Listener {
                 e.setCancelled(true);
                 e.setResult(Event.Result.DENY);
                 return;
+            }
+            if (emptying) {
+                ArmorMenu.removeLore(clickedItem);
+                clickedItem = new ItemStack(Material.AIR);
             }
             menu.onClick(slot, clickedItem, p);
         }
