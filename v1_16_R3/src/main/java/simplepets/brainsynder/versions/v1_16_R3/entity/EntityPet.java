@@ -61,6 +61,10 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.500000238418579);
     }
 
+    public boolean isJumping () {
+        return jumping;
+    }
+
     @Override
     public void teleportToOwner() {
         setWalkToLocation(null);

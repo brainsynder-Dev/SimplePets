@@ -7,6 +7,8 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.RabbitType;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
+import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ControllerJumpRabbit;
+import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ControllerMoveRabbit;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
 public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPet {
@@ -150,72 +152,6 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
         this.moveController.a(this.moveController.d(), this.moveController.e(), this.moveController.f(), speed);
     }
 
-    private static class ControllerJumpRabbit extends ControllerJump {
-        private final EntityRabbitPet rabbitPet;
-
-        // Translation: UNKNOWN
-        private boolean d = false;
-
-        public ControllerJumpRabbit(EntityRabbitPet entity) {
-            super(entity);
-            this.rabbitPet = entity;
-        }
-
-        public boolean isActive() {
-            return this.a;
-        }
-
-        // Translation: UNKNOWN
-        public boolean d() {
-            return this.d;
-        }
-
-        // Translation: UNKNOWN
-        public void a(boolean flag) {
-            this.d = flag;
-        }
-
-        // Translation: tick()
-        public void b() {
-            // Translation: this.active
-            if (this.a) {
-                this.rabbitPet.reseter();
-                // Translation: this.active
-                this.a = false;
-            }
-
-        }
-    }
-
-    private static class ControllerMoveRabbit extends ControllerMove {
-        private final EntityRabbitPet rabbit;
-        private double rabbitSpeed;
-
-        public ControllerMoveRabbit(EntityRabbitPet entityrabbit) {
-            super(entityrabbit);
-            this.rabbit = entityrabbit;
-        }
-
-        // Translation: tick()
-        public void a() {
-            if (this.rabbit.onGround && !this.rabbit.jumping && !((ControllerJumpRabbit)this.rabbit.getControllerJump()).isActive()) {
-                this.rabbit.setSpeed(0.0);
-            } else if (this.b()) { // Translation: this.isMoving()
-                this.rabbit.setSpeed(this.rabbitSpeed);
-            }
-
-            super.a();
-        }
-
-        // Translation: moveTo
-        public void a(double x, double y, double z, double speed) {
-            if (this.rabbit.isInWater()) speed = 1.5D;
-
-            super.a(x, y, z, speed);
-
-            if (speed > 0.0D) this.rabbitSpeed = speed;
-        }
-    }
 
     static {
         RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherWrapper.INT);
