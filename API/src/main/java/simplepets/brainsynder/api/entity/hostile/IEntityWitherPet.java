@@ -10,10 +10,7 @@ public interface IEntityWitherPet extends IEntityPet {
 
     void setShielded(boolean var);
 
-    default boolean isSmall() {
-        return false;
-    }
+    boolean isSmall();
 
-    default void setSmall(boolean var) {
-    }
+    void setSmall(boolean var);
 }

@@ -69,7 +69,6 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     public void teleportToOwner() {
         setWalkToLocation(null);
         user.getUserLocation().ifPresent(location -> setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch()));
-
     }
 
     @Override
@@ -81,7 +80,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     protected void initPathfinder() {
         goalSelector.a(1, new PathfinderGoalFloat(this));
         goalSelector.a(2, new PathfinderWalkToPlayer(this, 3, 10));
-        goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityPlayer.class, 8f));
+        goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityPlayer.class, 3f));
         goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
 
     }
