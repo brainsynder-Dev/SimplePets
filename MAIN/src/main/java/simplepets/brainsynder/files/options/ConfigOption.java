@@ -1,4 +1,4 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.files.options;
 
 import lib.brainsynder.files.options.YamlOption;
 

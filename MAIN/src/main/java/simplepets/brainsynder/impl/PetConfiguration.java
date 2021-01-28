@@ -3,6 +3,7 @@ package simplepets.brainsynder.impl;
 import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.sounds.SoundMaker;
+import lib.brainsynder.utils.Capitalise;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
@@ -10,8 +11,7 @@ import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
-import simplepets.brainsynder.files.ConfigOption;
-import simplepets.brainsynder.utils.Capitalise;
+import simplepets.brainsynder.files.options.ConfigOption;
 
 import java.io.File;
 import java.util.HashMap;

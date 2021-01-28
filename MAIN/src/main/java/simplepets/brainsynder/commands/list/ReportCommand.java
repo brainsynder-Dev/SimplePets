@@ -3,6 +3,7 @@ package simplepets.brainsynder.commands.list;
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.web.DiscordHook;
 import lib.brainsynder.web.WebConnector;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
-import simplepets.brainsynder.utils.DiscordHook;
 import simplepets.brainsynder.utils.Keys;
 
 import java.util.List;
@@ -107,7 +107,7 @@ public class ReportCommand extends PetSubCommand implements Listener {
             WebConnector.getInputStreamString("https://pluginwiki.us/pastebin/paste.php?title="+newTitle+"&text="+newText, getPlugin(), s -> {
                 event.getPlayer().sendMessage("URL: "+s);
                 if (s.startsWith("http")) {
-                    DiscordHook hook = new DiscordHook(getPlugin(), "https://discord.com/api/webhooks/802758724820533248/QgvJd0vYLOl5UHyLNDLboYjijLPhIaYTlRakazofNZAvduGpoL6XKAIRs7BI584W67GO");
+                    DiscordHook hook = new DiscordHook("https://discord.com/api/webhooks/802758724820533248/QgvJd0vYLOl5UHyLNDLboYjijLPhIaYTlRakazofNZAvduGpoL6XKAIRs7BI584W67GO");
                     hook.setUsername(event.getPlayer().getName());
                     hook.setAvatarUrl("https://minotar.net/cube/"+event.getPlayer().getUniqueId()+"/100.png");
                     hook.setContent(s);

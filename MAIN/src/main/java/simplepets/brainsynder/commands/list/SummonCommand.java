@@ -14,7 +14,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
-import simplepets.brainsynder.files.MessageOption;
+import simplepets.brainsynder.files.options.MessageOption;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;

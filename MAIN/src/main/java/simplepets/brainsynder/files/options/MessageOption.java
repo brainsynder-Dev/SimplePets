@@ -1,4 +1,4 @@
-package simplepets.brainsynder.files;
+package simplepets.brainsynder.files.options;
 
 import lib.brainsynder.files.options.YamlOption;
 
@@ -7,6 +7,7 @@ import java.util.List;
 
 public enum MessageOption implements YamlOption {
     PREFIX ("prefix", "&eSimplePets &6>>"),
+    NO_PERMISSION ("no_permission", "{prefix} &cYou do not have permission."),
     SUMMONED_ALL_PETS ("summon.all_pets", "{prefix} &7Successfully summoned {count} pets!"),
     SUMMONED_PET ("summon.pet", "{prefix} &7Successfully summoned the {type} pet!"),
     INVALID_PET_TYPE ("pet_type.invalid", "{prefix} &cSorry, &7'{arg}' &cis not a valid pet type."),

@@ -2,6 +2,7 @@ package simplepets.brainsynder.files;
 
 import lib.brainsynder.files.YamlFile;
 import net.md_5.bungee.api.ChatColor;
+import simplepets.brainsynder.files.options.MessageOption;
 
 import java.io.File;
 
