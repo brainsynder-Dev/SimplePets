@@ -77,6 +77,7 @@ public class EntitySheepPet extends EntityAgeablePet implements IEntitySheepPet 
         if (rainbow) {
             if (toggle == 4) {
                 setColor(DyeColorWrapper.getNext(getColor()));
+                getPetUser().updateDataMenu();
                 toggle = 0;
             }
             toggle++;

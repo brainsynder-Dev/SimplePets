@@ -2,6 +2,9 @@ package simplepets.brainsynder.utils;
 
 import org.bukkit.ChatColor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum DebugLevel {
     // Mostly used when debugging (cant be disabled)
     DEBUG(-1, ChatColor.WHITE, ChatColor.AQUA),
@@ -37,6 +40,14 @@ public enum DebugLevel {
         this.level = level;
         this.color = color;
         this.prefix = prefix;
+    }
+
+    public static List<String> getLevels () {
+        List<String> list = new ArrayList<>();
+        for (DebugLevel level : values()) {
+            if ((level != DEBUG) && (level != UPDATE)) list.add(level.name());
+        }
+        return list;
     }
 
     public ChatColor getColor() {

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.pet;
 
+import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.sounds.SoundMaker;
 import org.bukkit.entity.EntityType;
@@ -79,4 +80,19 @@ public interface IPetConfig {
      * What is the Ambient sound the pet makes
      */
     SoundMaker getSound();
+
+    /**
+     * Will fetch what the customized item is
+     *
+     * @return Will return the default item if an error occurs
+     */
+    ItemBuilder getBuilder ();
+
+    /**
+     * Will fetch the data item for the namespace
+     *
+     * @param namespace - Name of the data item
+     * @param value - value to get for
+     */
+    Optional<ItemBuilder> getDataItem (String namespace, Object value);
 }

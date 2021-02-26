@@ -3,7 +3,7 @@ package simplepets.brainsynder.versions.v1_16_R3.entity;
 import com.google.common.collect.Maps;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
-import net.md_5.bungee.api.ChatColor;
+import lib.brainsynder.utils.Colorize;
 import net.minecraft.server.v1_16_R3.*;
 import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
@@ -16,6 +16,7 @@ import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
@@ -24,6 +25,8 @@ import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.files.Config;
+import simplepets.brainsynder.versions.v1_16_R3.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_16_R3.pathfinder.PathfinderWalkToPlayer;
 
 import java.util.HashMap;
@@ -35,11 +38,25 @@ import java.util.function.Function;
 public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private PetUser user;
     private PetType petType;
-    private boolean silent = false;
     private Location walkTarget;
-    private boolean isGlowing = false;
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
+
+
+    private final double walkSpeed = 0.6000000238418579;
+    private final double rideSpeed = 0.4000000238418579;
+    private final boolean floatDown = false;
+    private final boolean canGlow = true;
+    private boolean isGlowing = false;
+    private final boolean autoRemove = true;
+    private final boolean hideName = true;
+    private boolean silent = false;
+    private boolean ignoreVanish = false;
+    private int standTime = 0;
+    private int blockX = 0;
+    private int blockZ = 0;
+    private int blockY = 0;
+    private final int tickDelay = 10000;
 
     public EntityPet(EntityTypes<? extends EntityInsentient> entitytypes, World world) {
         super(entitytypes, world);
@@ -80,9 +97,8 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     protected void initPathfinder() {
         goalSelector.a(1, new PathfinderGoalFloat(this));
         goalSelector.a(2, new PathfinderWalkToPlayer(this, 3, 10));
-        goalSelector.a(3, new PathfinderGoalLookAtPlayer(this, EntityPlayer.class, 3f));
+        goalSelector.a(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
         goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
-
     }
 
     @Override
@@ -98,18 +114,24 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         EntityNameChangeEvent event = new EntityNameChangeEvent(this, newName);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        petName = ChatColor.translateAlternateColorCodes('&', event.getPrefix())
+        petName = Colorize.translateBungeeHex(event.getPrefix())
                 + translateName(event.getName())
-                + ChatColor.translateAlternateColorCodes('&', event.getSuffix());
+                + Colorize.translateBungeeHex(event.getSuffix());
         getBukkitEntity().setCustomNameVisible(true);
         getBukkitEntity().setCustomName(petName);
     }
 
     public String translateName(String name) {
-//        boolean color = getConfiguration().getBoolean(Config.COLOR);
-        boolean magic = true;
-        name = ChatColor.translateAlternateColorCodes('&', magic ? name : name.replace("&k", "k"));
+        boolean color = PetCore.getInstance().getConfiguration().getBoolean(Config.COLOR);
+        boolean magic = PetCore.getInstance().getConfiguration().getBoolean(Config.MAGIC);
+        if (!magic) name = name.replace("&k", "");
+        if (!color) return name;
 
+        if (PetCore.getInstance().getConfiguration().getBoolean(Config.HEX)) {
+            name = Colorize.translateBungeeHex(name);
+        }else{
+            name = Colorize.translateBukkit(name);
+        }
         return name;
     }
 
@@ -224,6 +246,14 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     protected void registerDatawatchers() {
     }
 
+    public void setIgnoreVanish(boolean ignoreVanish) {
+        this.ignoreVanish = ignoreVanish;
+    }
+
+    public boolean canIgnoreVanish() {
+        return ignoreVanish;
+    }
+
     private boolean isOnGround(net.minecraft.server.v1_16_R3.Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
@@ -322,8 +352,81 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         }
     }
 
-    // TODO: Handles Ambient sound
+    @Override
+    public void tick() {
+        super.tick();
 
+        CraftEntity bukkitEntity = getBukkitEntity();
+        // This section handles the Auto-removal of pets after (tickDelay) Ticks of being stationary...
+        if (autoRemove && (bukkitEntity != null)) {
+            Location location = bukkitEntity.getLocation();
+            if ((blockX != location.getBlockX())
+                    || (blockY != location.getBlockY())
+                    || (blockZ != location.getBlockZ())) {
+                blockX = location.getBlockX();
+                blockY = location.getBlockY();
+                blockZ = location.getBlockZ();
+                if (standTime != 0) standTime = 0;
+            } else {
+                if (standTime == tickDelay) {
+                    if (user != null) {
+                        user.removePet(getPetType());
+                    } else {
+                        bukkitEntity.remove();
+                    }
+                }
+                standTime++;
+            }
+        }
+
+        // Handles all other Pet Tasks...
+        if (user == null) {
+            if (bukkitEntity != null)
+                bukkitEntity.remove();
+            return;
+        }
+
+        if (user.isPetVehicle(getPetType())) {
+            if (floatDown) {
+                if (!isOnGround(this)) {
+                    setMot(getMot().x, getMot().y*0.4, getMot().z);
+                }
+            }
+        }
+
+        if (user.getPlayer() != null) {
+            Player player = (Player) user.getPlayer();
+            boolean shifting = player.isSneaking();
+            if (hideName) getEntity().setCustomNameVisible((!shifting));
+
+            if (!canIgnoreVanish()) {
+                boolean ownerVanish = ((CraftPlayer) player).getHandle().isInvisible();
+                if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
+                    if (isGlowing && (!ownerVanish)) glowHandler(false);  // If the pet is glowing & owner is not vanished
+                    this.setInvisible(!this.isInvisible());
+                } else {
+                    if (ownerVanish && canGlow)
+                        if (((CraftPlayer) player).getHandle().isInvisible())
+                            glowHandler(true);
+                }
+            }
+
+            if (user.isPetHat(getPetType())) {
+                this.lastYaw = this.yaw = player.getLocation().getYaw();
+            }
+
+            double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
+            if (isOwnerRiding()) {
+                if (current != rideSpeed)
+                    getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(rideSpeed);
+            } else {
+                if (current != walkSpeed)
+                    getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(walkSpeed);
+            }
+        }
+    }
+
+    // TODO: Handles Ambient sound
     /**
      * Handles the Ambient Sound playing
      * <p>

@@ -20,6 +20,9 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new ModifyCommand(plugin));
         registerSub(new RemoveCommand(plugin));
         registerSub(new ListCommand(plugin));
+        registerSub(new GUICommand(plugin));
+        registerSub(new RenameCommand(plugin));
+        registerSub(new PurchasedCommand (plugin));
 
         ReportCommand reportCommand = new ReportCommand(plugin);
         plugin.getServer().getPluginManager().registerEvents(reportCommand, plugin);

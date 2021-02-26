@@ -26,7 +26,7 @@
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
         <module.version>5.0 (build ${jenkins.buildNumber})</module.version>
-        <bslib.version>0.1-B58</bslib.version>
+        <bslib.version>0.1-B1013</bslib.version>
     </properties>
 
     <build>
@@ -84,9 +84,18 @@
             <id>bs-repo</id>
             <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>https://repo.dmulloy2.net/nexus/repository/public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.5.0</version>
+        </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>

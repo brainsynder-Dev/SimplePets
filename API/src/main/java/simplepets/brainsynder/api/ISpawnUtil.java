@@ -2,6 +2,7 @@ package simplepets.brainsynder.api;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -51,4 +52,11 @@ public interface ISpawnUtil {
      * @param type - Type being check
      */
     boolean isRegistered (PetType type);
+
+    /**
+     * Fetches the NMS version of the entity
+     *
+     * @param entity - entity to be fetched from
+     */
+    Optional<Object> getHandle(Entity entity);
 }

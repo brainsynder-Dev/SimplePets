@@ -17,6 +17,7 @@ public class MessageFile {
                 addDefault(MessageOption.PREFIX, "Will replace the {prefix} placeholder");
                 addDefault(MessageOption.SUMMONED_ALL_PETS, "Message that will be sent when pets are spawned via '/pet summon all' (Mostly for OPs to show off)");
                 addDefault(MessageOption.SUMMONED_PET, "Message that will be sent when a pet is spawned via '/pet summon'");
+                addDefault(MessageOption.MISSING_PET_TYPE, "The pet type is missing");
                 addDefault(MessageOption.INVALID_PET_TYPE, "The input is not a valid pet (spelling?)");
                 addDefault(MessageOption.PET_NOT_REGISTERED, "The selected pet is not supported for the servers version\n(Or is missing in the jar file [in case it is modified])");
                 addDefault(MessageOption.INVALID_NBT, "Message that will show before the 'nbt error message'");
@@ -28,6 +29,13 @@ public class MessageFile {
                 addDefault(MessageOption.REMOVED_NOT_SPAWNED, "Message that will be sent when a pet is spawned via '/pet summon'");
                 addDefault(MessageOption.MODIFY_COMPOUND, "Message contains what the player has set the pets data to\nSet this as an empty string \"\" to prevent it from being sent");
                 addDefault(MessageOption.MODIFY_APPLIED, "Message that will be sent when the compound is applied to the entity");
+
+                addDefault(MessageOption.PURCHASE_ADD, "Message that will be sent when a pet is added to the players purchased list (via '/pets purchased add')");
+                addDefault(MessageOption.PURCHASE_REMOVE, "Message that will be sent when a pet is removed from the players purchased list (via '/pets purchased remove')");
+                addDefault(MessageOption.PURCHASE_LIST_PREFIX, "Is what is sent before the pets are listed (via '/pets purchased list')");
+
+                addDefault(MessageOption.RENAME_VIA_CHAT, "Message that will be sent when the player is renaming the pet via chat");
+                addDefault(MessageOption.RENAME_VIA_CHAT_CANCEL, "Message that will be sent when the player canceled renaming the pet");
             }
         };
     }

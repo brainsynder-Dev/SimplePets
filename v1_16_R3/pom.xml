@@ -61,11 +61,6 @@
             <version>${module.version}</version>
         </dependency>
         <dependency>
-            <groupId>lib.brainsynder</groupId>
-            <artifactId>v1_16_R3</artifactId>
-            <version>${bslib.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
             <version>1.16.4-R0.1-SNAPSHOT</version>

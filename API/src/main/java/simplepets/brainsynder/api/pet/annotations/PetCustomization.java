@@ -1,4 +1,6 @@
-package simplepets.brainsynder.api.pet;
+package simplepets.brainsynder.api.pet.annotations;
+
+import lib.brainsynder.sounds.SoundMaker;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,4 +9,6 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD})
-public @interface LargePet {}
+public @interface PetCustomization {
+    SoundMaker ambient ();
+}

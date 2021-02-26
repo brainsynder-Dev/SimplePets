@@ -1,7 +1,9 @@
 package simplepets.brainsynder.impl;
 
 import lib.brainsynder.files.JsonFile;
+import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Capitalise;
 import org.bukkit.entity.EntityType;
@@ -11,7 +13,8 @@ import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
-import simplepets.brainsynder.files.options.ConfigOption;
+import simplepets.brainsynder.utils.Debug;
+import simplepets.brainsynder.utils.DebugLevel;
 
 import java.io.File;
 import java.util.HashMap;
@@ -55,16 +58,29 @@ public class PetConfiguration implements PetConfigManager {
                     setDefault("enabled", true);
                     setDefault("hat", true);
                     setDefault("mount", true);
-                    setDefault("float_down", false);
-                    setDefault("display_name", "&a&l%player%'s " + Capitalise.capitalize(type.getName().replace("_", " ")) + " Pet");
+                    type.getCustomization().ifPresent(customization -> {
+                        setDefault("ambient-sound", customization.ambient().name());
+                    });
                     setDefault("fly", canFlyDefault(type));
+                    setDefault("float_down", false);
+
+                    setDefault("display_name", "&a&l%player%'s " + Capitalise.capitalize(type.getName().replace("_", " ")) + " Pet");
+                    setDefault("item", StorageTagTools.toJsonObject(type.getBuilder().toCompound()));
+
+                    JsonObject dataObject = new JsonObject();
+                    type.getPetData().forEach(petData -> {
+                        JsonObject data = new JsonObject();
+                        petData.getDefaultItems().keySet().forEach(value -> data.add(String.valueOf(value), StorageTagTools.toJsonObject(((ItemBuilder)petData.getDefaultItems().get(value)).toCompound())));
+                        dataObject.add(petData.getNamespace().namespace(), data);
+                    });
+                    if(!dataObject.isEmpty()) setDefault("data", dataObject);
                 }
             };
         }
 
         @Override
         public void handleAdditionalStorage(String pluginKey, Function<JsonObject, JsonObject> json) {
-            //TODO:
+            additional.put(pluginKey, json.apply(additional.getOrDefault(pluginKey, new JsonObject())));
         }
 
         @Override
@@ -74,13 +90,13 @@ public class PetConfiguration implements PetConfigManager {
 
         @Override
         public boolean hasPermission(Player player) {
-            if (!plugin.getConfiguration().getBoolean(ConfigOption.NEEDS_PERMISSION)) return true;
+            if (!plugin.getConfiguration().getBoolean("Needs-Permission")) return true;
             return player.hasPermission(getPermission());
         }
 
         @Override
         public boolean canHat(Player player) {
-            if (!plugin.getConfiguration().getBoolean(ConfigOption.HAT)) return false;
+            if (!plugin.getConfiguration().getBoolean("PetToggles.All-Pets-Hat")) return false;
             if (JSON.getBoolean("hat")) {
                 int permHat = plugin.hasPerm(player, getPermission() + ".hat", true);
                 if (permHat == -1) {
@@ -130,15 +146,51 @@ public class PetConfiguration implements PetConfigManager {
 
         @Override
         public SoundMaker getSound() {
-            return null;
+            if (!JSON.hasKey("ambient-sound")) return null;
+            String sound = JSON.getString("ambient-sound", null);
+            if (sound == null) return null;
+            return SoundMaker.fromString(sound);
+        }
+
+        @Override
+        public ItemBuilder getBuilder() {
+            try {
+                return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) JSON.getValue("item")));
+            }catch (Exception e) {
+                Debug.debug(DebugLevel.ERROR, "Failed to get default item for '"+type.getName()+"'");
+                Debug.debug(DebugLevel.ERROR, "Error: "+e.getMessage());
+                return type.getBuilder();
+            }
+        }
+
+        @Override
+        public Optional<ItemBuilder> getDataItem(String namespace, Object value) {
+            if (JSON.hasKey("data")) {
+                JsonObject dataObject = (JsonObject) JSON.getValue("data");
+                if (dataObject.names().contains(namespace)) {
+                    JsonObject data = (JsonObject) dataObject.get(namespace);
+                    if (data.names().contains(String.valueOf(value))) {
+                        return Optional.of(ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) data.get(String.valueOf(value)))));
+                    }
+                }
+            }
+
+            return Optional.empty();
         }
 
         public String getPermission() {
-            return "Pet.type."+type.getName().replace("_", "");
+            return "pet.type."+type.getName().replace("_", "");
         }
 
         private boolean canFlyDefault (PetType type) {
-            return false;
+            return (type == PetType.BAT)
+                    || (type == PetType.BEE)
+                    || (type == PetType.BLAZE)
+                    || (type == PetType.PHANTOM)
+                    || (type == PetType.PARROT)
+                    || (type == PetType.GHAST)
+                    || (type == PetType.VEX)
+                    || (type == PetType.WITHER);
         }
     }
 }

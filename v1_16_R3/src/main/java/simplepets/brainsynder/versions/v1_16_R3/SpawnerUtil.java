@@ -4,6 +4,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -83,5 +85,15 @@ public class SpawnerUtil implements ISpawnUtil {
     @Override
     public boolean isRegistered(PetType type) {
         return petMap.containsKey(type);
+    }
+
+    @Override
+    public Optional<Object> getHandle(Entity entity) {
+        if (entity == null) return Optional.empty();
+        try {
+            return Optional.of(((CraftEntity) entity).getHandle());
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 }

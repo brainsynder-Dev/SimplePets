@@ -112,21 +112,37 @@ public interface PetUser {
     void setPet (IEntityPet entity);
 
     /**
-     * Is the pet currently on their owners head
+     * Is there a pet currently on their owners head
      */
-    boolean isPetHat();
+    boolean hasPetHat();
+
+    /**
+     * Checks if the type is on the players head
+     *
+     * @param type
+     * @return
+     */
+    boolean isPetHat (PetType type);
 
     /**
      * Sets the pet to be a hat or not
      *
      * @param hat
      */
-    void setPetHat(boolean hat);
+    void setPetHat(PetType type, boolean hat);
 
     /**
      * Is the pets owner currently riding the pet
      */
-    boolean isPetVehicle();
+    boolean hasPetVehicle();
+
+    /**
+     * Checks if the type is the pet that the player is riding
+     *
+     * @param type
+     * @return
+     */
+    boolean isPetVehicle (PetType type);
 
     /**
      * Sets the pet to be a vehicle or not
@@ -134,11 +150,10 @@ public interface PetUser {
      * @param vehicle
      * @param byEvent - Was this method triggered by an event
      */
-    boolean setPetVehicle(boolean vehicle, boolean byEvent);
+    boolean setPetVehicle(PetType type, boolean vehicle, boolean byEvent);
 
     /**
-     * Updates the DataMenu GUI
-     *      Will only update the menu they currently have open
+     * Updates the pet data gui the player has open (if it is open)
      */
     void updateDataMenu ();
 }

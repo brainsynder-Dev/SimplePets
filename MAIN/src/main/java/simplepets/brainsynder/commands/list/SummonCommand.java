@@ -67,6 +67,11 @@ public class SummonCommand extends PetSubCommand {
 
         PetType type = petType.get();
 
+        if (!type.isSupported()) {
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
+            return;
+        }
+
         if (!SimplePets.getSpawnUtil().isRegistered(type)) {
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
             return;

@@ -8,6 +8,6 @@ import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityIllagerAbstr
 
 public class EntityPillagerPet extends EntityIllagerAbstractPet implements IEntityPillagerPet {
     public EntityPillagerPet(PetType type, PetUser user) {
-        super(EntityTypes.ILLUSIONER, type, user);
+        super(EntityTypes.PILLAGER, type, user);
     }
 }

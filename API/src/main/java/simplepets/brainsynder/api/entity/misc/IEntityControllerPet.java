@@ -3,12 +3,12 @@ package simplepets.brainsynder.api.entity.misc;
 import org.bukkit.entity.Entity;
 import simplepets.brainsynder.api.entity.IEntityPet;
 
-public interface IEntityControllerPet extends IEntityPet {
-    Entity getDisplayEntity();
+import java.util.Optional;
 
-    default Entity getDisplayRider () {
-        return null;
-    }
+public interface IEntityControllerPet extends IEntityPet {
+    Optional<Entity> getDisplayEntity();
+
+    Optional<Entity> getDisplayRider ();
 
     void setDisplayEntity(Entity entity);
 
@@ -20,7 +20,7 @@ public interface IEntityControllerPet extends IEntityPet {
 
     boolean isMoving();
 
-    default void updateName() {}
+    void updateName();
 
     IEntityPet getVisibleEntity();
 }
