@@ -1,8 +1,8 @@
 package simplepets.brainsynder.sql;
 
 import lib.brainsynder.nbt.JsonToNBT;
-import lib.brainsynder.nbt.NBTException;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import simplepets.brainsynder.utils.Debug;
