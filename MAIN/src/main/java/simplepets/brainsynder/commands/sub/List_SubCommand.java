@@ -18,7 +18,8 @@ import java.util.List;
 @ICommand(
         name = "list",
         usage = "&r &r &6[] &7/pet list",
-        description = "Lists all the pets that your version can use"
+        description = "Lists all the pets that your version can use",
+        style = "{usage}"
 )
 @Permission(permission = "list")
 public class List_SubCommand extends PetSubCommand {

@@ -15,7 +15,8 @@ import simplepets.brainsynder.utils.AdditionalData;
         name = "inv",
         alias = {"inventory"},
         usage = "&r &r &6[] &7/pet inv [player]",
-        description = "Opens the Item Storage GUI"
+        description = "Opens the Item Storage GUI",
+        style = "{usage}"
 )
 public class Inventory_SubCommand extends PetSubCommand {
     public Inventory_SubCommand() {

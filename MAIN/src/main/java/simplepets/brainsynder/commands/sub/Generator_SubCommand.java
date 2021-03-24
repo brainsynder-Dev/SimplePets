@@ -25,7 +25,8 @@ import java.util.List;
 @ICommand(
         name = "generator",
         usage = "&r &r &6[] &7/pet generator <permissions|types|values>",
-        description = "Generates a file that can contain Permissions, Pet Types, ETC..."
+        description = "Generates a file that can contain Permissions, Pet Types, ETC...",
+        style = "{usage}"
 )
 @Permission(permission = "generator")
 public class Generator_SubCommand extends PetSubCommand {

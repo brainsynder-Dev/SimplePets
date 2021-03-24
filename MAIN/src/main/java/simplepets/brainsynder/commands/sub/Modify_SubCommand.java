@@ -17,7 +17,8 @@ import java.util.Arrays;
 @ICommand(
         name = "modify",
         usage = "&r &r &6[] &7/pet modify <player> <json>",
-        description = "Modify the Selected Players' Pet."
+        description = "Modify the Selected Players' Pet.",
+        style = "{usage}"
 )
 @Permission(permission = "modify")
 public class Modify_SubCommand extends PetSubCommand {

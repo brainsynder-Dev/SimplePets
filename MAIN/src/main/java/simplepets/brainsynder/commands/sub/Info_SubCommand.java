@@ -29,7 +29,8 @@ import java.util.concurrent.CompletableFuture;
 @ICommand(
         name = "info",
         usage = "&r &r &6[] &7/pet info <player> [debug]",
-        description = "Collects information on a players pet/data"
+        description = "Collects information on a players pet/data",
+        style = "{usage}"
 )
 @Permission(permission = "info")
 @AdditionalData(otherPermissions = "pet.commands.info.debug")

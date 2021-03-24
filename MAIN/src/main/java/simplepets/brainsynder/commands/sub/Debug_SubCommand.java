@@ -23,7 +23,8 @@ import java.util.List;
 @ICommand(
         name = "debug",
         usage = "&r &r &6[] &7/pet debug",
-        description = "Collects Information about your server that we use for finding bugs"
+        description = "Collects Information about your server that we use for finding bugs",
+        style = "{usage}"
 )
 @Permission(permission = "debug")
 public class Debug_SubCommand extends PetSubCommand {

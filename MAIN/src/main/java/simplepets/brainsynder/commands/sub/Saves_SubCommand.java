@@ -10,7 +10,8 @@ import simplepets.brainsynder.player.PetOwner;
 @ICommand(
         name = "saves",
         usage = "&r &r &6[] &7/pet saves",
-        description = "Opens the Menu where all of your pet saves are"
+        description = "Opens the Menu where all of your pet saves are",
+        style = "{usage}"
 )
 public class Saves_SubCommand extends PetSubCommand {
     @Override

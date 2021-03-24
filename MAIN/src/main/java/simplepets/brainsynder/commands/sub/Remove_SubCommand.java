@@ -13,7 +13,8 @@ import simplepets.brainsynder.utils.AdditionalData;
 @ICommand(
         name = "remove",
         usage = "&r &r &6[] &7/pet remove [player]",
-        description = "Remove your pet or another players"
+        description = "Remove your pet or another players",
+        style = "{usage}"
 )
 public class Remove_SubCommand extends PetSubCommand {
     public Remove_SubCommand () {

@@ -10,7 +10,8 @@ import simplepets.brainsynder.player.PetOwner;
 @ICommand(
         name = "menu",
         usage = "&r &r &6[] &7/pet menu",
-        description = "Opens The Pet Selection GUI"
+        description = "Opens The Pet Selection GUI",
+        style = "{usage}"
 )
 public class Menu_SubCommand extends PetSubCommand {
     @Override

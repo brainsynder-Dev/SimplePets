@@ -11,7 +11,8 @@ import java.util.Arrays;
 @ICommand(
         name = "reload",
         usage = "&r &r &6[] &7/pet reload [pets|sql|inv|items]",
-        description = "Reloads the Settings that cant AutoReload"
+        description = "Reloads the Settings that cant AutoReload",
+        style = "{usage}"
 )
 @Permission(permission = "reload")
 public class Reload_SubCommand extends PetSubCommand {

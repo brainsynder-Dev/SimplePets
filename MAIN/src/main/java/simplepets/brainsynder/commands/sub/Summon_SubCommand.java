@@ -16,7 +16,8 @@ import simplepets.brainsynder.utils.AdditionalData;
         name = "summon",
         usage = "&r &r &6[] &7/pet summon <pet> [player]",
         alias = {"spawn"},
-        description = "Spawns a pet for the player or selected player"
+        description = "Spawns a pet for the player or selected player",
+        style = "{usage}"
 )
 public class Summon_SubCommand extends PetSubCommand {
     public Summon_SubCommand() {

@@ -9,7 +9,8 @@ import simplepets.brainsynder.player.PetOwner;
 @ICommand(
         name = "name",
         usage = "&r &r &6[] &7/pet name",
-        description = "Change your pets name"
+        description = "Change your pets name",
+        style = "{usage}"
 )
 public class Name_SubCommand extends PetSubCommand {
     @Override

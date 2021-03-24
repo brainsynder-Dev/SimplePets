@@ -10,7 +10,8 @@ import simplepets.brainsynder.commands.annotations.Permission;
 @ICommand(
         name = "help",
         usage = "&r &r &6[] &7/pet help",
-        description = "Collects Information about your server that we use for finding bugs"
+        description = "Collects Information about your server that we use for finding bugs",
+        style = "{usage}"
 )
 @Permission(permission = "help")
 public class Help_SubCommand extends PetSubCommand {
@@ -22,7 +23,7 @@ public class Help_SubCommand extends PetSubCommand {
     @Override
     public void run(CommandSender sender) {
         sender.sendMessage(PetCore.get().getCommands().getString("Help.Header", true));
-        parent.sendUsage(sender);
+
         for (PetSubCommand command : parent.getSubCommands()) {
             if (command.hasPermission(sender)) command.sendUsage(sender);
         }
