@@ -2,6 +2,7 @@ package simplepets.brainsynder.wrapper.villager;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.DyeColorWrapper;
 import org.bukkit.Material;
 import simplepets.brainsynder.wrapper.ProfessionWrapper;
 
@@ -20,8 +21,8 @@ public enum VillagerType {
     LEATHERWORKER(8, ServerVersion.v1_14_R1, new ItemBuilder(Material.LEATHER)),
     LIBRARIAN(9, ServerVersion.v1_14_R1, new ItemBuilder(Material.BOOK)),
     MASON(10, ServerVersion.v1_14_R1, new ItemBuilder(Material.BRICK)),
-    NITWIT(11, ServerVersion.v1_14_R1, lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 2)),
-    SHEPHERD(12, ServerVersion.v1_14_R1, lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 0)),
+    NITWIT(11, ServerVersion.v1_14_R1, lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, DyeColorWrapper.GREEN)),
+    SHEPHERD(12, ServerVersion.v1_14_R1, lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.WHITE)),
     TOOLSMITH(13, ServerVersion.v1_14_R1, new ItemBuilder(Material.IRON_PICKAXE)),
     WEAPONSMITH(14, ServerVersion.v1_14_R1, new ItemBuilder(Material.IRON_SWORD));
 

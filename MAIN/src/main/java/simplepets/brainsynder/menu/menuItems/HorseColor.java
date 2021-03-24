@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.DyeColorWrapper;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -59,25 +60,25 @@ public class HorseColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 15);
+        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.WHITE);
         item.withName("&6Black");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, 8);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, DyeColorWrapper.GRAY);
         item.withName("&6Chestnut");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 4);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.BLUE);
         item.withName("&6Creamy");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 12);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.LIGHT_BLUE);
         item.withName("&6Brown");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, 7);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, DyeColorWrapper.LIGHT_GRAY);
         item.withName("&6Dark Brown");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 7);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.LIGHT_GRAY);
         item.withName("&6Gray");
         items.add(item.clone());
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 0);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.WHITE);
         item.withName("&6White");
         items.add(item.clone());
         return items;

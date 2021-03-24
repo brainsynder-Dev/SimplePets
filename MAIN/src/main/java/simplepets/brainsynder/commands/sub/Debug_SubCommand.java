@@ -101,7 +101,12 @@ public class Debug_SubCommand extends PetSubCommand {
             sender.sendMessage("§cSaved Debug data to 'Debug.json' (in the SimplePets folder)...");
             File file = new File(PetCore.get().getDataFolder(), "Debug.json");
             if (file.exists()) file.delete();
-            JsonFile jsonFile = new JsonFile(file, true);
+            JsonFile jsonFile = new JsonFile(file, true) {
+                @Override
+                public void loadDefaults() {
+
+                }
+            };
             json.forEach(member -> jsonFile.set(member.getName(), member.getValue()));
             jsonFile.save();
         });

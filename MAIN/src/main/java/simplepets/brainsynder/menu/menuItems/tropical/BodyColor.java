@@ -55,7 +55,7 @@ public class BodyColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, color.getWoolData());
+            ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, lib.brainsynder.utils.DyeColorWrapper.getByWoolData(color.getWoolData()));
             item.withName(" ");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

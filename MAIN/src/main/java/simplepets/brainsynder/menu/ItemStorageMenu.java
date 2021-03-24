@@ -1,9 +1,9 @@
 package simplepets.brainsynder.menu;
 
 import lib.brainsynder.nbt.JsonToNBT;
-import lib.brainsynder.nbt.NBTException;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagString;
+import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

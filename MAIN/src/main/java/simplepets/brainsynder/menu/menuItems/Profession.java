@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.menuItems;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nms.DataConverter;
+import lib.brainsynder.utils.DyeColorWrapper;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityVillagerPet;
@@ -74,7 +75,7 @@ public class Profession extends MenuItemAbstract {
         item = new ItemBuilder(Material.ENCHANTED_BOOK);
         item.withName("&6Priest");
         items.add(item);
-        item = DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, 2);
+        item = DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.GREEN);
         item.withName("&6NitWit");
         items.add(item);
         return items;

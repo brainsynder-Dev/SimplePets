@@ -3,6 +3,7 @@ package simplepets.brainsynder.player;
 import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.nbt.*;
+import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;

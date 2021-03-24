@@ -51,7 +51,6 @@ public abstract class PetType extends JsonFile implements VersionRestricted {
 
     @Override
     public void loadDefaults() {
-        super.loadDefaults();
         setDefault("enabled", true);
         setDefault("hat", true);
         setDefault("mount", true);

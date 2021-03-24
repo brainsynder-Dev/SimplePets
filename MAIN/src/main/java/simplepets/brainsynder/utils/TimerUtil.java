@@ -44,7 +44,12 @@ public class TimerUtil {
     public static void outputTimings () {
         File file = new File(PetCore.get().getDataFolder(), "Timings.json");
         if (file.exists()) file.delete();
-        JsonFile json = new JsonFile(file, true);
+        JsonFile json = new JsonFile(file, true) {
+            @Override
+            public void loadDefaults() {
+
+            }
+        };
         storedTimeMap.forEach((className, map) -> {
             JsonObject object = new JsonObject();
             map.forEach((task, diff) -> object.add(task, diff+"ms"));

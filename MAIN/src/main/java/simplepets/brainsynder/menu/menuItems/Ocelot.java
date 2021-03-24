@@ -2,6 +2,7 @@ package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.DyeColorWrapper;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityOcelotPet;
 import simplepets.brainsynder.menu.menuItems.base.MenuItemAbstract;
@@ -48,16 +49,16 @@ public class Ocelot extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 11);
+        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, DyeColorWrapper.YELLOW);
         item.withName("&6Wild Cat");
         items.add(item);
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 0);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, DyeColorWrapper.BLACK);
         item.withName("&6Black Cat");
         items.add(item);
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 14);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, DyeColorWrapper.ORANGE);
         item.withName("&6Orange Cat");
         items.add(item);
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, 7);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.INK_SACK, DyeColorWrapper.GRAY);
         item.withName("&6Siamese Cat");
         items.add(item);
         return items;

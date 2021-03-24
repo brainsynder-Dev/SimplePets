@@ -56,7 +56,7 @@ public class PatternColor extends MenuItemAbstract {
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
         for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, color.getWoolData());
+            ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_CLAY, lib.brainsynder.utils.DyeColorWrapper.getByWoolData(color.getWoolData()));
             item.withName("&7Pattern Color");
             item.addLore("&6Previous: %prev_color%%prev_name%",
                     "&6Current: %curr_color%%curr_name%",

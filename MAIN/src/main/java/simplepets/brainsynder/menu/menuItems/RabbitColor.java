@@ -1,6 +1,7 @@
 package simplepets.brainsynder.menu.menuItems;
 
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.DyeColorWrapper;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
@@ -61,10 +62,10 @@ public class RabbitColor extends MenuItemAbstract {
     @Override
     public List<ItemBuilder> getDefaultItems() {
         List<ItemBuilder> items = new ArrayList<>();
-        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 15);
+        ItemBuilder item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.WHITE);
         item.withName("&6Black");
         items.add(item);
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 12);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.BROWN);
         item.withName("&6Brown");
         items.add(item);
         item = new ItemBuilder(Material.GOLD_BLOCK);
@@ -73,7 +74,7 @@ public class RabbitColor extends MenuItemAbstract {
         item = new ItemBuilder(Material.WHITE_WOOL, 0);
         item.withName("&6Black and White");
         items.add(item);
-        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, 7);
+        item = lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.WOOL, DyeColorWrapper.GRAY);
         item.withName("&6Salt and Pepper");
         items.add(item);
         item = new ItemBuilder(Material.REDSTONE_BLOCK);

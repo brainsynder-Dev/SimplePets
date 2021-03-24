@@ -4,6 +4,7 @@ import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagTools;
+import lib.brainsynder.utils.DyeColorWrapper;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.menu.inventory.CustomInventory;
 import simplepets.brainsynder.player.PetOwner;
@@ -52,7 +53,7 @@ public class Item extends JsonFile {
             return getItemBuilder();
         }
 
-        return lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_GLASS_PANE, 14);
+        return lib.brainsynder.nms.DataConverter.getColoredMaterial(lib.brainsynder.nms.DataConverter.MaterialType.STAINED_GLASS_PANE, DyeColorWrapper.RED);
     }
 
     /**
