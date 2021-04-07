@@ -128,10 +128,10 @@ public class LinkRetriever {
             if (!link.isHooked()) continue;
             if (!(link instanceof IProtectionLink)) continue;
             if (owner == null) {
-                list.add(((IProtectionLink) link).allowPetEntry(location));
+                list.add(((IProtectionLink) link).allowPetRiding(location));
                 continue;
             }
-            list.add(((IProtectionLink) link).allowPetEntry(owner, location));
+            list.add(((IProtectionLink) link).allowPetRiding(owner, location));
         }
         return (!list.contains(false));
     }
