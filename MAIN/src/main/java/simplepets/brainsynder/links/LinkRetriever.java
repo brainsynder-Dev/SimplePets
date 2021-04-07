@@ -41,7 +41,8 @@ public class LinkRetriever {
 
     public void initiate() {
         if (loaders == null) loaders = new ArrayList<>();
-        if (!loaders.isEmpty()) loaders.clear();
+        // Changed to >1 because otherwise it gets rid of the WorldGuard link which must link later
+        if (loaders.size() > 1) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new VaultLink());
         loaders.add(new TokenManagerLink());
