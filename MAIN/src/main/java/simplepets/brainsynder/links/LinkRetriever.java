@@ -41,7 +41,7 @@ public class LinkRetriever {
 
     public void initiate() {
         if (loaders == null) loaders = new ArrayList<>();
-        // Changed to >1 because otherwise it gets rid of the WorldGuard link which must link later
+        // Changed to >1 because otherwise it gets rid of the WorldGuard link which must link earlier
         if (loaders.size() > 1) loaders.clear();
         loaders.add(new PlotSquaredLink());
         loaders.add(new VaultLink());
