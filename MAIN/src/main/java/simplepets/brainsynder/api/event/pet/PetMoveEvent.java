@@ -9,18 +9,13 @@ public class PetMoveEvent extends SimplePetEvent {
     private final Location targetLocation;
     private Cause cause;
 
-    public PetMoveEvent(IEntityPet entity, Cause cause, boolean async) {
-        this.entity = entity;
-        this.cause = cause;
-        if (cause == Cause.RIDE) {
-            this.targetLocation = entity.getEntity().getLocation();
-        } else {
-            this.targetLocation = entity.getOwner().getLocation();
-        }
+    public PetMoveEvent(IEntityPet entity, Cause cause, boolean async) { // TODO - what is async for?
+        this(entity, cause);
     }
 
     public PetMoveEvent(IEntityPet entity, Cause cause) {
         this.entity = entity;
+        this.cause = cause;
         if (cause == Cause.RIDE) {
             this.targetLocation = entity.getEntity().getLocation();
         } else {
