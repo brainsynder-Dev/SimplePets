@@ -27,8 +27,10 @@ import java.util.List;
 public class PetEventListeners implements Listener {
     private final EconomyFile economyFile;
     private Class<? extends EconomyLink> clazz = null;
+    private static PetEventListeners instance;
 
     public PetEventListeners() {
+        instance = this;
         economyFile = PetCore.get().getEcomony();
 
         String type = PetCore.get().getConfiguration().getString(Config.ECONOMY_TYPE, "UNKNOWN");
@@ -150,5 +152,9 @@ public class PetEventListeners implements Listener {
         if (!PetCore.hasPerm(event.getPlayer(), "Pet.name"))
             cancel = true;
         event.setCancelled(cancel);
+    }
+
+    public static Class<? extends EconomyLink> getClazz() {
+        return instance.clazz;
     }
 }
