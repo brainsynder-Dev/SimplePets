@@ -24,6 +24,8 @@ import simplepets.brainsynder.api.entity.misc.ITameable;
 import simplepets.brainsynder.api.event.pet.PetNameChangeEvent;
 import simplepets.brainsynder.api.event.pet.PetRemoveEvent;
 import simplepets.brainsynder.api.pet.IPet;
+import simplepets.brainsynder.links.IPluginLink;
+import simplepets.brainsynder.listeners.PetEventListeners;
 import simplepets.brainsynder.nms.anvil.AnvilGUI;
 import simplepets.brainsynder.nms.anvil.AnvilSlot;
 import simplepets.brainsynder.pet.Pet;
@@ -403,9 +405,17 @@ public class PetOwner {
         if (!type.hasPermission(player)) return;
 
         // If economy is enabled check if the player owns the pet type
-        if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) {
-            List<PetType> petArray = getOwnedPets();
-            if (!petArray.contains(type)) return;
+        if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false) && !PetCore.hasPerm(player, "pet.economy.bypass")) {
+            if (PetEventListeners.getClazz() != null) {
+                try {
+                    IPluginLink link = PetCore.get().getLinkRetriever().getPluginLink(PetEventListeners.getClazz()).get();
+                    if (link.isHooked()) {
+                        List<PetType> petArray = getOwnedPets();
+                        if (!petArray.contains(type)) return;
+                    }
+                } catch (NoSuchElementException ignored) {
+                }
+            }
         }
 
         type.setPet(player, true);
