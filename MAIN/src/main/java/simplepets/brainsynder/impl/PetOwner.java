@@ -374,18 +374,14 @@ public class PetOwner implements PetUser {
                 if (optional.isPresent()) ent = optional.get();
             }
             IPetConfig config = configOptional.get();
-            System.out.println("Pre-check");
             if (config.canHat((Player) player) && hat) {
-                System.out.println("make pet hat");
                 PetHatEvent event = new PetHatEvent(this, entityPet, PetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
-                    System.out.println("cancel");
                     SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
                     return;
                 }
                 hatPets.add(type);
-                System.out.println("added to hatPets");
                 PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(hatEvent);
                 // Set the pet as a hat
@@ -393,7 +389,6 @@ public class PetOwner implements PetUser {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        System.out.println("setPassenger");
                         Utilities.setPassenger((Player) player, getTopEntity((Player) player), finalEnt);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
