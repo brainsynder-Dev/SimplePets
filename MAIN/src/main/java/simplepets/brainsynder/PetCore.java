@@ -227,7 +227,8 @@ public class PetCore extends JavaPlugin {
 
             debug("Creating SQL table if there is none...");
             CompletableFuture.runAsync(() -> {
-                try (Connection connection = mySQL.getSource().getConnection()) {
+                try {
+                    Connection connection = mySQL.getConnection();
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` VARCHAR(128),`name` TEXT, PRIMARY KEY (`UUID`));");
                     StringBuilder builder = new StringBuilder();
                     if (!mySQL.hasColumn(connection, "UUID")) {

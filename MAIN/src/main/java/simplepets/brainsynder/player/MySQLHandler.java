@@ -60,7 +60,8 @@ public class MySQLHandler {
 
             String finalNeedsRespawn = needsRespawn.toString();
             CompletableFuture.runAsync(() -> {
-                try (Connection connection = sql.getSource().getConnection()) {
+                try {
+                    Connection connection = sql.getConnection();
                     PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                     select.setString(1, player.getUniqueId().toString());
                     ResultSet result = select.executeQuery();
@@ -115,7 +116,8 @@ public class MySQLHandler {
 
         CompletableFuture.runAsync(() -> {
             final JsonObject data = new JsonObject();
-            try (Connection connection = sql.getSource().getConnection()) {
+            try {
+                Connection connection = sql.getConnection();
                 PreparedStatement select = connection.prepareStatement(SELECT_PETS);
                 select.setString(1, player.getUniqueId().toString()); // TODO
                 ResultSet result = select.executeQuery();

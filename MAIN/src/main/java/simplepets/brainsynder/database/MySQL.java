@@ -1,30 +1,26 @@
 package simplepets.brainsynder.database;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.errors.SimplePetsException;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class MySQL {
-    private MysqlDataSource source;
+    private Connection connection;
 
     public MySQL(String host, String port, String database, String user, String pass) {
-        source = new MysqlDataSource();
-        source.setPort(Integer.parseInt(port));
-        source.setPassword(pass);
-        source.setUser(user);
-        source.setDatabaseName(database);
-        source.setServerName(host);
-        source.setAutoReconnect(PetCore.get().getConfiguration().getBoolean("MySQL.Options.AutoReconnect"));
-        source.setUseSSL(PetCore.get().getConfiguration().getBoolean("MySQL.Options.UseSSL"));
+        String autoReconnect = String.valueOf(PetCore.get().getConfiguration().getBoolean("MySQL.Options.AutoReconnect"));
+        String useSSL = String.valueOf(PetCore.get().getConfiguration().getBoolean("MySQL.Options.UseSSL"));
+        String url = String.format("jdbc:mysql://%s:%s/%s?useSSL=%s&autoReconnect=%s", host, port, database, useSSL, autoReconnect);
+        try {
+            connection = DriverManager.getConnection(url, user, pass);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
-    public MysqlDataSource getSource() {
-        return source;
+    public Connection getConnection() {
+        return connection;
     }
 
     public boolean hasColumn(Connection connection, String column) {
