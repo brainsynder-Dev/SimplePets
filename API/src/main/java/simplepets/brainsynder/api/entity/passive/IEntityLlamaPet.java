@@ -10,5 +10,5 @@ import simplepets.brainsynder.api.wrappers.LlamaColor;
 public interface IEntityLlamaPet extends IChestedAbstractPet, IResetColor {
     void setSkinColor(LlamaColor skinColor);
 
-    LlamaColor getLlamaColor();
+    LlamaColor getSkinColor();
 }

@@ -10,11 +10,15 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
 import simplepets.brainsynder.api.wrappers.villager.VillagerData;
+import simplepets.brainsynder.api.wrappers.villager.VillagerLevel;
 import simplepets.brainsynder.api.wrappers.villager.VillagerType;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 import simplepets.brainsynder.versions.v1_16_R3.utils.EntityUtils;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityVillager}
+ */
 public class EntityVillagerPet extends EntityAgeablePet implements IEntityVillagerPet {
     private static final DataWatcherObject<Integer> HEAD_ROLLING_TIME_LEFT;
     private static final DataWatcherObject<net.minecraft.server.v1_16_R3.VillagerData> VILLAGER_DATA;
@@ -37,19 +41,22 @@ public class EntityVillagerPet extends EntityAgeablePet implements IEntityVillag
         setShaking(object.getBoolean("shaking", false));
         if (object.hasKey("data"))
             setVillagerData(VillagerData.fromCompound(object.getCompoundTag("data")));
+        if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
+        if (object.hasKey("biome")) setBiome(object.getEnum("biome", BiomeType.class, BiomeType.PLAINS));
+        if (object.hasKey("level")) setLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
         super.applyCompound(object);
     }
 
     @Override
     public void setVillagerData(VillagerData data) {
         net.minecraft.server.v1_16_R3.VillagerType biome = EntityUtils.getTypeFromBiome(data.getBiome());
-        datawatcher.set(VILLAGER_DATA, new net.minecraft.server.v1_16_R3.VillagerData(biome, EntityUtils.getProfession(data.getType()), data.getLevel()));
+        datawatcher.set(VILLAGER_DATA, new net.minecraft.server.v1_16_R3.VillagerData(biome, EntityUtils.getProfession(data.getType()), data.getLevel().ordinal()+1));
     }
 
     @Override
     public VillagerData getVillagerData() {
         net.minecraft.server.v1_16_R3.VillagerData raw = getRawData();
-        return  new VillagerData(EntityUtils.getBiomeFromType(raw.getType()), VillagerType.getVillagerType(raw.getProfession().toString()), raw.getLevel());
+        return  new VillagerData(EntityUtils.getBiomeFromType(raw.getType()), VillagerType.getVillagerType(raw.getProfession().toString()), VillagerLevel.getById(raw.getLevel()));
     }
 
     private net.minecraft.server.v1_16_R3.VillagerData getRawData() {

@@ -1,0 +1,169 @@
+package simplepets.brainsynder.commands.list;
+
+import com.google.common.collect.Lists;
+import lib.brainsynder.commands.annotations.ICommand;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.commands.Permission;
+import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.commands.PetsCommand;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
+
+@ICommand(
+        name = "generator",
+        description = "Can be used to generate a bit of information"
+)
+@Permission(permission = "generator", adminCommand = true)
+public class GeneratorCommand extends PetSubCommand {
+    private final PetsCommand parent;
+
+    public GeneratorCommand(PetsCommand parent) {
+        super(parent.getPlugin());
+        this.parent = parent;
+    }
+
+    @Override
+    public void run(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            sendUsage(sender);
+            return;
+        }
+        if (args[0].equalsIgnoreCase("permissions")) {
+            generatePluginPermissions();
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
+            return;
+        }
+    }
+
+    private void generatePluginPermissions() {
+        StringBuilder def = new StringBuilder();
+        def.append("        default: false").append("\n").append("        children:").append("\n");
+
+
+        StringBuilder master = new StringBuilder();
+        StringBuilder hostile = new StringBuilder();
+        StringBuilder passive = new StringBuilder();
+        StringBuilder allAllowData = new StringBuilder();
+        StringBuilder commandBuilder = new StringBuilder();
+        List<StringBuilder> pets = new ArrayList<>();
+        List<StringBuilder> other = new ArrayList<>();
+        PetCore core = parent.getPlugin();
+
+        parent.getSubCommands().forEach(command -> {
+            if (!command.getClass().isAnnotationPresent(Permission.class)) return;
+            Permission data = command.getClass().getAnnotation(Permission.class);
+
+            String permission = "pet.commands." + data.permission();
+            if (permission.isEmpty()) return;
+            commandBuilder.append("            ").append(permission).append(": true\n");
+            List<String> additional = Lists.newArrayList(data.additionalPermissions());
+            if (additional.isEmpty()) return;
+            for (String addition : additional) {
+                if (addition.isEmpty()) continue;
+                String comment = "";
+                if (addition.equals("all_other"))
+                    comment = "  # Will allow the player spawn/change for all the selected player pets";
+                if (addition.equals("all")) comment = "  # Will allow the player to run the command for all the pets";
+                if (addition.equals("nbt"))
+                    comment = "  # Will allow the player to input NBT data to modify the pet (Will bypass the data permissions for the pet)";
+                if (addition.equals("other")) comment = "  # Will allow the player to spawn/change other players data";
+                commandBuilder.append("            ").append(permission).append(".").append(addition).append(": true").append(comment).append("\n");
+            }
+
+            String allowDefault = "false # Not given to players by default";
+            if (data.adminCommand()) {
+                allowDefault = "op # Only Operators should be given this permission";
+            }else if (data.defaultAllow()) {
+                allowDefault = "true # Allows players to use them by default";
+            }
+
+            master.append("    ").append(permission).append(": # Grants access to the /pet ").append(command.getCommand(command.getClass()).name()).append(" command\n")
+                    .append("        default: ").append(allowDefault).append("\n\n");
+        });
+        master.append("\n")
+                .append("    pet.commands.*:  # Grants the player to use all commands (NOT recommended)").append("\n")
+                .append(def).append(commandBuilder).append("\n\n\n");
+
+        // Generate Pet Permissions
+        for (PetType type : PetType.values()) {
+            if (type == PetType.UNKNOWN) continue;
+            String path = type.getEntityClass().getName();
+            String permission = type.getPermission();
+            if (path.contains("hostile")) {
+                hostile.append("            ").append(permission).append(".*: true\n");
+            } else if (path.contains("passive") || path.contains("ambient")) {
+                passive.append("            ").append(permission).append(".*: true\n");
+            }
+            allAllowData.append("            ").append(permission).append(".data.*: true\n");
+
+            StringBuilder builder = new StringBuilder();
+            StringBuilder allData = new StringBuilder();
+
+            allData.append("    ").append(permission).append(".data.*:  # Grants access to all the data permissions for this pet").append("\n");
+            allData.append(def);
+
+            builder.append("    ").append(permission).append(".*:  # Will grant access to spawn the pet as well as all the other permissions for this pet").append("\n");
+
+            builder.append(def);
+            builder.append("            ").append(permission).append(".fly: true  # Will allow ").append(type.getName()).append(" to fly (if enabled)\n");
+            builder.append("            ").append(permission).append(".hat: true  # Will allow ").append(type.getName()).append(" to be a hat (if enabled)\n");
+            builder.append("            ").append(permission).append(".mount: true  # Will allow ").append(type.getName()).append(" to mount (if enabled)\n");
+            builder.append("            ").append(permission).append(".data.*").append(": true\n");
+            type.getPetData().forEach(petData -> {
+                String name = petData.getNamespace().namespace();
+                allData.append("            ").append(permission).append(".data.").append(name).append(": true\n");
+            });
+            other.add(allData);
+            pets.add(builder);
+        }
+
+
+        master
+                .append("    pet.type.*:  # Grants access to all pets").append("\n")
+                .append(def)
+                .append("            pet.type.passive: true").append("\n")
+                .append("            pet.type.hostile: true").append("\n")
+                .append("    pet.type.passive:  # Will grant access to all pets that would be passive in vanilla").append("\n")
+                .append(def)
+                .append(passive).append("\n\n")
+                .append("    pet.type.hostile:  # Will grant access to all the pets that would be hostile in vanilla").append("\n")
+                .append(def)
+                .append(hostile).append("\n\n")
+                .append("    pet.type.*.data.*:  # Will grant all data permissions for all pets").append("\n")
+                .append(def)
+                .append(allAllowData).append("\n\n");
+
+        pets.forEach(stringBuilder -> master.append(stringBuilder).append("\n\n"));
+        other.forEach(stringBuilder -> master.append(stringBuilder).append("\n\n"));
+
+        log(new File(core.getDataFolder().toString() + File.separator + "Generated Files" + File.separator), "permissions.yml", master.toString());
+    }
+
+
+    private void log(File folder, String fileName, String message) {
+        try {
+            if (!folder.exists()) folder.mkdirs();
+            File saveTo = new File(folder, fileName);
+            if (saveTo.exists()) saveTo.delete();
+            saveTo.createNewFile();
+
+            FileWriter fw = new FileWriter(saveTo, true);
+            PrintWriter pw = new PrintWriter(fw);
+            pw.println(message);
+            pw.flush();
+            pw.close();
+        } catch (IOException var7) {
+            var7.printStackTrace();
+        }
+    }
+}

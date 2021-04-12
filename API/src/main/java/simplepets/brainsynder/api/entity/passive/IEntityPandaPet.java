@@ -12,9 +12,6 @@ public interface IEntityPandaPet extends IAgeablePet, ISpecialFlag {
     PandaGene getGene ();
     void setGene (PandaGene gene);
 
-    void setSitting(boolean value);
-    boolean isSitting();
-
     void setSneezeProgress(int progress);
     int getSneezeProgress ();
     default void setSneezing (boolean value) {
@@ -28,10 +25,10 @@ public interface IEntityPandaPet extends IAgeablePet, ISpecialFlag {
         return getSpecialFlag(2);
     }
 
-    default boolean isScared() {
+    default boolean isSitting() {
         return getSpecialFlag(8);
     }
-    default void setScared(boolean value) {
+    default void setSitting(boolean value) {
         setSpecialFlag(8, value);
     }
 

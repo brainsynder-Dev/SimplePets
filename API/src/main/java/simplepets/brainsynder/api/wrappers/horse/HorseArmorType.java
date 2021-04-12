@@ -28,6 +28,14 @@ public enum HorseArmorType {
         return null;
     }
 
+    public static HorseArmorType getPrevious(HorseArmorType current) {
+        return (current == NONE) ? DIAMOND : values()[current.ordinal() - 1];
+    }
+
+    public static HorseArmorType getNext(HorseArmorType current) {
+        return (current == DIAMOND) ? NONE : values()[current.ordinal() + 1];
+    }
+
     public int getId() {
         return this.id;
     }

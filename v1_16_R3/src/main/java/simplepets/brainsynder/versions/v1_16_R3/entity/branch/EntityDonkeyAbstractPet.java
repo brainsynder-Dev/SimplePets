@@ -20,13 +20,13 @@ public class EntityDonkeyAbstractPet extends EntityHorseAbstractPet implements I
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("chested", isChested());
+        object.setBoolean("chest", isChested());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("chested")) setChested(object.getBoolean("chested"));
+        setChested(object.getBoolean("chest", false));
         super.applyCompound(object);
     }
 

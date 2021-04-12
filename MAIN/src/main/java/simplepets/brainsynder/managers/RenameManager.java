@@ -30,8 +30,8 @@ public class RenameManager {
     public void renameViaAnvil (PetUser user, PetType type) {
         AnvilGUI gui = new AnvilGUI(plugin, (Player) user.getPlayer(), event -> user.setPetName(event.getName(), type));
         gui.setColorRename(true);
-        gui.setTitle("&#de9790[] &#b35349Rename Pet");
-        gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemBuilder(Material.NAME_TAG).withName("&#de9790NEW NAME").build());
+        gui.setTitle(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TITLE));
+        gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemBuilder(Material.NAME_TAG).withName(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TAG)).build());
         gui.open();
     }
 

@@ -26,6 +26,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.files.Config;
+import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.versions.v1_16_R3.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_16_R3.pathfinder.PathfinderWalkToPlayer;
 
@@ -38,7 +39,6 @@ import java.util.function.Function;
 public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private PetUser user;
     private PetType petType;
-    private Location walkTarget;
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
 
@@ -49,7 +49,6 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private final boolean canGlow = true;
     private boolean isGlowing = false;
     private final boolean autoRemove = true;
-    private final boolean hideName = true;
     private boolean silent = false;
     private boolean ignoreVanish = false;
     private int standTime = 0;
@@ -84,8 +83,10 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 
     @Override
     public void teleportToOwner() {
-        setWalkToLocation(null);
-        user.getUserLocation().ifPresent(location -> setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch()));
+        user.getUserLocation().ifPresent(location -> {
+            setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+            PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), location);
+        });
     }
 
     @Override
@@ -117,7 +118,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         petName = Colorize.translateBungeeHex(event.getPrefix())
                 + translateName(event.getName())
                 + Colorize.translateBungeeHex(event.getSuffix());
-        getBukkitEntity().setCustomNameVisible(true);
+        getBukkitEntity().setCustomNameVisible(PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true));
         getBukkitEntity().setCustomName(petName);
     }
 
@@ -159,6 +160,8 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", getPetType().getName());
         object.setUniqueId("uuid", getUniqueID());
+        object.setFloat("health", getHealth());
+        object.setString("ownerName", getPetUser().getPlayer().getName());
         user.getPetName(getPetType()).ifPresent(name -> {
             object.setString("name", name.replace('§', '&'));
         });
@@ -175,7 +178,12 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("uuid")) a_(object.getUniqueId("uuid")); // Sets the Entities UUID
-
+        if (object.hasKey("health")) {
+            float health = object.getFloat("health", 20);
+            if (health >= 2048) health = 2047; // Prevents crash caused by spigot
+            if (health < 1) health = 1; // Prevents pets from instant death
+            setHealth(health);
+        }
         if (object.hasKey("name")) {
             String name = object.getString("name");
             if (name != null) name = name.replace("~", " ");
@@ -213,16 +221,6 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     @Override
     public PetUser getPetUser() {
         return user;
-    }
-
-    @Override
-    public Location getWalkToLocation() {
-        return walkTarget;
-    }
-
-    @Override
-    public void setWalkToLocation(Location location) {
-        walkTarget = location;
     }
 
     @Override
@@ -397,7 +395,8 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         if (user.getPlayer() != null) {
             Player player = (Player) user.getPlayer();
             boolean shifting = player.isSneaking();
-            if (hideName) getEntity().setCustomNameVisible((!shifting));
+            if (PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true))
+                getEntity().setCustomNameVisible((!shifting));
 
             if (!canIgnoreVanish()) {
                 boolean ownerVanish = ((CraftPlayer) player).getHandle().isInvisible();
@@ -549,5 +548,10 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 
     @Override
     public void load(NBTTagCompound nbttagcompound) {
+    }
+
+    @Override
+    public boolean canPortal() {
+        return false; // Prevents pets from teleporting from a portal
     }
 }

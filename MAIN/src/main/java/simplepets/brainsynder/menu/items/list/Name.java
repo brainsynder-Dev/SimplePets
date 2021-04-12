@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.items.list;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
@@ -38,7 +39,12 @@ public class Name extends Item {
         gui.open(user, inventory, event -> {
             PetType petType = gui.getPageCache(user).getOrDefault(event.getPage(), new HashMap<>()).getOrDefault(event.getPosition(), PetType.UNKNOWN);
             SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user1 -> {
-                ((Player)user.getPlayer()).performCommand("pet rename "+petType.getName());
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        ((Player)user.getPlayer()).performCommand("pet rename "+petType.getName());
+                    }
+                }.runTaskLater(PetCore.getInstance(), 2);
             });
             event.setWillClose(true);
             event.setWillDestroy(true);

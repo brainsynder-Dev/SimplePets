@@ -32,7 +32,7 @@ public class DataMenu extends CustomInventory {
         setDefault("title_comment", "The title of the GUI can support regular color codes '&c' and HEX color codes '&#FFFFFF'");
         setDefault("title", "&#de9790[] &#b35349Pet Data Changer");
 
-        Map<Integer, String> object = new HashMap<> ();
+        Map<Integer, String> object = new HashMap<>();
         Arrays.asList(20, 21, 22, 23, 24, 25, 26, 29, 30, 31, 32, 33, 34, 35).forEach(slot -> object.put(slot, "air"));
         object.put(1, "storage");
         object.put(5, "name");
@@ -61,14 +61,14 @@ public class DataMenu extends CustomInventory {
 
     }
 
-    public PetType getType (Player player) {
+    public PetType getType(Player player) {
         return typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
     }
 
-    public void setType (Player player, PetType type) {
+    public void setType(Player player, PetType type) {
         if ((type == null) || (type == PetType.UNKNOWN)) {
             typeMap.remove(player.getName());
-        }else{
+        } else {
             typeMap.put(player.getName(), type);
         }
     }
@@ -97,7 +97,7 @@ public class DataMenu extends CustomInventory {
             user.getPetEntity(type).ifPresent(entityPet -> {
                 type.getPetData().forEach(petData -> {
                     petData.getItem(entityPet).ifPresent(o -> {
-                        inv.addItem(((ItemBuilder)o).build());
+                        inv.addItem(((ItemBuilder) o).build());
                     });
                 });
             });
@@ -112,6 +112,10 @@ public class DataMenu extends CustomInventory {
         if (!isEnabled()) return;
         if (user == null) return;
         Player player = (Player) user.getPlayer();
+        if (!user.hasPets()) {
+            player.closeInventory();
+            return;
+        }
 
         if (player.getOpenInventory() == null) return;
         Inventory inv = player.getOpenInventory().getTopInventory();
@@ -125,17 +129,18 @@ public class DataMenu extends CustomInventory {
         });
         PetType type = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
 
-        if (user.hasPet(type)) {
-            if (user.hasPet(type)) {
-                user.getPetEntity(type).ifPresent(entityPet -> {
-                    type.getPetData().forEach(petData -> {
-                        petData.getItem(entityPet).ifPresent(o -> {
-                            inv.addItem(((ItemBuilder)o).build());
-                        });
-                    });
-                });
-            }
+        if (!user.hasPet(type)) {
+            player.closeInventory();
+            return;
         }
+
+        user.getPetEntity(type).ifPresent(entityPet -> {
+            type.getPetData().forEach(petData -> {
+                petData.getItem(entityPet).ifPresent(o -> {
+                    inv.addItem(((ItemBuilder) o).build());
+                });
+            });
+        });
     }
 
     @Override

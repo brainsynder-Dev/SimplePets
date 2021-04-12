@@ -10,11 +10,16 @@ import simplepets.brainsynder.api.pet.PetData;
 public class RainbowData extends PetData<IRainbow> {
     public RainbowData() {
         addDefaultItem("true", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Rainbow: &atrue")
+                .withName("&#c8c8c8{name}: &atrue")
                 .setTexture("http://textures.minecraft.net/texture/c69e3e6e5b2b92f0beb368b738b993d7ba225bf9bb2758bfc9fc2daba4a5a7d"));
         addDefaultItem("false", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Rainbow: &cfalse")
+                .withName("&#c8c8c8{name}: &cfalse")
                 .setTexture("http://textures.minecraft.net/texture/c69e3e6e5b2b92f0beb368b738b993d7ba225bf9bb2758bfc9fc2daba4a5a7d"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

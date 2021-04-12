@@ -12,6 +12,9 @@ import simplepets.brainsynder.api.wrappers.TropicalPattern;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityFishPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityTropicalFish}
+ */
 public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropicalFishPet {
     private static final DataWatcherObject<Integer> VARIANT;
 

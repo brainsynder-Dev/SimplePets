@@ -10,11 +10,16 @@ import simplepets.brainsynder.api.pet.PetData;
 public class DancingData extends PetData<IEntityPiglinPet> {
     public DancingData() {
         addDefaultItem("true", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Dancing: &atrue")
+                .withName("&#c8c8c8{name}: &atrue")
                 .setTexture("http://textures.minecraft.net/texture/9f18107d275f1cb3a9f973e5928d5879fa40328ff3258054db6dd3e7c0ca6330"));
         addDefaultItem("false", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Dancing: &cfalse")
+                .withName("&#c8c8c8{name}: &cfalse")
                 .setTexture("http://textures.minecraft.net/texture/9f18107d275f1cb3a9f973e5928d5879fa40328ff3258054db6dd3e7c0ca6330"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

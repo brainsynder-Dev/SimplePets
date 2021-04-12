@@ -5,8 +5,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
-import simplepets.brainsynder.utils.Debug;
-import simplepets.brainsynder.utils.DebugLevel;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

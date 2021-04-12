@@ -15,8 +15,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.impl.PetOwner;
-import simplepets.brainsynder.utils.Debug;
-import simplepets.brainsynder.utils.DebugLevel;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugBuilder;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -74,11 +75,16 @@ public class PlayerSQL extends SQLManager {
                         StorageTagCompound compound = new StorageTagCompound();
 
                         // Loads the pets the player purchased
+                        String raw = results.getString("UnlockedPets");
                         try {
-                            compound.setTag("owned_pets", JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(results.getString("UnlockedPets"))));
+                            if (!raw.equals("W10=")) {
+                                compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(raw)).toList());
+                            }
                         } catch (NBTException e) {
-                            Debug.debug(DebugLevel.ERROR, "Failed to load 'UnlockedPets' for uuid: "+uuid, true);
-                            Debug.debug(DebugLevel.ERROR, "Result: "+results.getString("UnlockedPets"), true);
+                            Debug.debug(DebugBuilder.build(getClass()).setMessages(
+                                    "Failed to load 'UnlockedPets' for uuid: "+uuid,
+                                    "Result: "+raw
+                            ).setSync(true).setLevel(DebugLevel.ERROR));
                         }
 
                         // Loads pet names
@@ -223,10 +229,15 @@ public class PlayerSQL extends SQLManager {
 
                         // Loads the pets the player purchased
                         try {
-                            compound.setTag("owned_pets", JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(results.getString("UnlockedPets"))));
+                            String result = results.getString("UnlockedPets");
+                            if (!result.equals("W10=")) {
+                                compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(results.getString("UnlockedPets"))).toList());
+                            }
                         } catch (NBTException e) {
-                            Debug.debug(DebugLevel.ERROR, "Failed to load 'UnlockedPets' for uuid: "+uuid.toString());
-                            Debug.debug(DebugLevel.ERROR, "Result: "+results.getString("UnlockedPets"));
+                            Debug.debug(DebugBuilder.build().setMessages(
+                                    "Failed to load 'UnlockedPets' for uuid: "+uuid.toString(),
+                                    "Result: "+results.getString("UnlockedPets")
+                            ).setLevel(DebugLevel.ERROR));
                         }
 
                         // Loads pet names

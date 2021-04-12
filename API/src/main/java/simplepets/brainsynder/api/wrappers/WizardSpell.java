@@ -1,19 +1,30 @@
 package simplepets.brainsynder.api.wrappers;
 
+import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nms.DataConverter;
+import lib.brainsynder.utils.DyeColorWrapper;
+import org.bukkit.Material;
+
 public enum WizardSpell {
-        NONE(0, 0.0D, 0.0D, 0.0D),
-        SUMMON_VEX(1, 0.7D, 0.7D, 0.8D),
-        FANGS(2, 0.4D, 0.3D, 0.35D),
-        WOLOLO(3, 0.7D, 0.5D, 0.2D),
-        DISAPPEAR(4, 0.3D, 0.3D, 0.8D),
-        BLINDNESS(5, 0.1D, 0.1D, 0.2D);
+        NONE(0, 0.0D, 0.0D, 0.0D, new ItemBuilder(Material.BARRIER)),
+        SUMMON_VEX(1, 0.7D, 0.7D, 0.8D, DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.GRAY)),
+        FANGS(2, 0.4D, 0.3D, 0.35D, DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.BROWN)),
+        WOLOLO(3, 0.7D, 0.5D, 0.2D, DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.ORANGE)),
+        DISAPPEAR(4, 0.3D, 0.3D, 0.8D, DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.LIGHT_BLUE)),
+        BLINDNESS(5, 0.1D, 0.1D, 0.2D, DataConverter.getColoredMaterial(DataConverter.MaterialType.INK_SACK, DyeColorWrapper.BLACK));
 
         private final int id;
         private final double[] array;
+        private final ItemBuilder builder;
 
-        WizardSpell(int id, double var4, double var8, double var6) {
+        WizardSpell(int id, double var4, double var8, double var6, ItemBuilder builder) {
             this.id = id;
+            this.builder = builder;
             this.array = new double[]{var4, var6, var8};
+        }
+
+        public ItemBuilder getIcon () {
+            return this.builder;
         }
 
         public static WizardSpell getByName(String name) {

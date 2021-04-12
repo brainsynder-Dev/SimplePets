@@ -8,12 +8,12 @@ import lib.brainsynder.nbt.StorageTagCompound;
 public class VillagerData {
     private BiomeType biome = BiomeType.PLAINS;
     private VillagerType type = VillagerType.NONE;
-    private int level = 1;
+    private VillagerLevel level = VillagerLevel.NOVICE;
 
-    public VillagerData(BiomeType biome, VillagerType type, int level) {
+    public VillagerData(BiomeType biome, VillagerType type, VillagerLevel level) {
         this.biome = biome;
         this.type = type;
-        this.level = Math.max(1, level);
+        this.level = level;
     }
 
     public VillagerType getType() {
@@ -24,7 +24,7 @@ public class VillagerData {
         return this.biome;
     }
 
-    public int getLevel() {
+    public VillagerLevel getLevel() {
         return this.level;
     }
 
@@ -36,31 +36,31 @@ public class VillagerData {
         return new VillagerData(this.biome, type, this.level);
     }
 
-    public VillagerData withLevel(int level) {
+    public VillagerData withLevel(VillagerLevel level) {
         return new VillagerData(this.biome, this.type, level);
     }
 
     public StorageTagCompound toCompound () {
         StorageTagCompound compound = new StorageTagCompound();
-        compound.setString("biome", biome.name());
-        compound.setString("type", type.name());
-        compound.setInteger("level", level);
+        compound.setEnum("biome", biome);
+        compound.setEnum("type", type);
+        compound.setEnum("level", level);
         return compound;
     }
 
     public static VillagerData getDefault () {
-        return new VillagerData(BiomeType.PLAINS, VillagerType.NONE, 1);
+        return new VillagerData(BiomeType.PLAINS, VillagerType.NONE, VillagerLevel.NOVICE);
     }
 
     public static VillagerData fromCompound (StorageTagCompound compound) {
         BiomeType biome = BiomeType.PLAINS;
-        if (compound.hasKey("biome")) biome = BiomeType.valueOf(compound.getString("biome"));
+        if (compound.hasKey("biome")) biome = compound.getEnum("biome", BiomeType.class, BiomeType.PLAINS);
 
         VillagerType type = VillagerType.NONE;
-        if (compound.hasKey("type")) type = VillagerType.valueOf(compound.getString("type"));
+        if (compound.hasKey("type")) type = compound.getEnum("type", VillagerType.class, VillagerType.NONE);
 
-        int level = 1;
-        if (compound.hasKey("level")) level = compound.getInteger("level");
+        VillagerLevel level = VillagerLevel.NOVICE;
+        if (compound.hasKey("level")) level = compound.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE);
 
         return new VillagerData(biome, type, level);
     }

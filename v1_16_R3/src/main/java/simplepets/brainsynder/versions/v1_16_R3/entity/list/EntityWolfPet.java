@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityTameablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityWolf}
+ */
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     private static final DataWatcherObject<Boolean> BEGGING;
     private static final DataWatcherObject<Integer> COLLAR_COLOR;

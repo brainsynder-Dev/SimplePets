@@ -31,6 +31,7 @@ public class Remove extends Item {
     public void onClick(PetUser user, CustomInventory inventory) {
         if (!user.hasPets()) return;
         user.removePets();
+        user.updateDataMenu();
     }
 
     @Override
@@ -38,7 +39,10 @@ public class Remove extends Item {
         PetSelectorGUI gui = new PetSelectorGUI();
         gui.open(user, inventory, event -> {
             PetType petType = gui.getPageCache(user).getOrDefault(event.getPage(), new HashMap<>()).getOrDefault(event.getPosition(), PetType.UNKNOWN);
-            SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user1 -> user1.removePet(petType));
+            SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user1 -> {
+                user1.removePet(petType);
+                user.updateDataMenu();
+            });
             event.setWillClose(true);
             event.setWillDestroy(true);
         });

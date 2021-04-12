@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.user;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -16,12 +17,52 @@ public interface PetUser {
      */
     OfflinePlayer getPlayer ();
 
+    /**
+     * Will fetch the players location
+     *      If player is offline will return empty
+     */
     default Optional<Location> getUserLocation () {
         if (getPlayer() instanceof Player) {
             return Optional.of(((Player)getPlayer()).getLocation());
         }
         return Optional.empty();
     }
+
+    /**
+     * Will check if the player already has the compound saved
+     *
+     * @param compound - The compound being checked
+     */
+    boolean hasPetSave (StorageTagCompound compound);
+
+    /**
+     * Will remove the compound from the players saved pets list
+     *
+     * @param compound - The compound being removed
+     */
+    void removePetSave (StorageTagCompound compound);
+
+    /**
+     * Will save the entities data to the players saved pets list
+     *
+     * @param entity - The Entity being saved
+     */
+    default void addPetSave (IEntityPet entity) {
+        if (entity == null) return;
+        addPetSave(entity.asCompound());
+    }
+
+    /**
+     * Will save the compound to the players saved pets list
+     *
+     * @param compound - The compound being saved
+     */
+    void addPetSave (StorageTagCompound compound);
+
+    /**
+     * Will fetch the list of pets the player has saved
+     */
+    List<Entry<PetType, StorageTagCompound>> getSavedPets ();
 
     /**
      * List of pets the player owns.
@@ -48,20 +89,16 @@ public interface PetUser {
 
     /**
      * Sets the player pets name
-     *     IT WILL OVERRIDE WHAT THE PLAYER CUSTOMIZED
+     *     IT WILL OVERRIDE WHAT THE PLAYER HAS CUSTOMIZED
      *
      * @param name - name of the pet
      */
     void setPetName (String name, PetType type);
 
     /**
-     * Sets the player pets name
-     *     IT WILL OVERRIDE WHAT THE PLAYER CUSTOMIZED
-     *
-     * @param name - name of the pet
-     * @param override - Should it run all the checks (player perms) or just override the name
+     * Contains all the pets that the player has on their heads
      */
-    void setPetName (String name, PetType type, boolean override);
+    List<PetType> getHatPets();
 
     /**
      * Does the player any pets spawned
@@ -156,4 +193,23 @@ public interface PetUser {
      * Updates the pet data gui the player has open (if it is open)
      */
     void updateDataMenu ();
+
+
+    class Entry<K,V> {
+        private final K key;
+        private final V value;
+
+        public Entry(K key, V value) {
+            this.key = key;
+            this.value = value;
+        }
+
+        public K getKey() {
+            return key;
+        }
+
+        public V getValue() {
+            return value;
+        }
+    }
 }

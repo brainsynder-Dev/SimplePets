@@ -3,6 +3,7 @@ package simplepets.brainsynder.api.entity.misc;
 
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
 import simplepets.brainsynder.api.wrappers.villager.VillagerData;
+import simplepets.brainsynder.api.wrappers.villager.VillagerLevel;
 import simplepets.brainsynder.api.wrappers.villager.VillagerType;
 
 public interface IProfession {
@@ -18,7 +19,7 @@ public interface IProfession {
     default BiomeType getBiome() {
         return getVillagerData().getBiome();
     }
-    default int getLevel() {
+    default VillagerLevel getLevel() {
         return getVillagerData().getLevel();
     }
 
@@ -32,7 +33,7 @@ public interface IProfession {
     default void setBiome (BiomeType biome){
         setVillagerData(getVillagerData().withBiome(biome));
     }
-    default void setLevel (int level){
+    default void setLevel (VillagerLevel level){
         setVillagerData(getVillagerData().withLevel(level));
     }
 }

@@ -20,13 +20,6 @@ public interface IPetConfig {
     String getDisplayName();
 
     /**
-     * Will check if a player has permission for a pet (Will also follow if NeedsPermission is toggled)
-     *
-     * @param player
-     */
-    boolean hasPermission(Player player);
-
-    /**
      * Will check if the player is allowed to have the pet as a hat
      *
      * @param player
@@ -95,4 +88,15 @@ public interface IPetConfig {
      * @param value - value to get for
      */
     Optional<ItemBuilder> getDataItem (String namespace, Object value);
+
+    /**
+     * Will fetch the data item for the namespace
+     *
+     * @param namespace - Name of the data item
+     * @param value - value to get for
+     * @param fallback - fallback item if there is none in the file
+     */
+    Optional<ItemBuilder> getDataItem (String namespace, Object value, ItemBuilder fallback);
+
+    JsonObject getRawData (String namespace);
 }

@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.wrappers.PufferState;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityFishPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityPufferFish}
+ */
 public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferFishPet {
     private static final DataWatcherObject<Integer> PUFF_STATE;
 
@@ -21,13 +24,13 @@ public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferF
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("state", getPuffState().name());
+        object.setEnum("size", getPuffState());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("state")) setPuffState(PufferState.getByName(object.getString("state", PufferState.SMALL.name())));
+        if (object.hasKey("size")) setPuffState(object.getEnum("size", PufferState.class, PufferState.SMALL));
         super.applyCompound(object);
     }
 

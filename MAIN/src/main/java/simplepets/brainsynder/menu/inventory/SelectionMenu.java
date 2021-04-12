@@ -25,8 +25,9 @@ import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
 import simplepets.brainsynder.menu.items.list.Air;
-import simplepets.brainsynder.utils.Debug;
-import simplepets.brainsynder.utils.DebugLevel;
+import simplepets.brainsynder.utils.Utilities;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.util.*;
@@ -51,8 +52,7 @@ public class SelectionMenu extends CustomInventory {
         setDefault("title", "&#de9790[] &#b35349Pets");
 
 
-
-        Map<Integer, String> object = new HashMap<> ();
+        Map<Integer, String> object = new HashMap<>();
         Arrays.asList(
                 11, 12, 13, 14, 15, 16, 17,
                 20, 21, 22, 23, 24, 25, 26,
@@ -126,15 +126,13 @@ public class SelectionMenu extends CustomInventory {
         boolean removeNoPerms = PetCore.getInstance().getConfiguration().getBoolean("Remove-Item-If-No-Permission");
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
-            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-                if (config.hasPermission(player)) {
-                    petTypes.add(new PetTypeStorage(type));
-                } else {
-                    if (!removeNoPerms) petTypes.add(new PetTypeStorage(type));
-                }
-            });
+            if (Utilities.hasPermission(player, type.getPermission())) {
+                petTypes.add(new PetTypeStorage(type));
+            } else {
+                if (!removeNoPerms) petTypes.add(new PetTypeStorage(type));
+            }
         }
-        if ((petTypes.getSize() == 0) && (PetCore.getInstance().getConfiguration().getBoolean("Needs-Pet-Permission-To-Open-GUI"))) {
+        if ((petTypes.getSize() == 0) && (PetCore.getInstance().getConfiguration().getBoolean("Permissions.Needs-Pet-Permission-for-GUI"))) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
             return;
         }
@@ -157,8 +155,8 @@ public class SelectionMenu extends CustomInventory {
                     inv.addItem(types.next());
                 }
                 petMap.put(player.getName(), event.getShownPetTypes());
-            }else{
-                Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page "+page+" / "+pages.totalPages()+")");
+            } else {
+                Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
 
         }

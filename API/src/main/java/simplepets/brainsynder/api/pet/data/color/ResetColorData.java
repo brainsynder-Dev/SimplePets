@@ -24,6 +24,11 @@ public class ResetColorData extends PetData<IResetColor> {
     }
 
     @Override
+    public Object getDefaultValue() {
+        return ColorWrapper.NONE;
+    }
+
+    @Override
     public Optional<ItemBuilder> getItem(IResetColor entity) {
         Optional<ItemBuilder> optional = super.getItem(entity);
         if (optional.isPresent()) {
@@ -33,19 +38,12 @@ public class ResetColorData extends PetData<IResetColor> {
             ColorWrapper next = ColorWrapper.getNext(entity.getColor());
 
             ItemBuilder builder = optional.get();
-            builder.replaceInLore("{previousColor}", previous.getChatColor())
-                    .replaceInLore("{currentColor}", entity.getColor().getChatColor())
-                    .replaceInLore("{nextColor}", next.getChatColor())
-                    .replaceInLore("{previousName}", WordUtils.capitalize(previous.name().toLowerCase().replace("_", " ")))
-                    .replaceInLore("{currentName}", WordUtils.capitalize(entity.getColor().name().toLowerCase().replace("_", " ")))
-                    .replaceInLore("{nextName}", WordUtils.capitalize(next.name().toLowerCase().replace("_", " ")));
-
-            builder.replaceInName("{previousColor}", previous.getChatColor())
-                    .replaceInName("{currentColor}", entity.getColor().getChatColor())
-                    .replaceInName("{nextColor}", next.getChatColor())
-                    .replaceInName("{previousName}", WordUtils.capitalize(previous.name().toLowerCase().replace("_", " ")))
-                    .replaceInName("{currentName}", WordUtils.capitalize(entity.getColor().name().toLowerCase().replace("_", " ")))
-                    .replaceInName("{nextName}", WordUtils.capitalize(next.name().toLowerCase().replace("_", " ")));
+            builder.replaceString("{previousColor}", previous.getChatColor())
+                    .replaceString("{currentColor}", entity.getColor().getChatColor())
+                    .replaceString("{nextColor}", next.getChatColor())
+                    .replaceString("{previousName}", WordUtils.capitalize(previous.name().toLowerCase().replace("_", " ")))
+                    .replaceString("{currentName}", WordUtils.capitalize(entity.getColor().name().toLowerCase().replace("_", " ")))
+                    .replaceString("{nextName}", WordUtils.capitalize(next.name().toLowerCase().replace("_", " ")));
             return Optional.of(builder);
         }
         return optional;

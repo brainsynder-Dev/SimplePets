@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityWither}
+ */
 public class EntityWitherPet extends EntityPet implements IEntityWitherPet {
     private static final DataWatcherObject<Integer> FIRST_HEAD_TARGET;
     private static final DataWatcherObject<Integer> SECOND_HEAD_TARGET;

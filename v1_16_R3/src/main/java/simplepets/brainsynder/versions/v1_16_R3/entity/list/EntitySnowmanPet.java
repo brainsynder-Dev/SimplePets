@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntitySnowman}
+ */
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
     private static final DataWatcherObject<Byte> PUMPKIN;
 

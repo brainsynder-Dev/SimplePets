@@ -12,6 +12,9 @@ import simplepets.brainsynder.api.wrappers.CatType;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityTameablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityCat}
+ */
 public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     private static final DataWatcherObject<Integer> TYPE;
     private static final DataWatcherObject<Boolean> SLEEPING_WITH_OWNER;
@@ -34,17 +37,19 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setString("type", getCatType().name());
-        compound.setInteger("color", getCollarColor().ordinal());
+        compound.setEnum("type", getCatType());
+        compound.setEnum("collar", getCollarColor());
+        compound.setBoolean("sleeping", isPetSleeping());
+        compound.setBoolean("head_up", isHeadUp());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type"))
-            setCatType(CatType.getByName(object.getString("type")));
-        if (object.hasKey("color"))
-            setCollarColor(DyeColorWrapper.getByWoolData((byte)object.getInteger("color")));
+        if (object.hasKey("type")) setCatType(object.getEnum("type", CatType.class, CatType.TABBY));
+        if (object.hasKey("collar")) setCollarColor(object.getEnum("collar", DyeColorWrapper.class, DyeColorWrapper.WHITE));
+        if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping", false));
+        if (object.hasKey("head_up")) setHeadUp(object.getBoolean("head_up", false));
         super.applyCompound(object);
     }
 

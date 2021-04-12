@@ -63,6 +63,14 @@
                                     <pattern>lib.brainsynder</pattern>
                                     <shadedPattern>simplepets.brainsynder.internal.bslib</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>javassist</pattern>
+                                    <shadedPattern>simplepets.brainsynder.internal.javassist</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.reflections</pattern>
+                                    <shadedPattern>simplepets.brainsynder.internal.reflections</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>

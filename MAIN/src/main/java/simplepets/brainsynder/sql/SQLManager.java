@@ -3,8 +3,8 @@ package simplepets.brainsynder.sql;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.utils.Debug;
-import simplepets.brainsynder.utils.DebugLevel;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;

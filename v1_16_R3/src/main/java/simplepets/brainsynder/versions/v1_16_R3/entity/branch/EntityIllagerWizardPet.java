@@ -1,5 +1,6 @@
 package simplepets.brainsynder.versions.v1_16_R3.entity.branch;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import net.minecraft.server.v1_16_R3.*;
 import simplepets.brainsynder.api.entity.misc.IEntityWizard;
@@ -13,6 +14,19 @@ public class EntityIllagerWizardPet extends EntityIllagerAbstractPet implements 
 
     public EntityIllagerWizardPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setEnum("spell", getSpell());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("spell")) setSpell(object.getEnum("spell", WizardSpell.class, WizardSpell.NONE));
+        super.applyCompound(object);
     }
 
     @Override

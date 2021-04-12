@@ -1,5 +1,6 @@
 package simplepets.brainsynder.files.options;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.files.options.YamlOption;
 
 import java.util.Arrays;
@@ -32,7 +33,16 @@ public enum MessageOption implements YamlOption {
     MODIFY_COMPOUND ("modify.compound", "{prefix} &7NBT compound: &e{compound}"),
     MODIFY_APPLIED ("modify.applied", "{prefix} &7Data has been applied to the {type} pet!"),
     RENAME_VIA_CHAT ("rename.via_chat", "{prefix} &7Type your pets new name in chat:"),
-    RENAME_VIA_CHAT_CANCEL ("rename.cancel", "{prefix} &cPet renaming has been canceled");
+    RENAME_VIA_CHAT_CANCEL ("rename.cancel", "{prefix} &cPet renaming has been canceled"),
+    RENAME_ANVIL_TITLE ("rename.anvil.title", "&#de9790[] &#b35349Rename Pet"),
+    RENAME_ANVIL_TAG ("rename.anvil.tag_name", "&#de9790NEW NAME"),
+    RENAME_SIGN_TEXT ("rename.sign.lines", Lists.newArrayList("{input}", "&l^^^^^^^^", "&9&lPlease Enter", "&9&lPet Name")),
+
+    PET_FILES_REGEN ("admin.regenerate.pets", "{prefix} &7The Pets folder has been regenerated to the default files."),
+    INV_FILES_REGEN ("admin.regenerate.inventories", "{prefix} &7The Inventories folder has been regenerated to the default files."),
+    ITEM_FILES_REGEN ("admin.regenerate.items", "{prefix} &7The Items folder has been regenerated to the default files."),
+    PARTICLE_FILES_REGEN ("admin.regenerate.particles", "{prefix} &7The Particles folder has been regenerated to the default files."),
+    PET_TYPE_FILE_REGEN ("admin.regenerate.pet_type", "{prefix} &7The file for the {type} pet has been reset to the default file.");
 
     private final String path;
     private final Object defaultValue;

@@ -9,7 +9,8 @@ import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
 import simplepets.brainsynder.menu.items.CustomItem;
 import simplepets.brainsynder.menu.items.list.*;
-import simplepets.brainsynder.utils.Debug;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugBuilder;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -26,9 +27,9 @@ public class ItemManager implements ItemHandler {
 
     public void initiate() {
         plugin = PetCore.getInstance();
-        Debug.debug("Initializing Menu Items...");
+        Debug.debug(DebugBuilder.build(getClass()).setMessages("Initializing Menu Items..."));
         if (items != null) if (!items.isEmpty()) items.clear();
-        Debug.debug("Loading Customizable Item Files...");
+        Debug.debug(DebugBuilder.build(getClass()).setMessages("Loading Customizable Item Files..."));
         File customFolder = new File(plugin.getDataFolder().toString() + "/Items/Custom/");
         registeredFolder = new File(plugin.getDataFolder().toString() + "/Items/AddonItems/");
         if (!customFolder.exists()) customFolder.mkdirs();
@@ -44,8 +45,8 @@ public class ItemManager implements ItemHandler {
 //        add(new Storage (getLocation(plugin, Storage.class)));
         add(new Placeholder (getLocation(plugin, Placeholder.class)));
 //        add(new Data(getLocation(plugin, Data.class)));
-//        add(new SavePet(getLocation(plugin, SavePet.class)));
-//        add(new Saves(getLocation(plugin, Saves.class)));
+        add(new SavePet(getLocation(plugin, SavePet.class)));
+        add(new Saves(getLocation(plugin, Saves.class)));
 //        add(new RedPlaceholder(getLocation(plugin, RedPlaceholder.class)));
 //        add(new Update(getLocation(plugin, Update.class)));
 //        add(new FlameOn(new File(customFolder, "flameon.json")));
@@ -53,7 +54,7 @@ public class ItemManager implements ItemHandler {
         for (Item loader : items.values()) {
             (loader).save();
         }
-        Debug.debug("Files have been loaded.");
+        Debug.debug(DebugBuilder.build(getClass()).setMessages("Files have been loaded."));
 
 
         // Loads the custom items that the were added

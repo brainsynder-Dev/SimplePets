@@ -14,6 +14,9 @@ import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityFox}
+ */
 public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     private static final DataWatcherObject<Integer> TYPE;
     private static final DataWatcherObject<Byte> FOX_FLAGS;
@@ -31,7 +34,7 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
         compound.setBoolean("rolling-head", isRollingHead());
         compound.setBoolean("crouching", isCrouching());
         compound.setBoolean("sitting", isSitting());
-        compound.setBoolean("sleeping", isPetSleeping());
+        compound.setBoolean("sleep", isPetSleeping());
         compound.setBoolean("angry", isAggressive());
         compound.setBoolean("walking", isWalking());
         return compound;
@@ -39,11 +42,11 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type")) setFoxType(FoxType.getByName(object.getString("type")));
+        if (object.hasKey("type")) setFoxType(object.getEnum("type", FoxType.class, FoxType.RED));
         if (object.hasKey("rolling-head")) setRollingHead(object.getBoolean("rolling-head"));
         if (object.hasKey("crouching")) setCrouching(object.getBoolean("crouching"));
         if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
-        if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping"));
+        if (object.hasKey("sleep")) setPetSleeping(object.getBoolean("sleep"));
         if (object.hasKey("angry")) setAggressive(object.getBoolean("angry"));
         if (object.hasKey("walking")) setWalking(object.getBoolean("walking"));
         super.applyCompound(object);

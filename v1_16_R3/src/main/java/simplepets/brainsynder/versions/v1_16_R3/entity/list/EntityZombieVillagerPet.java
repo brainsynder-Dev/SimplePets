@@ -6,10 +6,14 @@ import simplepets.brainsynder.api.entity.hostile.IEntityZombieVillagerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
+import simplepets.brainsynder.api.wrappers.villager.VillagerLevel;
 import simplepets.brainsynder.api.wrappers.villager.VillagerType;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 import simplepets.brainsynder.versions.v1_16_R3.utils.EntityUtils;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityZombieVillager}
+ */
 public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZombieVillagerPet {
     private static final DataWatcherObject<Boolean> CONVERTING;
     private static final DataWatcherObject<VillagerData> VILLAGER_DATA;
@@ -29,7 +33,7 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("arms_raised", isArmsRaised());
+        object.setBoolean("raised_arms", isArmsRaised());
         object.setBoolean("shaking", isShaking());
         object.setTag("data", getVillagerData().toCompound());
         return object;
@@ -39,7 +43,10 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("data"))
             setVillagerData(simplepets.brainsynder.api.wrappers.villager.VillagerData.fromCompound(object.getCompoundTag("data")));
-        if (object.hasKey("arms_raised")) setArmsRaised(object.getBoolean("arms_raised"));
+        if (object.hasKey("raised_arms")) setArmsRaised(object.getBoolean("raised_arms"));
+        if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
+        if (object.hasKey("biome")) setBiome(object.getEnum("biome", BiomeType.class, BiomeType.PLAINS));
+        if (object.hasKey("level")) setLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
         super.applyCompound(object);
     }
 
@@ -59,14 +66,14 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
 
     @Override
     public simplepets.brainsynder.api.wrappers.villager.VillagerData getVillagerData() {
-        return  new simplepets.brainsynder.api.wrappers.villager.VillagerData(EntityUtils.getBiomeFromType(getRawData().getType()), VillagerType.getVillagerType(getRawData().getProfession().toString()), getRawData().getLevel());
+        return  new simplepets.brainsynder.api.wrappers.villager.VillagerData(EntityUtils.getBiomeFromType(getRawData().getType()), VillagerType.getVillagerType(getRawData().getProfession().toString()), VillagerLevel.getById(getRawData().getLevel()));
     }
 
     @Override
     public void setVillagerData(simplepets.brainsynder.api.wrappers.villager.VillagerData data) {
         net.minecraft.server.v1_16_R3.VillagerType biome = EntityUtils.getTypeFromBiome(data.getBiome());
 
-        datawatcher.set(VILLAGER_DATA, new VillagerData(biome, EntityUtils.getProfession(data.getType()), data.getLevel()));
+        datawatcher.set(VILLAGER_DATA, new VillagerData(biome, EntityUtils.getProfession(data.getType()), data.getLevel().ordinal()+1));
     }
 
     static {

@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
 
@@ -12,6 +13,7 @@ import simplepets.brainsynder.menu.inventory.SelectionMenu;
         name = "gui",
         description = "Opens the pet gui"
 )
+@Permission(permission = "gui", defaultAllow = true)
 public class GUICommand extends PetSubCommand {
     public GUICommand(PetCore plugin) {
         super(plugin);

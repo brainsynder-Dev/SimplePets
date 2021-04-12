@@ -1,5 +1,6 @@
 package simplepets.brainsynder.impl;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
@@ -15,6 +16,10 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
+import simplepets.brainsynder.api.event.entity.PetDuplicateSpawnEvent;
+import simplepets.brainsynder.api.event.entity.PetHatEvent;
+import simplepets.brainsynder.api.event.entity.PetRemoveEvent;
+import simplepets.brainsynder.api.event.entity.PostPetHatEvent;
 import simplepets.brainsynder.api.event.user.PetNameChangeEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
@@ -22,6 +27,7 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
+import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.sql.PlayerSQL;
 import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.UUIDDataType;
@@ -99,7 +105,7 @@ public class PetOwner implements PetUser {
                                 if (!type.isSupported()) return;
                                 if (!spawnUtil.isRegistered(type)) return;
                                 if (player instanceof Player) {
-                                    if (!config.hasPermission((Player) player)) return;
+                                    if (!Utilities.hasPermission((Player) player, type.getPermission())) return;
                                     spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
                                 }
                             });
@@ -175,6 +181,34 @@ public class PetOwner implements PetUser {
     }
 
     @Override
+    public boolean hasPetSave(StorageTagCompound compound) {
+        return savedPetData.contains(compound);
+    }
+
+    @Override
+    public void removePetSave(StorageTagCompound compound) {
+        if (!savedPetData.contains(compound)) return;
+        savedPetData.remove(compound);
+    }
+
+    @Override
+    public void addPetSave(StorageTagCompound compound) {
+        if (savedPetData.contains(compound)) return;
+        savedPetData.add(compound);
+    }
+
+    @Override
+    public List<Entry<PetType, StorageTagCompound>> getSavedPets() {
+        List<Entry<PetType, StorageTagCompound>> entryList = Lists.newArrayList();
+        savedPetData.forEach(compound -> {
+            PetType.getPetType(compound.getString("PetType")).ifPresent(type -> {
+                entryList.add(new Entry(type, compound));
+            });
+        });
+        return entryList;
+    }
+
+    @Override
     public List<PetType> getOwnedPets() {
         return ownedPets;
     }
@@ -201,13 +235,6 @@ public class PetOwner implements PetUser {
 
     @Override
     public void setPetName(String name, PetType type) {
-        setPetName(name, type, false);
-    }
-
-    @Override
-    public void setPetName(String name, PetType type, boolean override) {
-        if (override) return;
-
         if (name != null) nameMap.put(type, name);
 
         if (name == null) {
@@ -224,6 +251,8 @@ public class PetOwner implements PetUser {
             if (event.isCancelled()) return;
 
             entity.setPetName(finalName);
+
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.RENAME, (Player) player, entity.getEntity().getLocation());
         });
     }
 
@@ -241,13 +270,13 @@ public class PetOwner implements PetUser {
     public boolean removePet(PetType type) {
         if (!hasPet(type)) return false;
         if (isPetHat(type)) setPetHat(type, false);
+        PetRemoveEvent event = new PetRemoveEvent(this, petMap.get(type));
+        Bukkit.getPluginManager().callEvent(event);
 
-        if (PetCore.getInstance().getConfiguration().getBoolean(Config.REMOVE_PARTICLE_TOGGLE, true)) {
-            petMap.get(type).getEntities().forEach(entity -> {
-                PetCore.getInstance().getParticleManager().getRemoveParticle().sendToLocation(entity.getLocation());
-                entity.remove();
-            });
-        }
+        petMap.get(type).getEntities().forEach(entity -> {
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) player, entity.getLocation());
+            entity.remove();
+        });
         petMap.remove(type);
         return true;
     }
@@ -257,13 +286,13 @@ public class PetOwner implements PetUser {
         if (petMap.isEmpty()) return false;
         petMap.forEach((type, entityPet) -> {
             if (isPetHat(type)) setPetHat(type, false);
+            PetRemoveEvent event = new PetRemoveEvent(this, entityPet);
+            Bukkit.getPluginManager().callEvent(event);
 
-            if (PetCore.getInstance().getConfiguration().getBoolean(Config.REMOVE_PARTICLE_TOGGLE, true)) {
-                entityPet.getEntities().forEach(entity -> {
-                    PetCore.getInstance().getParticleManager().getRemoveParticle().sendToLocation(entity.getLocation());
-                    entity.remove();
-                });
-            }
+            entityPet.getEntities().forEach(entity -> {
+                SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) player, entity.getLocation());
+                entity.remove();
+            });
         });
         petMap.clear();
         return true;
@@ -288,6 +317,8 @@ public class PetOwner implements PetUser {
 
         // If the player has a duplicate pet being spawned it will remove the old one
         getPetEntity(entity.getPetType()).ifPresent(entityPet -> {
+            PetDuplicateSpawnEvent event = new PetDuplicateSpawnEvent(this, entityPet);
+            Bukkit.getPluginManager().callEvent(event);
             removePet(entityPet.getPetType());
         });
         petMap.put(entity.getPetType(), entity);
@@ -296,12 +327,16 @@ public class PetOwner implements PetUser {
         container.set(Keys.ENTITY_OWNER, new UUIDDataType(), player.getUniqueId());
         container.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, entity.getPetType().getName());
 
-        if (PetCore.getInstance().getConfiguration().getBoolean(Config.SPAWN_PARTICLE_TOGGLE, true)) {
-            entity.getEntities().forEach(ent -> {
-                PetCore.getInstance().getParticleManager().getSpawnParticle().sendToLocation(ent.getLocation());
-            });
-        }
+        entity.getEntities().forEach(ent -> {
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, (Player) player, ent.getLocation());
+        });
+
         getPetName(entity.getPetType()).ifPresent(entity::setPetName);
+    }
+
+    @Override
+    public List<PetType> getHatPets() {
+        return hatPets;
     }
 
     @Override
@@ -339,22 +374,43 @@ public class PetOwner implements PetUser {
                 if (optional.isPresent()) ent = optional.get();
             }
             IPetConfig config = configOptional.get();
+            System.out.println("Pre-check");
             if (config.canHat((Player) player) && hat) {
+                System.out.println("make pet hat");
+                PetHatEvent event = new PetHatEvent(this, entityPet, PetHatEvent.Type.SET);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) {
+                    System.out.println("cancel");
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
+                    return;
+                }
                 hatPets.add(type);
+                System.out.println("added to hatPets");
+                PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.SET);
+                Bukkit.getPluginManager().callEvent(hatEvent);
                 // Set the pet as a hat
                 Entity finalEnt = ent;
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Utilities.setPassenger(getTopEntity((Player) player), finalEnt);
+                        System.out.println("setPassenger");
+                        Utilities.setPassenger((Player) player, getTopEntity((Player) player), finalEnt);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
             } else {
                 // If pet is a hat, remove the hat from the player
                 if (isPetHat(type)) {
+                    PetHatEvent event = new PetHatEvent(this, entityPet, PetHatEvent.Type.REMOVE);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
+                        SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
+                        return;
+                    }
                     Entity vehicle = ent.getVehicle();
                     Entity riderMob = getRiderEntity(ent);
                     hatPets.remove(type);
+                    PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.REMOVE);
+                    Bukkit.getPluginManager().callEvent(hatEvent);
                     if (entityPet instanceof IEntityControllerPet) {
                         IEntityControllerPet controller = ((IEntityControllerPet) entityPet);
                         Optional<Entity> riderOptional = controller.getDisplayRider();
@@ -374,7 +430,7 @@ public class PetOwner implements PetUser {
                         Utilities.removePassenger(vehicle, ent);
                     }
                     if (riderMob != null)
-                        Utilities.setPassenger(vehicle, riderMob);
+                        Utilities.setPassenger((Player) player, vehicle, riderMob);
                 }
             }
         });

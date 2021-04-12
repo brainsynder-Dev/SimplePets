@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.wrappers.MooshroomType;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityMushroomCow}
+ */
 public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMooshroomPet {
     private static final DataWatcherObject<String> TYPE;
 

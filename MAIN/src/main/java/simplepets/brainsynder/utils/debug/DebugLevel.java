@@ -1,4 +1,4 @@
-package simplepets.brainsynder.utils;
+package simplepets.brainsynder.utils.debug;
 
 import org.bukkit.ChatColor;
 
@@ -6,21 +6,53 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum DebugLevel {
-    // Mostly used when debugging (cant be disabled)
+    /**
+     * Mostly used when debugging
+     *
+     *      (Can't be disabled)
+     */
     DEBUG(-1, ChatColor.WHITE, ChatColor.AQUA),
+    /**
+     * Used to send hidden debug messages that can only be seen in the 'debug.json' file
+     *
+     *      (Can't be disabled)
+     */
+    HIDDEN(-1, ChatColor.WHITE, ChatColor.GRAY),
 
-    // Used for normal messages
+    /**
+     * Used when facing a critical error
+     *
+     *      (Can't be disabled)
+     */
+    CRITICAL("Critical Error", -1, ChatColor.WHITE, ChatColor.RED),
+
+    /**
+     * Used for normal messages
+     *
+     *      (Can be disabled if removed from the Debug level list)
+     */
     NORMAL(0, ChatColor.WHITE),
 
-    // Used for warnings
+    /**
+     * Used for warnings
+     *
+     *      (Can be disabled if removed from the Debug level list)
+     */
     MODERATE(1, ChatColor.YELLOW),
 
-    // Used if there is a major error
+    /**
+     * Used if there is a major error
+     *
+     *      (Can be disabled if removed from the Debug level list)
+     */
     ERROR(2, ChatColor.RED),
 
-    // This one is used if there is an update to the plugin (cant be disabled, unless update checking is off)
+    /**
+     * This one is used if there is an update to the plugin
+     *
+     *      (Can only be disabled if update checking is off)
+     */
     UPDATE ("Update", -1, ChatColor.GRAY, ChatColor.GREEN);
-
     private final String string;
     private final ChatColor color;
     private final ChatColor prefix;
@@ -45,7 +77,7 @@ public enum DebugLevel {
     public static List<String> getLevels () {
         List<String> list = new ArrayList<>();
         for (DebugLevel level : values()) {
-            if ((level != DEBUG) && (level != UPDATE)) list.add(level.name());
+            if ((level != DEBUG) && (level != UPDATE) && (level != HIDDEN)) list.add(level.name());
         }
         return list;
     }

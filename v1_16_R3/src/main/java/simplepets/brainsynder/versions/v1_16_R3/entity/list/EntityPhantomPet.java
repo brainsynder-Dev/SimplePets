@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityPhantom}
+ */
 public class EntityPhantomPet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;
 
@@ -32,7 +35,7 @@ public class EntityPhantomPet extends EntityPet implements IEntitySlimePet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("size")) setSize(object.getInteger("size"));
+        if (object.hasKey("size")) setSize(object.getInteger("size", 1));
         super.applyCompound(object);
     }
 

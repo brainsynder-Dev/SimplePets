@@ -11,6 +11,9 @@ import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ControllerJump
 import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ControllerMoveRabbit;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityRabbit}
+ */
 public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPet {
     private static final DataWatcherObject<Integer> RABBIT_TYPE;
     private int jumpTicks;
@@ -32,14 +35,14 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type")) setRabbitType(object.getEnum("type", RabbitType.class, RabbitType.BROWN));
+        if (object.hasKey("variant")) setRabbitType(object.getEnum("variant", RabbitType.class, RabbitType.BROWN));
         super.applyCompound(object);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("type", getRabbitType());
+        object.setEnum("variant", getRabbitType());
         return object;
     }
 

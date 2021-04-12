@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityBee}
+ */
 public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     private static final DataWatcherObject<Byte> FLAGS;
     private static final DataWatcherObject<Integer> ANGER;
@@ -30,7 +33,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
         StorageTagCompound object = super.asCompound();
         object.setBoolean("angry", isAngry());
         object.setBoolean("nectar", hasNectar());
-        object.setBoolean("stung", hasStung());
+        object.setBoolean("stinger", hasStung());
         return object;
     }
 
@@ -38,7 +41,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("angry")) setAngry(object.getBoolean("angry"));
         if (object.hasKey("nectar")) setHasNectar(object.getBoolean("nectar"));
-        if (object.hasKey("stung")) setHasStung(object.getBoolean("stung"));
+        if (object.hasKey("stinger")) setHasStung(object.getBoolean("stinger"));
         super.applyCompound(object);
     }
 

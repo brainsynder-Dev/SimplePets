@@ -10,9 +10,14 @@ import simplepets.brainsynder.api.pet.PetData;
 public class ChargingData extends PetData<IEntityPiglinPet> {
     public ChargingData() {
         addDefaultItem("true", new ItemBuilder(Material.IRON_SWORD)
-                .withName("&#c8c8c8Charging: &atrue"));
+                .withName("&#c8c8c8{name}: &atrue"));
         addDefaultItem("false", new ItemBuilder(Material.IRON_SWORD)
-                .withName("&#c8c8c8Charging: &cfalse"));
+                .withName("&#c8c8c8{name}: &cfalse"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

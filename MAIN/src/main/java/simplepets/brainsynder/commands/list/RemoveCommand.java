@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
@@ -14,14 +15,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @ICommand(
         name = "remove",
-        usage = "[player]",
+        usage = "[type]",
         description = "Remove your pet or another players"
 )
+@Permission(permission = "remove", defaultAllow = true, additionalPermissions = {"other"})
 public class RemoveCommand extends PetSubCommand {
     public RemoveCommand(PetCore plugin) {
         super(plugin);
-
-        registerCompletion(1, getPetTypes());
     }
 
     @Override

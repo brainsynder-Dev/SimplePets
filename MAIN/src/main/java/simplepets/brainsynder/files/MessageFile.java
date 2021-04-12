@@ -1,8 +1,10 @@
 package simplepets.brainsynder.files;
 
 import lib.brainsynder.files.YamlFile;
-import net.md_5.bungee.api.ChatColor;
+import lib.brainsynder.utils.Colorize;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 
@@ -11,6 +13,7 @@ public class MessageFile {
     private static YamlFile file;
 
     public static void init (File folder) {
+        Debug.debug(DebugLevel.HIDDEN, "Initializing Messages file");
         file = new YamlFile(folder, "messages.yml") {
             @Override
             public void loadDefaults() {
@@ -36,14 +39,30 @@ public class MessageFile {
 
                 addDefault(MessageOption.RENAME_VIA_CHAT, "Message that will be sent when the player is renaming the pet via chat");
                 addDefault(MessageOption.RENAME_VIA_CHAT_CANCEL, "Message that will be sent when the player canceled renaming the pet");
+                addDefault(MessageOption.RENAME_ANVIL_TITLE, "The title for the pet rename Anvil GUI");
+                addDefault(MessageOption.RENAME_ANVIL_TAG, "The name for the NAME_TAG in the Anvil GUI");
+                addDefault(MessageOption.RENAME_SIGN_TEXT, "The text that will be set for the sign\n" +
+                        "  - One line MUST have {input} to mark what line the player types the pets name\n" +
+                        "  - Hex colors can NOT be used for this\n" +
+                        "  - MUST have 4 lines");
+
+                addDefault(MessageOption.PET_FILES_REGEN, "Message will be sent when the pets folder has been reset");
+                addDefault(MessageOption.INV_FILES_REGEN, "Message will be sent when the inventories folder has been reset");
+                addDefault(MessageOption.ITEM_FILES_REGEN, "Message will be sent when the items folder has been reset");
+                addDefault(MessageOption.PARTICLE_FILES_REGEN, "Message will be sent when the particles folder has been reset");
+                addDefault(MessageOption.PET_TYPE_FILE_REGEN, "Message will be sent when the selected pet file has been reset");
             }
         };
+    }
+
+    public static YamlFile getFile() {
+        return file;
     }
 
     public static String getTranslation (MessageOption option) {
         String message = file.getString(option);
         if (message.contains("{prefix}") && (option != MessageOption.PREFIX)) message = message.replace("{prefix}", file.getString(MessageOption.PREFIX));
-        return ChatColor.translateAlternateColorCodes('&', message);
+        return Colorize.translateBungeeHex(message);
     }
 
 

@@ -26,7 +26,7 @@
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
         <module.version>5.0 (build ${jenkins.buildNumber})</module.version>
-        <bslib.version>0.1-B64</bslib.version>
+        <bslib.version>B1028</bslib.version>
     </properties>
 
     <build>
@@ -95,6 +95,12 @@
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
             <version>4.5.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.reflections</groupId>
+            <artifactId>reflections</artifactId>
+            <version>0.9.12</version>
         </dependency>
         <dependency>
             <groupId>lib.brainsynder</groupId>

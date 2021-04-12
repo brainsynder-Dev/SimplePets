@@ -3,9 +3,11 @@ package simplepets.brainsynder.managers;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
+import simplepets.brainsynder.menu.inventory.AddonMenu;
 import simplepets.brainsynder.menu.inventory.DataMenu;
+import simplepets.brainsynder.menu.inventory.SavesMenu;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
-import simplepets.brainsynder.utils.Debug;
+import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -15,8 +17,12 @@ import java.util.Optional;
 
 public class InventoryManager implements GUIHandler {
     private File registeredFolder;
+
     public static SelectionMenu SELECTION;
     public static DataMenu PET_DATA;
+    public static SavesMenu PET_SAVES;
+    public static AddonMenu ADDONS;
+
     private final List<CustomInventory> loaders = new ArrayList<>();
 
     public void initiate () {
@@ -30,7 +36,8 @@ public class InventoryManager implements GUIHandler {
 
         loaders.add(new SelectionMenu(getLocation(plugin, SelectionMenu.class)));
         loaders.add(new DataMenu (getLocation(plugin, DataMenu.class)));
-//        loaders.add(new SavesMenu (CustomInventory.getLocation(core, SavesMenu.class)));
+        loaders.add(new SavesMenu (getLocation(plugin, SavesMenu.class)));
+        loaders.add(new AddonMenu(getLocation(plugin, AddonMenu.class)));
 //        loaders.add(new ArmorMenu(CustomInventory.getLocation(core, ArmorMenu.class)));
 
         for (CustomInventory loader : loaders) loader.save();
@@ -39,7 +46,8 @@ public class InventoryManager implements GUIHandler {
 
         SELECTION = getInventory(SelectionMenu.class).get();
         PET_DATA = getInventory(DataMenu.class).get();
-//        SAVES = getLoader(SavesMenu.class);
+        PET_SAVES = getInventory(SavesMenu.class).get();
+        ADDONS = getInventory(AddonMenu.class).get();
 //        ARMOR = getLoader(ArmorMenu.class);
     }
 

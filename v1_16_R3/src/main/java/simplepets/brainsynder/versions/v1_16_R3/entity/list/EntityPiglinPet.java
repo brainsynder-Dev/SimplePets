@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityPiglinAbstractPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityPiglin}
+ */
 public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityPiglinPet {
     private static final DataWatcherObject<Boolean> BABY;
     private static final DataWatcherObject<Boolean> CHARGING;

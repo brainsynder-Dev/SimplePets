@@ -10,10 +10,10 @@ public enum BiomeType {
     DESERT(new ItemBuilder(Material.SAND)),
     JUNGLE(new ItemBuilder(Material.VINE)),
     PLAINS(new ItemBuilder(Material.GRASS_BLOCK)),
-    SAVANNA(new ItemBuilder(Material.PODZOL)),
+    SAVANNA(new ItemBuilder(Material.ACACIA_LOG)),
     SNOW(new ItemBuilder(Material.SNOW_BLOCK)),
     SWAMP(new ItemBuilder(Material.SLIME_BLOCK)),
-    TAIGA(new ItemBuilder(Material.MOSSY_COBBLESTONE));
+    TAIGA(new ItemBuilder(Material.PODZOL));
 
     private final ItemBuilder icon;
     BiomeType (ItemBuilder icon) {

@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntitySheep}
+ */
 public class EntitySheepPet extends EntityAgeablePet implements IEntitySheepPet {
     private static final DataWatcherObject<Byte> DYE_COLOR;
     private DyeColorWrapper color = DyeColorWrapper.WHITE;

@@ -2,12 +2,16 @@ package simplepets.brainsynder;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
+import lib.brainsynder.json.WriterConfig;
 import lib.brainsynder.metric.bukkit.Metrics;
+import lib.brainsynder.reflection.Reflection;
+import lib.brainsynder.update.UpdateResult;
+import lib.brainsynder.update.UpdateUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.reflections.Reflections;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
@@ -17,87 +21,195 @@ import simplepets.brainsynder.api.plugin.IPetsPlugin;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.UserManagement;
 import simplepets.brainsynder.commands.PetsCommand;
+import simplepets.brainsynder.commands.list.DebugCommand;
 import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.impl.PetOwner;
-import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
-import simplepets.brainsynder.utils.Debug;
+import simplepets.brainsynder.utils.debug.Debug;
+import simplepets.brainsynder.utils.debug.DebugBuilder;
+import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class PetCore extends JavaPlugin implements IPetsPlugin {
     private static PetCore instance;
 
     private File itemFolder;
+    private boolean reloaded = false;
 
     private Config configuration;
 
-    private ISpawnUtil SPAWN_UTIL; // TODO: Init
+    private ISpawnUtil SPAWN_UTIL;
     private UserManager USER_MANAGER;
     private PetConfiguration PET_CONFIG;
     private RenameManager renameManager;
     private ItemManager itemManager;
     private InventoryManager inventoryManager;
     private ParticleManager particleManager;
+    private AddonManager addonManager;
+
+    private UpdateUtils updateUtils;
+    private UpdateResult updateResult;
 
     @Override
     public void onEnable() {
         Debug.init(this);
+        Debug.debug(DebugLevel.HIDDEN, "Setting API instance");
+        SimplePets.setPLUGIN(this);
 
         instance = this;
         itemFolder = new File(getDataFolder().toString()+File.separator+"Items");
 
         MessageFile.init(getDataFolder());
+
+        Debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
+
+        reloaded = configuration.getBoolean("Reload-Detected", false);
+        Debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: "+reloaded);
+        configuration.remove("Reload-Detected");
+
+        Debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
         new InventorySQL();
         reloadSpawner();
 
-        SimplePets.setPLUGIN(this);
         handleManagers();
 
+        Debug.debug(DebugLevel.HIDDEN, "Initializing Player SQL");
         new PlayerSQL();
 
         handleMetrics();
 
         try {
+            Debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         handleListeners ();
+        handleUpdateUtils();
+
+        addonManager = new AddonManager(this);
+        addonManager.initialize();
+        addonManager.checkAddons();
 
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
         new BukkitRunnable() {
             @Override
             public void run() {
+                Debug.debug(DebugLevel.HIDDEN, "Respawning pets for players (if there are any)");
                 UserManagement userManager = SimplePets.getUserManager();
                 Bukkit.getOnlinePlayers().forEach(userManager::getPetUser);
             }
         }.runTaskLater(this, 20);
+
     }
 
     @Override
     public void onDisable() {
+        Debug.debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
         USER_MANAGER.getAllUsers().forEach(user -> ((PetOwner) user).markForRespawn());
 
+        addonManager.cleanup();
+
+        DebugCommand.fetchDebug(json -> {
+            json.set("reloaded", !isShuttingDown());
+            DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
+            Debug.debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
+        }, true);
+
+        addonManager = null;
         USER_MANAGER = null;
         PET_CONFIG = null;
         SPAWN_UTIL = null;
 
+        // Detected a reload...
+        if (!isShuttingDown()) {
+            Debug.debug(DebugBuilder.build().setMessages(
+                    "------------------------------------",
+                    "    The plugin has detected a reload",
+                    "If you encounter ANY strange issues then this will be the cause.",
+                    "To fix those, Simply RESTART your server",
+                    "------------------------------------"
+            ).setSync(false).setBroadcast(true).setLevel(DebugLevel.CRITICAL));
+            configuration.set("Reload-Detected", true);
+        }
+
         configuration = null;
+
         PlayerSQL.getInstance().disconnect();
         InventorySQL.getInstance().disconnect();
+
+    }
+
+    private void handleUpdateUtils () {
+        Debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
+        // Handle Update checking
+        updateResult = new UpdateResult().setPreStart(() -> Debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
+                .setFailParse(members -> Debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
+                .setNoNewBuilds(() -> Debug.debug(DebugLevel.UPDATE, "No new builds were found"))
+                .setOnError(() -> Debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
+                .setNewBuild(members -> {
+                    int latestBuild = members.getInt("build", -1);
+
+                    // New build found
+                    if (latestBuild > updateResult.getCurrentBuild()) {
+                        Debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
+                        Debug.debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
+                    }
+                });
+        updateUtils = new UpdateUtils(this, updateResult);
+
+        if (!configuration.getBoolean("Update-Checking.Enabled", true)) return;
+        int time = configuration.getInt("Update-Checking.time", 12);
+        TimeUnit unit;
+
+        String timeunit = configuration.getString("Update-Checking.unit", "HOURS");
+        try {
+            unit = TimeUnit.valueOf(timeunit);
+        }catch (Exception e) {
+            unit = TimeUnit.HOURS;
+            Debug.debug(DebugLevel.ERROR, "Could not find unit for '"+timeunit+"'");
+        }
+
+        updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
+
+    }
+
+    public boolean wasReloaded() {
+        return reloaded;
+    }
+
+    private boolean isShuttingDown() {
+        try {
+            Method isStopping = Bukkit.class.getDeclaredMethod("isStopping");
+            return (boolean) Reflection.invoke(isStopping, null);
+        }catch (Exception e) {
+            Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer");
+            try {
+                Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
+                Method isRunning = Reflection.getMethod(nmsClass, "isRunning");
+                return !((boolean) Reflection.invoke(isRunning, server));
+            } catch (IllegalAccessException | InvocationTargetException exception) {
+                exception.printStackTrace();
+            }
+        }
+        return true;
     }
 
     private void handleManagers () {
+        Debug.debug(DebugLevel.HIDDEN, "Initializing plugin managers");
         particleManager = new ParticleManager(this);
         renameManager = new RenameManager(this);
         PET_CONFIG = new PetConfiguration(this);
@@ -108,16 +220,25 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         inventoryManager = new InventoryManager();
         inventoryManager.initiate();
-
     }
 
     // Registers all listeners
     private void handleListeners () {
-        getServer().getPluginManager().registerEvents(new DataGUIListener(), this);
-        getServer().getPluginManager().registerEvents(new SelectionGUIListener(), this);
-        getServer().getPluginManager().registerEvents(new InteractListener(), this);
-        getServer().getPluginManager().registerEvents(new ChunkUnloadListener(), this);
-        getServer().getPluginManager().registerEvents(new JoinLeaveListeners(), this);
+        Debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
+
+        // This bit of code automatically registers all the listeners in the listeners package
+        String packageName = getClass().getPackage().getName();
+        for (Class<?> clazz : new Reflections(packageName+".listeners").getSubTypesOf(Listener.class)) {
+            try {
+                Listener listener = (Listener) clazz.getDeclaredConstructor().newInstance();
+                getServer().getPluginManager().registerEvents(listener, this);
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.CRITICAL).setMessages(
+                        "Failed to register listener: "+clazz.getSimpleName(),
+                        "Error Cause: "+e.getMessage()
+                ));
+            }
+        }
     }
 
     @Override
@@ -164,27 +285,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return configuration;
     }
 
-    public boolean hasPerm(Player p, String perm) {
-        return hasPerm(p, perm, false) == 1;
-    }
-
-    public int hasPerm(Player p, String perm, boolean strict) {
-        if (configuration.getBoolean("Needs-Permission")) {
-            if (strict) {
-                for (PermissionAttachmentInfo info : p.getEffectivePermissions()) {
-                    if (info.getPermission().equalsIgnoreCase(perm)) {
-                        return info.getValue() ? 1 : 0;
-                    }
-                }
-                return -1;
-            } else {
-                return p.hasPermission(perm) ? 1 : 0;
-            }
-        } else {
-            return 1;
-        }
-    }
-
     private Map<String, Integer> getActivePets() {
         Map<String, Integer> users = new HashMap<>();
 
@@ -204,8 +304,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return users;
     }
 
+    public AddonManager getAddonManager() {
+        return addonManager;
+    }
 
     private void handleMetrics () {
+        Debug.debug(DebugLevel.HIDDEN, "Loading Metrics");
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
     }
@@ -213,15 +317,15 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + version.name() + ".SpawnerUtil");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + version + ".SpawnerUtil");
             if (clazz == null) return;
             if (ISpawnUtil.class.isAssignableFrom(clazz)) {
                 SPAWN_UTIL = (ISpawnUtil) clazz.getConstructor().newInstance();
-                //TODO: debug("Successfully Linked to " + version.name() + " SpawnUtil Class");
+                Debug.debug(DebugLevel.HIDDEN, "Successfully Linked to " + version.name() + " SpawnUtil Class");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO: debug("Could not link to a SpawnUtil Class... Possible Wrong version?");
+            Debug.debug(DebugLevel.ERROR, "Could not link to a SpawnUtil Class... Missing for version: "+version);
         }
     }
 
@@ -233,11 +337,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return itemFolder;
     }
 
-    public ParticleManager getParticleManager() {
+    @Override
+    public ParticleManager getParticleHandler() {
         return particleManager;
     }
 
     public static PetCore getInstance() {
         return instance;
+    }
+
+    public UpdateUtils getUpdateUtils() {
+        return updateUtils;
     }
 }

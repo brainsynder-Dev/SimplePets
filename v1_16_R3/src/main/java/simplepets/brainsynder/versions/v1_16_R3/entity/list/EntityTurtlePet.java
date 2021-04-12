@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityTurtle}
+ */
 public class EntityTurtlePet extends EntityAgeablePet implements IEntityTurtlePet {
     private static final DataWatcherObject<BlockPosition> HOME_POS;
     private static final DataWatcherObject<Boolean> HAS_EGG;

@@ -8,6 +8,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 
 import java.util.Optional;
@@ -16,6 +17,7 @@ import java.util.Optional;
         name = "list",
         description = "Lists all the different pet types"
 )
+@Permission(permission = "list", defaultAllow = true)
 public class ListCommand extends PetSubCommand {
     public ListCommand(PetCore plugin) {
         super(plugin);

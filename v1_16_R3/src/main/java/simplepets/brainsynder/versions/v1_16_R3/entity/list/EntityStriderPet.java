@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityStrider}
+ */
 public class EntityStriderPet extends EntityAgeablePet implements IEntityStriderPet {
     private static DataWatcherObject<Integer> BOOST_TIME;
     private static DataWatcherObject<Boolean> COLD;

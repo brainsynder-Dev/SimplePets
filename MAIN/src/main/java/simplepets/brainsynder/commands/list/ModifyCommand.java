@@ -5,29 +5,30 @@ import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @ICommand(
         name = "modify",
-        usage = "<player> <type> <json>",
+        usage = "[player] <type> <nbt>",
         description = "Modify the Selected Players' Pet."
 )
+@Permission(permission = "modify", additionalPermissions = {"other"})
 public class ModifyCommand extends PetSubCommand {
     public ModifyCommand(PetCore plugin) {
         super(plugin);
-
-        registerCompletion(1, getOnlinePlayers());
-        registerCompletion(2, getPetTypes());
-        //registerCompletion(3, Arrays.asList("{}"));
     }
 
     @Override
@@ -36,16 +37,32 @@ public class ModifyCommand extends PetSubCommand {
             sendUsage(sender);
             return;
         }
+        AtomicInteger argStart = new AtomicInteger (0);
 
-        Player target = Bukkit.getPlayerExact(args[0]);
+        Player target = null;
+        if (isUsername(args[argStart.get()]) && Utilities.hasPermission(sender, getPermission("other"))) {
+            Player selected = Bukkit.getPlayerExact(args[argStart.get()]);
+            if (selected != null) {
+                target = selected;
+                if (!Utilities.hasPermission(sender, getPermission("other"))) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    return;
+                }
+                argStart.getAndIncrement();
+            }
+        }
+
         if (target == null) {
-            sender.sendMessage("player not online");
-            return;
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED+"You must be a player to run this command for yourself.");
+            }else{
+                target = (Player) sender;
+            }
         }
 
         SimplePets.getUserManager().getPetUser(target).ifPresent(user -> {
 
-            Optional<PetType> petType = PetType.getPetType(args[1]);
+            Optional<PetType> petType = PetType.getPetType(args[argStart.get()]);
             if (!petType.isPresent()) {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[1]));
                 return;
@@ -59,7 +76,7 @@ public class ModifyCommand extends PetSubCommand {
             }
 
             StorageTagCompound compound;
-            String json = messageMaker(args, 2).replace(" ", "~");
+            String json = messageMaker(args, argStart.get()+1).replace(" ", "~");
             json = formatJson(json);
 
 

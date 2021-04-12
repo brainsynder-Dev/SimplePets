@@ -7,6 +7,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityDolphin}
+ */
 public class EntityDolphinPet extends EntityPet implements IEntityDolphinPet {
     private static final DataWatcherObject<BlockPosition> TREASURE;
     private static final DataWatcherObject<Boolean> HAS_FISH;

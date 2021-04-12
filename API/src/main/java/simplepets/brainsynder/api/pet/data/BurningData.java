@@ -10,11 +10,16 @@ import simplepets.brainsynder.api.pet.PetData;
 public class BurningData extends PetData<IEntityBlazePet> {
     public BurningData() {
         addDefaultItem("true", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Burning: &atrue")
+                .withName("&#c8c8c8{name}: &atrue")
                 .setTexture("http://textures.minecraft.net/texture/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"));
         addDefaultItem("false", new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#c8c8c8Burning: &cfalse")
+                .withName("&#c8c8c8{name}: &cfalse")
                 .setTexture("http://textures.minecraft.net/texture/4080bbefca87dc0f36536b6508425cfc4b95ba6e8f5e6a46ff9e9cb488a9ed"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

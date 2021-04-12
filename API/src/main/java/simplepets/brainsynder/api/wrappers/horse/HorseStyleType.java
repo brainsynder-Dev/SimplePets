@@ -60,6 +60,14 @@ public enum HorseStyleType {
         return -1;
     }
 
+    public static HorseStyleType getPrevious(HorseStyleType current) {
+        return (current == NONE) ? BLACK_DOTS : values()[current.ordinal() - 1];
+    }
+
+    public static HorseStyleType getNext(HorseStyleType current) {
+        return (current == BLACK_DOTS) ? NONE : values()[current.ordinal() + 1];
+    }
+
     public Horse.Style getBukkitStyle() {
         return this.bukkitStyle;
     }

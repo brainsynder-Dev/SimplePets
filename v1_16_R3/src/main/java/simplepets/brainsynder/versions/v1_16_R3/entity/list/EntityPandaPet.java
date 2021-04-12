@@ -1,5 +1,6 @@
 package simplepets.brainsynder.versions.v1_16_R3.entity.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.server.v1_16_R3.*;
 import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.api.pet.PetType;
@@ -10,6 +11,9 @@ import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
 import java.util.List;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityPanda}
+ */
 public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet {
     private static final DataWatcherObject<Integer> ASK_FOR_BAMBOO_TICKS;
     private static final DataWatcherObject<Integer> SNEEZE_PROGRESS;
@@ -34,6 +38,25 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     }
 
     @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setEnum("type", getGene());
+        object.setBoolean("sitting", isSitting());
+        object.setBoolean("sleeping", isLyingOnBack());
+        object.setBoolean("sneeze", isSneezing());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("type")) setGene(object.getEnum("type", PandaGene.class, PandaGene.NORMAL));
+        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting", false));
+        if (object.hasKey("sleeping")) setLyingOnBack(object.getBoolean("sleeping", false));
+        if (object.hasKey("sneeze")) setSneezing(object.getBoolean("sneeze", false));
+        super.applyCompound(object);
+    }
+
+    @Override
     public PandaGene getGene() {
         return PandaGene.byId(this.datawatcher.get(MAIN_GENE));
     }
@@ -49,16 +72,6 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
         }else if ((hidden != PandaGene.BROWN) && (hidden != PandaGene.WEAK)) {
             if (hidden != PandaGene.NORMAL) datawatcher.set(HIDDEN_GENE, (byte)0);
         }
-    }
-
-    @Override
-    public void setSitting(boolean value) {
-        datawatcher.set(EATING_TICKS, value ? 1 : 0);
-    }
-
-    @Override
-    public boolean isSitting() {
-        return datawatcher.get(EATING_TICKS) > 0;
     }
 
     @Override

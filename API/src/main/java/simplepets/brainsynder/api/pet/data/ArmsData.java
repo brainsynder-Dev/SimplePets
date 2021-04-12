@@ -12,9 +12,14 @@ import simplepets.brainsynder.api.pet.PetData;
 public class ArmsData extends PetData {
     public ArmsData() {
         addDefaultItem("true", new ItemBuilder(Material.STICK)
-                .withName("&#c8c8c8Arms Raised: &atrue"));
+                .withName("&#c8c8c8{name}: &atrue"));
         addDefaultItem("false", new ItemBuilder(Material.STICK)
-                .withName("&#c8c8c8Arms Raised: &cfalse"));
+                .withName("&#c8c8c8{name}: &cfalse"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

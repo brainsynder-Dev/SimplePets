@@ -2,7 +2,9 @@ package simplepets.brainsynder.commands.list;
 
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.WriterConfig;
 import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.utils.Callback;
 import lib.brainsynder.web.DiscordHook;
 import lib.brainsynder.web.WebConnector;
 import net.md_5.bungee.api.ChatColor;
@@ -11,6 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -18,8 +21,12 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.Keys;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.List;
 
@@ -28,6 +35,7 @@ import java.util.List;
         usage = "<issue_title>",
         description = "Used to report an issue with the plugin without opening discord/github"
 )
+@Permission(permission = "issue_report", adminCommand = true)
 public class ReportCommand extends PetSubCommand implements Listener {
 
     public ReportCommand(PetCore plugin) {
@@ -38,12 +46,7 @@ public class ReportCommand extends PetSubCommand implements Listener {
     public void run(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
             sender.sendMessage(ChatColor.RED + "You need to be a player to run this command.");
-            sender.sendMessage(ChatColor.RED + "Or report the issue here:§r https://github.com/brainsynder-Dev/SimplePets/issues/new");
-            return;
-        }
-
-        if (!sender.isOp()) {
-            sender.sendMessage(ChatColor.RED+"You must be an operator to edit this book");
+            sender.sendMessage(ChatColor.RED + "Or report the issue here:§r https://github.com/brainsynder-Dev/SimplePets/issues/new/choose");
             return;
         }
 
@@ -71,6 +74,15 @@ public class ReportCommand extends PetSubCommand implements Listener {
     }
 
     @EventHandler
+    public void onDrop (PlayerDropItemEvent event) {
+        ItemStack stack = event.getItemDrop().getItemStack();
+        if (!stack.hasItemMeta()) return;
+        if (stack.getType().name().contains("BOOK")) return;
+        if (!stack.getItemMeta().getPersistentDataContainer().has(Keys.BOOK_KEY, PersistentDataType.STRING)) return;
+        event.getItemDrop().remove();
+    }
+
+    @EventHandler
     public void handleBook (PlayerEditBookEvent event) {
 
         // No changes to the meta
@@ -78,15 +90,19 @@ public class ReportCommand extends PetSubCommand implements Listener {
 
         // The book is an issue book
         if (event.getNewBookMeta().getPersistentDataContainer().has(Keys.BOOK_KEY, PersistentDataType.STRING)) {
-            if (!event.getPlayer().isOp()) {
+            if (!Utilities.hasPermission(event.getPlayer(), getPermission())) {
                 event.setNewBookMeta(event.getPreviousBookMeta());
-                event.getPlayer().sendMessage(ChatColor.RED+"You must be an operator to edit this book");
+                event.getPlayer().sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                 return;
             }
+            event.setCancelled(true);
+            event.setSigning(false);
 
             List<String> pages = event.getNewBookMeta().getPages();
 
             StringBuilder builder = new StringBuilder();
+            builder.append("Title: ").append(event.getPreviousBookMeta().getTitle()).append(" | ").append(event.getNewBookMeta().getTitle()).append("\n");
+
             pages.forEach(s -> builder.append(s).append("\n\n"));
 
             String newTitle = Base64Wrapper.encodeString(event.getNewBookMeta().getTitle());
@@ -99,21 +115,37 @@ public class ReportCommand extends PetSubCommand implements Listener {
                 if (!stack.getType().name().contains("BOOK")) continue;
                 if (!stack.hasItemMeta()) continue;
                 ItemMeta meta = stack.getItemMeta();
-                if (meta.getPersistentDataContainer().has(Keys.BOOK_KEY, PersistentDataType.STRING)) {
+                if (meta.getPersistentDataContainer().has(Keys.BOOK_KEY, PersistentDataType.STRING)
+                        || (meta == event.getNewBookMeta())
+                        || (meta == event.getPreviousBookMeta())) {
                     inventory.setItem((slot-1), new ItemStack(Material.AIR));
                 }
             }
 
-            WebConnector.getInputStreamString("https://pluginwiki.us/pastebin/paste.php?title="+newTitle+"&text="+newText, getPlugin(), s -> {
-                event.getPlayer().sendMessage("URL: "+s);
-                if (s.startsWith("http")) {
-                    DiscordHook hook = new DiscordHook("https://discord.com/api/webhooks/802758724820533248/QgvJd0vYLOl5UHyLNDLboYjijLPhIaYTlRakazofNZAvduGpoL6XKAIRs7BI584W67GO");
-                    hook.setUsername(event.getPlayer().getName());
-                    hook.setAvatarUrl("https://minotar.net/cube/"+event.getPlayer().getUniqueId()+"/100.png");
-                    hook.setContent(s);
-                    hook.send();
-                }
-            });
+            DebugCommand.fetchDebug(object -> {
+                builder.append("\n\n").append(object.toString(WriterConfig.PRETTY_PRINT));
+                DiscordHook hook = new DiscordHook("https://discord.com/api/webhooks/802758724820533248/QgvJd0vYLOl5UHyLNDLboYjijLPhIaYTlRakazofNZAvduGpoL6XKAIRs7BI584W67GO");
+                hook.setUsername(event.getPlayer().getName());
+                hook.setAvatarUrl("https://minotar.net/cube/"+event.getPlayer().getUniqueId()+"/100.png");
+
+                WebConnector.uploadPaste(getPlugin(), builder.toString(), new Callback<String, String>() {
+                    @Override
+                    public void success(String s) {
+                        hook.setContent(s);
+                        hook.send();
+                    }
+
+                    @Override
+                    public void fail(String value) {
+                        WebConnector.getInputStreamString("https://pluginwiki.us/pastebin/paste.php?title="+newTitle+"&text="+newText, getPlugin(), s -> {
+                            if (s.startsWith("http")) {
+                                hook.setContent(s);
+                                hook.send();
+                            }
+                        });
+                    }
+                });
+            }, false);
         }
     }
 }

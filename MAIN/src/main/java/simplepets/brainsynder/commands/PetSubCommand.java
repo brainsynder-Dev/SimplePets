@@ -6,10 +6,10 @@ import lib.brainsynder.nms.Tellraw;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,37 +27,62 @@ public class PetSubCommand extends SubCommand {
         return plugin;
     }
 
-    public boolean hasPermission (CommandSender sender) {
-        if (getClass().isAnnotationPresent(Permission.class)){
-            return sender.hasPermission(getPermission ());
-        }
-        return true;
-    }
-
     @Override
     public boolean canExecute(CommandSender sender) {
-        if (needsPermission()) return hasPermission(sender);
+        if (needsPermission()) {
+            //sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+            return Utilities.hasPermission(sender, getPermission());
+        }
         return super.canExecute(sender);
     }
 
-    public boolean needsPermission () {
+
+    @Override
+    public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        ICommand command = getCommand(getClass());
+        if (command == null) return completions;
+        String usage = command.usage();
+        if ((usage == null) || usage.isEmpty()) return completions;
+
+        String[] split = usage.split(" ");
+        int current = 1;
+        for (String value : split) {
+            if (current == index) {
+                if (value.contains("nbt") && Utilities.hasPermission(sender, getPermission("nbt"))) completions.add("{}");
+                if (value.contains("type")) completions.addAll(getPetTypes(sender));
+                if (value.contains("player") && Utilities.hasPermission(sender, getPermission("other"))) completions.addAll(getOnlinePlayers());
+                break;
+            }
+            current++;
+        }
+        return completions;
+    }
+
+    public boolean needsPermission() {
         return getClass().isAnnotationPresent(Permission.class);
     }
 
-    public String getPermission () {
-        if (getClass().isAnnotationPresent(Permission.class)){
-            return "Pet.commands." + getClass().getAnnotation(Permission.class).permission();
+    public String getPermission() {
+        if (getClass().isAnnotationPresent(Permission.class)) {
+            return "pet.commands." + getClass().getAnnotation(Permission.class).permission();
         }
-        return null;
+        return "";
     }
 
-    public List<String> getOnlinePlayers () {
+    public String getPermission(String addition) {
+        if (getClass().isAnnotationPresent(Permission.class)) {
+            return "pet.commands." + getClass().getAnnotation(Permission.class).permission() + "." + addition;
+        }
+        return "";
+    }
+
+    public List<String> getOnlinePlayers() {
         List<String> list = new ArrayList<>();
         Bukkit.getOnlinePlayers().forEach(o -> list.add(o.getName()));
         return list;
     }
 
-    public List<String> getPetTypes () {
+    public List<String> getPetTypes() {
         List<String> list = new ArrayList<>();
         for (PetType type : PetType.values()) {
             SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
@@ -70,7 +95,22 @@ public class PetSubCommand extends SubCommand {
         return list;
     }
 
-    public String formatJson (String json) {
+    public List<String> getPetTypes(CommandSender sender) {
+        List<String> list = new ArrayList<>();
+        for (PetType type : PetType.values()) {
+            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                if (!config.isEnabled()) return;
+                if (!type.isSupported()) return;
+                if (!SimplePets.getSpawnUtil().isRegistered(type)) return;
+
+                if (!Utilities.hasPermission(sender, type.getPermission())) return;
+                list.add(type.getName());
+            });
+        }
+        return list;
+    }
+
+    public String formatJson(String json) {
         // This should allow for spaces to be used in the NBT data
         Pattern pattern = Pattern.compile("\"([^\"]*)\"");
         Matcher matcher = pattern.matcher(json);
@@ -85,13 +125,8 @@ public class PetSubCommand extends SubCommand {
     }
 
 
-
     @Override
     public void sendUsage(CommandSender sender) {
-        if (!(sender instanceof Player)) {
-            super.sendUsage(sender);
-            return;
-        }
         ICommand command = this.getCommand(this.getClass());
         String usage = command.usage().trim();
         String description = command.description();
@@ -106,14 +141,14 @@ public class PetSubCommand extends SubCommand {
         // handles adding alias to the tooltip
         List<String> tooltip = new ArrayList<>();
         if (!description.isEmpty())
-            tooltip.add(ChatColor.GRAY+description);
+            tooltip.add(ChatColor.GRAY + description);
 
         if (command.alias().length != 0) {
             if (!command.alias()[0].isEmpty()) {
                 tooltip.add("&r");
                 tooltip.add("&8Alias:");
                 for (String alias : command.alias())
-                    tooltip.add(ChatColor.GRAY + " - "+alias);
+                    tooltip.add(ChatColor.GRAY + " - " + alias);
 
             }
         }
@@ -148,7 +183,6 @@ public class PetSubCommand extends SubCommand {
     }
 
 
-
     private org.bukkit.Color hex2Rgb(String hex) {
         if (hex.startsWith("#") && hex.length() == 7) {
             int rgb;
@@ -162,5 +196,9 @@ public class PetSubCommand extends SubCommand {
         } else {
             return org.bukkit.Color.RED;
         }
+    }
+
+    public boolean isUsername (String string) {
+        return (string.length() < 17) && (string.length() > 2) && string.replace("_", "").matches("[A-Za-z0-9]+");
     }
 }

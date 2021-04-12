@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.wrappers.LlamaColor;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityDonkeyAbstractPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityLlama}
+ */
 public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLlamaPet {
     private static final DataWatcherObject<Integer> STRENGTH;
     private static final DataWatcherObject<Integer> COLOR;
@@ -34,14 +37,14 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("variant", getLlamaColor().name());
+        object.setString("skin", getSkinColor().name());
         object.setString("color", getColor().name());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setSkinColor(LlamaColor.getByName(object.getString("variant")));
+        if (object.hasKey("skin")) setSkinColor(LlamaColor.getByName(object.getString("skin")));
         if (object.hasKey("color"))
             setColor(ColorWrapper.getByName(object.getString("color")));
         super.applyCompound(object);
@@ -53,7 +56,7 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     }
 
     @Override
-    public LlamaColor getLlamaColor() {
+    public LlamaColor getSkinColor() {
         return LlamaColor.getByID(getDataWatcher().get(VARIANT));
     }
 

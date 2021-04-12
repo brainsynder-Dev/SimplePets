@@ -1,6 +1,5 @@
 package simplepets.brainsynder.hooks;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -8,8 +7,11 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.SignMenuFactory;
 
+import java.util.List;
 import java.util.Map;
 
 public class ProtocolHook {
@@ -18,12 +20,24 @@ public class ProtocolHook {
 
     public static void renameViaSign (PetUser user, PetType type) {
         typeMap.put(user.getPlayer().getName(), type);
+        List<String> layout = MessageFile.getFile().getStringList(MessageOption.RENAME_SIGN_TEXT.getPath());
+        int index = 0;
+        for (String line : layout) {
+            if (line.trim().equalsIgnoreCase("{input}")) break;
+            index++;
+        }
+
+        layout.add(index, " ");
+
+        if (index >= 4) throw new IndexOutOfBoundsException("The layout for the sign gui must have 4 lines, and one of the lines must be for the {input}");
+
+        int finalIndex = index;
         signMenuFactory
                 // Does not support HEX colors
-                .newMenu(Lists.newArrayList(" ", "&l^^^^^^^^", "&#b35349Please Enter", "&#b35349Pet Name"))
+                .newMenu(layout)
                 .reopenIfFail()
                 .response((player, lines) -> {
-                    String line = lines[0];
+                    String line = lines[finalIndex];
                     if ((line == null) || line.isEmpty()) return false;
                     PetType petType = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
                     if (petType == PetType.UNKNOWN) return false;  // failure. becaues reopenIfFail was called, menu will reopen when closed.

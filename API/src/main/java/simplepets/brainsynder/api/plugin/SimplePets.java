@@ -1,8 +1,10 @@
 package simplepets.brainsynder.api.plugin;
 
+import org.bukkit.entity.Entity;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
+import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.user.UserManagement;
 
@@ -12,6 +14,10 @@ public final class SimplePets {
     public static void setPLUGIN(IPetsPlugin plugin) {
         if(PLUGIN != null) return;
         PLUGIN = plugin;
+    }
+
+    public static IPetsPlugin getPlugin() {
+        return PLUGIN;
     }
 
     public static UserManagement getUserManager () {
@@ -32,5 +38,13 @@ public final class SimplePets {
 
     public static GUIHandler getGUIHandler () {
         return PLUGIN.getGUIHandler();
+    }
+
+    public static ParticleHandler getParticleHandler () {
+        return PLUGIN.getParticleHandler();
+    }
+
+    public static boolean isPetEntity (Entity entity) {
+        return PLUGIN.isPetEntity(entity);
     }
 }

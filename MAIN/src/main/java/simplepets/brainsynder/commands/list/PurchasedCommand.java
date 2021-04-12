@@ -10,21 +10,31 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+
+import java.util.List;
 
 @ICommand(
         name = "purchased",
         usage = "<add/remove/list> <player> [type]",
         description = "Controls what pets the player has purchased"
 )
+@Permission(permission = "purchased")
 public class PurchasedCommand extends PetSubCommand {
     public PurchasedCommand(PetCore plugin) {
         super(plugin);
         registerCompletion(1, Lists.newArrayList("add", "remove", "list"));
-        registerCompletion(2, getOnlinePlayers());
-        registerCompletion(3, getPetTypes());
+    }
+
+    @Override
+    public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        if ((index == 3)) {
+            if (!args[0].contains("list")) return getPetTypes();
+        }
+        return super.handleCompletions(completions, sender, index, args);
     }
 
     @Override

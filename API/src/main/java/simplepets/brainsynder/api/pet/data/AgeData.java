@@ -10,9 +10,14 @@ import simplepets.brainsynder.api.pet.PetData;
 public class AgeData extends PetData<IAgeablePet> {
     public AgeData() {
         addDefaultItem("true", new ItemBuilder(Material.WHEAT)
-                .withName("&#c8c8c8Baby: &atrue"));
+                .withName("&#c8c8c8{name}: &atrue"));
         addDefaultItem("false", new ItemBuilder(Material.WHEAT)
-                .withName("&#c8c8c8Baby: &cfalse"));
+                .withName("&#c8c8c8{name}: &cfalse"));
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return false;
     }
 
     @Override

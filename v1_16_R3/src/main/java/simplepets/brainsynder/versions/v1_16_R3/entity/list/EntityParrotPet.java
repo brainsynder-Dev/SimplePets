@@ -10,6 +10,9 @@ import simplepets.brainsynder.versions.v1_16_R3.entity.EntityTameablePet;
 import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ParrotController;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityParrot}
+ */
 public class EntityParrotPet extends EntityTameablePet implements IEntityParrotPet {
     private static final DataWatcherObject<Integer> TYPE;
     private boolean rainbow = false;
@@ -41,7 +44,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("color")) setVariant(ParrotVariant.getByName(object.getString("color")));
+        if (object.hasKey("variant")) setVariant(ParrotVariant.getByName(object.getString("variant")));
         if (object.hasKey("rainbow")) rainbow = object.getBoolean("rainbow");
         super.applyCompound(object);
     }
@@ -49,7 +52,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        if (!rainbow) object.setString("color", getVariant().name());
+        if (!rainbow) object.setString("variant", getVariant().name());
         object.setBoolean("rainbow", rainbow);
         return object;
     }

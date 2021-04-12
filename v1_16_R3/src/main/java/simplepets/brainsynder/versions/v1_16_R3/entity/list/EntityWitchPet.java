@@ -14,6 +14,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityRaiderPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityWitch}
+ */
 public class EntityWitchPet extends EntityRaiderPet implements IEntityWitchPet {
     private static final DataWatcherObject<Boolean> IS_DRINKING;
 
@@ -30,14 +33,14 @@ public class EntityWitchPet extends EntityRaiderPet implements IEntityWitchPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("drinking", isDrinkingPotion());
+        object.setBoolean("potion", isDrinkingPotion());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("drinking"))
-            setDrinkingPotion(object.getBoolean("drinking"));
+        if (object.hasKey("potion"))
+            setDrinkingPotion(object.getBoolean("potion"));
         super.applyCompound(object);
     }
 

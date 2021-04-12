@@ -17,6 +17,9 @@ import simplepets.brainsynder.api.wrappers.horse.HorseStyleType;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityHorse}
+ */
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
     private static final DataWatcherObject<Integer> HORSE_VARIANT;
     private HorseArmorType armor = null;

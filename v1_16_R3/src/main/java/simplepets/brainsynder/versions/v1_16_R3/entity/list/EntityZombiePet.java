@@ -11,6 +11,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityZombie}
+ */
 public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     private static final DataWatcherObject<Boolean> BABY;
     private static final DataWatcherObject<Integer> UNKNOWN;
@@ -33,7 +36,7 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("raised", isArmsRaised());
+        object.setBoolean("raised_arms", isArmsRaised());
         object.setBoolean("baby", isBaby());
         object.setBoolean("shaking", isShaking());
         return object;
@@ -41,9 +44,9 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("raised")) setArmsRaised(object.getBoolean("raised", false));
-        if (object.hasKey("baby")) setBaby(object.getBoolean("baby", false));
-        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking", false));
+        setArmsRaised(object.getBoolean("raised_arms", false));
+        setBaby(object.getBoolean("baby", false));
+        setShaking(object.getBoolean("shaking", false));
         super.applyCompound(object);
     }
 

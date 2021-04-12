@@ -8,6 +8,9 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntityRaiderPet;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityRavager}
+ */
 public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerPet {
     private int attackTick = 10;
     private boolean chomping = false;

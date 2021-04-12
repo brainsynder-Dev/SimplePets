@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.storage.IStorage;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -9,16 +10,13 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.api.ISpawnUtil;
-import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
-import simplepets.brainsynder.files.MessageFile;
-import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
 import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 
@@ -55,22 +53,13 @@ public class SelectionGUIListener implements Listener {
                 while (storage.hasNext()) {
                     final PetTypeStorage type = storage.next();
                     if (type.getItemBuilder().isSimilar(e.getCurrentItem())) {
-                        SimplePets.getPetConfigManager().getPetConfig(type.getType()).ifPresent(config -> {
-                            if (!config.hasPermission(player)) return;
-                        });
 //                    PetInventorySelectTypeEvent event = new PetInventorySelectTypeEvent(type.getType(), p);
 //                    Bukkit.getServer().getPluginManager().callEvent(event);
 //                    if (event.isCancelled()) return;
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                ISpawnUtil spawner = SimplePets.getSpawnUtil();
-                                Optional<IEntityPet> entityPet = spawner.spawnEntityPet(type.getType(), user);
-                                if (entityPet.isPresent()) {
-                                    player.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getType().getName()));
-                                }else{
-                                    player.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getType().getName()));
-                                }
+                                Utilities.handlePetSpawning(user, type.getType(), new StorageTagCompound(), false);
                             }
                         }.runTask(PetCore.getInstance());
                         break;

@@ -1,6 +1,8 @@
 package simplepets.brainsynder.api.pet;
 
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonObject;
+import lib.brainsynder.json.JsonValue;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -30,8 +32,37 @@ public abstract class PetData<EntityParam extends IEntityPet> {
         throw new NullPointerException(getClass().getSimpleName() + " is missing @Namespace");
     }
 
+    /**
+     * This is only used when generating the pet data for the files
+     *  Use {@link PetData#getDefault(IEntityPet)}
+     */
+    @Deprecated
+    public abstract Object getDefaultValue();
+
+    public Optional<Object> getDefault (PetType type) {
+        Optional<IPetConfig> optional = SimplePets.getPetConfigManager().getPetConfig(type);
+        Namespace namespace = getNamespace();
+        if (optional.isPresent()) {
+            IPetConfig config = optional.get();
+            JsonObject json = config.getRawData(namespace.namespace());
+            if (json.names().contains("default")) {
+                JsonValue value = json.get("default");
+                if (value.isBoolean()) return Optional.of(value.asBoolean());
+                if (value.isNumber()) return Optional.of(value.asInt());
+                if (value.isString()) return Optional.of(value.asString());
+            }
+        }
+        return Optional.empty();
+    }
+
     public Map<String, ItemBuilder> getDefaultItems() {
         return defaultItems;
+    }
+
+    public boolean isEnabled (EntityParam entity) {
+        Optional<IPetConfig> optional = SimplePets.getPetConfigManager().getPetConfig(entity.getPetType());
+        Namespace namespace = getNamespace();
+        return optional.map(config -> config.getRawData(namespace.namespace()).getBoolean("enabled", true)).orElse(true);
     }
 
     /**
@@ -53,6 +84,7 @@ public abstract class PetData<EntityParam extends IEntityPet> {
         }
 
         IPetConfig config = optional.get();
+        if (defaultItems.containsKey(value)) return config.getDataItem(namespace.namespace(), value, defaultItems.get(value));
         return config.getDataItem(namespace.namespace(), value);
     }
 

@@ -10,6 +10,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntityCreeper}
+ */
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
     protected static final DataWatcherObject<Integer> STATE;
     protected static final DataWatcherObject<Boolean> POWERED;

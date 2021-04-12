@@ -12,25 +12,25 @@ import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @ICommand(
         name = "summon",
-        usage = "<pet> [player] [nbt]",
+        usage = "<type> [player] [nbt]",
         alias = {"spawn"},
         description = "Spawns a pet for the player or selected player"
 )
+@Permission(permission = "summon", defaultAllow = true, additionalPermissions = {"all", "other", "all_other", "nbt"})
 public class SummonCommand extends PetSubCommand {
     public SummonCommand(PetCore plugin) {
         super(plugin);
-
-        registerCompletion(1, getPetTypes());
-        registerCompletion(2, getOnlinePlayers());
     }
 
     @Override
@@ -41,9 +41,9 @@ public class SummonCommand extends PetSubCommand {
         }
 
         ISpawnUtil spawner = getPlugin().getSpawnUtil();
-        if (spawner == null) return; //TODO:
+        if (spawner == null) return;
 
-        if (args[0].equalsIgnoreCase("all")) {
+        if (args[0].equalsIgnoreCase("all") && Utilities.hasPermission(sender, getPermission("all"))) {
             AtomicInteger integer = new AtomicInteger(0);
             for (PetType type : PetType.values()) {
                 SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
@@ -77,14 +77,19 @@ public class SummonCommand extends PetSubCommand {
             return;
         }
 
+        Player target = null;
         StorageTagCompound compound = new StorageTagCompound();
         if (args.length > 1) {
             int argStart = 1;
 
             if (isUsername(args[1])) {
-                Player target = Bukkit.getPlayerExact(args[1]);
+                target = Bukkit.getPlayerExact(args[1]);
                 if (target == null) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE).replace("{player}", args[1]));
+                    return;
+                }
+                if ((!Utilities.hasPermission(sender, getPermission("other"))) && (!target.getName().equals(sender.getName()))) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 argStart++;
@@ -111,11 +116,23 @@ public class SummonCommand extends PetSubCommand {
                     return;
                 }
             }
-
         }
 
+        if (!Utilities.hasPermission(sender, getPermission("nbt"))) compound = new StorageTagCompound();
+
+        if (target == null) {
+            if (sender instanceof Player) {
+                target = (Player) sender;
+            }else{
+                sendUsage(sender);
+                return;
+            }
+        }
+
+
+
         StorageTagCompound finalCompound = compound;
-        getPlugin().getUserManager().getPetUser(((Player)sender).getUniqueId()).ifPresent(user -> {
+        getPlugin().getUserManager().getPetUser(target.getUniqueId()).ifPresent(user -> {
             Optional<IEntityPet> entityPet = spawner.spawnEntityPet(type, user, finalCompound);
             if (!entityPet.isPresent()) {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
@@ -126,9 +143,5 @@ public class SummonCommand extends PetSubCommand {
 
 
 
-    }
-
-    private boolean isUsername (String string) {
-        return (string.length() < 17) && (string.length() > 2) && string.replace("_", "").matches("[A-Za-z0-9]+");
     }
 }

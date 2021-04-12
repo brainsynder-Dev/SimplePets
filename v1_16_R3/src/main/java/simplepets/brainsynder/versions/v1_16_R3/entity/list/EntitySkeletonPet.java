@@ -6,6 +6,9 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.branch.EntitySkeletonAbstractPet;
 
+/**
+ * NMS: {@link net.minecraft.server.v1_16_R3.EntitySkeleton}
+ */
 public class EntitySkeletonPet extends EntitySkeletonAbstractPet implements IEntitySkeletonPet {
     public EntitySkeletonPet(PetType type, PetUser user) {
         super(EntityTypes.SKELETON, type, user);
