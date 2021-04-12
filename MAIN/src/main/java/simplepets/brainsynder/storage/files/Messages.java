@@ -17,6 +17,7 @@ public class Messages extends FileMaker {
         addDefault("Reload-Complete", "{prefix} &7Inventory and Files have been reloaded.");
         addDefault("Unknown-commands", "{prefix} &7Unknown SimplePets commands.");
         addDefault("Player-Not-Found", "{prefix} &7%player% is not Validate.");
+        addDefault("Pet-Not-Purchased", "{prefix} &7You can not summon &c%type% &7because you have not purchased it.");
         addDefault("Pet-Remove-Self-Removed", "{prefix} &7Your pet was removed.");
         addDefault("Pet-Remove-Self-No-Pet", "{prefix} &7You do not have a pet to remove.");
         addDefault("Pet-Remove-Other-Remover", "{prefix} &7%player%'s pet was successfully removed.");
