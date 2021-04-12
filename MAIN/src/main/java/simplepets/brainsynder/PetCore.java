@@ -137,7 +137,7 @@ public class PetCore extends JavaPlugin {
                     // New build found
                     if (latestBuild > updateResult.getCurrentBuild()) {
                         debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
-                        debug(DebugLevel.UPDATE, "http://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
+                        debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
                     }
                 });
         updateUtils = new UpdateUtils(this, updateResult);

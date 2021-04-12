@@ -18,10 +18,7 @@ import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IImpossaPet;
-import simplepets.brainsynder.api.event.pet.PetVehicleEvent;
-import simplepets.brainsynder.pet.Pet;
 import simplepets.brainsynder.player.PetOwner;
-import simplepets.brainsynder.reflection.ReflectionUtil;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.List;
@@ -60,7 +57,7 @@ public class MainListeners implements Listener {
         if (handle instanceof IImpossaPet) e.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
         Object handle = PetCore.getHandle(e.getRightClicked());
         if (handle instanceof IEntityPet) {
@@ -81,8 +78,8 @@ public class MainListeners implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onInteract(PlayerInteractAtEntityEvent e) {
+    @EventHandler(priority = EventPriority.LOW)
+    public void onInteract(PlayerInteractEntityEvent e) {
         if (!(e.getRightClicked() instanceof Player)) {
             Object handle = PetCore.getHandle(e.getRightClicked());
             if (handle instanceof IEntityPet) {
@@ -103,6 +100,8 @@ public class MainListeners implements Listener {
             PetOwner owner = PetOwner.getPetOwner(p);
             if (owner != null) {
                 if (owner.hasPet()) {
+                    Bukkit.broadcastMessage("Distance: " + (p.getLocation().distanceSquared(owner.getPet().getEntity().getEntity().getLocation())));
+
                     if (owner.getPet().getVisableEntity() == null) return;
                     if (!owner.hasPetToRespawn()) {
                         owner.setPetToRespawn(owner.getPet().getVisableEntity().asCompound());

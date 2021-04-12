@@ -9,7 +9,11 @@ import simplepets.brainsynder.api.event.inventory.PetCommandSummonEvent;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.pet.PetType;
 import simplepets.brainsynder.pet.TypeManager;
+import simplepets.brainsynder.player.PetOwner;
+import simplepets.brainsynder.storage.files.Config;
 import simplepets.brainsynder.utils.AdditionalData;
+
+import java.util.List;
 
 @AdditionalData(otherPermissions = "Pet.commands.summon.other")
 @ICommand(
@@ -56,6 +60,14 @@ public class Summon_SubCommand extends PetSubCommand {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
                 }
+                if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE) && !p.hasPermission("Pet.economy.bypass")) {
+                    PetOwner petOwner = PetOwner.getPetOwner(p);
+                    List<PetType> petArray = petOwner.getOwnedPets();
+                    if (!petArray.contains(type)) {
+                        sender.sendMessage(PetCore.get().getMessages().getString("Pet-Not-Purchased", true));
+                        return;
+                    }
+                }
                 PetCommandSummonEvent event = new PetCommandSummonEvent(type, p);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;
@@ -73,6 +85,14 @@ public class Summon_SubCommand extends PetSubCommand {
                 if (!type.hasPermission(p)) {
                     p.sendMessage(PetCore.get().getMessages().getString("No-Permission", true));
                     return;
+                }
+                if (PetCore.get().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE) && !p.hasPermission("Pet.economy.bypass")) {
+                    PetOwner petOwner = PetOwner.getPetOwner(p);
+                    List<PetType> petArray = petOwner.getOwnedPets();
+                    if (!petArray.contains(type)) {
+                        sender.sendMessage(PetCore.get().getMessages().getString("Pet-Not-Purchased", true));
+                        return;
+                    }
                 }
                 PetCommandSummonEvent event = new PetCommandSummonEvent(type, p);
                 Bukkit.getPluginManager().callEvent(event);
