@@ -1,9 +1,10 @@
 package simplepets.brainsynder.listeners;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -57,16 +58,9 @@ public class MainListeners implements Listener {
         if (handle instanceof IImpossaPet) e.setCancelled(true);
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGH)
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
-        Object handle = PetCore.getHandle(e.getRightClicked());
-        if (handle instanceof IEntityPet) {
-            e.setCancelled(true);
-            IEntityPet entityPet = (IEntityPet) handle;
-            if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
-                PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
-            }
-        }
+        handleEvent(e, e.getPlayer(), e.getRightClicked());
     }
 
     @EventHandler
@@ -78,19 +72,30 @@ public class MainListeners implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
-    public void onInteract(PlayerInteractEntityEvent e) {
-        if (!(e.getRightClicked() instanceof Player)) {
-            Object handle = PetCore.getHandle(e.getRightClicked());
+    private void handleEvent (Cancellable cancellable, Player player, Entity entity) {
+        if (!(entity instanceof Player)) {
+            Object handle = PetCore.getHandle(entity);
             if (handle instanceof IEntityPet) {
-                e.setCancelled(true);
+                cancellable.setCancelled(true);
                 IEntityPet entityPet = (IEntityPet) handle;
 
-                if (entityPet.getOwner().getName().equals(e.getPlayer().getName())) {
+                if (entityPet.getOwner().getName().equals(player.getName())) {
                     PetCore.get().getInvLoaders().PET_DATA.open(PetOwner.getPetOwner(entityPet.getOwner()));
                 }
             }
         }
+
+    }
+
+
+    @EventHandler
+    public void onInteractEntity (PlayerInteractAtEntityEvent e) {
+        handleEvent(e, e.getPlayer(), e.getRightClicked());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onInteract(PlayerInteractEntityEvent e) {
+        handleEvent(e, e.getPlayer(), e.getRightClicked());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -100,7 +105,6 @@ public class MainListeners implements Listener {
             PetOwner owner = PetOwner.getPetOwner(p);
             if (owner != null) {
                 if (owner.hasPet()) {
-                    Bukkit.broadcastMessage("Distance: " + (p.getLocation().distanceSquared(owner.getPet().getEntity().getEntity().getLocation())));
 
                     if (owner.getPet().getVisableEntity() == null) return;
                     if (!owner.hasPetToRespawn()) {

@@ -57,6 +57,13 @@ public class DataMenu extends CustomInventory {
         if (!isEnabled()) return;
         if (owner == null) return;
         Player player = Bukkit.getPlayer(owner.getUuid());
+
+        // Prevents the GUI from being opened multiple times
+        if (player.getOpenInventory() != null) {
+            Inventory inv = player.getOpenInventory().getTopInventory();
+            if ((inv.getHolder() != null) && (inv.getHolder() instanceof PetDataHolder)) return;
+        }
+
         Inventory inv = Bukkit.createInventory(new PetDataHolder(), getSize(), getTitle());
         int placeHolder = inv.getSize();
         while (placeHolder > 0) {

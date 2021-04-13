@@ -141,6 +141,14 @@ public class PetEventListeners implements Listener {
                     }
                 }
             }
+
+            String rawPattern = PetCore.get().getConfiguration().getString("RenamePet.Blocked-RegexPattern", "");
+            if ((rawPattern != null) && (!rawPattern.isEmpty())) {
+                if (event.getNewName().matches(rawPattern)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
 
         if (event.canUseColor())
