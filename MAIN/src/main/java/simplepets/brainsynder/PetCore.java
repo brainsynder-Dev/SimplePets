@@ -17,10 +17,7 @@ import simplepets.brainsynder.commands.PetCommand;
 import simplepets.brainsynder.database.MySQL;
 import simplepets.brainsynder.links.LinkRetriever;
 import simplepets.brainsynder.links.worldedit.WorldEditLink;
-import simplepets.brainsynder.listeners.MainListeners;
-import simplepets.brainsynder.listeners.OnJoin;
-import simplepets.brainsynder.listeners.OnPetSpawn;
-import simplepets.brainsynder.listeners.PetEventListeners;
+import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.menu.inventory.InvLoaders;
 import simplepets.brainsynder.menu.inventory.listeners.ArmorListener;
@@ -176,6 +173,7 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new SavesListener(), this);
         getServer().getPluginManager().registerEvents(new ArmorListener(), this);
+        getServer().getPluginManager().registerEvents(new PaperListeners(), this);
         TimerUtil.findDelay(getClass(), "Registering Listeners");
     }
 
@@ -227,7 +225,8 @@ public class PetCore extends JavaPlugin {
 
             debug("Creating SQL table if there is none...");
             CompletableFuture.runAsync(() -> {
-                try (Connection connection = mySQL.getSource().getConnection()) {
+                try {
+                    Connection connection = mySQL.getConnection();
                     connection.createStatement().executeUpdate("CREATE TABLE IF NOT EXISTS `SimplePets` (`UUID` VARCHAR(128),`name` TEXT, PRIMARY KEY (`UUID`));");
                     StringBuilder builder = new StringBuilder();
                     if (!mySQL.hasColumn(connection, "UUID")) {
