@@ -18,6 +18,7 @@ import simplepets.brainsynder.api.pet.annotations.LargePet;
 import simplepets.brainsynder.api.pet.annotations.PetCustomization;
 import simplepets.brainsynder.api.pet.data.*;
 import simplepets.brainsynder.api.pet.data.bee.BeeAngryData;
+import simplepets.brainsynder.api.pet.data.bee.FlippedData;
 import simplepets.brainsynder.api.pet.data.bee.NectarData;
 import simplepets.brainsynder.api.pet.data.bee.StingerData;
 import simplepets.brainsynder.api.pet.data.color.ColorData;
@@ -59,7 +60,7 @@ public enum PetType {
 
     @PetCustomization(ambient = SoundMaker.ENTITY_BEE_LOOP, weight = PetWeight.LIGHT)
     BEE(IEntityBeePet.class, "fa2cb74c13245d3ce9bacc8b1600af02fd7c91f501feaf97364e1f8b6f04f47f",
-            AgeData.class, BeeAngryData.class, NectarData.class, StingerData.class),
+            AgeData.class, BeeAngryData.class, NectarData.class, StingerData.class, FlippedData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_BLAZE_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0",

@@ -34,6 +34,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
         object.setBoolean("angry", isAngry());
         object.setBoolean("nectar", hasNectar());
         object.setBoolean("stinger", hasStung());
+        object.setBoolean("flipped", isFlipped());
         return object;
     }
 
@@ -42,6 +43,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
         if (object.hasKey("angry")) setAngry(object.getBoolean("angry"));
         if (object.hasKey("nectar")) setHasNectar(object.getBoolean("nectar"));
         if (object.hasKey("stinger")) setHasStung(object.getBoolean("stinger"));
+        if (object.hasKey("flipped")) setFlipped(object.getBoolean("flipped"));
         super.applyCompound(object);
     }
 

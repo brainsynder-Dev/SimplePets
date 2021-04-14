@@ -24,4 +24,11 @@ public interface IEntityBeePet extends IAgeablePet, ISpecialFlag, IFlyableEntity
     default void setHasStung (boolean hasStung) {
         setSpecialFlag(4, hasStung);
     }
+
+    default boolean isFlipped () {
+        return getSpecialFlag(2);
+    }
+    default void setFlipped (boolean flipped) {
+        setSpecialFlag(2, flipped);
+    }
 }
