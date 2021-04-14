@@ -23,7 +23,8 @@ import simplepets.brainsynder.api.pet.data.bee.StingerData;
 import simplepets.brainsynder.api.pet.data.color.ColorData;
 import simplepets.brainsynder.api.pet.data.color.RainbowData;
 import simplepets.brainsynder.api.pet.data.color.ResetColorData;
-import simplepets.brainsynder.api.pet.data.fox.FoxAngryData;
+import simplepets.brainsynder.api.pet.data.fox.FoxCrouchingData;
+import simplepets.brainsynder.api.pet.data.fox.FoxInterestData;
 import simplepets.brainsynder.api.pet.data.fox.FoxSittingData;
 import simplepets.brainsynder.api.pet.data.fox.FoxTypeData;
 import simplepets.brainsynder.api.pet.data.horse.ChestData;
@@ -114,7 +115,7 @@ public enum PetType {
 
     @PetCustomization(ambient = SoundMaker.ENTITY_FOX_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     FOX(IEntityFoxPet.class, "d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a",
-            AgeData.class, SleepData.class, FoxAngryData.class, FoxTypeData.class, FoxSittingData.class),
+            AgeData.class, SleepData.class, FoxInterestData.class, FoxCrouchingData.class, FoxTypeData.class, FoxSittingData.class),
 
     @LargePet
     @PetCustomization(ambient = SoundMaker.ENTITY_GHAST_AMBIENT, weight = PetWeight.HEAVY)

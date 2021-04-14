@@ -12,23 +12,28 @@ public interface IEntityFoxPet extends IAgeablePet, ISpecialFlag, ISleeper {
     FoxType getFoxType();
     void setFoxType(FoxType type);
 
-    default void setRollingHead(boolean value) {
+    /**
+     * Tilts the foxes head
+     */
+    default void setInterested(boolean value) {
         setSpecialFlag(8, value);
     }
+
+    /**
+     * Will make the fox wag its tail (Like a dog waiting for a ball to be thrown)
+     */
     default void setCrouching(boolean value) {
         setSpecialFlag(4, value);
     }
+
+    /**
+     * Really... the name says it all...
+     */
     default void setSitting(boolean value) {
         setSpecialFlag(1, value);
     }
-    default void setAggressive(boolean value) {
-        setSpecialFlag(128, value);
-    }
-    default void setWalking(boolean value) {
-        setSpecialFlag(64, value);
-    }
 
-    default boolean isRollingHead () {
+    default boolean isInterested() {
         return getSpecialFlag(8);
     }
     default boolean isCrouching () {
@@ -36,11 +41,5 @@ public interface IEntityFoxPet extends IAgeablePet, ISpecialFlag, ISleeper {
     }
     default boolean isSitting () {
         return getSpecialFlag(1);
-    }
-    default boolean isAggressive () {
-        return getSpecialFlag(128);
-    }
-    default boolean isWalking () {
-        return getSpecialFlag(64);
     }
 }

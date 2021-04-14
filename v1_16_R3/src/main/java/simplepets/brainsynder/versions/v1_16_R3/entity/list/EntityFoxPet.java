@@ -23,6 +23,7 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     private static final DataWatcherObject<Optional<UUID>> OWNER;
     private static final DataWatcherObject<Optional<UUID>> OTHER_TRUSTED;
 
+
     public EntityFoxPet(PetType type, PetUser user) {
         super(EntityTypes.FOX, type, user);
     }
@@ -31,24 +32,20 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
         compound.setString("type", getFoxType().name());
-        compound.setBoolean("rolling-head", isRollingHead());
+        compound.setBoolean("interested", isInterested());
         compound.setBoolean("crouching", isCrouching());
         compound.setBoolean("sitting", isSitting());
         compound.setBoolean("sleep", isPetSleeping());
-        compound.setBoolean("angry", isAggressive());
-        compound.setBoolean("walking", isWalking());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("type")) setFoxType(object.getEnum("type", FoxType.class, FoxType.RED));
-        if (object.hasKey("rolling-head")) setRollingHead(object.getBoolean("rolling-head"));
+        if (object.hasKey("interested")) setInterested(object.getBoolean("interested"));
         if (object.hasKey("crouching")) setCrouching(object.getBoolean("crouching"));
         if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
         if (object.hasKey("sleep")) setPetSleeping(object.getBoolean("sleep"));
-        if (object.hasKey("angry")) setAggressive(object.getBoolean("angry"));
-        if (object.hasKey("walking")) setWalking(object.getBoolean("walking"));
         super.applyCompound(object);
     }
 
