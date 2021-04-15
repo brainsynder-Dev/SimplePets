@@ -5,6 +5,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
+import org.bukkit.scheduler.BukkitRunnable;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.utils.debug.Debug;
 import simplepets.brainsynder.utils.debug.DebugLevel;
 
@@ -13,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public class InventorySQL extends SQLManager {
     private static InventorySQL instance;
@@ -24,6 +27,34 @@ public class InventorySQL extends SQLManager {
 
     public static InventorySQL getInstance() {
         return instance;
+    }
+
+    public void fetchRowCount(Consumer<Integer> consumer) {
+        CompletableFuture.runAsync(() -> {
+            try {
+                PreparedStatement statement = getConnection().prepareStatement("SELECT * FROM `" + tablePrefix + "_inventory`");
+                ResultSet result = statement.executeQuery();
+                int size = 0;
+                if (usingSqlite) {
+                    while (result.next()) size++;
+                }else {
+                    result = statement.executeQuery("SELECT COUNT(*) FROM `" + tablePrefix + "_inventory`");
+                    if (result.next()) size = result.getInt(1);
+                }
+                result.close();
+                statement.close();
+
+                int finalSize = size;
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        consumer.accept(finalSize);
+                    }
+                }.runTask(PetCore.getInstance());
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+        });
     }
 
     @Override

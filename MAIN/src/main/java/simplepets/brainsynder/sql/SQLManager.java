@@ -167,6 +167,10 @@ public abstract class SQLManager {
         return usingSqlite ? "TEXT" : "LONGTEXT";
     }
 
+    public boolean isUsingSqlite() {
+        return usingSqlite;
+    }
+
     public interface SQLCallback<D> {
         void onSuccess(D data);
 
