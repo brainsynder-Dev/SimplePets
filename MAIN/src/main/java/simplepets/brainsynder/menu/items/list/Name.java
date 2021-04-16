@@ -8,13 +8,11 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
-import simplepets.brainsynder.api.pet.PetType;
-import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.menu.PetSelectorGUI;
+import simplepets.brainsynder.managers.InventoryManager;
+import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
-import java.util.HashMap;
 
 @Namespace(namespace = "name")
 public class Name extends Item {
@@ -33,21 +31,18 @@ public class Name extends Item {
     }
 
     @Override
-    public void onClick(PetUser user, CustomInventory inventory) {
-        if (!user.hasPets()) return;
-        PetSelectorGUI gui = new PetSelectorGUI();
-        gui.open(user, inventory, event -> {
-            PetType petType = gui.getPageCache(user).getOrDefault(event.getPage(), new HashMap<>()).getOrDefault(event.getPosition(), PetType.UNKNOWN);
-            SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user1 -> {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        ((Player)user.getPlayer()).performCommand("pet rename "+petType.getName());
-                    }
-                }.runTaskLater(PetCore.getInstance(), 2);
-            });
-            event.setWillClose(true);
-            event.setWillDestroy(true);
+    public void onClick(PetUser masterUser, CustomInventory inventory) {
+        if (!masterUser.hasPets()) return;
+        PetSelectorMenu menu = InventoryManager.SELECTOR;
+        menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
+            ((Player)user.getPlayer()).closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    ((Player)user.getPlayer()).performCommand("pet rename "+type.getName());
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
         });
+        menu.open(masterUser, 1, inventory.getTitle());
     }
 }

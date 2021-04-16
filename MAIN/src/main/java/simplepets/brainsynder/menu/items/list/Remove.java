@@ -2,16 +2,17 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
-import simplepets.brainsynder.api.pet.PetType;
-import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.menu.PetSelectorGUI;
+import simplepets.brainsynder.managers.InventoryManager;
+import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
-import java.util.HashMap;
 
 @Namespace(namespace = "remove")
 public class Remove extends Item {
@@ -35,16 +36,19 @@ public class Remove extends Item {
     }
 
     @Override
-    public void onShiftClick(PetUser user, CustomInventory inventory) {
-        PetSelectorGUI gui = new PetSelectorGUI();
-        gui.open(user, inventory, event -> {
-            PetType petType = gui.getPageCache(user).getOrDefault(event.getPage(), new HashMap<>()).getOrDefault(event.getPosition(), PetType.UNKNOWN);
-            SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user1 -> {
-                user1.removePet(petType);
-                user.updateDataMenu();
-            });
-            event.setWillClose(true);
-            event.setWillDestroy(true);
+    public void onShiftClick(PetUser masterUser, CustomInventory inventory) {
+        if (!masterUser.hasPets()) return;
+        PetSelectorMenu menu = InventoryManager.SELECTOR;
+        menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
+            ((Player)user.getPlayer()).closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    user.removePet(type);
+                    user.updateDataMenu();
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
         });
+        menu.open(masterUser, 1, inventory.getTitle());
     }
 }

@@ -9,6 +9,8 @@ import lib.brainsynder.utils.Capitalise;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetConfigManager;
@@ -16,6 +18,7 @@ import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.files.Config;
+import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.utils.debug.Debug;
 import simplepets.brainsynder.utils.debug.DebugLevel;
@@ -193,7 +196,11 @@ public class PetConfiguration implements PetConfigManager {
         @Override
         public ItemBuilder getBuilder() {
             try {
-                return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) JSON.getValue("item")));
+                return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) JSON.getValue("item"))).handleMeta(ItemMeta.class, itemMeta -> {
+                    itemMeta.getPersistentDataContainer().set(Keys.GUI_ITEM, PersistentDataType.INTEGER, 1);
+                    itemMeta.getPersistentDataContainer().set(Keys.PET_TYPE_ITEM, PersistentDataType.STRING, type.getName());
+                    return itemMeta;
+                });
             }catch (Exception e) {
                 Debug.debug(DebugLevel.ERROR, "Failed to get default item for '"+type.getName()+"'");
                 Debug.debug(DebugLevel.ERROR, "Error: "+e.getMessage());

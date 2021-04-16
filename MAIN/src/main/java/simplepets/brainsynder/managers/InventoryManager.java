@@ -3,10 +3,7 @@ package simplepets.brainsynder.managers;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
-import simplepets.brainsynder.menu.inventory.AddonMenu;
-import simplepets.brainsynder.menu.inventory.DataMenu;
-import simplepets.brainsynder.menu.inventory.SavesMenu;
-import simplepets.brainsynder.menu.inventory.SelectionMenu;
+import simplepets.brainsynder.menu.inventory.*;
 import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
@@ -22,6 +19,7 @@ public class InventoryManager implements GUIHandler {
     public static DataMenu PET_DATA;
     public static SavesMenu PET_SAVES;
     public static AddonMenu ADDONS;
+    public static PetSelectorMenu SELECTOR;
 
     private final List<CustomInventory> loaders = new ArrayList<>();
 
@@ -38,6 +36,7 @@ public class InventoryManager implements GUIHandler {
         loaders.add(new DataMenu (getLocation(plugin, DataMenu.class)));
         loaders.add(new SavesMenu (getLocation(plugin, SavesMenu.class)));
         loaders.add(new AddonMenu(getLocation(plugin, AddonMenu.class)));
+        loaders.add(new PetSelectorMenu(getLocation(plugin, PetSelectorMenu.class)));
 //        loaders.add(new ArmorMenu(CustomInventory.getLocation(core, ArmorMenu.class)));
 
         for (CustomInventory loader : loaders) loader.save();
@@ -48,6 +47,7 @@ public class InventoryManager implements GUIHandler {
         PET_DATA = getInventory(DataMenu.class).get();
         PET_SAVES = getInventory(SavesMenu.class).get();
         ADDONS = getInventory(AddonMenu.class).get();
+        SELECTOR = getInventory(PetSelectorMenu.class).get();
 //        ARMOR = getLoader(ArmorMenu.class);
     }
 

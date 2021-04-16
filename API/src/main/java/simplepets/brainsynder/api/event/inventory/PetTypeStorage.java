@@ -25,5 +25,8 @@ public class PetTypeStorage {
 
     public ItemBuilder getItemBuilder() {return this.item;}
 
-    public void setItem(ItemBuilder item) {this.item = item; }
+    public PetTypeStorage setItem(ItemBuilder item) {
+        this.item = item;
+        return this;
+    }
 }
