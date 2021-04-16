@@ -124,10 +124,6 @@ public class Config extends YamlFile {
                 "ERROR = Critical/Errors (No explanation here i hope...)");
 
         // TODO: Reformat these value
-        addDefault("PetToggles.Weight.Enabled", true, "When pets are on the players head will they slow the player down\nDefault: true");
-        addDefault("PetToggles.Weight.Weight_Stacked", false, "If the player has multiple pets as a hat should the weight combine?\nDefault: 5");
-        addDefault("PetToggles.Weight.Max_Weight", 5, "How heavy can the total weight be for the player\nDefault: 5");
-
         addDefault("PetToggles.GlowWhenVanished", true, "When the owner is vanished should the owner see their pet with the glow effect?\nDefault: true");
         addDefault("PetToggles.ShowPetNames", true, "Should pet names be seen?\nDefault: true");
         addDefault("PetToggles.HideNameOnShift", true, "Should pet names be hidden when their owner sneaks?\nDefault: true");
@@ -193,8 +189,10 @@ public class Config extends YamlFile {
         remove("WorldGuard.Pet-Riding.Blocked-Regions");
         remove("OldPetRegistering");
         remove("MySQL.Options.Auto_Reconnect"); // Not needed as the new system needs the connection to remain
+        remove("PetToggles.Weight.Enabled");
+        remove("PetToggles.Weight.Weight_Stacked");
+        remove("PetToggles.Weight.Max_Weight");
         move("UseVaultEconomy", ECONOMY_TOGGLE);
-
     }
 
     public static final String

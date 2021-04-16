@@ -7,6 +7,7 @@ import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.json.WriterConfig;
 import lib.brainsynder.update.UpdateResult;
+import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -19,10 +20,7 @@ import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.debug.Debug;
 import simplepets.brainsynder.utils.debug.DebugBuilder;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -58,6 +56,37 @@ public class DebugCommand extends PetSubCommand {
         }, false);
     }
 
+    private static void fetchConfig (Consumer<String> consumer) {
+        File file = new File(PetCore.getInstance().getDataFolder(), "config.yml");
+        try {
+            LineNumberReader lnr = new LineNumberReader(new FileReader(file));
+            String line = "";
+            StringBuilder builder = new StringBuilder();
+            while (line != null) {
+                line = lnr.readLine();
+                if (line == null) break;
+                if (line.contains("Host:")) {
+                    String username = AdvString.after("Host:", line);
+                    line = line.replace(username, " HIDDEN");
+                }
+                if (line.contains("Username:")) {
+                    String username = AdvString.after("Username:", line);
+                    line = line.replace(username, " HIDDEN");
+                }
+                if (line.contains("Password:")) {
+                    String username = AdvString.after("Password:", line);
+                    line = line.replace(username, " HIDDEN");
+                }
+
+                builder.append(line).append("\n");
+            }
+
+            WebConnector.uploadPaste(PetCore.getInstance(), builder.toString(), consumer::accept);
+        }catch (Exception e) {
+            consumer.accept("ERROR: "+e.getMessage());
+        }
+    }
+
     public static void fetchDebug (Consumer<JsonObject> consumer, boolean skipJenkins) {
         JsonObject json = new JsonObject();
         json.add("reloaded", PetCore.getInstance().wasReloaded());
@@ -66,7 +95,7 @@ public class DebugCommand extends PetSubCommand {
 
         JsonArray addons = new JsonArray();
         PetCore.getInstance().getAddonManager().getLoadedAddons().forEach(addon -> {
-            addons.add(addon.getNamespace().namespace()+" (Made by: "+addon.getAuthor()+")");
+            addons.add(addon.getNamespace().namespace()+" (Made by: "+addon.getAuthor()+") [Version: "+addon.getVersion()+"]");
         });
         json.set("loaded_addons", addons);
 
@@ -76,10 +105,14 @@ public class DebugCommand extends PetSubCommand {
             consumer.accept(json);
             return;
         }
-        fetchJenkinsInfo(object -> {
-            json.add("jenkins", object);
-            fetchDebugMessages(values -> json.add("debug_log", values));
-            consumer.accept(json);
+        fetchConfig(conf -> {
+            json.set("config", conf+".yml");
+
+            fetchJenkinsInfo(object -> {
+                json.add("jenkins", object);
+                fetchDebugMessages(values -> json.add("debug_log", values));
+                consumer.accept(json);
+            });
         });
     }
 
