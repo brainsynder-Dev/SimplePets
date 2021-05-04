@@ -393,6 +393,7 @@ public enum PetType {
     }
 
     public EntityType getEntityType() {
+        if (this == POLARBEAR) return EntityType.POLAR_BEAR;
         return EntityType.valueOf(name());
     }
 
