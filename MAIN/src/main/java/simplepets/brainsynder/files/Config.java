@@ -20,17 +20,20 @@ public class Config extends YamlFile {
 
     @Override
     public void loadDefaults() {
-        double configVersion = 5.0;
-        double version = getDouble("version", -1);
-        addDefault("version", configVersion, "The version the config file was last majorly updated for\n   NOTE: CHANGING THIS WILL RESET YOUR CONFIG FILE");
+        int configVersion = 5; // The current config version, changing this will force the plugin to make a backup of the existing config
+        int version = getInt("version", -1);
+        if (getFile().length() == 0) {
+            version = configVersion;
+            addDefault("version", configVersion, "The version the config file was last majorly updated for\n   NOTE: CHANGING THIS WILL RESET YOUR CONFIG FILE");
+        }
 
         if (version != configVersion) {
             File folder = new File(PetCore.getInstance().getDataFolder() + File.separator+"Config Backups");
             if (!folder.exists()) folder.mkdirs();
             File file = getFile();
-            String name = file.getName().replace(".yml", "")+"_backup(v:"+version+").yml";
+            String name = file.getName().replace(".yml", "")+"_backup(v"+version+").yml";
             simplepets.brainsynder.utils.Utilities.makeBackup(this, new File(folder, name));
-            set("version", configVersion);
+            addDefault("version", configVersion, "The version the config file was last majorly updated for\n   NOTE: CHANGING THIS WILL RESET YOUR CONFIG FILE");
         }
 
         addDefault("Reload-Detected", false, "This is used by the plugin to detect if the plugin was previously unloaded (via /reload or by a plugin)\n    CAN NOT BE CUSTOMIZED");
