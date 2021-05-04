@@ -16,15 +16,12 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.RenameType;
-import simplepets.brainsynder.utils.SignMenuFactory;
 
 public class RenameManager {
     private final PetCore plugin;
-    private final SignMenuFactory signMenuFactory;
 
     public RenameManager(PetCore plugin) {
         this.plugin = plugin;
-        signMenuFactory = new SignMenuFactory(plugin);
     }
 
     public void renameViaAnvil (PetUser user, PetType type) {
