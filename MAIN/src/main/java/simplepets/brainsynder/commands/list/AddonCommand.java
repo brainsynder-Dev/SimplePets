@@ -8,7 +8,10 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.managers.AddonManager;
 import simplepets.brainsynder.menu.inventory.AddonMenu;
+
+import java.util.List;
 
 @ICommand(
         name = "addon",
@@ -19,6 +22,18 @@ public class AddonCommand extends PetSubCommand {
 
     public AddonCommand(PetCore plugin) {
         super(plugin);
+    }
+
+    @Override
+    public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        if (!canExecute(sender)) return super.handleCompletions(completions, sender, index, args);
+        AddonManager manager = getPlugin().getAddonManager();
+
+        if (index == 1) {
+            manager.getLoadedAddons().forEach(addon -> completions.add(addon.getNamespace().namespace()));
+        }
+
+        return super.handleCompletions(completions, sender, index, args);
     }
 
     @Override

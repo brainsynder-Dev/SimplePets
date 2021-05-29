@@ -60,10 +60,6 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>lib.brainsynder</pattern>
-                                    <shadedPattern>simplepets.brainsynder.internal.bslib</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>javassist</pattern>
                                     <shadedPattern>simplepets.brainsynder.internal.javassist</shadedPattern>
                                 </relocation>

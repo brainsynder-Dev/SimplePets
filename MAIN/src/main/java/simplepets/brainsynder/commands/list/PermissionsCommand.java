@@ -5,6 +5,7 @@ import lib.brainsynder.commands.annotations.ICommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.addon.AddonPermissions;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
@@ -20,29 +21,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ICommand(
-        name = "generator",
-        description = "Can be used to generate a bit of information"
+        name = "permissions",
+        description = "Generates a file that contains all the permissions in the plugin"
 )
-@Permission(permission = "generator", adminCommand = true)
-public class GeneratorCommand extends PetSubCommand {
+@Permission(permission = "permissions", adminCommand = true)
+public class PermissionsCommand extends PetSubCommand {
     private final PetsCommand parent;
 
-    public GeneratorCommand(PetsCommand parent) {
+    public PermissionsCommand(PetsCommand parent) {
         super(parent.getPlugin());
         this.parent = parent;
     }
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (args.length == 0) {
-            sendUsage(sender);
-            return;
-        }
-        if (args[0].equalsIgnoreCase("permissions")) {
-            generatePluginPermissions();
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
-            return;
-        }
+        generatePluginPermissions();
+        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
     }
 
     private void generatePluginPermissions() {
@@ -87,12 +81,29 @@ public class GeneratorCommand extends PetSubCommand {
                 allowDefault = "true # Allows players to use them by default";
             }
 
-            master.append("    ").append(permission).append(": # Grants access to the /pet ").append(command.getCommand(command.getClass()).name()).append(" command\n")
+            master.append("    ").append(permission).append(": # Grants access to the '/pet ").append(command.getCommand(command.getClass()).name()).append("' command\n")
                     .append("        default: ").append(allowDefault).append("\n\n");
         });
         master.append("\n")
                 .append("    pet.commands.*:  # Grants the player to use all commands (NOT recommended)").append("\n")
-                .append(def).append(commandBuilder).append("\n\n\n");
+                .append(def).append(commandBuilder).append("\n\n");
+
+
+        // Addon permissions
+        if (!AddonPermissions.getPermissions().isEmpty()) master.append("    # Here is all the Addon permissions (if there are any)\n\n");
+        AddonPermissions.getPermissions().forEach((addonName, list) -> {
+            master.append("    # Permissions for the ").append(addonName).append(" addon\n");
+
+            list.forEach(data -> {
+                String description = " # "+data.getDescription();
+                if (description.equals(" # ")) description = "";
+
+                master.append("    ").append(data.getPermission()).append(":").append(description).append("\n")
+                        .append("        default: ").append(data.getType().toString()).append("\n");
+            });
+        });
+        master.append("\n");
+
 
         // Generate Pet Permissions
         for (PetType type : PetType.values()) {

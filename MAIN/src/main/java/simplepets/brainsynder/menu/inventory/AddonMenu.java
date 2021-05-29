@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
-import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.utils.Colorize;
 import lib.brainsynder.utils.ListPager;
 import org.bukkit.Bukkit;
@@ -38,6 +37,7 @@ import java.util.function.Consumer;
 public class AddonMenu extends CustomInventory {
     private Map<String, List<AddonData>> addonCache;
     private Map<String, ListPager<ItemBuilder>> pagerMap;
+    private Map<String, Boolean> installerMap;
 
     public AddonMenu(File file) {
         super(file);
@@ -47,6 +47,7 @@ public class AddonMenu extends CustomInventory {
     public void loadDefaults() {
         addonCache = new HashMap<>();
         pagerMap = new HashMap<>();
+        installerMap = new HashMap<>();
 
         setDefault("size", 54);
         setDefault("title_comment", "The title of the GUI can support regular color codes '&c' and HEX color codes '&#FFFFFF'");
@@ -61,6 +62,7 @@ public class AddonMenu extends CustomInventory {
                 38, 39, 40, 41, 42, 43, 44
         ).forEach(slot -> object.put(slot, "air"));
         object.put(46, "previouspage");
+        object.put(50, "installer");
         object.put(54, "nextpage");
 
         // Makes sure the slot numbers are sorted from low to high
@@ -84,11 +86,13 @@ public class AddonMenu extends CustomInventory {
 
     }
 
+    public boolean isInstallerGUI (PetUser user) {
+        return installerMap.getOrDefault(user.getPlayer().getName(), false);
+    }
 
-    @Override
-    public void open(PetUser user, int page) {
-        if (!isEnabled()) return;
+    public void open(PetUser user, int page, boolean installer) {
         Player player = (Player) user.getPlayer();
+        installerMap.put(player.getName(), installer);
         pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new AddonHolder(), getInteger("size", 54), Colorize.translateBungeeHex(getString("title", "&#de9790[] &#b35349SimplePets Addons")));
 
@@ -113,44 +117,33 @@ public class AddonMenu extends CustomInventory {
             if (item.isEnabled() && item.addItemToInv(user, this))
                 inv.setItem(slot, item.getItemBuilder().build());
         });
+        ItemBuilder master = new ItemBuilder(Material.PLAYER_HEAD)
+                .setTexture("http://textures.minecraft.net/texture/ce1f3cc63c73a6a1dde72fe09c6ac5569376d7b61231bb740764368788cbf1fa");
 
         int finalMaxPets = maxPets;
-        handleFetch(player.getName(), jsonValues -> {
+
+        if (!installer) {
             List<ItemBuilder> items = Lists.newArrayList();
 
             AddonManager manager = PetCore.getInstance().getAddonManager();
 
-            ItemBuilder builder = new ItemBuilder(Material.PLAYER_HEAD)
-                    .setTexture("http://textures.minecraft.net/texture/ce1f3cc63c73a6a1dde72fe09c6ac5569376d7b61231bb740764368788cbf1fa");
-            for (AddonData data : jsonValues) {
-                String name = data.getName();
-                Optional<PetAddon> optional = manager.fetchAddon(name);
-                if (optional.isPresent()) {
-                    PetAddon addon = optional.get();
-                    builder = ItemBuilder.fromItem(addon.getAddonIcon());
-                    builder.addLore("&r ", "&7Enabled: "+(addon.isEnabled() ? "&atrue" : "&cfalse"));
-                    if (addon.hasUpdate() || (data.getVersion() > addon.getVersion())) {
-                        if (!addon.hasUpdate()) FieldAccessor.getField(PetAddon.class, "update", Boolean.TYPE).set(addon, true);
-                        builder.handleMeta(ItemMeta.class, itemMeta -> {
-                            PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-                            container.set(Keys.ADDON_UPDATE, PersistentDataType.STRING, data.getUrl());
-                            return itemMeta;
-                        });
-                        builder.addLore("&r ", "&7Update available! You are on "+addon.getVersion()+" new version "+data.getVersion(), "&c(Shift Click To Update)");
-                    }
-                }else{
-                    builder.withName(Colorize.fetchColor("e1eb5b")+name);
-                    List<String> description = Lists.newArrayList();
-                    if (!data.getDescription().isEmpty()) data.getDescription().forEach(s -> description.add(ChatColor.GRAY+s));
-                    description.add("&r ");
-                    description.add("&7Author: &e"+data.getAuthor());
-                    description.add("&7Version: &e"+data.getVersion());
-                    if (!data.getSupportedVersion().isEmpty()) description.add("&7Supported Version: &e"+data.getSupportedVersion()+" [And up]");
-                    builder.withLore(description).addLore("&r ","&7Click here to install the", "&7"+name+" addon to your server");
-                }
+            for (PetAddon addon : manager.getLoadedAddons()) {
+                String name = addon.getNamespace().namespace();
+                ItemBuilder builder = ItemBuilder.fromItem(addon.getAddonIcon());
+                builder.addLore("&r ", "&7Enabled: " + (addon.isEnabled() ? "&atrue" : "&cfalse"));
+//                The update checking should be handled elsewhere I think....
+//                if (addon.hasUpdate() || (addon.getVersion() > addon.getVersion())) {
+//                    if (!addon.hasUpdate())
+//                        FieldAccessor.getField(PetAddon.class, "update", Boolean.TYPE).set(addon, true);
+//                    builder.handleMeta(ItemMeta.class, itemMeta -> {
+//                        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+//                        container.set(Keys.ADDON_UPDATE, PersistentDataType.STRING, data.getUrl());
+//                        return itemMeta;
+//                    });
+//                    builder.addLore("&r ", "&7Update available! You are on " + addon.getVersion() + " new version " + data.getVersion(), "&c(Shift Click To Update)");
+//                }
                 builder.handleMeta(ItemMeta.class, itemMeta -> {
                     PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-                    if (!optional.isPresent()) container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getUrl());
                     container.set(Keys.ADDON_NAME, PersistentDataType.STRING, name);
                     return itemMeta;
                 });
@@ -169,11 +162,60 @@ public class AddonMenu extends CustomInventory {
 
             }
             player.openInventory(inv);
+            return;
+        }
+        handleFetch(player.getName(), addons -> {
+            List<ItemBuilder> items = Lists.newArrayList();
+
+            AddonManager manager = PetCore.getInstance().getAddonManager();
+
+            for (AddonData data : addons) {
+                String name = data.getName();
+                Optional<PetAddon> optional = manager.fetchAddon(name);
+                if (!optional.isPresent())  {
+                    ItemBuilder builder = master.clone();
+                    builder.withName(Colorize.fetchColor("e1eb5b") + name);
+                    List<String> description = Lists.newArrayList();
+                    if (!data.getDescription().isEmpty())
+                        data.getDescription().forEach(s -> description.add(ChatColor.GRAY + s));
+                    description.add("&r ");
+                    description.add("&7Author: &e" + data.getAuthor());
+                    description.add("&7Version: &e" + data.getVersion());
+                    if (!data.getSupportedVersion().isEmpty())
+                        description.add("&7Supported Version: &e" + data.getSupportedVersion() + " [And up]");
+                    builder.withLore(description).addLore("&r ", "&7Click here to install the", "&7" + name + " addon to your server");
+                    builder.handleMeta(ItemMeta.class, itemMeta -> {
+                        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+                        container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getUrl());
+                        container.set(Keys.ADDON_NAME, PersistentDataType.STRING, name);
+                        return itemMeta;
+                    });
+                    items.add(builder);
+                }
+            }
+
+            ListPager<ItemBuilder> pages = new ListPager<>(finalMaxPets, items);
+            pagerMap.put(player.getName(), pages);
+
+            if (!pages.isEmpty()) {
+                if (pages.exists(page)) {
+                    pages.getPage(page).forEach(builder1 -> inv.addItem(builder1.build()));
+                } else {
+                    Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+                }
+
+            }
+            player.openInventory(inv);
 
         });
     }
 
-    public void handleFetch (String name, Consumer<List<AddonData>> consumer) {
+    @Override
+    public void open(PetUser user, int page) {
+        open(user, page, false);
+    }
+
+    public void handleFetch(String name, Consumer<List<AddonData>> consumer) {
         if (addonCache.containsKey(name)) {
             consumer.accept(addonCache.get(name));
             return;
@@ -195,6 +237,7 @@ public class AddonMenu extends CustomInventory {
     @Override
     public void reset(PetUser user) {
         super.reset(user);
+        installerMap.remove(user.getPlayer().getName());
         addonCache.remove(user.getPlayer().getName());
         pagerMap.remove(user.getPlayer().getName());
     }

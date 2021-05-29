@@ -58,7 +58,7 @@ public class AddonGUIListener implements Listener {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
-                                menu.open(user, menu.getCurrentPage(user));
+                                menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
                             }
                         }.runTaskLater(PetCore.getInstance(), 10);
                     });
@@ -74,7 +74,7 @@ public class AddonGUIListener implements Listener {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
-                                    menu.open(user, menu.getCurrentPage(user));
+                                    menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
                                 }
                             }.runTaskLater(PetCore.getInstance(), 2);
                         });
@@ -87,7 +87,7 @@ public class AddonGUIListener implements Listener {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            menu.open(user, menu.getCurrentPage(user));
+                            menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
                         }
                     }.runTaskLater(PetCore.getInstance(), 2);
                 });

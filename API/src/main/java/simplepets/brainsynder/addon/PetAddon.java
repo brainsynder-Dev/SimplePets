@@ -7,13 +7,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.Namespace;
 
+import java.io.File;
 import java.util.List;
 
 public abstract class PetAddon implements Listener {
     private final boolean loaded = false;
     private final boolean enabled = false;
     private final boolean update = false;
-    private final AddonConfig config = null;
+    private final File addonFolder = null;
+
+    /**
+     * This method is used to generate the default values for the addons config file
+     */
+    public void loadDefaults (AddonConfig config) {}
 
     /**
      * This will be called when the addon is initialized by SimplePets
@@ -25,8 +31,18 @@ public abstract class PetAddon implements Listener {
      */
     public void cleanup (){}
 
-    public AddonConfig getConfig() {
-        return config;
+    /**
+     * Should the plugin enable (could be used when linking into another plugin)
+     */
+    public boolean shouldEnable () {
+        return true;
+    }
+
+    /**
+     * Will return the folder the Addon jar file is located in
+     */
+    public File getAddonFolder() {
+        return addonFolder;
     }
 
     /**

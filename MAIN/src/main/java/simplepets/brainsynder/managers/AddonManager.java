@@ -2,6 +2,7 @@ package simplepets.brainsynder.managers;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
@@ -35,7 +36,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class AddonManager {
-    private final AddonConfig addonFile;
+    private final YamlFile addonFile;
     private final PetCore plugin;
     private final File folder;
     private final List<PetAddon> rawAddons, loadedAddons;
@@ -46,7 +47,12 @@ public class AddonManager {
         loadedAddons = Lists.newArrayList();
         folder = new File(plugin.getDataFolder().toString() + File.separator + "Addons");
 
-        addonFile = new AddonConfig(plugin.getDataFolder(), "AddonConfig.yml");
+        addonFile = new YamlFile(plugin.getDataFolder(), "AddonConfig.yml") {
+            @Override
+            public void loadDefaults() {
+
+            }
+        };
 
         if (!folder.exists()) return;
         for (File file : folder.listFiles()) {
@@ -103,31 +109,45 @@ public class AddonManager {
         for (PetAddon addon : rawAddons) {
             try {
                 String name = addon.getNamespace().namespace();
+
+                new AddonConfig(folder, name+".yml") {
+                    @Override
+                    public void loadDefaults() {
+                        addon.loadDefaults(this);
+                    }
+                };
+
                 // Set the "loaded" field to true
                 FieldAccessor.getField(PetAddon.class, "loaded", Boolean.TYPE).set(addon, true);
-                if (!addonFile.contains(name + ".Enabled")) {
-                    addonFile.addComment(name + ".Enabled", "Enable/Disable the " + name + " addon");
-                    addonFile.set(name + ".Enabled", true);
+                if (!this.addonFile.contains(name + ".Enabled")) {
+                    this.addonFile.addComment(name + ".Enabled", "Enable/Disable the " + name + " addon");
+                    this.addonFile.set(name + ".Enabled", true);
                 }
                 loadedAddons.add(addon);
-                boolean enabled = addonFile.getBoolean(name + ".Enabled", true);
-                FieldAccessor.getField(PetAddon.class, "config", AddonConfig.class).set(addon, addonFile);
+                boolean enabled = this.addonFile.getBoolean(name + ".Enabled", true);
+                FieldAccessor.getField(PetAddon.class, "addonFolder", File.class).set(addon, folder);
                 if (!isSupported(addon.getSupportedVersion())) {
                     Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages(
                             name + " (by " + addon.getAuthor() + ") is not supported for version " + PetCore.getInstance().getDescription().getVersion()
                     ));
                     return;
                 }
-                FieldAccessor.getField(PetAddon.class, "enabled", Boolean.TYPE).set(addon, enabled);
+
+                if (addon.shouldEnable()) {
+                    FieldAccessor.getField(PetAddon.class, "enabled", Boolean.TYPE).set(addon, enabled);
+                }else{
+                    Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages("Failed to enable '"+name+"'"));
+                    continue;
+                }
 
                 if (addon.isEnabled()) {
                     Bukkit.getPluginManager().registerEvents(addon, plugin);
                     addon.init();
-                }
 
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.NORMAL).setMessages(
-                        "Successfully initialized the '" + name + "' Addon by " + addon.getAuthor()
-                ));
+                    Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.NORMAL).setMessages(
+                            "Successfully enabled the '" + name + "' Addon by " + addon.getAuthor()
+                    ));
+                }
             } catch (Exception e) {
                 Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
                         "Failed to initialize addon: " + addon.getClass().getSimpleName()
@@ -159,12 +179,15 @@ public class AddonManager {
     }
 
     public void toggleAddon(PetAddon addon, boolean enabled) {
+        Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("Toggled "+addon.getNamespace().namespace()+" to "+enabled));
         if (enabled && isSupported(addon.getSupportedVersion())) {
-            Bukkit.getPluginManager().registerEvents(addon, plugin);
             addon.init();
+            Bukkit.getPluginManager().registerEvents(addon, plugin);
+            Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("enabling addon"));
         } else {
-            addon.cleanup();
             HandlerList.unregisterAll(addon);
+            addon.cleanup();
+            Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("disabling addon"));
         }
         String name = addon.getNamespace().namespace();
 
@@ -237,25 +260,25 @@ public class AddonManager {
 
     public void fetchAddons(Consumer<List<AddonData>> consumer) {
         WebConnector.getInputStreamString("https://pluginwiki.us/addons/addons.json", plugin, result -> {
-            JsonArray array = (JsonArray) Json.parse(result);
-
             List<AddonData> addons = Lists.newArrayList();
 
-            array.forEach(jsonValue -> {
-                JsonObject json = (JsonObject) jsonValue;
-                AddonData data = new AddonData();
+            JsonObject jsonObject = (JsonObject) Json.parse(result);
+            jsonObject.forEach(member -> {
+                JsonObject json = (JsonObject) member.getValue();
+                AddonData data = new AddonData(
+                        json.getString("url", "Unknown"),
+                        member.getName(),
+                        json.getString("author", "Unknown"),
+                        Double.parseDouble(json.getString("version", "0.0"))
+                );
 
-                FieldAccessor.getField(AddonData.class, "url", String.class).set(data, json.getString("url", "UNKNOWN"));
-                FieldAccessor.getField(AddonData.class, "name", String.class).set(data, json.getString("name", "UNKNOWN"));
-                FieldAccessor.getField(AddonData.class, "author", String.class).set(data, json.getString("author", "UNKNOWN"));
                 if (json.names().contains("supportedVersion"))
-                    FieldAccessor.getField(AddonData.class, "supportedVersion", String.class).set(data, json.getString("supportedVersion", "UNKNOWN"));
-                FieldAccessor.getField(AddonData.class, "version", Double.TYPE).set(data, json.getDouble("version", 0.0));
+                    data.setSupportedVersion(json.getString("supportedVersion", "Unknown"));
 
                 if (json.names().contains("description")) {
                     List<String> description = Lists.newArrayList();
                     ((JsonArray) json.get("description")).forEach(value -> description.add(value.asString()));
-                    FieldAccessor.getField(AddonData.class, "description", List.class).set(data, description);
+                    data.setDescription(description);
                 }
 
                 addons.add(data);

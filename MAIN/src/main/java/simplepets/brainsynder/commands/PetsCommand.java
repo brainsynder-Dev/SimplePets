@@ -29,7 +29,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new GUICommand(plugin));
         registerSub(new RenameCommand(plugin));
         registerSub(new PurchasedCommand (plugin));
-        registerSub(new GeneratorCommand (this));
+        registerSub(new PermissionsCommand(this));
         registerSub(new RegenerateCommand (plugin));
         registerSub(new DebugCommand (this));
         registerSub(new AddonCommand (plugin));

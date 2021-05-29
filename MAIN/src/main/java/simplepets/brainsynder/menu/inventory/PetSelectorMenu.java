@@ -113,7 +113,7 @@ public class PetSelectorMenu extends CustomInventory {
                 itemMeta.getPersistentDataContainer().set(Keys.GUI_ITEM, PersistentDataType.INTEGER, 1);
                 itemMeta.getPersistentDataContainer().set(Keys.PET_TYPE_ITEM, PersistentDataType.STRING, entity.getPetType().getName());
                 return itemMeta;
-            })));
+            }).build()));
         }
 
         if (petTypes.getSize() == 0) return;
@@ -129,7 +129,7 @@ public class PetSelectorMenu extends CustomInventory {
         if (!pages.isEmpty()) {
             if (pages.exists(page)) {
                 pages.getPage(page).forEach(petTypeStorage -> {
-                    inv.addItem(petTypeStorage.getItemBuilder().build());
+                    inv.addItem(petTypeStorage.getItem());
                 });
             } else {
                 Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");

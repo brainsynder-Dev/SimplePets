@@ -121,15 +121,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         Debug.debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
         USER_MANAGER.getAllUsers().forEach(user -> ((PetOwner) user).markForRespawn());
 
-        addonManager.cleanup();
-
         DebugCommand.fetchDebug(json -> {
             json.set("reloaded", !isShuttingDown());
             DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
             Debug.debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
 
-        addonManager = null;
         USER_MANAGER = null;
         PET_CONFIG = null;
         SPAWN_UTIL = null;
@@ -150,6 +147,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         PlayerSQL.getInstance().disconnect();
         InventorySQL.getInstance().disconnect();
+        addonManager.cleanup();
+        addonManager = null;
 
     }
 

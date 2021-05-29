@@ -4,6 +4,9 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.api.user.PetUser;
 
+/**
+ * This event gets called when the pet is spawned
+ */
 public class PetEntitySpawnEvent extends CancellablePetEvent {
     private final PetUser user;
     private final IEntityPet entity;

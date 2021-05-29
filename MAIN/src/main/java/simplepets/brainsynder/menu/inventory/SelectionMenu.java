@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.api.event.inventory.PetInventoryOpenEvent;
+import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
@@ -126,10 +126,18 @@ public class SelectionMenu extends CustomInventory {
         boolean removeNoPerms = PetCore.getInstance().getConfiguration().getBoolean("Remove-Item-If-No-Permission");
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
+            PetTypeStorage storage = new PetTypeStorage(type);
+            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, storage.getType(), storage.getItem());
+
             if (Utilities.hasPermission(player, type.getPermission())) {
-                petTypes.add(new PetTypeStorage(type));
+                Bukkit.getPluginManager().callEvent(event);
             } else {
-                if (!removeNoPerms) petTypes.add(new PetTypeStorage(type));
+                if (!removeNoPerms) {
+                    Bukkit.getPluginManager().callEvent(event);
+                }
+            }
+            if (!event.isCancelled()) {
+                petTypes.add(storage.setItem(event.getItem()));
             }
         }
         if ((petTypes.getSize() == 0) && (PetCore.getInstance().getConfiguration().getBoolean("Permissions.Needs-Pet-Permission-for-GUI"))) {
@@ -147,14 +155,9 @@ public class SelectionMenu extends CustomInventory {
 
         if (!pages.isEmpty()) {
             if (pages.exists(page)) {
-                PetInventoryOpenEvent event = new PetInventoryOpenEvent(pages.getPage(page), player);
-                Bukkit.getServer().getPluginManager().callEvent(event);
-                if (event.isCancelled()) return;
-                IStorage<ItemStack> types = event.getItems().copy();
-                while (types.hasNext()) {
-                    inv.addItem(types.next());
-                }
-                petMap.put(player.getName(), event.getShownPetTypes());
+                for (PetTypeStorage storage : pages.getPage(page))
+                    inv.addItem(storage.getItem());
+                petMap.put(player.getName(), new StorageList<>(pages.getPage(page)));
             } else {
                 Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }

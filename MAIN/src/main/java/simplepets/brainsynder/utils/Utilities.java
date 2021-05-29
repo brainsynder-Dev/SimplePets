@@ -219,6 +219,7 @@ public class Utilities {
                     "Failed to create file backup for: "+file.getName(),
                     "Error: "+e.getMessage()
             ));
+            e.printStackTrace();
         }
 
     }

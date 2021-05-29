@@ -4,12 +4,15 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
 import simplepets.brainsynder.api.user.PetUser;
 
-public class PetHatEvent extends CancellablePetEvent {
+/**
+ * This event gets called BEFORE the pet is on the players head
+ */
+public class PrePetHatEvent extends CancellablePetEvent {
     private final PetUser user;
     private final IEntityPet entityPet;
     private final Type eventType;
 
-    public PetHatEvent(PetUser user, IEntityPet pet, Type type) {
+    public PrePetHatEvent(PetUser user, IEntityPet pet, Type type) {
         this.user = user;
         this.entityPet = pet;
         eventType = type;

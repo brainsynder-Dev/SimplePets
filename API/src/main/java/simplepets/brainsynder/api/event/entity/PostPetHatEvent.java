@@ -4,6 +4,9 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.SimplePetEvent;
 import simplepets.brainsynder.api.user.PetUser;
 
+/**
+ * This event gets called AFTER the pet is on the players head
+ */
 public class PostPetHatEvent extends SimplePetEvent {
     private final PetUser user;
     private final IEntityPet entityPet;
