@@ -17,9 +17,9 @@ import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.PetDuplicateSpawnEvent;
-import simplepets.brainsynder.api.event.entity.PetHatEvent;
 import simplepets.brainsynder.api.event.entity.PetRemoveEvent;
 import simplepets.brainsynder.api.event.entity.PostPetHatEvent;
+import simplepets.brainsynder.api.event.entity.PrePetHatEvent;
 import simplepets.brainsynder.api.event.user.PetNameChangeEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
@@ -89,6 +89,17 @@ public class PetOwner implements PetUser {
                         PetType.getPetType(string.getString()).ifPresent(ownedPets::add);
                     });
                 }
+//                savedPetData.forEach(tag -> {
+//                    StorageTagCompound storage = new StorageTagCompound();
+//                    storage.setTag("data", tag);
+//                    storage.setString("type", tag.getString("PetType"));
+//                    saves.appendTag(storage);
+//                });
+                if (compound.hasKey("saved_pets")) {
+
+                }
+
+
 
                 if (compound.hasKey("spawned_pets") && PetCore.getInstance().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login", true)) {
                     StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
@@ -375,7 +386,7 @@ public class PetOwner implements PetUser {
             }
             IPetConfig config = configOptional.get();
             if (config.canHat((Player) player) && hat) {
-                PetHatEvent event = new PetHatEvent(this, entityPet, PetHatEvent.Type.SET);
+                PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
                     SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
@@ -395,7 +406,7 @@ public class PetOwner implements PetUser {
             } else {
                 // If pet is a hat, remove the hat from the player
                 if (isPetHat(type)) {
-                    PetHatEvent event = new PetHatEvent(this, entityPet, PetHatEvent.Type.REMOVE);
+                    PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
                     Bukkit.getPluginManager().callEvent(event);
                     if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
                         SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
