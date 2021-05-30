@@ -266,7 +266,7 @@ public class AddonManager {
             jsonObject.forEach(member -> {
                 JsonObject json = (JsonObject) member.getValue();
                 AddonData data = new AddonData(
-                        json.getString("url", "Unknown"),
+                        "https://pluginwiki.us/addons/download/"+member.getName(),
                         member.getName(),
                         json.getString("author", "Unknown"),
                         Double.parseDouble(json.getString("version", "0.0"))
