@@ -11,10 +11,10 @@ import java.io.File;
 import java.util.List;
 
 public abstract class PetAddon implements Listener {
-    private final boolean loaded = false;
-    private final boolean enabled = false;
-    private final boolean update = false;
-    private final File addonFolder = null;
+    private boolean loaded = false;
+    private boolean enabled = false;
+    private boolean update = false;
+    private File addonFolder = null;
 
     /**
      * This method is used to generate the default values for the addons config file
@@ -106,5 +106,21 @@ public abstract class PetAddon implements Listener {
      */
     public boolean hasUpdate () {
         return update;
+    }
+
+    public void setAddonFolder(File addonFolder) {
+        this.addonFolder = addonFolder;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public void setLoaded(boolean loaded) {
+        this.loaded = loaded;
+    }
+
+    public void setHasUpdate(boolean update) {
+        this.update = update;
     }
 }

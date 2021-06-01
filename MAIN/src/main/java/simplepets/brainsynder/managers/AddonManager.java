@@ -6,7 +6,6 @@ import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
-import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
@@ -118,14 +117,14 @@ public class AddonManager {
                 };
 
                 // Set the "loaded" field to true
-                FieldAccessor.getField(PetAddon.class, "loaded", Boolean.TYPE).set(addon, true);
+                addon.setLoaded(true);
                 if (!this.addonFile.contains(name + ".Enabled")) {
                     this.addonFile.addComment(name + ".Enabled", "Enable/Disable the " + name + " addon");
                     this.addonFile.set(name + ".Enabled", true);
                 }
                 loadedAddons.add(addon);
                 boolean enabled = this.addonFile.getBoolean(name + ".Enabled", true);
-                FieldAccessor.getField(PetAddon.class, "addonFolder", File.class).set(addon, folder);
+                addon.setAddonFolder(folder);
                 if (!isSupported(addon.getSupportedVersion())) {
                     Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages(
                             name + " (by " + addon.getAuthor() + ") is not supported for version " + PetCore.getInstance().getDescription().getVersion()
@@ -134,7 +133,7 @@ public class AddonManager {
                 }
 
                 if (addon.shouldEnable()) {
-                    FieldAccessor.getField(PetAddon.class, "enabled", Boolean.TYPE).set(addon, enabled);
+                    addon.setEnabled(enabled);
                 }else{
                     Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages("Failed to enable '"+name+"'"));
                     continue;
@@ -192,7 +191,7 @@ public class AddonManager {
         String name = addon.getNamespace().namespace();
 
         addonFile.set(name + ".Enabled", enabled);
-        FieldAccessor.getField(PetAddon.class, "enabled", Boolean.TYPE).set(addon, enabled);
+        addon.setEnabled(enabled);
     }
 
     public Optional<PetAddon> fetchAddon(String name) {
@@ -238,7 +237,7 @@ public class AddonManager {
                 if (addonMap.containsKey(addon.getName())) {
                     PetAddon petAddon = addonMap.get(addon.getName());
                     if (addon.getVersion() > petAddon.getVersion()) {
-                        FieldAccessor.getField(PetAddon.class, "update", Boolean.TYPE).set(petAddon, true);
+                        petAddon.setHasUpdate(true);
                         updateNeeded.add(addon);
                     }
                 }
