@@ -95,7 +95,7 @@ public class DebugCommand extends PetSubCommand {
 
         JsonArray addons = new JsonArray();
         PetCore.getInstance().getAddonManager().getLoadedAddons().forEach(addon -> {
-            addons.add(addon.getNamespace().namespace()+" (Made by: "+addon.getAuthor()+") [Version: "+addon.getVersion()+"]");
+            addons.add(addon.getNamespace().namespace()+" (Made by: "+addon.getAuthor()+") [Version: "+addon.getVersion()+"] - Loaded: "+addon.isLoaded()+" | Enabled: "+addon.isEnabled());
         });
         json.set("loaded_addons", addons);
 
