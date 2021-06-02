@@ -20,22 +20,6 @@ public class Config extends YamlFile {
 
     @Override
     public void loadDefaults() {
-        int configVersion = 5; // The current config version, changing this will force the plugin to make a backup of the existing config
-        int version = getInt("version", -1);
-        if (getFile().length() == 0) {
-            version = configVersion;
-            addDefault("version", configVersion, "The version the config file was last majorly updated for\n   NOTE: CHANGING THIS WILL RESET YOUR CONFIG FILE");
-        }
-
-        if (version != configVersion) {
-            File folder = new File(PetCore.getInstance().getDataFolder() + File.separator+"Config Backups");
-            if (!folder.exists()) folder.mkdirs();
-            File file = getFile();
-            String name = file.getName().replace(".yml", "")+"_backup(v"+version+").yml";
-            simplepets.brainsynder.utils.Utilities.makeBackup(this, new File(folder, name));
-            addDefault("version", configVersion, "The version the config file was last majorly updated for\n   NOTE: CHANGING THIS WILL RESET YOUR CONFIG FILE");
-        }
-
         addDefault("Reload-Detected", false, "This is used by the plugin to detect if the plugin was previously unloaded (via /reload or by a plugin)\n    CAN NOT BE CUSTOMIZED");
         addDefault("Update-Checking.Enabled", true, "Would you like to check for new jenkins builds?\nDefault: true");
         addDefault("Update-Checking.Message-On-Join", true, "Would you like to be alerted when there is a new update when you log in?\n(MUST HAVE 'pet.update' permission or OP)\nDefault: true");
@@ -56,28 +40,19 @@ public class Config extends YamlFile {
 
         addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
 
-        addDefault(ECONOMY_TOGGLE, false,
-                "Enabling this would allow players to buy pets via Vault/TokenManager\n" +
-                        "NOTE: If 'Needs-Permission' is set to true the players will still need the permission for the pet\n" +
-                        "Default: false");
-        addDefault(ECONOMY_TYPE, "UNKNOWN",
-                "What type of economy do you have?\n" +
-                        "Economy Types:\n" +
-                        "- UNKNOWN (Will act like all pets are free)\n" +
-                        "- EXPERIENCE_LEVEL (Will use the players experience levels as payment)\n" +
-                        "- EXPERIENCE_POINTS (Will use the players experience points as payment [level 30 = 1395])\n" +
-                        "- VAULT https://www.spigotmc.org/resources/34315/\n" +
-                        "- TOKEN_MANAGER https://www.spigotmc.org/resources/8610/\n" +
-                        "- GEMS_ECONOMY https://www.spigotmc.org/resources/19655/\n" +
-                        "Default: 'UNKNOWN'");
-
+        addDefault("Economy", "Now Separate",
+                "Since v5 of SimplePets, Support for economy plugins for purchasing pets IN-Game\n" +
+                        "has been split into different module for each economy supported...\n" +
+                        "Why? mostly because it helps keep the code clean and if we ever need to fix issues\n" +
+                        "due to an api change, it wont require us to update the whole plugin, instead we just update the addon.\n\n" +
+                        "Any Questions contact us via Discord: https://pluginwiki.us/discord/"
+        );
         addDefault(SPAWN_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player spawns a pet\nDefault: true");
         addDefault(FAILED_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player fails to spawn a pet\nDefault: true");
         addDefault(REMOVE_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player removes a pet\nDefault: true");
         addDefault(NAME_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player renames a pet\nDefault: true");
         addDefault(TELEPORT_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a players pet teleports to its owner\nDefault: true");
         addDefault(FAILED_TASK_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a task for a pet fails\nDefault: true");
-        addDefault("Complete-Mobspawning-Deny-Bypass", true, "Disabling this would allow other plugins to deny the pets from spawning\nDefault: true");
 
         addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
         addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
@@ -195,7 +170,12 @@ public class Config extends YamlFile {
         remove("PetToggles.Weight.Enabled");
         remove("PetToggles.Weight.Weight_Stacked");
         remove("PetToggles.Weight.Max_Weight");
+        remove("Complete-Mobspawning-Deny-Bypass"); // This has not been fully used since 1.8
         move("UseVaultEconomy", ECONOMY_TOGGLE);
+
+        move(ECONOMY_TOGGLE, "Economy");
+        remove(ECONOMY_TYPE);
+
     }
 
     public static final String
