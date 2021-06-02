@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.reflections.Reflections;
+import simplepets.brainsynder.addon.PetAddon;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
@@ -317,9 +318,27 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Map<String, Integer> entry = new HashMap<>();
             entry.put("addon", 1);
             addonManager.getLoadedAddons().forEach(addon -> {
-                map.put(addon.getNamespace().namespace(), entry);
+                if (addonManager.getRegisteredAddons().contains(addon.getNamespace().namespace()))
+                    map.put(addon.getNamespace().namespace(), entry);
             });
             return map;
+        }));
+        metrics.addCustomChart(new Metrics.AdvancedPie("addon_tracker", () -> {
+            Map<String, Integer> valueMap = new HashMap<>();
+
+            int custom = 0;
+            int registered = 0;
+            for (PetAddon addon : addonManager.getLoadedAddons()) {
+                if (addonManager.getRegisteredAddons().contains(addon.getNamespace().namespace())) {
+                    registered++;
+                }else {
+                    custom++;
+                }
+            }
+
+            valueMap.put("Registered Addons", registered);
+            valueMap.put("Custom Addons", custom);
+            return valueMap;
         }));
     }
 
