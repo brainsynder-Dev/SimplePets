@@ -144,7 +144,7 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
         if (Math.abs((double) x - player.locX()) < 2.0D && Math.abs((double) z - player.locZ()) < 2.0D) return false;
         if (!this.canTeleportTo(new BlockPosition(x, y, z))) return false;
         this.entity.setPositionRotation((double) x + 0.5D, y, (double) z + 0.5D, this.entity.yaw, this.entity.pitch);
-        PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) player, entity.getEntity().getLocation());
+        PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), entity.getEntity().getLocation());
         this.navigation.o();// Translation: navigation.stop()
         return true;
     }
