@@ -4,10 +4,9 @@ import com.google.common.collect.Lists;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.utils.Utilities;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.utils.RenameType;
-import simplepets.brainsynder.utils.debug.Debug;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
@@ -94,12 +93,13 @@ public class Config extends YamlFile {
         addDefault("MySQL.Options.UseSSL", false);
 
         addDefault("Debug.Enabled", true, "Would you like to view Debug information in the console/logs?\nIt can help us see where issues are.\nDefault: true");
-        addDefault("Debug.Levels", Arrays.asList(
-                "NORMAL", "MODERATE", "ERROR"
-        ), "What level of debug info would you like to see?\n" +
+        addComment("Debug.Levels", "What level of debug info would you like to see?\n" +
                 "NORMAL = Normal Info\n" +
-                "MODERATE = Moderate Info (Warnings)\n" +
+                "WARNING = Used for warnings like a missing bit of info (but it has a default it can use)\n" +
                 "ERROR = Critical/Errors (No explanation here i hope...)");
+        addDefault("Debug.Levels.NORMAL", true);
+        addDefault("Debug.Levels.WARNING", true);
+        addDefault("Debug.Levels.ERROR", true);
 
         // TODO: Reformat these value
         addDefault("PetToggles.GlowWhenVanished", true, "When the owner is vanished should the owner see their pet with the glow effect?\nDefault: true");
@@ -200,7 +200,7 @@ public class Config extends YamlFile {
     protected BiConsumer<String, String> logMove () {
         return (oldKey, newKey) -> {
             String name = getClass().getSimpleName().replace("File", "");
-            Debug.debug("["+name+"] Moving '"+oldKey+"' to '"+newKey+"'");
+            SimplePets.getDebugLogger().debug("["+name+"] Moving '"+oldKey+"' to '"+newKey+"'");
         };
     }
 }

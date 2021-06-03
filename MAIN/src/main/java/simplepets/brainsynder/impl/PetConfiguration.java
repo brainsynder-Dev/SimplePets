@@ -17,11 +17,10 @@ import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.Utilities;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.util.HashMap;
@@ -202,8 +201,8 @@ public class PetConfiguration implements PetConfigManager {
                     return itemMeta;
                 });
             }catch (Exception e) {
-                Debug.debug(DebugLevel.ERROR, "Failed to get default item for '"+type.getName()+"'");
-                Debug.debug(DebugLevel.ERROR, "Error: "+e.getMessage());
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Failed to get default item for '"+type.getName()+"'");
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Error: "+e.getMessage());
                 return type.getBuilder();
             }
         }
@@ -291,7 +290,7 @@ public class PetConfiguration implements PetConfigManager {
                 JsonObject dataObject = (JsonObject) JSON.getValue("data");
                 JsonObject values = dataObject.names().contains("values") ? (JsonObject) dataObject.get("values") : new JsonObject();
                 if (!dataObject.names().contains(namespace)) {
-                    Debug.debug(DebugLevel.DEBUG, type.getName()+" | Missing namespace: "+namespace);
+                    SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, type.getName()+" | Missing namespace: "+namespace);
                     JsonObject data = new JsonObject();
                     petData.getDefaultItems().forEach((value, item) -> {
                         values.add(String.valueOf(value), StorageTagTools.toJsonObject(((ItemBuilder)item).toCompound()));
@@ -312,7 +311,7 @@ public class PetConfiguration implements PetConfigManager {
                         Map.Entry<String, ItemBuilder> entry = (Map.Entry<String, ItemBuilder>) object;
                         if (!values.names().contains(entry.getKey())) {
                             update = true;
-                            Debug.debug(DebugLevel.DEBUG, type.getName()+" | "+namespace+" | Missing namespace: "+entry.getKey());
+                            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, type.getName()+" | "+namespace+" | Missing namespace: "+entry.getKey());
                             values.add(entry.getKey(), StorageTagTools.toJsonObject(entry.getValue().toCompound()));
                         }
                     }
@@ -329,7 +328,7 @@ public class PetConfiguration implements PetConfigManager {
                 return true;
             }
 
-            Debug.debug(DebugLevel.DEBUG, type.getName()+" | Missing 'data' section");
+            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, type.getName()+" | Missing 'data' section");
 
             JsonObject dataObject = new JsonObject();
             JsonObject values = new JsonObject();

@@ -1,4 +1,4 @@
-package simplepets.brainsynder.utils.debug;
+package simplepets.brainsynder.debug;
 
 import com.google.common.collect.Lists;
 import lib.brainsynder.utils.AdvString;
@@ -83,9 +83,8 @@ public class DebugBuilder {
             for (StackTraceElement element : exception.getStackTrace()) {
                 String name = element.getClassName();
                 if (name == null) continue;
-                if (name.equals(Debug.class.getName())) continue;
                 if (name.contains("Thread")) continue;
-                if (name.contains("debug")) continue;
+                if (name.toLowerCase().contains("debug")) continue;
                 if (!name.contains("simplepets")) continue;
                 if ((clazz != null) && (!name.contains(clazz.getName()))) continue;
                 String method = element.getMethodName();
@@ -110,9 +109,8 @@ public class DebugBuilder {
             for (StackTraceElement element : exception.getStackTrace()) {
                 String name = element.getClassName();
                 if (name == null) continue;
-                if (name.equals(Debug.class.getName())) continue;
                 if (name.contains("Thread")) continue;
-                if (name.contains("debug")) continue;
+                if (name.toLowerCase().contains("debug")) continue;
                 if (!name.contains("simplepets")) continue;
                 if ((clazz != null) && (!name.contains(clazz.getName()))) continue;
 

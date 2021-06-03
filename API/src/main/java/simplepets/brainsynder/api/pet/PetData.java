@@ -6,6 +6,7 @@ import lib.brainsynder.json.JsonValue;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -79,7 +80,7 @@ public abstract class PetData<EntityParam extends IEntityPet> {
         // Could not find the pet config, using default item if available
         if (!optional.isPresent()) {
             if (defaultItems.containsKey(value)) return Optional.of(defaultItems.get(value));
-            System.out.println("[SimplePets API] "+getClass().getSimpleName()+" had no default item for '"+value+"'");
+            SimplePets.getDebugLogger().debug(DebugLevel.ERROR, getClass().getSimpleName()+" had no default item for '"+value+"'");
             return Optional.empty();
         }
 

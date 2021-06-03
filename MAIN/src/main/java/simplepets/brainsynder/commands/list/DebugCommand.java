@@ -12,13 +12,13 @@ import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.PetsCommand;
+import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
 
 import java.io.*;
 import java.time.Instant;
@@ -117,7 +117,7 @@ public class DebugCommand extends PetSubCommand {
     }
 
     private static void fetchDebugMessages (Consumer<JsonArray> consumer) {
-        LinkedList<DebugBuilder> debugLog = Debug.getDebugLog();
+        LinkedList<DebugBuilder> debugLog = SimplePets.getDebugLogger().getDebugLog();
         JsonArray array = new JsonArray();
         while (!debugLog.isEmpty()) {
             JsonObject json = new JsonObject();
@@ -128,7 +128,7 @@ public class DebugCommand extends PetSubCommand {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern ( "yyyy/MM/dd | HH:mm:ss:SSS" );
             String output = formatter.format ( zdt );
             json.add("time/date", output);
-            json.add("level", builder.getLevel().name());
+            json.add("level", builder.getLevel().getName());
 
             JsonArray messages = new JsonArray();
             builder.getMessages().forEach(messages::add);

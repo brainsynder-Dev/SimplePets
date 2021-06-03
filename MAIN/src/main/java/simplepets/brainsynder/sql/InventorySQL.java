@@ -7,8 +7,8 @@ import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -101,8 +101,8 @@ public class InventorySQL extends SQLManager {
                         try {
                             compound.setTag("item_storage", JsonToNBT.getTagFromJson(Base64Wrapper.decodeString(results.getString("inventory"))));
                         } catch (NBTException e) {
-                            Debug.debug(DebugLevel.ERROR, "Failed to load 'inventory' for uuid: "+uuid.toString());
-                            Debug.debug(DebugLevel.ERROR, "Result: "+results.getString("inventory"));
+                            SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Failed to load 'inventory' for uuid: "+uuid.toString());
+                            SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Result: "+results.getString("inventory"));
                         }
 
                         callback.onSuccess(compound);

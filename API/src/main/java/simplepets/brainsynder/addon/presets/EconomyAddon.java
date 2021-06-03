@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * This preset addon class, is for making addons for any type of plugin that handles economy (EG: Vault/TokenManager)
+ */
 public abstract class EconomyAddon extends PetAddon {
     private final Map<PetType, Double> priceMap = Maps.newHashMap();
 

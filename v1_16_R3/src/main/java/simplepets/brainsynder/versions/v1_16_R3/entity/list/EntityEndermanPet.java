@@ -11,10 +11,10 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_16_R3.block.data.CraftBlockData;
 import simplepets.brainsynder.api.entity.hostile.IEntityEndermanPet;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
@@ -63,7 +63,7 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
                     }
                 }
             }catch (Exception e) {
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
+                SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
                         "An error occured when trying to set the block in the enderman pets hand.",
                         "Result: "+raw,
                         "Error Message: "+e.getMessage()

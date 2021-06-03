@@ -21,14 +21,14 @@ import simplepets.brainsynder.addon.AddonData;
 import simplepets.brainsynder.addon.PetAddon;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.managers.AddonManager;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.AddonHolder;
 import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.utils.Keys;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.util.*;
@@ -157,7 +157,7 @@ public class AddonMenu extends CustomInventory {
                 if (pages.exists(page)) {
                     pages.getPage(page).forEach(builder1 -> inv.addItem(builder1.build()));
                 } else {
-                    Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+                    SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
                 }
 
             }
@@ -201,7 +201,7 @@ public class AddonMenu extends CustomInventory {
                 if (pages.exists(page)) {
                     pages.getPage(page).forEach(builder1 -> inv.addItem(builder1.build()));
                 } else {
-                    Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+                    SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
                 }
 
             }

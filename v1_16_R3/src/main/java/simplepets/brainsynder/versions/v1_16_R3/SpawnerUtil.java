@@ -12,10 +12,10 @@ import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
 
 import java.util.*;
@@ -34,7 +34,7 @@ public class SpawnerUtil implements ISpawnUtil {
                 Class<?> clazz = Class.forName("simplepets.brainsynder.versions.v1_16_R3.entity.list."+name);
                 petMap.put(type, clazz);
             }catch (ClassNotFoundException ignored) {
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages(
+                SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
                         "Failed to register the '"+type.getName()+"' pet (Missing '"+name+"' class for your version) [Will not effect your server]"
                 ));
             }

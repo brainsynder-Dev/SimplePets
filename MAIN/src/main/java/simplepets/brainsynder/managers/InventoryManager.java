@@ -3,8 +3,8 @@ package simplepets.brainsynder.managers;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.menu.inventory.*;
-import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -28,9 +28,9 @@ public class InventoryManager implements GUIHandler {
         registeredFolder = new File(plugin.getDataFolder().toString() + "/Inventories/AddonInventories/");
         if (!registeredFolder.exists()) registeredFolder.mkdirs();
 
-        Debug.debug("Initializing Inventories...");
+        SimplePets.getDebugLogger().debug("Initializing Inventories...");
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
-        Debug.debug("Loading Customizable Inventories Files...");
+        SimplePets.getDebugLogger().debug("Loading Customizable Inventories Files...");
 
         loaders.add(new SelectionMenu(getLocation(plugin, SelectionMenu.class)));
         loaders.add(new DataMenu (getLocation(plugin, DataMenu.class)));
@@ -40,7 +40,7 @@ public class InventoryManager implements GUIHandler {
 //        loaders.add(new ArmorMenu(CustomInventory.getLocation(core, ArmorMenu.class)));
 
         for (CustomInventory loader : loaders) loader.save();
-        Debug.debug("Files have been loaded.");
+        SimplePets.getDebugLogger().debug("Files have been loaded.");
 
 
         SELECTION = getInventory(SelectionMenu.class).get();

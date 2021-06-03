@@ -16,9 +16,9 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.addon.AddonConfig;
 import simplepets.brainsynder.addon.AddonData;
 import simplepets.brainsynder.addon.PetAddon;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,10 +38,12 @@ public class AddonManager {
     private final YamlFile addonFile;
     private final PetCore plugin;
     private final File folder;
+    private final List<String> registeredAddons;
     private final List<PetAddon> rawAddons, loadedAddons;
 
     public AddonManager(PetCore plugin) {
         this.plugin = plugin;
+        registeredAddons = Lists.newArrayList();
         rawAddons = Lists.newArrayList();
         loadedAddons = Lists.newArrayList();
         folder = new File(plugin.getDataFolder().toString() + File.separator + "Addons");
@@ -81,12 +83,12 @@ public class AddonManager {
             }
 
             if (rawAddons.isEmpty())
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages(
+                SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
                         "Could not find a class that extends PetAddon",
                         "Are you sure '" + file.getName() + "' is an addon?"
                 ));
         } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
+            SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
                     "Failed to load addon: " + file.getName(),
                     "Error Message: " + e.getMessage()
             ));
@@ -109,7 +111,7 @@ public class AddonManager {
             try {
                 String name = addon.getNamespace().namespace();
 
-                new AddonConfig(folder, name+".yml") {
+                new AddonConfig(new File(folder + File.separator+"configs"), name+".yml") {
                     @Override
                     public void loadDefaults() {
                         addon.loadDefaults(this);
@@ -126,7 +128,7 @@ public class AddonManager {
                 boolean enabled = this.addonFile.getBoolean(name + ".Enabled", true);
                 addon.setAddonFolder(folder);
                 if (!isSupported(addon.getSupportedVersion())) {
-                    Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages(
+                    SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
                             name + " (by " + addon.getAuthor() + ") is not supported for version " + PetCore.getInstance().getDescription().getVersion()
                     ));
                     return;
@@ -134,21 +136,19 @@ public class AddonManager {
 
                 if (addon.shouldEnable()) {
                     addon.setEnabled(enabled);
-                }else{
-                    Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.MODERATE).setMessages("Failed to enable '"+name+"'"));
-                    continue;
-                }
+                }else continue;
+
 
                 if (addon.isEnabled()) {
                     Bukkit.getPluginManager().registerEvents(addon, plugin);
                     addon.init();
 
-                    Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.NORMAL).setMessages(
+                    SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
                             "Successfully enabled the '" + name + "' Addon by " + addon.getAuthor()
                     ));
                 }
             } catch (Exception e) {
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
+                SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
                         "Failed to initialize addon: " + addon.getClass().getSimpleName()
                 ));
                 e.printStackTrace();
@@ -178,15 +178,12 @@ public class AddonManager {
     }
 
     public void toggleAddon(PetAddon addon, boolean enabled) {
-        Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("Toggled "+addon.getNamespace().namespace()+" to "+enabled));
         if (enabled && isSupported(addon.getSupportedVersion())) {
             addon.init();
             Bukkit.getPluginManager().registerEvents(addon, plugin);
-            Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("enabling addon"));
         } else {
             HandlerList.unregisterAll(addon);
             addon.cleanup();
-            Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.DEBUG).setMessages("disabling addon"));
         }
         String name = addon.getNamespace().namespace();
 
@@ -214,11 +211,11 @@ public class AddonManager {
         String plugin = PetCore.getInstance().getDescription().getVersion();
         if (!plugin.contains(" (build ")) return false; // Seems to be a different format (Custom?)
         if (!version.contains(" (build ")) return false; // Seems to be a different format (Custom?)
-        double main = Double.parseDouble(AdvString.before(" (build", plugin));
-        double checkMain = Double.parseDouble(AdvString.before(" (build", version));
+        double main = Double.parseDouble(AdvString.before("-BUILD-", plugin));
+        double checkMain = Double.parseDouble(AdvString.before("-BUILD-", version));
 
-        int build = Integer.parseInt(AdvString.between("build ", ")", plugin));
-        int checkBuild = Integer.parseInt(AdvString.between("build ", ")", version));
+        int build = Integer.parseInt(AdvString.after("-BUILD-", plugin));
+        int checkBuild = Integer.parseInt(AdvString.after("-BUILD-", version));
 
         if (main >= checkMain) {
             return build >= checkBuild;
@@ -246,7 +243,7 @@ public class AddonManager {
             if (updateNeeded.isEmpty()) return;
             updateNeeded.forEach(addonData -> {
 
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.UPDATE).setMessages(
+                SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.UPDATE).setMessages(
                         "There is an update for the addon '" + addonData.getName() + "' version " + addonData.getVersion()
                 ));
             });
@@ -281,9 +278,13 @@ public class AddonManager {
                 }
 
                 addons.add(data);
+                registeredAddons.add(data.getName());
             });
             consumer.accept(addons);
         });
     }
 
+    public List<String> getRegisteredAddons() {
+        return registeredAddons;
+    }
 }

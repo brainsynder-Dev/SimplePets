@@ -23,6 +23,9 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.UserManagement;
 import simplepets.brainsynder.commands.PetsCommand;
 import simplepets.brainsynder.commands.list.DebugCommand;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.debug.DebugLogger;
 import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.impl.PetConfiguration;
@@ -31,8 +34,6 @@ import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
 import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -61,10 +62,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private UpdateUtils updateUtils;
     private UpdateResult updateResult;
 
+    private Debug debug;
+
     @Override
     public void onEnable() {
-        Debug.init(this);
-        Debug.debug(DebugLevel.HIDDEN, "Setting API instance");
+        debug = new Debug(this);
+        debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         SimplePets.setPLUGIN(this);
 
         instance = this;
@@ -72,26 +75,26 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         MessageFile.init(getDataFolder());
 
-        Debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
+        debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
 
         reloaded = configuration.getBoolean("Reload-Detected", false);
-        Debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: "+reloaded);
+        debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: "+reloaded);
         configuration.remove("Reload-Detected");
 
-        Debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
+        debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
         new InventorySQL();
         reloadSpawner();
 
         handleManagers();
 
-        Debug.debug(DebugLevel.HIDDEN, "Initializing Player SQL");
+        debug.debug(DebugLevel.HIDDEN, "Initializing Player SQL");
         new PlayerSQL();
 
         handleMetrics();
 
         try {
-            Debug.debug(DebugLevel.HIDDEN, "Registering commands");
+            debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
         } catch (Exception e) {
             e.printStackTrace();
@@ -109,7 +112,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
-                Debug.debug(DebugLevel.HIDDEN, "Respawning pets for players (if there are any)");
+                debug.debug(DebugLevel.HIDDEN, "Respawning pets for players (if there are any)");
                 UserManagement userManager = SimplePets.getUserManager();
                 Bukkit.getOnlinePlayers().forEach(userManager::getPetUser);
             }
@@ -119,13 +122,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     @Override
     public void onDisable() {
-        Debug.debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
+        SimplePets.getDebugLogger().debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
         USER_MANAGER.getAllUsers().forEach(user -> ((PetOwner) user).markForRespawn());
 
         DebugCommand.fetchDebug(json -> {
             json.set("reloaded", !isShuttingDown());
             DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
-            Debug.debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
+            debug.debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
 
         USER_MANAGER = null;
@@ -134,7 +137,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         // Detected a reload...
         if (!isShuttingDown()) {
-            Debug.debug(DebugBuilder.build().setMessages(
+            debug.debug(DebugBuilder.build().setMessages(
                     "------------------------------------",
                     "    The plugin has detected a reload",
                     "If you encounter ANY strange issues then this will be the cause.",
@@ -154,19 +157,19 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     }
 
     private void handleUpdateUtils () {
-        Debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
+        debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
         // Handle Update checking
-        updateResult = new UpdateResult().setPreStart(() -> Debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
-                .setFailParse(members -> Debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
-                .setNoNewBuilds(() -> Debug.debug(DebugLevel.UPDATE, "No new builds were found"))
-                .setOnError(() -> Debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
+        updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
+                .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
+                .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
+                .setOnError(() -> debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
                 .setNewBuild(members -> {
                     int latestBuild = members.getInt("build", -1);
 
                     // New build found
                     if (latestBuild > updateResult.getCurrentBuild()) {
-                        Debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
-                        Debug.debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
+                        debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
+                        debug.debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
                     }
                 });
         updateUtils = new UpdateUtils(this, updateResult);
@@ -180,7 +183,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             unit = TimeUnit.valueOf(timeunit);
         }catch (Exception e) {
             unit = TimeUnit.HOURS;
-            Debug.debug(DebugLevel.ERROR, "Could not find unit for '"+timeunit+"'");
+            debug.debug(DebugLevel.ERROR, "Could not find unit for '"+timeunit+"'");
         }
 
         updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
@@ -209,7 +212,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     }
 
     private void handleManagers () {
-        Debug.debug(DebugLevel.HIDDEN, "Initializing plugin managers");
+        debug.debug(DebugLevel.HIDDEN, "Initializing plugin managers");
         particleManager = new ParticleManager(this);
         renameManager = new RenameManager(this);
         PET_CONFIG = new PetConfiguration(this);
@@ -224,7 +227,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     // Registers all listeners
     private void handleListeners () {
-        Debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
+        debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
 
         // This bit of code automatically registers all the listeners in the listeners package
         String packageName = getClass().getPackage().getName();
@@ -233,7 +236,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 Listener listener = (Listener) clazz.getDeclaredConstructor().newInstance();
                 getServer().getPluginManager().registerEvents(listener, this);
             } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                Debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.CRITICAL).setMessages(
+                debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.CRITICAL).setMessages(
                         "Failed to register listener: "+clazz.getSimpleName(),
                         "Error Cause: "+e.getMessage()
                 ));
@@ -309,7 +312,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     }
 
     private void handleMetrics () {
-        Debug.debug(DebugLevel.HIDDEN, "Loading Metrics");
+        SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Loading Metrics");
         Metrics metrics = new Metrics(this);
         metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
         metrics.addCustomChart(new Metrics.DrilldownPie("loaded_addons", () -> {
@@ -349,11 +352,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             if (clazz == null) return;
             if (ISpawnUtil.class.isAssignableFrom(clazz)) {
                 SPAWN_UTIL = (ISpawnUtil) clazz.getConstructor().newInstance();
-                Debug.debug(DebugLevel.HIDDEN, "Successfully Linked to " + version.name() + " SpawnUtil Class");
+                debug.debug(DebugLevel.HIDDEN, "Successfully Linked to " + version.name() + " SpawnUtil Class");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Debug.debug(DebugLevel.ERROR, "Could not link to a SpawnUtil Class... Missing for version: "+version);
+            debug.debug(DebugLevel.ERROR, "Could not link to a SpawnUtil Class... Missing for version: "+version);
         }
     }
 
@@ -368,6 +371,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     @Override
     public ParticleManager getParticleHandler() {
         return particleManager;
+    }
+
+    @Override
+    public DebugLogger getDebugLogger() {
+        return debug;
     }
 
     public static PetCore getInstance() {

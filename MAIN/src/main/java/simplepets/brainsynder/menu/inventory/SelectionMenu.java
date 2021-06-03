@@ -20,14 +20,13 @@ import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
 import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.utils.Utilities;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.util.*;
@@ -159,7 +158,7 @@ public class SelectionMenu extends CustomInventory {
                     inv.addItem(storage.getItem());
                 petMap.put(player.getName(), new StorageList<>(pages.getPage(page)));
             } else {
-                Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+                SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
 
         }

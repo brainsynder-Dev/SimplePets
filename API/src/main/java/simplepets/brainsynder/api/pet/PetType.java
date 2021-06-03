@@ -39,6 +39,8 @@ import simplepets.brainsynder.api.pet.data.panda.PandaTypeData;
 import simplepets.brainsynder.api.pet.data.villager.VillagerBiomeData;
 import simplepets.brainsynder.api.pet.data.villager.VillagerLevelData;
 import simplepets.brainsynder.api.pet.data.villager.VillagerTypeData;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.lang.annotation.Annotation;
 import java.util.LinkedList;
@@ -362,8 +364,8 @@ public enum PetType {
             try {
                 this.petData.add(clazz.newInstance());
             } catch (InstantiationException | IllegalAccessException e) {
-                System.out.println("[SimplePets API] Failed to create an instance of " + clazz.getSimpleName());
-                System.out.println("[SimplePets API] Error: " + e.getMessage());
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Failed to create an instance of " + clazz.getSimpleName());
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Error: " + e.getMessage());
             }
         });
     }

@@ -18,14 +18,14 @@ import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.SelectorHolder;
 import simplepets.brainsynder.menu.items.list.Air;
 import simplepets.brainsynder.utils.BiTask;
 import simplepets.brainsynder.utils.Keys;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.util.*;
@@ -132,7 +132,7 @@ public class PetSelectorMenu extends CustomInventory {
                     inv.addItem(petTypeStorage.getItem());
                 });
             } else {
-                Debug.debug(DebugLevel.MODERATE, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+                SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
 
         }

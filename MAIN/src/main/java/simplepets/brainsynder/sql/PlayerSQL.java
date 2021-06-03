@@ -13,11 +13,11 @@ import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.impl.PetOwner;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.sql.PreparedStatement;
@@ -111,7 +111,7 @@ public class PlayerSQL extends SQLManager {
                                 compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(raw)).toList());
                             }
                         } catch (NBTException e) {
-                            Debug.debug(DebugBuilder.build(getClass()).setMessages(
+                            SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages(
                                     "Failed to load 'UnlockedPets' for uuid: " + uuid,
                                     "Result: " + raw
                             ).setSync(true).setLevel(DebugLevel.ERROR));
@@ -124,7 +124,7 @@ public class PlayerSQL extends SQLManager {
                             try {
                                 compound.setTag("pet_names", JsonToNBT.parse(rawName).toList());
                             } catch (NBTException e) {
-                                Debug.debug(DebugLevel.ERROR, "Failed to read name data: " + rawName, true);
+                                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Failed to read name data: " + rawName, true);
                                 // Old pet name save... not supported in the new system
                             }
                         }
@@ -265,7 +265,7 @@ public class PlayerSQL extends SQLManager {
                                 compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(results.getString("UnlockedPets"))).toList());
                             }
                         } catch (NBTException e) {
-                            Debug.debug(DebugBuilder.build().setMessages(
+                            SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
                                     "Failed to load 'UnlockedPets' for uuid: " + uuid.toString(),
                                     "Result: " + results.getString("UnlockedPets")
                             ).setLevel(DebugLevel.ERROR));

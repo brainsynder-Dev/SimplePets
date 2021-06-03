@@ -8,6 +8,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.debug.DebugLogger;
 import simplepets.brainsynder.files.Config;
 
 import java.time.Instant;
@@ -18,18 +21,22 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public class Debug {
-    private static PetCore core;
-    private static Map<String, LinkedList<DebugBuilder>> debugStorage;
-    private static LinkedList<DebugBuilder> debugLog;
+public class Debug implements DebugLogger {
+    private final PetCore core;
+    private static final Map<String, LinkedList<DebugBuilder>> debugStorage;
+    private static final LinkedList<DebugBuilder> debugLog;
 
-    public static void init(PetCore core) {
-        Debug.core = core;
+    static {
         debugStorage = Maps.newHashMap();
         debugLog = Lists.newLinkedList();
     }
 
-    public static void debug(DebugBuilder builder) {
+    public Debug (PetCore core) {
+        this.core = core;
+    }
+
+    @Override
+    public void debug(DebugBuilder builder) {
         Runnable runnable = null;
         debugLog.addLast(builder);
 
@@ -38,27 +45,25 @@ public class Debug {
         LinkedList<DebugBuilder> storage = debugStorage.getOrDefault(className, Lists.newLinkedList());
         storage.addLast(builder);
         debugStorage.put(className, storage);
+        if (builder.getLevel().isHidden()) return;
 
-        if (builder.getLevel() != DebugLevel.HIDDEN) {
+        if (!builder.getLevel().canBypassDisable()) {
             if (core.isEnabled()) {
                 Config configuration = core.getConfiguration();
                 runnable = () -> {
-                    if ((builder.getLevel() != DebugLevel.DEBUG) && (builder.getLevel() != DebugLevel.CRITICAL) && (builder.getLevel() != DebugLevel.UPDATE) && (configuration != null)) {
-                        if (configuration == null) return;
+                    if ((configuration != null) && (builder.getLevel().getLevelName() != null)) {
                         if (!configuration.getBoolean("Debug.Enabled")) return;
-                        if ((!configuration.getStringList("Debug.Levels").contains(String.valueOf(builder.getLevel().getLevel())))
-                                && (!configuration.getStringList("Debug.Levels").contains(builder.getLevel().name())))
-                            return;
+                        if (!configuration.getBoolean("Debug.Levels."+builder.getLevel().getLevelName(), true)) return;
                     }
                     if (builder.broadcast())
                         Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).forEach(player -> {
                             builder.getMessages().forEach(message -> {
-                                player.sendMessage(builder.getLevel().getPrefix() + "[SimplePets] " + builder.getLevel().getColor() + message);
+                                player.sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets] " + builder.getLevel().getTextColor() + message);
                             });
                         });
 
                     builder.getMessages().forEach(message -> {
-                        Bukkit.getConsoleSender().sendMessage(builder.getLevel().getPrefix() + "[SimplePets " + builder.getLevel().getString() + "] " + builder.getLevel().getColor() + message);
+                        Bukkit.getConsoleSender().sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets " + builder.getLevel().getName() + "] " + builder.getLevel().getTextColor() + message);
                     });
                 };
             } else {
@@ -66,11 +71,11 @@ public class Debug {
                     if (builder.broadcast())
                         Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).forEach(player -> {
                             builder.getMessages().forEach(message -> {
-                                player.sendMessage(builder.getLevel().getPrefix() + "[SimplePets] " + builder.getLevel().getColor() + message);
+                                player.sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets] " + builder.getLevel().getTextColor() + message);
                             });
                         });
                     builder.getMessages().forEach(message -> {
-                        Bukkit.getConsoleSender().sendMessage(builder.getLevel().getPrefix() + "[SimplePets " + builder.getLevel().getString() + "] " + builder.getLevel().getColor() + message);
+                        Bukkit.getConsoleSender().sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets " + builder.getLevel().getName() + "] " + builder.getLevel().getTextColor() + message);
                     });
                 };
             }
@@ -92,23 +97,23 @@ public class Debug {
 
     }
 
-    public static void debug(String message) {
+    @Override
+    public void debug(String message) {
         debug(message, true);
     }
 
-    public static void debug(String message, boolean sync) {
+    @Override
+    public void debug(String message, boolean sync) {
         debug(DebugLevel.NORMAL, message, sync);
     }
 
-    public static void debug(DebugLevel level, String message) {
+    @Override
+    public void debug(DebugLevel level, String message) {
         debug(level, message, true);
     }
 
-    public static void debugBroadcast(DebugLevel level, String message, boolean sync) {
-        debug(DebugBuilder.build().setBroadcast(true).setLevel(level).setMessages(message).setSync(sync));
-    }
-
-    public static void debug(DebugLevel level, String message, boolean sync) {
+    @Override
+    public void debug(DebugLevel level, String message, boolean sync) {
         debug(DebugBuilder.build().setLevel(level).setMessages(message).setSync(sync));
     }
 
@@ -153,7 +158,7 @@ public class Debug {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern ( "yyyy/MM/dd | HH:mm:ss:SSS" );
             String output = formatter.format ( zdt );
             data.add("time/date", output);
-            data.add("level", builder.getLevel().name());
+            data.add("level", builder.getLevel().getName());
 
             JsonArray messages = new JsonArray();
             builder.getMessages().forEach(messages::add);
@@ -166,34 +171,8 @@ public class Debug {
         return json;
     }
 
-    public static LinkedList<DebugBuilder> getDebugLog() {
+    @Override
+    public LinkedList<DebugBuilder> getDebugLog() {
         return Lists.newLinkedList(debugLog);
-    }
-
-    public static class DebugValue {
-        public long timestamp;
-        public List<String> message;
-        public DebugLevel level;
-        public String callerClass = null;
-
-        public DebugValue(String message, DebugLevel level) {
-            this.message = Lists.newArrayList(message);
-            this.level = level;
-        }
-
-        public DebugValue(List<String> message, DebugLevel level) {
-            this.message = message;
-            this.level = level;
-        }
-
-        public DebugValue setTimestamp(long timestamp) {
-            this.timestamp = timestamp;
-            return this;
-        }
-
-        public DebugValue setCallerClass(String callerClass) {
-            this.callerClass = callerClass;
-            return this;
-        }
     }
 }

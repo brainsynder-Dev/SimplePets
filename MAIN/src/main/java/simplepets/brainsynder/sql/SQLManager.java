@@ -3,8 +3,8 @@ package simplepets.brainsynder.sql;
 import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,7 +30,7 @@ public abstract class SQLManager {
         PetCore plugin = PetCore.getInstance();
         tablePrefix = plugin.getConfiguration().getString("MySQL.Table");
         if (!tablePrefix.matches("^[_A-Za-z0-9]+$")) {
-            Debug.debug(DebugLevel.MODERATE, "Table prefix " + tablePrefix + " is not alphanumeric. Using simplepets...", true);
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Table prefix " + tablePrefix + " is not alphanumeric. Using simplepets...", true);
             tablePrefix = "simplepets";
         }
         boolean enabled = plugin.getConfiguration().getBoolean("MySQL.Enabled", false);
@@ -127,7 +127,7 @@ public abstract class SQLManager {
                 ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
                 callback.onSuccess(rsTables.next());
             } catch (Exception e) {
-                Debug.debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
                 callback.onSuccess(false);
             }
         });
@@ -139,7 +139,7 @@ public abstract class SQLManager {
                 Statement statement = getConnection().createStatement();
                 statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
             } catch (Exception e) {
-                Debug.debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
             }
         });
     }
@@ -150,7 +150,7 @@ public abstract class SQLManager {
                 Statement statement = getConnection().createStatement();
                 statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
             } catch (Exception e) {
-                Debug.debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
             }
         });
     }

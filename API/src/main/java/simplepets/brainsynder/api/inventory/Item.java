@@ -6,7 +6,9 @@ import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.utils.DyeColorWrapper;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.File;
 import java.util.Optional;
@@ -58,7 +60,7 @@ public abstract class Item extends JsonFile {
             try {
                 return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
             } catch (IllegalArgumentException ex) {
-                System.out.println("[SimplePets API] Error thrown when creating item for " + getClass().getSimpleName() + ".");
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Error thrown when creating item for " + getClass().getSimpleName() + ".");
                 return getDefaultItem();
             }
         }

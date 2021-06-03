@@ -9,6 +9,7 @@ import simplepets.brainsynder.api.inventory.handler.ItemHandler;
 import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.user.UserManagement;
+import simplepets.brainsynder.debug.DebugLogger;
 
 import java.util.Optional;
 
@@ -24,6 +25,8 @@ public interface IPetsPlugin extends Plugin {
     GUIHandler getGUIHandler ();
 
     ParticleHandler getParticleHandler ();
+
+    DebugLogger getDebugLogger ();
 
     /**
      * Will check if the entity is a simplepets entity

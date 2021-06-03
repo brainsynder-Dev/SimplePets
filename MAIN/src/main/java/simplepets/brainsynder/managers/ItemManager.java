@@ -7,10 +7,10 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.menu.items.CustomItem;
 import simplepets.brainsynder.menu.items.list.*;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
 
 import java.io.File;
 import java.lang.reflect.Constructor;
@@ -27,9 +27,9 @@ public class ItemManager implements ItemHandler {
 
     public void initiate() {
         plugin = PetCore.getInstance();
-        Debug.debug(DebugBuilder.build(getClass()).setMessages("Initializing Menu Items..."));
+        SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Initializing Menu Items..."));
         if (items != null) if (!items.isEmpty()) items.clear();
-        Debug.debug(DebugBuilder.build(getClass()).setMessages("Loading Customizable Item Files..."));
+        SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Loading Customizable Item Files..."));
         File customFolder = new File(plugin.getDataFolder().toString() + "/Items/Custom/");
         registeredFolder = new File(plugin.getDataFolder().toString() + "/Items/AddonItems/");
         if (!customFolder.exists()) customFolder.mkdirs();
@@ -55,7 +55,7 @@ public class ItemManager implements ItemHandler {
         for (Item loader : items.values()) {
             (loader).save();
         }
-        Debug.debug(DebugBuilder.build(getClass()).setMessages("Files have been loaded."));
+        SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Files have been loaded."));
 
 
         // Loads the custom items that the were added

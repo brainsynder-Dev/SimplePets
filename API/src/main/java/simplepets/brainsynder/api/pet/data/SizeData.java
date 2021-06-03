@@ -68,7 +68,6 @@ public class SizeData extends PetData<ISizable> {
 
         // Adds all the default sizes
         if (sizes.isEmpty()) sizes.addAll(Lists.newArrayList(1, 2, 3, 4));
-        System.out.println("[SimplePets API] Found sizes: "+sizes);
 
         return sizes;
     }

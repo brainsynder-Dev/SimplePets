@@ -2,9 +2,9 @@ package simplepets.brainsynder.files;
 
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.utils.Colorize;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.options.MessageOption;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 
@@ -13,7 +13,7 @@ public class MessageFile {
     private static YamlFile file;
 
     public static void init (File folder) {
-        Debug.debug(DebugLevel.HIDDEN, "Initializing Messages file");
+        SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Initializing Messages file");
         file = new YamlFile(folder, "messages.yml") {
             @Override
             public void loadDefaults() {

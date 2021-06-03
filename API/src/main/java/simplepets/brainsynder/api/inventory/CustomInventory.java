@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.File;
 import java.util.HashMap;
@@ -41,16 +42,16 @@ public abstract class CustomInventory extends JsonFile {
                 int slot = json.getInt("slot", -1);
                 String namespace = json.getString("item", "-unknown-");
                 if (slot == 0) {
-                    System.out.println("[SimplePets API] Slot can not be 0 for item '"+namespace+"'");
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Slot can not be 0 for item '"+namespace+"'");
                     return;
                 }
                 if (slot == -1) {
-                    System.out.println("[SimplePets API] Invalid slot for item '"+namespace+"'");
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Invalid slot for item '"+namespace+"'");
                     return;
                 }
 
                 if (namespace.equalsIgnoreCase("-unknown-")) {
-                    System.out.println("[SimplePets API] Invalid item for slot '"+slot+"'");
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Invalid item for slot '"+slot+"'");
                     return;
                 }
 
@@ -91,16 +92,16 @@ public abstract class CustomInventory extends JsonFile {
                     int slot = json.getInt("slot", -1);
                     String namespace = json.getString("item", "-unknown-");
                     if (slot == 0) {
-                        System.out.println("[SimplePets API] Slot can not be 0 for item '"+namespace+"'");
+                        SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Slot can not be 0 for item '"+namespace+"'");
                         return;
                     }
                     if (slot == -1) {
-                        System.out.println("[SimplePets API] Invalid slot for item '"+namespace+"'");
+                        SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Invalid slot for item '"+namespace+"'");
                         return;
                     }
 
                     if (namespace.equalsIgnoreCase("-unknown-")) {
-                        System.out.println("[SimplePets API] Invalid item for slot '"+slot+"'");
+                        SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Invalid item for slot '"+slot+"'");
                         return;
                     }
 

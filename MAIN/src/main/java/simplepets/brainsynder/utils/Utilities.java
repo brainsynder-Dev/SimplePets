@@ -21,12 +21,11 @@ import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.debug.DebugBuilder;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.ParticleManager;
-import simplepets.brainsynder.utils.debug.Debug;
-import simplepets.brainsynder.utils.debug.DebugBuilder;
-import simplepets.brainsynder.utils.debug.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;
@@ -89,7 +88,7 @@ public class Utilities {
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
-            Debug.debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
+            SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
         }
     }
@@ -133,7 +132,7 @@ public class Utilities {
                 sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
-            Debug.debug(DebugLevel.ERROR, "Could not run method IEntityPet#removePassenger");
+            SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#removePassenger");
             e.printStackTrace();
         }
     }
@@ -210,12 +209,12 @@ public class Utilities {
         try {
             if (!backup.exists()) backup.createNewFile();
             FileUtils.copyFile(file, backup);
-            Debug.debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.NORMAL).setMessages(
+            SimplePets.getDebugLogger().debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.NORMAL).setMessages(
                     "A new major config change was detected",
                     "Saving the old config to 'plugins/SimplePets/"+backup.getParentFile().getName()+"/"+backup.getName()+"'"
             ));
         } catch (IOException e) {
-            Debug.debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.ERROR).setMessages(
+            SimplePets.getDebugLogger().debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.ERROR).setMessages(
                     "Failed to create file backup for: "+file.getName(),
                     "Error: "+e.getMessage()
             ));

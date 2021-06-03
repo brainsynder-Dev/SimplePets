@@ -1,6 +1,9 @@
 package simplepets.brainsynder.addon;
 
 import com.google.common.collect.Maps;
+import net.md_5.bungee.api.ChatColor;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +11,12 @@ import java.util.Map;
 import java.util.Objects;
 
 public class AddonPermissions {
+    private static final DebugLevel REGISTER;
     private static final Map<String, List<PermissionData>> permissions;
 
     static {
         permissions = Maps.newHashMap();
+        REGISTER = new DebugLevel("Permissions", ChatColor.GRAY, ChatColor.GREEN);
     }
 
     /**
@@ -30,7 +35,7 @@ public class AddonPermissions {
 
         list.add(data);
         permissions.put(addon.getNamespace().namespace(), list);
-        System.out.println("[SimplePets AddonPerms] Registering '"+data.getPermission()+"' permission for the '"+addon.getNamespace().namespace()+"' addon");
+        SimplePets.getDebugLogger().debug(REGISTER, "Registering '"+data.getPermission()+"' permission for the '"+addon.getNamespace().namespace()+"' addon");
     }
 
     /**
