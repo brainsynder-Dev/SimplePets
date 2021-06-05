@@ -98,11 +98,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.reflections</groupId>
-            <artifactId>reflections</artifactId>
-            <version>0.9.12</version>
-        </dependency>
-        <dependency>
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
             <version>${bslib.version}</version>

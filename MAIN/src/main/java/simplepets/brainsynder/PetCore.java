@@ -8,10 +8,9 @@ import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Listener;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.reflections.Reflections;
 import simplepets.brainsynder.addon.PetAddon;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
@@ -30,6 +29,7 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.impl.PetOwner;
+import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
@@ -229,19 +229,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void handleListeners () {
         debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
 
-        // This bit of code automatically registers all the listeners in the listeners package
-        String packageName = getClass().getPackage().getName();
-        for (Class<?> clazz : new Reflections(packageName+".listeners").getSubTypesOf(Listener.class)) {
-            try {
-                Listener listener = (Listener) clazz.getDeclaredConstructor().newInstance();
-                getServer().getPluginManager().registerEvents(listener, this);
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.CRITICAL).setMessages(
-                        "Failed to register listener: "+clazz.getSimpleName(),
-                        "Error Cause: "+e.getMessage()
-                ));
-            }
-        }
+        PluginManager manager = Bukkit.getPluginManager();
+        manager.registerEvents(new AddonGUIListener(), this);
+        manager.registerEvents(new ChunkUnloadListener(), this);
+        manager.registerEvents(new DataGUIListener(), this);
+        manager.registerEvents(new InteractListener(), this);
+        manager.registerEvents(new JoinLeaveListeners(), this);
+        manager.registerEvents(new PetEventListener(), this);
+        manager.registerEvents(new PetSelectorGUIListener(), this);
+        manager.registerEvents(new SavesGUIListener(), this);
+        manager.registerEvents(new SelectionGUIListener(), this);
     }
 
     @Override
