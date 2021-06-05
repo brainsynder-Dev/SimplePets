@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.list.*;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.List;
 
@@ -51,11 +50,11 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         getSubCommands().forEach(sub -> {
             if (sub.getClass().isAnnotationPresent(Permission.class)) {
                 Permission permission = sub.getClass().getAnnotation(Permission.class);
-                if (permission.adminCommand() && Utilities.hasPermission(sender, permission.permission(), true)) {
+                if (permission.adminCommand() && sender.hasPermission(permission.permission())) {
                     adminCommands.add(sub);
                     return;
                 }
-                if (!permission.defaultAllow() && !Utilities.hasPermission(sender, permission.permission(), true)) return;
+                if (!permission.defaultAllow() && !sender.hasPermission(permission.permission())) return;
             }
             sub.sendUsage(sender);
         });

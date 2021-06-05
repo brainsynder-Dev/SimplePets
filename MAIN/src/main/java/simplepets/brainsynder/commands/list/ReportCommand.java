@@ -26,7 +26,6 @@ import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.Keys;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.List;
 
@@ -90,7 +89,7 @@ public class ReportCommand extends PetSubCommand implements Listener {
 
         // The book is an issue book
         if (event.getNewBookMeta().getPersistentDataContainer().has(Keys.BOOK_KEY, PersistentDataType.STRING)) {
-            if (!Utilities.hasPermission(event.getPlayer(), getPermission())) {
+            if (!event.getPlayer().hasPermission(getPermission())) {
                 event.setNewBookMeta(event.getPreviousBookMeta());
                 event.getPlayer().sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                 return;

@@ -35,6 +35,7 @@ public class SavesMenu extends CustomInventory {
         itemMap = new HashMap<>();
 
         defaults.add("size", 54);
+        setDefault("title_comment", "The title of the GUI can support regular color codes '&c' and HEX color codes '&#FFFFFF'");
         defaults.add("title", "&#de9790[] &#b35349Pet Saves");
 
         Map<Integer, String> object = new HashMap<>();

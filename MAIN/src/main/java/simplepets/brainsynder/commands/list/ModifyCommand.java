@@ -15,7 +15,6 @@ import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -40,11 +39,11 @@ public class ModifyCommand extends PetSubCommand {
         AtomicInteger argStart = new AtomicInteger (0);
 
         Player target = null;
-        if (isUsername(args[argStart.get()]) && Utilities.hasPermission(sender, getPermission("other"))) {
+        if (isUsername(args[argStart.get()]) && sender.hasPermission(getPermission("other"))) {
             Player selected = Bukkit.getPlayerExact(args[argStart.get()]);
             if (selected != null) {
                 target = selected;
-                if (!Utilities.hasPermission(sender, getPermission("other"))) {
+                if (!sender.hasPermission(getPermission("other"))) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }

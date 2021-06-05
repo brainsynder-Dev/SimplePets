@@ -16,7 +16,6 @@ import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -43,7 +42,7 @@ public class SummonCommand extends PetSubCommand {
         ISpawnUtil spawner = getPlugin().getSpawnUtil();
         if (spawner == null) return;
 
-        if (args[0].equalsIgnoreCase("all") && Utilities.hasPermission(sender, getPermission("all"))) {
+        if (args[0].equalsIgnoreCase("all") && sender.hasPermission(getPermission("all"))) {
             AtomicInteger integer = new AtomicInteger(0);
             for (PetType type : PetType.values()) {
                 SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
@@ -88,7 +87,7 @@ public class SummonCommand extends PetSubCommand {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE).replace("{player}", args[1]));
                     return;
                 }
-                if ((!Utilities.hasPermission(sender, getPermission("other"))) && (!target.getName().equals(sender.getName()))) {
+                if ((!sender.hasPermission(getPermission("other"))) && (!target.getName().equals(sender.getName()))) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
@@ -118,7 +117,7 @@ public class SummonCommand extends PetSubCommand {
             }
         }
 
-        if (!Utilities.hasPermission(sender, getPermission("nbt"))) compound = new StorageTagCompound();
+        if (!sender.hasPermission(getPermission("nbt"))) compound = new StorageTagCompound();
 
         if (target == null) {
             if (sender instanceof Player) {

@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ public class PetSubCommand extends SubCommand {
     public boolean canExecute(CommandSender sender) {
         if (needsPermission()) {
             //sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
-            return Utilities.hasPermission(sender, getPermission());
+            return sender.hasPermission(getPermission());
         }
         return super.canExecute(sender);
     }
@@ -48,9 +47,9 @@ public class PetSubCommand extends SubCommand {
         int current = 1;
         for (String value : split) {
             if (current == index) {
-                if (value.contains("nbt") && Utilities.hasPermission(sender, getPermission("nbt"))) completions.add("{}");
+                if (value.contains("nbt") && sender.hasPermission(getPermission("nbt"))) completions.add("{}");
                 if (value.contains("type")) completions.addAll(getPetTypes(sender));
-                if (value.contains("player") && Utilities.hasPermission(sender, getPermission("other"))) completions.addAll(getOnlinePlayers());
+                if (value.contains("player") && sender.hasPermission(getPermission("other"))) completions.addAll(getOnlinePlayers());
                 break;
             }
             current++;
@@ -103,7 +102,7 @@ public class PetSubCommand extends SubCommand {
                 if (!type.isSupported()) return;
                 if (!SimplePets.getSpawnUtil().isRegistered(type)) return;
 
-                if (!Utilities.hasPermission(sender, type.getPermission())) return;
+                if (!sender.hasPermission(type.getPermission())) return;
                 list.add(type.getName());
             });
         }

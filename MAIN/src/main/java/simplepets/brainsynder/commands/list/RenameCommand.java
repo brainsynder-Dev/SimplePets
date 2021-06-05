@@ -13,7 +13,6 @@ import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.utils.RenameType;
-import simplepets.brainsynder.utils.Utilities;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +32,7 @@ public class RenameCommand extends PetSubCommand {
     @Override
     public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
         if (index == 1) {
-            if (Utilities.hasPermission(sender, getPermission("other"))) {
+            if (sender.hasPermission(getPermission("other"))) {
                 completions.addAll(getOnlinePlayers());
             }
             completions.addAll(getPetTypes(sender));
@@ -45,7 +44,7 @@ public class RenameCommand extends PetSubCommand {
             // IS not a pet but is a player... should be...
             if (!optional.isPresent()) {
                 Player target = Bukkit.getPlayer(args[0]);
-                if ((target != null) && Utilities.hasPermission(sender, getPermission("other"))) {
+                if ((target != null) && sender.hasPermission(getPermission("other"))) {
                     completions.addAll(getPetTypes(sender));
                 }
             }
@@ -63,11 +62,11 @@ public class RenameCommand extends PetSubCommand {
         AtomicInteger index = new AtomicInteger(0);
 
         Player target = null;
-        if (isUsername(args[index.get()]) && Utilities.hasPermission(sender, getPermission("other"))) {
+        if (isUsername(args[index.get()]) && sender.hasPermission(getPermission("other"))) {
             Player selected = Bukkit.getPlayerExact(args[index.get()]);
             if (selected != null) {
                 target = selected;
-                if (!Utilities.hasPermission(sender, getPermission("other"))) {
+                if (!sender.hasPermission(getPermission("other"))) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
