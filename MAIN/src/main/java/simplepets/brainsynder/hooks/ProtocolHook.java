@@ -1,9 +1,11 @@
 package simplepets.brainsynder.hooks;
 
 import com.google.common.collect.Maps;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.event.user.PetRenameEvent;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
@@ -37,14 +39,21 @@ public class ProtocolHook {
                 .newMenu(layout)
                 .reopenIfFail()
                 .response((player, lines) -> {
-                    String line = lines[finalIndex];
-                    if ((line == null) || line.isEmpty()) return false;
+                    final String[] line = {lines[finalIndex]};
+                    if ((line[0] == null) || line[0].isEmpty()) return false;
                     PetType petType = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
                     if (petType == PetType.UNKNOWN) return false;  // failure. becaues reopenIfFail was called, menu will reopen when closed.
                     new BukkitRunnable() {
                         @Override
                         public void run() {
-                            SimplePets.getUserManager().getPetUser(player).ifPresent(user1 -> user1.setPetName(line.trim(), petType));
+                            SimplePets.getUserManager().getPetUser(player).ifPresent(user1 -> {
+                                if (line[0].equalsIgnoreCase("reset")) line[0] = null;
+
+                                PetRenameEvent renameEvent = new PetRenameEvent (user1, petType, line[0]);
+                                Bukkit.getPluginManager().callEvent(renameEvent);
+
+                                if (!renameEvent.isCancelled()) user1.setPetName(renameEvent.getName(), petType);
+                            });
                         }
                     }.runTask(PetCore.getInstance());
                     return true;

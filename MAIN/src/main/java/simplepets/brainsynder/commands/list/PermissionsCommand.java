@@ -39,12 +39,25 @@ public class PermissionsCommand extends PetSubCommand {
         sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
     }
 
+    private void addPermission (StringBuilder builder, String permission, String comment, String defaultType) {
+        builder.append("    ").append(permission).append(": ");
+
+        if ((comment != null) && (!comment.isEmpty())) builder.append(" # ").append(comment);
+
+        builder.append("\n        default: ").append(defaultType).append("\n");
+    }
+
     private void generatePluginPermissions() {
         StringBuilder def = new StringBuilder();
         def.append("        default: false").append("\n").append("        children:").append("\n");
 
 
         StringBuilder master = new StringBuilder();
+        addPermission(master, "pet.name.bypass", "This permission bypasses any of the pet renaming checks", "op");
+        addPermission(master, "pet.name.color", "This permission is to allow players to add color codes when renaming their pet", "true");
+        addPermission(master, "pet.name.color.hex", "This permission is to allow players to add HEX color codes when renaming their pet (Eg: &#FFFFFF)", "op");
+        master.append("\n\n");
+
         StringBuilder hostile = new StringBuilder();
         StringBuilder passive = new StringBuilder();
         StringBuilder allAllowData = new StringBuilder();

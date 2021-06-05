@@ -85,7 +85,7 @@ public class Config extends YamlFile {
 
         addDefault("MySQL.Enabled", false, "Would you like to use MySQL to save player/pet data?\nIf it is disabled the plugin will use SQLite\nDefault: false");
         addDefault("MySQL.Table", "simplepets");
-        addDefault("MySQL.Host", "host");
+        addDefault("MySQL.Host", "localhost");
         addDefault("MySQL.Port", 3306);
         addDefault("MySQL.DatabaseName", "SimplePets", "Example: SimplePets");
         addDefault("MySQL.Login.Username", "username");
@@ -120,6 +120,8 @@ public class Config extends YamlFile {
                 "- ANVIL (The Anvil GUI will open and they can change the name there)\n" +
                 "- SIGN [REQUIRES ProtocolLib] (Will open a Sign GUI they input the name on the configured line)\n" +
                 "Default: ANVIL");
+        addDefault(RENAME_TRIM, false, "Enabling this option will remove random spaces at the start and end of the name");
+        addDefault(LIMIT_CHARS_TOGGLE, false, "Should the name have a limited number of characters?\nDefault: false");
         addDefault(LIMIT_CHARS_TOGGLE, false, "Should the name have a limited number of characters?\nDefault: false");
         addDefault(LIMIT_CHARS_NUMBER, 10, "What should the character limit be set to?\nDefault: 10");
         addDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"),
@@ -128,6 +130,7 @@ public class Config extends YamlFile {
                         "         Example: [ass] will also flag glass because it contains the word in it\n" +
                         "   If you just have the word it will check for the exact word\n" +
                         "         Example: 'ass' will just be flagged so 'glass' can be said");
+        addDefault("RenamePet.Blocked-RegexPattern", "", "This blocks pets from having anything that matches the pattern as the name\nFor example MergedMobs has a pattern of '([0-9]+)(x)' will block names that are '999x'\nIf you want to use that pattern but ignore case then use '/([0-9]+)(x)/gmi'\nONLY CHECKS IF THE NAME MATCHES THE PATTERN\nDefault: \"\"");
         addDefault(MAGIC, false, "Are pet names allowed to have the &k color code?\nDefault: false");
         addDefault(COLOR, true, "Are pet names allowed to be colored?\nDefault: true");
         addDefault(HEX, true, "Are pet names allowed to have HEX colors?\nNOTE: If this is disabled only regular chat color will be used (EG: '&c')\nExample: '&#c986b2'\nDefault: true");
@@ -187,6 +190,7 @@ public class Config extends YamlFile {
             HEX = "RenamePet.ColorCodes.Allow-HEX-Colors",
             ECONOMY_TOGGLE = "Economy.Enabled",
             ECONOMY_TYPE = "Economy.Type",
+            RENAME_TRIM = "RenamePet.Trim-Name",
             LIMIT_CHARS_TOGGLE = "RenamePet.Character-Limit.Enabled",
             LIMIT_CHARS_NUMBER = "RenamePet.Character-Limit.Limit",
             SPAWN_PARTICLE_TOGGLE = "Particles.Summon",
