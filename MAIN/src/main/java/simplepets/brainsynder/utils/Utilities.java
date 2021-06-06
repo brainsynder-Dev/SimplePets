@@ -68,7 +68,7 @@ public class Utilities {
             player.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
             return true;
         }else{
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED_SPAWN, player, player.getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED, player, player.getLocation());
             player.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
             return false;
         }

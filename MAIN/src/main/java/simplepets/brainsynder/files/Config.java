@@ -47,7 +47,7 @@ public class Config extends YamlFile {
                         "Any Questions contact us via Discord: https://pluginwiki.us/discord/"
         );
         addDefault(SPAWN_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player spawns a pet\nDefault: true");
-        addDefault(FAILED_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player fails to spawn a pet\nDefault: true");
+        addDefault(FAILED_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a task fails for a player (EG: spawning, riding, etc..)\nDefault: true");
         addDefault(REMOVE_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player removes a pet\nDefault: true");
         addDefault(NAME_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player renames a pet\nDefault: true");
         addDefault(TELEPORT_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a players pet teleports to its owner\nDefault: true");
@@ -175,6 +175,7 @@ public class Config extends YamlFile {
         remove("PetToggles.Weight.Max_Weight");
         remove("Complete-Mobspawning-Deny-Bypass"); // This has not been fully used since 1.8
         move("UseVaultEconomy", ECONOMY_TOGGLE);
+        move("Particles.Failed-Summon", FAILED_PARTICLE_TOGGLE);
 
         move(ECONOMY_TOGGLE, "Economy");
         remove(ECONOMY_TYPE);
@@ -194,7 +195,7 @@ public class Config extends YamlFile {
             LIMIT_CHARS_TOGGLE = "RenamePet.Character-Limit.Enabled",
             LIMIT_CHARS_NUMBER = "RenamePet.Character-Limit.Limit",
             SPAWN_PARTICLE_TOGGLE = "Particles.Summon",
-            FAILED_PARTICLE_TOGGLE = "Particles.Failed-Summon",
+            FAILED_PARTICLE_TOGGLE = "Particles.Failed",
             TELEPORT_PARTICLE_TOGGLE = "Particles.Teleport",
             FAILED_TASK_PARTICLE_TOGGLE = "Particles.Failed-Task",
             REMOVE_PARTICLE_TOGGLE = "Particles.Remove",

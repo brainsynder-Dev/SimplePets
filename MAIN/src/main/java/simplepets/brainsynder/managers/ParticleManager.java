@@ -60,7 +60,7 @@ public class ParticleManager implements ParticleHandler {
             case SPAWN:
                 if (PetCore.getInstance().getConfiguration().getBoolean(Config.SPAWN_PARTICLE_TOGGLE, true)) spawnParticle.sendToPlayer(player, location);
                 break;
-            case FAILED_SPAWN:
+            case FAILED:
                 if (PetCore.getInstance().getConfiguration().getBoolean(Config.FAILED_PARTICLE_TOGGLE, true)) failSpawnParticle.sendToPlayer(player, location);
                 break;
             case RENAME:

@@ -7,6 +7,6 @@ public interface ParticleHandler {
     void sendParticle (Reason reason, Player player, Location location);
 
     enum Reason {
-        SPAWN, FAILED_SPAWN, RENAME, REMOVE, TELEPORT, TASK_FAILED
+        SPAWN, FAILED, RENAME, REMOVE, TELEPORT, TASK_FAILED
     }
 }
