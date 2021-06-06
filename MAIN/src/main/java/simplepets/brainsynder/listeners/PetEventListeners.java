@@ -129,6 +129,10 @@ public class PetEventListeners implements Listener {
         boolean cancel = false;
 
         if (!event.getPlayer().hasPermission("Pet.name.bypass")) {
+            if (PetCore.get().getConfiguration().getBoolean("RenamePet.Trim-Name")) {
+                event.setNewName(event.getNewName().trim());
+            }
+
             List<String> blocked = PetCore.get().getConfiguration().getStringList("RenamePet.Blocked-Words");
             if (!blocked.isEmpty()) {
                 String[] split = event.getNewName().split(" ");
