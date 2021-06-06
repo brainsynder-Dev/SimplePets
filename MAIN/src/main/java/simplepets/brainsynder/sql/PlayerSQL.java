@@ -314,6 +314,31 @@ public class PlayerSQL extends SQLManager {
                             }
                         }
 
+                        // Loading saved pets
+                        String savedPets = results.getString("SavedPets");
+                        if (Base64Wrapper.isEncoded(savedPets)) {
+                            savedPets = Base64Wrapper.decodeString(savedPets);
+                            StorageTagList pets = new StorageTagList();
+                            try {
+                                JsonToNBT parser = JsonToNBT.parse(savedPets);
+
+                                parser.toList().getList().forEach(storageBase -> {
+                                    StorageTagCompound tag = (StorageTagCompound) storageBase;
+                                    if (!tag.hasKey("type")) {
+                                        if (tag.hasKey("data")) {
+                                            tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
+                                            pets.appendTag(tag);
+                                        }
+                                        // Ignore the other values because it is not formatted correctly
+                                    } else {
+                                        pets.appendTag(storageBase);
+                                    }
+                                });
+                                compound.setTag("saved_pets", pets);
+                            } catch (NBTException e) {
+                            }
+                        }
+
                         callback.onSuccess(compound);
                         return;
                     } catch (NullPointerException | IllegalArgumentException ex) {

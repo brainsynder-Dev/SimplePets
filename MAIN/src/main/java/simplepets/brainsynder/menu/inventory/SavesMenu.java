@@ -123,7 +123,7 @@ public class SavesMenu extends CustomInventory {
                         ItemBuilder builder = type.getBuilder().clone();
                         builder.clearLore();
                         if (compound.hasKey("name") && (!compound.getString("name").equals("null")))
-                            builder.withName(compound.getString("name"));
+                            builder.withName(compound.getString("name").replaceAll("%player%", player.getName()));
                         compound.getKeySet().forEach(key -> {
                             if (!key.equals("name")) {
                                 StorageBase base = compound.getTag(key);
