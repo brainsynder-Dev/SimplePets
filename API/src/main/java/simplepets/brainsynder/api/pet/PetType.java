@@ -395,8 +395,14 @@ public enum PetType {
     }
 
     public EntityType getEntityType() {
-        if (this == POLARBEAR) return EntityType.POLAR_BEAR;
-        return EntityType.valueOf(name());
+        switch (this) {
+            case POLARBEAR:
+                return EntityType.POLAR_BEAR;
+            case MOOSHROOM:
+                return EntityType.MUSHROOM_COW;
+            default:
+                return EntityType.valueOf(name());
+        }
     }
 
     public boolean isSupported() {
