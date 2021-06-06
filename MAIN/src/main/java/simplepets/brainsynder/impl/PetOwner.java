@@ -36,6 +36,9 @@ import simplepets.brainsynder.utils.Utilities;
 import java.util.*;
 
 public class PetOwner implements PetUser {
+    // TODO - Please review, this caused a major bug with inventories not opening after relog
+    // Chances are it does a bit more than that
+    @Deprecated
     private final OfflinePlayer player;
     private final UUID uuid;
 
@@ -188,7 +191,7 @@ public class PetOwner implements PetUser {
 
     @Override
     public OfflinePlayer getPlayer() {
-        return player;
+        return Bukkit.getOfflinePlayer(uuid);
     }
 
     @Override
