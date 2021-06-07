@@ -8,7 +8,6 @@ import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
-import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ItemManager;
 
