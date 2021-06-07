@@ -1,14 +1,14 @@
 package simplepets.brainsynder.versions.v1_16_R3.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import lib.brainsynder.sounds.SoundMaker;
+import net.minecraft.server.v1_16_R3.*;
 import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_16_R3.entity.EntityPet;
+import simplepets.brainsynder.versions.v1_16_R3.entity.controller.ControllerSlime;
 import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
 
 /**
@@ -16,7 +16,6 @@ import simplepets.brainsynder.versions.v1_16_R3.utils.DataWatcherWrapper;
  */
 public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
     private static final DataWatcherObject<Integer> SIZE;
-    private int jumpDelay;
 
     public EntitySlimePet(PetType type, PetUser user) {
         this(EntityTypes.SLIME, type, user);
@@ -24,7 +23,7 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
 
     public EntitySlimePet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
-        jumpDelay = random.nextInt(15) + 10;
+        this.moveController = new ControllerSlime(this);
     }
 
     @Override
@@ -52,18 +51,23 @@ public class EntitySlimePet extends EntityPet implements IEntitySlimePet {
 
     public void setSize(int i) {
         this.datawatcher.set(SIZE, i);
-    }
-
-    @Override
-    public void movementTick() {
-        super.movementTick();
-        if (this.onGround && (jumpDelay-- <= 0) && (passengers.size() == 0) && (!getEntity().isInsideVehicle())) {
-            jumpDelay = this.random.nextInt(15) + 10;
-            this.getControllerJump().b();
-        }
+        getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2 + 0.1 * i);
     }
 
     static {
         SIZE = DataWatcher.a(EntitySlimePet.class, DataWatcherWrapper.INT);
+    }
+
+    @Override
+    public void F() {
+        // Do nothing
+    }
+
+    public void playJumpSound() {
+        if (isPetSilent()) return;
+        SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
+            SoundMaker sound = config.getSound();
+            if (sound != null) sound.playSound(getEntity());
+        });
     }
 }
