@@ -98,6 +98,19 @@ public class SelectionMenu extends CustomInventory {
 
     }
 
+    public void reloadAvailableTypes() {
+        availableTypes.clear();
+
+        for (PetType type : PetType.values()) {
+            if (!type.isSupported()) continue;
+            Optional<IPetConfig> optional = SimplePets.getPetConfigManager().getPetConfig(type);
+            if (!optional.isPresent()) continue;
+            IPetConfig config = optional.get();
+            if (!config.isEnabled()) continue;
+            if (!SimplePets.getSpawnUtil().isRegistered(type)) continue;
+            availableTypes.add(type);
+        }
+    }
 
     @Override
     public void open(PetUser user, int page) {
