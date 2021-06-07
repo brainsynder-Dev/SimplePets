@@ -24,7 +24,7 @@ public class SavePet extends Item {
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder(Material.CHAIN_COMMAND_BLOCK)
-                .withName("&e&lSave Pet")
+                .withName("&#e3c79a&lSave Pet")
                 .addLore("&7Click here to save your current","&7pet for you to spawn later");
     }
 

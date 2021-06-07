@@ -22,7 +22,7 @@ public class Name extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.NAME_TAG).withName("&a&lName Pet");
+        return new ItemBuilder(Material.NAME_TAG).withName("&#99ffac&lName Pet");
     }
 
     @Override

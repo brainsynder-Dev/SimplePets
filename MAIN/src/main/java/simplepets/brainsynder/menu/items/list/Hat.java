@@ -22,7 +22,7 @@ public class Hat extends Item {
 
     @Override
     public ItemBuilder getDefaultItem() {
-        return new ItemBuilder(Material.DIAMOND_HELMET).withName("&e&lToggle Pet as Hat");
+        return new ItemBuilder(Material.DIAMOND_HELMET).withName("&#e3c79a&lToggle Pet as Hat");
     }
 
     @Override
