@@ -99,10 +99,20 @@ public class PetOwner implements PetUser {
 //                    saves.appendTag(storage);
 //                });
                 if (compound.hasKey("saved_pets")) {
-
+                    StorageTagList list = (StorageTagList) compound.getTag("saved_pets");
+                    ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
+                    list.getList().forEach(base -> {
+                        StorageTagCompound tag = (StorageTagCompound) base;
+                        PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                                if (!config.isEnabled()) return;
+                                if (!type.isSupported()) return;
+                                if (!spawnUtil.isRegistered(type)) return;
+                                savedPetData.add(tag.getCompoundTag("data"));
+                            });
+                        });
+                    });
                 }
-
-
 
                 if (compound.hasKey("spawned_pets") && PetCore.getInstance().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login", true)) {
                     StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
