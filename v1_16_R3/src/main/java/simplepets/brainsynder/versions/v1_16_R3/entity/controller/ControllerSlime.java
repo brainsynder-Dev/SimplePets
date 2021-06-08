@@ -30,12 +30,18 @@ public class ControllerSlime extends ControllerMove {
     }
 
     public void a() {
-        this.a.a(((CraftPlayer) Bukkit.getPlayer(slimePet.getOwnerUUID())).getHandle(), 10, 10);
+        // Store owner
+        EntityPlayer owner = ((CraftPlayer) Bukkit.getPlayer(slimePet.getOwnerUUID())).getHandle();
+        // Store the stopping distance
+        int stoppingDistance = PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance");
+        // Rotate the slime's position so it can look to the player
+        this.a.a(owner, 10, 10);
         this.yRot = this.a.yaw;
         this.a.yaw = this.a(this.a.yaw, this.yRot, 90.0F);
         this.a.aC = this.a.yaw;
         this.a.aA = this.a.yaw;
-        if (this.h != Operation.MOVE_TO && lastJump < 60) {
+        // Let the slime idle if 1. It isn't prompted to move, 2. It isn't stuck, 3. It is close to its owner
+        if (this.h != Operation.MOVE_TO && lastJump < 60 && slimePet.h(owner) <= stoppingDistance) {
             this.a.t(0.0F);
             lastJump++;
         } else {
