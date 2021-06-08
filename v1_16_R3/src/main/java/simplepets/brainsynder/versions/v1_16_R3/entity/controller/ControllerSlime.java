@@ -1,9 +1,11 @@
 package simplepets.brainsynder.versions.v1_16_R3.entity.controller;
 
 import net.minecraft.server.v1_16_R3.ControllerMove;
+import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.GenericAttributes;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.versions.v1_16_R3.entity.list.EntitySlimePet;
 
 import java.util.Random;
@@ -12,7 +14,7 @@ public class ControllerSlime extends ControllerMove {
     private float yRot;
     private int jumpDelay;
     private final EntitySlimePet slimePet;
-    private int lastJump;
+    private int lastJump; // Slime sometimes gets stuck when going around fences so I implemented this variable to patch it
 
     public ControllerSlime(EntitySlimePet entityslime) {
         super(entityslime);
@@ -30,25 +32,33 @@ public class ControllerSlime extends ControllerMove {
     }
 
     public void a() {
-        this.a.a(((CraftPlayer) Bukkit.getPlayer(slimePet.getOwnerUUID())).getHandle(), 10, 10);
+        // Store owner
+        EntityPlayer owner = ((CraftPlayer) Bukkit.getPlayer(slimePet.getOwnerUUID())).getHandle();
+        // Store the stopping distance
+        int stoppingDistance = PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance");
+        // Rotate the slime's position so it can look to the player
+        this.a.a(owner, 10, 10);
         this.yRot = this.a.yaw;
+        // Turn left or right depending on which is closer
         this.a.yaw = this.a(this.a.yaw, this.yRot, 90.0F);
         this.a.aC = this.a.yaw;
         this.a.aA = this.a.yaw;
-        if (this.h != Operation.MOVE_TO && lastJump < 60) {
+        // Let the slime idle if 1. It isn't prompted to move, 2. It isn't stuck, 3. It is close to its owner
+        if (this.h != Operation.MOVE_TO && lastJump < 60 && slimePet.h(owner) <= stoppingDistance) {
             this.a.t(0.0F);
             lastJump++;
         } else {
             this.h = Operation.WAIT;
+            this.a.q((float)(this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
+            // If the slime is on the ground or simply stuck,
             if (this.a.isOnGround() || lastJump > 60) {
-                this.a.q((float)(this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
                 if (this.jumpDelay-- <= 0) {
-                    this.jumpDelay = new Random().nextInt(20) + 10;
-                    this.jumpDelay /= 3;
+                    // Reset the jump delay (shortened since otherwise the slime is too slow)
+                    this.jumpDelay = (new Random().nextInt(20) + 10) / 3;
+                    // Make it jump and play its sound
                     this.slimePet.getControllerJump().jump();
-                    if (this.slimePet.getSize() > 0) {
-                        this.slimePet.playJumpSound();
-                    }
+                    this.slimePet.playJumpSound();
+                    // Reset the last jump timer
                     lastJump = 0;
                 } else {
                     this.slimePet.aR = 0.0F;
@@ -58,7 +68,6 @@ public class ControllerSlime extends ControllerMove {
                 }
             } else {
                 lastJump++;
-                this.a.q((float)(this.e * this.a.b(GenericAttributes.MOVEMENT_SPEED)));
             }
         }
 
