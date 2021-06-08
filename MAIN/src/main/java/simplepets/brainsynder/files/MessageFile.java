@@ -52,6 +52,13 @@ public class MessageFile {
                 addDefault(MessageOption.ITEM_FILES_REGEN, "Message will be sent when the items folder has been reset");
                 addDefault(MessageOption.PARTICLE_FILES_REGEN, "Message will be sent when the particles folder has been reset");
                 addDefault(MessageOption.PET_TYPE_FILE_REGEN, "Message will be sent when the selected pet file has been reset");
+
+                addDefault(MessageOption.CONFIG_RELOADED, "Message that will be sent when the main config has been reloaded.");
+                addDefault(MessageOption.MESSAGES_RELOADED, "Message that will be sent when the messages config has been reloaded.");
+                addDefault(MessageOption.INVENTORIES_RELOADED, "Message that will be sent when the inventories manager has been reloaded.");
+                addDefault(MessageOption.PARTICLES_RELOADED, "Message that will be sent when the particles manager has been reloaded.");
+                addDefault(MessageOption.PETS_RELOADED, "Message that will be sent when the pets manager has been reloaded.");
+                addDefault(MessageOption.ALL_RELOADED, "Message that will be sent when all plugin elements have been reloaded.");
             }
         };
     }

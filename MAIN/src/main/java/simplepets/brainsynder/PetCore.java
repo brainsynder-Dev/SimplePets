@@ -251,6 +251,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return PET_CONFIG;
     }
 
+    public void reloadPetConfigManager() {
+        PET_CONFIG = new PetConfiguration(this);
+    }
+
     @Override
     public ItemHandler getItemHandler() {
         return itemManager;

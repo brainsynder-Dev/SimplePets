@@ -33,6 +33,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new DebugCommand (this));
         registerSub(new AddonCommand (plugin));
         registerSub(new DatabaseCommand (plugin));
+        registerSub(new ReloadCommand(plugin));
 
         ReportCommand reportCommand = new ReportCommand(plugin);
         plugin.getServer().getPluginManager().registerEvents(reportCommand, plugin);

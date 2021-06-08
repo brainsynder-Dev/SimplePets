@@ -42,7 +42,14 @@ public enum MessageOption implements YamlOption {
     INV_FILES_REGEN ("admin.regenerate.inventories", "{prefix} &7The Inventories folder has been regenerated to the default files."),
     ITEM_FILES_REGEN ("admin.regenerate.items", "{prefix} &7The Items folder has been regenerated to the default files."),
     PARTICLE_FILES_REGEN ("admin.regenerate.particles", "{prefix} &7The Particles folder has been regenerated to the default files."),
-    PET_TYPE_FILE_REGEN ("admin.regenerate.pet_type", "{prefix} &7The file for the {type} pet has been reset to the default file.");
+    PET_TYPE_FILE_REGEN ("admin.regenerate.pet_type", "{prefix} &7The file for the {type} pet has been reset to the default file."),
+
+    CONFIG_RELOADED("admin.reload.config", "{prefix} &7The plugin configuration has been reloaded!"),
+    MESSAGES_RELOADED("admin.reload.messages", "{prefix} &7The plugin's message configuration has been reloaded!"),
+    INVENTORIES_RELOADED("admin.reload.inventories", "{prefix} &7Items and inventories have been reloaded!"),
+    PARTICLES_RELOADED("admin.reload.particles", "{prefix} &7Particles have been reloaded!"),
+    PETS_RELOADED("admin.reload.pets", "{prefix} &7Pets have been reloaded!"),
+    ALL_RELOADED("admin.reload.all", "{prefix} &7All plugin elements have been reloaded!");
 
     private final String path;
     private final Object defaultValue;
