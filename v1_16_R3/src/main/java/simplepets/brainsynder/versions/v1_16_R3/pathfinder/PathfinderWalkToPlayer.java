@@ -100,9 +100,9 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
         if (--this.updateCountdownTicks <= 0) {
             this.updateCountdownTicks = 10;
 
-            // Will create a path to the player, and stop the pet within 5 blocks of the player
+            // Will create a path to the player, and stop the pet within 5 (default) blocks of the player
             // it will stop around 10 blocks if it is a large pet
-            PathEntity path = navigation.a(player, modifyInt(5));
+            PathEntity path = navigation.a(player, getStoppingDistance());
             navigation.a(path, entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
         }
     }
@@ -115,6 +115,11 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
     @Override
     public void stop() {
         navigation.o(); // Translation: navigation.stop
+    }
+
+    private int getStoppingDistance() {
+        return large ? PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance_LargePets")
+                : PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance");
     }
 
     /**
