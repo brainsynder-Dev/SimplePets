@@ -146,6 +146,8 @@ public class SelectionMenu extends CustomInventory {
             } else {
                 if (!removeNoPerms) {
                     Bukkit.getPluginManager().callEvent(event);
+                } else {
+                    continue;
                 }
             }
             if (!event.isCancelled()) {
