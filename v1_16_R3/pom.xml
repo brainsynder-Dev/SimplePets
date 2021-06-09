@@ -46,7 +46,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.16.4</module.info>
+        <module.info>-(1.16.4/1.16.5)</module.info>
     </properties>
 
     <dependencies>
