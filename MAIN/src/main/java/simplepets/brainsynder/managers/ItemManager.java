@@ -42,7 +42,7 @@ public class ItemManager implements ItemHandler {
         add(new PreviousPage(getLocation(plugin, PreviousPage.class)));
         add(new Remove (getLocation(plugin, Remove.class)));
         add(new Installer (getLocation(plugin, Installer.class)));
-//        add(new Ride (getLocation(plugin, Ride.class)));
+        add(new Ride (getLocation(plugin, Ride.class)));
 //        add(new Storage (getLocation(plugin, Storage.class)));
         add(new Placeholder (getLocation(plugin, Placeholder.class)));
 //        add(new Data(getLocation(plugin, Data.class)));

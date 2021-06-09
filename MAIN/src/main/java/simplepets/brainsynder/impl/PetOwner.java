@@ -5,6 +5,7 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
@@ -16,11 +17,9 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
-import simplepets.brainsynder.api.event.entity.PetDuplicateSpawnEvent;
-import simplepets.brainsynder.api.event.entity.PetRemoveEvent;
-import simplepets.brainsynder.api.event.entity.PostPetHatEvent;
-import simplepets.brainsynder.api.event.entity.PrePetHatEvent;
+import simplepets.brainsynder.api.event.entity.*;
 import simplepets.brainsynder.api.event.user.PetNameChangeEvent;
+import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -382,7 +381,7 @@ public class PetOwner implements PetUser {
 
         int d = 1;
         if (isPetVehicle(type)) {
-            setPetVehicle(type, false, false);
+            setPetVehicle(type, false);
             d = 3;
         }
         int delay = d;
@@ -469,7 +468,7 @@ public class PetOwner implements PetUser {
 
     @Override
     public boolean hasPetVehicle() {
-        return (vehicle != null);
+        return (vehicle != null) && getPetEntity(vehicle).isPresent();
     }
 
     @Override
@@ -478,16 +477,76 @@ public class PetOwner implements PetUser {
     }
 
     @Override
-    public boolean setPetVehicle(PetType type, boolean vehicle, boolean byEvent) {
+    public boolean setPetVehicle(PetType type, boolean vehicle) {
+        if (!hasPet(type)) {
+            if (this.vehicle == type) this.vehicle = null;
+            return false;
+        }
+        Player player = (Player) getPlayer();
+
         if (hasPetVehicle()) {
             // Remove previous vehicle
+            getPetEntity(this.vehicle).ifPresent(entityPet -> {
+                PetDismountEvent event = new PetDismountEvent(entityPet);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) {
+                    SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
+                    return;
+                }
 
+                if (entityPet.getEntity().getPassenger() != null) {
+                    if (entityPet instanceof IEntityControllerPet) {
+                        ((IEntityControllerPet) entityPet).getDisplayEntity().ifPresent(Entity::eject);
+                    } else {
+                        entityPet.getEntity().eject();
+                    }
+                }
+            });
         }
+
+        if (!vehicle) return true;
 
         this.vehicle = type;
         Optional<IPetConfig> configOptional = SimplePets.getPetConfigManager().getPetConfig(type);
         if (!configOptional.isPresent()) return false;
+        IPetConfig config = configOptional.get();
 
+        getPetEntity(type).ifPresent(entityPet -> {
+            if (!config.canMount((Player) getPlayer())) {
+                SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
+                return;
+            }
+
+            PetMountEvent event = new PetMountEvent(entityPet);
+            Bukkit.getPluginManager().callEvent(event);
+
+            if (event.isCancelled()) {
+                SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
+                return;
+            }
+
+            if (player.getLocation().getBlock() != null) {
+                List<Material> blocks = Utilities.getBlacklistedMaterials();
+                if (!blocks.contains(player.getLocation().getBlock().getType()) && !blocks.contains(player.getEyeLocation().getBlock().getType())) {
+                    entityPet.teleportToOwner();
+                }
+            } else {
+                entityPet.teleportToOwner();
+            }
+
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (entityPet instanceof IEntityControllerPet) {
+                        ((IEntityControllerPet) entityPet).getDisplayEntity().ifPresent(entity -> entity.addPassenger(player));
+                    } else {
+                        entityPet.getEntity().setPassenger(player);
+                    }
+
+                }
+            }.runTaskLater(PetCore.getInstance(), 2L);
+        });
         return false;
     }
 

@@ -5,6 +5,7 @@ import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
@@ -36,6 +37,21 @@ import java.util.Optional;
 import java.util.UUID;
 
 public class Utilities {
+    public static List<Material> getBlacklistedMaterials() {
+        List<Material> materials = new ArrayList<>();
+        for (Material material : Material.values()) {
+            String name = material.name();
+
+            if (name.contains("GLASS_PANE")) materials.add(material);
+            if (name.contains("FENCE")) materials.add(material);
+            if (name.contains("DOOR") && (!name.contains("TRAP"))) materials.add(material);
+            if (name.contains("FENCE_GATE")) materials.add(material);
+            if (name.contains("THIN")) materials.add(material);
+        }
+
+        return materials;
+    }
+
     public static boolean handlePetSpawning (PetUser user, PetType type, StorageTagCompound compound, boolean checkDataPermissions) {
         Player player = ((Player)user.getPlayer());
         if (!type.isSupported()) {

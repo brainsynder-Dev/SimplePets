@@ -185,9 +185,8 @@ public interface PetUser {
      * Sets the pet to be a vehicle or not
      *
      * @param vehicle
-     * @param byEvent - Was this method triggered by an event
      */
-    boolean setPetVehicle(PetType type, boolean vehicle, boolean byEvent);
+    boolean setPetVehicle(PetType type, boolean vehicle);
 
     /**
      * Updates the pet data gui the player has open (if it is open)

@@ -128,7 +128,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         DebugCommand.fetchDebug(json -> {
             json.set("reloaded", !isShuttingDown());
             DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
-            debug.debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
+            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
 
         USER_MANAGER = null;
@@ -137,7 +137,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         // Detected a reload...
         if (!isShuttingDown()) {
-            debug.debug(DebugBuilder.build().setMessages(
+            SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
                     "------------------------------------",
                     "    The plugin has detected a reload",
                     "If you encounter ANY strange issues then this will be the cause.",
@@ -153,6 +153,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         InventorySQL.getInstance().disconnect();
         addonManager.cleanup();
         addonManager = null;
+        debug = null;
 
     }
 
