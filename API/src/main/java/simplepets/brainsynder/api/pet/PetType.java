@@ -53,8 +53,11 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_ARMORSTAND_FALL, weight = PetWeight.LIGHT)
     ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND),
 
+    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT) // TODO: Add sound
     AXOLOTL(IEntityAxolotlPet.class, "5c138f401c67fc2e1e387d9c90a9691772ee486e8ddbf2ed375fc8348746f936",
-            AxolotlVariantData.class), //TODO: 1.17 Mob
+            AgeData.class,
+            AxolotlVariantData.class,
+            AxolotlPlayDeadData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_BAT_AMBIENT)
     BAT(IEntityBatPet.class, "9e99deef919db66ac2bd28d6302756ccd57c7f8b12b9dca8f41c3e0a04ac1cc",
@@ -129,8 +132,11 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_ZOMBIE_AMBIENT, weight = PetWeight.YOUR_KILLING_ME)
     GIANT(IEntityGiantPet.class, Material.ZOMBIE_HEAD),
 
-    GLOW_SQUID(IEntityGlowSquidPet.class, "3e94a1bb1cb00aaa153a74daf4b0eea20b8974522fe9901eb55aef478ebeff0d"), // TODO: 1.17 Mob
-    GOAT(IEntityGoatPet.class, "957607099d06b7a8b1327093cd0a488be7c9f50b6121b22151271b59170f3c21"), // TODO: 1.17 Mob
+    @PetCustomization(ambient = SoundMaker.ENTITY_SQUID_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
+    GLOW_SQUID(IEntityGlowSquidPet.class, "3e94a1bb1cb00aaa153a74daf4b0eea20b8974522fe9901eb55aef478ebeff0d",
+            GlowingData.class),
+    GOAT(IEntityGoatPet.class, "957607099d06b7a8b1327093cd0a488be7c9f50b6121b22151271b59170f3c21",
+            AgeData.class), // TODO: 1.17 Mob
 
     @PetCustomization(ambient = SoundMaker.ENTITY_GUARDIAN_AMBIENT, weight = PetWeight.HEAVY)
     GUARDIAN(IEntityGuardianPet.class, "a0bf34a71e7715b6ba52d5dd1bae5cb85f773dc9b0d457b4bfc5f9dd3cc7c94"),
@@ -289,7 +295,7 @@ public enum PetType {
     WANDERING_TRADER(IEntityWanderingTraderPet.class, "5f1379a82290d7abe1efaabbc70710ff2ec02dd34ade386bc00c930c461cf932"),
 
     @LargePet
-    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"), // TODO: 1.17 Mob
+    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"), // TODO: 1.18 Mob
 
     @PetCustomization(ambient = SoundMaker.ENTITY_WITCH_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     WITCH(IEntityWitchPet.class, "20e13d18474fc94ed55aeb7069566e4687d773dac16f4c3f8722fc95bf9f2dfa",

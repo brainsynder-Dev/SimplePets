@@ -102,6 +102,17 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
     }
 
+    // TODO: Needs to be set up when Spigot 1.17 is out
+    @Override
+    public boolean isFrozen() {
+        return false;
+    }
+
+    @Override
+    public void setFrozen(boolean frozen) {
+
+    }
+
     @Override
     public void setPetName(String name) {
         if ((name == null) || name.isEmpty()) {

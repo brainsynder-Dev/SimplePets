@@ -85,4 +85,22 @@ public interface IEntityPet extends IEntityBase {
      * @param name - name of the pet
      */
     void setPetName (String name);
+
+    /**
+     * Added in 1.17
+     *
+     * This checks if the pet is frozen, if it is it will shake
+     */
+    default boolean isFrozen () {
+        return false;
+    }
+
+    /**
+     * Added in 1.17
+     *
+     * This will toggle weather the pet is fully frozen or not
+     *
+     * @param frozen
+     */
+    default void setFrozen (boolean frozen) {}
 }

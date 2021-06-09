@@ -12,11 +12,12 @@ public interface IEntityGoatPet extends IAgeablePet {
     /**
      * According to {@link https://minecraft.gamepedia.com/Goat}
      * goats lose a horn each time they ram a block
+     *
+     * EDIT (6/9/2021): 1.17 does not have a way to change this data yet, hope it is not bedrock only...
      */
-    int getHornCount ();
-    void setHornCount (int count);
+//    int getHornCount ();
+//    void setHornCount (int count);
 
-    // Might remove these methods if the info holds true
-    boolean isMissingHorns ();
-    void setMissingHorns (boolean horns);
+    boolean isScreaming ();
+    void setScreaming (boolean screaming);
 }
