@@ -302,10 +302,9 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         this.lastYaw = this.yaw;
         this.pitch = owner.pitch * 0.5F;
         this.setYawPitch(this.yaw, this.pitch);
-        this.aA = this.yaw;
-        this.aC = this.aA;
-        strafe = owner.aR * 0.5F;
-        forward = owner.aT;
+        this.aC = (this.aA = this.yaw); // Translation: this.yHeadRot = (this.yBodyRot = this.yaw);
+        strafe = owner.aR * 0.5F; // Translation: double motionSideways = passenger.xxa * walkSpeed;
+        forward = owner.aT; // Translation: double motionForward = passenger.zza;
         if (forward <= 0.0F) {
             forward *= 0.25F;
         }
