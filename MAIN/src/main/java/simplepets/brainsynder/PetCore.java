@@ -200,7 +200,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Method isStopping = Bukkit.class.getDeclaredMethod("isStopping");
             return (boolean) Reflection.invoke(isStopping, null);
         }catch (Exception e) {
-            Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer");
+            Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer", "server");
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
                 Method isRunning = Reflection.getMethod(nmsClass, "isRunning");
