@@ -17,7 +17,7 @@ public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
     private static final EntityDataAccessor<Boolean> DATA_IS_SCREAMING_GOAT;
 
     public EntityGoatPet(PetType type, PetUser user) {
-        super(EntityType.MOOSHROOM, type, user);
+        super(EntityType.GOAT, type, user);
     }
 
     @Override
