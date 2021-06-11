@@ -27,7 +27,7 @@
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B78</bslib.version>
+        <bslib.version>B79</bslib.version>
     </properties>
 
     <build>
