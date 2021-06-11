@@ -1,36 +1,36 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityZombie}
  */
 public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
-    private static final DataWatcherObject<Boolean> BABY;
-    private static final DataWatcherObject<Integer> UNKNOWN;
-    private static final DataWatcherObject<Boolean> DROWN_CONVERTING;
+    private static final EntityDataAccessor<Boolean> BABY;
+    private static final EntityDataAccessor<Integer> UNKNOWN;
+    private static final EntityDataAccessor<Boolean> DROWN_CONVERTING;
 
     public EntityZombiePet(PetType type, PetUser user) {
-        this(EntityTypes.ZOMBIE, type, user);
+        this(EntityType.ZOMBIE, type, user);
     }
-    public EntityZombiePet (EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntityZombiePet (EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(BABY, false);
-        datawatcher.register(DROWN_CONVERTING, false);
+        entityData.define(BABY, false);
+        entityData.define(DROWN_CONVERTING, false);
     }
 
     @Override
@@ -51,9 +51,9 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     }
 
     static {
-        BABY = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.BOOLEAN);
-        UNKNOWN = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.INT);
-        DROWN_CONVERTING = DataWatcher.a(EntityZombiePet.class, DataWatcherWrapper.BOOLEAN);
+        BABY = SynchedEntityData.defineId(EntityZombiePet.class, EntityDataSerializers.BOOLEAN);
+        UNKNOWN = SynchedEntityData.defineId(EntityZombiePet.class, EntityDataSerializers.INT);
+        DROWN_CONVERTING = SynchedEntityData.defineId(EntityZombiePet.class, EntityDataSerializers.BOOLEAN);
     }
 
     @Override
@@ -68,21 +68,21 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
 
     @Override
     public boolean isShaking() {
-        return datawatcher.get(DROWN_CONVERTING);
+        return entityData.get(DROWN_CONVERTING);
     }
 
     @Override
     public void setShaking(boolean shaking) {
-        datawatcher.set(DROWN_CONVERTING, shaking);
+        entityData.set(DROWN_CONVERTING, shaking);
     }
 
     @Override
     public boolean isBaby() {
-        return datawatcher.get(BABY);
+        return entityData.get(BABY);
     }
 
     @Override
     public void setBaby(boolean flag) {
-        datawatcher.set(BABY, flag);
+        entityData.set(BABY, flag);
     }
 }

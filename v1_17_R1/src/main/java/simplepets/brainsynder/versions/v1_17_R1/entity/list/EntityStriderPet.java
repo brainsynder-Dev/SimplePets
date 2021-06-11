@@ -1,26 +1,26 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityStriderPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityStrider}
  */
 public class EntityStriderPet extends EntityAgeablePet implements IEntityStriderPet {
-    private static DataWatcherObject<Integer> BOOST_TIME;
-    private static DataWatcherObject<Boolean> COLD;
-    private static DataWatcherObject<Boolean> SADDLED;
+    private static EntityDataAccessor<Integer> BOOST_TIME;
+    private static EntityDataAccessor<Boolean> COLD;
+    private static EntityDataAccessor<Boolean> SADDLED;
     private static boolean registered = false;
 
     public EntityStriderPet(PetType type, PetUser user) {
-        super(EntityTypes.STRIDER, type, user);
+        super(EntityType.STRIDER, type, user);
     }
 
     @Override
@@ -40,35 +40,35 @@ public class EntityStriderPet extends EntityAgeablePet implements IEntityStrider
 
     @Override
     public boolean isSaddled() {
-        return datawatcher.get(SADDLED);
+        return entityData.get(SADDLED);
     }
 
     @Override
     public void setSaddled(boolean saddled) {
-        datawatcher.set(SADDLED, saddled);
+        entityData.set(SADDLED, saddled);
     }
 
     @Override
     public boolean isCold() {
-        return datawatcher.get(COLD);
+        return entityData.get(COLD);
     }
 
     @Override
     public void setCold(boolean cold) {
-        datawatcher.set(COLD, cold);
+        entityData.set(COLD, cold);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         if (!registered) {
-            BOOST_TIME = DataWatcher.a(EntityStriderPet.class, DataWatcherWrapper.INT);
-            COLD = DataWatcher.a(EntityStriderPet.class, DataWatcherWrapper.BOOLEAN);
-            SADDLED = DataWatcher.a(EntityStriderPet.class, DataWatcherWrapper.BOOLEAN);
+            BOOST_TIME = SynchedEntityData.defineId(EntityStriderPet.class, EntityDataSerializers.INT);
+            COLD = SynchedEntityData.defineId(EntityStriderPet.class, EntityDataSerializers.BOOLEAN);
+            SADDLED = SynchedEntityData.defineId(EntityStriderPet.class, EntityDataSerializers.BOOLEAN);
             registered = true;
         }
-        this.datawatcher.register(BOOST_TIME, 0);
-        this.datawatcher.register(COLD, false);
-        this.datawatcher.register(SADDLED, false);
+        this.entityData.define(BOOST_TIME, 0);
+        this.entityData.define(COLD, false);
+        this.entityData.define(SADDLED, false);
     }
 }

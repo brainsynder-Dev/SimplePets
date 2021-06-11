@@ -1,31 +1,31 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.branch;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import simplepets.brainsynder.api.entity.misc.ISkeletonAbstract;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 public class EntitySkeletonAbstractPet extends EntityAgeablePet implements ISkeletonAbstract {
-    private static final DataWatcherObject<Boolean> SWINGING_ARMS;
+    private static final EntityDataAccessor<Boolean> SWINGING_ARMS;
 
-    public EntitySkeletonAbstractPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntitySkeletonAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
     @Override
     public boolean isArmsRaised() {
-        return datawatcher.get(SWINGING_ARMS);
+        return entityData.get(SWINGING_ARMS);
     }
 
     @Override
     public void setArmsRaised(boolean flag) {
-        datawatcher.set(SWINGING_ARMS, flag);
+        entityData.set(SWINGING_ARMS, flag);
     }
 
     @Override
@@ -44,10 +44,10 @@ public class EntitySkeletonAbstractPet extends EntityAgeablePet implements ISkel
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(SWINGING_ARMS, false);
+        this.entityData.define(SWINGING_ARMS, false);
     }
 
     static {
-        SWINGING_ARMS = DataWatcher.a(EntitySkeletonAbstractPet.class, DataWatcherWrapper.BOOLEAN);
+        SWINGING_ARMS = SynchedEntityData.defineId(EntitySkeletonAbstractPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

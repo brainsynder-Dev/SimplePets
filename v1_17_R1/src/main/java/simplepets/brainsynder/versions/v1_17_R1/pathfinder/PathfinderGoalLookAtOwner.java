@@ -1,15 +1,15 @@
 package simplepets.brainsynder.versions.v1_17_R1.pathfinder;
 
-import net.minecraft.server.v1_16_R3.PathfinderGoal;
+import net.minecraft.world.entity.ai.goal.Goal;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 
 import java.util.EnumSet;
 
-public class PathfinderGoalLookAtOwner extends PathfinderGoal {
+public class PathfinderGoalLookAtOwner extends Goal {
     private final EntityPet entityPet;
     private PetUser user;
     private Player player;
@@ -21,11 +21,11 @@ public class PathfinderGoalLookAtOwner extends PathfinderGoal {
         this.entityPet = entityPet;
         this.range = range;
         this.chance = chance;
-        this.a(EnumSet.of(Type.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.LOOK));
     }
 
-    // Translation: canStart
-    public boolean a() {
+    @Override
+    public boolean canUse() {
         if ((user == null) || (player == null)) {
             this.user = entityPet.getPetUser();
             this.player = (Player) user.getPlayer();
@@ -39,10 +39,11 @@ public class PathfinderGoalLookAtOwner extends PathfinderGoal {
     }
 
     // Translation: shouldContinue
-    public boolean b() {
+    @Override
+    public boolean canContinueToUse() {
         if (this.player.isDead()) {
             return false;
-        } else if (this.entityPet.h(((CraftPlayer)player).getHandle()) > (double)(this.range * this.range)) {
+        } else if (this.entityPet.distanceToSqr(((CraftPlayer)player).getHandle()) > (double)(this.range * this.range)) {
             return false;
         } else {
             return this.lookTime > 0;
@@ -50,18 +51,20 @@ public class PathfinderGoalLookAtOwner extends PathfinderGoal {
     }
 
     // Translation: start
-    public void c() {
+    @Override
+    public void start() {
         this.lookTime = 40 + this.entityPet.getRandom().nextInt(40);
     }
 
     // Translation: tick
-    public void e() {
+    @Override
+    public void tick() {
         Location location = entityPet.getBukkitEntity().getLocation();
         location.add(location.getDirection().multiply(4.0));
         if (!user.isPetHat(entityPet.getPetType()))
-            location.setY(((CraftPlayer)player).getHandle().getHeadY());
+            location.setY(((CraftPlayer)player).getHandle().getEyeY());
 
-        this.entityPet.getControllerLook().a(location.getX(), location.getY(), location.getZ());
+        this.entityPet.getLookControl().setLookAt(location.getX(), location.getY(), location.getZ());
         --this.lookTime;
     }
 }

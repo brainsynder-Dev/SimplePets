@@ -2,29 +2,29 @@ package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityTameablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityWolf}
  */
 public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
-    private static final DataWatcherObject<Boolean> BEGGING;
-    private static final DataWatcherObject<Integer> COLLAR_COLOR;
-    private static final DataWatcherObject<Integer> ANGER_TIME;
+    private static final EntityDataAccessor<Boolean> BEGGING;
+    private static final EntityDataAccessor<Integer> COLLAR_COLOR;
+    private static final EntityDataAccessor<Integer> ANGER_TIME;
 
     private boolean angry = false;
     private boolean furWet = false;
     private int ticks = -1;
 
     public EntityWolfPet(PetType type, PetUser user) {
-        super(EntityTypes.WOLF, type, user);
+        super(EntityType.WOLF, type, user);
     }
 
     @Override
@@ -32,25 +32,25 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         super.tick();
         if (furWet) {
             if (ticks == -1) {
-                this.world.broadcastEntityEffect(this, (byte)8);
+                this.level.broadcastEntityEvent(this, (byte)8); // Wolf shaking
                 ticks = 0;
             }
 
             ticks++;
             if (ticks >= 27) {
                 ticks = 0;
-                this.world.broadcastEntityEffect(this, (byte)8); // shaking effect
+                this.level.broadcastEntityEvent(this, (byte)8); // Wolf shaking
             }
         }
-        if (this.angry && (datawatcher.get(ANGER_TIME) < 50)) datawatcher.set(ANGER_TIME, 500);
+        if (this.angry && (entityData.get(ANGER_TIME) < 50)) entityData.set(ANGER_TIME, 500);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(BEGGING, false);
-        datawatcher.register(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
-        datawatcher.register(ANGER_TIME, 0);
+        entityData.define(BEGGING, false);
+        entityData.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
+        entityData.define(ANGER_TIME, 0);
     }
 
     @Override
@@ -74,39 +74,39 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     @Override
     public boolean isHeadTilted() {
-        return datawatcher.get(BEGGING);
+        return entityData.get(BEGGING);
     }
 
     @Override
     public void setHeadTilted(boolean headTilted) {
-        datawatcher.set(BEGGING, headTilted);
+        entityData.set(BEGGING, headTilted);
     }
 
     @Override
     public boolean isAngry() {
-        return datawatcher.get(ANGER_TIME) > 0;
+        return entityData.get(ANGER_TIME) > 0;
     }
 
     @Override
     public void setAngry(boolean angry) {
         this.angry = angry;
-        datawatcher.set(ANGER_TIME, angry ? 500 : 0);
+        entityData.set(ANGER_TIME, angry ? 500 : 0);
     }
 
     @Override
     public DyeColorWrapper getColor() {
-        return DyeColorWrapper.getByWoolData((byte) ((int) getDataWatcher().get(COLLAR_COLOR)));
+        return DyeColorWrapper.getByWoolData((byte) ((int) entityData.get(COLLAR_COLOR)));
     }
 
     @Override
     public void setColor(DyeColorWrapper color) {
-        this.datawatcher.set(COLLAR_COLOR, color.getWoolData());
+        this.entityData.set(COLLAR_COLOR, color.getWoolData());
     }
 
     static {
-        BEGGING = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.BOOLEAN);
-        COLLAR_COLOR = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
-        ANGER_TIME = DataWatcher.a(EntityWolfPet.class, DataWatcherWrapper.INT);
+        BEGGING = SynchedEntityData.defineId(EntityWolfPet.class, EntityDataSerializers.BOOLEAN);
+        COLLAR_COLOR = SynchedEntityData.defineId(EntityWolfPet.class, EntityDataSerializers.INT);
+        ANGER_TIME = SynchedEntityData.defineId(EntityWolfPet.class, EntityDataSerializers.INT);
     }
 
     @Override
@@ -118,7 +118,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     public void setShaking(boolean shaking) {
         this.furWet = shaking;
 
-        if (!shaking) this.world.broadcastEntityEffect(this, (byte) 56);
+        if (!shaking) this.level.broadcastEntityEvent(this, (byte)56);
         this.ticks = -1;
     }
 }

@@ -2,36 +2,36 @@ package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.CatType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityTameablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityCat}
  */
 public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
-    private static final DataWatcherObject<Integer> TYPE;
-    private static final DataWatcherObject<Boolean> SLEEPING_WITH_OWNER;
-    private static final DataWatcherObject<Boolean> HEAD_UP;
-    private static final DataWatcherObject<Integer> COLLAR_COLOR;
+    private static final EntityDataAccessor<Integer> TYPE;
+    private static final EntityDataAccessor<Boolean> SLEEPING_WITH_OWNER;
+    private static final EntityDataAccessor<Boolean> HEAD_UP;
+    private static final EntityDataAccessor<Integer> COLLAR_COLOR;
 
     public EntityCatPet(PetType type, PetUser user) {
-        super(EntityTypes.CAT, type, user);
+        super(EntityType.CAT, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(TYPE, CatType.TABBY.ordinal());
-        datawatcher.register(SLEEPING_WITH_OWNER, false);
-        datawatcher.register(HEAD_UP, false);
-        datawatcher.register(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
+        entityData.define(TYPE, CatType.TABBY.ordinal());
+        entityData.define(SLEEPING_WITH_OWNER, false);
+        entityData.define(HEAD_UP, false);
+        entityData.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
     }
 
     @Override
@@ -55,48 +55,48 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
 
     @Override
     public CatType getCatType() {
-        return CatType.getByID(datawatcher.get(TYPE));
+        return CatType.getByID(entityData.get(TYPE));
     }
 
     @Override
     public void setCatType(CatType type) {
-        datawatcher.set(TYPE, type.ordinal());
+        entityData.set(TYPE, type.ordinal());
     }
 
     @Override
     public DyeColorWrapper getCollarColor() {
-        return DyeColorWrapper.getByWoolData((byte)((int)datawatcher.get(COLLAR_COLOR)));
+        return DyeColorWrapper.getByWoolData((byte)((int)entityData.get(COLLAR_COLOR)));
     }
 
     @Override
     public void setCollarColor(DyeColorWrapper color) {
-        datawatcher.set(COLLAR_COLOR, color.ordinal());
+        entityData.set(COLLAR_COLOR, color.ordinal());
     }
 
     @Override
     public boolean isHeadUp() {
-        return datawatcher.get(HEAD_UP);
+        return entityData.get(HEAD_UP);
     }
 
     @Override
     public void setHeadUp(boolean value) {
-        datawatcher.set(HEAD_UP, value);
+        entityData.set(HEAD_UP, value);
     }
 
     @Override
     public boolean isPetSleeping() {
-        return datawatcher.get(SLEEPING_WITH_OWNER);
+        return entityData.get(SLEEPING_WITH_OWNER);
     }
 
     @Override
     public void setPetSleeping(boolean sleeping) {
-        datawatcher.set(SLEEPING_WITH_OWNER, sleeping);
+        entityData.set(SLEEPING_WITH_OWNER, sleeping);
     }
 
     static {
-        TYPE = DataWatcher.a(EntityCatPet.class, DataWatcherWrapper.INT);
-        SLEEPING_WITH_OWNER = DataWatcher.a(EntityCatPet.class, DataWatcherWrapper.BOOLEAN);
-        HEAD_UP = DataWatcher.a(EntityCatPet.class, DataWatcherWrapper.BOOLEAN);
-        COLLAR_COLOR = DataWatcher.a(EntityCatPet.class, DataWatcherWrapper.INT);
+        TYPE = SynchedEntityData.defineId(EntityCatPet.class, EntityDataSerializers.INT);
+        SLEEPING_WITH_OWNER = SynchedEntityData.defineId(EntityCatPet.class, EntityDataSerializers.BOOLEAN);
+        HEAD_UP = SynchedEntityData.defineId(EntityCatPet.class, EntityDataSerializers.BOOLEAN);
+        COLLAR_COLOR = SynchedEntityData.defineId(EntityCatPet.class, EntityDataSerializers.INT);
     }
 }

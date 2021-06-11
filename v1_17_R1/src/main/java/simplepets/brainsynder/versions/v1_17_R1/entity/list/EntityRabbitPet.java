@@ -1,7 +1,13 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.util.Mth;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.Vec3;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -9,28 +15,27 @@ import simplepets.brainsynder.api.wrappers.RabbitType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_17_R1.entity.controller.ControllerJumpRabbit;
 import simplepets.brainsynder.versions.v1_17_R1.entity.controller.ControllerMoveRabbit;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityRabbit}
  */
 public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPet {
-    private static final DataWatcherObject<Integer> RABBIT_TYPE;
+    private static final EntityDataAccessor<Integer> RABBIT_TYPE;
     private int jumpTicks;
     private int jumpDuration;
     private boolean onGroundLastTick = false;
     private int ticksUntilJump = 0;
 
     public EntityRabbitPet(PetType type, PetUser user) {
-        super(EntityTypes.RABBIT, type, user);
-        bi = new ControllerJumpRabbit(this);
-        moveController = new ControllerMoveRabbit(this);
+        super(EntityType.RABBIT, type, user);
+        jumpControl = new ControllerJumpRabbit(this);
+        moveControl = new ControllerMoveRabbit(this);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(RABBIT_TYPE, 0);
+        this.entityData.define(RABBIT_TYPE, 0);
     }
 
     @Override
@@ -48,12 +53,12 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
 
     @Override
     public RabbitType getRabbitType() {
-        return RabbitType.getByID(this.datawatcher.get(RABBIT_TYPE));
+        return RabbitType.getByID(this.entityData.get(RABBIT_TYPE));
     }
 
     @Override
     public void setRabbitType(RabbitType type) {
-        this.datawatcher.set(RABBIT_TYPE, type.getId());
+        this.entityData.set(RABBIT_TYPE, type.getId());
     }
 
     @Override
@@ -63,8 +68,7 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
     }
 
     @Override
-    public void mobTick() {
-        super.mobTick();
+    public void customServerAiStep() {
         if (this.ticksUntilJump > 0) {
             --this.ticksUntilJump;
         }
@@ -75,22 +79,22 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
                 scheduleJump();
             }
 
-            ControllerJumpRabbit controller = (ControllerJumpRabbit)this.getControllerJump();
-            if (!controller.isActive()) {
-                if (this.moveController.b() && this.ticksUntilJump == 0) {
-                    PathEntity pathentity = this.navigation.k(); // Translation: navigation.getCurrentPath()
+            ControllerJumpRabbit controller = (ControllerJumpRabbit)this.getJumpControl();
+            if (!controller.wantJump()) {
+                if (this.moveControl.hasWanted() && this.ticksUntilJump == 0) {
+                    Path pathentity = this.navigation.getPath(); // Translation: navigation.getCurrentPath()
 
                     // Translation: getTargetX, getTargetY, getTargetZ
-                    Vec3D vec3d = new Vec3D(this.moveController.d(), this.moveController.e(), this.moveController.f());
-                    if (pathentity != null && pathentity.f() < pathentity.e()) {
-                        vec3d = pathentity.a(this); // Translation: getNodePosition ()
+                    Vec3 vec3d = new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
+                    if (pathentity != null && !pathentity.isDone()) {
+                        vec3d = pathentity.getNextEntityPos(this); // Translation: getNodePosition ()
                     }
 
                     this.lookTowards(vec3d.x, vec3d.z);
                     this.reseter();
                 }
-            } else if (!controller.d()) {
-                ((ControllerJumpRabbit) getControllerJump()).a(true);
+            } else if (!controller.canJump()) {
+                ((ControllerJumpRabbit) jumpControl).setCanJump(true);
             }
         }
 
@@ -99,25 +103,25 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
 
     private void scheduleJump() {
         this.doScheduleJump();
-        ((ControllerJumpRabbit)getControllerJump()).a(false);
+        ((ControllerJumpRabbit)jumpControl).setCanJump(false);
     }
 
     private void doScheduleJump() {
-        if (this.moveController.c() < 2.2D) {
+        if (this.moveControl.getSpeedModifier() < 2.2D) {
             this.ticksUntilJump = 10;
         } else {
             this.ticksUntilJump = 1;
         }
-        ((ControllerJumpRabbit)this.getControllerJump()).a(false);
+        ((ControllerJumpRabbit)this.jumpControl).setCanJump(false);
     }
 
     private void lookTowards(double d0, double d1) {
-        this.yaw = (float)(MathHelper.d(d1 - this.locZ(), d0 - this.locX()) * 57.2957763671875D) - 90.0F;
+        setYRot((float)(Mth.atan2(d1 - getZ(), d0 - getX()) * 57.2957763671875D) - 90.0F);
     }
 
     @Override
-    public void movementTick() {
-        super.movementTick();
+    public void aiStep() {
+        super.aiStep();
         if (jumpTicks != jumpDuration) {
             ++this.jumpTicks;
         } else if (jumpDuration != 0) {
@@ -127,21 +131,23 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
         }
     }
 
+    public void setSpeedModifier(double d0) {
+        getNavigation().setSpeedModifier(d0);
+        this.moveControl.setWantedPosition(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ(), d0);
+    }
+
     @Override
-    protected void jump() {
-        super.jump();
-        // Translation: moveControl.getSpeed()
-        double speed = this.moveController.c();
+    protected void jumpFromGround() {
+        super.jumpFromGround();
+        double speed = this.moveControl.getSpeedModifier();
         if (speed > 0.0D) {
-            // Translation: squaredHorizontalLength(velocity)
-            double length = c(this.getMot());
+            double length = getDeltaMovement().horizontalDistanceSqr();
             if (length < 0.01D) {
-                // Translation: updateVelocity
-                this.a(0.1F, new Vec3D(0.0D, 0.0D, 1.0D));
+                this.moveRelative(0.1F, new Vec3(0.0D, 0.0D, 1.0D));
             }
         }
 
-        if (!this.world.isClientSide) this.world.broadcastEntityEffect(this, (byte)1);
+        if (!this.level.isClientSide) this.level.broadcastEntityEvent(this, (byte)1);
     }
 
     public void reseter() {
@@ -150,13 +156,7 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
         this.jumpTicks = 0;
     }
 
-    public void setSpeed(double speed) {
-        this.getNavigation().a(speed);
-        this.moveController.a(this.moveController.d(), this.moveController.e(), this.moveController.f(), speed);
-    }
-
-
     static {
-        RABBIT_TYPE = DataWatcher.a(EntityRabbitPet.class, DataWatcherWrapper.INT);
+        RABBIT_TYPE = SynchedEntityData.defineId(EntityRabbitPet.class, EntityDataSerializers.INT);
     }
 }

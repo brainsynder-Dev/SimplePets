@@ -1,20 +1,20 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.branch;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import simplepets.brainsynder.api.entity.misc.IRaider;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 public abstract class EntityRaiderPet extends EntityPet implements IRaider {
-    private static final DataWatcherObject<Boolean> CELEBRATING;
+    private static final EntityDataAccessor<Boolean> CELEBRATING;
 
-    public EntityRaiderPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntityRaiderPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
@@ -33,21 +33,21 @@ public abstract class EntityRaiderPet extends EntityPet implements IRaider {
 
     @Override
     public boolean isCelebrating() {
-        return datawatcher.get(CELEBRATING);
+        return entityData.get(CELEBRATING);
     }
 
     @Override
     public void setCelebrating(boolean celebrating) {
-        datawatcher.set(CELEBRATING, celebrating);
+        entityData.set(CELEBRATING, celebrating);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(CELEBRATING, false);
+        this.entityData.define(CELEBRATING, false);
     }
 
     static {
-        CELEBRATING = DataWatcher.a(EntityRaiderPet.class, DataWatcherWrapper.BOOLEAN);
+        CELEBRATING = SynchedEntityData.defineId(EntityRaiderPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

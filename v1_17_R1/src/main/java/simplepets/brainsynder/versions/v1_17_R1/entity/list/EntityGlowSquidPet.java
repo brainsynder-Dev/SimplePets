@@ -1,22 +1,22 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityGlowSquidPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityGlowSquid}
  */
 public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSquidPet {
-    private static final DataWatcherObject<Integer> DATA_DARK_TICKS_REMAINING;
+    private static final EntityDataAccessor<Integer> DATA_DARK_TICKS_REMAINING;
 
     public EntityGlowSquidPet(PetType type, PetUser user) {
-        super(EntityTypes.SQUID, type, user);
+        super(EntityType.GLOW_SQUID, type, user);
     }
 
     @Override
@@ -35,20 +35,20 @@ public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSqu
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(DATA_DARK_TICKS_REMAINING, 0);
+        entityData.define(DATA_DARK_TICKS_REMAINING, 0);
     }
 
     @Override
     public boolean isSquidGlowing() {
-        return datawatcher.get(DATA_DARK_TICKS_REMAINING) == 0;
+        return entityData.get(DATA_DARK_TICKS_REMAINING) == 0;
     }
 
     @Override
     public void setSquidGlowing(boolean glowing) {
-        datawatcher.set(DATA_DARK_TICKS_REMAINING, glowing ? 0 : 100);
+        entityData.set(DATA_DARK_TICKS_REMAINING, glowing ? 0 : 100);
     }
 
     static {
-        DATA_DARK_TICKS_REMAINING = DataWatcher.a(EntityGlowSquidPet.class, DataWatcherWrapper.INT);
+        DATA_DARK_TICKS_REMAINING = SynchedEntityData.defineId(EntityGlowSquidPet.class, EntityDataSerializers.INT);
     }
 }

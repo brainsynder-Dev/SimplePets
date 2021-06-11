@@ -1,26 +1,26 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityAxolotlPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.AxolotlVariant;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityAxolotl}
  */
 public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotlPet {
-    private static final DataWatcherObject<Integer> DATA_VARIANT;
-    private static final DataWatcherObject<Boolean> DATA_PLAYING_DEAD;
-    private static final DataWatcherObject<Boolean> FROM_BUCKET;
+    private static final EntityDataAccessor<Integer> DATA_VARIANT;
+    private static final EntityDataAccessor<Boolean> DATA_PLAYING_DEAD;
+    private static final EntityDataAccessor<Boolean> FROM_BUCKET;
 
     public EntityAxolotlPet(PetType type, PetUser user) {
-        super(EntityTypes.BAT, type, user);
+        super(EntityType.AXOLOTL, type, user);
     }
 
     @Override
@@ -41,34 +41,34 @@ public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotl
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(DATA_VARIANT, 0);
-        this.datawatcher.register(DATA_PLAYING_DEAD, false);
-        this.datawatcher.register(FROM_BUCKET, false);
+        entityData.define(DATA_VARIANT, 0);
+        entityData.define(DATA_PLAYING_DEAD, false);
+        entityData.define(FROM_BUCKET, false);
     }
 
     @Override
     public boolean isPlayingDead() {
-        return datawatcher.get(DATA_PLAYING_DEAD);
+        return entityData.get(DATA_PLAYING_DEAD);
     }
 
     @Override
     public void setPlayingDead(boolean playingDead) {
-        datawatcher.set(DATA_PLAYING_DEAD, playingDead);
+        entityData.set(DATA_PLAYING_DEAD, playingDead);
     }
 
     @Override
     public AxolotlVariant getVariant() {
-        return AxolotlVariant.values()[datawatcher.get(DATA_VARIANT)];
+        return AxolotlVariant.values()[entityData.get(DATA_VARIANT)];
     }
 
     @Override
     public void setVariant(AxolotlVariant variant) {
-        datawatcher.set(DATA_VARIANT, variant.ordinal());
+        entityData.set(DATA_VARIANT, variant.ordinal());
     }
 
     static {
-        DATA_VARIANT = DataWatcher.a(EntityAxolotlPet.class, DataWatcherWrapper.INT);
-        DATA_PLAYING_DEAD = DataWatcher.a(EntityAxolotlPet.class, DataWatcherWrapper.BOOLEAN);
-        FROM_BUCKET = DataWatcher.a(EntityAxolotlPet.class, DataWatcherWrapper.BOOLEAN);
+        DATA_VARIANT = SynchedEntityData.defineId(EntityAxolotlPet.class, EntityDataSerializers.INT);
+        DATA_PLAYING_DEAD = SynchedEntityData.defineId(EntityAxolotlPet.class, EntityDataSerializers.BOOLEAN);
+        FROM_BUCKET = SynchedEntityData.defineId(EntityAxolotlPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

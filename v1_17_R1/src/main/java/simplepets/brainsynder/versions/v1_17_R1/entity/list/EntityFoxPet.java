@@ -1,15 +1,15 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.FoxType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -18,14 +18,14 @@ import java.util.UUID;
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityFox}
  */
 public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
-    private static final DataWatcherObject<Integer> TYPE;
-    private static final DataWatcherObject<Byte> FOX_FLAGS;
-    private static final DataWatcherObject<Optional<UUID>> OWNER;
-    private static final DataWatcherObject<Optional<UUID>> OTHER_TRUSTED;
+    private static final EntityDataAccessor<Integer> TYPE;
+    private static final EntityDataAccessor<Byte> FOX_FLAGS;
+    private static final EntityDataAccessor<Optional<UUID>> OWNER;
+    private static final EntityDataAccessor<Optional<UUID>> OTHER_TRUSTED;
 
 
     public EntityFoxPet(PetType type, PetUser user) {
-        super(EntityTypes.FOX, type, user);
+        super(EntityType.FOX, type, user);
     }
 
     @Override
@@ -52,20 +52,20 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(OWNER, Optional.empty());
-        datawatcher.register(OTHER_TRUSTED, Optional.empty());
-        datawatcher.register(TYPE, FoxType.RED.ordinal());
-        datawatcher.register(FOX_FLAGS, (byte)0);
+        entityData.define(OWNER, Optional.empty());
+        entityData.define(OTHER_TRUSTED, Optional.empty());
+        entityData.define(TYPE, FoxType.RED.ordinal());
+        entityData.define(FOX_FLAGS, (byte)0);
     }
 
     @Override
     public FoxType getFoxType() {
-        return FoxType.getByID(datawatcher.get(TYPE));
+        return FoxType.getByID(entityData.get(TYPE));
     }
 
     @Override
     public void setFoxType(FoxType type) {
-        datawatcher.set(TYPE, type.ordinal());
+        entityData.set(TYPE, type.ordinal());
     }
 
     @Override
@@ -81,21 +81,21 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     @Override
     public void setSpecialFlag(int flag, boolean value) {
         if (value) {
-            this.datawatcher.set(FOX_FLAGS, (byte)(this.datawatcher.get(FOX_FLAGS) | flag));
+            this.entityData.set(FOX_FLAGS, (byte)(this.entityData.get(FOX_FLAGS) | flag));
         } else {
-            this.datawatcher.set(FOX_FLAGS, (byte)(this.datawatcher.get(FOX_FLAGS) & ~flag));
+            this.entityData.set(FOX_FLAGS, (byte)(this.entityData.get(FOX_FLAGS) & ~flag));
         }
     }
 
     @Override
     public boolean getSpecialFlag(int flag) {
-        return (datawatcher.get(FOX_FLAGS) & flag) != 0x0;
+        return (entityData.get(FOX_FLAGS) & flag) != 0x0;
     }
 
     static {
-        TYPE = DataWatcher.a(EntityFoxPet.class, DataWatcherWrapper.INT);
-        FOX_FLAGS = DataWatcher.a(EntityFoxPet.class, DataWatcherWrapper.BYTE);
-        OWNER = DataWatcher.a(EntityFoxPet.class, DataWatcherWrapper.UUID);
-        OTHER_TRUSTED = DataWatcher.a(EntityFoxPet.class, DataWatcherWrapper.UUID);
+        TYPE = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.INT);
+        FOX_FLAGS = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.BYTE);
+        OWNER = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_UUID);
+        OTHER_TRUSTED = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_UUID);
     }
 }

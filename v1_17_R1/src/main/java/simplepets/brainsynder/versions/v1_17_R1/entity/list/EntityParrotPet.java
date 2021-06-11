@@ -1,26 +1,31 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.control.FlyingMoveControl;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.Level;
 import simplepets.brainsynder.api.entity.passive.IEntityParrotPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.ParrotVariant;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityTameablePet;
-import simplepets.brainsynder.versions.v1_17_R1.entity.controller.ParrotController;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityParrot}
  */
 public class EntityParrotPet extends EntityTameablePet implements IEntityParrotPet {
-    private static final DataWatcherObject<Integer> TYPE;
+    private static final EntityDataAccessor<Integer> TYPE;
     private boolean rainbow = false;
     private int toggle = 0;
 
     public EntityParrotPet(PetType type, PetUser user) {
-        super(EntityTypes.PARROT, type, user);
-        moveController = new ParrotController(this);
+        super(EntityType.PARROT, type, user);
+        this.moveControl = new FlyingMoveControl(this, 10, false);
     }
 
     @Override
@@ -39,7 +44,7 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(TYPE, 0);
+        this.entityData.define(TYPE, 0);
     }
 
     @Override
@@ -59,12 +64,12 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
 
     @Override
     public ParrotVariant getVariant() {
-        return ParrotVariant.getById(getDataWatcher().get(TYPE));
+        return ParrotVariant.getById(entityData.get(TYPE));
     }
 
     @Override
     public void setVariant(ParrotVariant variant) {
-        this.datawatcher.set(TYPE, variant.ordinal());
+        this.entityData.set(TYPE, variant.ordinal());
     }
 
     @Override
@@ -78,15 +83,15 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
 
     @Override
-    protected NavigationAbstract b(World var1) {
-        NavigationFlying var2 = new NavigationFlying(this, var1);
-        var2.a(false);
-        var2.d(true);
-        var2.b(true);
-        return var2;
+    protected PathNavigation createNavigation(Level var1) {
+        FlyingPathNavigation navigationflying = new FlyingPathNavigation(this, var1);
+        navigationflying.setCanOpenDoors(false);
+        navigationflying.setCanFloat(true);
+        navigationflying.setCanPassDoors(true);
+        return navigationflying;
     }
 
     static {
-        TYPE = DataWatcher.a(EntityParrotPet.class, DataWatcherWrapper.INT);
+        TYPE = SynchedEntityData.defineId(EntityParrotPet.class, EntityDataSerializers.INT);
     }
 }

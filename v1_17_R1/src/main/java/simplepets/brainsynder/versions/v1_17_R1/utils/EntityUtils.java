@@ -1,8 +1,8 @@
 package simplepets.brainsynder.versions.v1_17_R1.utils;
 
 import lib.brainsynder.reflection.Reflection;
-import net.minecraft.server.v1_16_R3.*;
-import org.bukkit.entity.EntityType;
+import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerType;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
 
 import java.lang.reflect.Field;
@@ -12,10 +12,6 @@ import java.util.Map;
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
-
-    public static EntityTypes<?> getType (EntityType wrapper) {
-        return IRegistry.ENTITY_TYPE.get(new MinecraftKey(wrapper.getName()));
-    }
 
     public static VillagerType getTypeFromBiome(BiomeType type) {
         if (stored.isEmpty()) initStores();

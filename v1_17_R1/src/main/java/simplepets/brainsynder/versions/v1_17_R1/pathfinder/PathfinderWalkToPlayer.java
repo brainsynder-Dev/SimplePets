@@ -1,8 +1,14 @@
 package simplepets.brainsynder.versions.v1_17_R1.pathfinder;
 
-import net.minecraft.server.v1_16_R3.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.misc.EntityPetType;
@@ -13,11 +19,11 @@ import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 
 import java.util.EnumSet;
 
-public class PathfinderWalkToPlayer extends PathfinderBase {
+public class PathfinderWalkToPlayer extends Goal {
     private final EntityPet entity;
     private PetUser user;
-    private EntityPlayer player;
-    private final NavigationAbstract navigation;
+    private net.minecraft.world.entity.player.Player player;
+    private final PathNavigation navigation;
 
     private int updateCountdownTicks;
     private final float maxDistance;
@@ -43,11 +49,11 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
         this.minDistance = modifyInt(minDistance);
 
         // Translation: setControls(EnumSet<Goal.Control>)
-        this.a(EnumSet.of(Type.MOVE, Type.LOOK));
+        this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
     }
 
     @Override
-    public boolean canStart() {
+    public boolean canUse() {
         if (user == null) {
             this.user = entity.getPetUser();
             this.player = ((CraftPlayer) entity.getPetUser().getPlayer()).getHandle();
@@ -65,7 +71,7 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
             if (!location.getWorld().getName().equals(entity.getBukkitEntity().getLocation().getWorld().getName()))
                 return false;
 
-            double distance = entity.h(player);
+            double distance = entity.distanceToSqr(player);
             return (distance >= (double) (maxDistance * minDistance)) || first;
         }
 
@@ -74,10 +80,10 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
     }
 
     @Override
-    public boolean shouldContinue() {
-        if (navigation.m()) return false; // Translation: navigation.isIdle()
+    public boolean canContinueToUse() {
+        if (navigation.isDone()) return false; // Translation: navigation.isIdle()
         // Translation: Entity.squaredDistanceTo (Entity)
-        double distance = entity.h(player);
+        double distance = entity.distanceToSqr(player);
         return !(distance < (double) (maxDistance * minDistance));
     }
 
@@ -85,9 +91,9 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
     public void tick() {
 
         // Translation: Entity.squaredDistanceTo (Entity)
-        if (entity.h(this.player) >= 155.0D) { // Will teleport the pet if the player is more then 155 blocks away
+        if (entity.distanceToSqr(this.player) >= 155.0D) { // Will teleport the pet if the player is more then 155 blocks away
             // Translation: Entity.distanceTo (Entity)
-            if (entity.g(this.player) >= 144) { // Will teleport the pet if the player is more then 144 blocks away
+            if (entity.distanceTo(this.player) >= 144) { // Will teleport the pet if the player is more then 144 blocks away
                 entity.teleportToOwner(); // Will ignore all checks and just teleport to the player
             } else {
                 this.tryTeleport();
@@ -102,8 +108,8 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
 
             // Will create a path to the player, and stop the pet within 5 (default) blocks of the player
             // it will stop around 10 blocks if it is a large pet
-            PathEntity path = navigation.a(player, getStoppingDistance());
-            navigation.a(path, entity.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+            Path path = navigation.createPath(player, getStoppingDistance());
+            navigation.moveTo(path, entity.getAttribute(Attributes.MOVEMENT_SPEED).getValue());
         }
     }
 
@@ -114,7 +120,7 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
 
     @Override
     public void stop() {
-        navigation.o(); // Translation: navigation.stop
+        navigation.stop(); // Translation: navigation.stop
     }
 
     private int getStoppingDistance() {
@@ -133,7 +139,7 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
 
 
     private void tryTeleport() {
-        BlockPosition blockposition = player.getChunkCoordinates();
+        BlockPos blockposition = player.blockPosition();
         int distance = modifyInt(3);
 
         for (int i = 0; i < 10; ++i) {
@@ -146,23 +152,21 @@ public class PathfinderWalkToPlayer extends PathfinderBase {
     }
 
     private boolean tryTeleportTo(int x, int y, int z) {
-        if (Math.abs((double) x - player.locX()) < 2.0D && Math.abs((double) z - player.locZ()) < 2.0D) return false;
-        if (!this.canTeleportTo(new BlockPosition(x, y, z))) return false;
-        this.entity.setPositionRotation((double) x + 0.5D, y, (double) z + 0.5D, this.entity.yaw, this.entity.pitch);
+        if (Math.abs((double) x - player.getX()) < 2.0D && Math.abs((double) z - player.getZ()) < 2.0D) return false;
+        if (!this.canTeleportTo(new BlockPos(x, y, z))) return false;
+        this.entity.moveTo((double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
         PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), entity.getEntity().getLocation());
-        this.navigation.o();// Translation: navigation.stop()
+        this.navigation.stop();// Translation: navigation.stop()
         return true;
     }
 
-    private boolean canTeleportTo(BlockPosition blockposition) {
-        // Translation: LandPathNodeMaker.getLandNodeType (World, BlockPosition)
-        // Translation: BlockPosition.mutableCopy()
-        PathType pathtype = PathfinderNormal.a(this.entity.world, blockposition.i());
-        if (pathtype != PathType.WALKABLE) return false;
+    private boolean canTeleportTo(BlockPos blockposition) {
+        BlockPathTypes pathtype = WalkNodeEvaluator.getBlockPathTypeStatic(this.entity.level, blockposition.mutable());
+        if (pathtype != BlockPathTypes.WALKABLE) return false;
 
         // Translation: BlockPosition.subtract (BlockPosition)
-        BlockPosition position = blockposition.b(this.entity.getChunkCoordinates());
-        return this.entity.world.getCubes(this.entity, this.entity.getBoundingBox().a(position));
+        BlockPos position = blockposition.e(this.entity.blockPosition());
+        return this.entity.level.noCollision(this.entity, this.entity.getBoundingBox().move(position));
     }
 
     private int getRandomInt(int min, int max) {

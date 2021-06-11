@@ -2,60 +2,60 @@ package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.TropicalPattern;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityFishPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityTropicalFish}
  */
 public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropicalFishPet {
-    private static final DataWatcherObject<Integer> VARIANT;
+    private static final EntityDataAccessor<Integer> VARIANT;
 
     public EntityTropicalFishPet(PetType type, PetUser user) {
-        super(EntityTypes.TROPICAL_FISH, type, user);
+        super(EntityType.TROPICAL_FISH, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(VARIANT, 0);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Override
     public DyeColorWrapper getPatternColor() {
-        return getRawPatternColor(datawatcher.get(VARIANT));
+        return getRawPatternColor(entityData.get(VARIANT));
     }
 
     @Override
     public void setPatternColor(DyeColorWrapper color) {
-        datawatcher.set(VARIANT, getRawData(color, getBodyColor(), getPattern()));
+        entityData.set(VARIANT, getRawData(color, getBodyColor(), getPattern()));
     }
 
     @Override
     public DyeColorWrapper getBodyColor() {
-        return getRawBodyColor(datawatcher.get(VARIANT));
+        return getRawBodyColor(entityData.get(VARIANT));
     }
 
     @Override
     public void setBodyColor(DyeColorWrapper color) {
-        datawatcher.set(VARIANT, getRawData(getPatternColor(), color, getPattern()));
+        entityData.set(VARIANT, getRawData(getPatternColor(), color, getPattern()));
     }
 
     @Override
     public TropicalPattern getPattern() {
-        return getRawPattern(datawatcher.get(VARIANT));
+        return getRawPattern(entityData.get(VARIANT));
     }
 
     @Override
     public void setPattern(TropicalPattern pattern) {
-        datawatcher.set(VARIANT, getRawData(getPatternColor(), getBodyColor(), pattern));
+        entityData.set(VARIANT, getRawData(getPatternColor(), getBodyColor(), pattern));
     }
 
     private DyeColorWrapper getRawPatternColor(int data) {
@@ -92,6 +92,6 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
     }
 
     static {
-        VARIANT = DataWatcher.a(EntityTropicalFishPet.class, DataWatcherWrapper.INT);
+        VARIANT = SynchedEntityData.defineId(EntityTropicalFishPet.class, EntityDataSerializers.INT);
     }
 }

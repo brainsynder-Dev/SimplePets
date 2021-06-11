@@ -1,34 +1,34 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityHoglinPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityHoglin}
  */
 public class EntityHoglinPet extends EntityAgeablePet implements IEntityHoglinPet {
-    private static DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
+    private static EntityDataAccessor<Boolean> IMMUNE_TO_ZOMBIFICATION;
     private static boolean registered = false;
 
     public EntityHoglinPet(PetType type, PetUser user) {
-        super(EntityTypes.HOGLIN, type, user);
+        super(EntityType.HOGLIN, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         if (!registered) {
-            IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityHoglinPet.class, DataWatcherWrapper.BOOLEAN);
+            IMMUNE_TO_ZOMBIFICATION = SynchedEntityData.defineId(EntityHoglinPet.class, EntityDataSerializers.BOOLEAN);
             registered = true;
         }
-        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default
+        this.entityData.define(IMMUNE_TO_ZOMBIFICATION, true); // Makes them not shade by default
     }
 
     @Override
@@ -46,11 +46,11 @@ public class EntityHoglinPet extends EntityAgeablePet implements IEntityHoglinPe
 
     @Override
     public boolean isShaking() {
-        return !datawatcher.get(IMMUNE_TO_ZOMBIFICATION);
+        return !entityData.get(IMMUNE_TO_ZOMBIFICATION);
     }
 
     @Override
     public void setShaking(boolean value) {
-        datawatcher.set(IMMUNE_TO_ZOMBIFICATION, !value);
+        entityData.set(IMMUNE_TO_ZOMBIFICATION, !value);
     }
 }

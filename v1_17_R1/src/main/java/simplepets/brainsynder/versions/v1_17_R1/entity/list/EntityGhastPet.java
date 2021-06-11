@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityGhastPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityGhast}
  */
 public class EntityGhastPet extends EntityPet implements IEntityGhastPet {
-    private static final DataWatcherObject<Boolean> ATTACKING;
+    private static final EntityDataAccessor<Boolean> ATTACKING;
 
     public EntityGhastPet(PetType type, PetUser user) {
-        super(EntityTypes.GHAST, type, user);
+        super(EntityType.GHAST, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(ATTACKING, false);
+        this.entityData.define(ATTACKING, false);
     }
 
     @Override
@@ -41,16 +41,16 @@ public class EntityGhastPet extends EntityPet implements IEntityGhastPet {
 
     @Override
     public boolean isScreaming() {
-        return this.datawatcher.get(ATTACKING);
+        return this.entityData.get(ATTACKING);
     }
 
     @Override
     public void setScreaming(boolean flag) {
-        this.datawatcher.set(ATTACKING, flag);
+        this.entityData.set(ATTACKING, flag);
     }
 
 
     static {
-        ATTACKING = DataWatcher.a(EntityGhastPet.class, DataWatcherWrapper.BOOLEAN);
+        ATTACKING = SynchedEntityData.defineId(EntityGhastPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

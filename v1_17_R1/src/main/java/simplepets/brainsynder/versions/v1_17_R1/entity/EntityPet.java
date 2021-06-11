@@ -1,25 +1,27 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
-import com.google.common.collect.Maps;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
-import net.minecraft.server.v1_16_R3.*;
-import org.apache.commons.lang.reflect.FieldUtils;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import org.bukkit.craftbukkit.v1_16_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_16_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
-import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
@@ -36,7 +38,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-public abstract class EntityPet extends EntityInsentient implements IEntityPet {
+public abstract class EntityPet extends Mob implements IEntityPet {
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -47,7 +49,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private final double rideSpeed = 0.4000000238418579;
     private final boolean floatDown = false;
     private final boolean canGlow = true;
-    private boolean isGlowing = false;
+    private final boolean isGlowing = false;
     private final boolean autoRemove = true;
     private boolean silent = false;
     private boolean ignoreVanish = false;
@@ -57,12 +59,12 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     private int blockY = 0;
     private final int tickDelay = 10000;
 
-    public EntityPet(EntityTypes<? extends EntityInsentient> entitytypes, World world) {
+    public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
         getBukkitEntity().remove();
     }
 
-    public EntityPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, ((CraftWorld) ((Player) user.getPlayer()).getLocation().getWorld()).getHandle());
         this.user = user;
         this.petType = type;
@@ -70,11 +72,11 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         this.additional = new HashMap<>();
 
         this.collides = false;
-        this.noclip = false;
+        this.noPhysics = false;
 
 
         // needs to be faster but less then 6
-        getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.500000238418579);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
     }
 
     public boolean isJumping () {
@@ -84,33 +86,32 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     @Override
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
-            setPositionRotation(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+            setPos(location.getX(), location.getY(), location.getZ());
             PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), location);
         });
     }
 
     @Override
-    public boolean damageEntity(DamageSource damagesource, float f) {
+    protected boolean damageEntity0(DamageSource damagesource, float f) {
         return false;
     }
 
     @Override
-    protected void initPathfinder() {
-        goalSelector.a(1, new PathfinderGoalFloat(this));
-        goalSelector.a(2, new PathfinderWalkToPlayer(this, 3, 10));
-        goalSelector.a(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
-        goalSelector.a(3, new PathfinderGoalRandomLookaround(this));
+    protected void registerGoals() {
+        goalSelector.addGoal(1, new FloatGoal(this));
+        goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
+        goalSelector.addGoal(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
+        goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
 
-    // TODO: Needs to be set up when Spigot 1.17 is out
     @Override
     public boolean isFrozen() {
-        return false;
+        return isFullyFrozen();
     }
 
     @Override
     public void setFrozen(boolean frozen) {
-
+        setTicksFrozen(frozen ? 140 : 0);
     }
 
     @Override
@@ -170,7 +171,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", getPetType().getName());
-        object.setUniqueId("uuid", getUniqueID());
+        object.setUniqueId("uuid", getUUID());
         object.setFloat("health", getHealth());
         object.setString("ownerName", getPetUser().getPlayer().getName());
         user.getPetName(getPetType()).ifPresent(name -> {
@@ -188,7 +189,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("uuid")) a_(object.getUniqueId("uuid")); // Sets the Entities UUID
+        if (object.hasKey("uuid")) setUUID(object.getUniqueId("uuid")); // Sets the Entities UUID
         if (object.hasKey("health")) {
             float health = object.getFloat("health", 20);
             if (health >= 2048) health = 2047; // Prevents crash caused by spigot
@@ -235,7 +236,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     }
 
     @Override
-    public EntityType getPetEntityType() {
+    public org.bukkit.entity.EntityType getPetEntityType() {
         return petType.getEntityType();
     }
 
@@ -243,12 +244,12 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     /**
      * Handles the registration of DataWatchers
      * <p>
-     * Search for: this.datawatcher.register
+     * Search for: this.entityData.register
      * Class: EntityLiving
      */
     @Override
-    protected void initDatawatcher() { // entityInit
-        super.initDatawatcher();
+    protected void defineSynchedData() {
+        super.defineSynchedData();
         registerDatawatchers();
     }
 
@@ -263,16 +264,16 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         return ignoreVanish;
     }
 
-    private boolean isOnGround(net.minecraft.server.v1_16_R3.Entity entity) {
+    private boolean isOnGround(net.minecraft.world.entity.Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid();
     }
 
     protected boolean isOwnerRiding() {
         if (passengers.size() == 0) return false;
-        EntityPlayer owner = ((CraftPlayer) getPetUser().getPlayer()).getHandle();
-        for (net.minecraft.server.v1_16_R3.Entity passenger : this.passengers) {
-            if (passenger.getUniqueID().equals(owner.getUniqueID())) {
+        net.minecraft.world.entity.player.Player owner = ((CraftPlayer) getPetUser().getPlayer()).getHandle();
+        for (net.minecraft.world.entity.Entity passenger : this.passengers) {
+            if (passenger.getUUID().equals(owner.getUUID())) {
                 return true;
             }
         }
@@ -280,15 +281,13 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     }
 
     @Override
-    public void g(Vec3D vec3D) {
-        super.g(vec3D);
+    public void travel(Vec3 vec3D) {
+        super.travel(vec3D);
         if ((petType == null) || (user == null)) return;
 
         if ((passengers == null)
                 || (!isOwnerRiding())) {
-            this.G = (float) 0.5;
-            this.aL = (float) 0.02;
-            super.g(vec3D);
+            super.travel(vec3D);
             return;
         }
 
@@ -296,68 +295,68 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         double vertical = vec3D.y;
         double forward = vec3D.z;
 
-        EntityPlayer owner = ((CraftPlayer) user.getPlayer()).getHandle();
+        net.minecraft.world.entity.player.Player owner = ((CraftPlayer) user.getPlayer()).getHandle();
         if (jumping) {
             if (isOnGround(this)) {
-                setMot(getMot().x, 0.5, getMot().z);
+                setDeltaMovement(getDeltaMovement().x, 0.5, getDeltaMovement().z);
             } else {
                 SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
                     if (config.canFly((Player) user.getPlayer())) {
-                        setMot(getMot().x, 0.3, getMot().z);
+                        setDeltaMovement(getDeltaMovement().x, 0.3, getDeltaMovement().z);
                     }
                 });
             }
         }
 
-        this.yaw = owner.yaw;
-        this.lastYaw = this.yaw;
-        this.pitch = owner.pitch * 0.5F;
-        this.setYawPitch(this.yaw, this.pitch);
-        this.aC = (this.aA = this.yaw); // Translation: this.yHeadRot = (this.yBodyRot = this.yaw);
-        strafe = owner.aR * 0.5F; // Translation: double motionSideways = passenger.xxa * walkSpeed;
-        forward = owner.aT; // Translation: double motionForward = passenger.zza;
+        setYRot(owner.getYRot());
+        this.yRotO = getYRot();
+        setXRot(owner.getXRot() * 0.5F);
+        this.setRot(this.getYRot(), this.getXRot());
+        this.yHeadRot = (this.yBodyRot = this.getYRot()); // Translation: this.yHeadRot = (this.yBodyRot = this.yRot);
+        strafe = owner.xxa * 0.5F; // Translation: double motionSideways = passenger.xxa * walkSpeed;
+        forward = owner.zza; // Translation: double motionForward = passenger.zza;
         if (forward <= 0.0F) {
             forward *= 0.25F;
         }
-        //this.aL = this.aD = this.yaw;
+        //this.aL = this.aD = this.yRot;
         //this.H = 1.0F;
 
-        Vec3D vec = new Vec3D(strafe, vertical, forward);
+        Vec3 vec = new Vec3(strafe, vertical, forward);
         //if (!(this instanceof IEntityHorsePet)) vec3D.vec3D.x *= 0.75;
-        this.n((float) getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-        super.g(vec);
-        if (!world.isClientSide) {
-            if (this instanceof IEntityHorsePet) {
-                Location location = getBukkitEntity().getLocation();
-                setPosition(location.getX(), location.getY(), location.getZ());
-                PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
-                owner.playerConnection.sendPacket(packet);
-                if (forward > 0.0F) {
-                    float f = MathHelper.sin((float) (this.yaw * 0.017453292));
-                    float f1 = MathHelper.cos((float) (this.yaw * 0.017453292));
-                    setMot(getMot().add((-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0))); // This would be 0 anyways?
-                }
-
-                this.aL = this.dM() * 0.1F;
-                if (this.cj()) {
-                    this.n((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-                    super.g(new Vec3D(strafe, vertical, forward));
-                } else if (owner instanceof EntityHuman) {
-                    this.setMot(new Vec3D(0, 0, 0));
-                }
-
-                this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
-                double d0 = this.locX() - this.lastX;
-                double d1 = this.locZ() - this.lastZ;
-                float f5 = (float) (MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0);
-                if (f5 > 1.0) {
-                    f5 = (float) 1.0;
-                }
-
-                this.aC += (f5 - this.aC) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
-                this.aD += this.aC; // this.limbSwing += this.limbSwingAmount;
-            }
-        }
+        this.setSpeed((float) getAttribute(Attributes.MOVEMENT_SPEED).getValue());
+        super.travel(vec);
+//        if (!level.isClientSide) {
+//            if (this instanceof IEntityHorsePet) {
+//                Location location = getBukkitEntity().getLocation();
+//                setPosition(location.getX(), location.getY(), location.getZ());
+//                PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
+//                owner.playerConnection.sendPacket(packet);
+//                if (forward > 0.0F) {
+//                    float f = MathHelper.sin((float) (this.yRot * 0.017453292));
+//                    float f1 = MathHelper.cos((float) (this.yRot * 0.017453292));
+//                    setMot(getMot().add((-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0))); // This would be 0 anyways?
+//                }
+//
+//                this.aL = this.dM() * 0.1F;
+//                if (this.cj()) {
+//                    this.n((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
+//                    super.g(new Vec3D(strafe, vertical, forward));
+//                } else if (owner instanceof EntityHuman) {
+//                    this.setMot(new Vec3D(0, 0, 0));
+//                }
+//
+//                this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
+//                double d0 = this.locX() - this.lastX;
+//                double d1 = this.locZ() - this.lastZ;
+//                float f5 = (float) (MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0);
+//                if (f5 > 1.0) {
+//                    f5 = (float) 1.0;
+//                }
+//
+//                this.limbSwingAmount += (f5 - this.aC) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
+//                this.aD += this.aC; // this.limbSwing += this.limbSwingAmount;
+//            }
+//        }
     }
 
     @Override
@@ -397,7 +396,7 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
         if (user.isPetVehicle(getPetType())) {
             if (floatDown) {
                 if (!isOnGround(this)) {
-                    setMot(getMot().x, getMot().y*0.4, getMot().z);
+                    setDeltaMovement(getDeltaMovement().x, getDeltaMovement().y*0.4, getDeltaMovement().z);
                 }
             }
         }
@@ -421,16 +420,17 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
             }
 
             if (user.isPetHat(getPetType())) {
-                this.lastYaw = this.yaw = player.getLocation().getYaw();
+                setYRot(player.getLocation().getYaw());
+                this.yRotO = getYRot();
             }
 
-            double current = getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue();
+            double current = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
                 if (current != rideSpeed)
-                    getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(rideSpeed);
+                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(rideSpeed);
             } else {
                 if (current != walkSpeed)
-                    getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(walkSpeed);
+                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
             }
         }
     }
@@ -439,11 +439,11 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     /**
      * Handles the Ambient Sound playing
      * <p>
-     * Search for: SoundEffect soundeffect = this.
-     * Class: {@link EntityInsentient}
+     * Search for: SoundEvent soundeffect = this.getAmbientSound
+     * Class: {@link Mob}
      */
     @Override
-    public void F() {
+    public void playAmbientSound() {
         if (silent) return;
         SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
             SoundMaker sound = config.getSound();
@@ -454,75 +454,14 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
 
     // TODO: Handles glow effect
     private void glowHandler(boolean glow) {
-        try {
-            net.minecraft.server.v1_16_R3.Entity pet = this;
-            if (this instanceof IEntityControllerPet) {
-                Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
-                pet = ((CraftEntity) ent).getHandle();
-            }
-            handleInvisible(glow, pet);
-        } catch (IllegalAccessException ignored) {
-        }
+        // TODO: This code is broken a bit, needs updating
     }
-
-    private void handleInvisible(boolean glow, net.minecraft.server.v1_16_R3.Entity pet) throws IllegalAccessException {
-        DataWatcher toCloneDataWatcher = pet.getDataWatcher();
-        DataWatcher newDataWatcher = new DataWatcher(pet);
-        String fieldName = "d";
-
-        Int2ObjectOpenHashMap<DataWatcher.Item<?>> currentHashMap = new Int2ObjectOpenHashMap<>();
-        try {
-            Map<Integer, DataWatcher.Item<?>> map = (Map<Integer, DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
-            for (Integer integer : map.keySet()) {
-                currentHashMap.put(integer, map.get(integer).d());
-            }
-        } catch (Exception e) {
-            fieldName = "entries";
-            try {
-                currentHashMap = (Int2ObjectOpenHashMap<DataWatcher.Item<?>>) FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
-            } catch (Exception f) {
-                // Failed to get any of the fields
-                return;
-            }
-        }
-
-        Int2ObjectOpenHashMap<DataWatcher.Item<?>> newHashMap = new Int2ObjectOpenHashMap<>();
-        for (Integer integer : currentHashMap.keySet()) {
-            newHashMap.put(integer, currentHashMap.get(integer).d());
-        }
-
-        DataWatcher.Item item = newHashMap.get(0);
-        byte initialBitMask = (Byte) item.b();
-        byte bitMaskIndex = (byte) 6;
-        isGlowing = glow;
-        if (glow) {
-            item.a((byte) (initialBitMask | 1 << bitMaskIndex));
-        } else {
-            item.a((byte) (initialBitMask & ~(1 << bitMaskIndex)));
-        }
-
-        if (fieldName.equals("d")) {
-            Map<Integer, DataWatcher.Item<?>> newMap = Maps.newHashMap();
-            for (Integer integer : newHashMap.keySet()) {
-                newMap.put(integer, newHashMap.get(integer).d());
-            }
-            FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newMap, true);
-        } else {
-            FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
-        }
-
-        PacketPlayOutEntityMetadata metadataPacket = new PacketPlayOutEntityMetadata(pet.getId(), newDataWatcher, true);
-
-        ((CraftPlayer) getPetUser().getPlayer()).getHandle().playerConnection.sendPacket(metadataPacket);
-
-    }
-
 
     // TODO: This literally fixed the shit with p2 and i'm so fucking mad
     public CraftEntity getBukkitEntity() {
-        return new CraftLivingEntity(world.getServer(), this) {
+        return new CraftLivingEntity(level.getCraftServer(), this) {
             @Override
-            public EntityType getType() {
+            public org.bukkit.entity.EntityType getType() {
                 return petType.getEntityType();
             }
         };
@@ -532,36 +471,31 @@ public abstract class EntityPet extends EntityInsentient implements IEntityPet {
     /**
      * Used to stop the pet from moving when its pushed
      * <p>
-     * Search for: this.impulse = true;
+     * Search for: this.hasImpulse = true;
      * Class: Entity
      */
     @Override
-    public void f(double x, double y, double z) {
+    public void push(double x, double y, double z) {
     }
 
 
     // TODO: These methods prevent pets from being saved in the worlds
     @Override
-    public boolean a_(NBTTagCompound nbttagcompound) {// Calls e
+    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
         return false;
     }
 
     @Override
-    public boolean d(NBTTagCompound nbttagcompound) {// Calls e
+    public boolean save(CompoundTag nbttagcompound) {// Calls e
         return false;
     }
 
     @Override
-    public NBTTagCompound save(NBTTagCompound nbttagcompound) {// Saving
-        return nbttagcompound;
+    public void load(CompoundTag nbttagcompound) {
     }
 
     @Override
-    public void load(NBTTagCompound nbttagcompound) {
-    }
-
-    @Override
-    public boolean canPortal() {
-        return false; // Prevents pets from teleporting from a portal
+    public boolean isOnPortalCooldown() {
+        return true; // Prevents pets from teleporting from a portal
     }
 }

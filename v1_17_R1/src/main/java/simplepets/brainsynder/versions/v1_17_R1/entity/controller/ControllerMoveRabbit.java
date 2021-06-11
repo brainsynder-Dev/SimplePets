@@ -1,9 +1,9 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.controller;
 
-import net.minecraft.server.v1_16_R3.ControllerMove;
+import net.minecraft.world.entity.ai.control.MoveControl;
 import simplepets.brainsynder.versions.v1_17_R1.entity.list.EntityRabbitPet;
 
-public class ControllerMoveRabbit extends ControllerMove {
+public class ControllerMoveRabbit extends MoveControl {
         private final EntityRabbitPet rabbit;
         private double rabbitSpeed;
 
@@ -13,21 +13,21 @@ public class ControllerMoveRabbit extends ControllerMove {
         }
 
         // Translation: tick()
-        public void a() {
-            if (this.rabbit.isOnGround() && !this.rabbit.isJumping() && !((ControllerJumpRabbit)this.rabbit.getControllerJump()).isActive()) {
-                this.rabbit.setSpeed(0.0);
-            } else if (this.b()) { // Translation: this.isMoving()
-                this.rabbit.setSpeed(this.rabbitSpeed);
+        public void tick() {
+            if (this.rabbit.isOnGround() && !this.rabbit.isJumping() && !((ControllerJumpRabbit)this.rabbit.getJumpControl()).wantJump()) {
+                this.rabbit.setSpeedModifier(0.0);
+            } else if (hasWanted()) { // Translation: this.isMoving()
+                this.rabbit.setSpeedModifier(this.rabbitSpeed);
             }
 
-            super.a();
+            super.tick();
         }
 
         // Translation: moveTo
-        public void a(double x, double y, double z, double speed) {
+        public void setWantedPosition(double x, double y, double z, double speed) {
             if (this.rabbit.isInWater()) speed = 1.5D;
 
-            super.a(x, y, z, speed);
+            super.setWantedPosition(x, y, z, speed);
 
             if (speed > 0.0D) this.rabbitSpeed = speed;
         }

@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntitySnowman}
  */
 public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
-    private static final DataWatcherObject<Byte> PUMPKIN;
+    private static final EntityDataAccessor<Byte> PUMPKIN;
 
     public EntitySnowmanPet(PetType type, PetUser user) {
-        super(EntityTypes.SNOW_GOLEM, type, user);
+        super(EntityType.SNOW_GOLEM, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(PUMPKIN, (byte) 0);
+        this.entityData.define(PUMPKIN, (byte) 0);
     }
 
     @Override
@@ -41,20 +41,20 @@ public class EntitySnowmanPet extends EntityPet implements IEntitySnowmanPet {
 
     @Override
     public boolean hasPumpkin() {
-        return (this.datawatcher.get(PUMPKIN) & 16) != 0;
+        return (this.entityData.get(PUMPKIN) & 16) != 0;
     }
 
     @Override
     public void setHasPumpkin(boolean flag) {
-        byte b0 = this.datawatcher.get(PUMPKIN);
+        byte b0 = this.entityData.get(PUMPKIN);
         if (flag) {
-            this.datawatcher.set(PUMPKIN, (byte) (b0 | 16));
+            this.entityData.set(PUMPKIN, (byte) (b0 | 16));
         } else {
-            this.datawatcher.set(PUMPKIN, (byte) (b0 & -17));
+            this.entityData.set(PUMPKIN, (byte) (b0 & -17));
         }
     }
 
     static {
-        PUMPKIN = DataWatcher.a(EntitySnowmanPet.class, DataWatcherWrapper.BYTE);
+        PUMPKIN = SynchedEntityData.defineId(EntitySnowmanPet.class, EntityDataSerializers.BYTE);
     }
 }

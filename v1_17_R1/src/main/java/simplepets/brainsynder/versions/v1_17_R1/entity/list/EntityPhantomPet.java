@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntitySlimePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityPhantom}
  */
 public class EntityPhantomPet extends EntityPet implements IEntitySlimePet {
-    private static final DataWatcherObject<Integer> SIZE;
+    private static final EntityDataAccessor<Integer> SIZE;
 
     public EntityPhantomPet(PetType type, PetUser user) {
-        super(EntityTypes.PHANTOM, type, user);
+        super(EntityType.PHANTOM, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(SIZE, 1);
+        this.entityData.define(SIZE, 1);
     }
 
     @Override
@@ -40,14 +40,14 @@ public class EntityPhantomPet extends EntityPet implements IEntitySlimePet {
     }
 
     public int getSize() {
-        return this.datawatcher.get(SIZE);
+        return this.entityData.get(SIZE);
     }
 
     public void setSize(int i) {
-        this.datawatcher.set(SIZE, i);
+        this.entityData.set(SIZE, i);
     }
 
     static {
-        SIZE = DataWatcher.a(EntityPhantomPet.class, DataWatcherWrapper.INT);
+        SIZE = SynchedEntityData.defineId(EntityPhantomPet.class, EntityDataSerializers.INT);
     }
 }

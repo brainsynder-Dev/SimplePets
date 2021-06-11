@@ -1,8 +1,8 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.SoundEffects;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityRavagerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -16,7 +16,7 @@ public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerP
     private boolean chomping = false;
 
     public EntityRavagerPet(PetType type, PetUser user) {
-        super(EntityTypes.RAVAGER, type, user);
+        super(EntityType.RAVAGER, type, user);
     }
 
     @Override
@@ -43,8 +43,8 @@ public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerP
 
         if (this.attackTick <= 0) {
             this.attackTick = 20;
-            this.playSound(SoundEffects.ENTITY_RAVAGER_ATTACK, 1.0F, 1.0F);
-            this.world.broadcastEntityEffect(this, (byte)4);
+            this.playSound(SoundEvents.RAVAGER_ATTACK, 1.0F, 1.0F);
+            this.level.broadcastEntityEvent(this, (byte)4);
         }
     }
 

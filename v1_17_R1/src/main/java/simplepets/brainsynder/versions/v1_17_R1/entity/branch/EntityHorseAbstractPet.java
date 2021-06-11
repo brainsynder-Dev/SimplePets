@@ -1,40 +1,40 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.branch;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 import java.util.Optional;
 import java.util.UUID;
 
 public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAbstract {
-    private static final DataWatcherObject<Byte> STATUS;
-    private static final DataWatcherObject<Optional<UUID>> OWNER_UNIQUE_ID;
+    private static final EntityDataAccessor<Byte> STATUS;
+    private static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID;
 
-    public EntityHorseAbstractPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntityHorseAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
     @Override
     public void setSpecialFlag(int flag, boolean value) {
-        byte b0 = this.datawatcher.get(STATUS);
+        byte b0 = this.entityData.get(STATUS);
         if(value){
-            this.datawatcher.set(STATUS, (byte) (b0 | flag));
+            this.entityData.set(STATUS, (byte) (b0 | flag));
         }else{
-            this.datawatcher.set(STATUS, (byte) (b0 & (~flag)));
+            this.entityData.set(STATUS, (byte) (b0 & (~flag)));
         }
     }
 
     @Override
     public boolean getSpecialFlag(int flag) {
-        return (this.datawatcher.get(STATUS) & flag) != 0;
+        return (this.entityData.get(STATUS) & flag) != 0;
     }
 
     @Override
@@ -59,12 +59,12 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(STATUS, (byte) 0);
-        this.datawatcher.register(OWNER_UNIQUE_ID, Optional.empty());
+        this.entityData.define(STATUS, (byte) 0);
+        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     static {
-        STATUS = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherWrapper.BYTE);
-        OWNER_UNIQUE_ID = DataWatcher.a(EntityHorseAbstractPet.class, DataWatcherWrapper.UUID);
+        STATUS = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.BYTE);
+        OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.OPTIONAL_UUID);
     }
 }

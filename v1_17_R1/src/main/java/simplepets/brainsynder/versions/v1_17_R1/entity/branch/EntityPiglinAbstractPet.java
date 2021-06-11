@@ -1,20 +1,20 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.branch;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityInsentient;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Mob;
 import simplepets.brainsynder.api.entity.misc.IShaking;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 public abstract class EntityPiglinAbstractPet extends EntityPet implements IShaking {
-    private static final DataWatcherObject<Boolean> IMMUNE_TO_ZOMBIFICATION;
+    private static final EntityDataAccessor<Boolean> IMMUNE_TO_ZOMBIFICATION;
 
-    public EntityPiglinAbstractPet(EntityTypes<? extends EntityInsentient> entitytypes, PetType type, PetUser user) {
+    public EntityPiglinAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
@@ -33,21 +33,21 @@ public abstract class EntityPiglinAbstractPet extends EntityPet implements IShak
 
     @Override
     public boolean isShaking() {
-        return datawatcher.get(IMMUNE_TO_ZOMBIFICATION);
+        return entityData.get(IMMUNE_TO_ZOMBIFICATION);
     }
 
     @Override
     public void setShaking(boolean shaking) {
-        datawatcher.set(IMMUNE_TO_ZOMBIFICATION, shaking);
+        entityData.set(IMMUNE_TO_ZOMBIFICATION, shaking);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(IMMUNE_TO_ZOMBIFICATION, true);
+        this.entityData.define(IMMUNE_TO_ZOMBIFICATION, true);
     }
 
     static {
-        IMMUNE_TO_ZOMBIFICATION = DataWatcher.a(EntityPiglinAbstractPet.class, DataWatcherWrapper.BOOLEAN);
+        IMMUNE_TO_ZOMBIFICATION = SynchedEntityData.defineId(EntityPiglinAbstractPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

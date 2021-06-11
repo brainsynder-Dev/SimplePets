@@ -1,31 +1,31 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityBeePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityBee}
  */
 public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
-    private static final DataWatcherObject<Byte> FLAGS;
-    private static final DataWatcherObject<Integer> ANGER;
+    private static final EntityDataAccessor<Byte> FLAGS;
+    private static final EntityDataAccessor<Integer> ANGER;
 
     public EntityBeePet(PetType type, PetUser user) {
-        super(EntityTypes.BEE, type, user);
+        super(EntityType.BEE, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(FLAGS, (byte) 4);
-        this.datawatcher.register(ANGER, 0);
+        this.entityData.define(FLAGS, (byte) 4);
+        this.entityData.define(ANGER, 0);
     }
 
     @Override
@@ -49,34 +49,34 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
 
     @Override
     public boolean isAngry() {
-        return datawatcher.get(ANGER) > 0;
+        return entityData.get(ANGER) > 0;
     }
 
     @Override
     public void setAngry(boolean angry) {
-        datawatcher.set(ANGER, (angry) ? 25562256 : 0);
+        entityData.set(ANGER, (angry) ? 25562256 : 0);
     }
 
     @Override
     public void setSpecialFlag(int flag, boolean value) {
-        byte flagByte = datawatcher.get(FLAGS);
+        byte flagByte = entityData.get(FLAGS);
         if (value) {
             flagByte = (byte)(flagByte | flag);
         } else {
             flagByte = (byte)(flagByte & ~flag);
         }
 
-        if (flagByte != datawatcher.get(FLAGS)) this.datawatcher.set(FLAGS, flagByte);
+        if (flagByte != entityData.get(FLAGS)) this.entityData.set(FLAGS, flagByte);
     }
 
     @Override
     public boolean getSpecialFlag(int flag) {
-        return (this.datawatcher.get(FLAGS) & flag) != 0;
+        return (this.entityData.get(FLAGS) & flag) != 0;
     }
 
 
     static {
-        FLAGS = DataWatcher.a(EntityBeePet.class, DataWatcherWrapper.BYTE);
-        ANGER = DataWatcher.a(EntityBeePet.class, DataWatcherWrapper.INT);
+        FLAGS = SynchedEntityData.defineId(EntityBeePet.class, EntityDataSerializers.BYTE);
+        ANGER = SynchedEntityData.defineId(EntityBeePet.class, EntityDataSerializers.INT);
     }
 }

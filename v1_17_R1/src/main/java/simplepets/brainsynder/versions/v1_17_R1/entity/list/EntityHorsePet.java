@@ -1,12 +1,13 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
-import net.minecraft.server.v1_16_R3.EnumItemSlot;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.pet.PetType;
@@ -15,23 +16,22 @@ import simplepets.brainsynder.api.wrappers.horse.HorseArmorType;
 import simplepets.brainsynder.api.wrappers.horse.HorseColorType;
 import simplepets.brainsynder.api.wrappers.horse.HorseStyleType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.branch.EntityHorseAbstractPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityHorse}
  */
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
-    private static final DataWatcherObject<Integer> HORSE_VARIANT;
+    private static final EntityDataAccessor<Integer> HORSE_VARIANT;
     private HorseArmorType armor = null;
 
     public EntityHorsePet(PetType type, PetUser user) {
-        super(EntityTypes.HORSE, type, user);
+        super(EntityType.HORSE, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(HORSE_VARIANT, 0);
+        this.entityData.define(HORSE_VARIANT, 0);
     }
 
     @Override
@@ -76,8 +76,8 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
                 break;
         }
         ItemStack stack = new ItemStack(material);
-        this.setSlot(EnumItemSlot.CHEST, CraftItemStack.asNMSCopy(stack));
-        this.a(EnumItemSlot.CHEST, 0.0F);
+        this.setItemSlot(EquipmentSlot.CHEST, CraftItemStack.asNMSCopy(stack));
+        this.setDropChance(EquipmentSlot.CHEST, 0.0F);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public void setStyle(HorseStyleType style) {
-        this.datawatcher.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
+        this.entityData.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
     }
 
     @Override
@@ -97,15 +97,15 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public void setColor(HorseColorType color) {
-        this.datawatcher.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
+        this.entityData.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
 
     }
 
     private int getVariant() {
-        return this.datawatcher.get(HORSE_VARIANT);
+        return this.entityData.get(HORSE_VARIANT);
     }
 
     static {
-        HORSE_VARIANT = DataWatcher.a(EntityHorsePet.class, DataWatcherWrapper.INT);
+        HORSE_VARIANT = SynchedEntityData.defineId(EntityHorsePet.class, EntityDataSerializers.INT);
     }
 }

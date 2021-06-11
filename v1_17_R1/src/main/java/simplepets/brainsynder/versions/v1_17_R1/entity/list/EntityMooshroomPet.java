@@ -1,30 +1,30 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityMooshroomPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.MooshroomType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityMushroomCow}
  */
 public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMooshroomPet {
-    private static final DataWatcherObject<String> TYPE;
+    private static final EntityDataAccessor<String> TYPE;
 
     public EntityMooshroomPet(PetType type, PetUser user) {
-        super(EntityTypes.MOOSHROOM, type, user);
+        super(EntityType.MOOSHROOM, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(TYPE, MooshroomType.RED.name());
+        entityData.define(TYPE, MooshroomType.RED.name());
     }
 
     @Override
@@ -43,15 +43,15 @@ public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMoosh
 
     @Override
     public void setMooshroomType(MooshroomType type) {
-        datawatcher.set(TYPE, type.name().toLowerCase());
+        entityData.set(TYPE, type.name().toLowerCase());
     }
 
     @Override
     public MooshroomType getMooshroomType() {
-        return MooshroomType.valueOf(datawatcher.get(TYPE).toUpperCase());
+        return MooshroomType.valueOf(entityData.get(TYPE).toUpperCase());
     }
 
     static {
-        TYPE = DataWatcher.a(EntityMooshroomPet.class, DataWatcherWrapper.STRING);
+        TYPE = SynchedEntityData.defineId(EntityMooshroomPet.class, EntityDataSerializers.STRING);
     }
 }

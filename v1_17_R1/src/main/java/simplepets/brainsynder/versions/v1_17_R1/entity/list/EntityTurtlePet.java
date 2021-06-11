@@ -1,47 +1,47 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
-import net.minecraft.server.v1_16_R3.BlockPosition;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityTurtlePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityTurtle}
  */
 public class EntityTurtlePet extends EntityAgeablePet implements IEntityTurtlePet {
-    private static final DataWatcherObject<BlockPosition> HOME_POS;
-    private static final DataWatcherObject<Boolean> HAS_EGG;
-    private static final DataWatcherObject<Boolean> DIGGING_SAND;
-    private static final DataWatcherObject<BlockPosition> TRAVEL_POS;
-    private static final DataWatcherObject<Boolean> LAND_BOUND;
-    private static final DataWatcherObject<Boolean> ACTIVELY_TRAVELLING;
+    private static final EntityDataAccessor<BlockPos> HOME_POS;
+    private static final EntityDataAccessor<Boolean> HAS_EGG;
+    private static final EntityDataAccessor<Boolean> DIGGING_SAND;
+    private static final EntityDataAccessor<BlockPos> TRAVEL_POS;
+    private static final EntityDataAccessor<Boolean> LAND_BOUND;
+    private static final EntityDataAccessor<Boolean> ACTIVELY_TRAVELLING;
 
     public EntityTurtlePet(PetType type, PetUser user) {
-        super(EntityTypes.TURTLE, type, user);
+        super(EntityType.TURTLE, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(HOME_POS, BlockPosition.ZERO);
-        this.datawatcher.register(HAS_EGG, false);
-        this.datawatcher.register(TRAVEL_POS, BlockPosition.ZERO);
-        this.datawatcher.register(LAND_BOUND, false);
-        this.datawatcher.register(ACTIVELY_TRAVELLING, false);
-        this.datawatcher.register(DIGGING_SAND, false);
+        this.entityData.define(HOME_POS, BlockPos.ZERO);
+        this.entityData.define(HAS_EGG, false);
+        this.entityData.define(TRAVEL_POS, BlockPos.ZERO);
+        this.entityData.define(LAND_BOUND, false);
+        this.entityData.define(ACTIVELY_TRAVELLING, false);
+        this.entityData.define(DIGGING_SAND, false);
     }
 
     static {
-        HOME_POS = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BLOCK_POS);
-        HAS_EGG = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
-        DIGGING_SAND = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
-        TRAVEL_POS = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BLOCK_POS);
-        LAND_BOUND = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
-        ACTIVELY_TRAVELLING = DataWatcher.a(EntityTurtlePet.class, DataWatcherWrapper.BOOLEAN);
+        HOME_POS = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BLOCK_POS);
+        HAS_EGG = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BOOLEAN);
+        DIGGING_SAND = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BOOLEAN);
+        TRAVEL_POS = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BLOCK_POS);
+        LAND_BOUND = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BOOLEAN);
+        ACTIVELY_TRAVELLING = SynchedEntityData.defineId(EntityTurtlePet.class, EntityDataSerializers.BOOLEAN);
     }
 }

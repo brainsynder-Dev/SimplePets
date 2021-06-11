@@ -1,33 +1,33 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityCreeper}
  */
 public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
-    protected static final DataWatcherObject<Integer> STATE;
-    protected static final DataWatcherObject<Boolean> POWERED;
-    protected static final DataWatcherObject<Boolean> IGNITED;
+    protected static final EntityDataAccessor<Integer> STATE;
+    protected static final EntityDataAccessor<Boolean> POWERED;
+    protected static final EntityDataAccessor<Boolean> IGNITED;
 
     public EntityCreeperPet(PetType type, PetUser user) {
-        super(EntityTypes.CREEPER, type, user);
+        super(EntityType.CREEPER, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(STATE, -1);
-        this.datawatcher.register(POWERED, false);
-        this.datawatcher.register(IGNITED, false);
+        this.entityData.define(STATE, -1);
+        this.entityData.define(POWERED, false);
+        this.entityData.define(IGNITED, false);
     }
 
     @Override
@@ -45,27 +45,27 @@ public class EntityCreeperPet extends EntityPet implements IEntityCreeperPet {
 
     @Override
     public boolean isIgnited() {
-        return datawatcher.get(IGNITED);
+        return entityData.get(IGNITED);
     }
 
     @Override
     public void setIgnited(boolean flag) {
-        this.datawatcher.set(IGNITED, flag);
+        this.entityData.set(IGNITED, flag);
     }
 
     @Override
     public boolean isPowered() {
-        return datawatcher.get(POWERED);
+        return entityData.get(POWERED);
     }
 
     @Override
     public void setPowered(boolean flag) {
-        this.datawatcher.set(POWERED, flag);
+        this.entityData.set(POWERED, flag);
     }
 
     static {
-        STATE = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.INT);
-        POWERED = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.BOOLEAN);
-        IGNITED = DataWatcher.a(EntityCreeperPet.class, DataWatcherWrapper.BOOLEAN);
+        STATE = SynchedEntityData.defineId(EntityCreeperPet.class, EntityDataSerializers.INT);
+        POWERED = SynchedEntityData.defineId(EntityCreeperPet.class, EntityDataSerializers.BOOLEAN);
+        IGNITED = SynchedEntityData.defineId(EntityCreeperPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

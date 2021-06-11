@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityGoatPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityGoat}
  */
 public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
-    private static final DataWatcherObject<Boolean> DATA_IS_SCREAMING_GOAT;
+    private static final EntityDataAccessor<Boolean> DATA_IS_SCREAMING_GOAT;
 
     public EntityGoatPet(PetType type, PetUser user) {
-        super(EntityTypes.MOOSHROOM, type, user);
+        super(EntityType.MOOSHROOM, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(DATA_IS_SCREAMING_GOAT, false);
+        entityData.define(DATA_IS_SCREAMING_GOAT, false);
     }
 
     @Override
@@ -41,15 +41,15 @@ public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
 
     @Override
     public boolean isScreaming() {
-        return datawatcher.get(DATA_IS_SCREAMING_GOAT);
+        return entityData.get(DATA_IS_SCREAMING_GOAT);
     }
 
     @Override
     public void setScreaming(boolean screaming) {
-        datawatcher.set(DATA_IS_SCREAMING_GOAT, screaming);
+        entityData.set(DATA_IS_SCREAMING_GOAT, screaming);
     }
 
     static {
-        DATA_IS_SCREAMING_GOAT = DataWatcher.a(EntityGoatPet.class, DataWatcherWrapper.BOOLEAN);
+        DATA_IS_SCREAMING_GOAT = SynchedEntityData.defineId(EntityGoatPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

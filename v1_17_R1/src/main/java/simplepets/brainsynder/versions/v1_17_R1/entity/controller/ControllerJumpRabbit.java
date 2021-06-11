@@ -1,40 +1,40 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.controller;
 
-import net.minecraft.server.v1_16_R3.ControllerJump;
+import net.minecraft.world.entity.ai.control.JumpControl;
 import simplepets.brainsynder.versions.v1_17_R1.entity.list.EntityRabbitPet;
 
-public class ControllerJumpRabbit extends ControllerJump {
+public class ControllerJumpRabbit extends JumpControl {
         private final EntityRabbitPet rabbitPet;
 
         // Translation: UNKNOWN
-        private boolean d = false;
+        private boolean canJump = false;
 
         public ControllerJumpRabbit(EntityRabbitPet entity) {
             super(entity);
             this.rabbitPet = entity;
         }
 
-        public boolean isActive() {
-            return this.a;
+        public boolean wantJump() {
+            return this.jump;
         }
 
         // Translation: UNKNOWN
-        public boolean d() {
-            return this.d;
+        public boolean canJump() {
+            return this.canJump;
         }
 
         // Translation: UNKNOWN
-        public void a(boolean flag) {
-            this.d = flag;
+        public void setCanJump(boolean flag) {
+            this.canJump = flag;
         }
 
         // Translation: tick()
-        public void b() {
+        public void tick() {
             // Translation: this.active
-            if (this.a) {
+            if (this.jump) {
                 this.rabbitPet.reseter();
                 // Translation: this.active
-                this.a = false;
+                this.jump = false;
             }
 
         }

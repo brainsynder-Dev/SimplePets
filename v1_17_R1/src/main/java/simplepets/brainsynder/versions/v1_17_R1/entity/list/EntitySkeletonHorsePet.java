@@ -1,6 +1,6 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntitySkeletonHorsePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -11,6 +11,6 @@ import simplepets.brainsynder.versions.v1_17_R1.entity.branch.EntityHorseAbstrac
  */
 public class EntitySkeletonHorsePet extends EntityHorseAbstractPet implements IEntitySkeletonHorsePet {
     public EntitySkeletonHorsePet(PetType type, PetUser user) {
-        super(EntityTypes.SKELETON_HORSE, type, user);
+        super(EntityType.SKELETON_HORSE, type, user);
     }
 }

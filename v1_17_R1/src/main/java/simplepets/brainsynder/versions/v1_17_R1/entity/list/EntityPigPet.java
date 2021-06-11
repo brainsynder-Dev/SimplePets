@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityPig}
  */
 public class EntityPigPet extends EntityAgeablePet implements IEntityPigPet {
-    private static final DataWatcherObject<Boolean> SADDLE;
+    private static final EntityDataAccessor<Boolean> SADDLE;
 
     public EntityPigPet(PetType type, PetUser user) {
-        super(EntityTypes.PIG, type, user);
+        super(EntityType.PIG, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        datawatcher.register(SADDLE, false);
+        entityData.define(SADDLE, false);
     }
 
     @Override
@@ -41,15 +41,15 @@ public class EntityPigPet extends EntityAgeablePet implements IEntityPigPet {
 
     @Override
     public boolean isSaddled() {
-        return datawatcher.get(SADDLE);
+        return entityData.get(SADDLE);
     }
 
     @Override
     public void setSaddled(boolean flag) {
-        datawatcher.set(SADDLE, flag);
+        entityData.set(SADDLE, flag);
     }
 
     static {
-        SADDLE = DataWatcher.a(EntityPigPet.class, DataWatcherWrapper.BOOLEAN);
+        SADDLE = SynchedEntityData.defineId(EntityPigPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

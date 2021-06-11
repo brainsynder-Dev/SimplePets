@@ -1,28 +1,28 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityVexPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityVex}
  */
 public class EntityVexPet extends EntityPet implements IEntityVexPet {
-    protected static final DataWatcherObject<Byte> VEX_FLAGS;
+    protected static final EntityDataAccessor<Byte> VEX_FLAGS;
 
     public EntityVexPet(PetType type, PetUser user) {
-        super(EntityTypes.VEX, type, user);
+        super(EntityType.VEX, type, user);
     }
 
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.getDataWatcher().register(VEX_FLAGS, (byte) 0);
+        this.entityData.define(VEX_FLAGS, (byte) 0);
     }
 
     @Override
@@ -40,12 +40,12 @@ public class EntityVexPet extends EntityPet implements IEntityVexPet {
 
     @Override
     public boolean isPowered() {
-        return (datawatcher.get(VEX_FLAGS) & 1) != 0;
+        return (entityData.get(VEX_FLAGS) & 1) != 0;
     }
 
     @Override
     public void setPowered(boolean value) {
-        byte flag = this.datawatcher.get(VEX_FLAGS);
+        byte flag = this.entityData.get(VEX_FLAGS);
         int j;
         if (value) {
             j = flag | 1;
@@ -53,10 +53,10 @@ public class EntityVexPet extends EntityPet implements IEntityVexPet {
             j = flag & ~1;
         }
 
-        this.datawatcher.set(VEX_FLAGS, (byte) (j & 255));
+        this.entityData.set(VEX_FLAGS, (byte) (j & 255));
     }
 
     static {
-        VEX_FLAGS = DataWatcher.a(EntityVexPet.class, DataWatcherWrapper.BYTE);
+        VEX_FLAGS = SynchedEntityData.defineId(EntityVexPet.class, EntityDataSerializers.BYTE);
     }
 }

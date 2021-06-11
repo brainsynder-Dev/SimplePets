@@ -1,33 +1,33 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityPiglinPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.branch.EntityPiglinAbstractPet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityPiglin}
  */
 public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityPiglinPet {
-    private static final DataWatcherObject<Boolean> BABY;
-    private static final DataWatcherObject<Boolean> CHARGING;
-    private static final DataWatcherObject<Boolean> DANCING;
+    private static final EntityDataAccessor<Boolean> BABY;
+    private static final EntityDataAccessor<Boolean> CHARGING;
+    private static final EntityDataAccessor<Boolean> DANCING;
 
     public EntityPiglinPet(PetType type, PetUser user) {
-        super(EntityTypes.PIGLIN, type, user);
+        super(EntityType.PIGLIN, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(BABY, false);
-        this.datawatcher.register(CHARGING, false);
-        this.datawatcher.register(DANCING, false); // Makes them not shake by default
+        this.entityData.define(BABY, false);
+        this.entityData.define(CHARGING, false);
+        this.entityData.define(DANCING, false); // Makes them not shake by default
     }
 
     @Override
@@ -49,37 +49,37 @@ public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityP
 
     @Override
     public boolean isCharging() {
-        return datawatcher.get(CHARGING);
+        return entityData.get(CHARGING);
     }
 
     @Override
     public void setCharging(boolean charging) {
-        datawatcher.set(CHARGING, charging);
+        entityData.set(CHARGING, charging);
     }
 
     @Override
     public boolean isDancing() {
-        return datawatcher.get(DANCING);
+        return entityData.get(DANCING);
     }
 
     @Override
     public void setDancing(boolean dancing) {
-        datawatcher.set(DANCING, dancing);
+        entityData.set(DANCING, dancing);
     }
 
     @Override
     public boolean isBaby() {
-        return datawatcher.get(BABY);
+        return entityData.get(BABY);
     }
 
     @Override
     public void setBaby(boolean value) {
-        datawatcher.set(BABY, value);
+        entityData.set(BABY, value);
     }
 
     static {
-        BABY = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
-        CHARGING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
-        DANCING = DataWatcher.a(EntityPiglinPet.class, DataWatcherWrapper.BOOLEAN);
+        BABY = SynchedEntityData.defineId(EntityPiglinPet.class, EntityDataSerializers.BOOLEAN);
+        CHARGING = SynchedEntityData.defineId(EntityPiglinPet.class, EntityDataSerializers.BOOLEAN);
+        DANCING = SynchedEntityData.defineId(EntityPiglinPet.class, EntityDataSerializers.BOOLEAN);
     }
 }

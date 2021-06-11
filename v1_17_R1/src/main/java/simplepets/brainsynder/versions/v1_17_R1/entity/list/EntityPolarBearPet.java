@@ -1,29 +1,29 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.server.v1_16_R3.DataWatcher;
-import net.minecraft.server.v1_16_R3.DataWatcherObject;
-import net.minecraft.server.v1_16_R3.EntityTypes;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityPolarBearPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
-import simplepets.brainsynder.versions.v1_17_R1.utils.DataWatcherWrapper;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityPolarBear}
  */
 public class EntityPolarBearPet extends EntityAgeablePet implements IEntityPolarBearPet {
-    private static final DataWatcherObject<Boolean> IS_STANDING;
+    private static final EntityDataAccessor<Boolean> IS_STANDING;
 
     public EntityPolarBearPet(PetType type, PetUser user) {
-        super(EntityTypes.POLAR_BEAR, type, user);
+        super(EntityType.POLAR_BEAR, type, user);
     }
 
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        this.datawatcher.register(IS_STANDING, Boolean.FALSE);
+        this.entityData.define(IS_STANDING, Boolean.FALSE);
     }
 
     @Override
@@ -41,15 +41,15 @@ public class EntityPolarBearPet extends EntityAgeablePet implements IEntityPolar
 
     @Override
     public void setStandingUp(boolean flag) {
-        this.datawatcher.set(IS_STANDING, flag);
+        this.entityData.set(IS_STANDING, flag);
     }
 
     @Override
     public boolean isStanding() {
-        return this.datawatcher.get(IS_STANDING);
+        return this.entityData.get(IS_STANDING);
     }
 
     static {
-        IS_STANDING = DataWatcher.a(EntityPolarBearPet.class, DataWatcherWrapper.BOOLEAN);
+        IS_STANDING = SynchedEntityData.defineId(EntityPolarBearPet.class, EntityDataSerializers.BOOLEAN);
     }
 }
