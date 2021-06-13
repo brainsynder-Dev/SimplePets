@@ -48,6 +48,13 @@
         <module.info>-IGNORE</module.info>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
@@ -58,6 +65,7 @@
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
         </dependency>
     </dependencies>
