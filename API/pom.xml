@@ -18,4 +18,23 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-API (DEVELOPERS ONLY)</module.info>
     </properties>
+
+
+
+
+    <repositories>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.17-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 </project>
