@@ -94,6 +94,7 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
+
     <pluginRepositories>
         <pluginRepository>
             <id>apache.snapshots</id>
@@ -102,6 +103,12 @@
     </pluginRepositories>
 
     <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>1.17-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
@@ -112,13 +119,6 @@
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
             <version>${bslib.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
-            <classifier>remapped-mojang</classifier>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

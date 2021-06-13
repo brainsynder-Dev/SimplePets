@@ -18,13 +18,4 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-API (DEVELOPERS ONLY)</module.info>
     </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.17-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
 </project>
