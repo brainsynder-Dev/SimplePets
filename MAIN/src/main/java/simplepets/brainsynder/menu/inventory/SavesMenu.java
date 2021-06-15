@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.inventory;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
@@ -15,10 +16,12 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.SavesHolder;
 import simplepets.brainsynder.menu.items.list.Air;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 import java.util.*;
@@ -97,9 +100,26 @@ public class SavesMenu extends CustomInventory {
             }
             placeHolder--;
         }
+        ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
+
+        List<PetUser.Entry<PetType, StorageTagCompound>> savedPets = Lists.newArrayList();
+        user.getSavedPets().forEach(entry -> {
+            PetType type = entry.getKey();
+
+            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                if (!config.isEnabled()) return;
+                if (!type.isSupported()) return;
+                if (!spawnUtil.isRegistered(type)) return;
+                if (player instanceof Player) {
+                    if (!Utilities.hasPermission(player, type.getPermission())) return;
+                    savedPets.add(entry);
+                }
+            });
+
+        });
 
 
-        ListPager<PetUser.Entry<PetType, StorageTagCompound>> pages = new ListPager<>(maxPets, new ArrayList<>(user.getSavedPets()));
+        ListPager<PetUser.Entry<PetType, StorageTagCompound>> pages = new ListPager<>(maxPets, new ArrayList<>(savedPets));
 
         if (pagerMap.containsKey(player.getName())) {
             pages = pagerMap.get(player.getName());
