@@ -2,6 +2,7 @@ package simplepets.brainsynder.api.entity;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.entity.Entity;
+import simplepets.brainsynder.api.entity.misc.IBurnablePet;
 import simplepets.brainsynder.api.entity.misc.IEntityBase;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -12,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Function;
 
-public interface IEntityPet extends IEntityBase {
+public interface IEntityPet extends IEntityBase, IBurnablePet {
     /**
      * Will teleport the pet to its owner
      */

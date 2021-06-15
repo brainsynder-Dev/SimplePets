@@ -51,6 +51,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private final boolean canGlow = true;
     private final boolean isGlowing = false;
     private final boolean autoRemove = true;
+    private boolean frozen = false;
     private boolean silent = false;
     private boolean ignoreVanish = false;
     private int standTime = 0;
@@ -105,13 +106,24 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     @Override
+    public boolean isBurning() {
+        return getSharedFlag(0);
+    }
+
+    @Override
+    public void setBurning(boolean var) {
+        setSharedFlagOnFire(var);
+    }
+
+    @Override
     public boolean isFrozen() {
         return isFullyFrozen();
     }
 
     @Override
     public void setFrozen(boolean frozen) {
-        setTicksFrozen(frozen ? 140 : 0);
+        this.frozen = frozen;
+        setTicksFrozen(frozen ? 150 : 0);
     }
 
     @Override
@@ -184,6 +196,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             this.additional.forEach(additional::setTag);
             object.setTag("additional", additional);
         }
+
+        object.setBoolean("frozen", isFrozen());
+        object.setBoolean("burning", isBurning());
         return object;
     }
 
@@ -208,6 +223,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             StorageTagCompound additional = object.getCompoundTag("additional");
             additional.getKeySet().forEach(pluginKey -> this.additional.put(pluginKey, additional.getCompoundTag(pluginKey)));
         }
+
+        if (object.hasKey("frozen")) setFrozen(object.getBoolean("frozen", false));
+        if (object.hasKey("burning")) setBurning(object.getBoolean("burning", false));
     }
 
     @Override
@@ -298,7 +316,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         net.minecraft.world.entity.player.Player owner = ((CraftPlayer) user.getPlayer()).getHandle();
         if (jumping) {
             if (isOnGround(this)) {
-                setDeltaMovement(getDeltaMovement().x, 0.5, getDeltaMovement().z);
+                jumpFromGround();
             } else {
                 SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
                     if (config.canFly((Player) user.getPlayer())) {
@@ -400,6 +418,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
                 }
             }
         }
+
+        if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
 
         if (user.getPlayer() != null) {
             Player player = (Player) user.getPlayer();

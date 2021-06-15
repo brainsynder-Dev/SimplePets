@@ -363,6 +363,8 @@ public enum PetType {
         this.entityClass = entityClass;
         LinkedList<Class<? extends PetData>> list = Lists.newLinkedList();
         list.addFirst(SilentData.class);
+        list.addFirst(BurningData.class);
+        list.addFirst(FrozenData.class);
         list.addAll(Lists.newArrayList(petData));
         this.builder = builder.withName(Colorize.translateBungeeHex("&#c8f792" + Capitalise.capitalize(name().toLowerCase().replace("_", " "))));
 

@@ -8,7 +8,4 @@ import simplepets.brainsynder.api.pet.PetType;
 
 @EntityPetType(petType = PetType.BLAZE)
 public interface IEntityBlazePet extends IEntityPet, IFlyableEntity {
-    boolean isBurning();
-
-    void setBurning(boolean var);
 }

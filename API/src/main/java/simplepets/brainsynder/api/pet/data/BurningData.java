@@ -3,11 +3,11 @@ package simplepets.brainsynder.api.pet.data;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
-import simplepets.brainsynder.api.entity.hostile.IEntityBlazePet;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.PetData;
 
 @Namespace(namespace = "burning")
-public class BurningData extends PetData<IEntityBlazePet> {
+public class BurningData extends PetData<IEntityPet> {
     public BurningData() {
         addDefaultItem("true", new ItemBuilder(Material.PLAYER_HEAD)
                 .withName("&#c8c8c8{name}: &atrue")
@@ -23,12 +23,12 @@ public class BurningData extends PetData<IEntityBlazePet> {
     }
 
     @Override
-    public void onLeftClick(IEntityBlazePet entity) {
+    public void onLeftClick(IEntityPet entity) {
         entity.setBurning(!entity.isBurning());
     }
 
     @Override
-    public Object value(IEntityBlazePet entity) {
+    public Object value(IEntityPet entity) {
         return entity.isBurning();
     }
 }
