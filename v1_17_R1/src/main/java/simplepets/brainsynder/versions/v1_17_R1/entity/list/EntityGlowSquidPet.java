@@ -10,7 +10,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityGlowSquid}
+ * NMS: {@link net.minecraft.world.entity.GlowSquid}
  */
 public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSquidPet {
     private static final EntityDataAccessor<Integer> DATA_DARK_TICKS_REMAINING;
@@ -44,7 +44,7 @@ public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSqu
     }
 
     @Override
-    public void setSquidGlowing(boolean glowing) {
+    public void setSquidGlowing(boolean glowing) { // Does this even make the GlowSquid darker?!
         entityData.set(DATA_DARK_TICKS_REMAINING, glowing ? 0 : 100);
     }
 
