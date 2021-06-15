@@ -53,7 +53,7 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_ARMORSTAND_FALL, weight = PetWeight.LIGHT)
     ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND),
 
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT) // TODO: Add sound
+    @PetCustomization(ambient = SoundMaker.ENTITY_AXOLOTL_IDLE_WATER, weight = PetWeight.LIGHT) // TODO: Add sound
     AXOLOTL(IEntityAxolotlPet.class, "5c138f401c67fc2e1e387d9c90a9691772ee486e8ddbf2ed375fc8348746f936",
             AgeData.class,
             AxolotlVariantData.class,
@@ -132,11 +132,13 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_ZOMBIE_AMBIENT, weight = PetWeight.YOUR_KILLING_ME)
     GIANT(IEntityGiantPet.class, Material.ZOMBIE_HEAD),
 
-    @PetCustomization(ambient = SoundMaker.ENTITY_SQUID_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
+    @PetCustomization(ambient = SoundMaker.ENTITY_GLOW_SQUID_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     GLOW_SQUID(IEntityGlowSquidPet.class, "3e94a1bb1cb00aaa153a74daf4b0eea20b8974522fe9901eb55aef478ebeff0d",
             GlowingData.class),
+
+    @PetCustomization(ambient = SoundMaker.ENTITY_GOAT_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     GOAT(IEntityGoatPet.class, "957607099d06b7a8b1327093cd0a488be7c9f50b6121b22151271b59170f3c21",
-            AgeData.class), // TODO: 1.17 Mob
+            AgeData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_GUARDIAN_AMBIENT, weight = PetWeight.HEAVY)
     GUARDIAN(IEntityGuardianPet.class, "a0bf34a71e7715b6ba52d5dd1bae5cb85f773dc9b0d457b4bfc5f9dd3cc7c94"),
