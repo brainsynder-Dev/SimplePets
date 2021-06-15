@@ -28,4 +28,13 @@ public class PermissionData {
     public String getPermission() {
         return permission;
     }
+
+    @Override
+    public String toString() {
+        return "PermissionData{" +
+                "permission='" + permission + '\'' +
+                ", type=" + type +
+                ", description='" + description + '\'' +
+                '}';
+    }
 }
