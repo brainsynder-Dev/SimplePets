@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import simplepets.brainsynder.api.ISpawnUtil;
+import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
@@ -141,7 +143,12 @@ public class SavesMenu extends CustomInventory {
                         stack = builder.replaceString("{player}", user.getPlayer().getName()).replaceString("{type}", type.getName()).build();
                         storageMap.put(compound, new PetUser.Entry<>(type, stack));
                     }
-                    inv.addItem(stack);
+
+                    PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, entry.getKey(), stack);
+                    Bukkit.getPluginManager().callEvent(event);
+
+
+                    if (!event.isCancelled()) inv.addItem(event.getItem());
                 }
             });
         }

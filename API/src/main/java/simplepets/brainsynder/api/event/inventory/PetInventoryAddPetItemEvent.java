@@ -6,7 +6,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
 /**
- * This event is called when a pets item is added to the Selection GUI
+ * This event is called when a pets item is added to the Selection/Saves GUI
  */
 public class PetInventoryAddPetItemEvent extends CancellablePetEvent {
     private final PetUser user;
