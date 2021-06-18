@@ -179,6 +179,14 @@ public class AddonManager {
 
     public void toggleAddon(PetAddon addon, boolean enabled) {
         if (enabled && isSupported(addon.getSupportedVersion())) {
+
+            new AddonConfig(new File(folder + File.separator+"configs"), addon.getNamespace().namespace()+".yml") {
+                @Override
+                public void loadDefaults() {
+                    addon.loadDefaults(this);
+                }
+            };
+
             addon.init();
             Bukkit.getPluginManager().registerEvents(addon, plugin);
         } else {
@@ -209,8 +217,8 @@ public class AddonManager {
     public boolean isSupported(String version) {
         if ((version == null) || (version.isEmpty())) return true;
         String plugin = PetCore.getInstance().getDescription().getVersion();
-        if (!plugin.contains(" (build ")) return false; // Seems to be a different format (Custom?)
-        if (!version.contains(" (build ")) return false; // Seems to be a different format (Custom?)
+        if (!plugin.contains("-BUILD-")) return false; // Seems to be a different format (Custom?)
+        if (!version.contains("-BUILD-")) return false; // Seems to be a different format (Custom?)
         double main = Double.parseDouble(AdvString.before("-BUILD-", plugin));
         double checkMain = Double.parseDouble(AdvString.before("-BUILD-", version));
 
