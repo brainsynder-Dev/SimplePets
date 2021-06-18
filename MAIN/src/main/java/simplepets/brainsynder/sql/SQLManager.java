@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 /**
  * This class was provided by {@link https://github.com/Thatsmusic99}
@@ -96,9 +97,18 @@ public abstract class SQLManager {
         }
     }
 
-    public Connection getConnection() throws SQLException {
-        if (usingSqlite) return connection;
-        return source.getConnection();
+    // This method should keep SQLite connections open, while closing regular SQL connections
+    public void handleConnection (Consumer<Connection> consumer) {
+        if (usingSqlite) {
+            consumer.accept(connection);
+            return;
+        }
+
+        try (Connection connection = source.getConnection()) {
+            consumer.accept(connection);
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
     public String getTable(String suffix) {
@@ -122,36 +132,40 @@ public abstract class SQLManager {
     //SHOW COLUMNS FROM `tbl_name`; // Lists columns
     public void hasColumn(String table, String column, SQLCallback<Boolean> callback) {
         CompletableFuture.runAsync(() -> {
-            try {
-                DatabaseMetaData md2 = getConnection().getMetaData();
-                ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
-                callback.onSuccess(rsTables.next());
-            } catch (Exception e) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
-                callback.onSuccess(false);
-            }
+            handleConnection(connection -> {
+                try {
+                    DatabaseMetaData md2 = connection.getMetaData();
+                    ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
+                    callback.onSuccess(rsTables.next());
+                } catch (Exception e) {
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
+                    callback.onSuccess(false);
+                }
+            });
         });
     }
 
     public void modifyColumn(String table, String column, String type) {
         CompletableFuture.runAsync(() -> {
-            try {
-                Statement statement = getConnection().createStatement();
-                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
-            } catch (Exception e) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-            }
+            handleConnection(connection -> {
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
+                } catch (SQLException throwables) {
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+                }
+            });
         });
     }
 
     public void addColumn(String table, String column, String type) {
         CompletableFuture.runAsync(() -> {
-            try {
-                Statement statement = getConnection().createStatement();
-                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
-            } catch (Exception e) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-            }
+            handleConnection(connection -> {
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
+                } catch (SQLException throwables) {
+                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+                }
+            });
         });
     }
 
