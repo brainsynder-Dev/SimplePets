@@ -15,8 +15,8 @@ import java.util.List;
 
 @ICommand(
         name = "reload",
-        usage = "[type]",
-        description = "Regenerates the a file/folder back to default (ignores plugin addons)"
+        usage = "[selector]",
+        description = "Reloads a selected file/folder"
 )
 @Permission(permission = "reload", adminCommand = true)
 public class ReloadCommand extends PetSubCommand {
