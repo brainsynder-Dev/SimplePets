@@ -103,7 +103,7 @@ public class PermissionsCommand extends PetSubCommand {
 
 
         // Addon permissions
-        if (!AddonPermissions.getPermissions().isEmpty()) master.append("    # Here is all the Addon permissions (if there are any)\n\n");
+        if ((!AddonPermissions.getPermissions().isEmpty()) || (!AddonPermissions.getParentPermissions().isEmpty())) master.append("    # Here is all the Addon permissions (if there are any)\n\n");
         AddonPermissions.getPermissions().forEach((addonName, list) -> {
             master.append("    # Permissions for the ").append(addonName).append(" addon\n");
 
@@ -113,6 +113,22 @@ public class PermissionsCommand extends PetSubCommand {
 
                 master.append("    ").append(data.getPermission()).append(":").append(description).append("\n")
                         .append("        default: ").append(data.getType().toString()).append("\n");
+            });
+        });
+
+        AddonPermissions.getParentPermissions().forEach((addonName, permissionMap) -> {
+            if (!master.toString().contains("    # Permissions for the "+addonName+" addon"))
+                master.append("    # Permissions for the ").append(addonName).append(" addon\n");
+            permissionMap.forEach((parent, children) -> {
+                String parentDescription = " # "+parent.getDescription();
+                if (parentDescription.equals(" # ")) parentDescription = "";
+                master.append("    ").append(parent.getPermission()).append(":  ").append(parentDescription).append("\n");
+
+                children.forEach(data -> {
+                    String description = " # "+data.getDescription();
+                    if (description.equals(" # ")) description = "";
+                    master.append("        ").append(data.getPermission()).append(": ").append(description).append("\n");
+                });
             });
         });
         master.append("\n");

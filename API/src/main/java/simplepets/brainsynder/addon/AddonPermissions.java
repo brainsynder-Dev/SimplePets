@@ -78,9 +78,12 @@ public class AddonPermissions {
 
         Map<PermissionData, List<PermissionData>> map = parentPermissions.getOrDefault(name, new HashMap<>());
         List<PermissionData> children = map.getOrDefault(parentPermission, new ArrayList<>());
+        if (children.isEmpty()) {
+            SimplePets.getDebugLogger().debug(REGISTER, "Registering '"+parentPermission.getPermission()+"' permission and its children permissions for the '"+addon.getNamespace().namespace()+"' addon");
+        }
+
         if (!children.contains(data)) {
             children.add(data);
-            SimplePets.getDebugLogger().debug(REGISTER, "Registering '"+data.getPermission()+"' permission for the '"+addon.getNamespace().namespace()+"' addon");
             map.put(parentPermission, children);
             parentPermissions.put(name, map);
         }
