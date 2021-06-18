@@ -178,6 +178,13 @@ public class PetOwner implements PetUser {
         });
         updateDatabase();
         removePets();
+        this.nameMap.clear();
+        this.vehicle = null;
+        this.savedPetData.clear();
+        this.hatPets.clear();
+        this.ownedPets.clear();
+        this.petMap.clear();
+        this.respawnPets.clear();
     }
 
     /**
