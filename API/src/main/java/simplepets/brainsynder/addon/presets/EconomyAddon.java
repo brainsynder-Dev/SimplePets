@@ -30,25 +30,31 @@ public abstract class EconomyAddon extends PetAddon {
     private String prefix, bypassPerm, freePrice, bypassPrice, insufficientFunds, successfulPayment, paid, boolTrue, boolFalse;
     private List<String> lore;
     private boolean hidePrice, payPerUse;
+    private Map<PetType, String> typePermissions;
 
     @Override
     public void init() {
-        AddonPermissions.register(this, new PermissionData(bypassPerm).setDescription("Players that have this permission can bypass paying for pets"));
+        PermissionData parent = new PermissionData(bypassPerm).setDescription("This is the master permission, Will ignore all individual bypass permissions listed below");
+
+        typePermissions.forEach((type, s) -> {
+            AddonPermissions.register(this, parent, new PermissionData(s).setDescription("This is a bypass permission for the "+type.getName()+" pet, who ever has this permission will not have to pay for this pet"));
+        });
     }
 
     @Override
     public void cleanup() {
         if (priceMap != null) priceMap.clear();
+        if (typePermissions != null) typePermissions.clear();
 
+        typePermissions = null;
         bypassPerm = null;
     }
 
     @Override
     public void loadDefaults(AddonConfig config) {
-        String bypassPermission = "pet."+getNamespace().namespace().toLowerCase().replace(" ", "_")+".bypass";
+        this.typePermissions = Maps.newHashMap();
 
-        config.addDefault("bypass_permission", bypassPermission,
-                "This is the bypass permission, who ever has this permission will not have to pay");
+        String bypassPermission = "pet."+getNamespace().namespace().toLowerCase().replace(" ", "_")+".bypass";
 
         config.addDefault("Hide-Price-If-Bypassed", true,
                 "Disabling this will make the items show the price, but if the player has bypass permissions he wont have to pay\n" +
@@ -105,11 +111,16 @@ public abstract class EconomyAddon extends PetAddon {
                         "- {price} (price of the pet)\n" +
                         "- {purchased} (true/false if the player purchased the pet)");
 
+        config.addDefault("bypass_permissions.parent", bypassPermission,
+                "This is the master permission, Will ignore all individual bypass permissions listed below");
+
         for (PetType type : PetType.values()) {
             if (type == PetType.UNKNOWN) continue;
             if (!type.isSupported()) continue;
             config.addDefault("type." + type.getName(), getDefaultPrice(), "The price of the " + type.getName() + " pet");
+            config.addDefault("bypass_permissions.type."+type.getName(), bypassPermission+"."+type.getName(), "This is a bypass permission for the "+type.getName()+" pet, who ever has this permission will now have to pay for this pet");
 
+            typePermissions.put(type, config.getString("bypass_permissions.type."+type.getName(), bypassPermission+"."+type.getName()));
             priceMap.put(type, config.getDouble("type." + type.getName(), getDefaultPrice()));
         }
 
@@ -150,7 +161,7 @@ public abstract class EconomyAddon extends PetAddon {
         String price = String.valueOf(priceMap.getOrDefault(type, 2000.0));
         if (price.equals("-1")) price = freePrice;
 
-        if (hidePrice && ((Player) event.getUser().getPlayer()).hasPermission(bypassPerm)) price = bypassPrice;
+        if (hidePrice && (AddonPermissions.hasPermission(this, (Player) event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
         boolean contains = petArray.contains(type);
         for (String line : lore)
             maker.addLore(line.replace("{price}", price).replace("{purchased}", String.valueOf(var(contains))));
@@ -161,7 +172,7 @@ public abstract class EconomyAddon extends PetAddon {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSelect(PetSelectTypeEvent event) {
         if (!isEnabled()) return;
-        if (((Player) event.getUser().getPlayer()).hasPermission(bypassPerm)) return;
+        if (AddonPermissions.hasPermission(this, (Player) event.getUser().getPlayer(), typePermissions.get(event.getPetType()))) return;
 
         double price = priceMap.getOrDefault(event.getPetType(), 2000.0);
         if (price == -1) return; // The pet is free, return
