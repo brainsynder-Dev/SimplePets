@@ -5,7 +5,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
-import org.spigotmc.event.entity.EntityMountEvent;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.managers.InventoryManager;
@@ -25,15 +24,16 @@ public class InteractListener implements Listener {
         });
     }
 
-    @EventHandler
-    public void onInteract(EntityMountEvent e) {
-        SimplePets.getSpawnUtil().getHandle(e.getMount()).ifPresent(handle -> {
-            if (handle instanceof IEntityPet) {
-                IEntityPet entity = (IEntityPet) handle;
-                e.setCancelled(!entity.getPetUser().isPetVehicle(entity.getPetType()));
-            }
-        });
-    }
+//    Is this even used anymore?
+//    @EventHandler
+//    public void onInteract(EntityMountEvent e) {
+//        SimplePets.getSpawnUtil().getHandle(e.getMount()).ifPresent(handle -> {
+//            if (handle instanceof IEntityPet) {
+//                IEntityPet entity = (IEntityPet) handle;
+//                e.setCancelled(!entity.getPetUser().isPetVehicle(entity.getPetType()));
+//            }
+//        });
+//    }
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEntityEvent e) {
