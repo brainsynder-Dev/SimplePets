@@ -1,6 +1,7 @@
 package simplepets.brainsynder.commands.list;
 
 import lib.brainsynder.commands.annotations.ICommand;
+import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -29,11 +30,17 @@ public class DatabaseCommand extends PetSubCommand {
                 try {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Player Data SQL &#b35349======&#de9790-------"));
                     sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79a" + (PlayerSQL.getInstance().isUsingSqlite() ? "SQLite" : "MySQL")));
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Status: ") + (PlayerSQL.getInstance().getConnection().isClosed() ? "§cDISCONNECTED" : "§aCONNECTED"));
+                    Tellraw raw = Tellraw.fromLegacy(" &#e1eb5b- &#d1c9c9Status: ");
+                    if (PlayerSQL.getInstance().isUsingSqlite()) {
+                        raw.then("CONNECTED").color(ChatColor.GREEN).tooltip("&7SQLite connections are kept connected");
+                    }else{
+                        raw.then("IDLE").color("#e3aa4f").tooltip("&7MySQL connections are kept closed until they are needed","&7That's what the IDLE state is");
+                    }
+                    raw.send(sender);
                     sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Players In Database: &#e3c79a"+playerDataCount));
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Inventory Data SQL &#b35349====&#de9790------"));
                     sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79aSQLite"));
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Status: ") + (InventorySQL.getInstance().getConnection().isClosed() ? "§cDISCONNECTED" : "§aCONNECTED"));
+                    Tellraw.fromLegacy(" &#e1eb5b- &#d1c9c9Status: ").then("CONNECTED").color(ChatColor.GREEN).tooltip("&7SQLite connections are kept connected").send(sender);
                     sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Inventories In Database: &#e3c79a"+invCount));
                 }catch (Exception e) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.RED + "Failed to fetch database information");

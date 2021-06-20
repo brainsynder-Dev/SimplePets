@@ -1,6 +1,6 @@
 package simplepets.brainsynder.sql;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -56,7 +56,7 @@ public abstract class SQLManager {
         }
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Error using SQLite", true);
             loadSqlite();
@@ -70,8 +70,12 @@ public abstract class SQLManager {
             source.setUser(user);
             source.setDatabaseName(databaseName);
             source.setServerName(host);
-            source.setAutoReconnect(true);
-            source.setUseSSL(ssl);
+            try {
+                source.setAutoReconnect(true);
+                source.setUseSSL(ssl);
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
             new BukkitRunnable() {
                 @Override
                 public void run() {
