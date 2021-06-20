@@ -9,3 +9,1649 @@ commands:
     pet:
         description: Main SimplePets command
         aliases: [pets, simplepets, simplepet]
+
+permissions:
+    pet.name.bypass: # This permission bypasses any of the pet renaming checks
+        default: op
+    pet.name.color: # This permission is to allow players to add color codes when renaming their pet
+        default: true
+    pet.name.color.hex: # This permission is to allow players to add HEX color codes when renaming their pet (Eg: &#FFFFFF)
+        default: op
+
+
+    pet.commands.summon: # Grants access to the '/pet summon' command
+        default: true # Allows players to use them by default
+
+    pet.commands.modify: # Grants access to the '/pet modify' command
+        default: false # Not given to players by default
+
+    pet.commands.remove: # Grants access to the '/pet remove' command
+        default: true # Allows players to use them by default
+
+    pet.commands.list: # Grants access to the '/pet list' command
+        default: true # Allows players to use them by default
+
+    pet.commands.gui: # Grants access to the '/pet gui' command
+        default: true # Allows players to use them by default
+
+    pet.commands.rename: # Grants access to the '/pet rename' command
+        default: true # Allows players to use them by default
+
+    pet.commands.purchased: # Grants access to the '/pet purchased' command
+        default: false # Not given to players by default
+
+    pet.commands.permissions: # Grants access to the '/pet permissions' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.regenerate: # Grants access to the '/pet regenerate' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.debug: # Grants access to the '/pet debug' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.addon: # Grants access to the '/pet addon' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.database: # Grants access to the '/pet database' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.reload: # Grants access to the '/pet reload' command
+        default: op # Only Operators should be given this permission
+
+    pet.commands.issue_report: # Grants access to the '/pet report' command
+        default: op # Only Operators should be given this permission
+
+
+    pet.commands.*: # Grants the player to use all commands (NOT recommended)
+        default: false
+        children:
+            pet.commands.summon: true
+            pet.commands.summon.all: true  # Will allow the player to run the command for all the pets
+            pet.commands.summon.other: true  # Will allow the player to spawn/change other players data
+            pet.commands.summon.all_other: true  # Will allow the player spawn/change for all the selected player pets
+            pet.commands.summon.nbt: true  # Will allow the player to input NBT data to modify the pet (Will bypass the data permissions for the pet)
+            pet.commands.modify: true
+            pet.commands.modify.other: true  # Will allow the player to spawn/change other players data
+            pet.commands.remove: true
+            pet.commands.remove.other: true  # Will allow the player to spawn/change other players data
+            pet.commands.list: true
+            pet.commands.gui: true
+            pet.commands.rename: true
+            pet.commands.rename.other: true  # Will allow the player to spawn/change other players data
+            pet.commands.purchased: true
+            pet.commands.permissions: true
+            pet.commands.regenerate: true
+            pet.commands.debug: true
+            pet.commands.addon: true
+            pet.commands.database: true
+            pet.commands.reload: true
+            pet.commands.issue_report: true
+
+
+
+    pet.type.*: # Grants access to all pets
+        default: false
+        children:
+            pet.type.passive: true
+            pet.type.hostile: true
+    pet.type.passive: # Will grant access to all pets that would be passive in vanilla
+        default: false
+        children:
+            pet.type.armorstand.*: true
+            pet.type.axolotl.*: true
+            pet.type.bat.*: true
+            pet.type.bee.*: true
+            pet.type.cat.*: true
+            pet.type.chicken.*: true
+            pet.type.cod.*: true
+            pet.type.cow.*: true
+            pet.type.donkey.*: true
+            pet.type.fox.*: true
+            pet.type.glowsquid.*: true
+            pet.type.goat.*: true
+            pet.type.horse.*: true
+            pet.type.irongolem.*: true
+            pet.type.llama.*: true
+            pet.type.mooshroom.*: true
+            pet.type.mule.*: true
+            pet.type.ocelot.*: true
+            pet.type.panda.*: true
+            pet.type.parrot.*: true
+            pet.type.pig.*: true
+            pet.type.polarbear.*: true
+            pet.type.rabbit.*: true
+            pet.type.salmon.*: true
+            pet.type.sheep.*: true
+            pet.type.skeletonhorse.*: true
+            pet.type.snowman.*: true
+            pet.type.squid.*: true
+            pet.type.strider.*: true
+            pet.type.traderllama.*: true
+            pet.type.tropicalfish.*: true
+            pet.type.turtle.*: true
+            pet.type.villager.*: true
+            pet.type.wanderingtrader.*: true
+            pet.type.wolf.*: true
+            pet.type.zombiehorse.*: true
+
+
+    pet.type.hostile: # Will grant access to all the pets that would be hostile in vanilla
+        default: false
+        children:
+            pet.type.blaze.*: true
+            pet.type.cavespider.*: true
+            pet.type.creeper.*: true
+            pet.type.dolphin.*: true
+            pet.type.drowned.*: true
+            pet.type.elderguardian.*: true
+            pet.type.enderman.*: true
+            pet.type.endermite.*: true
+            pet.type.evoker.*: true
+            pet.type.ghast.*: true
+            pet.type.giant.*: true
+            pet.type.guardian.*: true
+            pet.type.hoglin.*: true
+            pet.type.husk.*: true
+            pet.type.illusioner.*: true
+            pet.type.magmacube.*: true
+            pet.type.phantom.*: true
+            pet.type.piglin.*: true
+            pet.type.piglinbrute.*: true
+            pet.type.pillager.*: true
+            pet.type.pufferfish.*: true
+            pet.type.ravager.*: true
+            pet.type.shulker.*: true
+            pet.type.silverfish.*: true
+            pet.type.skeleton.*: true
+            pet.type.slime.*: true
+            pet.type.spider.*: true
+            pet.type.stray.*: true
+            pet.type.vex.*: true
+            pet.type.vindicator.*: true
+            pet.type.warden.*: true
+            pet.type.witch.*: true
+            pet.type.wither.*: true
+            pet.type.witherskeleton.*: true
+            pet.type.zoglin.*: true
+            pet.type.zombie.*: true
+            pet.type.zombievillager.*: true
+            pet.type.zombifiedpiglin.*: true
+
+
+    pet.type.*.data.*: # Will grant all data permissions for all pets
+        default: false
+        children:
+            pet.type.armorstand.data.*: true
+            pet.type.axolotl.data.*: true
+            pet.type.bat.data.*: true
+            pet.type.bee.data.*: true
+            pet.type.blaze.data.*: true
+            pet.type.cat.data.*: true
+            pet.type.cavespider.data.*: true
+            pet.type.chicken.data.*: true
+            pet.type.cod.data.*: true
+            pet.type.cow.data.*: true
+            pet.type.creeper.data.*: true
+            pet.type.dolphin.data.*: true
+            pet.type.donkey.data.*: true
+            pet.type.drowned.data.*: true
+            pet.type.elderguardian.data.*: true
+            pet.type.enderman.data.*: true
+            pet.type.endermite.data.*: true
+            pet.type.evoker.data.*: true
+            pet.type.fox.data.*: true
+            pet.type.ghast.data.*: true
+            pet.type.giant.data.*: true
+            pet.type.glowsquid.data.*: true
+            pet.type.goat.data.*: true
+            pet.type.guardian.data.*: true
+            pet.type.hoglin.data.*: true
+            pet.type.horse.data.*: true
+            pet.type.husk.data.*: true
+            pet.type.illusioner.data.*: true
+            pet.type.irongolem.data.*: true
+            pet.type.llama.data.*: true
+            pet.type.magmacube.data.*: true
+            pet.type.mooshroom.data.*: true
+            pet.type.mule.data.*: true
+            pet.type.ocelot.data.*: true
+            pet.type.panda.data.*: true
+            pet.type.parrot.data.*: true
+            pet.type.phantom.data.*: true
+            pet.type.pig.data.*: true
+            pet.type.piglin.data.*: true
+            pet.type.piglinbrute.data.*: true
+            pet.type.pillager.data.*: true
+            pet.type.polarbear.data.*: true
+            pet.type.pufferfish.data.*: true
+            pet.type.rabbit.data.*: true
+            pet.type.ravager.data.*: true
+            pet.type.salmon.data.*: true
+            pet.type.sheep.data.*: true
+            pet.type.shulker.data.*: true
+            pet.type.silverfish.data.*: true
+            pet.type.skeleton.data.*: true
+            pet.type.skeletonhorse.data.*: true
+            pet.type.slime.data.*: true
+            pet.type.snowman.data.*: true
+            pet.type.spider.data.*: true
+            pet.type.squid.data.*: true
+            pet.type.stray.data.*: true
+            pet.type.strider.data.*: true
+            pet.type.traderllama.data.*: true
+            pet.type.tropicalfish.data.*: true
+            pet.type.turtle.data.*: true
+            pet.type.vex.data.*: true
+            pet.type.villager.data.*: true
+            pet.type.vindicator.data.*: true
+            pet.type.wanderingtrader.data.*: true
+            pet.type.warden.data.*: true
+            pet.type.witch.data.*: true
+            pet.type.wither.data.*: true
+            pet.type.witherskeleton.data.*: true
+            pet.type.wolf.data.*: true
+            pet.type.zoglin.data.*: true
+            pet.type.zombie.data.*: true
+            pet.type.zombiehorse.data.*: true
+            pet.type.zombievillager.data.*: true
+            pet.type.zombifiedpiglin.data.*: true
+
+
+    pet.type.armorstand.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.armorstand.fly: true  # Will allow armor_stand to fly (if enabled)
+            pet.type.armorstand.hat: true  # Will allow armor_stand to be a hat (if enabled)
+            pet.type.armorstand.mount: true  # Will allow armor_stand to mount (if enabled)
+            pet.type.armorstand.data.*: true
+
+
+    pet.type.axolotl.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.axolotl.fly: true  # Will allow axolotl to fly (if enabled)
+            pet.type.axolotl.hat: true  # Will allow axolotl to be a hat (if enabled)
+            pet.type.axolotl.mount: true  # Will allow axolotl to mount (if enabled)
+            pet.type.axolotl.data.*: true
+
+
+    pet.type.bat.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.bat.fly: true  # Will allow bat to fly (if enabled)
+            pet.type.bat.hat: true  # Will allow bat to be a hat (if enabled)
+            pet.type.bat.mount: true  # Will allow bat to mount (if enabled)
+            pet.type.bat.data.*: true
+
+
+    pet.type.bee.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.bee.fly: true  # Will allow bee to fly (if enabled)
+            pet.type.bee.hat: true  # Will allow bee to be a hat (if enabled)
+            pet.type.bee.mount: true  # Will allow bee to mount (if enabled)
+            pet.type.bee.data.*: true
+
+
+    pet.type.blaze.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.blaze.fly: true  # Will allow blaze to fly (if enabled)
+            pet.type.blaze.hat: true  # Will allow blaze to be a hat (if enabled)
+            pet.type.blaze.mount: true  # Will allow blaze to mount (if enabled)
+            pet.type.blaze.data.*: true
+
+
+    pet.type.cat.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.cat.fly: true  # Will allow cat to fly (if enabled)
+            pet.type.cat.hat: true  # Will allow cat to be a hat (if enabled)
+            pet.type.cat.mount: true  # Will allow cat to mount (if enabled)
+            pet.type.cat.data.*: true
+
+
+    pet.type.cavespider.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.cavespider.fly: true  # Will allow cave_spider to fly (if enabled)
+            pet.type.cavespider.hat: true  # Will allow cave_spider to be a hat (if enabled)
+            pet.type.cavespider.mount: true  # Will allow cave_spider to mount (if enabled)
+            pet.type.cavespider.data.*: true
+
+
+    pet.type.chicken.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.chicken.fly: true  # Will allow chicken to fly (if enabled)
+            pet.type.chicken.hat: true  # Will allow chicken to be a hat (if enabled)
+            pet.type.chicken.mount: true  # Will allow chicken to mount (if enabled)
+            pet.type.chicken.data.*: true
+
+
+    pet.type.cod.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.cod.fly: true  # Will allow cod to fly (if enabled)
+            pet.type.cod.hat: true  # Will allow cod to be a hat (if enabled)
+            pet.type.cod.mount: true  # Will allow cod to mount (if enabled)
+            pet.type.cod.data.*: true
+
+
+    pet.type.cow.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.cow.fly: true  # Will allow cow to fly (if enabled)
+            pet.type.cow.hat: true  # Will allow cow to be a hat (if enabled)
+            pet.type.cow.mount: true  # Will allow cow to mount (if enabled)
+            pet.type.cow.data.*: true
+
+
+    pet.type.creeper.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.creeper.fly: true  # Will allow creeper to fly (if enabled)
+            pet.type.creeper.hat: true  # Will allow creeper to be a hat (if enabled)
+            pet.type.creeper.mount: true  # Will allow creeper to mount (if enabled)
+            pet.type.creeper.data.*: true
+
+
+    pet.type.dolphin.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.dolphin.fly: true  # Will allow dolphin to fly (if enabled)
+            pet.type.dolphin.hat: true  # Will allow dolphin to be a hat (if enabled)
+            pet.type.dolphin.mount: true  # Will allow dolphin to mount (if enabled)
+            pet.type.dolphin.data.*: true
+
+
+    pet.type.donkey.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.donkey.fly: true  # Will allow donkey to fly (if enabled)
+            pet.type.donkey.hat: true  # Will allow donkey to be a hat (if enabled)
+            pet.type.donkey.mount: true  # Will allow donkey to mount (if enabled)
+            pet.type.donkey.data.*: true
+
+
+    pet.type.drowned.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.drowned.fly: true  # Will allow drowned to fly (if enabled)
+            pet.type.drowned.hat: true  # Will allow drowned to be a hat (if enabled)
+            pet.type.drowned.mount: true  # Will allow drowned to mount (if enabled)
+            pet.type.drowned.data.*: true
+
+
+    pet.type.elderguardian.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.elderguardian.fly: true  # Will allow elder_guardian to fly (if enabled)
+            pet.type.elderguardian.hat: true  # Will allow elder_guardian to be a hat (if enabled)
+            pet.type.elderguardian.mount: true  # Will allow elder_guardian to mount (if enabled)
+            pet.type.elderguardian.data.*: true
+
+
+    pet.type.enderman.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.enderman.fly: true  # Will allow enderman to fly (if enabled)
+            pet.type.enderman.hat: true  # Will allow enderman to be a hat (if enabled)
+            pet.type.enderman.mount: true  # Will allow enderman to mount (if enabled)
+            pet.type.enderman.data.*: true
+
+
+    pet.type.endermite.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.endermite.fly: true  # Will allow endermite to fly (if enabled)
+            pet.type.endermite.hat: true  # Will allow endermite to be a hat (if enabled)
+            pet.type.endermite.mount: true  # Will allow endermite to mount (if enabled)
+            pet.type.endermite.data.*: true
+
+
+    pet.type.evoker.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.evoker.fly: true  # Will allow evoker to fly (if enabled)
+            pet.type.evoker.hat: true  # Will allow evoker to be a hat (if enabled)
+            pet.type.evoker.mount: true  # Will allow evoker to mount (if enabled)
+            pet.type.evoker.data.*: true
+
+
+    pet.type.fox.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.fox.fly: true  # Will allow fox to fly (if enabled)
+            pet.type.fox.hat: true  # Will allow fox to be a hat (if enabled)
+            pet.type.fox.mount: true  # Will allow fox to mount (if enabled)
+            pet.type.fox.data.*: true
+
+
+    pet.type.ghast.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.ghast.fly: true  # Will allow ghast to fly (if enabled)
+            pet.type.ghast.hat: true  # Will allow ghast to be a hat (if enabled)
+            pet.type.ghast.mount: true  # Will allow ghast to mount (if enabled)
+            pet.type.ghast.data.*: true
+
+
+    pet.type.giant.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.giant.fly: true  # Will allow giant to fly (if enabled)
+            pet.type.giant.hat: true  # Will allow giant to be a hat (if enabled)
+            pet.type.giant.mount: true  # Will allow giant to mount (if enabled)
+            pet.type.giant.data.*: true
+
+
+    pet.type.glowsquid.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.glowsquid.fly: true  # Will allow glow_squid to fly (if enabled)
+            pet.type.glowsquid.hat: true  # Will allow glow_squid to be a hat (if enabled)
+            pet.type.glowsquid.mount: true  # Will allow glow_squid to mount (if enabled)
+            pet.type.glowsquid.data.*: true
+
+
+    pet.type.goat.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.goat.fly: true  # Will allow goat to fly (if enabled)
+            pet.type.goat.hat: true  # Will allow goat to be a hat (if enabled)
+            pet.type.goat.mount: true  # Will allow goat to mount (if enabled)
+            pet.type.goat.data.*: true
+
+
+    pet.type.guardian.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.guardian.fly: true  # Will allow guardian to fly (if enabled)
+            pet.type.guardian.hat: true  # Will allow guardian to be a hat (if enabled)
+            pet.type.guardian.mount: true  # Will allow guardian to mount (if enabled)
+            pet.type.guardian.data.*: true
+
+
+    pet.type.hoglin.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.hoglin.fly: true  # Will allow hoglin to fly (if enabled)
+            pet.type.hoglin.hat: true  # Will allow hoglin to be a hat (if enabled)
+            pet.type.hoglin.mount: true  # Will allow hoglin to mount (if enabled)
+            pet.type.hoglin.data.*: true
+
+
+    pet.type.horse.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.horse.fly: true  # Will allow horse to fly (if enabled)
+            pet.type.horse.hat: true  # Will allow horse to be a hat (if enabled)
+            pet.type.horse.mount: true  # Will allow horse to mount (if enabled)
+            pet.type.horse.data.*: true
+
+
+    pet.type.husk.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.husk.fly: true  # Will allow husk to fly (if enabled)
+            pet.type.husk.hat: true  # Will allow husk to be a hat (if enabled)
+            pet.type.husk.mount: true  # Will allow husk to mount (if enabled)
+            pet.type.husk.data.*: true
+
+
+    pet.type.illusioner.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.illusioner.fly: true  # Will allow illusioner to fly (if enabled)
+            pet.type.illusioner.hat: true  # Will allow illusioner to be a hat (if enabled)
+            pet.type.illusioner.mount: true  # Will allow illusioner to mount (if enabled)
+            pet.type.illusioner.data.*: true
+
+
+    pet.type.irongolem.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.irongolem.fly: true  # Will allow iron_golem to fly (if enabled)
+            pet.type.irongolem.hat: true  # Will allow iron_golem to be a hat (if enabled)
+            pet.type.irongolem.mount: true  # Will allow iron_golem to mount (if enabled)
+            pet.type.irongolem.data.*: true
+
+
+    pet.type.llama.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.llama.fly: true  # Will allow llama to fly (if enabled)
+            pet.type.llama.hat: true  # Will allow llama to be a hat (if enabled)
+            pet.type.llama.mount: true  # Will allow llama to mount (if enabled)
+            pet.type.llama.data.*: true
+
+
+    pet.type.magmacube.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.magmacube.fly: true  # Will allow magma_cube to fly (if enabled)
+            pet.type.magmacube.hat: true  # Will allow magma_cube to be a hat (if enabled)
+            pet.type.magmacube.mount: true  # Will allow magma_cube to mount (if enabled)
+            pet.type.magmacube.data.*: true
+
+
+    pet.type.mooshroom.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.mooshroom.fly: true  # Will allow mooshroom to fly (if enabled)
+            pet.type.mooshroom.hat: true  # Will allow mooshroom to be a hat (if enabled)
+            pet.type.mooshroom.mount: true  # Will allow mooshroom to mount (if enabled)
+            pet.type.mooshroom.data.*: true
+
+
+    pet.type.mule.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.mule.fly: true  # Will allow mule to fly (if enabled)
+            pet.type.mule.hat: true  # Will allow mule to be a hat (if enabled)
+            pet.type.mule.mount: true  # Will allow mule to mount (if enabled)
+            pet.type.mule.data.*: true
+
+
+    pet.type.ocelot.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.ocelot.fly: true  # Will allow ocelot to fly (if enabled)
+            pet.type.ocelot.hat: true  # Will allow ocelot to be a hat (if enabled)
+            pet.type.ocelot.mount: true  # Will allow ocelot to mount (if enabled)
+            pet.type.ocelot.data.*: true
+
+
+    pet.type.panda.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.panda.fly: true  # Will allow panda to fly (if enabled)
+            pet.type.panda.hat: true  # Will allow panda to be a hat (if enabled)
+            pet.type.panda.mount: true  # Will allow panda to mount (if enabled)
+            pet.type.panda.data.*: true
+
+
+    pet.type.parrot.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.parrot.fly: true  # Will allow parrot to fly (if enabled)
+            pet.type.parrot.hat: true  # Will allow parrot to be a hat (if enabled)
+            pet.type.parrot.mount: true  # Will allow parrot to mount (if enabled)
+            pet.type.parrot.data.*: true
+
+
+    pet.type.phantom.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.phantom.fly: true  # Will allow phantom to fly (if enabled)
+            pet.type.phantom.hat: true  # Will allow phantom to be a hat (if enabled)
+            pet.type.phantom.mount: true  # Will allow phantom to mount (if enabled)
+            pet.type.phantom.data.*: true
+
+
+    pet.type.pig.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.pig.fly: true  # Will allow pig to fly (if enabled)
+            pet.type.pig.hat: true  # Will allow pig to be a hat (if enabled)
+            pet.type.pig.mount: true  # Will allow pig to mount (if enabled)
+            pet.type.pig.data.*: true
+
+
+    pet.type.piglin.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.piglin.fly: true  # Will allow piglin to fly (if enabled)
+            pet.type.piglin.hat: true  # Will allow piglin to be a hat (if enabled)
+            pet.type.piglin.mount: true  # Will allow piglin to mount (if enabled)
+            pet.type.piglin.data.*: true
+
+
+    pet.type.piglinbrute.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.piglinbrute.fly: true  # Will allow piglin_brute to fly (if enabled)
+            pet.type.piglinbrute.hat: true  # Will allow piglin_brute to be a hat (if enabled)
+            pet.type.piglinbrute.mount: true  # Will allow piglin_brute to mount (if enabled)
+            pet.type.piglinbrute.data.*: true
+
+
+    pet.type.pillager.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.pillager.fly: true  # Will allow pillager to fly (if enabled)
+            pet.type.pillager.hat: true  # Will allow pillager to be a hat (if enabled)
+            pet.type.pillager.mount: true  # Will allow pillager to mount (if enabled)
+            pet.type.pillager.data.*: true
+
+
+    pet.type.polarbear.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.polarbear.fly: true  # Will allow polarbear to fly (if enabled)
+            pet.type.polarbear.hat: true  # Will allow polarbear to be a hat (if enabled)
+            pet.type.polarbear.mount: true  # Will allow polarbear to mount (if enabled)
+            pet.type.polarbear.data.*: true
+
+
+    pet.type.pufferfish.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.pufferfish.fly: true  # Will allow pufferfish to fly (if enabled)
+            pet.type.pufferfish.hat: true  # Will allow pufferfish to be a hat (if enabled)
+            pet.type.pufferfish.mount: true  # Will allow pufferfish to mount (if enabled)
+            pet.type.pufferfish.data.*: true
+
+
+    pet.type.rabbit.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.rabbit.fly: true  # Will allow rabbit to fly (if enabled)
+            pet.type.rabbit.hat: true  # Will allow rabbit to be a hat (if enabled)
+            pet.type.rabbit.mount: true  # Will allow rabbit to mount (if enabled)
+            pet.type.rabbit.data.*: true
+
+
+    pet.type.ravager.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.ravager.fly: true  # Will allow ravager to fly (if enabled)
+            pet.type.ravager.hat: true  # Will allow ravager to be a hat (if enabled)
+            pet.type.ravager.mount: true  # Will allow ravager to mount (if enabled)
+            pet.type.ravager.data.*: true
+
+
+    pet.type.salmon.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.salmon.fly: true  # Will allow salmon to fly (if enabled)
+            pet.type.salmon.hat: true  # Will allow salmon to be a hat (if enabled)
+            pet.type.salmon.mount: true  # Will allow salmon to mount (if enabled)
+            pet.type.salmon.data.*: true
+
+
+    pet.type.sheep.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.sheep.fly: true  # Will allow sheep to fly (if enabled)
+            pet.type.sheep.hat: true  # Will allow sheep to be a hat (if enabled)
+            pet.type.sheep.mount: true  # Will allow sheep to mount (if enabled)
+            pet.type.sheep.data.*: true
+
+
+    pet.type.shulker.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.shulker.fly: true  # Will allow shulker to fly (if enabled)
+            pet.type.shulker.hat: true  # Will allow shulker to be a hat (if enabled)
+            pet.type.shulker.mount: true  # Will allow shulker to mount (if enabled)
+            pet.type.shulker.data.*: true
+
+
+    pet.type.silverfish.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.silverfish.fly: true  # Will allow silverfish to fly (if enabled)
+            pet.type.silverfish.hat: true  # Will allow silverfish to be a hat (if enabled)
+            pet.type.silverfish.mount: true  # Will allow silverfish to mount (if enabled)
+            pet.type.silverfish.data.*: true
+
+
+    pet.type.skeleton.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.skeleton.fly: true  # Will allow skeleton to fly (if enabled)
+            pet.type.skeleton.hat: true  # Will allow skeleton to be a hat (if enabled)
+            pet.type.skeleton.mount: true  # Will allow skeleton to mount (if enabled)
+            pet.type.skeleton.data.*: true
+
+
+    pet.type.skeletonhorse.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.skeletonhorse.fly: true  # Will allow skeleton_horse to fly (if enabled)
+            pet.type.skeletonhorse.hat: true  # Will allow skeleton_horse to be a hat (if enabled)
+            pet.type.skeletonhorse.mount: true  # Will allow skeleton_horse to mount (if enabled)
+            pet.type.skeletonhorse.data.*: true
+
+
+    pet.type.slime.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.slime.fly: true  # Will allow slime to fly (if enabled)
+            pet.type.slime.hat: true  # Will allow slime to be a hat (if enabled)
+            pet.type.slime.mount: true  # Will allow slime to mount (if enabled)
+            pet.type.slime.data.*: true
+
+
+    pet.type.snowman.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.snowman.fly: true  # Will allow snowman to fly (if enabled)
+            pet.type.snowman.hat: true  # Will allow snowman to be a hat (if enabled)
+            pet.type.snowman.mount: true  # Will allow snowman to mount (if enabled)
+            pet.type.snowman.data.*: true
+
+
+    pet.type.spider.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.spider.fly: true  # Will allow spider to fly (if enabled)
+            pet.type.spider.hat: true  # Will allow spider to be a hat (if enabled)
+            pet.type.spider.mount: true  # Will allow spider to mount (if enabled)
+            pet.type.spider.data.*: true
+
+
+    pet.type.squid.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.squid.fly: true  # Will allow squid to fly (if enabled)
+            pet.type.squid.hat: true  # Will allow squid to be a hat (if enabled)
+            pet.type.squid.mount: true  # Will allow squid to mount (if enabled)
+            pet.type.squid.data.*: true
+
+
+    pet.type.stray.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.stray.fly: true  # Will allow stray to fly (if enabled)
+            pet.type.stray.hat: true  # Will allow stray to be a hat (if enabled)
+            pet.type.stray.mount: true  # Will allow stray to mount (if enabled)
+            pet.type.stray.data.*: true
+
+
+    pet.type.strider.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.strider.fly: true  # Will allow strider to fly (if enabled)
+            pet.type.strider.hat: true  # Will allow strider to be a hat (if enabled)
+            pet.type.strider.mount: true  # Will allow strider to mount (if enabled)
+            pet.type.strider.data.*: true
+
+
+    pet.type.traderllama.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.traderllama.fly: true  # Will allow trader_llama to fly (if enabled)
+            pet.type.traderllama.hat: true  # Will allow trader_llama to be a hat (if enabled)
+            pet.type.traderllama.mount: true  # Will allow trader_llama to mount (if enabled)
+            pet.type.traderllama.data.*: true
+
+
+    pet.type.tropicalfish.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.tropicalfish.fly: true  # Will allow tropical_fish to fly (if enabled)
+            pet.type.tropicalfish.hat: true  # Will allow tropical_fish to be a hat (if enabled)
+            pet.type.tropicalfish.mount: true  # Will allow tropical_fish to mount (if enabled)
+            pet.type.tropicalfish.data.*: true
+
+
+    pet.type.turtle.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.turtle.fly: true  # Will allow turtle to fly (if enabled)
+            pet.type.turtle.hat: true  # Will allow turtle to be a hat (if enabled)
+            pet.type.turtle.mount: true  # Will allow turtle to mount (if enabled)
+            pet.type.turtle.data.*: true
+
+
+    pet.type.vex.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.vex.fly: true  # Will allow vex to fly (if enabled)
+            pet.type.vex.hat: true  # Will allow vex to be a hat (if enabled)
+            pet.type.vex.mount: true  # Will allow vex to mount (if enabled)
+            pet.type.vex.data.*: true
+
+
+    pet.type.villager.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.villager.fly: true  # Will allow villager to fly (if enabled)
+            pet.type.villager.hat: true  # Will allow villager to be a hat (if enabled)
+            pet.type.villager.mount: true  # Will allow villager to mount (if enabled)
+            pet.type.villager.data.*: true
+
+
+    pet.type.vindicator.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.vindicator.fly: true  # Will allow vindicator to fly (if enabled)
+            pet.type.vindicator.hat: true  # Will allow vindicator to be a hat (if enabled)
+            pet.type.vindicator.mount: true  # Will allow vindicator to mount (if enabled)
+            pet.type.vindicator.data.*: true
+
+
+    pet.type.wanderingtrader.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.wanderingtrader.fly: true  # Will allow wandering_trader to fly (if enabled)
+            pet.type.wanderingtrader.hat: true  # Will allow wandering_trader to be a hat (if enabled)
+            pet.type.wanderingtrader.mount: true  # Will allow wandering_trader to mount (if enabled)
+            pet.type.wanderingtrader.data.*: true
+
+
+    pet.type.warden.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.warden.fly: true  # Will allow warden to fly (if enabled)
+            pet.type.warden.hat: true  # Will allow warden to be a hat (if enabled)
+            pet.type.warden.mount: true  # Will allow warden to mount (if enabled)
+            pet.type.warden.data.*: true
+
+
+    pet.type.witch.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.witch.fly: true  # Will allow witch to fly (if enabled)
+            pet.type.witch.hat: true  # Will allow witch to be a hat (if enabled)
+            pet.type.witch.mount: true  # Will allow witch to mount (if enabled)
+            pet.type.witch.data.*: true
+
+
+    pet.type.wither.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.wither.fly: true  # Will allow wither to fly (if enabled)
+            pet.type.wither.hat: true  # Will allow wither to be a hat (if enabled)
+            pet.type.wither.mount: true  # Will allow wither to mount (if enabled)
+            pet.type.wither.data.*: true
+
+
+    pet.type.witherskeleton.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.witherskeleton.fly: true  # Will allow wither_skeleton to fly (if enabled)
+            pet.type.witherskeleton.hat: true  # Will allow wither_skeleton to be a hat (if enabled)
+            pet.type.witherskeleton.mount: true  # Will allow wither_skeleton to mount (if enabled)
+            pet.type.witherskeleton.data.*: true
+
+
+    pet.type.wolf.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.wolf.fly: true  # Will allow wolf to fly (if enabled)
+            pet.type.wolf.hat: true  # Will allow wolf to be a hat (if enabled)
+            pet.type.wolf.mount: true  # Will allow wolf to mount (if enabled)
+            pet.type.wolf.data.*: true
+
+
+    pet.type.zoglin.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.zoglin.fly: true  # Will allow zoglin to fly (if enabled)
+            pet.type.zoglin.hat: true  # Will allow zoglin to be a hat (if enabled)
+            pet.type.zoglin.mount: true  # Will allow zoglin to mount (if enabled)
+            pet.type.zoglin.data.*: true
+
+
+    pet.type.zombie.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.zombie.fly: true  # Will allow zombie to fly (if enabled)
+            pet.type.zombie.hat: true  # Will allow zombie to be a hat (if enabled)
+            pet.type.zombie.mount: true  # Will allow zombie to mount (if enabled)
+            pet.type.zombie.data.*: true
+
+
+    pet.type.zombiehorse.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.zombiehorse.fly: true  # Will allow zombie_horse to fly (if enabled)
+            pet.type.zombiehorse.hat: true  # Will allow zombie_horse to be a hat (if enabled)
+            pet.type.zombiehorse.mount: true  # Will allow zombie_horse to mount (if enabled)
+            pet.type.zombiehorse.data.*: true
+
+
+    pet.type.zombievillager.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.zombievillager.fly: true  # Will allow zombie_villager to fly (if enabled)
+            pet.type.zombievillager.hat: true  # Will allow zombie_villager to be a hat (if enabled)
+            pet.type.zombievillager.mount: true  # Will allow zombie_villager to mount (if enabled)
+            pet.type.zombievillager.data.*: true
+
+
+    pet.type.zombifiedpiglin.*: # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.zombifiedpiglin.fly: true  # Will allow zombified_piglin to fly (if enabled)
+            pet.type.zombifiedpiglin.hat: true  # Will allow zombified_piglin to be a hat (if enabled)
+            pet.type.zombifiedpiglin.mount: true  # Will allow zombified_piglin to mount (if enabled)
+            pet.type.zombifiedpiglin.data.*: true
+
+
+    pet.type.armorstand.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.armorstand.data.frozen: true
+            pet.type.armorstand.data.burning: true
+            pet.type.armorstand.data.silent: true
+
+
+    pet.type.axolotl.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.axolotl.data.frozen: true
+            pet.type.axolotl.data.burning: true
+            pet.type.axolotl.data.silent: true
+            pet.type.axolotl.data.baby: true
+            pet.type.axolotl.data.variant: true
+            pet.type.axolotl.data.playing_dead: true
+
+
+    pet.type.bat.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.bat.data.frozen: true
+            pet.type.bat.data.burning: true
+            pet.type.bat.data.silent: true
+            pet.type.bat.data.hanging: true
+
+
+    pet.type.bee.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.bee.data.frozen: true
+            pet.type.bee.data.burning: true
+            pet.type.bee.data.silent: true
+            pet.type.bee.data.baby: true
+            pet.type.bee.data.angry: true
+            pet.type.bee.data.nectar: true
+            pet.type.bee.data.stinger: true
+            pet.type.bee.data.flipped: true
+
+
+    pet.type.blaze.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.blaze.data.frozen: true
+            pet.type.blaze.data.burning: true
+            pet.type.blaze.data.silent: true
+
+
+    pet.type.cat.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.cat.data.frozen: true
+            pet.type.cat.data.burning: true
+            pet.type.cat.data.silent: true
+            pet.type.cat.data.baby: true
+            pet.type.cat.data.tamed: true
+            pet.type.cat.data.sitting: true
+            pet.type.cat.data.sleep: true
+            pet.type.cat.data.collar: true
+            pet.type.cat.data.type: true
+            pet.type.cat.data.head_up: true
+
+
+    pet.type.cavespider.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.cavespider.data.frozen: true
+            pet.type.cavespider.data.burning: true
+            pet.type.cavespider.data.silent: true
+
+
+    pet.type.chicken.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.chicken.data.frozen: true
+            pet.type.chicken.data.burning: true
+            pet.type.chicken.data.silent: true
+            pet.type.chicken.data.baby: true
+
+
+    pet.type.cod.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.cod.data.frozen: true
+            pet.type.cod.data.burning: true
+            pet.type.cod.data.silent: true
+
+
+    pet.type.cow.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.cow.data.frozen: true
+            pet.type.cow.data.burning: true
+            pet.type.cow.data.silent: true
+            pet.type.cow.data.baby: true
+
+
+    pet.type.creeper.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.creeper.data.frozen: true
+            pet.type.creeper.data.burning: true
+            pet.type.creeper.data.silent: true
+            pet.type.creeper.data.powered: true
+
+
+    pet.type.dolphin.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.dolphin.data.frozen: true
+            pet.type.dolphin.data.burning: true
+            pet.type.dolphin.data.silent: true
+
+
+    pet.type.donkey.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.donkey.data.frozen: true
+            pet.type.donkey.data.burning: true
+            pet.type.donkey.data.silent: true
+            pet.type.donkey.data.baby: true
+            pet.type.donkey.data.chest: true
+            pet.type.donkey.data.eating: true
+            pet.type.donkey.data.saddled: true
+
+
+    pet.type.drowned.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.drowned.data.frozen: true
+            pet.type.drowned.data.burning: true
+            pet.type.drowned.data.silent: true
+            pet.type.drowned.data.baby: true
+            pet.type.drowned.data.raised_arms: true
+            pet.type.drowned.data.shaking: true
+
+
+    pet.type.elderguardian.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.elderguardian.data.frozen: true
+            pet.type.elderguardian.data.burning: true
+            pet.type.elderguardian.data.silent: true
+
+
+    pet.type.enderman.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.enderman.data.frozen: true
+            pet.type.enderman.data.burning: true
+            pet.type.enderman.data.silent: true
+            pet.type.enderman.data.screaming: true
+
+
+    pet.type.endermite.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.endermite.data.frozen: true
+            pet.type.endermite.data.burning: true
+            pet.type.endermite.data.silent: true
+
+
+    pet.type.evoker.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.evoker.data.frozen: true
+            pet.type.evoker.data.burning: true
+            pet.type.evoker.data.silent: true
+            pet.type.evoker.data.spell: true
+
+
+    pet.type.fox.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.fox.data.frozen: true
+            pet.type.fox.data.burning: true
+            pet.type.fox.data.silent: true
+            pet.type.fox.data.baby: true
+            pet.type.fox.data.sleep: true
+            pet.type.fox.data.interested: true
+            pet.type.fox.data.crouching: true
+            pet.type.fox.data.type: true
+            pet.type.fox.data.sitting: true
+
+
+    pet.type.ghast.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.ghast.data.frozen: true
+            pet.type.ghast.data.burning: true
+            pet.type.ghast.data.silent: true
+            pet.type.ghast.data.screaming: true
+
+
+    pet.type.giant.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.giant.data.frozen: true
+            pet.type.giant.data.burning: true
+            pet.type.giant.data.silent: true
+
+
+    pet.type.glowsquid.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.glowsquid.data.frozen: true
+            pet.type.glowsquid.data.burning: true
+            pet.type.glowsquid.data.silent: true
+            pet.type.glowsquid.data.glowing: true
+
+
+    pet.type.goat.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.goat.data.frozen: true
+            pet.type.goat.data.burning: true
+            pet.type.goat.data.silent: true
+            pet.type.goat.data.baby: true
+
+
+    pet.type.guardian.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.guardian.data.frozen: true
+            pet.type.guardian.data.burning: true
+            pet.type.guardian.data.silent: true
+
+
+    pet.type.hoglin.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.hoglin.data.frozen: true
+            pet.type.hoglin.data.burning: true
+            pet.type.hoglin.data.silent: true
+            pet.type.hoglin.data.baby: true
+            pet.type.hoglin.data.shaking: true
+
+
+    pet.type.horse.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.horse.data.frozen: true
+            pet.type.horse.data.burning: true
+            pet.type.horse.data.silent: true
+            pet.type.horse.data.baby: true
+            pet.type.horse.data.eating: true
+            pet.type.horse.data.armor: true
+            pet.type.horse.data.color: true
+            pet.type.horse.data.style: true
+            pet.type.horse.data.saddled: true
+
+
+    pet.type.husk.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.husk.data.frozen: true
+            pet.type.husk.data.burning: true
+            pet.type.husk.data.silent: true
+            pet.type.husk.data.baby: true
+            pet.type.husk.data.raised_arms: true
+            pet.type.husk.data.shaking: true
+
+
+    pet.type.illusioner.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.illusioner.data.frozen: true
+            pet.type.illusioner.data.burning: true
+            pet.type.illusioner.data.silent: true
+            pet.type.illusioner.data.spell: true
+
+
+    pet.type.irongolem.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.irongolem.data.frozen: true
+            pet.type.irongolem.data.burning: true
+            pet.type.irongolem.data.silent: true
+
+
+    pet.type.llama.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.llama.data.frozen: true
+            pet.type.llama.data.burning: true
+            pet.type.llama.data.silent: true
+            pet.type.llama.data.baby: true
+            pet.type.llama.data.chest: true
+            pet.type.llama.data.color: true
+            pet.type.llama.data.skin: true
+            pet.type.llama.data.saddled: true
+
+
+    pet.type.magmacube.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.magmacube.data.frozen: true
+            pet.type.magmacube.data.burning: true
+            pet.type.magmacube.data.silent: true
+            pet.type.magmacube.data.size: true
+
+
+    pet.type.mooshroom.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.mooshroom.data.frozen: true
+            pet.type.mooshroom.data.burning: true
+            pet.type.mooshroom.data.silent: true
+            pet.type.mooshroom.data.baby: true
+            pet.type.mooshroom.data.type: true
+
+
+    pet.type.mule.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.mule.data.frozen: true
+            pet.type.mule.data.burning: true
+            pet.type.mule.data.silent: true
+            pet.type.mule.data.baby: true
+            pet.type.mule.data.chest: true
+            pet.type.mule.data.eating: true
+            pet.type.mule.data.saddled: true
+
+
+    pet.type.ocelot.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.ocelot.data.frozen: true
+            pet.type.ocelot.data.burning: true
+            pet.type.ocelot.data.silent: true
+            pet.type.ocelot.data.baby: true
+
+
+    pet.type.panda.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.panda.data.frozen: true
+            pet.type.panda.data.burning: true
+            pet.type.panda.data.silent: true
+            pet.type.panda.data.baby: true
+            pet.type.panda.data.type: true
+            pet.type.panda.data.sitting: true
+            pet.type.panda.data.sleeping: true
+            pet.type.panda.data.sneeze: true
+
+
+    pet.type.parrot.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.parrot.data.frozen: true
+            pet.type.parrot.data.burning: true
+            pet.type.parrot.data.silent: true
+            pet.type.parrot.data.rainbow: true
+            pet.type.parrot.data.tamed: true
+            pet.type.parrot.data.variant: true
+            pet.type.parrot.data.sitting: true
+
+
+    pet.type.phantom.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.phantom.data.frozen: true
+            pet.type.phantom.data.burning: true
+            pet.type.phantom.data.silent: true
+            pet.type.phantom.data.size: true
+
+
+    pet.type.pig.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.pig.data.frozen: true
+            pet.type.pig.data.burning: true
+            pet.type.pig.data.silent: true
+            pet.type.pig.data.baby: true
+            pet.type.pig.data.saddled: true
+
+
+    pet.type.piglin.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.piglin.data.frozen: true
+            pet.type.piglin.data.burning: true
+            pet.type.piglin.data.silent: true
+            pet.type.piglin.data.baby: true
+            pet.type.piglin.data.charging: true
+            pet.type.piglin.data.dancing: true
+            pet.type.piglin.data.shaking: true
+
+
+    pet.type.piglinbrute.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.piglinbrute.data.frozen: true
+            pet.type.piglinbrute.data.burning: true
+            pet.type.piglinbrute.data.silent: true
+            pet.type.piglinbrute.data.shaking: true
+
+
+    pet.type.pillager.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.pillager.data.frozen: true
+            pet.type.pillager.data.burning: true
+            pet.type.pillager.data.silent: true
+
+
+    pet.type.polarbear.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.polarbear.data.frozen: true
+            pet.type.polarbear.data.burning: true
+            pet.type.polarbear.data.silent: true
+            pet.type.polarbear.data.baby: true
+            pet.type.polarbear.data.standing: true
+
+
+    pet.type.pufferfish.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.pufferfish.data.frozen: true
+            pet.type.pufferfish.data.burning: true
+            pet.type.pufferfish.data.silent: true
+            pet.type.pufferfish.data.size: true
+
+
+    pet.type.rabbit.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.rabbit.data.frozen: true
+            pet.type.rabbit.data.burning: true
+            pet.type.rabbit.data.silent: true
+            pet.type.rabbit.data.baby: true
+            pet.type.rabbit.data.variant: true
+
+
+    pet.type.ravager.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.ravager.data.frozen: true
+            pet.type.ravager.data.burning: true
+            pet.type.ravager.data.silent: true
+            pet.type.ravager.data.chomping: true
+
+
+    pet.type.salmon.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.salmon.data.frozen: true
+            pet.type.salmon.data.burning: true
+            pet.type.salmon.data.silent: true
+
+
+    pet.type.sheep.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.sheep.data.frozen: true
+            pet.type.sheep.data.burning: true
+            pet.type.sheep.data.silent: true
+            pet.type.sheep.data.baby: true
+            pet.type.sheep.data.color: true
+            pet.type.sheep.data.rainbow: true
+            pet.type.sheep.data.sheared: true
+
+
+    pet.type.shulker.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.shulker.data.frozen: true
+            pet.type.shulker.data.burning: true
+            pet.type.shulker.data.silent: true
+            pet.type.shulker.data.color: true
+            pet.type.shulker.data.rainbow: true
+            pet.type.shulker.data.closed: true
+
+
+    pet.type.silverfish.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.silverfish.data.frozen: true
+            pet.type.silverfish.data.burning: true
+            pet.type.silverfish.data.silent: true
+
+
+    pet.type.skeleton.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.skeleton.data.frozen: true
+            pet.type.skeleton.data.burning: true
+            pet.type.skeleton.data.silent: true
+            pet.type.skeleton.data.raised_arms: true
+
+
+    pet.type.skeletonhorse.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.skeletonhorse.data.frozen: true
+            pet.type.skeletonhorse.data.burning: true
+            pet.type.skeletonhorse.data.silent: true
+            pet.type.skeletonhorse.data.baby: true
+            pet.type.skeletonhorse.data.eating: true
+            pet.type.skeletonhorse.data.saddled: true
+
+
+    pet.type.slime.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.slime.data.frozen: true
+            pet.type.slime.data.burning: true
+            pet.type.slime.data.silent: true
+            pet.type.slime.data.size: true
+
+
+    pet.type.snowman.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.snowman.data.frozen: true
+            pet.type.snowman.data.burning: true
+            pet.type.snowman.data.silent: true
+            pet.type.snowman.data.pumpkin: true
+
+
+    pet.type.spider.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.spider.data.frozen: true
+            pet.type.spider.data.burning: true
+            pet.type.spider.data.silent: true
+
+
+    pet.type.squid.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.squid.data.frozen: true
+            pet.type.squid.data.burning: true
+            pet.type.squid.data.silent: true
+
+
+    pet.type.stray.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.stray.data.frozen: true
+            pet.type.stray.data.burning: true
+            pet.type.stray.data.silent: true
+            pet.type.stray.data.raised_arms: true
+
+
+    pet.type.strider.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.strider.data.frozen: true
+            pet.type.strider.data.burning: true
+            pet.type.strider.data.silent: true
+            pet.type.strider.data.baby: true
+            pet.type.strider.data.saddled: true
+
+
+    pet.type.traderllama.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.traderllama.data.frozen: true
+            pet.type.traderllama.data.burning: true
+            pet.type.traderllama.data.silent: true
+            pet.type.traderllama.data.baby: true
+            pet.type.traderllama.data.chest: true
+            pet.type.traderllama.data.color: true
+            pet.type.traderllama.data.skin: true
+
+
+    pet.type.tropicalfish.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.tropicalfish.data.frozen: true
+            pet.type.tropicalfish.data.burning: true
+            pet.type.tropicalfish.data.silent: true
+
+
+    pet.type.turtle.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.turtle.data.frozen: true
+            pet.type.turtle.data.burning: true
+            pet.type.turtle.data.silent: true
+            pet.type.turtle.data.baby: true
+
+
+    pet.type.vex.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.vex.data.frozen: true
+            pet.type.vex.data.burning: true
+            pet.type.vex.data.silent: true
+            pet.type.vex.data.powered: true
+
+
+    pet.type.villager.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.villager.data.frozen: true
+            pet.type.villager.data.burning: true
+            pet.type.villager.data.silent: true
+            pet.type.villager.data.baby: true
+            pet.type.villager.data.shaking: true
+            pet.type.villager.data.profession: true
+            pet.type.villager.data.biome: true
+            pet.type.villager.data.level: true
+
+
+    pet.type.vindicator.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.vindicator.data.frozen: true
+            pet.type.vindicator.data.burning: true
+            pet.type.vindicator.data.silent: true
+            pet.type.vindicator.data.johnny: true
+
+
+    pet.type.wanderingtrader.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.wanderingtrader.data.frozen: true
+            pet.type.wanderingtrader.data.burning: true
+            pet.type.wanderingtrader.data.silent: true
+
+
+    pet.type.warden.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.warden.data.frozen: true
+            pet.type.warden.data.burning: true
+            pet.type.warden.data.silent: true
+
+
+    pet.type.witch.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.witch.data.frozen: true
+            pet.type.witch.data.burning: true
+            pet.type.witch.data.silent: true
+            pet.type.witch.data.potion: true
+
+
+    pet.type.wither.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.wither.data.frozen: true
+            pet.type.wither.data.burning: true
+            pet.type.wither.data.silent: true
+            pet.type.wither.data.shielded: true
+            pet.type.wither.data.small: true
+
+
+    pet.type.witherskeleton.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.witherskeleton.data.frozen: true
+            pet.type.witherskeleton.data.burning: true
+            pet.type.witherskeleton.data.silent: true
+            pet.type.witherskeleton.data.raised_arms: true
+
+
+    pet.type.wolf.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.wolf.data.frozen: true
+            pet.type.wolf.data.burning: true
+            pet.type.wolf.data.silent: true
+            pet.type.wolf.data.baby: true
+            pet.type.wolf.data.tamed: true
+            pet.type.wolf.data.angry: true
+            pet.type.wolf.data.color: true
+            pet.type.wolf.data.sitting: true
+            pet.type.wolf.data.tilted: true
+            pet.type.wolf.data.shaking: true
+
+
+    pet.type.zoglin.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.zoglin.data.frozen: true
+            pet.type.zoglin.data.burning: true
+            pet.type.zoglin.data.silent: true
+            pet.type.zoglin.data.baby: true
+
+
+    pet.type.zombie.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.zombie.data.frozen: true
+            pet.type.zombie.data.burning: true
+            pet.type.zombie.data.silent: true
+            pet.type.zombie.data.baby: true
+            pet.type.zombie.data.raised_arms: true
+            pet.type.zombie.data.shaking: true
+
+
+    pet.type.zombiehorse.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.zombiehorse.data.frozen: true
+            pet.type.zombiehorse.data.burning: true
+            pet.type.zombiehorse.data.silent: true
+            pet.type.zombiehorse.data.baby: true
+            pet.type.zombiehorse.data.eating: true
+            pet.type.zombiehorse.data.saddled: true
+
+
+    pet.type.zombievillager.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.zombievillager.data.frozen: true
+            pet.type.zombievillager.data.burning: true
+            pet.type.zombievillager.data.silent: true
+            pet.type.zombievillager.data.baby: true
+            pet.type.zombievillager.data.raised_arms: true
+            pet.type.zombievillager.data.shaking: true
+            pet.type.zombievillager.data.profession: true
+            pet.type.zombievillager.data.biome: true
+            pet.type.zombievillager.data.level: true
+
+
+    pet.type.zombifiedpiglin.data.*: # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.zombifiedpiglin.data.frozen: true
+            pet.type.zombifiedpiglin.data.burning: true
+            pet.type.zombifiedpiglin.data.silent: true
+            pet.type.zombifiedpiglin.data.baby: true
+            pet.type.zombifiedpiglin.data.raised_arms: true
+
+
+
