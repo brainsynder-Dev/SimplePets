@@ -68,8 +68,7 @@ public enum PetType {
             AgeData.class, BeeAngryData.class, NectarData.class, StingerData.class, FlippedData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_BLAZE_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
-    BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0",
-            BurningData.class),
+    BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_CAT_AMBIENT, weight = PetWeight.LIGHT)
     CAT(IEntityCatPet.class, "6b253fc6b656988453a2d7138fca4d1f2752f47691f0c434e432183771cfe1",
