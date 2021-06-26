@@ -1,8 +1,7 @@
 package simplepets.brainsynder.managers;
 
-import lib.brainsynder.anvil.AnvilGUI;
-import lib.brainsynder.anvil.AnvilSlot;
 import lib.brainsynder.item.ItemBuilder;
+import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.conversations.ConversationContext;
@@ -27,18 +26,17 @@ public class RenameManager {
     }
 
     public void renameViaAnvil (PetUser user, PetType type) {
-        AnvilGUI gui = new AnvilGUI(plugin, (Player) user.getPlayer(), event -> {
-            String name = event.getName();
+        AnvilGUI.Builder builder = new AnvilGUI.Builder().plugin(plugin);
+        builder.itemLeft(new ItemBuilder(Material.NAME_TAG).withName(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TAG)).build());
+        builder.onComplete((player, name) -> {
             if (name.equalsIgnoreCase("reset")) name = null;
             PetRenameEvent renameEvent = new PetRenameEvent (user, type, name);
             Bukkit.getPluginManager().callEvent(renameEvent);
 
             if (!renameEvent.isCancelled()) user.setPetName(renameEvent.getName(), type);
-        });
-        gui.setColorRename(true);
-        gui.setTitle(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TITLE));
-        gui.setSlot(AnvilSlot.INPUT_LEFT, new ItemBuilder(Material.NAME_TAG).withName(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TAG)).build());
-        gui.open();
+            return AnvilGUI.Response.close();
+        }).title(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TITLE));
+        builder.open((Player) user.getPlayer());
     }
 
     public void renameViaChat (PetUser user, PetType type) {

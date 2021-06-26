@@ -40,12 +40,12 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.mysql</pattern>
-                                    <shadedPattern>${groupId}.internal.mysql</shadedPattern>
+                                    <pattern>net.wesjd</pattern>
+                                    <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>com.google</pattern>
-                                    <shadedPattern>${groupId}.internal.google</shadedPattern>
+                                    <pattern>com.mysql</pattern>
+                                    <shadedPattern>${groupId}.internal.mysql</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -78,6 +78,11 @@
             <version>${spigot.version}</version>
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.wesjd</groupId>
+            <artifactId>anvilgui</artifactId>
+            <version>1.5.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
