@@ -116,7 +116,7 @@ public class Utilities {
     public static boolean hasPermission (CommandSender sender, String permission, boolean strict) {
         if (sender instanceof ConsoleCommandSender) return true;
         if ((permission == null) || (permission.isEmpty())) return true;
-        if (sender.isOp()) return true;
+        //if (sender.isOp()) return true;
 
         int value = getPermission(sender, permission, strict);
         if (PetCore.getInstance().getConfiguration().getStringList("Permissions.Ignored-List").contains(permission)) return true;
