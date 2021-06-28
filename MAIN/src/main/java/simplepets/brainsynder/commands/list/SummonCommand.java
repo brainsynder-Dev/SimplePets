@@ -16,6 +16,7 @@ import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -68,6 +69,11 @@ public class SummonCommand extends PetSubCommand {
 
         if (!type.isSupported()) {
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
+            return;
+        }
+
+        if (!Utilities.hasPermission(sender, type.getPermission())) {
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
             return;
         }
 
@@ -127,8 +133,6 @@ public class SummonCommand extends PetSubCommand {
                 return;
             }
         }
-
-
 
         StorageTagCompound finalCompound = compound;
         getPlugin().getUserManager().getPetUser(target.getUniqueId()).ifPresent(user -> {
