@@ -57,7 +57,7 @@ public class SelectionGUIListener implements Listener {
                 if (!user.canSpawnMorePets()) {
                     e.setCancelled(true);
                     player.closeInventory();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                    player.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
                     return;
                 }
 
@@ -67,6 +67,7 @@ public class SelectionGUIListener implements Listener {
                     if (!ItemBuilder.fromItem(type.getItem()).isSimilar(e.getCurrentItem())) continue;
                     PetSelectTypeEvent event = new PetSelectTypeEvent(type.getType(), user);
                     Bukkit.getServer().getPluginManager().callEvent(event);
+
                     if (event.isCancelled()) return;
                     new BukkitRunnable() {
                         @Override
