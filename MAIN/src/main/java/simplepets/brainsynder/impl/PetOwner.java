@@ -10,6 +10,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -465,6 +466,19 @@ public class PetOwner implements PetUser {
     @Override
     public boolean hasPetVehicle() {
         return (vehicle != null) && getPetEntity(vehicle).isPresent();
+    }
+
+    @Override
+    public boolean canSpawnMorePets() {
+        int maxAmount = PetCore.getInstance().getConfiguration().getInt("PetToggles.Default-Spawn-Limit");
+        if (!getPlayer().isOnline()) return false;
+        for (PermissionAttachmentInfo permission : ((Player) getPlayer()).getEffectivePermissions()) {
+            if (!permission.getValue()) continue;
+            if (!permission.getPermission().startsWith("pet.amount.")) continue;
+            String strAmount = permission.getPermission().substring(11);
+            maxAmount = Integer.parseInt(strAmount);
+        }
+        return petMap.size() < maxAmount;
     }
 
     @Override

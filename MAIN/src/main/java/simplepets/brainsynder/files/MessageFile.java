@@ -26,6 +26,7 @@ public class MessageFile {
                 addDefault(MessageOption.PET_NOT_REGISTERED, "The selected pet is not supported for the servers version\n(Or is missing in the jar file [in case it is modified])");
                 addDefault(MessageOption.INVALID_NBT, "Message that will show before the 'nbt error message'");
                 addDefault(MessageOption.INVALID_NBT_MESSAGE, "Message that will be sent when a pet is spawned via '/pet summon'");
+                addDefault(MessageOption.CANT_SPAWN_MORE_PETS, "Message that will be sent if a player attempts to spawn more pets than they are allowed.");
                 addDefault(MessageOption.FAILED_SUMMON, "Message that will be sent when a pet is spawned via '/pet summon'");
                 addDefault(MessageOption.PLAYER_NOT_ONLINE, "Message that will be sent when a pet is spawned via '/pet summon'");
                 addDefault(MessageOption.REMOVED_PET, "Message that will be sent when a pet is spawned via '/pet summon'");

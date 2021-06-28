@@ -134,8 +134,14 @@ public class SummonCommand extends PetSubCommand {
             }
         }
 
+
         StorageTagCompound finalCompound = compound;
+        Player finalTarget = target;
         getPlugin().getUserManager().getPetUser(target.getUniqueId()).ifPresent(user -> {
+            if (!user.canSpawnMorePets() && finalTarget == sender) {
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                return;
+            }
             Optional<IEntityPet> entityPet = spawner.spawnEntityPet(type, user, finalCompound);
             if (!entityPet.isPresent()) {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));

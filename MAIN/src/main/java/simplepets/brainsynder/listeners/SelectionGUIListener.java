@@ -16,6 +16,8 @@ import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
 import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
@@ -52,21 +54,27 @@ public class SelectionGUIListener implements Listener {
                     return;
                 }
 
+                if (!user.canSpawnMorePets()) {
+                    e.setCancelled(true);
+                    player.closeInventory();
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                    return;
+                }
+
                 IStorage<PetTypeStorage> storage = menu.getPetMap().get(player.getName()).copy();
                 while (storage.hasNext()) {
                     final PetTypeStorage type = storage.next();
-                    if (ItemBuilder.fromItem(type.getItem()).isSimilar(e.getCurrentItem())) {
+                    if (!ItemBuilder.fromItem(type.getItem()).isSimilar(e.getCurrentItem())) continue;
                     PetSelectTypeEvent event = new PetSelectTypeEvent(type.getType(), user);
                     Bukkit.getServer().getPluginManager().callEvent(event);
                     if (event.isCancelled()) return;
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                Utilities.handlePetSpawning(user, type.getType(), new StorageTagCompound(), false);
-                            }
-                        }.runTask(PetCore.getInstance());
-                        break;
-                    }
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            Utilities.handlePetSpawning(user, type.getType(), new StorageTagCompound(), false); }
+                    }.runTask(PetCore.getInstance());
+                    break;
+
                 }
             });
         }

@@ -174,6 +174,11 @@ public interface PetUser {
     boolean hasPetVehicle();
 
     /**
+     * Whether or not the user should be able to spawn more pets.
+     */
+    boolean canSpawnMorePets();
+
+    /**
      * Checks if the type is the pet that the player is riding
      *
      * @param type

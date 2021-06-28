@@ -26,6 +26,7 @@ public enum MessageOption implements YamlOption {
     INVALID_NBT ("nbt.invalid", "{prefix} &cInvalid nbt has been entered."),
     INVALID_NBT_MESSAGE ("nbt.error", "{prefix} &c{message}"),
     FAILED_SUMMON ("summon.failed", "{prefix} &cSorry, the {type} pet was unable to be spawned at the moment."),
+    CANT_SPAWN_MORE_PETS("summon.cant_spawn_more_pets", "{prefix} &cYou can't spawn any more pets!"),
     PLAYER_NOT_ONLINE ("player_not_online", "{prefix} &c{player} is not online (spelling?)"),
     REMOVED_PET ("remove.removed_pet", "{prefix} &7Successfully removed the {type} pet!"),
     REMOVED_ALL_PETS ("remove.all_pets", "{prefix} &7Successfully removed {count} pets!"),
