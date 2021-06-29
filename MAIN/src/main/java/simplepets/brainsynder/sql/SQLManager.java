@@ -1,7 +1,5 @@
 package simplepets.brainsynder.sql;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -15,9 +13,9 @@ import java.util.function.Consumer;
 /**
  * This class was provided by {@link https://github.com/Thatsmusic99}
  * From the resource {@link https://github.com/Niestrat99/AT-Rewritten}
+ * Fat chance, i didn't use MysqlDataSource lmao
  */
 public abstract class SQLManager {
-    protected MysqlDataSource source;
     private Connection connection;
     protected String tablePrefix;
     private final String databaseName;
@@ -64,32 +62,22 @@ public abstract class SQLManager {
         }
 
         CompletableFuture.runAsync(() -> {
-            MysqlDataSource source = new MysqlDataSource();
-            source.setPort(port);
-            source.setPassword(pass);
-            source.setUser(user);
-            source.setDatabaseName(databaseName);
-            source.setServerName(host);
+            StringBuilder url = new StringBuilder();
+            url.append("jdbc:mysql://").append(host).append(":").append(port).append("/").append(databaseName);
+            url.append("?useSSL=").append(ssl);
+            url.append("&autoReconnect=true");
             try {
-                source.setAutoReconnect(true);
-                source.setUseSSL(ssl);
-            } catch (SQLException exception) {
-                exception.printStackTrace();
+                connection = DriverManager.getConnection(url.toString(), user, pass);
+                usingSqlite = false;
+                PetCore.getInstance().getDebugLogger().debug(getClass().getSimpleName() + " Using MySQL");
+                createTable();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
             }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    SQLManager.this.source = source;
-                    usingSqlite = false;
-                    //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Using MySQL");
-                    createTable();
-                }
-            }.runTask(plugin);
         });
     }
 
     public void disconnect() {
-        if (source != null) source = null;
         if (connection == null) return;
 
         try {
@@ -103,16 +91,7 @@ public abstract class SQLManager {
 
     // This method should keep SQLite connections open, while closing regular SQL connections
     public void handleConnection (Consumer<Connection> consumer) {
-        if (usingSqlite) {
-            consumer.accept(connection);
-            return;
-        }
-
-        try (Connection connection = source.getConnection()) {
-            consumer.accept(connection);
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
+        consumer.accept(connection);
     }
 
     public String getTable(String suffix) {
