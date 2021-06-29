@@ -68,6 +68,12 @@ public class PetOwner implements PetUser {
     }
 
     public void loadCompound (StorageTagCompound compound) {
+        respawnPets.clear();
+        savedPetData.clear();
+        hatPets.clear();
+        petMap.clear();
+        nameMap.clear();
+        ownedPets.clear();
         new BukkitRunnable() {
             @Override
             public void run() {

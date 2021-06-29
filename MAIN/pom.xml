@@ -43,10 +43,6 @@
                                     <pattern>net.wesjd</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
-                                <relocation>
-                                    <pattern>com.mysql</pattern>
-                                    <shadedPattern>${groupId}.internal.mysql</shadedPattern>
-                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -66,6 +62,7 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.25</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
