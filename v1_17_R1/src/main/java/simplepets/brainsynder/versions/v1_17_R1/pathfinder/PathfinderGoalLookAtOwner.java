@@ -28,6 +28,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
     public boolean canUse() {
         if ((user == null) || (player == null)) {
             this.user = entityPet.getPetUser();
+            if (!(user.getPlayer() instanceof Player)) return false;
             this.player = (Player) user.getPlayer();
         }
 

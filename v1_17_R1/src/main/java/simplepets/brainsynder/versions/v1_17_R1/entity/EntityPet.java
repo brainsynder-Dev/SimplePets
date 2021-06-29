@@ -405,7 +405,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         }
 
         // Handles all other Pet Tasks...
-        if (user == null) {
+        if (user == null || !user.getPlayer().isOnline()) {
             if (bukkitEntity != null)
                 bukkitEntity.remove();
             return;
@@ -421,7 +421,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
 
-        if (user.getPlayer() != null) {
+        if (user.getPlayer() != null && user.getPlayer() instanceof Player) {
             Player player = (Player) user.getPlayer();
             boolean shifting = player.isSneaking();
             if (PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true))
