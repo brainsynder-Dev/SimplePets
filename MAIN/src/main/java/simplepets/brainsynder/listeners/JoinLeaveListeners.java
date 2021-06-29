@@ -29,7 +29,9 @@ public class JoinLeaveListeners implements Listener {
             @Override
             public void run() {
                 PlayerSQL.getInstance().fetchData(event.getPlayer().getUniqueId(), data -> {
+                    boolean load = SimplePets.getUserManager().isUserCached(event.getPlayer());
                     SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
+                        if (!load) return;
                         ((PetOwner) user).loadCompound(data);
                     });
                 });

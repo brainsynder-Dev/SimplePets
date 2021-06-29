@@ -69,9 +69,16 @@ public class UserManager implements UserManagement {
         return Optional.of(user);
     }
 
+
     @Override
     public Collection<PetUser> getAllUsers() {
         return userMap.values();
     }
+
+    @Override
+    public boolean isUserCached(Player player) {
+        return userMap.containsKey(player.getUniqueId());
+    }
+
 
 }
