@@ -94,15 +94,6 @@ public class Utilities {
         System.out.println("Entity: "+entity.getType()+"  Passenger: "+passenger.getType());
         try {
             entity.setPassenger(passenger);
-            //sendMountPacket(player, passenger);
-            if (passenger instanceof Player) {
-                System.out.println("pass is player");
-                sendMountPacket((Player) passenger, entity);
-            }
-            if (entity instanceof Player) {
-                System.out.println("entity is player");
-                sendMountPacket((Player) entity, passenger);
-            }
         } catch (Exception e) {
             SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
@@ -145,7 +136,6 @@ public class Utilities {
             entity.eject();
             if (entity instanceof Player) {
                 resetRideCooldown(passenger);
-                sendMountPacket((Player) entity, passenger);
             }
         } catch (Exception e) {
             SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#removePassenger");
@@ -155,22 +145,9 @@ public class Utilities {
 
     public static void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
-        if (ServerVersion.getVersion() == ServerVersion.v1_13_R1 || ServerVersion.getVersion() == ServerVersion.v1_13_R2) {
-            field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "k", Integer.TYPE);
-        } else {
-            field = FieldAccessor.getField(Reflection.getNmsClass("Entity"), "j", Integer.TYPE);
-        }
-        field.set(Reflection.getHandle(entity), 0);
-    }
+        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), "s", Integer.TYPE);
 
-    public static void sendMountPacket(Player player, Entity entity) {
-        if (ServerVersion.getVersion() == ServerVersion.v1_8_R3) return;
-        SimplePets.getSpawnUtil().getHandle(entity).ifPresent(handle -> {
-            Class<?> outMount = Reflection.getNmsClass("PacketPlayOutMount");
-            Constructor<?> constructor = Reflection.fillConstructor(outMount, Reflection.getNmsClass("Entity"));
-            Object packet = Reflection.initiateClass(constructor, handle);
-            Reflection.sendPacket(player, packet);
-        });
+        field.set(Reflection.getHandle(entity), 0);
     }
 
     public static void hidePet(PetUser user, IEntityPet entityPet) {
