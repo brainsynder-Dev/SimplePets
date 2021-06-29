@@ -177,22 +177,24 @@ public class PetOwner implements PetUser {
                     .setString("type", type.getName())
             );
         });
-        updateDatabase();
-        removePets();
-        this.nameMap.clear();
-        this.vehicle = null;
-        this.savedPetData.clear();
-        this.hatPets.clear();
-        this.ownedPets.clear();
-        this.petMap.clear();
-        this.respawnPets.clear();
+        updateDatabase(callback -> {
+            // Reset everything after we finish saving
+            removePets();
+            this.nameMap.clear();
+            this.vehicle = null;
+            this.savedPetData.clear();
+            this.hatPets.clear();
+            this.ownedPets.clear();
+            this.petMap.clear();
+            this.respawnPets.clear();
+        });
     }
 
     /**
      * Will update the data that is in the database
      */
-    public void updateDatabase() {
-        PlayerSQL.getInstance().uploadData(this);
+    public void updateDatabase(SQLManager.SQLCallback<Boolean> callback) {
+        PlayerSQL.getInstance().uploadData(this, callback);
     }
 
     @Override
@@ -237,13 +239,13 @@ public class PetOwner implements PetUser {
     public void addOwnedPet(PetType type) {
         if (ownedPets.contains(type)) return;
         ownedPets.add(type);
-        updateDatabase();
+        updateDatabase(callback -> {});
     }
 
     @Override
     public void removeOwnedPet(PetType type) {
         ownedPets.remove(type);
-        updateDatabase();
+        updateDatabase(callback -> {});
     }
 
     @Override
@@ -262,7 +264,7 @@ public class PetOwner implements PetUser {
             if (config.isPresent()) name = config.get().getDisplayName();
             nameMap.remove(type);
         }
-        updateDatabase();
+        updateDatabase(callback -> {});
         String finalName = name;
         getPetEntity(type).ifPresent(entity -> {
 

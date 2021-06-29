@@ -354,12 +354,12 @@ public class PlayerSQL extends SQLManager {
         });
     }
 
-    public void uploadData(PetUser user) {
+    public void uploadData(PetUser user, SQLCallback<Boolean> callback) {
         isPlayerInDatabase(user.getPlayer().getUniqueId(), data -> {
             if (data) {
-                updateData(user, data1 -> {});
+                updateData(user, callback);
             } else {
-                insertData(user, data1 -> {});
+                insertData(user, callback);
             }
         });
     }
