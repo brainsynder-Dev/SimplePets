@@ -141,21 +141,21 @@ public class PetConfiguration implements PetConfigManager {
         @Override
         public boolean canHat(Player player) {
             if (!plugin.getConfiguration().getBoolean(Config.HATS)) return false;
-            if (JSON.getBoolean("hat", true)) return Utilities.hasPermission(player, type.getPermission("hat"), true);
+            if (JSON.getBoolean("hat", true)) return Utilities.hasPermission(player, type.getPermission("hat"));
             return false;
         }
 
         @Override
         public boolean canMount(Player player) {
             if (!plugin.getConfiguration().getBoolean(Config.MOUNTABLE)) return false;
-            if (JSON.getBoolean("mount", true)) return Utilities.hasPermission(player, type.getPermission("mount"), true);
+            if (JSON.getBoolean("mount", true)) return Utilities.hasPermission(player, type.getPermission("mount"));
             return false;
         }
 
         @Override
         public boolean canFly(Player player) {
             if (!plugin.getConfiguration().getBoolean(Config.MOUNTABLE)) return false;
-            if (JSON.getBoolean("mount", true)) return Utilities.hasPermission(player, type.getPermission("mount"), true);
+            if (JSON.getBoolean("mount", true)) return Utilities.hasPermission(player, type.getPermission("mount"));
             return false;
         }
 
