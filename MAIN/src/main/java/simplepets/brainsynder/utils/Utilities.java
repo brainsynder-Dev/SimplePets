@@ -1,6 +1,5 @@
 package simplepets.brainsynder.utils;
 
-import lib.brainsynder.ServerVersion;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.reflection.FieldAccessor;
