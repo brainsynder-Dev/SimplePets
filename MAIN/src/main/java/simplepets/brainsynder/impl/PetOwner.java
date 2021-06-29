@@ -420,39 +420,37 @@ public class PetOwner implements PetUser {
                 }.runTaskLater(PetCore.getInstance(), delay);
             } else {
                 // If pet is a hat, remove the hat from the player
-                if (isPetHat(type)) {
-                    PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
-                        SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
-                        return;
-                    }
-                    Entity vehicle = ent.getVehicle();
-                    Entity riderMob = getRiderEntity(ent);
-                    hatPets.remove(type);
-                    PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.REMOVE);
-                    Bukkit.getPluginManager().callEvent(hatEvent);
-                    if (entityPet instanceof IEntityControllerPet) {
-                        IEntityControllerPet controller = ((IEntityControllerPet) entityPet);
-                        Optional<Entity> riderOptional = controller.getDisplayRider();
+                if (!isPetHat(type)) return;
+                PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
+                Bukkit.getPluginManager().callEvent(event);
+                if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
+                    return;
+                }
+                Entity vehicle = ent.getVehicle();
+                Entity riderMob = getRiderEntity(ent);
+                hatPets.remove(type);
+                PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.REMOVE);
+                Bukkit.getPluginManager().callEvent(hatEvent);
+                if (entityPet instanceof IEntityControllerPet) {
+                    IEntityControllerPet controller = ((IEntityControllerPet) entityPet);
+                    Optional<Entity> riderOptional = controller.getDisplayRider();
 
-                        if (riderOptional.isPresent()) {
-                            Entity rider = riderOptional.get();
-                            vehicle.eject();
-                            controller.getDisplayEntity().ifPresent(entity -> {
-                                Utilities.sendMountPacket((Player) getPlayer(), rider);
-                                Utilities.resetRideCooldown(rider);
-                                entity.setPassenger(rider);
-                            });
-                        } else {
-                            Utilities.removePassenger(vehicle, ent);
-                        }
+                    if (riderOptional.isPresent()) {
+                        Entity rider = riderOptional.get();
+                        vehicle.eject();
+                        controller.getDisplayEntity().ifPresent(entity -> {
+                            Utilities.resetRideCooldown(rider);
+                            entity.setPassenger(rider);
+                        });
                     } else {
                         Utilities.removePassenger(vehicle, ent);
                     }
-                    if (riderMob != null)
-                        Utilities.setPassenger((Player) getPlayer(), vehicle, riderMob);
+                } else {
+                    Utilities.removePassenger(vehicle, ent);
                 }
+                if (riderMob != null)
+                    Utilities.setPassenger((Player) getPlayer(), vehicle, riderMob);
             }
         });
     }
