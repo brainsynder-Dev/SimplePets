@@ -29,6 +29,7 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.sql.PlayerSQL;
+import simplepets.brainsynder.sql.SQLManager;
 import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.UUIDDataType;
 import simplepets.brainsynder.utils.Utilities;
@@ -36,10 +37,7 @@ import simplepets.brainsynder.utils.Utilities;
 import java.util.*;
 
 public class PetOwner implements PetUser {
-    // TODO - Please review, this caused a major bug with inventories not opening after relog
-    // Chances are it does a bit more than that
-    @Deprecated
-    private final OfflinePlayer player;
+
     private final UUID uuid;
 
     private PetType vehicle = null;
@@ -53,7 +51,6 @@ public class PetOwner implements PetUser {
 
     public PetOwner(OfflinePlayer player) {
         Validate.notNull(player, "Player can not be null (They Offline?)");
-        this.player = player;
         this.uuid = player.getUniqueId();
 
         respawnPets = new ArrayList<>();
@@ -117,8 +114,9 @@ public class PetOwner implements PetUser {
                                 if (!config.isEnabled()) return;
                                 if (!type.isSupported()) return;
                                 if (!spawnUtil.isRegistered(type)) return;
-                                if (player instanceof Player) {
-                                    if (!Utilities.hasPermission((Player) player, type.getPermission())) return;
+                                Player player = Bukkit.getPlayer(uuid);
+                                if (player != null) {
+                                    if (!Utilities.hasPermission(player, type.getPermission())) return;
                                     spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
                                 }
                             });
@@ -274,7 +272,7 @@ public class PetOwner implements PetUser {
 
             entity.setPetName(finalName);
 
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.RENAME, (Player) player, entity.getEntity().getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.RENAME, (Player) getPlayer(), entity.getEntity().getLocation());
         });
     }
 
@@ -296,7 +294,7 @@ public class PetOwner implements PetUser {
         Bukkit.getPluginManager().callEvent(event);
 
         petMap.get(type).getEntities().forEach(entity -> {
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) player, entity.getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) getPlayer(), entity.getLocation());
             entity.remove();
         });
         petMap.remove(type);
@@ -312,7 +310,7 @@ public class PetOwner implements PetUser {
             Bukkit.getPluginManager().callEvent(event);
 
             entityPet.getEntities().forEach(entity -> {
-                SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) player, entity.getLocation());
+                SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) getPlayer(), entity.getLocation());
                 entity.remove();
             });
         });
@@ -335,7 +333,7 @@ public class PetOwner implements PetUser {
     public void setPet(IEntityPet entity) {
         if (entity == null) return;
         // This is another players entity pet
-        if (!entity.getOwnerUUID().equals(player.getUniqueId())) return;
+        if (!entity.getOwnerUUID().equals(uuid)) return;
 
         // If the player has a duplicate pet being spawned it will remove the old one
         getPetEntity(entity.getPetType()).ifPresent(entityPet -> {
@@ -346,11 +344,11 @@ public class PetOwner implements PetUser {
         petMap.put(entity.getPetType(), entity);
 
         PersistentDataContainer container = entity.getEntity().getPersistentDataContainer();
-        container.set(Keys.ENTITY_OWNER, new UUIDDataType(), player.getUniqueId());
+        container.set(Keys.ENTITY_OWNER, new UUIDDataType(), uuid);
         container.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, entity.getPetType().getName());
 
         entity.getEntities().forEach(ent -> {
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, (Player) player, ent.getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, (Player) getPlayer(), ent.getLocation());
         });
 
         getPetName(entity.getPetType()).ifPresent(entity::setPetName);
@@ -369,7 +367,7 @@ public class PetOwner implements PetUser {
     @Override
     public boolean isPetHat(PetType type) {
         if (hatPets.isEmpty()) return false;
-        if (((Player) player).getPassengers().isEmpty()) return false;
+        if (((Player) getPlayer()).getPassengers().isEmpty()) return false;
         return hatPets.contains(type);
     }
 
@@ -396,11 +394,11 @@ public class PetOwner implements PetUser {
                 if (optional.isPresent()) ent = optional.get();
             }
             IPetConfig config = configOptional.get();
-            if (config.canHat((Player) player) && hat) {
+            if (config.canHat((Player) getPlayer()) && hat) {
                 PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
-                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
                     return;
                 }
                 hatPets.add(type);
@@ -411,7 +409,7 @@ public class PetOwner implements PetUser {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Utilities.setPassenger((Player) player, getTopEntity((Player) player), finalEnt);
+                        Utilities.setPassenger((Player) getPlayer(), getTopEntity((Player) getPlayer()), finalEnt);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
             } else {
@@ -420,7 +418,7 @@ public class PetOwner implements PetUser {
                     PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
                     Bukkit.getPluginManager().callEvent(event);
                     if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
-                        SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) player, ent.getLocation());
+                        SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
                         return;
                     }
                     Entity vehicle = ent.getVehicle();
@@ -436,7 +434,7 @@ public class PetOwner implements PetUser {
                             Entity rider = riderOptional.get();
                             vehicle.eject();
                             controller.getDisplayEntity().ifPresent(entity -> {
-                                Utilities.sendMountPacket((Player) player, rider);
+                                Utilities.sendMountPacket((Player) getPlayer(), rider);
                                 Utilities.resetRideCooldown(rider);
                                 entity.setPassenger(rider);
                             });
@@ -447,7 +445,7 @@ public class PetOwner implements PetUser {
                         Utilities.removePassenger(vehicle, ent);
                     }
                     if (riderMob != null)
-                        Utilities.setPassenger((Player) player, vehicle, riderMob);
+                        Utilities.setPassenger((Player) getPlayer(), vehicle, riderMob);
                 }
             }
         });
