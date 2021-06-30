@@ -76,6 +76,10 @@
             <version>${module.version}</version>
             <exclusions>
                 <exclusion>
+                    <groupId>net.wesjd</groupId>
+                    <artifactId>anvilgui</artifactId>
+                </exclusion>
+                <exclusion>
                     <groupId>mysql</groupId>
                     <artifactId>mysql-connector-java</artifactId>
                 </exclusion>

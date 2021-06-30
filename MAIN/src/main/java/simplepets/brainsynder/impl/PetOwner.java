@@ -219,12 +219,14 @@ public class PetOwner implements PetUser {
     public void removePetSave(StorageTagCompound compound) {
         if (!savedPetData.contains(compound)) return;
         savedPetData.remove(compound);
+        updateDatabase(data -> {});
     }
 
     @Override
     public void addPetSave(StorageTagCompound compound) {
         if (savedPetData.contains(compound)) return;
         savedPetData.add(compound);
+        updateDatabase(data -> {});
     }
 
     @Override
