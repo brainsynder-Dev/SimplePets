@@ -48,8 +48,8 @@ public class Debug implements DebugLogger {
         if (builder.getLevel().isHidden()) return;
 
         if (!builder.getLevel().canBypassDisable()) {
-            if (core.isEnabled()) {
-                Config configuration = core.getConfiguration();
+            Config configuration = core.getConfiguration();
+            if (core.isEnabled() && (configuration != null)) {
                 runnable = () -> {
                     if ((configuration != null) && (builder.getLevel().getLevelName() != null)) {
                         if (!configuration.getBoolean("Debug.Enabled")) return;
@@ -79,6 +79,18 @@ public class Debug implements DebugLogger {
                     });
                 };
             }
+        }else{
+            runnable = () -> {
+                if (builder.broadcast())
+                    Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).forEach(player -> {
+                        builder.getMessages().forEach(message -> {
+                            player.sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets] " + builder.getLevel().getTextColor() + message);
+                        });
+                    });
+                builder.getMessages().forEach(message -> {
+                    Bukkit.getConsoleSender().sendMessage(builder.getLevel().getPrefixColor() + "[SimplePets " + builder.getLevel().getName() + "] " + builder.getLevel().getTextColor() + message);
+                });
+            };
         }
 
         if (runnable == null) return;
