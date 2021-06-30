@@ -11,7 +11,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityBlaze}
+ * NMS: {@link net.minecraft.world.entity.monster.Blaze}
  */
 public class EntityBlazePet extends EntityPet implements IEntityBlazePet {
     private static final EntityDataAccessor<Byte> ON_FIRE;

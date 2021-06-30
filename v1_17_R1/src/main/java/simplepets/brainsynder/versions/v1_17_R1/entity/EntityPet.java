@@ -73,7 +73,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
-        super(entitytypes, ((CraftWorld) ((Player) user.getPlayer()).getLocation().getWorld()).getHandle());
+        super(entitytypes, ((CraftWorld) user.getPlayer().getLocation().getWorld()).getHandle());
         this.user = user;
         this.petType = type;
 
@@ -95,7 +95,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
             setPos(location.getX(), location.getY(), location.getZ());
-            PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), location);
+            PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), location);
         });
     }
 
@@ -114,12 +114,12 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     @Override
     public boolean isBurning() {
-        return getSharedFlag(0);
+        return hasVisualFire;
     }
 
     @Override
     public void setBurning(boolean var) {
-        setSharedFlagOnFire(var);
+        this.hasVisualFire = var;
     }
 
     @Override
@@ -413,7 +413,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
 
         if (user.getPlayer() != null && user.getPlayer() instanceof Player) {
-            Player player = (Player) user.getPlayer();
+            Player player = user.getPlayer();
             boolean shifting = player.isSneaking();
             if (PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true))
                 getEntity().setCustomNameVisible((!shifting));
