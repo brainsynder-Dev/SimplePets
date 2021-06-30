@@ -11,7 +11,6 @@ import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
-import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.misc.EntityPetType;
 import simplepets.brainsynder.api.pet.PetType;
@@ -65,7 +64,7 @@ public class PathfinderWalkToPlayer extends Goal {
         if (entity == null) return false;
 
         if (!user.getPlayer().isOnline()) return false;
-        if (((Player) user.getPlayer()).isInsideVehicle()) return false;
+        if (user.getPlayer().isInsideVehicle()) return false;
         if (!user.hasPets()) return false;
 
         if (user.getUserLocation().isPresent()) {
@@ -127,6 +126,8 @@ public class PathfinderWalkToPlayer extends Goal {
     }
 
     private int getStoppingDistance() {
+        if (PetCore.getInstance().getConfiguration() == null) return 0;
+
         return large ? PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance_LargePets")
                 : PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance");
     }
@@ -158,7 +159,7 @@ public class PathfinderWalkToPlayer extends Goal {
         if (Math.abs((double) x - player.getX()) < 2.0D && Math.abs((double) z - player.getZ()) < 2.0D) return false;
         if (!this.canTeleportTo(new BlockPos(x, y, z))) return false;
         this.entity.moveTo((double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
-        PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, (Player) user.getPlayer(), entity.getEntity().getLocation());
+        PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), entity.getEntity().getLocation());
         this.navigation.stop();// Translation: navigation.stop()
         return true;
     }
