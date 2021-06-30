@@ -362,6 +362,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         super.travel(new Vec3(strafe, vertical, forward));
 
         // This bit of code at least keeps the special riding mobs in the correct location
+        // Horse riding is still bugged but at least its not in the wrong spot
         if (this instanceof ISpecialRiding) {
             ClientboundMoveVehiclePacket packet = new ClientboundMoveVehiclePacket(this);
             passenger.connection.send(packet);
