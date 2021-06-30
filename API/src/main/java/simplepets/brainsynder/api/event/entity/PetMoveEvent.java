@@ -2,9 +2,9 @@ package simplepets.brainsynder.api.event.entity;
 
 import org.bukkit.Location;
 import simplepets.brainsynder.api.entity.IEntityPet;
-import simplepets.brainsynder.api.event.SimplePetEvent;
+import simplepets.brainsynder.api.event.CancellablePetEvent;
 
-public class PetMoveEvent extends SimplePetEvent {
+public class PetMoveEvent extends CancellablePetEvent {
     private final IEntityPet entity;
     private final Location targetLocation;
     private final Cause cause;
