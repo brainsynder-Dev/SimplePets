@@ -6,7 +6,6 @@ import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -49,7 +48,7 @@ public class PetOwner implements PetUser {
     private final Map<PetType, IEntityPet> petMap;
     private final Map<PetType, String> nameMap;
 
-    public PetOwner(OfflinePlayer player) {
+    public PetOwner(Player player) {
         Validate.notNull(player, "Player can not be null (They Offline?)");
         this.uuid = player.getUniqueId();
 
@@ -202,8 +201,13 @@ public class PetOwner implements PetUser {
     }
 
     @Override
-    public OfflinePlayer getPlayer() {
-        return Bukkit.getOfflinePlayer(uuid);
+    public UUID getOwnerUUID() {
+        return uuid;
+    }
+
+    @Override
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
     }
 
     @Override
@@ -278,7 +282,7 @@ public class PetOwner implements PetUser {
 
             entity.setPetName(finalName);
 
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.RENAME, (Player) getPlayer(), entity.getEntity().getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.RENAME, getPlayer(), entity.getEntity().getLocation());
         });
     }
 
@@ -300,7 +304,7 @@ public class PetOwner implements PetUser {
         Bukkit.getPluginManager().callEvent(event);
 
         petMap.get(type).getEntities().forEach(entity -> {
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) getPlayer(), entity.getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
             entity.remove();
         });
         petMap.remove(type);
@@ -316,7 +320,7 @@ public class PetOwner implements PetUser {
             Bukkit.getPluginManager().callEvent(event);
 
             entityPet.getEntities().forEach(entity -> {
-                SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, (Player) getPlayer(), entity.getLocation());
+                SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
                 entity.remove();
             });
         });
@@ -354,7 +358,7 @@ public class PetOwner implements PetUser {
         container.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, entity.getPetType().getName());
 
         entity.getEntities().forEach(ent -> {
-            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, (Player) getPlayer(), ent.getLocation());
+            SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, getPlayer(), ent.getLocation());
         });
 
         getPetName(entity.getPetType()).ifPresent(entity::setPetName);
@@ -373,7 +377,7 @@ public class PetOwner implements PetUser {
     @Override
     public boolean isPetHat(PetType type) {
         if (hatPets.isEmpty()) return false;
-        if (((Player) getPlayer()).getPassengers().isEmpty()) return false;
+        if (getPlayer().getPassengers().isEmpty()) return false;
         return hatPets.contains(type);
     }
 
@@ -400,11 +404,11 @@ public class PetOwner implements PetUser {
                 if (optional.isPresent()) ent = optional.get();
             }
             IPetConfig config = configOptional.get();
-            if (config.canHat((Player) getPlayer()) && hat) {
+            if (config.canHat(getPlayer()) && hat) {
                 PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
-                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, getPlayer(), ent.getLocation());
                     return;
                 }
                 hatPets.add(type);
@@ -415,7 +419,7 @@ public class PetOwner implements PetUser {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        Utilities.setPassenger((Player) getPlayer(), getTopEntity((Player) getPlayer()), finalEnt);
+                        Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
             } else {
@@ -424,7 +428,7 @@ public class PetOwner implements PetUser {
                 PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
-                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, (Player) getPlayer(), ent.getLocation());
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, getPlayer(), ent.getLocation());
                     return;
                 }
                 Entity vehicle = ent.getVehicle();
@@ -450,7 +454,7 @@ public class PetOwner implements PetUser {
                     Utilities.removePassenger(vehicle, ent);
                 }
                 if (riderMob != null)
-                    Utilities.setPassenger((Player) getPlayer(), vehicle, riderMob);
+                    Utilities.setPassenger(getPlayer(), vehicle, riderMob);
             }
         });
     }
@@ -476,7 +480,7 @@ public class PetOwner implements PetUser {
     public boolean canSpawnMorePets() {
         int maxAmount = PetCore.getInstance().getConfiguration().getInt("PetToggles.Default-Spawn-Limit");
         if (!getPlayer().isOnline()) return false;
-        for (PermissionAttachmentInfo permission : ((Player) getPlayer()).getEffectivePermissions()) {
+        for (PermissionAttachmentInfo permission : getPlayer().getEffectivePermissions()) {
             if (!permission.getValue()) continue;
             if (!permission.getPermission().startsWith("pet.amount.")) continue;
             String strAmount = permission.getPermission().substring(11);
@@ -487,7 +491,11 @@ public class PetOwner implements PetUser {
 
     @Override
     public boolean isPetVehicle(PetType type) {
-        return vehicle == type;
+        if (getPlayer().getVehicle() == null) {
+            this.vehicle = null;
+            return false;
+        }
+        return this.vehicle == type;
     }
 
     @Override
@@ -496,9 +504,9 @@ public class PetOwner implements PetUser {
             if (this.vehicle == type) this.vehicle = null;
             return false;
         }
-        Player player = (Player) getPlayer();
+        Player player = getPlayer();
 
-        if (hasPetVehicle()) {
+        if (hasPetVehicle() && (player.getVehicle() != null)) {
             // Remove previous vehicle
             getPetEntity(this.vehicle).ifPresent(entityPet -> {
                 PetDismountEvent event = new PetDismountEvent(entityPet);
@@ -526,7 +534,7 @@ public class PetOwner implements PetUser {
         IPetConfig config = configOptional.get();
 
         getPetEntity(type).ifPresent(entityPet -> {
-            if (!config.canMount((Player) getPlayer())) {
+            if (!config.canMount(getPlayer())) {
                 SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
                 return;
             }

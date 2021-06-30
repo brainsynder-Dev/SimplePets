@@ -2,7 +2,6 @@ package simplepets.brainsynder.api.user;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.PetType;
@@ -10,12 +9,15 @@ import simplepets.brainsynder.api.pet.PetType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface PetUser {
+    UUID getOwnerUUID ();
+
     /**
      * Player instance
      */
-    OfflinePlayer getPlayer ();
+    Player getPlayer ();
 
     /**
      * Will fetch the players location
@@ -23,7 +25,7 @@ public interface PetUser {
      */
     default Optional<Location> getUserLocation () {
         if (getPlayer() instanceof Player) {
-            return Optional.of(((Player)getPlayer()).getLocation());
+            return Optional.of(getPlayer().getLocation());
         }
         return Optional.empty();
     }

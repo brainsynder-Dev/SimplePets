@@ -355,7 +355,7 @@ public class PlayerSQL extends SQLManager {
     }
 
     public void uploadData(PetUser user, SQLCallback<Boolean> callback) {
-        isPlayerInDatabase(user.getPlayer().getUniqueId(), data -> {
+        isPlayerInDatabase(user.getOwnerUUID(), data -> {
             if (data) {
                 updateData(user, callback);
             } else {
