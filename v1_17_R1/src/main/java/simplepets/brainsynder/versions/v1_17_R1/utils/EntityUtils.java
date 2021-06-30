@@ -1,17 +1,47 @@
 package simplepets.brainsynder.versions.v1_17_R1.utils;
 
 import lib.brainsynder.reflection.Reflection;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
+import simplepets.brainsynder.versions.v1_17_R1.entity.FakeEntity;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
 
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
+    private static Field jumpingField;
+
+    static {
+        try{
+            FakeEntity fakeEntity = new FakeEntity();
+            fakeEntity.setJumping(true);
+            for(Field field : LivingEntity.class.getDeclaredFields()){
+                if(!Modifier.isProtected(field.getModifiers())){
+                    continue;
+                }
+                if(boolean.class.isAssignableFrom(field.getType())){
+                    field.setAccessible(true);
+                    if(field.getBoolean(fakeEntity)){
+                        jumpingField = field;
+                        break;
+                    }
+                    field.setAccessible(false);
+                }
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
+    }
+
+    public static Field getJumpingField() {
+        return jumpingField;
+    }
 
     public static VillagerType getTypeFromBiome(BiomeType type) {
         if (stored.isEmpty()) initStores();

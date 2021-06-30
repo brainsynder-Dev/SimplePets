@@ -4,6 +4,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.game.ClientboundMoveVehiclePacket;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -22,7 +24,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.ISpecialRiding;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
+import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -31,7 +35,9 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderWalkToPlayer;
+import simplepets.brainsynder.versions.v1_17_R1.utils.EntityUtils;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -47,6 +53,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     private final double walkSpeed = 0.6000000238418579;
     private final double rideSpeed = 0.4000000238418579;
+    private final double jumpHeight = 0.5D;
     private final boolean floatDown = false;
     private final boolean canGlow = true;
     private final boolean isGlowing = false;
@@ -80,7 +87,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
     }
 
-    public boolean isJumping () {
+    public boolean isJumping() {
         return jumping;
     }
 
@@ -154,7 +161,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         if (PetCore.getInstance().getConfiguration().getBoolean(Config.HEX)) {
             name = Colorize.translateBungeeHex(name);
-        }else{
+        } else {
             name = Colorize.translateBukkit(name);
         }
         return name;
@@ -299,82 +306,66 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     @Override
-    public void travel(Vec3 vec3D) {
-        super.travel(vec3D);
+    public void travel(Vec3 vec3d) {
         if ((petType == null) || (user == null)) return;
 
         if ((passengers == null)
                 || (!isOwnerRiding())) {
-            super.travel(vec3D);
+            super.travel(vec3d);
             return;
         }
 
-        double strafe = vec3D.x;
-        double vertical = vec3D.y;
-        double forward = vec3D.z;
+        net.minecraft.world.entity.Entity rider = getFirstPassenger();
 
-        net.minecraft.world.entity.player.Player owner = ((CraftPlayer) user.getPlayer()).getHandle();
-        if (jumping) {
-            if (isOnGround(this)) {
-                jumpFromGround();
-            } else {
-                SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
-                    if (config.canFly((Player) user.getPlayer())) {
-                        setDeltaMovement(getDeltaMovement().x, 0.3, getDeltaMovement().z);
-                    }
-                });
-            }
+        if (!(rider instanceof ServerPlayer)) {
+            super.travel(vec3d);
+            return;
         }
+        ServerPlayer passenger = (ServerPlayer) rider;
 
-        setYRot(owner.getYRot());
-        this.yRotO = getYRot();
-        setXRot(owner.getXRot() * 0.5F);
+
+        this.setYRot(passenger.getYRot());
+        this.yRotO = this.getYRot();
+        this.setXRot(passenger.getXRot() * 0.5F);
         this.setRot(this.getYRot(), this.getXRot());
-        this.yHeadRot = (this.yBodyRot = this.getYRot()); // Translation: this.yHeadRot = (this.yBodyRot = this.yRot);
-        strafe = owner.xxa * 0.5F; // Translation: double motionSideways = passenger.xxa * walkSpeed;
-        forward = owner.zza; // Translation: double motionForward = passenger.zza;
-        if (forward <= 0.0F) {
+        this.yHeadRot = this.yBodyRot = this.getYRot();
+
+        double strafe = passenger.xxa * 0.5;
+        double vertical = vec3d.y;
+        double forward = passenger.zza;
+        if (forward <= 0) {
             forward *= 0.25F;
         }
-        //this.aL = this.aD = this.yRot;
-        //this.H = 1.0F;
 
-        Vec3 vec = new Vec3(strafe, vertical, forward);
-        //if (!(this instanceof IEntityHorsePet)) vec3D.vec3D.x *= 0.75;
-        this.setSpeed((float) getAttribute(Attributes.MOVEMENT_SPEED).getValue());
-        super.travel(vec);
-//        if (!level.isClientSide) {
-//            if (this instanceof IEntityHorsePet) {
-//                Location location = getBukkitEntity().getLocation();
-//                setPosition(location.getX(), location.getY(), location.getZ());
-//                PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport(this);
-//                owner.playerConnection.sendPacket(packet);
-//                if (forward > 0.0F) {
-//                    float f = MathHelper.sin((float) (this.yRot * 0.017453292));
-//                    float f1 = MathHelper.cos((float) (this.yRot * 0.017453292));
-//                    setMot(getMot().add((-0.4 * f * 0.0), 0, (0.4 * f1 * 0.0))); // This would be 0 anyways?
-//                }
-//
-//                this.aL = this.dM() * 0.1F;
-//                if (this.cj()) {
-//                    this.n((float) this.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).getValue());
-//                    super.g(new Vec3D(strafe, vertical, forward));
-//                } else if (owner instanceof EntityHuman) {
-//                    this.setMot(new Vec3D(0, 0, 0));
-//                }
-//
-//                this.aB = this.aC; // this.prevLimbSwingAmount = this.limbSwingAmount;
-//                double d0 = this.locX() - this.lastX;
-//                double d1 = this.locZ() - this.lastZ;
-//                float f5 = (float) (MathHelper.sqrt(d0 * d0 + d1 * d1) * 4.0);
-//                if (f5 > 1.0) {
-//                    f5 = (float) 1.0;
-//                }
-//
-//                this.limbSwingAmount += (f5 - this.aC) * 0.4; // this.limbSwingAmount += (f5 - this.limbSwingAmount) * 0.4F;
-//                this.aD += this.aC; // this.limbSwing += this.limbSwingAmount;
-//            }
-//        }
+        PetMoveEvent moveEvent = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+        Bukkit.getServer().getPluginManager().callEvent(moveEvent);
+        if (moveEvent.isCancelled()) return;
+
+        double speed = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
+
+        Field jumpField = EntityUtils.getJumpingField();
+        if ((jumpField != null) && (!passengers.isEmpty())) {
+            SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
+                try {
+                    if (config.canFly(getPetUser().getPlayer())) {
+                        if (jumpField.getBoolean(passenger))
+                            setDeltaMovement(getDeltaMovement().x, 0.3F, getDeltaMovement().z);
+                    } else if (this.onGround && jumpField.getBoolean(passenger)) {
+                        setDeltaMovement(getDeltaMovement().x, jumpHeight, getDeltaMovement().z);
+                        this.hasImpulse = true;
+                    }
+                } catch (IllegalArgumentException | IllegalStateException | IllegalAccessException ignored) {}
+            });
+        }
+
+        this.setSpeed((float) speed);
+        super.travel(new Vec3(strafe, vertical, forward));
+
+        // This bit of code at least keeps the special riding mobs in the correct location
+        if (this instanceof ISpecialRiding) {
+            ClientboundMoveVehiclePacket packet = new ClientboundMoveVehiclePacket(this);
+            passenger.connection.send(packet);
+        }
     }
 
     @Override
@@ -414,7 +405,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         if (user.isPetVehicle(getPetType())) {
             if (floatDown) {
                 if (!isOnGround(this)) {
-                    setDeltaMovement(getDeltaMovement().x, getDeltaMovement().y*0.4, getDeltaMovement().z);
+                    setDeltaMovement(getDeltaMovement().x, getDeltaMovement().y * 0.4, getDeltaMovement().z);
                 }
             }
         }
@@ -430,7 +421,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             if (!canIgnoreVanish()) {
                 boolean ownerVanish = ((CraftPlayer) player).getHandle().isInvisible();
                 if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
-                    if (isGlowing && (!ownerVanish)) glowHandler(false);  // If the pet is glowing & owner is not vanished
+                    if (isGlowing && (!ownerVanish))
+                        glowHandler(false);  // If the pet is glowing & owner is not vanished
                     this.setInvisible(!this.isInvisible());
                 } else {
                     if (ownerVanish && canGlow)
