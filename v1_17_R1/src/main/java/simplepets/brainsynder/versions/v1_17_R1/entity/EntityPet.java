@@ -24,6 +24,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.ISaddle;
 import simplepets.brainsynder.api.entity.misc.ISpecialRiding;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
@@ -79,6 +80,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         this.additional = new HashMap<>();
 
+        maxUpStep = 1;
         this.collides = false;
         this.noPhysics = false;
 
@@ -323,6 +325,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         }
         ServerPlayer passenger = (ServerPlayer) rider;
 
+        if (this instanceof ISaddle) {
+            ((ISaddle)this).setSaddled(true);
+        }
 
         this.setYRot(passenger.getYRot());
         this.yRotO = this.getYRot();
