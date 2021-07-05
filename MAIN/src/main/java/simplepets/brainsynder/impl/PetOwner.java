@@ -562,11 +562,7 @@ public class PetOwner implements PetUser {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    if (entityPet instanceof IEntityControllerPet) {
-                        ((IEntityControllerPet) entityPet).getDisplayEntity().ifPresent(entity -> entity.addPassenger(player));
-                    } else {
-                        entityPet.getEntity().setPassenger(player);
-                    }
+                    entityPet.attachOwner();
 
                 }
             }.runTaskLater(PetCore.getInstance(), 2L);

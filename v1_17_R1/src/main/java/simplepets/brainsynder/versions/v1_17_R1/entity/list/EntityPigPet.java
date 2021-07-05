@@ -18,6 +18,7 @@ public class EntityPigPet extends EntityAgeablePet implements IEntityPigPet {
 
     public EntityPigPet(PetType type, PetUser user) {
         super(EntityType.PIG, type, user);
+        doIndirectAttach = true;
     }
 
     @Override

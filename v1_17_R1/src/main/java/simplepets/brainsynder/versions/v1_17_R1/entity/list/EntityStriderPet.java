@@ -21,6 +21,7 @@ public class EntityStriderPet extends EntityAgeablePet implements IEntityStrider
 
     public EntityStriderPet(PetType type, PetUser user) {
         super(EntityType.STRIDER, type, user);
+        doIndirectAttach = true;
     }
 
     @Override

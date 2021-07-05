@@ -28,6 +28,7 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
 
     public EntityLlamaPet(EntityType<? extends Mob> llama, PetType type, PetUser user) {
         super(llama, type, user);
+        doIndirectAttach = false;
     }
 
     @Override
