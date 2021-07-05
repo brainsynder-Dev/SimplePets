@@ -102,6 +102,7 @@ public class Config extends YamlFile {
         addDefault("Debug.Levels.ERROR", true);
 
         // TODO: Reformat these value
+        addDefault(PUSH_PETS, false, "Are pets able to be pushed around?\nDefault: false");
         addDefault("PetToggles.GlowWhenVanished", true, "When the owner is vanished should the owner see their pet with the glow effect?\nDefault: true");
         addDefault("PetToggles.ShowPetNames", true, "Should pet names be seen?\nDefault: true");
         addDefault("PetToggles.HideNameOnShift", true, "Should pet names be hidden when their owner sneaks?\nDefault: true");
@@ -186,6 +187,7 @@ public class Config extends YamlFile {
     }
 
     public static final String
+            PUSH_PETS = "PetToggles.Move-Pets-Get-Out-Da-Way",
             MOUNTABLE = "PetToggles.All-Pets-Mountable",
             HATS = "PetToggles.All-Pets-Hat",
             FLYABLE = "PetToggles.All-Pets-Flyable",

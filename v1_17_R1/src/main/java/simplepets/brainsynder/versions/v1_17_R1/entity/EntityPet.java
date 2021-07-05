@@ -59,6 +59,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private final boolean canGlow = true;
     private final boolean isGlowing = false;
     private final boolean autoRemove = true;
+    private boolean pushable = false;
     private boolean frozen = false;
     private boolean silent = false;
     private boolean ignoreVanish = false;
@@ -84,6 +85,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         this.collides = false;
         this.noPhysics = false;
 
+        pushable = PetCore.getInstance().getConfiguration().getBoolean(Config.PUSH_PETS, false);
 
         // needs to be faster but less then 6
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
@@ -494,6 +496,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
      */
     @Override
     public void push(double x, double y, double z) {
+        if (!pushable) return;
+        super.push(x, y, z);
     }
 
 
