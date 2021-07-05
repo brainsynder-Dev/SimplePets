@@ -8,6 +8,7 @@ import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.menu.inventory.SavesMenu;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
 
 import java.io.File;
@@ -32,9 +33,9 @@ public class NextPage extends Item {
             return ((SelectionMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
         }
 
-//        if (inventory instanceof SavesMenu) {
-//            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
-//        }
+        if (inventory instanceof SavesMenu) {
+            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
+        }
 
         return false;
     }

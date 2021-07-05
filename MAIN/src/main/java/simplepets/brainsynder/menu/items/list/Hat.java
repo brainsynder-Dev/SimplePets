@@ -2,13 +2,13 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
@@ -27,7 +27,7 @@ public class Hat extends Item {
 
     @Override
     public boolean addItemToInv(PetUser user, CustomInventory inventory) {
-        return PetCore.getInstance().getConfiguration().getBoolean("PetToggles.All-Pets-Hat");
+        return PetCore.getInstance().getConfiguration().getBoolean(Config.HATS);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Hat extends Item {
         if (!masterUser.hasPets()) return;
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            ((Player)user.getPlayer()).closeInventory();
+            user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {

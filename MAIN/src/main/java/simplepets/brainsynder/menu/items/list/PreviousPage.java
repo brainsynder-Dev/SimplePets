@@ -6,6 +6,7 @@ import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.menu.inventory.SavesMenu;
 import simplepets.brainsynder.menu.inventory.SelectionMenu;
 
 import java.io.File;
@@ -30,9 +31,9 @@ public class PreviousPage extends Item {
             return inventory.getCurrentPage(owner) > 1;
         }
 
-//        if (inventory instanceof SavesMenu) {
-//            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
-//        }
+        if (inventory instanceof SavesMenu) {
+            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
+        }
 
         return false;
     }
