@@ -1,8 +1,10 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
+import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.material.Fluid;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
@@ -42,11 +44,33 @@ public class SeatEntity extends ArmorStand {
             // Trash this entity when player stopped riding
             stopRiding();
             discard();
+        } else if (getVehicle() == null) {
+            // We got dismounted somehow
+            ejectPassengers();
+            discard();
         }
     }
 
     @Override
     public void setRot(float f, float f1) {
         super.setRot(f, f1);
+    }
+
+    // If a passenger has their eyes in water and this returns false, the
+    // passenger ejects themselves from the vehicle.
+    @Override
+    public boolean rideableUnderWater() {
+        if (getVehicle() != null) {
+            // let vehicle decide what should happen
+            return getVehicle().rideableUnderWater();
+        }
+        return false;
+    }
+
+    // Never let seats eject themselves if they are in water, the passenger has
+    // to decide that.
+    @Override
+    public boolean isEyeInFluid(Tag<Fluid> tag) {
+        return false;
     }
 }
