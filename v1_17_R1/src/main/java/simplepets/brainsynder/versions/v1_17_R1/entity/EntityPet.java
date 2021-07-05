@@ -57,10 +57,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private String petName = null;
 
 
-    private final double walkSpeed = 0.6000000238418579;
-    private final double rideSpeed = 0.4000000238418579;
     private final double jumpHeight = 0.5D;
-    private final boolean floatDown = false;
     private boolean isGlowing = false;
     private boolean frozen = false;
     private boolean silent = false;
@@ -69,7 +66,17 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private int blockX = 0;
     private int blockZ = 0;
     private int blockY = 0;
-    private final int tickDelay = 10000;
+
+    // Theses fields are based off config options
+    private final double walkSpeed = 0.6000000238418579;
+    private final double rideSpeed = 0.4000000238418579;
+    private final boolean floatDown = false;
+    private boolean pushable = false;
+    private boolean canGlow = true;
+    private boolean autoRemove = true;
+    private boolean displayName = true;
+    private boolean hideNameShifting = true;
+    private int tickDelay = 10000;
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
@@ -87,7 +94,19 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         this.collides = false;
         this.noPhysics = false;
 
-        pushable = PetCore.getInstance().getConfiguration().getBoolean(Config.PUSH_PETS, false);
+
+        Config configuration = PetCore.getInstance().getConfiguration();
+        pushable = configuration.getBoolean(Config.PUSH_PETS, false);
+        canGlow = configuration.getBoolean("PetToggles.GlowWhenVanished", true);
+        autoRemove = configuration.getBoolean("PetToggles.AutoRemove.Enabled", true);
+        tickDelay = configuration.getInt("PetToggles.AutoRemove.TickDelay", 10000);
+        canGlow = configuration.getBoolean("PetToggles.GlowWhenVanished", true);//
+        hideNameShifting = configuration.getBoolean("PetToggles.HideNameOnShift", true);
+        displayName = configuration.getBoolean("PetToggles.ShowPetNames", true);
+
+        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+            // TODO: fill in values
+        });
 
         // needs to be faster but less then 6
         getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
@@ -425,7 +444,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         if (user.getPlayer() != null && user.getPlayer() instanceof Player) {
             Player player = user.getPlayer();
             boolean shifting = player.isSneaking();
-            if (PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true))
+            if (displayName && hideNameShifting)
                 getEntity().setCustomNameVisible((!shifting));
 
             if (!canIgnoreVanish()) {
