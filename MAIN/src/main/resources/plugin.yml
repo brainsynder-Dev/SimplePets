@@ -4,6 +4,7 @@ version: ${module.version}
 softdepend: [WorldGuard, WorldEdit, PlotSquared, TokenManager, GemsEconomy, ProtocolLib]
 loadbefore: [mcMMO, ProtocolSupport]
 authors: [brainsynder, Thatsmusic99]
+contributors: [traksag]
 api-version: 1.16
 commands:
     pet:
