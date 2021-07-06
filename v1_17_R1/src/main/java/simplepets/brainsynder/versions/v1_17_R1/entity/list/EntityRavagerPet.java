@@ -17,6 +17,7 @@ public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerP
 
     public EntityRavagerPet(PetType type, PetUser user) {
         super(EntityType.RAVAGER, type, user);
+        doIndirectAttach = true;
     }
 
     @Override

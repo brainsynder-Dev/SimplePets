@@ -13,6 +13,7 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import simplepets.brainsynder.api.entity.misc.IHorseAbstract;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.pet.PetType;
@@ -27,82 +28,10 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
     private static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID;
 
     protected boolean isJumping;
-    protected float playerJumpPendingScale;
-    protected int gallopSoundCounter;
 
     public EntityHorseAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
-    }
-
-    @Override
-    public void travel(Vec3 vec3d) {
-        if (this.isAlive()) {
-            if (this.isVehicle() && this.canBeControlledByRider()) {
-                LivingEntity entityliving = (LivingEntity)this.getControllingPassenger();
-                this.setYRot(entityliving.getYRot());
-                this.yRotO = this.getYRot();
-                this.setXRot(entityliving.getXRot() * 0.5F);
-                this.setRot(this.getYRot(), this.getXRot());
-                this.yBodyRot = this.getYRot();
-                this.yHeadRot = this.yBodyRot;
-                float strafe = entityliving.xxa * 0.5F;
-                float forward = entityliving.zza;
-                if (forward <= 0.0F) {
-                    forward *= 0.25F;
-                    this.gallopSoundCounter = 0;
-                }
-
-                if (this.onGround && this.playerJumpPendingScale == 0.0F) {
-                    strafe = 0.0F;
-                    forward = 0.0F;
-                }
-
-                PetMoveEvent moveEvent = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
-                Bukkit.getServer().getPluginManager().callEvent(moveEvent);
-                if (moveEvent.isCancelled()) return;
-
-                if (this.playerJumpPendingScale > 0.0F && !this.isJumping() && this.onGround) {
-                    double d0 = this.getCustomJump() * (double)this.playerJumpPendingScale * (double)this.getBlockJumpFactor();
-                    double d1;
-                    if (this.hasEffect(MobEffects.JUMP)) {
-                        d1 = d0 + (double)((float)(this.getEffect(MobEffects.JUMP).getAmplifier() + 1) * 0.1F);
-                    } else {
-                        d1 = d0;
-                    }
-
-                    Vec3 vec3d1 = this.getDeltaMovement();
-                    this.setDeltaMovement(vec3d1.x, d1, vec3d1.z);
-                    this.setIsJumping(true);
-                    this.hasImpulse = true;
-                    if (forward > 0.0F) {
-                        float f2 = Mth.sin(this.getYRot() * 0.017453292F);
-                        float f3 = Mth.cos(this.getYRot() * 0.017453292F);
-                        this.setDeltaMovement(this.getDeltaMovement().add(-0.4F * f2 * this.playerJumpPendingScale, 0.0D, 0.4F * f3 * this.playerJumpPendingScale));
-                    }
-
-                    this.playerJumpPendingScale = 0.0F;
-                }
-
-                this.flyingSpeed = this.getSpeed() * 0.1F;
-                if (this.isControlledByLocalInstance()) {
-                    this.setSpeed((float)this.getAttributeValue(Attributes.MOVEMENT_SPEED));
-                    super.travel(new Vec3(strafe, vec3d.y, forward));
-                } else if (entityliving instanceof Player) {
-                    this.setDeltaMovement(Vec3.ZERO);
-                }
-
-                if (this.onGround) {
-                    this.playerJumpPendingScale = 0.0F;
-                    this.setIsJumping(false);
-                }
-
-                this.calculateEntityAnimation(this, false);
-                this.tryCheckInsideBlocks();
-            } else {
-                this.flyingSpeed = 0.02F;
-                super.travel(vec3d);
-            }
-        }
+        doIndirectAttach = true;
     }
 
     public boolean isJumping() {

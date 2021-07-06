@@ -97,7 +97,7 @@
         </repository>
         <repository>
             <id>bs-repo</id>
-            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>dmulloy2-repo</id>

@@ -4,7 +4,6 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.game.ClientboundMoveVehiclePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,8 +28,6 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
-import simplepets.brainsynder.api.entity.misc.ISaddle;
-import simplepets.brainsynder.api.entity.misc.ISpecialRiding;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
@@ -66,6 +63,13 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private int blockX = 0;
     private int blockZ = 0;
     private int blockY = 0;
+
+    // Some entities can be controlled by the client when the player is riding
+    // them, such as pigs, horses and ravagers. This is determined by
+    // Mob#canBeControlledByRider (see the overrides). To prevent the client
+    // from taking control, we use an intermediate 'seat' entity. If this is
+    // true, a 'seat' entity is used.
+    protected boolean doIndirectAttach;
 
     // Theses fields are based off config options
     private final double walkSpeed = 0.6000000238418579;
@@ -276,6 +280,20 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     @Override
+    public boolean attachOwner() {
+        ejectPassengers();
+        var owner = user.getPlayer();
+        if (owner != null) {
+            if (!doIndirectAttach) {
+                return getBukkitEntity().addPassenger(owner);
+            } else {
+                return SeatEntity.attach(((CraftPlayer) owner).getHandle(), this);
+            }
+        }
+        return false;
+    }
+
+    @Override
     public PetType getPetType() {
         return petType;
     }
@@ -322,12 +340,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     protected boolean isOwnerRiding() {
         if (passengers.size() == 0) return false;
         net.minecraft.world.entity.player.Player owner = ((CraftPlayer) getPetUser().getPlayer()).getHandle();
-        for (net.minecraft.world.entity.Entity passenger : this.passengers) {
-            if (passenger.getUUID().equals(owner.getUUID())) {
-                return true;
-            }
-        }
-        return false;
+        return getSelfAndPassengers().anyMatch(e -> e.equals(owner));
     }
 
     @Override
@@ -340,16 +353,18 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             return;
         }
 
-        net.minecraft.world.entity.Entity rider = getFirstPassenger();
+        ServerPlayer passenger = ((CraftPlayer) getPetUser().getPlayer()).getHandle();
 
-        if (!(rider instanceof ServerPlayer)) {
-            super.travel(vec3d);
-            return;
-        }
-        ServerPlayer passenger = (ServerPlayer) rider;
-
-        if (this instanceof ISaddle) {
-            ((ISaddle)this).setSaddled(true);
+        if (doIndirectAttach) {
+            if (getFirstPassenger() instanceof SeatEntity seat) {
+                // orient the seat entity correctly. Seems to fix the issue
+                // where ridden horses are not oriented properly
+                seat.setYRot(passenger.getYRot());
+                seat.yRotO = this.getYRot();
+                seat.setXRot(passenger.getXRot() * 0.5F);
+                seat.setRot(this.getYRot(), this.getXRot());
+                seat.yHeadRot = this.yBodyRot = this.getYRot();
+            }
         }
 
         this.setYRot(passenger.getYRot());
@@ -388,13 +403,6 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         this.setSpeed((float) speed);
         super.travel(new Vec3(strafe, vertical, forward));
-
-        // This bit of code at least keeps the special riding mobs in the correct location
-        // Horse riding is still bugged but at least its not in the wrong spot
-        if (this instanceof ISpecialRiding) {
-            ClientboundMoveVehiclePacket packet = new ClientboundMoveVehiclePacket(this);
-            passenger.connection.send(packet);
-        }
     }
 
     @Override

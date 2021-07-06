@@ -42,6 +42,8 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      */
     Entity getEntity();
 
+    boolean attachOwner();
+
     /**
      * Will return all the entities involved in the pet
      */
