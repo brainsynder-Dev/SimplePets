@@ -28,7 +28,7 @@ public class JoinLeaveListeners implements Listener {
         new BukkitRunnable() {
             @Override
             public void run() {
-                PlayerSQL.getInstance().fetchData(event.getPlayer().getUniqueId(), data -> {
+                PlayerSQL.getInstance().fetchData(event.getPlayer().getUniqueId()).thenAccept(data -> {
                     boolean load = SimplePets.getUserManager().isUserCached(event.getPlayer());
                     SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
                         if (!load) return;

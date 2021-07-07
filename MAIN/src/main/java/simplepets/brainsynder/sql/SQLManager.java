@@ -16,10 +16,10 @@ import java.util.function.Consumer;
  * Fat chance, i didn't use MysqlDataSource lmao
  */
 public abstract class SQLManager {
-    private Connection connection;
+
     protected String tablePrefix;
     private final String databaseName;
-    protected boolean usingSqlite;
+    protected volatile boolean usingSqlite;
 
     public SQLManager() {
         this(false);
@@ -33,23 +33,11 @@ public abstract class SQLManager {
             tablePrefix = "simplepets";
         }
         boolean enabled = plugin.getConfiguration().getBoolean("MySQL.Enabled", false);
-        String host = plugin.getConfiguration().getString("MySQL.Host");
-        int port = plugin.getConfiguration().getInt("MySQL.Port");
         databaseName = plugin.getConfiguration().getString("MySQL.DatabaseName");
-        String user = plugin.getConfiguration().getString("MySQL.Login.Username");
-        String pass = plugin.getConfiguration().getString("MySQL.Login.Password");
-        boolean ssl = plugin.getConfiguration().getBoolean("MySQL.Options.UseSSL", false);
 
-        if (forceSqlite) {
+        if (forceSqlite || !enabled) {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Using SQLite - forced", true);
-            loadSqlite();
-            createTable();
-            return;
-        }
-        if (!enabled) {
-            //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Using SQLite - sql disabled", true);
-            loadSqlite();
-            createTable();
+            usingSqlite = true;
             return;
         }
 
@@ -57,41 +45,31 @@ public abstract class SQLManager {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Error using SQLite", true);
-            loadSqlite();
-            createTable();
+            usingSqlite = true;
         }
+    }
 
-        CompletableFuture.runAsync(() -> {
+    // Forgot about thread safety and got told off for it in AT
+    public Connection implementConnection() {
+        Connection connection = null;
+        Config config = PetCore.getInstance().getConfiguration();
+        if (usingSqlite) {
+            connection = loadSqlite();
+        } else {
             StringBuilder url = new StringBuilder();
-            url.append("jdbc:mysql://").append(host).append(":").append(port).append("/").append(databaseName);
-            url.append("?useSSL=").append(ssl);
+            url.append("jdbc:mysql://").append(config.getString("MySQL.Host")).append(":")
+                    .append(config.getInt("MySQL.Port")).append("/").append(databaseName);
+            url.append("?useSSL=").append(config.getBoolean("MySQL.Options.UseSSL"));
             url.append("&autoReconnect=true");
+
             try {
-                connection = DriverManager.getConnection(url.toString(), user, pass);
-                usingSqlite = false;
-                PetCore.getInstance().getDebugLogger().debug(getClass().getSimpleName() + " Using MySQL");
-                createTable();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                connection = DriverManager.getConnection(url.toString(),
+                        config.getString("MySQL.Login.Username"), config.getString("MySQL.Login.Password"));
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
             }
-        });
-    }
-
-    public void disconnect() {
-        if (connection == null) return;
-
-        try {
-            if (connection.isClosed()) return;
-            connection.close();
-            connection = null;
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
         }
-    }
-
-    // This method should keep SQLite connections open, while closing regular SQL connections
-    public void handleConnection (Consumer<Connection> consumer) {
-        consumer.accept(connection);
+        return connection;
     }
 
     public String getTable(String suffix) {
@@ -99,57 +77,53 @@ public abstract class SQLManager {
         return databaseName + "." + (tablePrefix + suffix);
     }
 
-    private void loadSqlite() {
+    private Connection loadSqlite() {
         // Load JDBC
         try {
             Class.forName("org.sqlite.JDBC");
             File file = new File(PetCore.getInstance().getDataFolder(), "storage.db");
             if (!file.exists()) file.createNewFile();
-            connection = DriverManager.getConnection("jdbc:sqlite:" + file);
-            usingSqlite = true;
+            return DriverManager.getConnection("jdbc:sqlite:" + file);
         } catch (ClassNotFoundException | SQLException | IOException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     //SHOW COLUMNS FROM `tbl_name`; // Lists columns
-    public void hasColumn(String table, String column, SQLCallback<Boolean> callback) {
-        CompletableFuture.runAsync(() -> {
-            handleConnection(connection -> {
-                try {
-                    DatabaseMetaData md2 = connection.getMetaData();
-                    ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
-                    callback.onSuccess(rsTables.next());
-                } catch (Exception e) {
-                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
-                    callback.onSuccess(false);
-                }
-            });
-        });
+    public CompletableFuture<Boolean> hasColumn(String table, String column) {
+        return CompletableFuture.supplyAsync(() -> {
+            try (Connection connection = implementConnection()) {
+                DatabaseMetaData md2 = connection.getMetaData();
+                ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
+                return rsTables.next();
+            } catch (Exception e) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
+                return false;
+            }
+        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public void modifyColumn(String table, String column, String type) {
         CompletableFuture.runAsync(() -> {
-            handleConnection(connection -> {
-                try (Statement statement = connection.createStatement()) {
-                    statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
-                } catch (SQLException throwables) {
-                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-                }
-            });
-        });
+            try (Connection connection = implementConnection()) {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
+            } catch (SQLException throwables) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+            }
+        }, PetCore.getInstance().async);
     }
 
     public void addColumn(String table, String column, String type) {
         CompletableFuture.runAsync(() -> {
-            handleConnection(connection -> {
-                try (Statement statement = connection.createStatement()) {
-                    statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
-                } catch (SQLException throwables) {
-                    SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-                }
-            });
-        });
+            try (Connection connection = implementConnection()) {
+                Statement statement = connection.createStatement();
+                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
+            } catch (SQLException throwables) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
+            }
+        }, PetCore.getInstance().async);
     }
 
     public abstract void createTable();
@@ -167,14 +141,4 @@ public abstract class SQLManager {
     public boolean isUsingSqlite() {
         return usingSqlite;
     }
-
-    public interface SQLCallback<D> {
-        void onSuccess(D data);
-
-        default void onSuccess() {}
-
-        default void onFail() {}
-    }
-
-
 }

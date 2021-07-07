@@ -28,12 +28,12 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.sql.PlayerSQL;
-import simplepets.brainsynder.sql.SQLManager;
 import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.UUIDDataType;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class PetOwner implements PetUser {
 
@@ -180,7 +180,7 @@ public class PetOwner implements PetUser {
                     .setString("type", type.getName())
             );
         });
-        updateDatabase(callback -> {
+        updateDatabase().thenAccept(callback -> {
             // Reset everything after we finish saving
             removePets();
             this.nameMap.clear();
@@ -196,8 +196,8 @@ public class PetOwner implements PetUser {
     /**
      * Will update the data that is in the database
      */
-    public void updateDatabase(SQLManager.SQLCallback<Boolean> callback) {
-        PlayerSQL.getInstance().uploadData(this, callback);
+    public CompletableFuture<Object> updateDatabase() {
+        return PlayerSQL.getInstance().uploadData(this);
     }
 
     @Override
@@ -219,14 +219,14 @@ public class PetOwner implements PetUser {
     public void removePetSave(StorageTagCompound compound) {
         if (!savedPetData.contains(compound)) return;
         savedPetData.remove(compound);
-        updateDatabase(data -> {});
+        updateDatabase();
     }
 
     @Override
     public void addPetSave(StorageTagCompound compound) {
         if (savedPetData.contains(compound)) return;
         savedPetData.add(compound);
-        updateDatabase(data -> {});
+        updateDatabase();
     }
 
     @Override
@@ -249,13 +249,13 @@ public class PetOwner implements PetUser {
     public void addOwnedPet(PetType type) {
         if (ownedPets.contains(type)) return;
         ownedPets.add(type);
-        updateDatabase(callback -> {});
+        updateDatabase();
     }
 
     @Override
     public void removeOwnedPet(PetType type) {
         ownedPets.remove(type);
-        updateDatabase(callback -> {});
+        updateDatabase();
     }
 
     @Override
@@ -274,7 +274,7 @@ public class PetOwner implements PetUser {
             if (config.isPresent()) name = config.get().getDisplayName();
             nameMap.remove(type);
         }
-        updateDatabase(callback -> {});
+        updateDatabase();
         String finalName = name;
         getPetEntity(type).ifPresent(entity -> {
 

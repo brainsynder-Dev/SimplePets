@@ -40,6 +40,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 public class PetCore extends JavaPlugin implements IPetsPlugin {
@@ -64,6 +65,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private Debug debug;
 
+    public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
+    public final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(this, task);
+
     @Override
     public void onEnable() {
         debug = new Debug(this);
@@ -71,7 +75,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         SimplePets.setPLUGIN(this);
 
         instance = this;
-        itemFolder = new File(getDataFolder().toString()+File.separator+"Items");
+        itemFolder = new File(getDataFolder() +File.separator+"Items");
 
         MessageFile.init(getDataFolder());
 
@@ -148,9 +152,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
 
         configuration = null;
-
-        PlayerSQL.getInstance().disconnect();
-        InventorySQL.getInstance().disconnect();
         addonManager.cleanup();
         addonManager = null;
         debug = null;
