@@ -8,9 +8,50 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <version>${module.version}</version>
+    <artifactId>Version_1.17.1</artifactId>
 
-    <artifactId>v1_17_R1</artifactId>
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <module.info>-1.17.1</module.info>
+        <spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>API</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>MAIN</artifactId>
+            <version>${module.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.wesjd</groupId>
+                    <artifactId>anvilgui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>Version_1.17</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <resources>
@@ -88,40 +129,4 @@
         </plugins>
     </build>
 
-    <properties>
-        <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>16</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.17.1</module.info>
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>${spigot.version}</version>
-            <classifier>remapped-mojang</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>API</artifactId>
-            <version>${module.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>MAIN</artifactId>
-            <version>${module.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.wesjd</groupId>
-                    <artifactId>anvilgui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 </project>

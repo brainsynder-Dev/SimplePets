@@ -8,22 +8,14 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+    <version>${module.version}</version>
 
-    <artifactId>DIST</artifactId>
-<!--    This is no longer used as we have switched to using individual jars per version-->
-
-    <properties>
-        <maven.compiler.source>1.16</maven.compiler.source>
-        <maven.compiler.target>1.16</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info></module.info>
-    </properties>
-    <packaging>jar</packaging>
+    <artifactId>Version_1.17</artifactId>
 
     <build>
         <resources>
             <resource>
-                <directory>${project.parent.basedir}/MAIN/src/main/resources</directory>
+                <directory>${project.parent.basedir}/src/main/resources</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -60,11 +52,57 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>net.md-5</groupId>
+                <artifactId>specialsource-maven-plugin</artifactId>
+                <version>1.2.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>remap</goal>
+                        </goals>
+                        <id>remap-obf</id>
+                        <configuration>
+                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:txt:maps-mojang</srgIn>
+                            <reverse>true</reverse>
+                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-mojang</remappedDependencies>
+                            <remappedArtifactAttached>true</remappedArtifactAttached>
+                            <remappedClassifierName>remapped-obf</remappedClassifierName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>remap</goal>
+                        </goals>
+                        <id>remap-spigot</id>
+                        <configuration>
+                            <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
+                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:csrg:maps-spigot</srgIn>
+                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-obf</remappedDependencies>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
+    <properties>
+        <maven.compiler.source>16</maven.compiler.source>
+        <maven.compiler.target>16</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <module.info>-1.17</module.info>
+    </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
             <artifactId>API</artifactId>
@@ -84,11 +122,6 @@
                     <artifactId>mysql-connector-java</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>v1_17_R1</artifactId>
-            <version>${module.version}</version>
         </dependency>
     </dependencies>
 </project>

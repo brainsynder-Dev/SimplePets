@@ -29,7 +29,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
         if ((user == null) || (player == null)) {
             this.user = entityPet.getPetUser();
             if (!(user.getPlayer() instanceof Player)) return false;
-            this.player = (Player) user.getPlayer();
+            this.player = user.getPlayer();
         }
 
         if (this.entityPet.getRandom().nextFloat() >= this.chance) {
