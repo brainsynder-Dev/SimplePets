@@ -3,12 +3,12 @@ package simplepets.brainsynder.sql;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.files.Config;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 
 /**
  * This class was provided by {@link https://github.com/Thatsmusic99}
