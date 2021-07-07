@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
@@ -30,6 +31,8 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
+import simplepets.brainsynder.api.event.entity.movment.PetJumpEvent;
+import simplepets.brainsynder.api.event.entity.movment.PetRideEvent;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -380,7 +383,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             forward *= 0.25F;
         }
 
-        PetMoveEvent moveEvent = new PetMoveEvent(this, PetMoveEvent.Cause.RIDE);
+        PetMoveEvent moveEvent = new PetRideEvent(this);
         Bukkit.getServer().getPluginManager().callEvent(moveEvent);
         if (moveEvent.isCancelled()) return;
 
@@ -390,12 +393,21 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         if ((jumpField != null) && (!passengers.isEmpty())) {
             SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
                 try {
+                    boolean flight = false;
+                    double height = jumpHeight;
+
                     if (config.canFly(getPetUser().getPlayer())) {
-                        if (jumpField.getBoolean(passenger))
-                            setDeltaMovement(getDeltaMovement().x, 0.3F, getDeltaMovement().z);
-                    } else if (this.onGround && jumpField.getBoolean(passenger)) {
-                        setDeltaMovement(getDeltaMovement().x, jumpHeight, getDeltaMovement().z);
-                        this.hasImpulse = true;
+                        flight = true;
+                        height = 0.3;
+                    }
+
+                    PetJumpEvent jumpEvent = new PetJumpEvent(this, height);
+                    Bukkit.getServer().getPluginManager().callEvent(jumpEvent);
+                    if ((!jumpEvent.isCancelled()) && jumpField.getBoolean(passenger)) {
+                        if (flight || this.onGround) {
+                            setDeltaMovement(getDeltaMovement().x, jumpEvent.getJumpHeight(), getDeltaMovement().z);
+                            this.hasImpulse = true;
+                        }
                     }
                 } catch (IllegalArgumentException | IllegalStateException | IllegalAccessException ignored) {}
             });
@@ -557,6 +569,13 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         };
     }
 
+    @Override
+    public void move(MoverType enummovetype, Vec3 vec3d) {
+        PetMoveEvent moveEvent = new PetMoveEvent(this);
+        Bukkit.getServer().getPluginManager().callEvent(moveEvent);
+        if (moveEvent.isCancelled()) return;
+        super.move(enummovetype, vec3d);
+    }
 
     /**
      * Used to stop the pet from moving when its pushed

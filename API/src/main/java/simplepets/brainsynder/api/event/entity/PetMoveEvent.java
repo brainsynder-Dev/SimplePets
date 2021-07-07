@@ -4,21 +4,17 @@ import org.bukkit.Location;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.CancellablePetEvent;
 
+/**
+ * This event is called when ever a pet moves (walks, controlled, and/or jumps)
+ */
 public class PetMoveEvent extends CancellablePetEvent {
     private final IEntityPet entity;
     private final Location targetLocation;
-    private final Cause cause;
 
-    public PetMoveEvent(IEntityPet entity, Cause cause) {
+    public PetMoveEvent(IEntityPet entity) {
         this.entity = entity;
-        if (cause == Cause.RIDE) {
-            this.targetLocation = entity.getEntity().getLocation();
-        } else {
-            this.targetLocation = entity.getPetUser().getUserLocation().get();
-        }
-        this.cause = cause;
+        targetLocation = entity.getEntity().getLocation();
     }
-
 
     public IEntityPet getEntity() {
         return entity;
@@ -26,15 +22,5 @@ public class PetMoveEvent extends CancellablePetEvent {
 
     public Location getTargetLocation() {
         return targetLocation;
-    }
-
-    public Cause getCause() {
-        return cause;
-    }
-
-
-    public enum Cause {
-        RIDE,
-        WALK
     }
 }
