@@ -11,11 +11,14 @@
     <artifactId>Version_1.17.1</artifactId>
 
     <properties>
+        <module.info>-1.17.1</module.info>
+        <parent.module>Version_1.17</parent.module>
+        <spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
+
+        <!-- Nothing should have to be changed below this point -->
         <maven.compiler.source>16</maven.compiler.source>
         <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.17.1</module.info>
-        <spigot.version>1.17.1-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
     <dependencies>
@@ -46,14 +49,10 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.17</artifactId>
-            <version>${module.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/../${parent.module}/src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>${project.parent.basedir}/src/main/resources</directory>
