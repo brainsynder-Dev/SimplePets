@@ -486,7 +486,8 @@ public class PetOwner implements PetUser {
             if (!permission.getValue()) continue;
             if (!permission.getPermission().startsWith("pet.amount.")) continue;
             String strAmount = permission.getPermission().substring(11);
-            maxAmount = Integer.parseInt(strAmount);
+            int permAmount = Integer.parseInt(strAmount);
+            if (permAmount >= maxAmount) maxAmount = permAmount;
         }
         return petMap.size() < maxAmount;
     }
