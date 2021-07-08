@@ -483,6 +483,7 @@ public class PetOwner implements PetUser {
         int maxAmount = PetCore.getInstance().getConfiguration().getInt("PetToggles.Default-Spawn-Limit");
         if (!getPlayer().isOnline()) return false;
         if (getPlayer().isOp()) return true;
+        if (getPlayer().hasPermission("pet.amount.bypass")) return true;
         for (PermissionAttachmentInfo permission : getPlayer().getEffectivePermissions()) {
             if (!permission.getValue()) continue;
             if (!permission.getPermission().startsWith("pet.amount.")) continue;

@@ -53,6 +53,8 @@ public class PermissionsCommand extends PetSubCommand {
 
 
         StringBuilder master = new StringBuilder();
+        addPermission(master, "pet.amount.bypass", "This permission bypasses the limit of how many pets can be spawned", "op");
+        addPermission(master, "pet.amount.<number>", "This permission sets how many pets the player can have spawned", "false");
         addPermission(master, "pet.name.bypass", "This permission bypasses any of the pet renaming checks", "op");
         addPermission(master, "pet.name.color", "This permission is to allow players to add color codes when renaming their pet", "true");
         addPermission(master, "pet.name.color.hex", "This permission is to allow players to add HEX color codes when renaming their pet (Eg: &#FFFFFF)", "op");
@@ -186,7 +188,7 @@ public class PermissionsCommand extends PetSubCommand {
         pets.forEach(stringBuilder -> master.append(stringBuilder).append("\n\n"));
         other.forEach(stringBuilder -> master.append(stringBuilder).append("\n\n"));
 
-        log(new File(core.getDataFolder().toString() + File.separator + "Generated Files" + File.separator), "permissions.yml", master.toString());
+        log(new File(core.getDataFolder() + File.separator + "Generated Files" + File.separator), "permissions.yml", master.toString());
     }
 
 
