@@ -52,7 +52,7 @@ public class Utilities {
     }
 
     public static boolean handlePetSpawning (PetUser user, PetType type, StorageTagCompound compound, boolean checkDataPermissions) {
-        Player player = ((Player)user.getPlayer());
+        Player player = user.getPlayer();
         if (!type.isSupported()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
             return false;
@@ -90,7 +90,6 @@ public class Utilities {
     }
 
     public static void setPassenger(Player player, Entity entity, Entity passenger) {
-        System.out.println("Entity: "+entity.getType()+"  Passenger: "+passenger.getType());
         try {
             entity.setPassenger(passenger);
         } catch (Exception e) {
@@ -152,13 +151,13 @@ public class Utilities {
     public static void hidePet(PetUser user, IEntityPet entityPet) {
         UUID entityID = entityPet.getEntity().getUniqueId();
         if (entityPet instanceof IEntityControllerPet) entityID = ((IEntityControllerPet)entityPet).getVisibleEntity().getEntity().getUniqueId();
-        managePetVisibility((Player) user.getPlayer(), "PacketPlayOutEntityDestroy", Integer.TYPE, entityID);
+        managePetVisibility(user.getPlayer(), "PacketPlayOutEntityDestroy", Integer.TYPE, entityID);
     }
 
     public static void showPet(PetUser user, IEntityPet entityPet) {
         Entity entity = entityPet.getEntity();
         if (entityPet instanceof IEntityControllerPet) entity = ((IEntityControllerPet)entityPet).getVisibleEntity().getEntity();
-        managePetVisibility((Player) user.getPlayer(), "PacketPlayOutSpawnEntityLiving", Reflection.getNmsClass("EntityLiving"), entity);
+        managePetVisibility(user.getPlayer(), "PacketPlayOutSpawnEntityLiving", Reflection.getNmsClass("EntityLiving"), entity);
     }
 
     private static void managePetVisibility(Player p, String nmsClass, Class<?> o1, Object o2) {
