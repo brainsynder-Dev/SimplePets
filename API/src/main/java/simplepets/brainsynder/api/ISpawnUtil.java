@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
+import java.util.Map;
 import java.util.Optional;
 
 public interface ISpawnUtil {
@@ -59,4 +60,9 @@ public interface ISpawnUtil {
      * @param entity - entity to be fetched from
      */
     Optional<Object> getHandle(Entity entity);
+
+    /**
+     * This method simply is a way to track how many times a pet was successfully spawned
+     */
+    Map<PetType, Integer> getSpawnCount ();
 }

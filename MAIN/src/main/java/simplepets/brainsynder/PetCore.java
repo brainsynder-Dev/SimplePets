@@ -309,6 +309,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         return users;
     }
+    private Map<String, Integer> getSpawnedPetCounts() {
+        Map<String, Integer> users = new HashMap<>();
+        getSpawnUtil().getSpawnCount().forEach((petType, integer) -> {
+            users.put(petType.getName(), integer);
+        });
+        return users;
+    }
 
     public AddonManager getAddonManager() {
         return addonManager;
@@ -317,6 +324,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void handleMetrics () {
         SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Loading Metrics");
         Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.AdvancedPie("spawned_pet_counter", this::getSpawnedPetCounts));
         metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
         metrics.addCustomChart(new Metrics.DrilldownPie("loaded_addons", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();

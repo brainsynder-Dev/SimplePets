@@ -22,9 +22,11 @@ import java.util.*;
 
 public class SpawnerUtil implements ISpawnUtil {
     private final Map<PetType, Class<?>> petMap;
+    private final Map<PetType, Integer> spawnCount;
 
     public SpawnerUtil () {
         petMap = new HashMap<>();
+        spawnCount = new HashMap<>();
 
         for (PetType type : PetType.values()) {
             if (type.getEntityClass() == null) continue;
@@ -78,6 +80,8 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (((CraftWorld)location.getWorld()).getHandle().addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
+                int count = spawnCount.getOrDefault(type, 0);
+                spawnCount.put(type, (count+1));
                 return Optional.of(customEntity);
             }
         }catch (Exception e) {
@@ -100,6 +104,11 @@ public class SpawnerUtil implements ISpawnUtil {
         } catch (Exception e) {
             return Optional.empty();
         }
+    }
+
+    @Override
+    public Map<PetType, Integer> getSpawnCount() {
+        return spawnCount;
     }
 
     private Location getRandomLocation (PetType type, Location center) {
