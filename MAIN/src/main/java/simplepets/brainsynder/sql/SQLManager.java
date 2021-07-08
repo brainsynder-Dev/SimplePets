@@ -47,6 +47,9 @@ public abstract class SQLManager {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Error using SQLite", true);
             usingSqlite = true;
         }
+
+        // This ended up being missed in the code leading SQLSyntaxErrorException
+        createTable();
     }
 
     // Forgot about thread safety and got told off for it in AT
