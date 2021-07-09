@@ -33,9 +33,7 @@ public class Config extends YamlFile {
         addDefault("Permissions.Needs-Pet-Permission-for-GUI", false, "Enabling this would require players to have access to at least 1 pets permission\nDefault: false");
         addDefault("Permissions.Enabled", true, "Disabling this would grant ALL players access to pets (they wont need permissions)\nDefault: true");
         addDefault("Permissions.Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
-
-
-        addDefault("Remove-Item-If-No-Permission", true, "Disabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
+        addDefault("Permissions.Only-Show-Pets-Player-Can-Access", true, "Enabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
 
         addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
 
@@ -158,6 +156,7 @@ public class Config extends YamlFile {
         move("Needs-Pet-Permission-To-Open-GUI", "Permissions.Needs-Pet-Permission-for-GUI", logMove());
         move("Needs-Data-Permissions", "Permissions.Data-Permissions", logMove());
         move("Needs-Permission", "Permissions.Enabled", logMove());
+        move("Remove-Item-If-No-Permission", "Permissions.Only-Show-Pets-Player-Can-Access", logMove());
         move("Use&k", MAGIC, logMove());
         move("ShowParticles", SPAWN_PARTICLE_TOGGLE, logMove());
         move("ColorCodes", COLOR, logMove());
