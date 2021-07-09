@@ -38,14 +38,13 @@ public abstract class SQLManager {
         if (forceSqlite || !enabled) {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Using SQLite - forced", true);
             usingSqlite = true;
-            return;
-        }
-
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Error using SQLite", true);
-            usingSqlite = true;
+        } else {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Error using SQLite", true);
+                usingSqlite = true;
+            }
         }
 
         // This ended up being missed in the code leading SQLSyntaxErrorException
