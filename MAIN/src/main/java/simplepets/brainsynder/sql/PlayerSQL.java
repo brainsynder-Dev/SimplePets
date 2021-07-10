@@ -252,7 +252,7 @@ public class PlayerSQL extends SQLManager {
                 ResultSet results = statement.executeQuery();
                 if (!results.next()) {
                     results.close();
-                    return null;
+                    return new StorageTagCompound();
                 }
                 try {
                     StorageTagCompound compound = new StorageTagCompound();
@@ -341,11 +341,11 @@ public class PlayerSQL extends SQLManager {
                     results.close();
                     return compound;
                 } catch (NullPointerException | IllegalArgumentException ex) {
-                    return null;
+                    return new StorageTagCompound();
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                return null;
+                return new StorageTagCompound();
             }
         }, PetCore.getInstance().async).thenApplyAsync(compound -> compound, PetCore.getInstance().sync);
     }

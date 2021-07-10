@@ -29,7 +29,12 @@ public class JoinLeaveListeners implements Listener {
             @Override
             public void run() {
                 PlayerSQL.getInstance().fetchData(event.getPlayer().getUniqueId()).thenAccept(data -> {
+                    // Check if the user is cached.
                     boolean load = SimplePets.getUserManager().isUserCached(event.getPlayer());
+                    // Assuming the player is not just a mindless NPC, this will always run.
+                    // However, if the user is not cached (in which case we don't want to load anything)...
+                    // It will initiate the PetOwner object which will load a new StorageCompound already.
+                    // If it is cached though, load the data from the DB.
                     SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
                         if (!load) return;
                         ((PetOwner) user).loadCompound(data);
