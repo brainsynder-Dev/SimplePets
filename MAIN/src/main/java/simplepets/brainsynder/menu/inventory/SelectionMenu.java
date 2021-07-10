@@ -135,7 +135,7 @@ public class SelectionMenu extends CustomInventory {
             placeHolder--;
         }
 
-        boolean removeNoPerms = PetCore.getInstance().getConfiguration().getBoolean("Remove-Item-If-No-Permission");
+        boolean removeNoPerms = PetCore.getInstance().getConfiguration().getBoolean("Permissions.Only-Show-Pets-Player-Can-Access");
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
             PetTypeStorage storage = new PetTypeStorage(type);
