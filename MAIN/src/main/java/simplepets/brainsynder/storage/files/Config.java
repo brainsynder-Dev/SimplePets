@@ -100,6 +100,7 @@ public class Config extends FileMaker {
         addDefault("RenamePet.CharacterLimit", 10, "What should the character limit be set to?\nDefault: 10");
         addDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"), "Are there words you don't want in a pets name?");
         addDefault("RenamePet.Blocked-RegexPattern", "", "This blocks pets from having anything that matches the pattern as the name\nFor example MergedMobs has a pattern of '([0-9]+)(x)' will block names that are '999x'\nONLY CHECKS IF THE NAME MATCHES THE PATTERN\nDefault: \"\"");
+        addDefault("RenamePet.Trim-Name", true, "Enabling this option removes all whitespace at the start and end of a name.");
         addDefault(MAGIC, false, "Are pet names allowed to have the &k color code?\nDefault: false");
         addDefault(COLOR, true, "Are pet names allowed to be colored?\nDefault: true");
         updateSections();
