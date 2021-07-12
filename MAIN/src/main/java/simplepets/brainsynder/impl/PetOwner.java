@@ -180,6 +180,11 @@ public class PetOwner implements PetUser {
                     .setString("type", type.getName())
             );
         });
+        // If the server is shutting down
+        if (!PetCore.getInstance().isEnabled()) {
+            PlayerSQL.getInstance().uploadDataSync(this);
+            return;
+        }
         updateDatabase().thenAccept(callback -> {
             // Reset everything after we finish saving
             removePets();

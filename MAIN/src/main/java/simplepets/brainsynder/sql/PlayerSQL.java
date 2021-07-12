@@ -360,64 +360,83 @@ public class PlayerSQL extends SQLManager {
         });
     }
 
+    public boolean uploadDataSync(PetUser user) {
+        if (isPlayerInDatabaseSync(user.getOwnerUUID())) {
+            return updateDataSync(user);
+        } else {
+            return insertDataSync(user);
+        }
+    }
+
+    /**
+     * Sync methods should be used for shutdown only
+     */
+    public boolean updateDataSync(PetUser user) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("UPDATE `" + tablePrefix + "_players` SET " +
+                    "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
+            statement.setString(1, user.getPlayer().getName());
+            StorageTagCompound compound = ((PetOwner) user).toCompound();
+
+            statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+            statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+            statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+            statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+            statement.setString(6, user.getPlayer().getUniqueId().toString());
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertDataSync(PetUser user) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + tablePrefix + "_players` " +
+                    "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
+            statement.setString(1, user.getPlayer().getUniqueId().toString());
+            statement.setString(2, user.getPlayer().getName());
+
+            StorageTagCompound compound = ((PetOwner) user).toCompound();
+            statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+            statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+            statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+            statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean isPlayerInDatabaseSync(UUID uuid) {
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE uuid = ?");
+            statement.setString(1, uuid.toString());
+            ResultSet results = statement.executeQuery();
+            boolean next = results.next();
+            results.close();
+            return next;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            return false;
+        }
+    }
 
     public CompletableFuture<Boolean> updateData(PetUser user) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("UPDATE `" + tablePrefix + "_players` SET " +
-                        "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
-                statement.setString(1, user.getPlayer().getName());
-                StorageTagCompound compound = ((PetOwner) user).toCompound();
-
-                statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                statement.setString(6, user.getPlayer().getUniqueId().toString());
-                statement.executeUpdate();
-                return true;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-                return false;
-            }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
+        return CompletableFuture.supplyAsync(() -> updateDataSync(user), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public CompletableFuture<Boolean> insertData(PetUser user) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + tablePrefix + "_players` " +
-                        "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
-                statement.setString(1, user.getPlayer().getUniqueId().toString());
-                statement.setString(2, user.getPlayer().getName());
-
-                StorageTagCompound compound = ((PetOwner) user).toCompound();
-                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                statement.executeUpdate();
-                return true;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-                return false;
-            }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
+        return CompletableFuture.supplyAsync(() -> insertDataSync(user), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public CompletableFuture<Boolean> isPlayerInDatabase(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE uuid = ?");
-                statement.setString(1, uuid.toString());
-                ResultSet results = statement.executeQuery();
-                boolean next = results.next();
-                results.close();
-                return next;
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-                return false;
-            }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
+        return CompletableFuture.supplyAsync(() -> isPlayerInDatabaseSync(uuid), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 }
