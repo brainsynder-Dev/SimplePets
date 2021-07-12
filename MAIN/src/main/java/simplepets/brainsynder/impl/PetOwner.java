@@ -38,6 +38,7 @@ import java.util.concurrent.CompletableFuture;
 public class PetOwner implements PetUser {
 
     private final UUID uuid;
+    private final String name;
 
     private PetType vehicle = null;
     private final List<PetType> hatPets;
@@ -51,6 +52,7 @@ public class PetOwner implements PetUser {
     public PetOwner(Player player) {
         Validate.notNull(player, "Player can not be null (They Offline?)");
         this.uuid = player.getUniqueId();
+        this.name = player.getName();
 
         respawnPets = new ArrayList<>();
         savedPetData = new ArrayList<>();
@@ -208,6 +210,11 @@ public class PetOwner implements PetUser {
     @Override
     public UUID getOwnerUUID() {
         return uuid;
+    }
+
+    @Override
+    public String getOwnerName() {
+        return name;
     }
 
     @Override

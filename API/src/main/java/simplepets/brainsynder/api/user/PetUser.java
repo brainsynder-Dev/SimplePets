@@ -12,7 +12,16 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface PetUser {
+
+    /**
+     * Returns the UUID of the player.
+     */
     UUID getOwnerUUID ();
+
+    /**
+     * Returns the name of the player.
+     */
+    String getOwnerName();
 
     /**
      * Player instance

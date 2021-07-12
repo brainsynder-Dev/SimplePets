@@ -353,36 +353,35 @@ public class PlayerSQL extends SQLManager {
     public CompletableFuture<Object> uploadData(PetUser user) {
         return isPlayerInDatabase(user.getOwnerUUID()).thenApply(data -> {
             if (data) {
-                return updateData(user);
+                return updateData(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
             } else {
-                return insertData(user);
+                return insertData(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
             }
         });
     }
 
     public boolean uploadDataSync(PetUser user) {
         if (isPlayerInDatabaseSync(user.getOwnerUUID())) {
-            return updateDataSync(user);
+            return updateDataSync(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
         } else {
-            return insertDataSync(user);
+            return insertDataSync(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
         }
     }
 
     /**
      * Sync methods should be used for shutdown only
      */
-    public boolean updateDataSync(PetUser user) {
+    public boolean updateDataSync(UUID uuid, String name, StorageTagCompound compound) {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("UPDATE `" + tablePrefix + "_players` SET " +
                     "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
-            statement.setString(1, user.getPlayer().getName());
-            StorageTagCompound compound = ((PetOwner) user).toCompound();
+            statement.setString(1, name);
 
             statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
             statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
             statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
             statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-            statement.setString(6, user.getPlayer().getUniqueId().toString());
+            statement.setString(6, uuid.toString());
             statement.executeUpdate();
             return true;
         } catch (SQLException exception) {
@@ -391,14 +390,13 @@ public class PlayerSQL extends SQLManager {
         }
     }
 
-    public boolean insertDataSync(PetUser user) {
+    public boolean insertDataSync(UUID uuid, String name, StorageTagCompound compound) {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + tablePrefix + "_players` " +
                     "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
-            statement.setString(1, user.getPlayer().getUniqueId().toString());
-            statement.setString(2, user.getPlayer().getName());
+            statement.setString(1, uuid.toString());
+            statement.setString(2, name);
 
-            StorageTagCompound compound = ((PetOwner) user).toCompound();
             statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
             statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
             statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
@@ -425,13 +423,13 @@ public class PlayerSQL extends SQLManager {
         }
     }
 
-    public CompletableFuture<Boolean> updateData(PetUser user) {
-        return CompletableFuture.supplyAsync(() -> updateDataSync(user), PetCore.getInstance().async)
+    public CompletableFuture<Boolean> updateData(UUID uuid, String name, StorageTagCompound compound) {
+        return CompletableFuture.supplyAsync(() -> updateDataSync(uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
-    public CompletableFuture<Boolean> insertData(PetUser user) {
-        return CompletableFuture.supplyAsync(() -> insertDataSync(user), PetCore.getInstance().async)
+    public CompletableFuture<Boolean> insertData(UUID uuid, String name, StorageTagCompound compound) {
+        return CompletableFuture.supplyAsync(() -> insertDataSync(uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
