@@ -56,6 +56,7 @@ public class ParticleManager implements ParticleHandler {
 
     @Override
     public void sendParticle (Reason reason, Player player, Location location) {
+        if (player == null) return;
         switch (reason) {
             case SPAWN:
                 if (PetCore.getInstance().getConfiguration().getBoolean(Config.SPAWN_PARTICLE_TOGGLE, true)) spawnParticle.sendToPlayer(player, location);
