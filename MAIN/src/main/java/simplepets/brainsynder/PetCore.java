@@ -80,7 +80,7 @@ public class PetCore extends JavaPlugin {
         fetchSupportedVersions();
 
         if (ServerVersion.isOlder(ServerVersion.v1_15_R1)) {
-            debug(DebugLevel.DEBUG, "This version is not supported, be sure you are " + supportedVersions.toString());
+            debug(DebugLevel.DEBUG, "This version is not supported, be sure you are " + supportedVersions);
             setEnabled(false);
             return;
         }
@@ -173,7 +173,13 @@ public class PetCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new DataListener(), this);
         getServer().getPluginManager().registerEvents(new SavesListener(), this);
         getServer().getPluginManager().registerEvents(new ArmorListener(), this);
-        getServer().getPluginManager().registerEvents(new PaperListeners(), this);
+        try {
+            Class.forName("io.papermc.paper.event.player.PlayerNameEntityEvent", false, getLoader());
+            getServer().getPluginManager().registerEvents(new PaperListeners(), this);
+            debug(DebugLevel.NORMAL, "Registered PaperSpigot Listener");
+        } catch (ClassNotFoundException e) {
+            debug(DebugLevel.NORMAL, "Skipping PaperSpigot Listener");
+        }
         TimerUtil.findDelay(getClass(), "Registering Listeners");
     }
 
@@ -421,7 +427,7 @@ public class PetCore extends JavaPlugin {
         }
 
         if (!supportedVersions.isEmpty())
-            debug("Found support for version(s): " + supportedVersions.toString());
+            debug("Found support for version(s): " + supportedVersions);
         TimerUtil.findDelay(getClass(), "SupportedVersions");
     }
 
@@ -498,7 +504,7 @@ public class PetCore extends JavaPlugin {
     public void getPlayerStorageByName(String name, Call<PlayerStorage> callback) {
         Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
             PlayerStorage storage = null;
-            File folder = new File(getDataFolder().toString() + "/PlayerData/");
+            File folder = new File(getDataFolder() + "/PlayerData/");
             if (folder.isDirectory()) {
                 File[] files = folder.listFiles();
                 if (files != null && files.length != 0) {
