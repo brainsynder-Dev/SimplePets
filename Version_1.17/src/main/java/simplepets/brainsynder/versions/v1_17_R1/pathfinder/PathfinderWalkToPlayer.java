@@ -61,6 +61,7 @@ public class PathfinderWalkToPlayer extends Goal {
             this.player = ((CraftPlayer) entity.getPetUser().getPlayer()).getHandle();
         }
         if (user == null) return false;
+        if (user.getPlayer() == null) return false;
         if (entity == null) return false;
 
         if (!user.getPlayer().isOnline()) return false;
