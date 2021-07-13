@@ -155,7 +155,7 @@ public class PetConfiguration implements PetConfigManager {
         @Override
         public boolean canFly(Player player) {
             if (!plugin.getConfiguration().getBoolean(Config.FLYABLE)) return false;
-            if (JSON.getBoolean("fly", true)) return Utilities.hasPermission(player, type.getPermission("fly"), true);
+            if (JSON.getBoolean("fly", true)) return Utilities.hasPermission(player, type.getPermission("fly"));
             return false;
         }
 
