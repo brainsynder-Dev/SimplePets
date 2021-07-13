@@ -22,7 +22,7 @@ import java.util.List;
         usage = "<add/remove/list> <player> [type]",
         description = "Controls what pets the player has purchased"
 )
-@Permission(permission = "purchased")
+@Permission(permission = "purchased", adminCommand = true)
 public class PurchasedCommand extends PetSubCommand {
     public PurchasedCommand(PetCore plugin) {
         super(plugin);
