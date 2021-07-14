@@ -38,7 +38,7 @@ public abstract class EntityPiglinAbstractPet extends EntityPet implements IShak
 
     @Override
     public void setShaking(boolean shaking) {
-        entityData.set(IMMUNE_TO_ZOMBIFICATION, shaking);
+        entityData.set(IMMUNE_TO_ZOMBIFICATION, !shaking);
     }
 
     @Override
