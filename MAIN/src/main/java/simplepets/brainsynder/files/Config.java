@@ -110,7 +110,7 @@ public class Config extends YamlFile {
         addDefault(HATS, true, "Are all pets able to be worn as hats?\nDefault: true");
         addDefault(FLYABLE, false, "Are all pets able to fly when mounted?\nDefault: false");
         addDefault("PetToggles.Default-Spawn-Limit", 3, "The maximum number of pets a player can spawn at a time.\n" +
-                "This can be overridden using pet.amount.<Number>, e.g. pet.number.1 to only allow 1 at once.\n" +
+                "This can be overridden using pet.amount.<Number>, e.g. pet.amount.1 to only allow 1 at once.\n" +
                 "Default: 3");
         addDefault("Respawn-Last-Pet-On-Login", true, "When a player logs back in should their pet be spawned in as well?\nNOTE: If the player removed their pet before logging out then it wont respawn.\nDefault: true");
 
