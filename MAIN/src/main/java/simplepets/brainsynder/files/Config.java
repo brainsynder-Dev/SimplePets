@@ -112,6 +112,10 @@ public class Config extends YamlFile {
         addDefault("PetToggles.Default-Spawn-Limit", 3, "The maximum number of pets a player can spawn at a time.\n" +
                 "This can be overridden using pet.amount.<Number>, e.g. pet.amount.1 to only allow 1 at once.\n" +
                 "Default: 3");
+        addDefault("PetToggles.Default-Walk-Speed", 0.6000000238418579, "The default walk speed each pet will go at.\n" +
+                "This can be overriden in an individual pet .json file using the walk_speed key.");
+        addDefault("PetToggles.Default-Ride-Speed", 0.4000000238418579, "The default ride speed each pet will go at when mounted.\n" +
+                "This can be overriden in an individual pet .json file using the ride_speed key.");
         addDefault("Respawn-Last-Pet-On-Login", true, "When a player logs back in should their pet be spawned in as well?\nNOTE: If the player removed their pet before logging out then it wont respawn.\nDefault: true");
 
         addDefault("RenamePet.Enabled", true, "Should players be able to rename pets?\nDefault: true");

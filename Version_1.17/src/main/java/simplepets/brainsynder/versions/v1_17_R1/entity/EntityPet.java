@@ -75,9 +75,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     protected boolean doIndirectAttach;
 
     // Theses fields are based off config options
-    private final double walkSpeed = 0.6000000238418579;
-    private final double rideSpeed = 0.4000000238418579;
-    private final boolean floatDown = false;
+    private double walkSpeed = 0.6000000238418579;
+    private double rideSpeed = 0.4000000238418579;
+    private boolean floatDown = false;
     private boolean pushable = false;
     private boolean canGlow = true;
     private boolean autoRemove = true;
@@ -113,6 +113,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             // TODO: fill in values
+            this.walkSpeed = config.getWalkSpeed();
+            this.rideSpeed = config.getRideSpeed();
+            this.floatDown = config.canFloat();
         });
 
         // needs to be faster but less then 6

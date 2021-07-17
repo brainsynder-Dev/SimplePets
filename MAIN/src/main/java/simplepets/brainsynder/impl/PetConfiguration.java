@@ -166,17 +166,17 @@ public class PetConfiguration implements PetConfigManager {
 
         @Override
         public boolean canFloat() {
-            return false;
+            return JSON.getBoolean("float_down", false);
         }
 
         @Override
         public double getRideSpeed() {
-            return 0;
+            return JSON.getDouble("ride_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Ride-Speed"));
         }
 
         @Override
         public double getWalkSpeed() {
-            return 0;
+            return JSON.getDouble("walk_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Walk-Speed"));
         }
 
         @Override
