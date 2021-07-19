@@ -51,6 +51,7 @@ public class Config extends YamlFile {
         addDefault(TELEPORT_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a players pet teleports to its owner\nDefault: true");
         addDefault(FAILED_TASK_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a task for a pet fails\nDefault: true");
 
+        addSectionHeader("PetItemStorage", "The ability to have pets store items in another inventory is temporarily not implemented yet\nThis feature will be back as either an addon or re-implemented into the plugin");
         addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
         addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
 
@@ -60,23 +61,23 @@ public class Config extends YamlFile {
         addDefault("Pathfinding.Stopping-Distance", 3.0, "How far away can the pet be before it will stop walking near the player?\nDefault: 3");
         addDefault("Pathfinding.Stopping-Distance_LargePets", 7.0, "How far away can the large pet (Giant/Ghast) be before it will stop walking near the player?\nDefault: 7");
 
+        addSectionHeader("Worlds", "Currently not implemented, but will be re-implemented in the future");
         addDefault("Worlds.Enabled", false, "Enabling this will make it so pets only work in the worlds that are listed in 'Allowed-Worlds'\nDefault: false");
         addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
 
         addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to support WorldGuard flags\nFlag Names:\n- allow-pet-spawn\n- allow-pet-enter\n- allow-pet-riding");
         addDefault("WorldGuard.BypassPermission", "region.bypass", "This is the bypass permission for WorldGuard\nDefault: region.bypass");
 
-        addDefault("PlotSquared.BypassPermission", "plots.admin", "This is the bypass permission for PlotSquared\nDefault: plots.admin");
-        addDefault("PlotSquared.On-Unclaimed-Plots.Move", true, "Are pets allowed to move on unclaimed plots?\nDefault: true");
-        addDefault("PlotSquared.On-Unclaimed-Plots.Spawn", true, "Are pets allowed to be spawned on unclaimed plots?\nDefault: true");
-        addDefault("PlotSquared.On-Unclaimed-Plots.Riding", true, "Are players allowed to ride pets on unclaimed plots?\nDefault: true");
-        addDefault("PlotSquared.On-Roads.Move", true, "Are pets allowed to move on the roads?\nDefault: true");
-        addDefault("PlotSquared.On-Roads.Spawn", true, "Are pets allowed to be spawned while on roads\nDefault: true");
-        addDefault("PlotSquared.On-Roads.Riding", true, "Are players allowed to ride pets while on a road\nDefault: true");
-        addDefault("PlotSquared.Block-If-Denied.Move", true, "Are pets allowed to move on a plot their owner is blocked on?\nDefault: true");
-        addDefault("PlotSquared.Block-If-Denied.Spawn", true, "Are pets allowed to be spawned on plots their owner is blocked on?\n(Is this even needed? Its not like they can get on the plot anyway XD)\n\nDefault: true");
-        addDefault("PlotSquared.Block-If-Denied.Riding", true, "Can player ride their pets onto plots they are denied on?\nDefault: true");
-
+        remove("PlotSquared.BypassPermission");
+        remove("PlotSquared.On-Unclaimed-Plots.Move");
+        remove("PlotSquared.On-Unclaimed-Plots.Spawn");
+        remove("PlotSquared.On-Unclaimed-Plots.Riding");
+        remove("PlotSquared.On-Roads.Move");
+        remove("PlotSquared.On-Roads.Spawn");
+        remove("PlotSquared.On-Roads.Riding");
+        remove("PlotSquared.Block-If-Denied.Move");
+        remove("PlotSquared.Block-If-Denied.Spawn");
+        remove("PlotSquared.Block-If-Denied.Riding");
         addDefault("WorldBorder.Block-If-Denied.Move", true, "Are pets allowed to move when inside a WorldBorder?\nDefault: true");
         addDefault("WorldBorder.Block-If-Denied.Spawn", true, "Can pets be spawned in a WorldBorder?\nDefault: true");
         addDefault("WorldBorder.Block-If-Denied.Riding", true, "Can a player ride a pet in a WorldBorder?\nDefault: true");
