@@ -1,6 +1,7 @@
 package simplepets.brainsynder.versions.v1_17_R1;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.storage.RandomCollection;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -44,24 +45,24 @@ public class SpawnerUtil implements ISpawnUtil {
     }
 
     @Override
-    public Optional<IEntityPet> spawnEntityPet(PetType type, PetUser user) {
+    public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user) {
         if (user.getUserLocation().isPresent()) return spawnEntityPet(type, user, getRandomLocation(type, user.getUserLocation().get()));
-        return Optional.empty();
+        return BiOptional.empty();
     }
 
     @Override
-    public Optional<IEntityPet> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound) {
+    public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound) {
         if (user.getUserLocation().isPresent()) return spawnEntityPet(type, user, compound, getRandomLocation(type, user.getUserLocation().get()));
-        return Optional.empty();
+        return BiOptional.empty();
     }
 
     @Override
-    public Optional<IEntityPet> spawnEntityPet(PetType type, PetUser user, Location location) {
+    public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, Location location) {
         return spawnEntityPet(type, user, new StorageTagCompound(), location);
     }
 
     @Override
-    public Optional<IEntityPet> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
+    public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
         try {
             EntityPet customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
 
@@ -74,7 +75,12 @@ public class SpawnerUtil implements ISpawnUtil {
             // Call the spawn event
             PetEntitySpawnEvent event = new PetEntitySpawnEvent(user, customEntity);
             Bukkit.getServer().getPluginManager().callEvent(event);
-            if (event.isCancelled()) return Optional.empty();
+            if (event.isCancelled()) {
+                String reason = "";
+                if (event.getReason() != null) reason = event.getReason();
+                if (!reason.isEmpty()) return BiOptional.of(null, reason);
+                return BiOptional.empty();
+            }
 
             if (!location.getChunk().isLoaded()) location.getChunk().load();
 
@@ -82,13 +88,14 @@ public class SpawnerUtil implements ISpawnUtil {
                 user.setPet(customEntity);
                 int count = spawnCount.getOrDefault(type, 0);
                 spawnCount.put(type, (count+1));
-                return Optional.of(customEntity);
+                return BiOptional.of(customEntity);
             }
         }catch (Exception e) {
             e.printStackTrace();
+            return BiOptional.of(null, e.getMessage());
         }
 
-        return Optional.empty();
+        return BiOptional.empty();
     }
 
     @Override

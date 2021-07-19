@@ -2,6 +2,8 @@ package simplepets.brainsynder.utils;
 
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nms.Tellraw;
+import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import org.bukkit.Material;
@@ -32,7 +34,6 @@ import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 public class Utilities {
@@ -78,12 +79,18 @@ public class Utilities {
             }
         }
 
-        Optional<IEntityPet> entityPet = spawner.spawnEntityPet(type, user, compound);
-        if (entityPet.isPresent()) {
+        BiOptional<IEntityPet, String> entityPet = spawner.spawnEntityPet(type, user, compound);
+        if (entityPet.isFirstPresent()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
             return true;
         }else{
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED, player, player.getLocation());
+            if (entityPet.isSecondPresent()) {
+                Tellraw.fromLegacy(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()))
+                        .tooltip(entityPet.second().get()).send(player);
+                return false;
+            }
+
             player.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
             return false;
         }

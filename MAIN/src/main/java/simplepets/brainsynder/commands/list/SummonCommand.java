@@ -4,6 +4,8 @@ import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
+import lib.brainsynder.nms.Tellraw;
+import lib.brainsynder.optional.BiOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -142,8 +144,14 @@ public class SummonCommand extends PetSubCommand {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
                 return;
             }
-            Optional<IEntityPet> entityPet = spawner.spawnEntityPet(type, user, finalCompound);
-            if (!entityPet.isPresent()) {
+            BiOptional<IEntityPet, String> entityPet = spawner.spawnEntityPet(type, user, finalCompound);
+            if (!entityPet.isFirstPresent()) {
+                if (entityPet.isSecondPresent()) {
+                    Tellraw.fromLegacy(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()))
+                            .tooltip(entityPet.second().get()).send(sender);
+                    return;
+                }
+
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
                 return;
             }
