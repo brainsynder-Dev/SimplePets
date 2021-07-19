@@ -46,7 +46,7 @@ public class AddonManager {
         registeredAddons = Lists.newArrayList();
         rawAddons = Lists.newArrayList();
         loadedAddons = Lists.newArrayList();
-        folder = new File(plugin.getDataFolder().toString() + File.separator + "Addons");
+        folder = new File(plugin.getDataFolder() + File.separator + "Addons");
 
         addonFile = new YamlFile(plugin.getDataFolder(), "AddonConfig.yml") {
             @Override
@@ -61,7 +61,11 @@ public class AddonManager {
         }
     }
 
-    private void loadAddon(File file) {
+    public File getFolder() {
+        return folder;
+    }
+
+    public void loadAddon(File file) {
         if (file.isDirectory()) return;
         if (!file.getName().endsWith(".jar")) return;
         try {
