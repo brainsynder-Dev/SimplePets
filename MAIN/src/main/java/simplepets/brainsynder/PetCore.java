@@ -232,6 +232,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
 
         PluginManager manager = Bukkit.getPluginManager();
+        if (configuration.getBoolean("PetToggles.MobSpawnBypass", true)) manager.registerEvents(new PetSpawnListener(), this);
         manager.registerEvents(new AddonGUIListener(), this);
         manager.registerEvents(new ChunkUnloadListener(), this);
         manager.registerEvents(new DataGUIListener(), this);

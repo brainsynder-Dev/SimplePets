@@ -100,6 +100,9 @@ public class Config extends YamlFile {
         addDefault("Debug.Levels.ERROR", true);
 
         // TODO: Reformat these value
+        addDefault("PetToggles.MobSpawnBypass", true,
+                "When this is enabled it will allow pets to spawn anywhere\n" +
+                "This is especially used if WorldGuard/PlotSquared are blocking mobs from spawning\nDefault: true");
         addDefault(PUSH_PETS, false, "Are pets able to be pushed around?\nDefault: false");
         addDefault("PetToggles.GlowWhenVanished", true, "When the owner is vanished should the owner see their pet with the glow effect?\nDefault: true");
         addDefault("PetToggles.ShowPetNames", true, "Should pet names be seen?\nDefault: true");
