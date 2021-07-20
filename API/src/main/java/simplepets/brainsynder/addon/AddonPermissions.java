@@ -30,6 +30,7 @@ public class AddonPermissions {
      *      false | They do not have permission
      */
     public static boolean hasPermission (PetAddon addon, CommandSender sender, String permission) {
+        if (sender.isOp()) return true;
         String name = addon.getNamespace().namespace();
         Map<PermissionData, List<PermissionData>> map = parentPermissions.getOrDefault(name, new HashMap<>());
         for (Map.Entry<PermissionData, List<PermissionData>> entry : map.entrySet()) {
