@@ -127,7 +127,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     @Override
     public void onDisable() {
         SimplePets.getDebugLogger().debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
-        USER_MANAGER.getAllUsers().forEach(user -> ((PetOwner) user).markForRespawn());
+        USER_MANAGER.getAllUsers().forEach(user -> {
+            if (user.getPlayer() != null) {
+                ((PetOwner) user).markForRespawn();
+            }
+        });
 
         DebugCommand.fetchDebug(json -> {
             json.set("reloaded", !isShuttingDown());
