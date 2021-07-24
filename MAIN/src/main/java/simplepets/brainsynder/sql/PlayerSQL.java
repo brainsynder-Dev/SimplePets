@@ -97,65 +97,7 @@ public class PlayerSQL extends SQLManager {
                 while (results.next()) {
                     String uuid = results.getString("uuid");
                     try {
-                        StorageTagCompound compound = new StorageTagCompound();
-
-                        // Loads the pets the player purchased
-                        String raw = results.getString("UnlockedPets");
-                        try {
-                            if (!raw.equals("W10=")) {
-                                compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(raw)).toList());
-                            }
-                        } catch (NBTException e) {
-                            SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages(
-                                    "Failed to load 'UnlockedPets' for uuid: " + uuid,
-                                    "Result: " + raw
-                            ).setSync(true).setLevel(DebugLevel.ERROR));
-                        }
-
-                        // Loads pet names
-                        String rawName = results.getString("PetName");
-                        if (Base64Wrapper.isEncoded(rawName)) {
-                            rawName = Base64Wrapper.decodeString(rawName);
-                            try {
-                                compound.setTag("pet_names", JsonToNBT.parse(rawName).toList());
-                            } catch (NBTException e) {
-                                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Failed to read name data: " + rawName, true);
-                                // Old pet name save... not supported in the new system
-                            }
-                        }
-
-                        String spawnedPets = results.getString("NeedsRespawn");
-                        if (Base64Wrapper.isEncoded(spawnedPets)) {
-                            spawnedPets = Base64Wrapper.decodeString(spawnedPets);
-                            StorageTagList pets = new StorageTagList();
-                            try {
-                                JsonToNBT parser = JsonToNBT.parse(spawnedPets);
-
-                                if (spawnedPets.startsWith("[")) {
-                                    // New system
-                                    parser.toList().getList().forEach(storageBase -> {
-                                        StorageTagCompound tag = (StorageTagCompound) storageBase;
-                                        if (!tag.hasKey("type")) {
-                                            if (tag.hasKey("data")) {
-                                                tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
-                                                pets.appendTag(tag);
-                                            }
-                                            // Ignore the other values because it is not formatted correctly
-                                        } else {
-                                            pets.appendTag(storageBase);
-                                        }
-                                    });
-                                    compound.setTag("spawned_pets", pets);
-                                } else {
-                                    // Old system of saving 1 pet
-                                    StorageTagCompound tag = parser.toCompound();
-                                    compound.setTag("spawned_pets", pets.appendTag(new StorageTagCompound().setString("type", tag.getString("PetType")).setTag("data", tag)));
-                                }
-                            } catch (NBTException e) {
-                                // Old pet name save... not supported in the new system
-                            }
-                        }
-
+                        StorageTagCompound compound = rowToCompound(UUID.fromString(uuid), results, true);
                         cache.put(UUID.fromString(uuid), compound);
                         // Cache the data...
                     } catch (NullPointerException | IllegalArgumentException ex) {
@@ -244,6 +186,93 @@ public class PlayerSQL extends SQLManager {
         });
     }
 
+    public StorageTagCompound rowToCompound(UUID uuid, ResultSet results, boolean syncLogs) throws SQLException {
+        StorageTagCompound compound = new StorageTagCompound();
+
+        // Loads the pets the player purchased
+        String raw = results.getString("UnlockedPets");
+        try {
+            if (!raw.equals("W10=")) {
+                compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(raw)).toList());
+            }
+        } catch (NBTException e) {
+            SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
+                    "Failed to load 'UnlockedPets' for uuid: " + uuid,
+                    "Result: " + raw
+            ).setSync(syncLogs).setLevel(DebugLevel.ERROR));
+        }
+
+        // Loads pet names
+        String rawName = results.getString("PetName");
+        if (Base64Wrapper.isEncoded(rawName)) {
+            rawName = Base64Wrapper.decodeString(rawName);
+            try {
+                compound.setTag("pet_names", JsonToNBT.parse(rawName).toList());
+            } catch (NBTException e) {
+                // Old pet name save... not supported in the new system
+            }
+        }
+
+        String spawnedPets = results.getString("NeedsRespawn");
+        if (Base64Wrapper.isEncoded(spawnedPets)) {
+            spawnedPets = Base64Wrapper.decodeString(spawnedPets);
+            StorageTagList pets = new StorageTagList();
+            try {
+                JsonToNBT parser = JsonToNBT.parse(spawnedPets);
+
+                if (spawnedPets.startsWith("[")) {
+                    // New system
+                    parser.toList().getList().forEach(storageBase -> {
+                        StorageTagCompound tag = (StorageTagCompound) storageBase;
+                        if (!tag.hasKey("type")) {
+                            if (tag.hasKey("data")) {
+                                tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
+                                pets.appendTag(tag);
+                            }
+                            // Ignore the other values because it is not formatted correctly
+                        } else {
+                            pets.appendTag(storageBase);
+                        }
+                    });
+                    compound.setTag("spawned_pets", pets);
+                } else {
+                    // Old system of saving 1 pet
+                    StorageTagCompound tag = parser.toCompound();
+                    compound.setTag("spawned_pets", pets.appendTag(new StorageTagCompound().setString("type", tag.getString("PetType")).setTag("data", tag)));
+                }
+            } catch (NBTException e) {
+                // Old pet name save... not supported in the new system
+            }
+        }
+
+        // Loading saved pets
+        String savedPets = results.getString("SavedPets");
+        if (Base64Wrapper.isEncoded(savedPets)) {
+            savedPets = Base64Wrapper.decodeString(savedPets);
+            StorageTagList pets = new StorageTagList();
+            try {
+                JsonToNBT parser = JsonToNBT.parse(savedPets);
+
+                parser.toList().getList().forEach(storageBase -> {
+                    StorageTagCompound tag = (StorageTagCompound) storageBase;
+                    if (!tag.hasKey("type")) {
+                        if (tag.hasKey("data")) {
+                            tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
+                            pets.appendTag(tag);
+                        }
+                        // Ignore the other values because it is not formatted correctly
+                    } else {
+                        pets.appendTag(storageBase);
+                    }
+                });
+                compound.setTag("saved_pets", pets);
+            } catch (NBTException e) {
+            }
+        }
+
+        return compound;
+    }
+
     public CompletableFuture<StorageTagCompound> fetchData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
@@ -255,89 +284,7 @@ public class PlayerSQL extends SQLManager {
                     return new StorageTagCompound();
                 }
                 try {
-                    StorageTagCompound compound = new StorageTagCompound();
-
-                    // Loads the pets the player purchased
-                    try {
-                        String result = results.getString("UnlockedPets");
-                        if (!result.equals("W10=")) {
-                            compound.setTag("owned_pets", JsonToNBT.parse(Base64Wrapper.decodeString(results.getString("UnlockedPets"))).toList());
-                        }
-                    } catch (NBTException e) {
-                        SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
-                                "Failed to load 'UnlockedPets' for uuid: " + uuid,
-                                "Result: " + results.getString("UnlockedPets")
-                        ).setLevel(DebugLevel.ERROR));
-                    }
-
-                    // Loads pet names
-                    String rawName = results.getString("PetName");
-                    if (Base64Wrapper.isEncoded(rawName)) {
-                        rawName = Base64Wrapper.decodeString(rawName);
-                        try {
-                            compound.setTag("pet_names", JsonToNBT.parse(rawName).toList());
-                        } catch (NBTException e) {
-                            // Old pet name save... not supported in the new system
-                        }
-                    }
-
-                    String spawnedPets = results.getString("NeedsRespawn");
-                    if (Base64Wrapper.isEncoded(spawnedPets)) {
-                        spawnedPets = Base64Wrapper.decodeString(spawnedPets);
-                        StorageTagList pets = new StorageTagList();
-                        try {
-                            JsonToNBT parser = JsonToNBT.parse(spawnedPets);
-
-                            if (spawnedPets.startsWith("[")) {
-                                // New system
-                                parser.toList().getList().forEach(storageBase -> {
-                                    StorageTagCompound tag = (StorageTagCompound) storageBase;
-                                    if (!tag.hasKey("type")) {
-                                        if (tag.hasKey("data")) {
-                                            tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
-                                            pets.appendTag(tag);
-                                        }
-                                        // Ignore the other values because it is not formatted correctly
-                                    } else {
-                                        pets.appendTag(storageBase);
-                                    }
-                                });
-                                compound.setTag("spawned_pets", pets);
-                            } else {
-                                // Old system of saving 1 pet
-                                StorageTagCompound tag = parser.toCompound();
-                                compound.setTag("spawned_pets", pets.appendTag(new StorageTagCompound().setString("type", tag.getString("PetType")).setTag("data", tag)));
-                            }
-                        } catch (NBTException e) {
-                            // Old pet name save... not supported in the new system
-                        }
-                    }
-
-                    // Loading saved pets
-                    String savedPets = results.getString("SavedPets");
-                    if (Base64Wrapper.isEncoded(savedPets)) {
-                        savedPets = Base64Wrapper.decodeString(savedPets);
-                        StorageTagList pets = new StorageTagList();
-                        try {
-                            JsonToNBT parser = JsonToNBT.parse(savedPets);
-
-                            parser.toList().getList().forEach(storageBase -> {
-                                StorageTagCompound tag = (StorageTagCompound) storageBase;
-                                if (!tag.hasKey("type")) {
-                                    if (tag.hasKey("data")) {
-                                        tag.setString("type", tag.getCompoundTag("data").getString("PetType"));
-                                        pets.appendTag(tag);
-                                    }
-                                    // Ignore the other values because it is not formatted correctly
-                                } else {
-                                    pets.appendTag(storageBase);
-                                }
-                            });
-                            compound.setTag("saved_pets", pets);
-                        } catch (NBTException e) {
-                        }
-                    }
-
+                    StorageTagCompound compound = rowToCompound(uuid, results, false);
                     results.close();
                     return compound;
                 } catch (NullPointerException | IllegalArgumentException ex) {
