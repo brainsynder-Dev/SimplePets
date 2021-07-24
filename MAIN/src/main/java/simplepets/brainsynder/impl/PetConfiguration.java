@@ -125,7 +125,7 @@ public class PetConfiguration implements PetConfigManager {
             };
 
             // Makes sure all the pet data is added to the file.
-            //type.getPetData().forEach(this::checkPetData);
+            type.getPetData().forEach(this::checkPetData);
         }
 
         @Override
