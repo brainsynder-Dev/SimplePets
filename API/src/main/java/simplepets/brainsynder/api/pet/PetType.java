@@ -274,7 +274,8 @@ public enum PetType {
             AgeData.class, ChestData.class, ResetColorData.class, LlamaSkinData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_TROPICAL_FISH_AMBIENT, weight = PetWeight.LIGHT)
-    TROPICAL_FISH(IEntityTropicalFishPet.class, "d6dd5e6addb56acbc694ea4ba5923b1b25688178feffa72290299e2505c97281"),
+    TROPICAL_FISH(IEntityTropicalFishPet.class, "d6dd5e6addb56acbc694ea4ba5923b1b25688178feffa72290299e2505c97281",
+            TropicalBodyColorData.class, TropicalPatternData.class, TropicalPatternColorData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_TURTLE_SHAMBLE, weight = PetWeight.HEAVY)
     TURTLE(IEntityTurtlePet.class, "0a4050e7aacc4539202658fdc339dd182d7e322f9fbcc4d5f99b5718a",

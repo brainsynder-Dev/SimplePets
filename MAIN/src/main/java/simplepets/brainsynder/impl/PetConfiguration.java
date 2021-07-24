@@ -125,7 +125,7 @@ public class PetConfiguration implements PetConfigManager {
             };
 
             // Makes sure all the pet data is added to the file.
-            //type.getPetData().forEach(this::checkPetData);
+            type.getPetData().forEach(this::checkPetData);
         }
 
         @Override
@@ -288,10 +288,11 @@ public class PetConfiguration implements PetConfigManager {
             if (JSON.containsKey("data")) {
 
                 JsonObject dataObject = (JsonObject) JSON.getValue("data");
-                JsonObject values = dataObject.names().contains("values") ? (JsonObject) dataObject.get("values") : new JsonObject();
+                JsonObject values;
                 if (!dataObject.names().contains(namespace)) {
                     SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, type.getName()+" | Missing namespace: "+namespace);
                     JsonObject data = new JsonObject();
+                    values = new JsonObject();
                     petData.getDefaultItems().forEach((value, item) -> {
                         values.add(String.valueOf(value), StorageTagTools.toJsonObject(((ItemBuilder)item).toCompound()));
                     });
@@ -304,9 +305,10 @@ public class PetConfiguration implements PetConfigManager {
                 }
 
                 if (dataObject.names().contains(namespace)) {
-                    JsonObject data = (JsonObject) dataObject.get(namespace);
-                    boolean update = false;
 
+                    JsonObject data = (JsonObject) dataObject.get(namespace);
+                    values = data.names().contains("values") ? (JsonObject) data.get("values") : new JsonObject();
+                    boolean update = false;
                     for (Object object : petData.getDefaultItems().entrySet()) {
                         Map.Entry<String, ItemBuilder> entry = (Map.Entry<String, ItemBuilder>) object;
                         if (!values.names().contains(entry.getKey())) {
