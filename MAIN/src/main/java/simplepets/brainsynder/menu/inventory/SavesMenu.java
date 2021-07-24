@@ -120,12 +120,7 @@ public class SavesMenu extends CustomInventory {
 
 
         ListPager<PetUser.Entry<PetType, StorageTagCompound>> pages = new ListPager<>(maxPets, new ArrayList<>(savedPets));
-
-        if (pagerMap.containsKey(player.getName())) {
-            pages = pagerMap.get(player.getName());
-        } else {
-            pagerMap.put(player.getName(), pages);
-        }
+        pagerMap.put(player.getName(), pages);
 
         getSlots().forEach((slot, item) -> {
             if (item.isEnabled() && item.addItemToInv(user, this))
