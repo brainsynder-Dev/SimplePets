@@ -60,8 +60,6 @@ public class PetOwner implements PetUser {
         petMap = new HashMap<>();
         nameMap = new HashMap<>();
         ownedPets = new ArrayList<>();
-
-        loadCompound(PlayerSQL.getInstance().getCache(uuid));
     }
 
     public PetOwner(String username) {

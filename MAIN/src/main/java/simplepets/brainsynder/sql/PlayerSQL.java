@@ -33,7 +33,6 @@ import java.util.function.Consumer;
 
 public class PlayerSQL extends SQLManager {
     private static PlayerSQL instance;
-    private final Map<UUID, StorageTagCompound> dataCache = Maps.newHashMap();
 
     public PlayerSQL() {
         super(false);
@@ -89,39 +88,7 @@ public class PlayerSQL extends SQLManager {
                 exception.printStackTrace();
             }
             transferOldData();
-
-            Map<UUID, StorageTagCompound> cache = new HashMap<>();
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players`");
-                ResultSet results = statement.executeQuery();
-                while (results.next()) {
-                    String uuid = results.getString("uuid");
-                    try {
-                        StorageTagCompound compound = rowToCompound(UUID.fromString(uuid), results, true);
-                        cache.put(UUID.fromString(uuid), compound);
-                        // Cache the data...
-                    } catch (NullPointerException | IllegalArgumentException ex) {
-                        // Failed...
-                    }
-                }
-                results.close();
-                statement.close();
-
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        dataCache.putAll(cache);
-                    }
-                }.runTask(PetCore.getInstance());
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
         });
-    }
-
-    public StorageTagCompound getCache(UUID uuid) {
-        return dataCache.getOrDefault(uuid, new StorageTagCompound());
     }
 
     @Override
