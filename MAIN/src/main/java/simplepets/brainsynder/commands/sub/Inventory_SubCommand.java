@@ -5,6 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.commands.annotations.Permission;
 import simplepets.brainsynder.menu.ItemStorageMenu;
 import simplepets.brainsynder.player.PetOwner;
 import simplepets.brainsynder.storage.files.Commands;
@@ -18,6 +19,7 @@ import simplepets.brainsynder.utils.AdditionalData;
         description = "Opens the Item Storage GUI",
         style = "{usage}"
 )
+@Permission(permission = "inv")
 public class Inventory_SubCommand extends PetSubCommand {
     public Inventory_SubCommand() {
         registerCompletion(1, (commandSender, list, s) -> {
