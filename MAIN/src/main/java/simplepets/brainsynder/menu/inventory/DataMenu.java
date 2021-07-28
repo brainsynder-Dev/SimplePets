@@ -77,7 +77,7 @@ public class DataMenu extends CustomInventory {
     @Override
     public void open(PetUser user, int page) {
         if (!isEnabled()) return;
-        Player player = (Player) user.getPlayer();
+        Player player = user.getPlayer();
 
         PetType type = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
 
@@ -96,9 +96,12 @@ public class DataMenu extends CustomInventory {
         if (user.hasPet(type)) {
             user.getPetEntity(type).ifPresent(entityPet -> {
                 type.getPetData().forEach(petData -> {
-                    petData.getItem(entityPet).ifPresent(o -> {
-                        inv.addItem(((ItemBuilder) o).build());
-                    });
+                    if (petData.isEnabled(entityPet)
+                            && user.getPlayer().hasPermission(type.getPermission("data."+petData.getNamespace().namespace()))) {
+                        petData.getItem(entityPet).ifPresent(o -> {
+                            inv.addItem(((ItemBuilder) o).build());
+                        });
+                    }
                 });
             });
         }
@@ -111,7 +114,7 @@ public class DataMenu extends CustomInventory {
     public void update(PetUser user) {
         if (!isEnabled()) return;
         if (user == null) return;
-        Player player = (Player) user.getPlayer();
+        Player player = user.getPlayer();
         if (!user.hasPets()) {
             player.closeInventory();
             return;
