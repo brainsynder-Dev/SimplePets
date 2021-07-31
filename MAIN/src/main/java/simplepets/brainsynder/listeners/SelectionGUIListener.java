@@ -86,7 +86,6 @@ public class SelectionGUIListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SelectionHolder)) return;
         SelectionMenu menu = InventoryManager.SELECTION;
-        if (e.getPlayer().getOpenInventory() == null)
-            SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+        SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
     }
 }
