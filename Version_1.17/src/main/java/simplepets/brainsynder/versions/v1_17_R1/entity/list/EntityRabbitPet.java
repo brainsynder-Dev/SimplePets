@@ -1,11 +1,14 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.reflection.Reflection;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.phys.Vec3;
 import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
@@ -15,6 +18,8 @@ import simplepets.brainsynder.api.wrappers.RabbitType;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityAgeablePet;
 import simplepets.brainsynder.versions.v1_17_R1.entity.controller.ControllerJumpRabbit;
 import simplepets.brainsynder.versions.v1_17_R1.entity.controller.ControllerMoveRabbit;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityRabbit}
@@ -82,7 +87,7 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
             ControllerJumpRabbit controller = (ControllerJumpRabbit)this.getJumpControl();
             if (!controller.wantJump()) {
                 if (this.moveControl.hasWanted() && this.ticksUntilJump == 0) {
-                    Path pathentity = this.navigation.getPath(); // Translation: navigation.getCurrentPath()
+                    Path pathentity = getPath(); // Translation: navigation.getCurrentPath()
 
                     // Translation: getTargetX, getTargetY, getTargetZ
                     Vec3 vec3d = new Vec3(this.moveControl.getWantedX(), this.moveControl.getWantedY(), this.moveControl.getWantedZ());
@@ -148,6 +153,19 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
         }
 
         if (!this.level.isClientSide) this.level.broadcastEntityEvent(this, (byte)1);
+    }
+
+    private Path getPath() {
+        try {
+            return navigation.getPath();
+        } catch (NoSuchMethodError ex) {
+            try {
+                return (Path) Reflection.getMethod(PathNavigation.class, "getPath").invoke(navigation);
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public void reseter() {
