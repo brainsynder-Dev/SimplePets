@@ -36,7 +36,7 @@ public class RenameManager {
             if (!renameEvent.isCancelled()) user.setPetName(renameEvent.getName(), type);
             return AnvilGUI.Response.close();
         }).title(MessageFile.getTranslation(MessageOption.RENAME_ANVIL_TITLE));
-        builder.open((Player) user.getPlayer());
+        builder.open(user.getPlayer());
     }
 
     public void renameViaChat (PetUser user, PetType type) {
@@ -47,7 +47,7 @@ public class RenameManager {
                     if (event.gracefulExit()) {
                         String name = event.getContext().getSessionData("name").toString(); // It's a string prompt for a reason
                         if (name.equalsIgnoreCase("cancel")) {
-                            ((Player)user.getPlayer()).sendMessage(MessageFile.getTranslation(MessageOption.RENAME_VIA_CHAT_CANCEL));
+                            user.getPlayer().sendMessage(MessageFile.getTranslation(MessageOption.RENAME_VIA_CHAT_CANCEL));
                             return;
                         }
                         if (name.equalsIgnoreCase("reset")) name = null;
@@ -58,7 +58,7 @@ public class RenameManager {
 
                     }
                 });
-        factory.buildConversation(((Player)user.getPlayer())).begin();
+        factory.buildConversation(user.getPlayer()).begin();
     }
 
     public void renameViaSign (PetUser user, PetType type) {

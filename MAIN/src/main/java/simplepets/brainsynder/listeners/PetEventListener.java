@@ -16,7 +16,7 @@ public class PetEventListener implements Listener {
         Config config = PetCore.getInstance().getConfiguration();
         String name = event.getName();
 
-        Player player = (Player) event.getUser().getPlayer();
+        Player player = event.getUser().getPlayer();
 
         if (config.getBoolean(Config.RENAME_TRIM, false)) name = name.trim();
         if (player.hasPermission("pet.name.bypass")) return;

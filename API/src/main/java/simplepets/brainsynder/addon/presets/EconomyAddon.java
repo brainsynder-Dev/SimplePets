@@ -161,7 +161,7 @@ public abstract class EconomyAddon extends PetAddon {
         String price = String.valueOf(priceMap.getOrDefault(type, 2000.0));
         if (price.equals("-1")) price = freePrice;
 
-        if (hidePrice && (AddonPermissions.hasPermission(this, (Player) event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
+        if (hidePrice && (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
         boolean contains = petArray.contains(type);
         for (String line : lore)
             maker.addLore(line.replace("{price}", price).replace("{purchased}", String.valueOf(var(contains))));
@@ -172,7 +172,7 @@ public abstract class EconomyAddon extends PetAddon {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSelect(PetSelectTypeEvent event) {
         if (!isEnabled()) return;
-        if (AddonPermissions.hasPermission(this, (Player) event.getUser().getPlayer(), typePermissions.get(event.getPetType()))) return;
+        if (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(event.getPetType()))) return;
 
         double price = priceMap.getOrDefault(event.getPetType(), 2000.0);
         if (price == -1) return; // The pet is free, return
@@ -186,7 +186,7 @@ public abstract class EconomyAddon extends PetAddon {
         // Checks the players balance (if they have a balance that is lower then the price)
         if (bal < price) {
             event.setCancelled(true);
-            ((Player) user.getPlayer()).sendMessage(Colorize.translateBungeeHex(insufficientFunds
+            user.getPlayer().sendMessage(Colorize.translateBungeeHex(insufficientFunds
                     .replace("{price}", String.valueOf(price))
                     .replace("{type}", event.getPetType().getName())
                     .replace("{prefix}", prefix)
@@ -197,7 +197,7 @@ public abstract class EconomyAddon extends PetAddon {
         // Checks if PayPerUse is enabled, if it is dont add the pet to the players purchased list
         if (payPerUse) {
             withdraw(user.getPlayer().getUniqueId(), price);
-            ((Player) user.getPlayer()).sendMessage(Colorize.translateBungeeHex(paid
+            user.getPlayer().sendMessage(Colorize.translateBungeeHex(paid
                     .replace("{price}", String.valueOf(price))
                     .replace("{type}", event.getPetType().getName())
                     .replace("{prefix}", prefix)
@@ -208,7 +208,7 @@ public abstract class EconomyAddon extends PetAddon {
         // withdraw money, and add pet to the players purchased list
         user.addOwnedPet(event.getPetType());
         withdraw(user.getPlayer().getUniqueId(), price);
-        ((Player) user.getPlayer()).sendMessage(Colorize.translateBungeeHex(successfulPayment
+        user.getPlayer().sendMessage(Colorize.translateBungeeHex(successfulPayment
                 .replace("{price}", String.valueOf(price))
                 .replace("{type}", event.getPetType().getName())
                 .replace("{prefix}", prefix)

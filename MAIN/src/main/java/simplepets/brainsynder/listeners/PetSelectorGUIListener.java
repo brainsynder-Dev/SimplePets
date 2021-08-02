@@ -16,7 +16,6 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
-import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.holders.SelectorHolder;
 import simplepets.brainsynder.utils.Keys;
 

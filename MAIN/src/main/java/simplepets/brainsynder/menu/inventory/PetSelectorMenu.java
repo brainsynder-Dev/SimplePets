@@ -60,7 +60,7 @@ public class PetSelectorMenu extends CustomInventory {
         // Makes sure the slot numbers are sorted from low to high
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
+        list.sort(Map.Entry.comparingByKey());
 
         JsonArray array = new JsonArray();
         for (Map.Entry<Integer, String> entry : list) {
@@ -87,7 +87,7 @@ public class PetSelectorMenu extends CustomInventory {
     }
 
     public void open (PetUser user, int page, String title) {
-        Player player = (Player) user.getPlayer();
+        Player player = user.getPlayer();
         pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new SelectorHolder(), getInteger("size", 54), Colorize.translateBungeeHex(title));
         int placeHolder = inv.getSize();

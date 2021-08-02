@@ -15,7 +15,6 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.SavesMenu;
 import simplepets.brainsynder.menu.inventory.holders.SavesHolder;
-import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;

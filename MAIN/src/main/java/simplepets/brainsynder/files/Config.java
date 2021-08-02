@@ -134,7 +134,7 @@ public class Config extends YamlFile {
         addDefault(LIMIT_CHARS_TOGGLE, false, "Should the name have a limited number of characters?\nDefault: false");
         addDefault(LIMIT_CHARS_TOGGLE, false, "Should the name have a limited number of characters?\nDefault: false");
         addDefault(LIMIT_CHARS_NUMBER, 10, "What should the character limit be set to?\nDefault: 10");
-        addDefault("RenamePet.Blocked-Words", Arrays.asList("jeb_"),
+        addDefault("RenamePet.Blocked-Words", Collections.singletonList("jeb_"),
                 "Are there words you don't want in a pets name?\n" +
                         "   If you put word in between [] it will check if it contains ANY part of the word\n" +
                         "         Example: [ass] will also flag glass because it contains the word in it\n" +

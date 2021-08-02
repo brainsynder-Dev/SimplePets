@@ -57,7 +57,7 @@ public class ProtocolHook {
                         }
                     }.runTask(PetCore.getInstance());
                     return true;
-                }).open((Player) user.getPlayer());
+                }).open(user.getPlayer());
     }
 
     static {

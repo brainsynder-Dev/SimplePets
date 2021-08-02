@@ -7,10 +7,7 @@ import simplepets.brainsynder.api.entity.misc.IEntityBase;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Function;
 
 public interface IEntityPet extends IEntityBase, IBurnablePet {
@@ -48,7 +45,7 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      * Will return all the entities involved in the pet
      */
     default List<Entity> getEntities() {
-        return Arrays.asList(getEntity());
+        return Collections.singletonList(getEntity());
     }
 
     /**

@@ -353,14 +353,17 @@ public enum PetType {
         this(entityClass, new ItemBuilder(Material.PLAYER_HEAD).setTexture("http://textures.minecraft.net/texture/" + textureID));
     }
 
+    @SafeVarargs
     PetType(Class<? extends IEntityPet> entityClass, Material material, Class<? extends PetData>... petData) {
         this(entityClass, new ItemBuilder(material), petData);
     }
 
+    @SafeVarargs
     PetType(Class<? extends IEntityPet> entityClass, String textureID, Class<? extends PetData>... petData) {
         this(entityClass, new ItemBuilder(Material.PLAYER_HEAD).setTexture("http://textures.minecraft.net/texture/" + textureID), petData);
     }
 
+    @SafeVarargs
     PetType(Class<? extends IEntityPet> entityClass, ItemBuilder builder, Class<? extends PetData>... petData) {
         this.entityClass = entityClass;
         LinkedList<Class<? extends PetData>> list = Lists.newLinkedList();

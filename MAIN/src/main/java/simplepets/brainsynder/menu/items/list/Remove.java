@@ -40,7 +40,7 @@ public class Remove extends Item {
         if (!masterUser.hasPets()) return;
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            ((Player)user.getPlayer()).closeInventory();
+            user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {

@@ -60,7 +60,7 @@ public class SavesMenu extends CustomInventory {
 
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
+        list.sort(Map.Entry.comparingByKey());
 
         JsonArray array = new JsonArray();
         for (Map.Entry<Integer, String> entry : list) {

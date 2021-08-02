@@ -69,7 +69,7 @@ public class AddonMenu extends CustomInventory {
         // Makes sure the slot numbers are sorted from low to high
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
+        list.sort(Map.Entry.comparingByKey());
 
         JsonArray array = new JsonArray();
         for (Map.Entry<Integer, String> entry : list) {
@@ -92,7 +92,7 @@ public class AddonMenu extends CustomInventory {
     }
 
     public void open(PetUser user, int page, boolean installer) {
-        Player player = (Player) user.getPlayer();
+        Player player = user.getPlayer();
         installerMap.put(player.getName(), installer);
         pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new AddonHolder(), getInteger("size", 54), Colorize.translateBungeeHex(getString("title", "&#de9790[] &#b35349SimplePets Addons")));

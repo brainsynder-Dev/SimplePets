@@ -70,7 +70,7 @@ public class SelectionMenu extends CustomInventory {
         // Makes sure the slot numbers are sorted from low to high
         Set<Map.Entry<Integer, String>> set = object.entrySet();
         List<Map.Entry<Integer, String>> list = new ArrayList<>(set);
-        Collections.sort(list, Comparator.comparing(o -> (o.getKey())));
+        list.sort(Map.Entry.comparingByKey());
 
         JsonArray array = new JsonArray();
         for (Map.Entry<Integer, String> entry : list) {
@@ -115,7 +115,7 @@ public class SelectionMenu extends CustomInventory {
     @Override
     public void open(PetUser user, int page) {
         if (!isEnabled()) return;
-        Player player = (Player) user.getPlayer();
+        Player player = user.getPlayer();
         pageSave.put(player.getName(), page);
         Inventory inv = Bukkit.createInventory(new SelectionHolder(), getInteger("size", 54), Colorize.translateBungeeHex(getString("title", "&#de9790[] &#b35349Pets")));
         int placeHolder = inv.getSize();
@@ -175,7 +175,6 @@ public class SelectionMenu extends CustomInventory {
             } else {
                 SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
-
         }
         player.openInventory(inv);
     }

@@ -1,6 +1,5 @@
 package simplepets.brainsynder.sql;
 
-import com.google.common.collect.Maps;
 import lib.brainsynder.files.StorageFile;
 import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
@@ -25,8 +24,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
