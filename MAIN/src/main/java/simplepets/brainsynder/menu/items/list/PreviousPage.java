@@ -27,12 +27,8 @@ public class PreviousPage extends Item {
 
     @Override
     public boolean addItemToInv(PetUser owner, CustomInventory inventory) {
-        if (inventory instanceof SelectionMenu) {
+        if (inventory instanceof SelectionMenu || inventory instanceof SavesMenu) {
             return inventory.getCurrentPage(owner) > 1;
-        }
-
-        if (inventory instanceof SavesMenu) {
-            return ((SavesMenu) inventory).getPages(owner).totalPages() > inventory.getCurrentPage(owner);
         }
 
         return false;
