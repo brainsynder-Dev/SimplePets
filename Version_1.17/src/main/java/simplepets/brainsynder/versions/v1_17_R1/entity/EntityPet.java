@@ -4,7 +4,10 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
@@ -55,6 +58,7 @@ import java.util.function.Function;
 public abstract class EntityPet extends Mob implements IEntityPet {
 
     private EntityType<? extends Mob> entityType;
+    private EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -92,6 +96,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
         entityType = getEntityType(entitytypes);
+        originalEntityType = entitytypes;
         getBukkitEntity().remove();
     }
 
@@ -100,6 +105,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         this.user = user;
         this.petType = type;
         entityType = getEntityType(entitytypes);
+        originalEntityType = entitytypes;
 
         this.additional = new HashMap<>();
 
@@ -524,6 +530,11 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     @Override
     public EntityType<?> getType() {
         return entityType;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
 
     private void glowHandler(boolean glow) {
