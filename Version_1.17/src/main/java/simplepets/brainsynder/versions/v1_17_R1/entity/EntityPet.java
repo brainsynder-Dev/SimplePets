@@ -1,6 +1,7 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.nbt.CompoundTag;
@@ -10,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -51,6 +53,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class EntityPet extends Mob implements IEntityPet {
+
+    private EntityType<? extends Mob> entityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -87,11 +91,13 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
+        entityType = getEntityType(entitytypes);
         getBukkitEntity().remove();
     }
 
     public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, ((CraftWorld) user.getPlayer().getLocation().getWorld()).getHandle());
+        entityType = getEntityType(entitytypes);
         this.user = user;
         this.petType = type;
 
@@ -515,6 +521,10 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         });
     }
 
+    @Override
+    public EntityType<?> getType() {
+        return entityType;
+    }
 
     private void glowHandler(boolean glow) {
         try {
@@ -590,6 +600,18 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public void push(double x, double y, double z) {
         if (!pushable) return;
         super.push(x, y, z);
+    }
+
+    private static EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
+        try {
+            Field field = EntityType.class.getDeclaredField("bm");
+            field.setAccessible(true);
+            EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
+            return builder.build("simplepets_pet");
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+            return originalType;
+        }
     }
 
 
