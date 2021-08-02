@@ -97,9 +97,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, ((CraftWorld) user.getPlayer().getLocation().getWorld()).getHandle());
-        entityType = getEntityType(entitytypes);
         this.user = user;
         this.petType = type;
+        entityType = getEntityType(entitytypes);
 
         this.additional = new HashMap<>();
 
@@ -602,12 +602,13 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         super.push(x, y, z);
     }
 
-    private static EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
+    private EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
         try {
             Field field = EntityType.class.getDeclaredField("bm");
             field.setAccessible(true);
             EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
-            return builder.build("simplepets_pet");
+            builder.sized(0.1f, 0.1f);
+            return builder.build(petType.name().toLowerCase());
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
             return originalType;
