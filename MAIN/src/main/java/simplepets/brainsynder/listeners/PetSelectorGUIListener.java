@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -9,11 +10,13 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
+import simplepets.brainsynder.menu.inventory.holders.SelectionHolder;
 import simplepets.brainsynder.menu.inventory.holders.SelectorHolder;
 import simplepets.brainsynder.utils.Keys;
 
@@ -56,6 +59,10 @@ public class PetSelectorGUIListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SelectorHolder)) return;
         PetSelectorMenu menu = InventoryManager.SELECTOR;
-        SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> {
+            if (!(e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof SelectorHolder)) {
+                SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+            }
+        }, 3);
     }
 }
