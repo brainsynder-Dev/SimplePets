@@ -1,7 +1,6 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.core.BlockPos;
