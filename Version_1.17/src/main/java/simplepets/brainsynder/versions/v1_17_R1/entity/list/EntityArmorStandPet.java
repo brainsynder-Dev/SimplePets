@@ -1,18 +1,24 @@
-package simplepets.brainsynder.versions.v1_17_R1.entity.special;
+package simplepets.brainsynder.versions.v1_17_R1.entity.list;
 
 import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.Base64Wrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.Mob;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -29,6 +35,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.utils.animation.AnimationCycle;
 import simplepets.brainsynder.utils.animation.AnimationManager;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
+import simplepets.brainsynder.versions.v1_17_R1.entity.special.EntityControllerPet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -49,6 +56,31 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
     private boolean restricted;
     private final List<ItemStack> cachedItems = new ArrayList<>();
 
+    private static final EntityDataAccessor<Byte> FLAGS;
+    private static final EntityDataAccessor<Rotations> HEAD_POSE;
+    private static final EntityDataAccessor<Rotations> BODY_POSE;
+    private static final EntityDataAccessor<Rotations> LEFT_ARM_POSE;
+    private static final EntityDataAccessor<Rotations> RIGHT_ARM_POSE;
+    private static final EntityDataAccessor<Rotations> LEFT_LEG_POSE;
+    private static final EntityDataAccessor<Rotations> RIGHT_LEG_POSE;
+
+    static {
+        EntityDataAccessor<Byte> FLAGS1;
+        try {
+            FLAGS1 = (EntityDataAccessor<Byte>) Reflection.getField(Mob.class, "b").get(null);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            FLAGS1 = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.BYTE);
+        }
+        FLAGS = FLAGS1;
+        HEAD_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+        BODY_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+        LEFT_ARM_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+        RIGHT_ARM_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+        LEFT_LEG_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+        RIGHT_LEG_POSE = SynchedEntityData.defineId(EntityArmorStandPet.class, EntityDataSerializers.ROTATIONS);
+    }
+
     public EntityArmorStandPet(ServerLevel world) {
         super(EntityType.ZOMBIE, world);
     }
@@ -56,6 +88,17 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
     private EntityArmorStandPet(EntityControllerPet pet, PetUser user) {
         super(EntityType.ZOMBIE, PetType.ARMOR_STAND, user);
         this.pet = pet;
+    }
+
+    protected void registerDatawatchers() {
+        super.registerDatawatchers();
+        //this.entityData.define(FLAGS, (byte) 0);
+        this.entityData.define(HEAD_POSE, new Rotations(0f, 0f, 0f));
+        this.entityData.define(BODY_POSE, new Rotations(0f, 0f, 0f));
+        this.entityData.define(LEFT_ARM_POSE, new Rotations(-10f, 0f, -10f));
+        this.entityData.define(RIGHT_ARM_POSE, new Rotations(-15f, 0f, 10f));
+        this.entityData.define(LEFT_LEG_POSE, new Rotations(-1f, 0f, -1f));
+        this.entityData.define(RIGHT_LEG_POSE, new Rotations(1f, 0f, 1f));
     }
 
     public static org.bukkit.entity.ArmorStand spawn(Location location, EntityControllerPet pet) {
@@ -303,58 +346,62 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
 
     @Override
     public void setHeadPose(EulerAngle angle) {
-        getEntity().setHeadPose(angle);
+        this.entityData.set(HEAD_POSE, toNMS(angle));
     }
 
     @Override
     public void setBodyPose(EulerAngle angle) {
-        getEntity().setBodyPose(angle);
+        this.entityData.set(BODY_POSE, toNMS(angle));
     }
+
     @Override
     public void setLeftArmPose(EulerAngle angle) {
-        getEntity().setLeftArmPose(angle);
+        this.entityData.set(LEFT_ARM_POSE, toNMS(angle));
     }
+
     @Override
     public void setRightArmPose(EulerAngle angle) {
-        getEntity().setRightArmPose(angle);
+        this.entityData.set(RIGHT_ARM_POSE, toNMS(angle));
     }
+
     @Override
     public void setLeftLegPose(EulerAngle angle) {
-        getEntity().setLeftLegPose(angle);
+        this.entityData.set(LEFT_LEG_POSE, toNMS(angle));
     }
+
     @Override
     public void setRightLegPose(EulerAngle angle) {
-        getEntity().setRightLegPose(angle);
+        this.entityData.set(RIGHT_LEG_POSE, toNMS(angle));
     }
 
     @Override
     public EulerAngle getHeadPose() {
-        return getEntity().getHeadPose();
+        return toBukkit(this.entityData.get(HEAD_POSE));
     }
 
     @Override
     public EulerAngle getBodyPose() {
-        return getEntity().getBodyPose();
+        return toBukkit(this.entityData.get(BODY_POSE));
     }
 
     @Override
     public EulerAngle getLeftArmPose() {
-        return getEntity().getLeftArmPose();
+        return toBukkit(this.entityData.get(LEFT_ARM_POSE));
     }
 
     @Override
     public EulerAngle getRightArmPose() {
-        return getEntity().getRightArmPose();
+        return toBukkit(this.entityData.get(RIGHT_ARM_POSE));
     }
 
     @Override
     public EulerAngle getLeftLegPose() {
-        return getEntity().getLeftLegPose();
+        return toBukkit(this.entityData.get(LEFT_LEG_POSE));
     }
 
     @Override
     public EulerAngle getRightLegPose() {
-        return getEntity().getRightLegPose();
+        return toBukkit(this.entityData.get(RIGHT_LEG_POSE));
     }
 
     @Override
@@ -364,7 +411,7 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
 
     @Override
     public boolean hasBasePlate() {
-        return false;
+        return (this.entityData.get(FLAGS) & 8) == 0;
     }
 
     @Override
@@ -377,6 +424,13 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
 
     }
 
+    // CONVERSIONS
+    private EulerAngle toBukkit(Rotations vector3f) {
+        return new EulerAngle(vector3f.getX(), vector3f.getY(), vector3f.getZ());
+    }
+    private Rotations toNMS(EulerAngle angle) {
+        return new Rotations((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
+    }
 
     public ItemStack getItems(EquipmentSlot enumitemslot) {
         return toBukkit(super.getItemBySlot(enumitemslot));
