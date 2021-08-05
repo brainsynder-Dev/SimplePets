@@ -16,6 +16,11 @@ public class PetMoveEvent extends CancellablePetEvent {
         targetLocation = entity.getEntity().getLocation();
     }
 
+    public PetMoveEvent(IEntityPet entity, Location targetLocation) {
+        this.entity = entity;
+        this.targetLocation = targetLocation;
+    }
+
     public IEntityPet getEntity() {
         return entity;
     }

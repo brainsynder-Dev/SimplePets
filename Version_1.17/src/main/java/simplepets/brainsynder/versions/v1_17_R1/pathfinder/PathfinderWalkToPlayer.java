@@ -9,10 +9,12 @@ import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.level.pathfinder.BlockPathTypes;
 import net.minecraft.world.level.pathfinder.Path;
 import net.minecraft.world.level.pathfinder.WalkNodeEvaluator;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.misc.EntityPetType;
+import simplepets.brainsynder.api.event.entity.movment.PetTeleportEvent;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ParticleManager;
@@ -158,6 +160,11 @@ public class PathfinderWalkToPlayer extends Goal {
 
     private boolean tryTeleportTo(int x, int y, int z) {
         if (Math.abs((double) x - player.getX()) < 2.0D && Math.abs((double) z - player.getZ()) < 2.0D) return false;
+
+        PetTeleportEvent event = new PetTeleportEvent(entity, new Location(user.getPlayer().getWorld(), x, y, z));
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) return false;
+
         if (!this.canTeleportTo(new BlockPos(x, y, z))) return false;
         this.entity.moveTo((double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
         PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), entity.getEntity().getLocation());
