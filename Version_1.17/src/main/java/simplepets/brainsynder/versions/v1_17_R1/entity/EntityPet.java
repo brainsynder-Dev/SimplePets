@@ -56,13 +56,12 @@ import java.util.function.Function;
 
 public abstract class EntityPet extends Mob implements IEntityPet {
 
-    private EntityType<? extends Mob> entityType;
-    private EntityType<? extends Mob> originalEntityType;
+    protected final EntityType<? extends Mob> entityType;
+    protected final EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
-
 
     private final double jumpHeight = 0.5D;
     private boolean isGlowing = false;
@@ -123,7 +122,6 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         displayName = configuration.getBoolean("PetToggles.ShowPetNames", true);
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-            // TODO: fill in values
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
             this.floatDown = config.canFloat();
