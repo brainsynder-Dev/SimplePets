@@ -1,15 +1,20 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.FloatGoal;
@@ -51,6 +56,9 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class EntityPet extends Mob implements IEntityPet {
+
+    private EntityType<? extends Mob> entityType;
+    private EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -87,6 +95,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
+        entityType = getEntityType(entitytypes);
+        originalEntityType = entitytypes;
         getBukkitEntity().remove();
     }
 
@@ -94,6 +104,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         super(entitytypes, ((CraftWorld) user.getPlayer().getLocation().getWorld()).getHandle());
         this.user = user;
         this.petType = type;
+        entityType = getEntityType(entitytypes);
+        originalEntityType = entitytypes;
 
         this.additional = new HashMap<>();
 
@@ -515,6 +527,15 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         });
     }
 
+    @Override
+    public EntityType<?> getType() {
+        return entityType;
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
+    }
 
     private void glowHandler(boolean glow) {
         try {
@@ -590,6 +611,19 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public void push(double x, double y, double z) {
         if (!pushable) return;
         super.push(x, y, z);
+    }
+
+    private EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
+        try {
+            Field field = EntityType.class.getDeclaredField("bm");
+            field.setAccessible(true);
+            EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
+            builder.sized(0.1f, 0.1f);
+            return builder.build(petType.name().toLowerCase());
+        } catch (IllegalAccessException | NoSuchFieldException e) {
+            e.printStackTrace();
+            return originalType;
+        }
     }
 
 
