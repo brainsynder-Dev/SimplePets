@@ -4,9 +4,11 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
@@ -533,6 +535,15 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     @Override
     public Packet<?> getAddEntityPacket() {
+        try {
+            ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
+            Field type = packet.getClass().getDeclaredField("c");
+            type.setAccessible(true);
+            type.set(packet, Registry.ENTITY_TYPE.getId(originalEntityType));
+            return packet;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
         return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
 
