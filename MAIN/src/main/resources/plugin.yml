@@ -1810,6 +1810,9 @@ permissions:
             pet.type.tropicalfish.data.frozen: true
             pet.type.tropicalfish.data.burning: true
             pet.type.tropicalfish.data.silent: true
+            pet.type.tropicalfish.data.body_color: true
+            pet.type.tropicalfish.data.pattern: true
+            pet.type.tropicalfish.data.pattern_color: true
 
 
     pet.type.turtle.data.*: # Grants access to all the data permissions for this pet
