@@ -7,7 +7,6 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.utils.RenameType;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
@@ -20,6 +19,8 @@ public class Config extends YamlFile {
     @Override
     public void loadDefaults() {
         addDefault("Reload-Detected", false, "This is used by the plugin to detect if the plugin was previously unloaded (via /reload or by a plugin)\n    CAN NOT BE CUSTOMIZED");
+        addDefault("Simpler-Pet-GUI-Command", false, "UGGGGGGGG This config option makes it so `/pet` opens the GUI (like `/pet gui`)\n" +
+                "Requires a server restart for some reason ¯\\_(ツ)_/¯\nDefault: false");
         addDefault("Update-Checking.Enabled", true, "Would you like to check for new jenkins builds?\nDefault: true");
         addDefault("Update-Checking.Message-On-Join", true, "Would you like to be alerted when there is a new update when you log in?\n(MUST HAVE 'pet.update' permission or OP)\nDefault: true");
         addSectionHeader("Update-Checking.unit", Utilities.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");

@@ -6,6 +6,7 @@ import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.list.*;
 
@@ -48,6 +49,13 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
 
     @Override
     public void run(CommandSender sender, String[] args) {
+        if (plugin.getConfiguration().getBoolean("Simpler-Pet-GUI-Command", false)
+                && (sender instanceof Player)
+                && (args.length == 0)) {
+            ((Player) sender).performCommand("pet gui");
+            return;
+        }
+
         List<PetSubCommand> adminCommands = Lists.newArrayList();
 
         getSubCommands().forEach(sub -> {

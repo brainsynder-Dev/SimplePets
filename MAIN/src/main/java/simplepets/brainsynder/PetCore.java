@@ -329,6 +329,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void handleMetrics () {
         SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Loading Metrics");
         Metrics metrics = new Metrics(this);
+        metrics.addCustomChart(new Metrics.SimplePie("stupid_config_option_for_gui_command", () -> String.valueOf(configuration.getBoolean("Simpler-Pet-GUI-Command", false))));
         metrics.addCustomChart(new Metrics.AdvancedPie("spawned_pet_counter", this::getSpawnedPetCounts));
         metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
         metrics.addCustomChart(new Metrics.DrilldownPie("loaded_addons", () -> {
