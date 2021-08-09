@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
@@ -38,6 +37,19 @@ public class Remove extends Item {
     @Override
     public void onShiftClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
+        if (masterUser.getPetEntities().size() == 1) {
+            masterUser.getPlayer().closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                        masterUser.removePet(iEntityPet.getPetType());
+                        masterUser.updateDataMenu();
+                    });
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
+            return;
+        }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPlayer().closeInventory();

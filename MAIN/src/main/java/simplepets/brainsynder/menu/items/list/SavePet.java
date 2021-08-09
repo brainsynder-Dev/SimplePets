@@ -31,6 +31,20 @@ public class SavePet extends Item {
     @Override
     public void onClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
+        if (masterUser.getPetEntities().size() == 1) {
+            masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                StorageTagCompound compound = iEntityPet.asCompound();
+                if (iEntityPet.getPetType() == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
+                masterUser.addPetSave(compound);
+            });
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    inventory.open(masterUser);
+                }
+            }.runTaskLater(PetCore.getInstance(), 1);
+            return;
+        }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPetEntity(type).ifPresent(entity -> {

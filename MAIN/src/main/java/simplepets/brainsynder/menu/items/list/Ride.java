@@ -33,6 +33,18 @@ public class Ride extends Item {
     @Override
     public void onClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
+        if (masterUser.getPetEntities().size() == 1) {
+            masterUser.getPlayer().closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                        masterUser.setPetVehicle(iEntityPet.getPetType(), !masterUser.isPetVehicle(iEntityPet.getPetType()));
+                    });
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
+            return;
+        }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPlayer().closeInventory();
