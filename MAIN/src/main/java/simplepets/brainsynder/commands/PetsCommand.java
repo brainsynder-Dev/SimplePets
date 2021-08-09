@@ -21,6 +21,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
 
     public PetsCommand(PetCore plugin) {
         this.plugin = plugin;
+        registerSub(new HelpCommand(this));
         registerSub(new SummonCommand(plugin));
         registerSub(new ModifyCommand(plugin));
         registerSub(new RemoveCommand(plugin));
