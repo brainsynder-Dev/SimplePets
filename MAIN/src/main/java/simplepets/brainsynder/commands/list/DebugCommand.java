@@ -90,7 +90,7 @@ public class DebugCommand extends PetSubCommand {
     public static void fetchDebug (Consumer<JsonObject> consumer, boolean skipJenkins) {
         JsonObject json = new JsonObject();
         json.add("reloaded", PetCore.getInstance().wasReloaded());
-
+        PetCore.getInstance().checkWorldGuard(value -> json.add("worldguard_config_check", value));
         fetchServerInfo(object -> json.add("server", object));
 
         JsonArray addons = new JsonArray();

@@ -8,6 +8,8 @@ import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -42,6 +44,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 
 public class PetCore extends JavaPlugin implements IPetsPlugin {
     private static PetCore instance;
@@ -110,6 +113,17 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         addonManager = new AddonManager(this);
         addonManager.initialize();
         addonManager.checkAddons();
+
+        checkWorldGuard(value -> {
+            if (value) {
+                debug.debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.CRITICAL)
+                        .setMessages(
+                                "Your server is using WorldGuard and the 'mobs.block-plugin-spawning' is set to true",
+                                "This causes issues with the plugin not being able to spawn pets",
+                                "Please set this to 'false' in the WorldGuard config so pets can spawn"
+                        ));
+            }
+        });
 
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
@@ -290,6 +304,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         } catch (Throwable t) {
             return 0.0;
         }
+    }
+
+    // Checks if the server is using WorldGuard and fetches the value of 'mobs.block-plugin-spawning'
+    public void checkWorldGuard (Consumer<Boolean> consumer) {
+        Plugin worldguard = Bukkit.getPluginManager().getPlugin("WorldGuard");
+        if (worldguard == null) return;
+        FileConfiguration config = worldguard.getConfig();
+        consumer.accept(config.getBoolean("mobs.block-plugin-spawning", false));
     }
 
     public Config getConfiguration() {
