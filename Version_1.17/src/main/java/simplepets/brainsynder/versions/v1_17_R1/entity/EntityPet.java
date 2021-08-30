@@ -656,4 +656,9 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public boolean isOnPortalCooldown() {
         return true; // Prevents pets from teleporting from a portal
     }
+
+    @Override
+    protected void handleNetherPortal() {
+        // fuck around and find out
+    }
 }
