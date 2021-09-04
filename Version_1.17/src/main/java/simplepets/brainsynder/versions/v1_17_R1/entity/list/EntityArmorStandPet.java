@@ -19,6 +19,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -43,7 +44,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandPet {
+public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStandPet {
 
     private boolean isSpecial = false;
     private EntityControllerPet pet;
@@ -85,7 +86,7 @@ public class EntityArmorStandPet extends EntityPet implements IEntityArmorStandP
         super(EntityType.ZOMBIE, world);
     }
 
-    private EntityArmorStandPet(EntityControllerPet pet, PetUser user) {
+    public EntityArmorStandPet(EntityControllerPet pet, PetUser user) {
         super(EntityType.ZOMBIE, PetType.ARMOR_STAND, user);
         this.pet = pet;
     }
