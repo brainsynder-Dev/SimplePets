@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
@@ -144,6 +145,15 @@ public class SummonCommand extends PetSubCommand {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
                 return;
             }
+
+            if (finalTarget == sender) {
+                // Will be treated like selecting a pet from the selection menu
+                // TODO - own thing?
+                PetSelectTypeEvent event = new PetSelectTypeEvent(type, user);
+                Bukkit.getServer().getPluginManager().callEvent(event);
+                if (event.isCancelled()) return;
+            }
+
             BiOptional<IEntityPet, String> entityPet = spawner.spawnEntityPet(type, user, finalCompound);
             if (!entityPet.isFirstPresent()) {
                 if (entityPet.isSecondPresent()) {
