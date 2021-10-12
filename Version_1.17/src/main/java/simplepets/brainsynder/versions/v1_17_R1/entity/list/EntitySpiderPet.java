@@ -4,6 +4,7 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntitySpiderPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -14,9 +15,11 @@ import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
  */
 public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     private static final EntityDataAccessor<Byte> WALL_CLIMB_FLAG;
+    private final boolean wallClimbing;
 
     public EntitySpiderPet(PetType type, PetUser user) {
         super(EntityType.SPIDER, type, user);
+        wallClimbing = PetCore.getInstance().getConfiguration().getBoolean("PetToggles.SpiderClimbing", true);
     }
 
     @Override
@@ -27,7 +30,7 @@ public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     @Override
     public void tick() {
         super.tick();
-        if (!this.level.isClientSide) this.setWallClimb(this.horizontalCollision);
+        if ((!this.level.isClientSide) && wallClimbing) this.setWallClimb(this.horizontalCollision);
     }
 
     @Override
@@ -41,6 +44,7 @@ public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     }
 
     public boolean canWallClimb() {
+        if (!wallClimbing) return false;
         return (this.entityData.get(WALL_CLIMB_FLAG) & 1) != 0;
     }
 
