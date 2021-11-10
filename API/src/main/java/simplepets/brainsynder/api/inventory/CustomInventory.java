@@ -3,6 +3,7 @@ package simplepets.brainsynder.api.inventory;
 import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -25,7 +26,12 @@ public abstract class CustomInventory extends JsonFile {
     }
 
     public void reset (PetUser owner) {
-        pageSave.remove(owner.getPlayer().getName());
+        if (owner == null) return;
+        Player player = owner.getPlayer();
+        if (player == null) player = Bukkit.getPlayer(owner.getOwnerUUID());
+        if (player == null) return;
+
+        pageSave.remove(player.getName());
     }
 
     @Override
