@@ -15,9 +15,11 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.misc.EntityPetType;
 import simplepets.brainsynder.api.event.entity.movment.PetTeleportEvent;
+import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ParticleManager;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 
 import java.lang.reflect.InvocationTargetException;
@@ -167,6 +169,7 @@ public class PathfinderWalkToPlayer extends Goal {
 
         if (!this.canTeleportTo(new BlockPos(x, y, z))) return false;
         this.entity.moveTo((double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
+        Utilities.runPetCommands(CommandReason.TELEPORT, user, entity.getPetType());
         PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), entity.getEntity().getLocation());
         this.navigation.stop();// Translation: navigation.stop()
         return true;

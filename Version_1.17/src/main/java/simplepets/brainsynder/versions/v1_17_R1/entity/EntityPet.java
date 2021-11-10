@@ -39,12 +39,14 @@ import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.event.entity.movment.PetJumpEvent;
 import simplepets.brainsynder.api.event.entity.movment.PetRideEvent;
+import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.ParticleManager;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderWalkToPlayer;
 import simplepets.brainsynder.versions.v1_17_R1.utils.EntityUtils;
@@ -58,8 +60,8 @@ import java.util.function.Function;
 
 public abstract class EntityPet extends Mob implements IEntityPet {
 
-    private EntityType<? extends Mob> entityType;
-    private EntityType<? extends Mob> originalEntityType;
+    private final EntityType<? extends Mob> entityType;
+    private final EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -143,6 +145,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
             setPos(location.getX(), location.getY(), location.getZ());
+            Utilities.runPetCommands(CommandReason.TELEPORT, user, getPetType());
             PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), location);
         });
     }
@@ -303,6 +306,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         ejectPassengers();
         var owner = user.getPlayer();
         if (owner != null) {
+            Utilities.runPetCommands(CommandReason.RIDE, user, getPetType());
             if (!doIndirectAttach) {
                 return getBukkitEntity().addPassenger(owner);
             } else {

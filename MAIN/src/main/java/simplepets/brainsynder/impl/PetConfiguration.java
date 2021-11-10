@@ -1,7 +1,9 @@
 package simplepets.brainsynder.impl;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.sounds.SoundMaker;
@@ -12,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.api.pet.IPetConfig;
-import simplepets.brainsynder.api.pet.PetConfigManager;
-import simplepets.brainsynder.api.pet.PetData;
-import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.pet.*;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.Config;
@@ -24,6 +23,7 @@ import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -71,12 +71,14 @@ public class PetConfiguration implements PetConfigManager {
         private final PetType type;
         private final JsonFile JSON;
         private final Map<String, JsonObject> additional;
+        private final Map<CommandReason, List<String>> commandMap;
 
         private PetConfig(PetType type) {
             this.type = type;
             additional = new HashMap<>();
+            commandMap = new HashMap<>();
 
-            JSON = new JsonFile(new File(new File(plugin.getDataFolder().toString()+File.separator+"Pets"), type.getName()+".json"), true){
+            JSON = new JsonFile(new File(new File(plugin.getDataFolder() +File.separator+"Pets"), type.getName()+".json"), true){
                 @Override
                 public void loadDefaults() {
                     setDefault("enabled", true);
@@ -85,6 +87,11 @@ public class PetConfiguration implements PetConfigManager {
                     type.getCustomization().ifPresent(customization -> {
                         setDefault("ambient-sound", customization.ambient().name());
                     });
+
+                    JsonObject reasons = new JsonObject();
+                    for (CommandReason reason : CommandReason.values()) reasons.add(reason.name(), new JsonArray());
+                    setDefault("commands", reasons);
+
                     setDefault("fly", canFlyDefault(type));
                     setDefault("float_down", false);
 
@@ -123,6 +130,18 @@ public class PetConfiguration implements PetConfigManager {
                     setDefault("data", dataObject);
                 }
             };
+
+            if (JSON.hasKey("commands")) {
+                JsonObject commands = (JsonObject) JSON.getValue("commands");
+                commands.names().forEach(s -> {
+                    CommandReason.getReason(s).ifPresent(reason -> {
+                        List<String> list = commandMap.getOrDefault(reason, Lists.newArrayList());
+                        JsonArray array = (JsonArray) commands.get(s);
+                        array.forEach(jsonValue -> list.add(jsonValue.asString()));
+                        commandMap.put(reason, list);
+                    });
+                });
+            }
 
             // Makes sure all the pet data is added to the file.
             type.getPetData().forEach(this::checkPetData);
@@ -281,6 +300,11 @@ public class PetConfiguration implements PetConfigManager {
                 if (dataObject.names().contains(namespace)) data = (JsonObject) dataObject.get(namespace);
             }
             return data;
+        }
+
+        @Override
+        public Map<CommandReason, List<String>> getCommands() {
+            return commandMap;
         }
 
         private boolean checkPetData(PetData petData) {

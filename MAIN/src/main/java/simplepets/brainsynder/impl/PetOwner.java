@@ -21,6 +21,7 @@ import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.*;
 import simplepets.brainsynder.api.event.user.PetNameChangeEvent;
 import simplepets.brainsynder.api.other.ParticleHandler;
+import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -315,6 +316,7 @@ public class PetOwner implements PetUser {
         if (isPetHat(type)) setPetHat(type, false);
         PetRemoveEvent event = new PetRemoveEvent(this, petMap.get(type));
         Bukkit.getPluginManager().callEvent(event);
+        Utilities.runPetCommands(CommandReason.REVOKE, this, type);
 
         petMap.get(type).getEntities().forEach(entity -> {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
@@ -331,6 +333,7 @@ public class PetOwner implements PetUser {
             if (isPetHat(type)) setPetHat(type, false);
             PetRemoveEvent event = new PetRemoveEvent(this, entityPet);
             Bukkit.getPluginManager().callEvent(event);
+            Utilities.runPetCommands(CommandReason.REVOKE, this, type);
 
             entityPet.getEntities().forEach(entity -> {
                 SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
@@ -421,6 +424,7 @@ public class PetOwner implements PetUser {
                 PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.SET);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
+                    Utilities.runPetCommands(CommandReason.FAILED, this, type);
                     SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, getPlayer(), ent.getLocation());
                     return;
                 }
@@ -432,6 +436,7 @@ public class PetOwner implements PetUser {
                 new BukkitRunnable() {
                     @Override
                     public void run() {
+                        Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
                         Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
@@ -441,6 +446,7 @@ public class PetOwner implements PetUser {
                 PrePetHatEvent event = new PrePetHatEvent(this, entityPet, PrePetHatEvent.Type.REMOVE);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) { // Don't know why someone would cancel removing the hat XD
+                    Utilities.runPetCommands(CommandReason.FAILED, PetOwner.this, type);
                     SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.TASK_FAILED, getPlayer(), ent.getLocation());
                     return;
                 }
@@ -468,6 +474,7 @@ public class PetOwner implements PetUser {
                 }
                 if (riderMob != null)
                     Utilities.setPassenger(getPlayer(), vehicle, riderMob);
+                Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
             }
         });
     }
@@ -528,6 +535,7 @@ public class PetOwner implements PetUser {
                 PetDismountEvent event = new PetDismountEvent(entityPet);
                 Bukkit.getPluginManager().callEvent(event);
                 if (event.isCancelled()) {
+                    Utilities.runPetCommands(CommandReason.FAILED, PetOwner.this, type);
                     SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
                     return;
                 }
@@ -551,6 +559,7 @@ public class PetOwner implements PetUser {
 
         getPetEntity(type).ifPresent(entityPet -> {
             if (!config.canMount(getPlayer())) {
+                Utilities.runPetCommands(CommandReason.FAILED, PetOwner.this, type);
                 SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
                 return;
             }
@@ -559,6 +568,7 @@ public class PetOwner implements PetUser {
             Bukkit.getPluginManager().callEvent(event);
 
             if (event.isCancelled()) {
+                Utilities.runPetCommands(CommandReason.FAILED, PetOwner.this, type);
                 SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
                 return;
             }

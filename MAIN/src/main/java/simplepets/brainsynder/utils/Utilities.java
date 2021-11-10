@@ -1,14 +1,19 @@
 package simplepets.brainsynder.utils;
 
+import com.google.common.collect.Lists;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
+import lib.brainsynder.utils.TaskTimer;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -19,6 +24,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
+import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -96,6 +102,61 @@ public class Utilities {
         }
     }
 
+    public static void runPetCommands(CommandReason reason, PetUser owner, PetType type) {
+        runPetCommands(reason, owner, type, null);
+    }
+
+    public static void runPetCommands(CommandReason reason, PetUser owner, PetType type, Location location) {
+        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+            List<String> commands = config.getCommands().getOrDefault(reason, Lists.newArrayList());
+            if (owner.getPetEntity(type).isPresent()) {
+                commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handleCommandPlaceholders(owner, owner.getPetEntity(type).get(), null, command)));
+                return;
+            }
+            commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handleCommandPlaceholders(owner, null, location, command)));
+        });
+
+    }
+
+    /**
+     * This method replaces all the placeholders with the correct replacements
+     * <p>
+     * List of Placeholders
+     * <ul>
+     *     <li>{petX} - The pets X coordinate</li>
+     *     <li>{petY} - The pets Y coordinate</li>
+     *     <li>{petZ} - The pets Z coordinate</li>
+     *     <li>{ownerX} - The pet owners X coordinate</li>
+     *     <li>{ownerY} - The pet owners Y coordinate</li>
+     *     <li>{ownerZ} - The pet owners Z coordinate</li>
+     *     <li>{ownerName} - The pet owners name</li>
+     *     <li>{petName} - The pets current name</li>
+     *     <li>{petType} - The type of pet</li>
+     * </ul>
+     *
+     * @param owner   The owner of the pet
+     * @param entity  The pet the commands are run for
+     * @param command The command that is being run
+     * @return | Returns the command with all the replaced placeholders
+     */
+    public static String handleCommandPlaceholders(PetUser owner, IEntityPet entity, Location petLoc, String command) {
+        Location ownerLoc = owner.getPlayer().getLocation();
+        if ((petLoc == null) && (entity != null)) petLoc = entity.getEntity().getLocation();
+
+        if (petLoc != null) command = command.replace("{petX}", String.valueOf(petLoc.getX()))
+                .replace("{petY}", String.valueOf(petLoc.getY()))
+                .replace("{petZ}", String.valueOf(petLoc.getZ()));
+
+        command = command.replace("{ownerX}", String.valueOf(ownerLoc.getX()))
+                .replace("{ownerY}", String.valueOf(ownerLoc.getY()))
+                .replace("{ownerZ}", String.valueOf(ownerLoc.getZ()))
+                .replace("{ownerName}", owner.getOwnerName())
+                .replace("{petType}", entity.getPetType().getName());
+        if ((entity != null) && entity.getPetName().isPresent())
+            command = command.replace("{petName}", entity.getPetName().get());
+        return command;
+    }
+
     public static void setPassenger(Player player, Entity entity, Entity passenger) {
         try {
             entity.setPassenger(passenger);
@@ -105,17 +166,18 @@ public class Utilities {
         }
     }
 
-    public static boolean hasPermission (CommandSender sender, String permission) {
+    public static boolean hasPermission(CommandSender sender, String permission) {
         return hasPermission(sender, permission, false);
     }
 
-    public static boolean hasPermission (CommandSender sender, String permission, boolean strict) {
+    public static boolean hasPermission(CommandSender sender, String permission, boolean strict) {
         if (sender instanceof ConsoleCommandSender) return true;
         if ((permission == null) || (permission.isEmpty())) return true;
         //if (sender.isOp()) return true;
 
         int value = getPermission(sender, permission, strict);
-        if (PetCore.getInstance().getConfiguration().getStringList("Permissions.Ignored-List").contains(permission)) return true;
+        if (PetCore.getInstance().getConfiguration().getStringList("Permissions.Ignored-List").contains(permission))
+            return true;
         return value == 1;
     }
 
@@ -157,13 +219,15 @@ public class Utilities {
 
     public static void hidePet(PetUser user, IEntityPet entityPet) {
         UUID entityID = entityPet.getEntity().getUniqueId();
-        if (entityPet instanceof IEntityControllerPet) entityID = ((IEntityControllerPet)entityPet).getVisibleEntity().getEntity().getUniqueId();
+        if (entityPet instanceof IEntityControllerPet)
+            entityID = ((IEntityControllerPet) entityPet).getVisibleEntity().getEntity().getUniqueId();
         managePetVisibility(user.getPlayer(), "PacketPlayOutEntityDestroy", Integer.TYPE, entityID);
     }
 
     public static void showPet(PetUser user, IEntityPet entityPet) {
         Entity entity = entityPet.getEntity();
-        if (entityPet instanceof IEntityControllerPet) entity = ((IEntityControllerPet)entityPet).getVisibleEntity().getEntity();
+        if (entityPet instanceof IEntityControllerPet)
+            entity = ((IEntityControllerPet) entityPet).getVisibleEntity().getEntity();
         managePetVisibility(user.getPlayer(), "PacketPlayOutSpawnEntityLiving", Reflection.getNmsClass("EntityLiving"), entity);
     }
 
@@ -202,22 +266,39 @@ public class Utilities {
         return main.isSimilar(check);
     }
 
-    public static void makeBackup (YamlFile yamlFile, File backup) {
+    public static void makeBackup(YamlFile yamlFile, File backup) {
         File file = yamlFile.getFile();
         try {
             if (!backup.exists()) backup.createNewFile();
             FileUtils.copyFile(file, backup);
             SimplePets.getDebugLogger().debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.NORMAL).setMessages(
                     "A new major config change was detected",
-                    "Saving the old config to 'plugins/SimplePets/"+backup.getParentFile().getName()+"/"+backup.getName()+"'"
+                    "Saving the old config to 'plugins/SimplePets/" + backup.getParentFile().getName() + "/" + backup.getName() + "'"
             ));
         } catch (IOException e) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build(yamlFile.getClass()).setLevel(DebugLevel.ERROR).setMessages(
-                    "Failed to create file backup for: "+file.getName(),
-                    "Error: "+e.getMessage()
+                    "Failed to create file backup for: " + file.getName(),
+                    "Error: " + e.getMessage()
             ));
             e.printStackTrace();
         }
 
+    }
+
+    public static String itemToString(ItemStack itemStack) {
+        YamlConfiguration config = new YamlConfiguration();
+        config.set("i", itemStack);
+        return config.saveToString();
+    }
+
+    public static ItemStack stringToItem(String stringBlob) {
+        YamlConfiguration config = new YamlConfiguration();
+        try {
+            config.loadFromString(stringBlob);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        return config.getItemStack("i", null);
     }
 }

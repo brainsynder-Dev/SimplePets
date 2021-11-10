@@ -6,6 +6,8 @@ import lib.brainsynder.sounds.SoundMaker;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -99,4 +101,6 @@ public interface IPetConfig {
     Optional<ItemBuilder> getDataItem (String namespace, Object value, ItemBuilder fallback);
 
     JsonObject getRawData (String namespace);
+
+    Map<CommandReason, List<String>> getCommands ();
 }

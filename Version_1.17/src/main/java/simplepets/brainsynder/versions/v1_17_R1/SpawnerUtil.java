@@ -12,11 +12,13 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
+import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 
 import java.util.*;
@@ -76,6 +78,7 @@ public class SpawnerUtil implements ISpawnUtil {
             PetEntitySpawnEvent event = new PetEntitySpawnEvent(user, customEntity);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
+                Utilities.runPetCommands(CommandReason.FAILED, user, type);
                 String reason = "";
                 if (event.getReason() != null) reason = event.getReason();
                 if (!reason.isEmpty()) return BiOptional.of(null, reason);
@@ -86,12 +89,14 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (((CraftWorld)location.getWorld()).getHandle().addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
+                Utilities.runPetCommands(CommandReason.SPAWN, user, type);
                 int count = spawnCount.getOrDefault(type, 0);
                 spawnCount.put(type, (count+1));
                 return BiOptional.of(customEntity);
             }
         }catch (Exception e) {
             e.printStackTrace();
+            Utilities.runPetCommands(CommandReason.FAILED, user, type, location);
             return BiOptional.of(null, e.getMessage());
         }
 
