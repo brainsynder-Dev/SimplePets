@@ -58,45 +58,62 @@ public class Utilities {
         return materials;
     }
 
-    public static boolean handlePetSpawning (PetUser user, PetType type, StorageTagCompound compound, boolean checkDataPermissions) {
+    public static boolean handlePetSpawning(PetUser user, PetType type, StorageTagCompound compound, boolean checkDataPermissions) {
+        TaskTimer timer = new TaskTimer(Utilities.class, "handlePetSpawning");
+        timer.start();
         Player player = user.getPlayer();
         if (!type.isSupported()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
+            timer.stop("unsupported type - end");
             return false;
         }
 
         if (!SimplePets.getSpawnUtil().isRegistered(type)) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
+            timer.stop("unregistered type - end");
             return false;
         }
 
-        if (!Utilities.hasPermission(player, type.getPermission())) return false;
+        if (!Utilities.hasPermission(player, type.getPermission())) {
+            timer.stop("no permission - end");
+            return false;
+        }
 
         ISpawnUtil spawner = SimplePets.getSpawnUtil();
-        if (spawner == null) return false;
+        if (spawner == null) {
+            timer.stop("spawner is null - end");
+            return false;
+        }
 
         if (compound.hasNoTags()) {
             // Should load the defaults based on the Pet data
             for (PetData petData : type.getPetData()) {
-                if (checkDataPermissions && (!hasPermission(player, type.getPermission("data."+petData.getNamespace().namespace())))) continue;
+                if (checkDataPermissions && (!hasPermission(player, type.getPermission("data." + petData.getNamespace().namespace()))))
+                    continue;
                 petData.getDefault(type).ifPresent(o -> {
                     compound.set(petData.getNamespace().namespace(), o);
                 });
             }
+            timer.label("loaded default data");
         }
 
         BiOptional<IEntityPet, String> entityPet = spawner.spawnEntityPet(type, user, compound);
+        timer.label("spawned pet entity");
+
         if (entityPet.isFirstPresent()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
+            timer.stop("successful spawn - end");
             return true;
-        }else{
+        } else {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED, player, player.getLocation());
             if (entityPet.isSecondPresent()) {
                 Tellraw.fromLegacy(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()))
                         .tooltip(entityPet.second().get()).send(player);
+                timer.stop("failed spawn - end");
                 return false;
             }
 
+            timer.stop("unknown fail reason - end");
             player.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
             return false;
         }

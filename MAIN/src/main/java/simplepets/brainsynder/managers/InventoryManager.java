@@ -1,5 +1,6 @@
 package simplepets.brainsynder.managers;
 
+import lib.brainsynder.utils.TaskTimer;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
@@ -24,22 +25,27 @@ public class InventoryManager implements GUIHandler {
     private final List<CustomInventory> loaders = new ArrayList<>();
 
     public void initiate () {
+        TaskTimer timer = new TaskTimer(getClass(), "initiate");
+        timer.start();
         PetCore plugin = PetCore.getInstance();
-        registeredFolder = new File(plugin.getDataFolder().toString() + "/Inventories/AddonInventories/");
+        registeredFolder = new File(plugin.getDataFolder() + "/Inventories/AddonInventories/");
         if (!registeredFolder.exists()) registeredFolder.mkdirs();
 
         SimplePets.getDebugLogger().debug("Initializing Inventories...");
         if (loaders != null) if (!loaders.isEmpty()) loaders.clear();
-        SimplePets.getDebugLogger().debug("Loading Customizable Inventories Files...");
+        timer.label("clearing old data (if any)");
 
+        SimplePets.getDebugLogger().debug("Loading Customizable Inventories Files...");
         loaders.add(new SelectionMenu(getLocation(plugin, SelectionMenu.class)));
         loaders.add(new DataMenu (getLocation(plugin, DataMenu.class)));
         loaders.add(new SavesMenu (getLocation(plugin, SavesMenu.class)));
         loaders.add(new AddonMenu(getLocation(plugin, AddonMenu.class)));
         loaders.add(new PetSelectorMenu(getLocation(plugin, PetSelectorMenu.class)));
+        timer.label("inventories registered");
 //        loaders.add(new ArmorMenu(CustomInventory.getLocation(core, ArmorMenu.class)));
 
         for (CustomInventory loader : loaders) loader.save();
+        timer.label("saving files");
         SimplePets.getDebugLogger().debug("Files have been loaded.");
 
 
@@ -48,12 +54,13 @@ public class InventoryManager implements GUIHandler {
         PET_SAVES = getInventory(SavesMenu.class).get();
         ADDONS = getInventory(AddonMenu.class).get();
         SELECTOR = getInventory(PetSelectorMenu.class).get();
+        timer.stop();
 //        ARMOR = getLoader(ArmorMenu.class);
     }
 
 
     public static File getLocation(PetCore core, Class<? extends CustomInventory> clazz) {
-        File folder = new File(core.getDataFolder().toString() + "/Inventories/");
+        File folder = new File(core.getDataFolder() + "/Inventories/");
         return new File(folder, clazz.getSimpleName() + ".json");
     }
 

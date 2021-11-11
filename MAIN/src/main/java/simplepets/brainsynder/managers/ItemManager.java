@@ -1,6 +1,7 @@
 package simplepets.brainsynder.managers;
 
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.TaskTimer;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.PetCore;
@@ -26,14 +27,19 @@ public class ItemManager implements ItemHandler {
     private final Map<String, Item> items = new HashMap<>();
 
     public void initiate() {
+        TaskTimer timer = new TaskTimer(getClass(), "initiate");
+        timer.start();
         plugin = PetCore.getInstance();
         SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Initializing Menu Items..."));
         if (items != null) if (!items.isEmpty()) items.clear();
+        timer.label("clearing old data (if any)");
+
         SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Loading Customizable Item Files..."));
-        File customFolder = new File(plugin.getDataFolder().toString() + "/Items/Custom/");
-        registeredFolder = new File(plugin.getDataFolder().toString() + "/Items/AddonItems/");
+        File customFolder = new File(plugin.getDataFolder() + "/Items/Custom/");
+        registeredFolder = new File(plugin.getDataFolder() + "/Items/AddonItems/");
         if (!customFolder.exists()) customFolder.mkdirs();
         if (!registeredFolder.exists()) registeredFolder.mkdirs();
+        timer.label("folder generation");
 
         add(new Air (getLocation(plugin, Air.class)));
         add(new Hat (getLocation(plugin, Hat.class)));
@@ -51,10 +57,12 @@ public class ItemManager implements ItemHandler {
 //        add(new RedPlaceholder(getLocation(plugin, RedPlaceholder.class)));
 //        add(new Update(getLocation(plugin, Update.class)));
 //        add(new FlameOn(new File(customFolder, "flameon.json")));
+        timer.label("items registered");
 
         for (Item loader : items.values()) {
             (loader).save();
         }
+        timer.label("saving files");
         SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setMessages("Files have been loaded."));
 
 
@@ -75,16 +83,18 @@ public class ItemManager implements ItemHandler {
                 }
             }
         }
+        timer.label("fetched custom items");
 
         AIR = getItem(Air.class).get();
         PLACEHOLDER = getItem(Placeholder.class).get();
 //        RED_PLACEHOLDER = getLoader(RedPlaceholder.class);
 //        DATA = getLoader(Data.class);
+        timer.stop();
     }
 
 
     public static File getLocation (PetCore core, Class<? extends Item> clazz) {
-        File folder = new File(core.getDataFolder().toString() + "/Items/");
+        File folder = new File(core.getDataFolder() + "/Items/");
         return new File(folder, clazz.getSimpleName() + ".json");
     }
 

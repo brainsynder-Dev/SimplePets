@@ -7,6 +7,7 @@ import lib.brainsynder.metric.bukkit.Metrics;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
+import lib.brainsynder.utils.TaskTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -38,6 +39,8 @@ import simplepets.brainsynder.sql.PlayerSQL;
 import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -67,23 +70,31 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private UpdateResult updateResult;
 
     private Debug debug;
+    private TaskTimer taskTimer;
 
     public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
     public final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(this, task);
 
     @Override
     public void onEnable() {
+        taskTimer = new TaskTimer(this);
+        taskTimer.start();
+
         debug = new Debug(this);
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         SimplePets.setPLUGIN(this);
+        taskTimer.label("registered api instance");
+
 
         instance = this;
         itemFolder = new File(getDataFolder() +File.separator+"Items");
 
         MessageFile.init(getDataFolder());
+        taskTimer.label("init messages");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
+        taskTimer.label("init config");
 
         reloaded = configuration.getBoolean("Reload-Detected", false);
         debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: "+reloaded);
@@ -91,28 +102,38 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
         new InventorySQL();
+        taskTimer.label("init InventorySQL");
         reloadSpawner();
+        taskTimer.label("located spawner util");
 
         handleManagers();
+        taskTimer.label("init managers");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Player SQL");
         new PlayerSQL();
+        taskTimer.label("init PlayerSQL");
 
         handleMetrics();
+        taskTimer.label("init metrics");
 
         try {
             debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
+            taskTimer.label("init commands");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         handleListeners ();
+        taskTimer.label("registered listeners");
         handleUpdateUtils();
+        taskTimer.label("init update checking");
 
         addonManager = new AddonManager(this);
         addonManager.initialize();
+        taskTimer.label("init addons");
         addonManager.checkAddons();
+        taskTimer.label("addon update check");
 
         checkWorldGuard(value -> {
             if (value) {
@@ -124,6 +145,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                         ));
             }
         });
+        taskTimer.stop();
 
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
@@ -138,8 +160,19 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     }
 
+    private void outputTimings () {
+        File file = new File(getDataFolder(), "Timings.json");
+        if (file.exists()) file.delete();
+        try (PrintWriter writer = new PrintWriter(file)) {
+            writer.write(TaskTimer.fetchAllCompletedTimers().toString(WriterConfig.PRETTY_PRINT));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onDisable() {
+        outputTimings();
         SimplePets.getDebugLogger().debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
         USER_MANAGER.getAllUsers().forEach(user -> {
             if (user.getPlayer() != null) {
