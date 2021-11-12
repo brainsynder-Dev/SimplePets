@@ -35,6 +35,9 @@ public class HelpCommand extends PetSubCommand {
                     return;
                 }
                 if (!permission.defaultAllow() && !sender.hasPermission(permission.permission())) return;
+                if (getPlugin().getConfiguration().getBoolean("ConfigToggles.IgnoreAllowsDefault", false)) {
+                    if (!sender.hasPermission(permission.permission())) return;
+                }
             }
             sub.sendUsage(sender);
         });

@@ -101,8 +101,8 @@ public class Config extends YamlFile {
         addDefault("Debug.Levels.WARNING", true);
         addDefault("Debug.Levels.ERROR", true);
 
-        addDefault("ConfigToggles.HideRenameCommand", false, "If you do not want players to rename their pets, should they be able to use the pet rename command?\n\nDefault: false");
-        addDefault("ConfigToggles.HideCertainPets", false, "Setting this to true will hide any Unregistered, Unsupported, and only show the pets the player can use/purchase in `/pet list`.\n\nDefault: false");
+        addDefault("ConfigToggles.IgnoreAllowsDefault", false, "Should the help command ignore commands that are allowed by default?\nExample: Could be used to hide commands they do not have permission to\nDefault: false");
+        addDefault("ConfigToggles.HideCertainPets", false, "Setting this to true will hide any Unregistered, Unsupported, and only show the pets the player can use/purchase in `/pet list`.\nDefault: false");
 
         // TODO: Reformat these value
         addDefault("PetToggles.MobSpawnBypass", true,
