@@ -10,6 +10,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 
@@ -41,6 +42,11 @@ public class ListCommand extends PetSubCommand {
                 color = ChatColor.YELLOW; // yellow
                 tooltip = color + "NOT REGISTERED";
             }
+            if (getPlugin().getConfiguration().getBoolean("ConfigToggles.HideCertainPets", false)) {
+                if (color != ChatColor.GREEN) continue;
+                if (!Utilities.hasPermission(sender, type.getPermission())) continue;
+            }
+
             raw.then(type.getName()).color(color);
             if (!tooltip.isEmpty()) raw.tooltip(tooltip);
 
