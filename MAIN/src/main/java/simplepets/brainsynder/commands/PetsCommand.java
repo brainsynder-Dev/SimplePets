@@ -29,7 +29,8 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new ListCommand(plugin));
         registerSub(new GUICommand(plugin));
         registerSub(new DataCommand(plugin));
-        registerSub(new RenameCommand(plugin));
+        if (plugin.getConfiguration().getBoolean("RenamePet.Enabled", true))
+            registerSub(new RenameCommand(plugin));
         registerSub(new PurchasedCommand (plugin));
         registerSub(new PermissionsCommand(this));
         registerSub(new RegenerateCommand (plugin));
