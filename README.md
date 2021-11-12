@@ -1,6 +1,6 @@
 # SimplePets
 <div align="center">
-  <img src="https://pluginwiki.us/version/buildnumber.svg"></br>
+  <img src="https://pluginwiki.us/version/badge/SimplePets_v5.svg"></br>
   <img src="https://ci.pluginwiki.us/job/SimplePets/badge/icon?subject=Master (outdated)"> 
   <img src="https://ci.pluginwiki.us/job/SimplePets-Experimental/badge/icon?subject=Experimental (1.15->1.16.5)"> 
   <img src="https://ci.pluginwiki.us/job/SimplePets_v5/badge/icon?subject=v5%20Recode (1.17)"></br>
@@ -13,7 +13,7 @@
 
 ## API
 <div align="center">
-    <img src="https://pluginwiki.us/version/buildversion.svg"><br>
+    <img src="https://pluginwiki.us/version/badge/SimplePets_v5.svg"><br>
 </div>
 
 ```xml
