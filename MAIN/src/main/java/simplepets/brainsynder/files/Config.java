@@ -66,7 +66,11 @@ public class Config extends YamlFile {
         addDefault("Worlds.Enabled", false, "Enabling this will make it so pets only work in the worlds that are listed in 'Allowed-Worlds'\nDefault: false");
         addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
 
-        addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to support WorldGuard flags\nFlag Names:\n- allow-pet-spawn\n- allow-pet-enter\n- allow-pet-riding");
+        addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to use addons instead\nSimply install the WorldGuard addon  by following these steps:\n" +
+                "- Run the `/pet addon` command\n" +
+                "- Click the `Install Addons` item that is on the last row\n" +
+                "- Click the `WorldGuard` addon to install\n" +
+                "- Re-Open the `/pet addon` GUI and make sure the addon is enabled (green)");
         addDefault("WorldGuard.BypassPermission", "region.bypass", "This is the bypass permission for WorldGuard\nDefault: region.bypass");
 
         remove("PlotSquared.BypassPermission");
