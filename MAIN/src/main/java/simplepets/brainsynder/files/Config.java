@@ -71,7 +71,7 @@ public class Config extends YamlFile {
                 "- Click the `Install Addons` item that is on the last row\n" +
                 "- Click the `WorldGuard` addon to install\n" +
                 "- Re-Open the `/pet addon` GUI and make sure the addon is enabled (green)");
-        addDefault("WorldGuard.BypassPermission", "region.bypass", "This is the bypass permission for WorldGuard\nDefault: region.bypass");
+        remove("WorldGuard.BypassPermission");
 
         remove("PlotSquared.BypassPermission");
         remove("PlotSquared.On-Unclaimed-Plots.Move");
@@ -105,6 +105,9 @@ public class Config extends YamlFile {
         addDefault("Debug.Levels.WARNING", true);
         addDefault("Debug.Levels.ERROR", true);
 
+        addDefault("InventoryToggles.AutoClosing.RemovePet", true, "Should the Pet GUI close when they remove a pet?\nDefault: true");
+        addDefault("InventoryToggles.AutoClosing.RidePet", true, "Should the Pet GUI close when they start riding a pet?\nDefault: true");
+        addDefault("InventoryToggles.AutoClosing.HatPet", true, "Should the Pet GUI close when they set a pet as a hat?\nDefault: true");
         addDefault("ConfigToggles.IgnoreAllowsDefault", false, "Should the help command ignore commands that are allowed by default?\nExample: Could be used to hide commands they do not have permission to\nDefault: false");
         addDefault("ConfigToggles.HideCertainPets", false, "Setting this to true will hide any Unregistered, Unsupported, and only show the pets the player can use/purchase in `/pet list`.\nDefault: false");
 

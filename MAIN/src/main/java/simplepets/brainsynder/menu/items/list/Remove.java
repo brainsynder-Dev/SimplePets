@@ -38,7 +38,8 @@ public class Remove extends Item {
     public void onShiftClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
         if (masterUser.getPetEntities().size() == 1) {
-            masterUser.getPlayer().closeInventory();
+            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RemovePet", true))
+                masterUser.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -52,7 +53,8 @@ public class Remove extends Item {
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            user.getPlayer().closeInventory();
+            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RemovePet", true))
+                user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {

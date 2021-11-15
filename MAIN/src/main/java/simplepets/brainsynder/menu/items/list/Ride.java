@@ -34,7 +34,8 @@ public class Ride extends Item {
     public void onClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
         if (masterUser.getPetEntities().size() == 1) {
-            masterUser.getPlayer().closeInventory();
+            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RidePet", true))
+                masterUser.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -47,7 +48,8 @@ public class Ride extends Item {
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            user.getPlayer().closeInventory();
+            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RidePet", true))
+                user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
                 public void run() {
