@@ -15,6 +15,7 @@
         <!-- <module>v1_16_R3</module> -->
         <module>Version_1.17</module>
         <module>Version_1.17.1</module>
+        <module>Version_1.18</module>
     </modules>
 
     <properties>
