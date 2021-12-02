@@ -8,8 +8,8 @@ import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.web.WebConnector;
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.libs.org.apache.commons.io.FileUtils;
 import org.bukkit.event.HandlerList;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
@@ -115,7 +115,7 @@ public class AddonManager {
             try {
                 String name = addon.getNamespace().namespace();
 
-                new AddonConfig(new File(folder + File.separator+"configs"), name+".yml") {
+                new AddonConfig(new File(folder + File.separator + "configs"), name + ".yml") {
                     @Override
                     public void loadDefaults() {
                         addon.loadDefaults(this);
@@ -140,7 +140,7 @@ public class AddonManager {
 
                 if (addon.shouldEnable()) {
                     addon.setEnabled(enabled);
-                }else continue;
+                } else continue;
 
 
                 if (addon.isEnabled()) {
@@ -184,7 +184,7 @@ public class AddonManager {
     public void toggleAddon(PetAddon addon, boolean enabled) {
         if (enabled && isSupported(addon.getSupportedVersion())) {
 
-            new AddonConfig(new File(folder + File.separator+"configs"), addon.getNamespace().namespace()+".yml") {
+            new AddonConfig(new File(folder + File.separator + "configs"), addon.getNamespace().namespace() + ".yml") {
                 @Override
                 public void loadDefaults() {
                     addon.loadDefaults(this);
@@ -274,7 +274,7 @@ public class AddonManager {
             jsonObject.forEach(member -> {
                 JsonObject json = (JsonObject) member.getValue();
                 AddonData data = new AddonData(
-                        "https://pluginwiki.us/addons/download/"+member.getName(),
+                        "https://pluginwiki.us/addons/download/" + member.getName(),
                         member.getName(),
                         json.getString("author", "Unknown"),
                         Double.parseDouble(json.getString("version", "0.0"))
