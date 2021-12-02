@@ -19,7 +19,7 @@ public interface IProfession {
     default BiomeType getBiome() {
         return getVillagerData().getBiome();
     }
-    default VillagerLevel getLevel() {
+    default VillagerLevel getMasteryLevel() {
         return getVillagerData().getLevel();
     }
 
@@ -33,7 +33,7 @@ public interface IProfession {
     default void setBiome (BiomeType biome){
         setVillagerData(getVillagerData().withBiome(biome));
     }
-    default void setLevel (VillagerLevel level){
+    default void setMasteryLevel(VillagerLevel level){
         setVillagerData(getVillagerData().withLevel(level));
     }
 }

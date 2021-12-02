@@ -49,7 +49,7 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
         if (object.hasKey("raised_arms")) setArmsRaised(object.getBoolean("raised_arms"));
         if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
         if (object.hasKey("biome")) setBiome(object.getEnum("biome", BiomeType.class, BiomeType.PLAINS));
-        if (object.hasKey("level")) setLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
+        if (object.hasKey("level")) setMasteryLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
         super.applyCompound(object);
     }
 

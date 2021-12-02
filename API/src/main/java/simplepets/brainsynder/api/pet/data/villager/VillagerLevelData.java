@@ -21,16 +21,16 @@ public class VillagerLevelData extends PetData<IEntityVillagerPet> {
 
     @Override
     public void onLeftClick(IEntityVillagerPet entity) {
-        entity.setLevel(VillagerLevel.getNext(entity.getLevel()));
+        entity.setMasteryLevel(VillagerLevel.getNext(entity.getMasteryLevel()));
     }
 
     @Override
     public void onRightClick(IEntityVillagerPet entity) {
-        entity.setLevel(VillagerLevel.getPrevious(entity.getLevel()));
+        entity.setMasteryLevel(VillagerLevel.getPrevious(entity.getMasteryLevel()));
     }
 
     @Override
     public Object value(IEntityVillagerPet entity) {
-        return entity.getLevel();
+        return entity.getMasteryLevel();
     }
 }
