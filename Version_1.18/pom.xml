@@ -12,6 +12,14 @@
 
     <artifactId>Version_1.18</artifactId>
 
+    <properties>
+        <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <module.info>-1.18</module.info>
+    </properties>
+
     <build>
         <resources>
             <resource>
@@ -49,6 +57,14 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache.commons</pattern>
+                                    <shadedPattern>${groupId}.internal.apache</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -87,14 +103,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <properties>
-        <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.18</module.info>
-    </properties>
 
     <dependencies>
         <dependency>

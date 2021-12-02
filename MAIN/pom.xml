@@ -40,6 +40,10 @@
                         <configuration>
                             <relocations>
                                 <relocation>
+                                    <pattern>org.apache.commons</pattern>
+                                    <shadedPattern>${groupId}.internal.apache</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>net.wesjd</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
@@ -80,6 +84,11 @@
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
             <version>1.5.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>20030203.000550</version>
         </dependency>
     </dependencies>
 </project>
