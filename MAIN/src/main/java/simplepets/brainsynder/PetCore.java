@@ -82,6 +82,17 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug = new Debug(this);
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
+
+        // I added this temporarily due to issues with the plugin
+        // Error on startup: https://www.pastelog.us/qahilinixo.md
+        if (ServerVersion.isNewer(ServerVersion.v1_17_R1)) {
+            debug.debug(DebugBuilder.build().setLevel(DebugLevel.CRITICAL).setMessages(
+                    "Currently SimplePets does not work on 1.18 due to a startup error",
+                    "Check the discord for more information just in case."
+            ));
+            setEnabled(false);
+            return;
+        }
         SimplePets.setPLUGIN(this);
         taskTimer.label("registered api instance");
 

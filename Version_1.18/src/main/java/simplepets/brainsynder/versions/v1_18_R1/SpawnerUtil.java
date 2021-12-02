@@ -87,6 +87,8 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (!location.getChunk().isLoaded()) location.getChunk().load();
 
+            // NoClassDefFoundError: awt    (Entity)
+            // ((CraftWorld)location.getWorld()).getHandle().addFreshEntity((awt)customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)
             if (((CraftWorld)location.getWorld()).getHandle().addFreshEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
                 Utilities.runPetCommands(CommandReason.SPAWN, user, type);
