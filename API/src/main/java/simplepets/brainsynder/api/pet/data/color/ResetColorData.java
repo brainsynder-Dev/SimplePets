@@ -1,7 +1,7 @@
 package simplepets.brainsynder.api.pet.data.color;
 
+import lib.brainsynder.apache.WordUtils;
 import lib.brainsynder.item.ItemBuilder;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.misc.IResetColor;

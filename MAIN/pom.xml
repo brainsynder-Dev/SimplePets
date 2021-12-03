@@ -16,8 +16,13 @@
         <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
         <resources>
             <resource>
-                <directory>src/main/resources</directory>
+                <targetPath>.</targetPath>
                 <filtering>true</filtering>
+                <directory>../src/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                    <include>*.properties</include>
+                </includes>
             </resource>
         </resources>
         <plugins>
@@ -84,11 +89,6 @@
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
             <version>1.5.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>20030203.000550</version>
         </dependency>
     </dependencies>
 </project>

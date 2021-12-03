@@ -28,7 +28,7 @@
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B90</bslib.version>
+        <bslib.version>B91</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
@@ -37,11 +37,12 @@
         <finalName>${project.parent.artifactId}${module.info}</finalName>
         <resources>
             <resource>
-                <directory>${project.basedir}/MAIN/src/main/resources</directory>
+                <targetPath>.</targetPath>
                 <filtering>true</filtering>
-                <excludes>
-                    <exclude>all-jar.xml</exclude>
-                </excludes>
+                <directory>src/resources/</directory>
+                <includes>
+                    <include>*.yml</include>
+                </includes>
             </resource>
         </resources>
         <plugins>
@@ -87,6 +88,37 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.3.0-SNAPSHOT</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>simplepets.brainsynder:*</include>
+                                    <include>lib.brainsynder:*</include>
+                                    <include>mysql:*</include>
+                                    <include>net.wesjd:*</include>
+                                    <include>commons-io:*</include>
+                                    <include>resources:*</include>
+                                </includes>
+                            </artifactSet>
+                            <relocations>
+                                <relocation>
+                                    <pattern>org.apache.commons</pattern>
+                                    <shadedPattern>${groupId}.internal.apache</shadedPattern>
+                                </relocation>
+                            </relocations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -128,6 +160,16 @@
             <groupId>lib.brainsynder</groupId>
             <artifactId>API</artifactId>
             <version>${bslib.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+        </dependency>
+        <dependency>
+            <groupId>it.unimi.dsi</groupId>
+            <artifactId>fastutil</artifactId>
+            <version>8.5.6</version>
         </dependency>
     </dependencies>
 </project>

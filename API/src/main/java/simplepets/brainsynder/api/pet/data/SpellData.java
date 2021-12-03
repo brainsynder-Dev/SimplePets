@@ -1,6 +1,6 @@
 package simplepets.brainsynder.api.pet.data;
 
-import org.apache.commons.lang.WordUtils;
+import lib.brainsynder.apache.WordUtils;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.misc.IEntityWizard;
 import simplepets.brainsynder.api.pet.PetData;

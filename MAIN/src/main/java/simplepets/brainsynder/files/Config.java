@@ -2,7 +2,7 @@ package simplepets.brainsynder.files;
 
 import com.google.common.collect.Lists;
 import lib.brainsynder.files.YamlFile;
-import lib.brainsynder.utils.Utilities;
+import lib.brainsynder.utils.AdvString;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.utils.RenameType;
@@ -23,7 +23,7 @@ public class Config extends YamlFile {
                 "Requires a server restart for some reason ¯\\_(ツ)_/¯\nDefault: false");
         addDefault("Update-Checking.Enabled", true, "Would you like to check for new jenkins builds?\nDefault: true");
         addDefault("Update-Checking.Message-On-Join", true, "Would you like to be alerted when there is a new update when you log in?\n(MUST HAVE 'pet.update' permission or OP)\nDefault: true");
-        addSectionHeader("Update-Checking.unit", Utilities.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");
+        addSectionHeader("Update-Checking.unit", AdvString.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");
         addDefault("Update-Checking.unit", TimeUnit.HOURS.name());
         addDefault("Update-Checking.time", 12);
 
@@ -66,7 +66,7 @@ public class Config extends YamlFile {
         addDefault("Worlds.Enabled", false, "Enabling this will make it so pets only work in the worlds that are listed in 'Allowed-Worlds'\nDefault: false");
         addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
 
-        addSectionHeader("WorldGuard", Utilities.AlignText.LEFT, "Recently our code changed to use addons instead\nSimply install the WorldGuard addon  by following these steps:\n" +
+        addSectionHeader("WorldGuard", AdvString.AlignText.LEFT, "Recently our code changed to use addons instead\nSimply install the WorldGuard addon  by following these steps:\n" +
                 "- Run the `/pet addon` command\n" +
                 "- Click the `Install Addons` item that is on the last row\n" +
                 "- Click the `WorldGuard` addon to install\n" +

@@ -1,14 +1,15 @@
 package simplepets.brainsynder.api.pet.data;
 
-import java.util.Optional;
+import lib.brainsynder.apache.WordUtils;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.utils.DyeColorWrapper;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.passive.IEntityTropicalFishPet;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.wrappers.TropicalPattern;
+
+import java.util.Optional;
 
 @Namespace(namespace = "pattern")
 public class TropicalPatternData extends PetData<IEntityTropicalFishPet> {

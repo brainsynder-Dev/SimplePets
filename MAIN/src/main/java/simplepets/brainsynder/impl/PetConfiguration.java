@@ -1,6 +1,7 @@
 package simplepets.brainsynder.impl;
 
 import com.google.common.collect.Lists;
+import lib.brainsynder.apache.WordUtils;
 import lib.brainsynder.files.JsonFile;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonArray;
@@ -8,7 +9,6 @@ import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Capitalise;
-import org.apache.commons.lang.WordUtils;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;

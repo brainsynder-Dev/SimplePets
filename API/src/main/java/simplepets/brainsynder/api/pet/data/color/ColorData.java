@@ -1,9 +1,9 @@
 package simplepets.brainsynder.api.pet.data.color;
 
+import lib.brainsynder.apache.WordUtils;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nms.DataConverter;
 import lib.brainsynder.utils.DyeColorWrapper;
-import org.apache.commons.lang.WordUtils;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.misc.IColorable;
 import simplepets.brainsynder.api.pet.PetData;
