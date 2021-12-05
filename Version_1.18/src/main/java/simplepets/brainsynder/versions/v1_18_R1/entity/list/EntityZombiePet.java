@@ -77,12 +77,12 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     }
 
     @Override
-    public boolean isBaby() {
+    public boolean isBabySafe() {
         return entityData.get(BABY);
     }
 
     @Override
-    public void setBaby(boolean flag) {
+    public void setBabySafe(boolean flag) {
         entityData.set(BABY, flag);
     }
 }

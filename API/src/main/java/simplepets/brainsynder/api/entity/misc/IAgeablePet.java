@@ -3,7 +3,15 @@ package simplepets.brainsynder.api.entity.misc;
 import simplepets.brainsynder.api.entity.IEntityPet;
 
 public interface IAgeablePet extends IEntityPet {
-    boolean isBaby();
+    default boolean isBaby() {
+        return isBabySafe();
+    }
 
-    void setBaby(boolean flag);
+    default void setBaby(boolean flag) {
+        setBabySafe(flag);
+    }
+
+    boolean isBabySafe();
+
+    void setBabySafe(boolean flag);
 }

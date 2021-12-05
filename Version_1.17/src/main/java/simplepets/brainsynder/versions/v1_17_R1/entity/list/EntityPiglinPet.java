@@ -68,12 +68,12 @@ public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityP
     }
 
     @Override
-    public boolean isBaby() {
+    public boolean isBabySafe() {
         return entityData.get(BABY);
     }
 
     @Override
-    public void setBaby(boolean value) {
+    public void setBabySafe(boolean value) {
         entityData.set(BABY, value);
     }
 

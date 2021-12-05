@@ -41,11 +41,21 @@ public abstract class EntityAgeablePet extends EntityPet implements IAgeablePet 
 
     @Override
     public boolean isBaby() {
-        return this.entityData.get(BABY);
+        return isBabySafe();
     }
 
     @Override
     public void setBaby(boolean flag) {
+        setBabySafe(flag);
+    }
+
+    @Override
+    public boolean isBabySafe() {
+        return this.entityData.get(BABY);
+    }
+
+    @Override
+    public void setBabySafe(boolean flag) {
         this.entityData.set(BABY, flag);
     }
 
