@@ -198,7 +198,11 @@ public class DebugCommand extends PetSubCommand {
         String java = System.getProperty("java.version");
         int pos = java.indexOf('.');
         pos = java.indexOf('.', pos + 1);
-        info.add("java", Double.parseDouble(java.substring(0, pos).replace(".0", "")));
+        if (pos != -1) {
+            info.add("java", Double.parseDouble(java.substring(0, pos).replace(".0", "")));
+        } else {
+            info.add("java", java);
+        }
 
         String version = Bukkit.getVersion();
         info.add("raw", version);
