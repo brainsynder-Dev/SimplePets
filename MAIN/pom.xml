@@ -90,7 +90,7 @@
         <dependency>
             <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
-            <version>1.5.1-SNAPSHOT</version>
+            <version>1.5.4-CUSTOM</version>
         </dependency>
     </dependencies>
 </project>
