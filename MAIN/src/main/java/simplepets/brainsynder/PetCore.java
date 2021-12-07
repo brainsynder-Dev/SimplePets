@@ -266,7 +266,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer", "server");
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
-                Method isRunning = Reflection.getMethod(nmsClass, "isRunning");
+                Method isRunning = Reflection.getMethod(nmsClass, new String[]{"isRunning", "ab"});
                 return !((boolean) Reflection.invoke(isRunning, server));
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
