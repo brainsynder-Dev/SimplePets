@@ -122,6 +122,16 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <url>https://repo.pluginwiki.us/repository/maven-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <repositories>
         <repository>
