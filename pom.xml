@@ -30,6 +30,7 @@
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
         <bslib.version>B94</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
+        <anvilgui.version>1.5.7-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
@@ -54,6 +55,14 @@
                     <properties>
                         <property>
                             <name>spigot.version</name>
+                            <dependencies>
+                                <dependency>
+                                    <groupId>simplepets.brainsynder</groupId>
+                                </dependency>
+                            </dependencies>
+                        </property>
+                        <property>
+                            <name>anvilgui.version</name>
                             <dependencies>
                                 <dependency>
                                     <groupId>simplepets.brainsynder</groupId>
@@ -92,6 +101,12 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0-SNAPSHOT</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <outputDirectory>/tmp</outputDirectory>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -103,7 +118,6 @@
                                 <includes>
                                     <include>simplepets.brainsynder:*</include>
                                     <include>lib.brainsynder:*</include>
-                                    <include>mysql:*</include>
                                     <include>net.wesjd:*</include>
                                     <include>commons-io:*</include>
                                     <include>resources:*</include>
@@ -113,6 +127,10 @@
                                 <relocation>
                                     <pattern>org.apache.commons</pattern>
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.wesjd</pattern>
+                                    <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -137,6 +155,10 @@
         <repository>
             <id>bs-nms</id>
             <url>https://repo.pluginwiki.us/repository/nms/</url>
+        </repository>
+        <repository>
+            <id>bs-public</id>
+            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
         </repository>
         <repository>
             <id>nms-repo</id>

@@ -39,6 +39,7 @@
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.3.0-SNAPSHOT</version>
                 <configuration>
+                    <minimizeJar>false</minimizeJar>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
                     <shadedArtifactAttached>false</shadedArtifactAttached>
                     <outputDirectory>/tmp</outputDirectory>
@@ -54,6 +55,10 @@
                                 <relocation>
                                     <pattern>org.apache.commons</pattern>
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>net.wesjd</pattern>
+                                    <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -124,10 +129,6 @@
                 <exclusion>
                     <groupId>net.wesjd</groupId>
                     <artifactId>anvilgui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>mysql</groupId>
-                    <artifactId>mysql-connector-java</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
