@@ -125,6 +125,10 @@
 
     <repositories>
         <repository>
+            <id>bs-nms</id>
+            <url>https://repo.pluginwiki.us/repository/nms/</url>
+        </repository>
+        <repository>
             <id>nms-repo</id>
             <url>https://repo.codemc.org/repository/nms/</url>
         </repository>
