@@ -1,6 +1,5 @@
 package simplepets.brainsynder.utils;
 
-import com.google.common.collect.Lists;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nms.Tellraw;
@@ -9,7 +8,6 @@ import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.TaskTimer;
 import org.apache.commons.io.FileUtils;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -120,19 +118,11 @@ public class Utilities {
     }
 
     public static void runPetCommands(CommandReason reason, PetUser owner, PetType type) {
-        runPetCommands(reason, owner, type, null);
+        SimplePets.getPetUtilities().runPetCommands(reason, owner, type, null);
     }
 
     public static void runPetCommands(CommandReason reason, PetUser owner, PetType type, Location location) {
-        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-            List<String> commands = config.getCommands().getOrDefault(reason, Lists.newArrayList());
-            if (owner.getPetEntity(type).isPresent()) {
-                commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handleCommandPlaceholders(owner, owner.getPetEntity(type).get(), null, command)));
-                return;
-            }
-            commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handleCommandPlaceholders(owner, null, location, command)));
-        });
-
+        SimplePets.getPetUtilities().runPetCommands(reason, owner, type, location);
     }
 
     /**
@@ -157,21 +147,7 @@ public class Utilities {
      * @return | Returns the command with all the replaced placeholders
      */
     public static String handleCommandPlaceholders(PetUser owner, IEntityPet entity, Location petLoc, String command) {
-        Location ownerLoc = owner.getPlayer().getLocation();
-        if ((petLoc == null) && (entity != null)) petLoc = entity.getEntity().getLocation();
-
-        if (petLoc != null) command = command.replace("{petX}", String.valueOf(petLoc.getX()))
-                .replace("{petY}", String.valueOf(petLoc.getY()))
-                .replace("{petZ}", String.valueOf(petLoc.getZ()));
-
-        command = command.replace("{ownerX}", String.valueOf(ownerLoc.getX()))
-                .replace("{ownerY}", String.valueOf(ownerLoc.getY()))
-                .replace("{ownerZ}", String.valueOf(ownerLoc.getZ()))
-                .replace("{ownerName}", owner.getOwnerName())
-                .replace("{petType}", entity.getPetType().getName());
-        if ((entity != null) && entity.getPetName().isPresent())
-            command = command.replace("{petName}", entity.getPetName().get());
-        return command;
+        return SimplePets.getPetUtilities().handlePlaceholders(owner, entity, petLoc, command);
     }
 
     public static void setPassenger(Player player, Entity entity, Entity passenger) {

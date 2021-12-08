@@ -1,5 +1,6 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
+import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
@@ -32,21 +33,18 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.EntityNameChangeEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.event.entity.movment.PetJumpEvent;
 import simplepets.brainsynder.api.event.entity.movment.PetRideEvent;
+import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.files.Config;
-import simplepets.brainsynder.managers.ParticleManager;
-import simplepets.brainsynder.utils.Utilities;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderWalkToPlayer;
 import simplepets.brainsynder.versions.v1_17_R1.utils.EntityUtils;
@@ -117,8 +115,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         this.noPhysics = false;
 
 
-        Config configuration = PetCore.getInstance().getConfiguration();
-        pushable = configuration.getBoolean(Config.PUSH_PETS, false);
+        YamlFile configuration = SimplePets.getConfiguration();
+        pushable = configuration.getBoolean("PetToggles.Move-Pets-Get-Out-Da-Way", false);
         canGlow = configuration.getBoolean("PetToggles.GlowWhenVanished", true);
         autoRemove = configuration.getBoolean("PetToggles.AutoRemove.Enabled", true);
         tickDelay = configuration.getInt("PetToggles.AutoRemove.TickDelay", 10000);
@@ -145,8 +143,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
             setPos(location.getX(), location.getY(), location.getZ());
-            Utilities.runPetCommands(CommandReason.TELEPORT, user, getPetType());
-            PetCore.getInstance().getParticleHandler().sendParticle(ParticleManager.Reason.TELEPORT, user.getPlayer(), location);
+            SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, getPetType());
+            SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), location);
         });
     }
 
@@ -198,24 +196,10 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         petName = Colorize.translateBungeeHex(event.getPrefix())
-                + translateName(event.getName())
+                + SimplePets.getPetUtilities().translatePetName(event.getName())
                 + Colorize.translateBungeeHex(event.getSuffix());
-        getBukkitEntity().setCustomNameVisible(PetCore.getInstance().getConfiguration().getBoolean("PetToggles.ShowPetNames", true));
+        getBukkitEntity().setCustomNameVisible(SimplePets.getConfiguration().getBoolean("PetToggles.ShowPetNames", true));
         getBukkitEntity().setCustomName(petName);
-    }
-
-    public String translateName(String name) {
-        boolean color = PetCore.getInstance().getConfiguration().getBoolean(Config.COLOR);
-        boolean magic = PetCore.getInstance().getConfiguration().getBoolean(Config.MAGIC);
-        if (!magic) name = name.replace("&k", "");
-        if (!color) return name;
-
-        if (PetCore.getInstance().getConfiguration().getBoolean(Config.HEX)) {
-            name = Colorize.translateBungeeHex(name);
-        } else {
-            name = Colorize.translateBukkit(name);
-        }
-        return name;
     }
 
     @Override
@@ -306,7 +290,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         ejectPassengers();
         var owner = user.getPlayer();
         if (owner != null) {
-            Utilities.runPetCommands(CommandReason.RIDE, user, getPetType());
+            SimplePets.getPetUtilities().runPetCommands(CommandReason.RIDE, user, getPetType());
             if (!doIndirectAttach) {
                 return getBukkitEntity().addPassenger(owner);
             } else {

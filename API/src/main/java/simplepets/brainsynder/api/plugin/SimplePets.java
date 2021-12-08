@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.plugin;
 
+import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.utils.AdvString;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
 import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.PetConfigManager;
+import simplepets.brainsynder.api.plugin.utils.IPetUtilities;
 import simplepets.brainsynder.api.user.UserManagement;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.debug.DebugLogger;
@@ -94,8 +96,16 @@ public final class SimplePets {
         return null;
     }
 
+    public static YamlFile getConfiguration () {
+        return getPlugin().getConfiguration();
+    }
+
     public static UserManagement getUserManager () {
         return getPlugin().getUserManager();
+    }
+
+    public static IPetUtilities getPetUtilities () {
+        return getPlugin().getPetUtilities();
     }
 
     public static ISpawnUtil getSpawnUtil () {

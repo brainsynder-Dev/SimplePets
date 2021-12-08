@@ -4,9 +4,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntitySpiderPet;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_18_R1.entity.EntityPet;
 
@@ -19,7 +19,7 @@ public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
 
     public EntitySpiderPet(PetType type, PetUser user) {
         super(EntityType.SPIDER, type, user);
-        wallClimbing = PetCore.getInstance().getConfiguration().getBoolean("PetToggles.SpiderClimbing", true);
+        wallClimbing = SimplePets.getConfiguration().getBoolean("PetToggles.SpiderClimbing", true);
     }
 
     @Override

@@ -22,6 +22,7 @@ import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.IPetsPlugin;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.utils.IPetUtilities;
 import simplepets.brainsynder.api.user.UserManagement;
 import simplepets.brainsynder.commands.PetsCommand;
 import simplepets.brainsynder.commands.list.DebugCommand;
@@ -32,6 +33,7 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.impl.PetOwner;
+import simplepets.brainsynder.impl.PetUtility;
 import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.InventorySQL;
@@ -70,6 +72,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private UpdateResult updateResult;
 
     private Debug debug;
+    private IPetUtilities petUtilities;
     private TaskTimer taskTimer;
 
     public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
@@ -82,6 +85,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug = new Debug(this);
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
+
+        petUtilities = new PetUtility();
 
         // I added this temporarily due to issues with the plugin
         // Error on startup: https://www.pastelog.us/qahilinixo.md
@@ -197,6 +202,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
 
+        petUtilities = null;
         USER_MANAGER = null;
         PET_CONFIG = null;
         SPAWN_UTIL = null;
@@ -359,8 +365,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         consumer.accept(config.getBoolean("mobs.block-plugin-spawning", false));
     }
 
+    @Override
     public Config getConfiguration() {
         return configuration;
+    }
+
+    @Override
+    public IPetUtilities getPetUtilities() {
+        return petUtilities;
     }
 
     private Map<String, Integer> getActivePets() {

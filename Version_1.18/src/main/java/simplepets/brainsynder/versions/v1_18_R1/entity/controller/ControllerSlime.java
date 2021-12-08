@@ -5,7 +5,7 @@ import net.minecraft.world.entity.ai.control.MoveControl;
 import net.minecraft.world.entity.player.Player;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
-import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.versions.v1_18_R1.entity.list.EntitySlimePet;
 
 import java.util.Random;
@@ -35,7 +35,7 @@ public class ControllerSlime extends MoveControl {
         // Store owner
         Player owner = ((CraftPlayer) Bukkit.getPlayer(slimePet.getOwnerUUID())).getHandle();
         // Store the stopping distance
-        int stoppingDistance = PetCore.getInstance().getConfiguration().getInt("Pathfinding.Stopping-Distance");
+        int stoppingDistance = SimplePets.getConfiguration().getInt("Pathfinding.Stopping-Distance");
         // Rotate the slime's position so it can look to the player
         this.mob.lookAt(owner, 10, 10);
         this.yRot = this.mob.getYRot();
