@@ -1,6 +1,6 @@
 # SimplePets
 <div align="center">
-  <img src="https://pluginwiki.us/version/badge/SimplePets_v5.svg"></br>
+  <img src="https://img.shields.io/maven-metadata/v?color=red&label=Current%20Version&metadataUrl=https%3A%2F%2Frepo.pluginwiki.us%2Frepository%2Fmaven-releases%2Fsimplepets%2Fbrainsynder%2FAPI%2Fmaven-metadata.xml"></br>
   <img src="https://ci.pluginwiki.us/job/SimplePets/badge/icon?subject=Master (outdated)"> 
   <img src="https://ci.pluginwiki.us/job/SimplePets-Experimental/badge/icon?subject=Experimental (1.15->1.16.5)"> 
   <img src="https://ci.pluginwiki.us/job/SimplePets_v5/badge/icon?subject=v5%20Recode (1.17)"></br>
@@ -8,18 +8,19 @@
 </div>
 
 ## Requirements:
-- Spigot Version 1.17
-- Java 16
+- Spigot Version 1.17/1.17.1 - 1.18/1.18.1
+- Java 16 (If on 1.17) 
+- Java 17 (If on 1.18)
 
 ## API
 <div align="center">
-    <img src="https://pluginwiki.us/version/badge/SimplePets_v5.svg"><br>
+    <img src="https://img.shields.io/maven-metadata/v?color=red&label=Current%20Version&metadataUrl=https%3A%2F%2Frepo.pluginwiki.us%2Frepository%2Fmaven-releases%2Fsimplepets%2Fbrainsynder%2FAPI%2Fmaven-metadata.xml&style=for-the-badge"><br>
 </div>
 
 ```xml
 <repository>
     <id>bs-repo</id>
-    <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+    <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
 </repository>
 
 <dependency>

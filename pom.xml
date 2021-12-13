@@ -16,6 +16,7 @@
         <module>Version_1.17</module>
         <module>Version_1.17.1</module>
         <module>Version_1.18</module>
+        <module>Version_1.18.1</module>
     </modules>
 
     <properties>
@@ -155,6 +156,10 @@
         <repository>
             <id>bs-nms</id>
             <url>https://repo.pluginwiki.us/repository/nms/</url>
+        </repository>
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
             <id>bs-public</id>

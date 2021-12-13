@@ -20,7 +20,12 @@ public class EntityUtils {
             jumpingField = LivingEntity.class.getDeclaredField("bn");
             jumpingField.setAccessible(true);
         }catch(Exception ex){
-            ex.printStackTrace();
+            try{
+                jumpingField = LivingEntity.class.getDeclaredField("bo");
+                jumpingField.setAccessible(true);
+            }catch(Exception ex1){
+                ex1.printStackTrace();
+            }
         }
     }
 
