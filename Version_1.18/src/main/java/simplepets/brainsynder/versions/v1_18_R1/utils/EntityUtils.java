@@ -17,15 +17,13 @@ public class EntityUtils {
 
     static {
         try{
-            jumpingField = LivingEntity.class.getDeclaredField("bn");
+            jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.18
+            if (jumpingField.getType() != Boolean.TYPE) {
+                jumpingField = LivingEntity.class.getDeclaredField("bo"); // For 1.18.1
+            }
             jumpingField.setAccessible(true);
         }catch(Exception ex){
-            try{
-                jumpingField = LivingEntity.class.getDeclaredField("bo");
-                jumpingField.setAccessible(true);
-            }catch(Exception ex1){
-                ex1.printStackTrace();
-            }
+            ex.printStackTrace();
         }
     }
 
