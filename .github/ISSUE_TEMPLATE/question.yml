@@ -1,0 +1,53 @@
+name: ❓ Simple Question
+description: You have a question you would like answered
+title: "[Question]: "
+labels: ["question"]
+assignees:
+  - brainsynder-Dev
+  - Thatsmusic99
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <div align="center">So you have a feature you would like to request? Perfect fill out the info below and we will look into adding it in if possible.</div>
+
+  - type: dropdown
+    id: issue-related
+    attributes:
+      label: Issue Related
+      description: Is the question you are asking about related to a current issue?
+      options:
+        - "YES"
+        - "NO"
+    validations:
+      required: true
+
+  - type: textarea
+    id: request
+    attributes:
+      label: What is your question?
+      description: |
+        In the area below please put your question. [ REQUIRED ]
+
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: I have an idea!
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checked
+    attributes:
+      label: Did you search on Github?
+      description: Have you searched previous questions/issues for an answer?
+      options:
+        - label: I have searched on github
+          required: false
+
+  - type: checkboxes
+    id: discord
+    attributes:
+      label: Did you search on Discord?
+      description: Have you searched in our [DISCORD](https://discord.gg/TzhnW8xtsR) for answers?
+      options:
+        - label: I have searched on discord
+          required: false

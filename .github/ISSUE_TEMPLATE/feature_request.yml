@@ -1,0 +1,45 @@
+name: 📝 Feature Request
+description: Suggest a new feature for the plugin
+title: "[Feature Request]: "
+labels: ["feature request"]
+assignees:
+  - brainsynder-Dev
+  - Thatsmusic99
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <div align="center">So you have a feature you would like to request? Perfect fill out the info below and we will look into adding it in if possible.</div>
+
+  - type: dropdown
+    id: issue-related
+    attributes:
+      label: Issue Related
+      description: Is the feature you are requesting related to a current issue?
+      options:
+        - "YES"
+        - "NO"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: addon-related
+    attributes:
+      label: Addon
+      description: Could this feature be an addon instead?
+      options:
+        - label: Yea, it could be an addon instead
+          required: false
+
+  - type: textarea
+    id: request
+    attributes:
+      label: Describe the Feature
+      description: |
+        In the area below describe the feature you would like added. [ REQUIRED ]
+        If it is a complex feature then go into detail of what it is.
+
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: I have an idea!
+    validations:
+      required: true
