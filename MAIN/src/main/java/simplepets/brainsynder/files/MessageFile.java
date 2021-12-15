@@ -23,6 +23,7 @@ public class MessageFile {
                 addDefault(MessageOption.SUMMONED_PET, "Message that will be sent when a pet is spawned via '/pet summon'");
                 addDefault(MessageOption.MISSING_PET_TYPE, "The pet type is missing");
                 addDefault(MessageOption.INVALID_PET_TYPE, "The input is not a valid pet (spelling?)");
+                addDefault(MessageOption.PET_IN_DEVELOPMENT, "The selected pet is in development for your version of SimplePets\nAKA we are still working on it expect issues");
                 addDefault(MessageOption.PET_NOT_REGISTERED, "The selected pet is not supported for the servers version\n(Or is missing in the jar file [in case it is modified])");
                 addDefault(MessageOption.INVALID_NBT, "Message that will show before the 'nbt error message'");
                 addDefault(MessageOption.INVALID_NBT_MESSAGE, "Message that will be sent when a pet is spawned via '/pet summon'");

@@ -60,6 +60,13 @@ public class Utilities {
         TaskTimer timer = new TaskTimer(Utilities.class, "handlePetSpawning");
         timer.start();
         Player player = user.getPlayer();
+        if (type.isInDevelopment()
+                && (!PetCore.getInstance().getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+            player.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
+            timer.stop("in-development pet - end");
+            return false;
+        }
+
         if (!type.isSupported()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
             timer.stop("unsupported type - end");

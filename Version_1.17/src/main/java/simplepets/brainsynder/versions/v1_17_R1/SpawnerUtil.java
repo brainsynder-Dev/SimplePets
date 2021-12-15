@@ -19,6 +19,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
+import simplepets.brainsynder.versions.v1_17_R1.entity.special.EntityControllerPet;
 
 import java.util.*;
 
@@ -65,7 +66,13 @@ public class SpawnerUtil implements ISpawnUtil {
     @Override
     public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
         try {
-            EntityPet customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
+            EntityPet customEntity;
+
+            if (type == PetType.ARMOR_STAND) {
+                customEntity = new EntityControllerPet(type, user);
+            }else{
+                customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
+            }
 
             if ((compound != null) && (!compound.hasNoTags())) customEntity.applyCompound(compound);
 

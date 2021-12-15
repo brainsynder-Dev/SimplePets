@@ -114,7 +114,9 @@ public class Config extends YamlFile {
         // TODO: Reformat these value
         addDefault("PetToggles.MobSpawnBypass", true,
                 "When this is enabled it will allow pets to spawn anywhere\n" +
-                "This is especially used if WorldGuard/PlotSquared are blocking mobs from spawning\nDefault: true");
+                        "This is especially used if WorldGuard/PlotSquared are blocking mobs from spawning\nDefault: true");
+        addDefault("PetToggles.Allow-In-Development-Mobs", false,
+                "If this is true it will allow any mobs that are currently in-development to be spawned/registered\nDefault: false");
         addDefault(PUSH_PETS, false, "Are pets able to be pushed around?\nDefault: false");
         addDefault("PetToggles.FallDamage.Non-Flyable-Pets", true, "Should fall damage be allowed for Non-Flyable pets?\nDefault: true");
         addDefault("PetToggles.FallDamage.Flyable-Pets", true, "Should fall damage be allowed for Flyable pets?\nDefault: true");

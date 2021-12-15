@@ -41,6 +41,10 @@ public class ListCommand extends PetSubCommand {
             }else if (!SimplePets.getSpawnUtil().isRegistered(type)) {
                 color = ChatColor.YELLOW; // yellow
                 tooltip = color + "NOT REGISTERED";
+            }else if (type.isInDevelopment()
+                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+                color = ChatColor.GRAY;
+                tooltip = color + "IN DEVELOPMENT";
             }
             if (getPlugin().getConfiguration().getBoolean("ConfigToggles.HideCertainPets", false)) {
                 if (color != ChatColor.GREEN) continue;

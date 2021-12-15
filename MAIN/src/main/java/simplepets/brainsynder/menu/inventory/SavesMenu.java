@@ -105,6 +105,9 @@ public class SavesMenu extends CustomInventory {
         List<PetUser.Entry<PetType, StorageTagCompound>> savedPets = Lists.newArrayList();
         user.getSavedPets().forEach(entry -> {
             PetType type = entry.getKey();
+            if (type.isInDevelopment()
+                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false)))
+                return;
 
             SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
                 if (!config.isEnabled()) return;

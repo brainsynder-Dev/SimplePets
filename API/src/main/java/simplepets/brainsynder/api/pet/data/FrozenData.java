@@ -4,6 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.pet.PetData;
 
 @Namespace(namespace = "frozen")
@@ -22,11 +23,16 @@ public class FrozenData extends PetData {
 
     @Override
     public void onLeftClick(IEntityPet entity) {
+        if (entity instanceof IEntityControllerPet controller) {
+            controller.getVisibleEntity().setFrozen(!controller.getVisibleEntity().isFrozen());
+            return;
+        }
         entity.setFrozen(!entity.isFrozen());
     }
 
     @Override
     public Object value(IEntityPet entity) {
+        if (entity instanceof IEntityControllerPet controller) return controller.getVisibleEntity().isFrozen();
         return entity.isFrozen();
     }
 }

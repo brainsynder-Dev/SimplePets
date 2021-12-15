@@ -69,6 +69,11 @@ public class SummonCommand extends PetSubCommand {
         }
 
         PetType type = petType.get();
+        if (type.isInDevelopment()
+                && (!PetCore.getInstance().getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
+            return;
+        }
 
         if (!type.isSupported()) {
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));

@@ -84,6 +84,9 @@ public class SelectionMenu extends CustomInventory {
 
         for (PetType type : PetType.values()) {
             if (!type.isSupported()) continue;
+            if (type.isInDevelopment()
+                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false)))
+                continue;
             Optional<IPetConfig> optional = SimplePets.getPetConfigManager().getPetConfig(type);
             if (!optional.isPresent()) continue;
             IPetConfig config = optional.get();

@@ -20,6 +20,7 @@ public enum MessageOption implements YamlOption {
     INVALID_PET_TYPE ("pet_type.invalid", "{prefix} &cSorry, &7'{arg}' &cis not a valid pet type."),
     PET_NOT_REGISTERED ("pet_type.not_registered", "{prefix} &cSorry, {type} is not registered."),
     PET_NOT_REGISTERED_LORE ("pet_type.not_registered_lore", "&cNOT REGISTERED"),
+    PET_IN_DEVELOPMENT ("pet_type.in_development", "{prefix} &cSorry, {type} is currently in-development and not able to be used."),
     PET_NOT_SUPPORTED ("pet_type.not_supported", "{prefix} &cSorry, {type} is not supported for this version."),
     PET_NOT_SUPPORTED_LORE ("pet_type.not_supported_lore", "&cNOT SUPPORTED"),
 

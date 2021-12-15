@@ -14,6 +14,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.hostile.*;
 import simplepets.brainsynder.api.entity.passive.*;
+import simplepets.brainsynder.api.pet.annotations.InDevelopment;
 import simplepets.brainsynder.api.pet.annotations.LargePet;
 import simplepets.brainsynder.api.pet.annotations.PetCustomization;
 import simplepets.brainsynder.api.pet.data.*;
@@ -50,6 +51,7 @@ import java.util.Optional;
 public enum PetType {
     UNKNOWN(new ItemBuilder(Material.STONE)),
 
+    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_ARMORSTAND_FALL, weight = PetWeight.LIGHT)
     ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND),
 
@@ -453,6 +455,16 @@ public enum PetType {
         try {
             for (Annotation annotation : getClass().getField(this.name()).getAnnotations()) {
                 if (annotation instanceof LargePet) return true;
+            }
+        } catch (NoSuchFieldException ignored) {
+        }
+        return false;
+    }
+
+    public boolean isInDevelopment() {
+        try {
+            for (Annotation annotation : getClass().getField(this.name()).getAnnotations()) {
+                if (annotation instanceof InDevelopment) return true;
             }
         } catch (NoSuchFieldException ignored) {
         }

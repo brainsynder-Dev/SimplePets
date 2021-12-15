@@ -9,31 +9,31 @@ import simplepets.brainsynder.api.pet.PetType;
 
 @EntityPetType(petType = PetType.ARMOR_STAND)
 public interface IEntityArmorStandPet extends IDisplayEntity {
-    boolean isSmall();
-    void setSmall(boolean flag);
+    boolean isSmallStand();
+    void setSmallStand(boolean flag);
 
     boolean isOwner();
     void setOwner(boolean flag);
 
-    default EulerAngle getHeadPose () { return new EulerAngle(0,0,0); }
-    default EulerAngle getBodyPose () { return new EulerAngle(0,0,0); }
-    default EulerAngle getLeftArmPose () { return new EulerAngle(0,0,0); }
-    default EulerAngle getRightArmPose () { return new EulerAngle(0,0,0); }
-    default EulerAngle getLeftLegPose () { return new EulerAngle(0,0,0); }
-    default EulerAngle getRightLegPose () { return new EulerAngle(0,0,0); }
+    default EulerAngle getHeadAngle() { return new EulerAngle(0,0,0); }
+    default EulerAngle getBodyAngle() { return new EulerAngle(0,0,0); }
+    default EulerAngle getLeftArmAngle() { return new EulerAngle(0,0,0); }
+    default EulerAngle getRightArmAngle() { return new EulerAngle(0,0,0); }
+    default EulerAngle getLeftLegAngle() { return new EulerAngle(0,0,0); }
+    default EulerAngle getRightLegAngle() { return new EulerAngle(0,0,0); }
 
-    default void setHeadPose(EulerAngle vector) {}
-    default void setBodyPose(EulerAngle vector) {}
-    default void setLeftArmPose(EulerAngle vector) {}
-    default void setRightArmPose(EulerAngle vector) {}
-    default void setLeftLegPose(EulerAngle vector) {}
-    default void setRightLegPose(EulerAngle vector) {}
+    default void setHeadAngle(EulerAngle vector) {}
+    default void setBodyAngle(EulerAngle vector) {}
+    default void setLeftArmAngle(EulerAngle vector) {}
+    default void setRightArmAngle(EulerAngle vector) {}
+    default void setLeftLegAngle(EulerAngle vector) {}
+    default void setRightLegAngle(EulerAngle vector) {}
 
-    void setBasePlate(boolean flag);
-    boolean hasBasePlate();
+    void setBasePlateVisibility(boolean flag);
+    boolean hasBasePlateVisibility();
 
-    boolean hasArms();
-    void setArms(boolean flag);
+    boolean hasArmsVisibile();
+    void setArmsVisibile(boolean flag);
 
     boolean isRestricted();
     void setRestricted(boolean flag);
