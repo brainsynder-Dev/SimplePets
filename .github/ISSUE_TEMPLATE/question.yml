@@ -37,17 +37,12 @@ body:
   - type: checkboxes
     id: checked
     attributes:
-      label: Did you search on Github?
+      label: Did you search for answers?
       description: Have you searched previous questions/issues for an answer?
       options:
-        - label: I have searched on github
+        - label: I have searched on [GITHUB](https://github.com/brainsynder-Dev/SimplePets/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc) for similar answers
           required: false
-
-  - type: checkboxes
-    id: discord
-    attributes:
-      label: Did you search on Discord?
-      description: Have you searched in our [DISCORD](https://discord.gg/TzhnW8xtsR) for answers?
-      options:
-        - label: I have searched on discord
+        - label: I have searched on [DISCORD](https://discord.gg/TzhnW8xtsR) for answers
+          required: false
+        - label: I have searched the [WIKI](https://brainsynder.gitbook.io/simplepets/faq) for answers
           required: false
