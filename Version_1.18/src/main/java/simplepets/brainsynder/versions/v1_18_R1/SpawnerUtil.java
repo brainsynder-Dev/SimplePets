@@ -19,6 +19,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.versions.v1_18_R1.entity.EntityPet;
+import simplepets.brainsynder.versions.v1_18_R1.entity.special.EntityControllerPet;
 
 import java.util.*;
 
@@ -35,7 +36,7 @@ public class SpawnerUtil implements ISpawnUtil {
 
             String name = type.getEntityClass().getSimpleName().replaceFirst("I", "");
             try {
-                Class<?> clazz = Class.forName("simplepets.brainsynder.versions.v1_18_R1.entity.list."+name);
+                Class<?> clazz = Class.forName("simplepets.brainsynder.versions.v1_17_R1.entity.list."+name);
                 petMap.put(type, clazz);
             }catch (ClassNotFoundException ignored) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
@@ -65,7 +66,13 @@ public class SpawnerUtil implements ISpawnUtil {
     @Override
     public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
         try {
-            EntityPet customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
+            EntityPet customEntity;
+
+            if (type == PetType.ARMOR_STAND) {
+                customEntity = new EntityControllerPet(type, user);
+            }else{
+                customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
+            }
 
             if ((compound != null) && (!compound.hasNoTags())) customEntity.applyCompound(compound);
 
@@ -86,8 +93,6 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (!location.getChunk().isLoaded()) location.getChunk().load();
 
-            // NoClassDefFoundError: awt    (Entity)
-            // ((CraftWorld)location.getWorld()).getHandle().addFreshEntity((awt)customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)
             if (((CraftWorld)location.getWorld()).getHandle().addFreshEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
                 SimplePets.getPetUtilities().runPetCommands(CommandReason.SPAWN, user, type);

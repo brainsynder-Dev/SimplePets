@@ -171,6 +171,54 @@ public class PetOwner implements PetUser {
         return compound;
     }
 
+    @Override
+    public boolean summonCachedPets() {
+        if (respawnPets.isEmpty()) return false;
+
+        ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
+        if (spawnUtil == null) return false;
+
+        respawnPets.forEach(tag -> {
+            PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                // Will prevent people from spawning pets they did not purchase if enabled
+                if ((!ownedPets.contains(type)) && PetCore.getInstance().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) return;
+
+                SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                    if (!config.isEnabled()) return;
+                    if (!type.isSupported()) return;
+                    if (!spawnUtil.isRegistered(type)) return;
+                    Player player = Bukkit.getPlayer(uuid);
+                    if (player != null) {
+                        if (!Utilities.hasPermission(player, type.getPermission())) return;
+                        spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
+                    }
+                });
+            });
+        });
+        return true;
+    }
+
+    @Override
+    public void cacheAndRemove() {
+        petMap.forEach((type, entityPet) -> {
+            respawnPets.add(new StorageTagCompound()
+                    .setTag("data", entityPet.asCompound())
+                    .setString("type", type.getName())
+            );
+        });
+
+        // If the server is shutting down, JUST IN CASE
+        if (!PetCore.getInstance().isEnabled()) {
+            PlayerSQL.getInstance().uploadDataSync(this);
+            return;
+        }
+
+        updateDatabase().thenAccept(callback -> {
+            // Just remove the pets, the player didn't disconnect
+            removePets();
+        });
+    }
+
     /**
      * Will save all the pets currently spawned, upload them to the database and then remove them
      */

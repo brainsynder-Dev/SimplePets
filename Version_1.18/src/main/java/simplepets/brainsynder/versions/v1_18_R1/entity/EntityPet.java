@@ -1,6 +1,5 @@
 package simplepets.brainsynder.versions.v1_18_R1.entity;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
@@ -11,8 +10,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
-import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
-import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -24,7 +21,6 @@ import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.apache.commons.lang.reflect.FieldUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
@@ -58,8 +54,8 @@ import java.util.function.Function;
 
 public abstract class EntityPet extends Mob implements IEntityPet {
 
-    private final EntityType<? extends Mob> entityType;
-    private final EntityType<? extends Mob> originalEntityType;
+    protected  final EntityType<? extends Mob> entityType;
+    protected  final EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
     private Map<String, StorageTagCompound> additional;
@@ -67,7 +63,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
 
     private final double jumpHeight = 0.5D;
-    private boolean isGlowing = false;
+    private final boolean isGlowing = false;
     private boolean frozen = false;
     private boolean silent = false;
     private boolean ignoreVanish = false;
@@ -84,8 +80,8 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     protected boolean doIndirectAttach;
 
     // Theses fields are based off config options
-    private double walkSpeed = 0.6000000238418579;
-    private double rideSpeed = 0.4000000238418579;
+    protected double walkSpeed = 0.6000000238418579;
+    protected double rideSpeed = 0.4000000238418579;
     private boolean floatDown = false;
     private boolean pushable = false;
     private boolean canGlow = true;
@@ -536,50 +532,50 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     private void glowHandler(boolean glow) {
-        try {
-            net.minecraft.world.entity.Entity pet = this;
-            if (this instanceof IEntityControllerPet) {
-                org.bukkit.entity.Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
-                pet = ((CraftEntity) ent).getHandle();
-            }
-            handleInvisible(glow, pet);
-        } catch (IllegalAccessException ignored) {}
+//        try {
+        net.minecraft.world.entity.Entity pet = this;
+        if (this instanceof IEntityControllerPet) {
+            org.bukkit.entity.Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
+            pet = ((CraftEntity) ent).getHandle();
+        }
+        // handleInvisible(glow, pet);
+//        } catch (IllegalAccessException ignored) {}
     }
 
-    private void handleInvisible (boolean glow, net.minecraft.world.entity.Entity pet) throws IllegalAccessException {
-        SynchedEntityData toCloneDataWatcher = pet.getEntityData();
-        SynchedEntityData newDataWatcher = new SynchedEntityData(pet);
-
-        String fieldName = "f";
-        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> currentHashMap;
-        try {
-            currentHashMap = (Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
-        }catch (Exception f){
-            return;
-        }
-
-        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> newHashMap = new Int2ObjectOpenHashMap<>();
-        for (Integer integer : currentHashMap.keySet()) {
-            newHashMap.put(integer, currentHashMap.get(integer).copy());
-        }
-
-        SynchedEntityData.DataItem item = newHashMap.get(0);
-        byte initialBitMask = (Byte) item.getValue();
-
-        // @link net.minecraft.world.entity.Entity#setGlowingTag(boolean)
-        byte bitMaskIndex = (byte) 6;
-        isGlowing = glow;
-        if (glow) {
-            item.setValue((byte) (initialBitMask | 1 << bitMaskIndex));
-        } else {
-            item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
-        }
-        FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
-
-
-        ClientboundSetEntityDataPacket metadataPacket = new ClientboundSetEntityDataPacket(pet.getId(), newDataWatcher, true);
-        ((CraftPlayer) getPetUser().getPlayer()).getHandle().connection.send(metadataPacket);
-    }
+//    private void handleInvisible (boolean glow, net.minecraft.world.entity.Entity pet) throws IllegalAccessException {
+//        SynchedEntityData toCloneDataWatcher = pet.getEntityData();
+//        SynchedEntityData newDataWatcher = new SynchedEntityData(pet);
+//
+//        String fieldName = "f";
+//        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> currentHashMap;
+//        try {
+//            currentHashMap = (Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
+//        }catch (Exception f){
+//            return;
+//        }
+//
+//        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> newHashMap = new Int2ObjectOpenHashMap<>();
+//        for (Integer integer : currentHashMap.keySet()) {
+//            newHashMap.put(integer, currentHashMap.get(integer).copy());
+//        }
+//
+//        SynchedEntityData.DataItem item = newHashMap.get(0);
+//        byte initialBitMask = (Byte) item.getValue();
+//
+//        // @link net.minecraft.world.entity.Entity#setGlowingTag(boolean)
+//        byte bitMaskIndex = (byte) 6;
+//        isGlowing = glow;
+//        if (glow) {
+//            item.setValue((byte) (initialBitMask | 1 << bitMaskIndex));
+//        } else {
+//            item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+//        }
+//        FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
+//
+//
+//        ClientboundSetEntityDataPacket metadataPacket = new ClientboundSetEntityDataPacket(pet.getId(), newDataWatcher, true);
+//        ((CraftPlayer) getPetUser().getPlayer()).getHandle().connection.send(metadataPacket);
+//    }
 
     // TODO: This literally fixed the shit with p2 and i'm so fucking mad
     public CraftEntity getBukkitEntity() {

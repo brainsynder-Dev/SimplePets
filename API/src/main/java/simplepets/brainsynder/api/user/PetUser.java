@@ -63,6 +63,15 @@ public interface PetUser {
         addPetSave(entity.asCompound());
     }
 
+    boolean summonCachedPets ();
+
+    /**
+     * - Will save all the pets currently spawned.
+     * - Then it will cache the pets to the server (and database if need be)
+     * - Then remove the pets
+     */
+    void cacheAndRemove ();
+
     /**
      * Will save the compound to the players saved pets list
      *

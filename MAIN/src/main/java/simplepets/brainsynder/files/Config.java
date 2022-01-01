@@ -36,7 +36,11 @@ public class Config extends YamlFile {
         addDefault("Permissions.Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
         addDefault("Permissions.Only-Show-Pets-Player-Can-Access", true, "Enabling this would remove all the pets the player does not have access to from the GUI\nDefault: true");
 
-        addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault true");
+        addDefault("RemovePetsOnWorldChange", true, "Disabling this will remove a players pet when they change worlds\nDefault: true");
+
+        // TODO: This needs to be utilized yet
+        addDefault("Utilize-Purchased-Pets", false, "This option will make it so if the player has the pet (was 'purchased' either via economy or the command)\n" +
+                "It will allow the player to spawn that pet\nNOT FULLY IMPLEMENTED YET 1/1/2022\nDefault: false");
 
         addDefault("Economy", "Now Separate",
                 "Since v5 of SimplePets, Support for economy plugins for purchasing pets IN-Game\n" +

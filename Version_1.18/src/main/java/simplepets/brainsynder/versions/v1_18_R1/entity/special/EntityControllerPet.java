@@ -1,4 +1,4 @@
-package simplepets.brainsynder.versions.v1_17_R1.entity.special;
+package simplepets.brainsynder.versions.v1_18_R1.entity.special;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
@@ -10,8 +10,8 @@ import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -19,8 +19,8 @@ import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.versions.v1_17_R1.entity.list.EntityArmorStandPet;
-import simplepets.brainsynder.versions.v1_17_R1.entity.list.EntityZombiePet;
+import simplepets.brainsynder.versions.v1_18_R1.entity.list.EntityArmorStandPet;
+import simplepets.brainsynder.versions.v1_18_R1.entity.list.EntityZombiePet;
 
 import java.util.ArrayList;
 import java.util.List;

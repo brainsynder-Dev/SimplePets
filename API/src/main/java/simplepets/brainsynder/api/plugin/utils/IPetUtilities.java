@@ -1,6 +1,8 @@
 package simplepets.brainsynder.api.plugin.utils;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.metadata.MetadataValue;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
@@ -14,4 +16,12 @@ public interface IPetUtilities {
     String handlePlaceholders(PetUser owner, IEntityPet entity, Location petLoc, String text);
 
     String translatePetName (String name);
+
+    // TODO: Needs to be utilized
+    default boolean isVanished(Player player) {
+        for (MetadataValue meta : player.getMetadata("vanished")) {
+            if (meta.asBoolean()) return true;
+        }
+        return false;
+    }
 }

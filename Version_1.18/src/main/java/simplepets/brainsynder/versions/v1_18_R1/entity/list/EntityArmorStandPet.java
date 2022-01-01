@@ -1,4 +1,4 @@
-package simplepets.brainsynder.versions.v1_17_R1.entity.list;
+package simplepets.brainsynder.versions.v1_18_R1.entity.list;
 
 import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
@@ -20,9 +20,9 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -33,7 +33,7 @@ import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.versions.v1_17_R1.entity.special.EntityControllerPet;
+import simplepets.brainsynder.versions.v1_18_R1.entity.special.EntityControllerPet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -76,7 +76,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.setInvulnerable(true);
         stand.persist = true;
         stand.setSpecial(true);
-        ((CraftWorld) location.getWorld()).getHandle().addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        ((CraftWorld) location.getWorld()).getHandle().addFreshEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return stand;
     }
 
@@ -485,7 +485,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     public void setSlot(EquipmentSlot enumitemslot, ItemStack itemstack) {
-        super.setSlot(enumitemslot, toNMS(itemstack), false);
+        super.setItemSlot(enumitemslot, toNMS(itemstack), false);
     }
 
     private ItemStack checkItem(ItemStack item) {

@@ -10,95 +10,45 @@ public class AnimationManager {
 
     static {
         WALKING_ANIMATION = new MovementFrames(Lists.newArrayList(new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(0.0, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(-0.0, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(-0.0, 0, 0))
-                        .setRightHand(new EulerAngle(0.0, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(0.05, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(-0.05, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(-0.05, 0, 0))
-                        .setRightHand(new EulerAngle(0.05, 0, 0)),
+                        .setLeftLeg(new EulerAngle(0, 0.0D, 0.0D))
+                        .setRightLeg(new EulerAngle(0, 0.0D, 0.0D))
+                        .setLeftHand(new EulerAngle(0, 0, 0))
+                        .setRightHand(new EulerAngle(0, 0, 0)),
                 new AnimationFrame()
                         .setLeftLeg(new EulerAngle(0.1, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(-0.1, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(-0.1, 0, 0))
                         .setRightHand(new EulerAngle(0.1, 0, 0)),
                 new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(0.15, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(-0.15, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(-0.15, 0, 0))
-                        .setRightHand(new EulerAngle(0.15, 0, 0)),
-                new AnimationFrame()
                         .setLeftLeg(new EulerAngle(0.2, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(-0.2, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(-0.2, 0, 0))
                         .setRightHand(new EulerAngle(0.2, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(0.25, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(-0.25, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(-0.25, 0, 0))
-                        .setRightHand(new EulerAngle(0.25, 0, 0)),
                 new AnimationFrame()
                         .setLeftLeg(new EulerAngle(0.3, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(-0.3, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(-0.3, 0, 0))
                         .setRightHand(new EulerAngle(0.3, 0, 0)),
                 new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(0.35, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(-0.35, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(-0.35, 0, 0))
-                        .setRightHand(new EulerAngle(0.35, 0, 0)),
-                new AnimationFrame()
                         .setLeftLeg(new EulerAngle(0.4, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(-0.4, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(-0.4, 0, 0))
                         .setRightHand(new EulerAngle(0.4, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.45, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.45, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.45, 0, 0))
-                        .setRightHand(new EulerAngle(-0.45, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.4, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.4, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.4, 0, 0))
-                        .setRightHand(new EulerAngle(-0.4, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.35, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.35, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.35, 0, 0))
-                        .setRightHand(new EulerAngle(-0.35, 0, 0)),
                 new AnimationFrame()
                         .setLeftLeg(new EulerAngle(-0.3, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(0.3, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(0.3, 0, 0))
                         .setRightHand(new EulerAngle(-0.3, 0, 0)),
                 new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.25, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.25, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.25, 0, 0))
-                        .setRightHand(new EulerAngle(-0.25, 0, 0)),
-                new AnimationFrame()
                         .setLeftLeg(new EulerAngle(-0.2, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(0.2, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(0.2, 0, 0))
                         .setRightHand(new EulerAngle(-0.2, 0, 0)),
                 new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.15, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.15, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.15, 0, 0))
-                        .setRightHand(new EulerAngle(-0.15, 0, 0)),
-                new AnimationFrame()
                         .setLeftLeg(new EulerAngle(-0.1, 0.0D, 0.0D))
                         .setRightLeg(new EulerAngle(0.1, 0.0D, 0.0D))
                         .setLeftHand(new EulerAngle(0.1, 0, 0))
-                        .setRightHand(new EulerAngle(-0.1, 0, 0)),
-                new AnimationFrame()
-                        .setLeftLeg(new EulerAngle(-0.05, 0.0D, 0.0D))
-                        .setRightLeg(new EulerAngle(0.05, 0.0D, 0.0D))
-                        .setLeftHand(new EulerAngle(0.05, 0, 0))
-                        .setRightHand(new EulerAngle(-0.05, 0, 0))
+                        .setRightHand(new EulerAngle(-0.1, 0, 0))
         ));
 
         // This bit of code is used to generate the code above...
