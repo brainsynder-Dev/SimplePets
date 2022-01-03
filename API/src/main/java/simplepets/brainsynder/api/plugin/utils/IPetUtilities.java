@@ -17,8 +17,8 @@ public interface IPetUtilities {
 
     String translatePetName (String name);
 
-    // TODO: Needs to be utilized
     default boolean isVanished(Player player) {
+        if (player == null) return false;
         for (MetadataValue meta : player.getMetadata("vanished")) {
             if (meta.asBoolean()) return true;
         }
