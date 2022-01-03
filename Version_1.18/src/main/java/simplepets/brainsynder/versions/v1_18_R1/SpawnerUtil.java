@@ -36,7 +36,7 @@ public class SpawnerUtil implements ISpawnUtil {
 
             String name = type.getEntityClass().getSimpleName().replaceFirst("I", "");
             try {
-                Class<?> clazz = Class.forName("simplepets.brainsynder.versions.v1_17_R1.entity.list."+name);
+                Class<?> clazz = Class.forName("simplepets.brainsynder.versions.v1_18_R1.entity.list."+name);
                 petMap.put(type, clazz);
             }catch (ClassNotFoundException ignored) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
