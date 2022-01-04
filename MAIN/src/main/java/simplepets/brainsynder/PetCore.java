@@ -301,6 +301,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         manager.registerEvents(new PetSelectorGUIListener(), this);
         manager.registerEvents(new SavesGUIListener(), this);
         manager.registerEvents(new SelectionGUIListener(), this);
+        manager.registerEvents(new LocationChangeListener(), this);
     }
 
     @Override
