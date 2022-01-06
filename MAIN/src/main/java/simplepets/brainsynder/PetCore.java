@@ -136,9 +136,15 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.label("init update checking");
 
         addonManager = new AddonManager(this);
-        addonManager.initialize();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                addonManager.initialize();
+                addonManager.checkAddons();
+            }
+        }.runTaskLater(this, 60);
         taskTimer.label("init addons");
-        addonManager.checkAddons();
         taskTimer.label("addon update check");
 
         checkWorldGuard(value -> {
