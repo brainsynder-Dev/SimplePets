@@ -7,7 +7,7 @@ import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.wrappers.AxolotlVariant;
 
-@SupportedVersion(version = ServerVersion.v1_17_R1)
+@SupportedVersion(version = ServerVersion.v1_17)
 @EntityPetType(petType = PetType.AXOLOTL)
 public interface IEntityAxolotlPet extends IAgeablePet {
 

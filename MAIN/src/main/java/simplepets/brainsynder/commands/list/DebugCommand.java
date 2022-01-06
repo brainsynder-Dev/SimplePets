@@ -226,7 +226,7 @@ public class DebugCommand extends PetSubCommand {
         }
 
         info.add("bukkit_version", Bukkit.getBukkitVersion());
-        info.add("nms_version", ServerVersion.getVersion().name());
+        info.add("nms_version", ServerVersion.getVersion().getNMS());
         info.add("simplepets", PetCore.getInstance().getDescription().getVersion());
 
         consumer.accept(info);

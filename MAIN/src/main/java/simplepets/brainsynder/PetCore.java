@@ -435,7 +435,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + version + ".SpawnerUtil");
+            Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + version.getNMS() + ".SpawnerUtil");
             if (clazz == null) return;
             if (ISpawnUtil.class.isAssignableFrom(clazz)) {
                 SPAWN_UTIL = (ISpawnUtil) clazz.getConstructor().newInstance();

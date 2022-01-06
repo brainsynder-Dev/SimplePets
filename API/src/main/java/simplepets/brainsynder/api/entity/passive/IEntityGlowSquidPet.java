@@ -5,7 +5,7 @@ import lib.brainsynder.SupportedVersion;
 import simplepets.brainsynder.api.entity.misc.EntityPetType;
 import simplepets.brainsynder.api.pet.PetType;
 
-@SupportedVersion(version = ServerVersion.v1_17_R1)
+@SupportedVersion(version = ServerVersion.v1_17)
 @EntityPetType(petType = PetType.GLOW_SQUID)
 public interface IEntityGlowSquidPet extends IEntitySquidPet {
     boolean isSquidGlowing ();
