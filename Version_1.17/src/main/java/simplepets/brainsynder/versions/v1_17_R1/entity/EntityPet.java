@@ -468,7 +468,10 @@ public abstract class EntityPet extends Mob implements IEntityPet {
                 getEntity().setCustomNameVisible((!shifting));
 
             if (!canIgnoreVanish()) {
-                boolean ownerVanish = ((CraftPlayer) player).getHandle().isInvisible();
+                boolean ownerVanish = (((CraftPlayer) player).getHandle().isInvisible()
+                        // Added this check for SuperVanish and PremiumVanish since they recommend using this method to check
+                        || SimplePets.getPetUtilities().isVanished(player)
+                );
                 if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
                     if (isGlowing && (!ownerVanish))
                         glowHandler(false);  // If the pet is glowing & owner is not vanished
@@ -505,7 +508,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
      */
     @Override
     public void playAmbientSound() {
-        if (silent) return;
+        if (silent || isInvisible()) return;
         SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
             SoundMaker sound = config.getSound();
             if (sound != null) sound.playSound(getEntity());
