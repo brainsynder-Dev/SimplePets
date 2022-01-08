@@ -416,10 +416,6 @@ public class PetOwner implements PetUser {
         });
         petMap.put(entity.getPetType(), entity);
 
-        PersistentDataContainer container = entity.getEntity().getPersistentDataContainer();
-        container.set(Keys.ENTITY_OWNER, new UUIDDataType(), uuid);
-        container.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, entity.getPetType().getName());
-
         entity.getEntities().forEach(ent -> {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.SPAWN, getPlayer(), ent.getLocation());
         });

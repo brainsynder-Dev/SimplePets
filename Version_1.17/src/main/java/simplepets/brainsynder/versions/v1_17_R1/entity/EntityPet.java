@@ -221,7 +221,6 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     public StorageTagCompound asCompound() {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", getPetType().getName());
-        object.setUniqueId("uuid", getUUID());
         object.setFloat("health", getHealth());
         object.setString("ownerName", getPetUser().getPlayer().getName());
         user.getPetName(getPetType()).ifPresent(name -> {
@@ -242,7 +241,6 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("uuid")) setUUID(object.getUniqueId("uuid")); // Sets the Entities UUID
         if (object.hasKey("health")) {
             float health = object.getFloat("health", 20);
             if (health >= 2048) health = 2047; // Prevents crash caused by spigot

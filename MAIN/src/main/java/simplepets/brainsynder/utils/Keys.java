@@ -7,9 +7,6 @@ public class Keys {
     public final static NamespacedKey GUI_ITEM; // Will be added to any items that is in the GUI
     public final static NamespacedKey PET_TYPE_ITEM; // Will be added to items that are for a PetType
 
-    public final static NamespacedKey ENTITY_OWNER;
-    public final static NamespacedKey ENTITY_TYPE;
-
     public final static NamespacedKey BOOK_KEY;
 
     public final static NamespacedKey ADDON_NAME;
