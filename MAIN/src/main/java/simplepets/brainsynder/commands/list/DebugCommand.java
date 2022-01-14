@@ -142,7 +142,7 @@ public class DebugCommand extends PetSubCommand {
     private static void fetchJenkinsInfo(Consumer<JsonObject> consumer) {
         UpdateResult result = PetCore.getInstance().getUpdateUtils().getResult();
         int build = result.getCurrentBuild();
-        WebConnector.getInputStreamString("https://pluginwiki.us/version/builds.json", PetCore.getInstance(), string -> {
+        WebConnector.getInputStreamString("https://pluginwiki.us/version/jenkins/"+result.getRepo(), PetCore.getInstance(), string -> {
             JsonObject jenkins = new JsonObject();
             jenkins.add("repo", result.getRepo());
             jenkins.add("plugin_build_number", build);
@@ -151,11 +151,14 @@ public class DebugCommand extends PetSubCommand {
                 JsonObject buildResult = (JsonObject) Json.parse(string);
 
                 if (!buildResult.isEmpty()) {
-                    if (buildResult.names().contains(result.getRepo())) {
-                        int latestBuild = buildResult.getInt(result.getRepo(), -1);
+                    if (buildResult.names().contains("build")) {
+                        int latestBuild = buildResult.getInt("build", -1);
 
                         // New build found
                         if (latestBuild > build) jenkins.add("number_of_builds_behind", (latestBuild - build));
+
+                        // Using a custom build that is ahead of the Jenkins builds
+                        if (build > latestBuild) jenkins.add("number_of_builds_behind", "From The Future :O");
 
                         jenkins.add("jenkins_build_number", latestBuild);
                     }else{
