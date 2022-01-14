@@ -10,8 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
@@ -29,8 +27,6 @@ import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.sql.PlayerSQL;
-import simplepets.brainsynder.utils.Keys;
-import simplepets.brainsynder.utils.UUIDDataType;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.*;
