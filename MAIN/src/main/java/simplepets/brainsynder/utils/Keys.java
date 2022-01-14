@@ -17,9 +17,6 @@ public class Keys {
         GUI_ITEM = new NamespacedKey(PetCore.getInstance(), "gui_item");
         PET_TYPE_ITEM = new NamespacedKey(PetCore.getInstance(), "pet_item");
 
-        ENTITY_OWNER = new NamespacedKey(PetCore.getInstance(), "ownerUUID");
-        ENTITY_TYPE = new NamespacedKey(PetCore.getInstance(), "petType");
-
         BOOK_KEY = new NamespacedKey(PetCore.getInstance(), "book_key");
 
         ADDON_NAME = new NamespacedKey(PetCore.getInstance(), "addon_name");

@@ -195,6 +195,7 @@ public class PetOwner implements PetUser {
                 });
             });
         });
+        respawnPets.clear();
         return true;
     }
 
@@ -215,7 +216,20 @@ public class PetOwner implements PetUser {
 
         updateDatabase().thenAccept(callback -> {
             // Just remove the pets, the player didn't disconnect
-            removePets();
+            petMap.forEach((type, entityPet) -> {
+                if (!hasPet(type)) return;
+                if (isPetHat(type)) setPetHat(type, false);
+                PetRemoveEvent event = new PetRemoveEvent(this, petMap.get(type));
+                Bukkit.getPluginManager().callEvent(event);
+                Utilities.runPetCommands(CommandReason.REVOKE, this, type);
+
+                entityPet.getEntities().forEach(entity -> {
+                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
+                    entity.remove();
+                });
+            });
+
+            petMap.clear();
         });
     }
 
@@ -365,7 +379,13 @@ public class PetOwner implements PetUser {
         Bukkit.getPluginManager().callEvent(event);
         Utilities.runPetCommands(CommandReason.REVOKE, this, type);
 
-        petMap.get(type).getEntities().forEach(entity -> {
+        IEntityPet entityPet = petMap.get(type);
+
+        respawnPets.remove(new StorageTagCompound()
+                .setTag("data", entityPet.asCompound())
+                .setString("type", type.getName()));
+
+        entityPet.getEntities().forEach(entity -> {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
             entity.remove();
         });
@@ -381,6 +401,10 @@ public class PetOwner implements PetUser {
             PetRemoveEvent event = new PetRemoveEvent(this, entityPet);
             Bukkit.getPluginManager().callEvent(event);
             Utilities.runPetCommands(CommandReason.REVOKE, this, type);
+
+            respawnPets.remove(new StorageTagCompound()
+                    .setTag("data", entityPet.asCompound())
+                    .setString("type", type.getName()));
 
             entityPet.getEntities().forEach(entity -> {
                 SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
