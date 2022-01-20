@@ -22,15 +22,29 @@ import java.util.List;
         usage = "<add/remove/list> <player> [type]",
         description = "Controls what pets the player has purchased"
 )
-@Permission(permission = "purchased", adminCommand = true)
+@Permission(permission = "purchased", adminCommand = true, additionalPermissions = {"add", "remove", "list", "list.other"})
 public class PurchasedCommand extends PetSubCommand {
     public PurchasedCommand(PetCore plugin) {
         super(plugin);
-        registerCompletion(1, Lists.newArrayList("add", "remove", "list"));
     }
 
     @Override
     public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        if (args.length == 1) {
+            if (sender.hasPermission(getPermission("add"))) completions.add("add");
+            if (sender.hasPermission(getPermission("remove"))) completions.add("remove");
+            if (sender.hasPermission(getPermission("list"))) completions.add("list");
+            return completions;
+        }
+
+        if (args.length == 2) {
+            if (args[0].contains("list")) {
+                if (sender.hasPermission(getPermission("list.other"))) return getOnlinePlayers();
+                return Lists.newArrayList(sender.getName());
+            }
+            return completions;
+        }
+
         if ((index == 3)) {
             if (!args[0].contains("list")) return getPetTypes();
         }
@@ -51,13 +65,23 @@ public class PurchasedCommand extends PetSubCommand {
         }
         Player target = Bukkit.getPlayerExact(args[1]);
 
+        if (args[0].equalsIgnoreCase("list") && (!sender.hasPermission(getPermission("list.other")))){
+            if (sender instanceof Player) target = (Player) sender;
+        }
+
         if (target == null) {
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE));
             return;
         }
 
+        Player finalTarget = target;
         SimplePets.getUserManager().getPetUser(target).ifPresent(user -> {
             if (args[0].equalsIgnoreCase("add")) {
+                if (!sender.hasPermission(getPermission("add"))){
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    return;
+                }
+
                 if (args.length == 2) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
                     return;
@@ -66,7 +90,7 @@ public class PurchasedCommand extends PetSubCommand {
                 PetType.getPetType(args[2]).ifPresent(type -> {
                     user.addOwnedPet(type);
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PURCHASE_ADD)
-                            .replace("{player}", target.getName())
+                            .replace("{player}", finalTarget.getName())
                             .replace("{type}", type.getName())
                     );
                 });
@@ -74,6 +98,10 @@ public class PurchasedCommand extends PetSubCommand {
             }
 
             if (args[0].equalsIgnoreCase("remove")) {
+                if (!sender.hasPermission(getPermission("remove"))){
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    return;
+                }
                 if (args.length == 2) {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
                     return;
@@ -82,7 +110,7 @@ public class PurchasedCommand extends PetSubCommand {
                 PetType.getPetType(args[2]).ifPresent(type -> {
                     user.removeOwnedPet(type);
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PURCHASE_REMOVE)
-                            .replace("{player}", target.getName())
+                            .replace("{player}", finalTarget.getName())
                             .replace("{type}", type.getName())
                     );
                 });
@@ -90,6 +118,11 @@ public class PurchasedCommand extends PetSubCommand {
             }
 
             if (args[0].equalsIgnoreCase("list")) {
+                if (!sender.hasPermission(getPermission("list"))){
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    return;
+                }
+
                 String prefix = MessageFile.getTranslation(MessageOption.PURCHASE_LIST_PREFIX);
                 if (!prefix.endsWith(" ")) prefix = prefix+" ";
                 Tellraw tellraw = Tellraw.getInstance(prefix);
