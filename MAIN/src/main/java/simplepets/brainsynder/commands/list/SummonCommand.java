@@ -31,7 +31,7 @@ import java.util.concurrent.atomic.AtomicInteger;
         alias = {"spawn"},
         description = "Spawns a pet for the player or selected player"
 )
-@Permission(permission = "summon", defaultAllow = true, additionalPermissions = {"all", "other", "all_other", "nbt"})
+@Permission(permission = "summon", defaultAllow = true, additionalPermissions = {"all", "other", "nbt"})
 public class SummonCommand extends PetSubCommand {
     public SummonCommand(PetCore plugin) {
         super(plugin);
