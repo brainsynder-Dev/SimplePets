@@ -95,6 +95,11 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (((CraftWorld)location.getWorld()).getHandle().addFreshEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
+                if (compound.hasKey("name")) {
+                    String name = compound.getString("name");
+                    if (name != null) name = name.replace("~", " ");
+                    customEntity.setPetName(name);
+                }
                 SimplePets.getPetUtilities().runPetCommands(CommandReason.SPAWN, user, type);
                 int count = spawnCount.getOrDefault(type, 0);
                 spawnCount.put(type, (count+1));
