@@ -1,0 +1,24 @@
+name: Addon Idea Submission
+description: You have an idea for a new addon
+title: "[Addon Idea]: "
+labels: ["addon idea"]
+assignees:
+  - brainsynder-Dev
+  - Thatsmusic99
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <div align="center">So you have a feature you would like to request? Perfect fill out the info below and we will look into adding it in if possible.</div>
+
+  - type: textarea
+    id: request
+    attributes:
+      label: What is your addon idea?
+      description: |
+        In the area below please put your idea. [ REQUIRED ]
+
+        Tip: You can attach images or files by clicking this area to highlight it and then dragging files in.
+      placeholder: I have an addon idea!
+    validations:
+      required: true
