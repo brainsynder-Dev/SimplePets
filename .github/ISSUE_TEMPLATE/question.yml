@@ -9,7 +9,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        <div align="center">So you have a feature you would like to request? Perfect fill out the info below and we will look into adding it in if possible.</div>
+        <div align="center">So you have a question you would like to answered? Perfect fill out the info below and we will look into adding it in if possible.</div>
 
   - type: dropdown
     id: issue-related
