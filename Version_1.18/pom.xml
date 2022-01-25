@@ -47,6 +47,10 @@
                         <configuration>
                             <relocations>
                                 <relocation>
+                                    <pattern>${groupId}.versions.v1_18_R1</pattern>
+                                    <shadedPattern>${groupId}.versions.v1_18</shadedPattern>
+                                </relocation>
+                                <relocation>
                                     <pattern>org.apache.commons</pattern>
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
                                 </relocation>
