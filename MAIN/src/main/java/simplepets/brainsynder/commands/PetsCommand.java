@@ -39,7 +39,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new DatabaseCommand (plugin));
         registerSub(new ReloadCommand(plugin));
 
-        if (!plugin.getPurchaseUserID().equals("%%__USER__%%"))
+        if (!plugin.getPurchaseUserID().contains("_USER_"))
             registerSub(new PremiumCommand(plugin));
 
         ReportCommand reportCommand = new ReportCommand(plugin);
