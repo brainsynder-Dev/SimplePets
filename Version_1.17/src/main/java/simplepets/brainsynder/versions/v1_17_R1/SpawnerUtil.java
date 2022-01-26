@@ -3,6 +3,7 @@ package simplepets.brainsynder.versions.v1_17_R1;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.storage.RandomCollection;
+import lib.brainsynder.utils.Colorize;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
@@ -65,6 +66,11 @@ public class SpawnerUtil implements ISpawnUtil {
 
     @Override
     public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
+        if (SimplePets.getConfiguration().getBoolean("Worlds.Enabled", false)) {
+            if (!SimplePets.getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(location.getWorld().getName()))
+                return BiOptional.of(null, Colorize.translateBungeeHex(SimplePets.getConfiguration().getString("Worlds.fail-message")));
+        }
+
         try {
             EntityPet customEntity;
 

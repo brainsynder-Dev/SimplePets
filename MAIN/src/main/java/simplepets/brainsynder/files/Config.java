@@ -66,9 +66,10 @@ public class Config extends YamlFile {
         addDefault("Pathfinding.Stopping-Distance", 3.0, "How far away can the pet be before it will stop walking near the player?\nDefault: 3");
         addDefault("Pathfinding.Stopping-Distance_LargePets", 7.0, "How far away can the large pet (Giant/Ghast) be before it will stop walking near the player?\nDefault: 7");
 
-        addSectionHeader("Worlds", "Currently not implemented, but will be re-implemented in the future");
         addDefault("Worlds.Enabled", false, "Enabling this will make it so pets only work in the worlds that are listed in 'Allowed-Worlds'\nDefault: false");
         addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
+        addDefault("Worlds.fail-message", "&cPets are not allowed to spawn in this world",
+                "This message is only visible when the player hovers over the fail message");
 
         addSectionHeader("WorldGuard", AdvString.AlignText.LEFT, "Recently our code changed to use addons instead\nSimply install the WorldGuard addon  by following these steps:\n" +
                 "- Run the `/pet addon` command\n" +
