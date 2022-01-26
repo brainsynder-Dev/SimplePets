@@ -21,6 +21,7 @@ public class Config extends YamlFile {
         addDefault("Reload-Detected", false, "This is used by the plugin to detect if the plugin was previously unloaded (via /reload or by a plugin)\n    CAN NOT BE CUSTOMIZED");
         addDefault("Simpler-Pet-GUI-Command", false, "UGGGGGGGG This config option makes it so `/pet` opens the GUI (like `/pet gui`)\n" +
                 "Requires a server restart for some reason ¯\\_(ツ)_/¯\nDefault: false");
+
         addDefault("Update-Checking.Enabled", true, "Would you like to check for new jenkins builds?\nDefault: true");
         addDefault("Update-Checking.Message-On-Join", true, "Would you like to be alerted when there is a new update when you log in?\n(MUST HAVE 'pet.update' permission or OP)\nDefault: true");
         addSectionHeader("Update-Checking.unit", AdvString.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");
@@ -30,7 +31,6 @@ public class Config extends YamlFile {
         addDefault("Permissions.Ignored-List", Lists.newArrayList(
                 ""
         ), "Any permission in this list will be ignored when the plugin checks if the player has permission\n(Will act like the player has the permission, without actually having it)");
-
         addDefault("Permissions.Needs-Pet-Permission-for-GUI", false, "Enabling this would require players to have access to at least 1 pets permission\nDefault: false");
         addDefault("Permissions.Enabled", true, "Disabling this would grant ALL players access to pets (they wont need permissions)\nDefault: true");
         addDefault("Permissions.Data-Permissions", true, "Disabling this will make it so players do not need to have any data permissions (EG. pet.type.armorstand.data.silent)\nDefault: true"); // TODO: Reformat this value
@@ -42,13 +42,6 @@ public class Config extends YamlFile {
         addDefault("Utilize-Purchased-Pets", false, "This option will make it so if the player has the pet (was 'purchased' either via economy or the command)\n" +
                 "It will allow the player to spawn that pet\nNOT FULLY IMPLEMENTED YET 1/1/2022\nDefault: false");
 
-        addDefault("Economy", "Now Separate",
-                "Since v5 of SimplePets, Support for economy plugins for purchasing pets IN-Game\n" +
-                        "has been split into different module for each economy supported...\n" +
-                        "Why? mostly because it helps keep the code clean and if we ever need to fix issues\n" +
-                        "due to an api change, it wont require us to update the whole plugin, instead we just update the addon.\n\n" +
-                        "Any Questions contact us via Discord: https://pluginwiki.us/discord/"
-        );
         addDefault(SPAWN_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player spawns a pet\nDefault: true");
         addDefault(FAILED_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a task fails for a player (EG: spawning, riding, etc..)\nDefault: true");
         addDefault(REMOVE_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a player removes a pet\nDefault: true");
@@ -56,9 +49,9 @@ public class Config extends YamlFile {
         addDefault(TELEPORT_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a players pet teleports to its owner\nDefault: true");
         addDefault(FAILED_TASK_PARTICLE_TOGGLE, true, "Disabling this would make it so there is no particles when a task for a pet fails\nDefault: true");
 
-        addSectionHeader("PetItemStorage", "The ability to have pets store items in another inventory is temporarily not implemented yet\nThis feature will be back as either an addon or re-implemented into the plugin");
-        addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
-        addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
+//        addSectionHeader("PetItemStorage", "The ability to have pets store items in another inventory is temporarily not implemented yet\nThis feature will be back as either an addon or re-implemented into the plugin");
+//        addDefault("PetItemStorage.Enable", true, "Disabling this will remove players access to a GUI that stores items\nDefault: true");
+//        addDefault("PetItemStorage.Inventory-Size", 27, "What size would you like the inventory to be?\nSizes: 9,18,27,36,45,54\nDefault: 27");
 
         addDefault("Pathfinding.Distance-to-Player", 1.9, "How far away can the pets stand near the player?\nDefault: 1.9");
         addDefault("Pathfinding.Distance-to-Player_LargePets", 2.9, "How far away can the large pets (Giants/Ghast) stand near the player?\nDefault: 2.9");
@@ -70,27 +63,6 @@ public class Config extends YamlFile {
         addDefault("Worlds.Allowed-Worlds", Collections.singletonList("world"));
         addDefault("Worlds.fail-message", "&cPets are not allowed to spawn in this world",
                 "This message is only visible when the player hovers over the fail message");
-
-        addSectionHeader("WorldGuard", AdvString.AlignText.LEFT, "Recently our code changed to use addons instead\nSimply install the WorldGuard addon  by following these steps:\n" +
-                "- Run the `/pet addon` command\n" +
-                "- Click the `Install Addons` item that is on the last row\n" +
-                "- Click the `WorldGuard` addon to install\n" +
-                "- Re-Open the `/pet addon` GUI and make sure the addon is enabled (green)");
-        remove("WorldGuard.BypassPermission");
-
-        remove("PlotSquared.BypassPermission");
-        remove("PlotSquared.On-Unclaimed-Plots.Move");
-        remove("PlotSquared.On-Unclaimed-Plots.Spawn");
-        remove("PlotSquared.On-Unclaimed-Plots.Riding");
-        remove("PlotSquared.On-Roads.Move");
-        remove("PlotSquared.On-Roads.Spawn");
-        remove("PlotSquared.On-Roads.Riding");
-        remove("PlotSquared.Block-If-Denied.Move");
-        remove("PlotSquared.Block-If-Denied.Spawn");
-        remove("PlotSquared.Block-If-Denied.Riding");
-        addDefault("WorldBorder.Block-If-Denied.Move", true, "Are pets allowed to move when inside a WorldBorder?\nDefault: true");
-        addDefault("WorldBorder.Block-If-Denied.Spawn", true, "Can pets be spawned in a WorldBorder?\nDefault: true");
-        addDefault("WorldBorder.Block-If-Denied.Riding", true, "Can a player ride a pet in a WorldBorder?\nDefault: true");
 
         addDefault("MySQL.Enabled", false, "Would you like to use MySQL to save player/pet data?\nIf it is disabled the plugin will use SQLite\nDefault: false");
         addDefault("MySQL.Table", "simplepets");
@@ -113,10 +85,10 @@ public class Config extends YamlFile {
         addDefault("InventoryToggles.AutoClosing.RemovePet", true, "Should the Pet GUI close when they remove a pet?\nDefault: true");
         addDefault("InventoryToggles.AutoClosing.RidePet", true, "Should the Pet GUI close when they start riding a pet?\nDefault: true");
         addDefault("InventoryToggles.AutoClosing.HatPet", true, "Should the Pet GUI close when they set a pet as a hat?\nDefault: true");
+
         addDefault("ConfigToggles.IgnoreAllowsDefault", false, "Should the help command ignore commands that are allowed by default?\nExample: Could be used to hide commands they do not have permission to\nDefault: false");
         addDefault("ConfigToggles.HideCertainPets", false, "Setting this to true will hide any Unregistered, Unsupported, and only show the pets the player can use/purchase in `/pet list`.\nDefault: false");
 
-        // TODO: Reformat these value
         addDefault("PetToggles.MobSpawnBypass", true,
                 "When this is enabled it will allow pets to spawn anywhere\n" +
                         "This is especially used if WorldGuard/PlotSquared are blocking mobs from spawning\nDefault: true");
@@ -141,6 +113,7 @@ public class Config extends YamlFile {
                 "This can be overriden in an individual pet .json file using the walk_speed key.");
         addDefault("PetToggles.Default-Ride-Speed", 0.4000000238418579, "The default ride speed each pet will go at when mounted.\n" +
                 "This can be overriden in an individual pet .json file using the ride_speed key.");
+
         addDefault("Respawn-Last-Pet-On-Login", true, "When a player logs back in should their pet be spawned in as well?\nNOTE: If the player removed their pet before logging out then it wont respawn.\nDefault: true");
 
         addDefault("RenamePet.Enabled", true, "Should players be able to rename pets?\nDefault: true");
@@ -182,6 +155,22 @@ public class Config extends YamlFile {
     }
 
     private void updateSections () {
+        remove("PetItemStorage.Enable");
+        remove("PetItemStorage.Inventory-Size");
+        remove("WorldGuard.BypassPermission");
+        remove("PlotSquared.BypassPermission");
+        remove("PlotSquared.On-Unclaimed-Plots.Move");
+        remove("PlotSquared.On-Unclaimed-Plots.Spawn");
+        remove("PlotSquared.On-Unclaimed-Plots.Riding");
+        remove("PlotSquared.On-Roads.Move");
+        remove("PlotSquared.On-Roads.Spawn");
+        remove("PlotSquared.On-Roads.Riding");
+        remove("PlotSquared.Block-If-Denied.Move");
+        remove("PlotSquared.Block-If-Denied.Spawn");
+        remove("PlotSquared.Block-If-Denied.Riding");
+        remove("WorldBorder.Block-If-Denied.Move");
+        remove("WorldBorder.Block-If-Denied.Spawn");
+        remove("WorldBorder.Block-If-Denied.Riding");
         move("Needs-Pet-Permission-To-Open-GUI", "Permissions.Needs-Pet-Permission-for-GUI", logMove());
         move("Needs-Data-Permissions", "Permissions.Data-Permissions", logMove());
         move("Needs-Permission", "Permissions.Enabled", logMove());
