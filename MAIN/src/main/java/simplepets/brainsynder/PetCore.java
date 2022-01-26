@@ -542,4 +542,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.label("Finished looking for supported versions.");
         return supported;
     }
+
+    public String getPurchaseUserID () {
+        return "%%__USER__%%";
+    }
+
+    public String getPremiumID () {
+        return "%%__RESOURCE__%%";
+    }
+
+    public String getPremiumUniqueID () {
+        return "%%__NONCE__%%";
+    }
 }
