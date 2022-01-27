@@ -439,6 +439,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             });
             return map;
         }));
+        metrics.addCustomChart(new Metrics.DrilldownPie("download_type", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+            Map<String, Integer> entry = new HashMap<>();
+            entry.put("download_type", 1);
+            map.put(getDownloadType(), entry);
+            return map;
+        }));
         metrics.addCustomChart(new Metrics.AdvancedPie("addon_tracker", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
 
@@ -456,6 +463,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             valueMap.put("Custom Addons", custom);
             return valueMap;
         }));
+    }
+
+    public String getDownloadType () {
+        if ("%%__POLYMART__%%".equals("1")) return "PolyMart Premium";
+        if (!getPurchaseUserID().contains("_USER_")) return "Spigot Premium";
+        return "Jenkins";
     }
 
     private void reloadSpawner() {
