@@ -5,8 +5,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.spigotmc.event.entity.EntityDismountEvent;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.user.PetRenameEvent;
+import simplepets.brainsynder.api.pet.CommandReason;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.files.Config;
 
 public class PetEventListener implements Listener {
@@ -32,5 +36,17 @@ public class PetEventListener implements Listener {
             name = Colorize.removeHexColor(name);
 
         event.setName(name);
+    }
+
+    @EventHandler
+    public void onDismount (EntityDismountEvent event) {
+        if ((event.getEntity() instanceof Player) && SimplePets.isPetEntity(event.getDismounted())) {
+            SimplePets.getUserManager().getPetUser((Player) event.getEntity()).ifPresent(user -> {
+                SimplePets.getSpawnUtil().getHandle(event.getDismounted()).ifPresent(o -> {
+                    IEntityPet pet = (IEntityPet) o;
+                    SimplePets.getPetUtilities().runPetCommands(CommandReason.RIDE_DISMOUNT, user, pet.getPetType());
+                });
+            });
+        }
     }
 }
