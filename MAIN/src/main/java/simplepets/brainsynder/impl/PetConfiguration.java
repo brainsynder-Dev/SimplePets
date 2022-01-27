@@ -92,6 +92,8 @@ public class PetConfiguration implements PetConfigManager {
                     for (CommandReason reason : CommandReason.values()) reasons.add(reason.name(), new JsonArray());
                     setDefault("commands", reasons);
 
+                    setDefault("ride_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Ride-Speed"));
+                    setDefault("walk_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Walk-Speed"));
                     setDefault("fly", canFlyDefault(type));
                     setDefault("float_down", false);
 
