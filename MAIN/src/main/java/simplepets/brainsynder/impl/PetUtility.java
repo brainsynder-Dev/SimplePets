@@ -47,6 +47,7 @@ public class PetUtility implements IPetUtilities {
      *     <li>{ownerName} - The pet owners name</li>
      *     <li>{petName} - The pets current name</li>
      *     <li>{petType} - The type of pet</li>
+     *     <li>{petUUID} - The UUID of pet</li>
      * </ul>
      *
      * @param owner   The owner of the pet
@@ -67,7 +68,8 @@ public class PetUtility implements IPetUtilities {
                 .replace("{ownerY}", String.valueOf(ownerLoc.getY()))
                 .replace("{ownerZ}", String.valueOf(ownerLoc.getZ()))
                 .replace("{ownerName}", owner.getOwnerName())
-                .replace("{petType}", entity.getPetType().getName());
+                .replace("{petType}", entity.getPetType().getName())
+                .replace("{petUUID}", entity.getEntity().getUniqueId().toString());
         if ((entity != null) && entity.getPetName().isPresent())
             text = text.replace("{petName}", entity.getPetName().get());
         return text;
