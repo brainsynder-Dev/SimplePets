@@ -48,6 +48,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     private EntityControllerPet pet;
     private Location previus;
     private boolean moving = false;
+    private boolean visible = true;
     private boolean store = true;
     private boolean minime = false;
     private boolean frozen = false;
@@ -78,6 +79,17 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.setSpecial(true);
         ((CraftWorld) location.getWorld()).getHandle().addFreshEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return stand;
+    }
+
+    @Override
+    public boolean isPetVisible() {
+        return visible;
+    }
+
+    @Override
+    public void setPetVisible(boolean visible) {
+        this.visible = visible;
+        setInvisible(!visible);
     }
 
     @Override
@@ -220,7 +232,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         object.setBoolean("small", isSmallStand());
         object.setBoolean("clone", isOwner());
         object.setBoolean("restricted", restricted);
-        if (isInvisible()) object.setBoolean("invisible", isInvisible());
+        if (!isPetVisible()) object.setBoolean("visible", !isPetVisible());
 
         StorageTagCompound items = new StorageTagCompound();
         if (getHeadItem() != null) items.setString("head", parseItem(getHeadItem()));
@@ -245,7 +257,8 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         if (object.hasKey("restricted")) setRestricted(object.getBoolean("restricted"));
         if (object.hasKey("small")) setSmallStand(object.getBoolean("small"));
         if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));
-        if (object.hasKey("invisible")) setInvisible(object.getBoolean("invisible"));
+        if (object.hasKey("invisible")) setPetVisible(!object.getBoolean("invisible"));
+        if (object.hasKey("visible")) setPetVisible(object.getBoolean("visible"));
         if (object.hasKey("items")) {
             StorageTagCompound items = object.getCompoundTag("items");
             if (items.hasKey("head")) setHeadItem(parseString(items.getString("head")));

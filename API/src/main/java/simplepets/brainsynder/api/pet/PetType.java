@@ -53,7 +53,7 @@ public enum PetType {
 
     @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_ARMORSTAND_FALL, weight = PetWeight.LIGHT)
-    ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND),
+    ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND, Visible.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_AXOLOTL_IDLE_WATER, weight = PetWeight.LIGHT) // TODO: Add sound
     AXOLOTL(IEntityAxolotlPet.class, "5c138f401c67fc2e1e387d9c90a9691772ee486e8ddbf2ed375fc8348746f936",
@@ -372,6 +372,7 @@ public enum PetType {
         list.addFirst(SilentData.class);
         list.addFirst(BurningData.class);
         list.addFirst(FrozenData.class);
+        list.addFirst(Visible.class);
         list.addAll(Lists.newArrayList(petData));
         this.builder = builder.withName(Colorize.translateBungeeHex("&#c8f792" + Capitalise.capitalize(name().toLowerCase().replace("_", " "))));
 

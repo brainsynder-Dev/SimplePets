@@ -7,7 +7,10 @@ import simplepets.brainsynder.api.entity.misc.IEntityBase;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Function;
 
 public interface IEntityPet extends IEntityBase, IBurnablePet {
@@ -103,4 +106,16 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      * @param frozen
      */
     default void setFrozen (boolean frozen) {}
+
+    /**
+     * Is the pet visible to players
+     */
+    boolean isPetVisible ();
+
+    /**
+     * This will toggle weather the pet is visible to players or not
+     *
+     * @param visible
+     */
+    void setPetVisible (boolean visible);
 }

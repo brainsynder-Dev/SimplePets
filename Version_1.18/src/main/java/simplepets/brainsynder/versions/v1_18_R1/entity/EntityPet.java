@@ -66,6 +66,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private final boolean isGlowing = false;
     private boolean frozen = false;
     private boolean silent = false;
+    private boolean visible = true;
     private boolean ignoreVanish = false;
     private int standTime = 0;
     private int blockX = 0;
@@ -227,6 +228,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             object.setString("name", name.replace('§', '&'));
         });
         object.setBoolean("silent", silent);
+        if (!isPetVisible()) object.setBoolean("visible", !isPetVisible());
 
         if (!additional.isEmpty()) {
             StorageTagCompound additional = new StorageTagCompound();
@@ -254,6 +256,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         }
 
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
+        if (object.hasKey("visible")) setPetVisible(object.getBoolean("visible"));
 
         if (object.hasKey("additional")) {
             StorageTagCompound additional = object.getCompoundTag("additional");
@@ -262,6 +265,17 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         if (object.hasKey("frozen")) setFrozen(object.getBoolean("frozen", false));
         if (object.hasKey("burning")) setBurning(object.getBoolean("burning", false));
+    }
+
+    @Override
+    public boolean isPetVisible() {
+        return visible;
+    }
+
+    @Override
+    public void setPetVisible(boolean visible) {
+        this.visible = visible;
+        setInvisible(!visible);
     }
 
     @Override
