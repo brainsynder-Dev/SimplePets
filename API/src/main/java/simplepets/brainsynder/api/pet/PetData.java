@@ -121,4 +121,16 @@ public abstract class PetData<EntityParam extends IEntityPet> {
      * @param entity - Entity that is being modified
      */
     public abstract Object value (EntityParam entity);
+
+    /**
+     * Checks if the PetData is able to be changed for the entity
+     *
+     * @param entity - Entity that is being modified
+     * @return
+     *      true - Entity can be modified
+     *      false - Entity cant be modified
+     */
+    public boolean isModifiable (EntityParam entity) {
+        return true;
+    }
 }
