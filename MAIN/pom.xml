@@ -53,6 +53,10 @@
                                     <pattern>net.wesjd</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.jeff_media.updatechecker</pattern>
+                                    <shadedPattern>${groupId}.internal.updatechecker</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -95,6 +99,12 @@
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
             <version>2.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jeff_media</groupId>
+            <artifactId>SpigotUpdateChecker</artifactId>
+            <version>2.2.0</version> <!-- Check on GitHub for the latest version -->
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

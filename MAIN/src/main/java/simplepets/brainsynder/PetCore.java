@@ -1,5 +1,7 @@
 package simplepets.brainsynder;
 
+import com.jeff_media.updatechecker.UpdateCheckSource;
+import com.jeff_media.updatechecker.UpdateChecker;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
 import lib.brainsynder.json.WriterConfig;
@@ -241,23 +243,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     }
 
     private void handleUpdateUtils() {
-        debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
-        // Handle Update checking
-        updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
-                .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
-                .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
-                .setOnError(() -> debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
-                .setNewBuild(members -> {
-                    int latestBuild = members.getInt("build", -1);
-
-                    // New build found
-                    if (latestBuild > updateResult.getCurrentBuild()) {
-                        debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
-                        debug.debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
-                    }
-                });
-        updateUtils = new UpdateUtils(this, updateResult);
-
         if (!configuration.getBoolean("Update-Checking.Enabled", true)) return;
         int time = configuration.getInt("Update-Checking.time", 12);
         TimeUnit unit;
@@ -270,8 +255,35 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             debug.debug(DebugLevel.ERROR, "Could not find unit for '" + timeunit + "'");
         }
 
-        updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
+        debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
+        if ((getDownloadType() == UpdateCheckSource.CUSTOM_URL) || configuration.getBoolean("Update-Checking.Check-Dev-Builds", true)) {
+            updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
+                    .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
+                    .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
+                    .setOnError(() -> debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
+                    .setNewBuild(members -> {
+                        int latestBuild = members.getInt("build", -1);
 
+                        // New build found
+                        if (latestBuild > updateResult.getCurrentBuild()) {
+                            debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
+                            debug.debug(DebugLevel.UPDATE, "https://ci.pluginwiki.us/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
+                        }
+                    });
+            updateUtils = new UpdateUtils(this, updateResult);
+            updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
+        }
+        if (getDownloadType() != UpdateCheckSource.CUSTOM_URL) {
+            int resourceID = Integer.parseInt(getPremiumID());
+            new UpdateChecker(this, getDownloadType(), getPremiumID())
+                    .setChangelogLink(resourceID)
+                    .setDownloadLink(resourceID)
+                    .setColoredConsoleOutput(true)
+                    .setNotifyOpsOnJoin(true).setNotifyByPermissionOnJoin("pet.update")
+                    .suppressUpToDateMessage(true)
+                    .checkEveryXHours(12)
+                    .checkNow();
+        }
     }
 
     public boolean wasReloaded() {
@@ -443,7 +455,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             Map<String, Integer> entry = new HashMap<>();
             entry.put("download_type", 1);
-            map.put(getDownloadType(), entry);
+            if (getDownloadType() == UpdateCheckSource.CUSTOM_URL) {
+                map.put("Jenkins", entry);
+            }else{
+                map.put(getDownloadType().name(), entry);
+            }
             return map;
         }));
         metrics.addCustomChart(new Metrics.AdvancedPie("addon_tracker", () -> {
@@ -465,10 +481,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }));
     }
 
-    public String getDownloadType () {
-        if ("%%__POLYMART__%%".equals("1")) return "PolyMart Premium";
-        if (!getPurchaseUserID().contains("_USER_")) return "Spigot Premium";
-        return "Jenkins";
+    public UpdateCheckSource getDownloadType () {
+        if ("%%__POLYMART__%%".equals("1")) return UpdateCheckSource.POLYMART;
+        if (!getPurchaseUserID().contains("_USER_")) return UpdateCheckSource.SPIGOT;
+        return UpdateCheckSource.CUSTOM_URL;
     }
 
     private void reloadSpawner() {

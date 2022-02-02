@@ -58,6 +58,10 @@
                                     <pattern>net.wesjd</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.jeff_media.updatechecker</pattern>
+                                    <shadedPattern>${groupId}.internal.updatechecker</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
@@ -134,6 +138,10 @@
                 <exclusion>
                     <groupId>net.wesjd</groupId>
                     <artifactId>anvilgui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.jeff_media</groupId>
+                    <artifactId>SpigotUpdateChecker</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

@@ -121,6 +121,7 @@
                                     <include>simplepets.brainsynder:*</include>
                                     <include>lib.brainsynder:*</include>
                                     <include>net.wesjd:*</include>
+                                    <include>com.jeff_media:*</include>
                                     <include>commons-io:*</include>
                                     <include>resources:*</include>
                                 </includes>
@@ -181,6 +182,10 @@
         <repository>
             <id>codemc-snapshots</id>
             <url>https://repo.codemc.io/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
+            <id>jeff-media-public</id>
+            <url>https://hub.jeff-media.com/nexus/repository/jeff-media-public/</url>
         </repository>
     </repositories>
 
