@@ -223,7 +223,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         StorageTagCompound object = new StorageTagCompound();
         object.setString("PetType", getPetType().getName());
         object.setFloat("health", getHealth());
-        object.setString("ownerName", getPetUser().getPlayer().getName());
+        object.setString("ownerName", getPetUser().getOwnerName());
         user.getPetName(getPetType()).ifPresent(name -> {
             object.setString("name", name.replace('§', '&'));
         });
