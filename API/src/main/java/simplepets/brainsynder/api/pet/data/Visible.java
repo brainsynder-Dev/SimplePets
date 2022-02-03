@@ -6,7 +6,9 @@ import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.pet.PetData;
+import simplepets.brainsynder.api.pet.annotations.DisableDefault;
 
+@DisableDefault
 @Namespace(namespace = "visible")
 public class Visible extends PetData<IEntityPet> {
     public Visible() {
