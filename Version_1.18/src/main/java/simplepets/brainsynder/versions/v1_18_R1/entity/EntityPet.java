@@ -484,15 +484,16 @@ public abstract class EntityPet extends Mob implements IEntityPet {
                         // Added this check for SuperVanish and PremiumVanish since they recommend using this method to check
                         || SimplePets.getPetUtilities().isVanished(player)
                 );
-
-                if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
-                    if (isGlowing && (!ownerVanish))
-                        glowHandler(false);  // If the pet is glowing & owner is not vanished
-                    this.setInvisible(!this.isInvisible());
-                } else {
-                    if (ownerVanish && canGlow)
-                        if (((CraftPlayer) player).getHandle().isInvisible())
-                            glowHandler(true);
+                if (isPetVisible()) {
+                    if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
+                        if (isGlowing && (!ownerVanish))
+                            glowHandler(false);  // If the pet is glowing & owner is not vanished
+                        this.setInvisible(!this.isInvisible());
+                    } else {
+                        if (ownerVanish && canGlow)
+                            if (((CraftPlayer) player).getHandle().isInvisible())
+                                glowHandler(true);
+                    }
                 }
             }
 
