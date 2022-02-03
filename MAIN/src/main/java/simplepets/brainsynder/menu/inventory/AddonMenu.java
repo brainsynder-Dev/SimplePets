@@ -131,7 +131,7 @@ public class AddonMenu extends CustomInventory {
             for (PetAddon addon : manager.getLoadedAddons()) {
                 String name = addon.getNamespace().namespace();
                 ItemBuilder builder = ItemBuilder.fromItem(addon.getAddonIcon());
-                builder.addLore("&r ", "&7Enabled: " + (addon.isEnabled() ? "&atrue" : "&cfalse"));
+                builder.addLore("&r ", "&7Enabled: " + (addon.isEnabled() ? "&atrue" : "&cfalse"), "&7Version: &e"+addon.getVersion());
 //                The update checking should be handled elsewhere I think....
 //                if (addon.hasUpdate() || (addon.getVersion() > addon.getVersion())) {
 //                    if (!addon.hasUpdate())
