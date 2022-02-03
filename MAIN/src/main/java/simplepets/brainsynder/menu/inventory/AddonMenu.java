@@ -238,8 +238,9 @@ public class AddonMenu extends CustomInventory {
     @Override
     public void reset(PetUser user) {
         super.reset(user);
-        installerMap.remove(user.getPlayer().getName());
-        addonCache.remove(user.getPlayer().getName());
-        pagerMap.remove(user.getPlayer().getName());
+        String name = user.getOwnerName();
+        installerMap.remove(name);
+        addonCache.remove(name);
+        pagerMap.remove(name);
     }
 }

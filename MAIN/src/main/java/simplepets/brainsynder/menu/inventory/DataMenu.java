@@ -157,6 +157,6 @@ public class DataMenu extends CustomInventory {
     @Override
     public void reset(PetUser user) {
         super.reset(user);
-        typeMap.remove(user.getPlayer().getName());
+        typeMap.remove(user.getOwnerName());
     }
 }

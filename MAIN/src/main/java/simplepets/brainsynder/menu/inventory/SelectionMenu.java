@@ -197,7 +197,8 @@ public class SelectionMenu extends CustomInventory {
     public void reset(PetUser user) {
         super.reset(user);
 
-        petMap.remove(user.getPlayer().getName());
-        pagerMap.remove(user.getPlayer().getName());
+        String name = user.getOwnerName();
+        petMap.remove(name);
+        pagerMap.remove(name);
     }
 }

@@ -230,10 +230,10 @@ public class SavesMenu extends CustomInventory {
 
 
     @Override
-    public void reset(PetUser owner) {
-        Player player = Bukkit.getPlayer(owner.getPlayer().getUniqueId());
-        super.reset(owner);
-        itemMap.remove(player.getName());
-        pagerMap.remove(player.getName());
+    public void reset(PetUser user) {
+        super.reset(user);
+        String name = user.getOwnerName();
+        itemMap.remove(name);
+        pagerMap.remove(name);
     }
 }
