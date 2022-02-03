@@ -15,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.*;
+import simplepets.brainsynder.api.pet.annotations.DisableDefault;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.Config;
@@ -104,7 +105,7 @@ public class PetConfiguration implements PetConfigManager {
                     JsonObject dataObject = new JsonObject();
                     type.getPetData().forEach(petData -> {
                         JsonObject data = new JsonObject();
-                        data.set("enabled", true);
+                        data.set("enabled", (!petData.getClass().isAnnotationPresent(DisableDefault.class)));
 
                         Object defaultValue = petData.getDefaultValue();
                         if (defaultValue instanceof Integer) {
