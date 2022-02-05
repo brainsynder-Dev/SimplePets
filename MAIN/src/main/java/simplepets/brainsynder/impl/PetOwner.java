@@ -174,6 +174,7 @@ public class PetOwner implements PetUser {
         ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
         if (spawnUtil == null) return false;
 
+        List<StorageTagCompound> respawnPets = this.respawnPets;
         respawnPets.forEach(tag -> {
             PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
                 // Will prevent people from spawning pets they did not purchase if enabled
@@ -191,7 +192,7 @@ public class PetOwner implements PetUser {
                 });
             });
         });
-        respawnPets.clear();
+        this.respawnPets.clear();
         return true;
     }
 
