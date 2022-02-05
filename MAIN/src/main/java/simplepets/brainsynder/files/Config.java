@@ -1,11 +1,11 @@
 package simplepets.brainsynder.files;
 
 import com.google.common.collect.Lists;
-import com.jeff_media.updatechecker.UpdateCheckSource;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.utils.AdvString;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.RenameType;
 
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class Config extends YamlFile {
 
         addDefault("Update-Checking.Enabled", true, "Would you like to check for when there is a new update?\nDefault: true");
         addDefault("Update-Checking.Message-On-Join", true, "Would you like to be alerted when there is a new update when you log in?\n(MUST HAVE 'pet.update' permission or OP)\nDefault: true");
-        if (PetCore.getInstance().getDownloadType() != UpdateCheckSource.CUSTOM_URL)
+        if (Premium.getDownloadType() != Premium.DownloadType.JENKINS)
             addDefault("Update-Checking.Check-Dev-Builds", true, "This will enable checking for dev builds released on jenkins");
 
         addSectionHeader("Update-Checking.unit", AdvString.AlignText.LEFT, "The unit of time for update checking\nTime Units:\n- SECONDS\n- MINUTES\n- HOURS\n- DAYS");

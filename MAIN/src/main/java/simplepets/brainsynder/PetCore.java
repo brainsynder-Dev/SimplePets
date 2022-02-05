@@ -1,6 +1,5 @@
 package simplepets.brainsynder;
 
-import com.jeff_media.updatechecker.UpdateCheckSource;
 import com.jeff_media.updatechecker.UpdateChecker;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
@@ -40,6 +39,7 @@ import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
+import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
@@ -256,7 +256,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
 
         debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
-        if ((getDownloadType() == UpdateCheckSource.CUSTOM_URL) || configuration.getBoolean("Update-Checking.Check-Dev-Builds", true)) {
+        if ((Premium.getDownloadType() == Premium.DownloadType.JENKINS) || configuration.getBoolean("Update-Checking.Check-Dev-Builds", true)) {
             updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
                     .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
                     .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
@@ -273,9 +273,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             updateUtils = new UpdateUtils(this, updateResult);
             updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
         }
-        if (getDownloadType() != UpdateCheckSource.CUSTOM_URL) {
-            int resourceID = Integer.parseInt(getPremiumID());
-            new UpdateChecker(this, getDownloadType(), getPremiumID())
+        if (Premium.getDownloadType() != Premium.DownloadType.JENKINS) {
+            int resourceID = Integer.parseInt(Premium.RESOURCE_ID);
+            new UpdateChecker(this, Premium.getDownloadType().toSource(), Premium.RESOURCE_ID)
                     .setChangelogLink(resourceID)
                     .setDownloadLink(resourceID)
                     .setColoredConsoleOutput(true)
@@ -455,11 +455,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             Map<String, Integer> entry = new HashMap<>();
             entry.put("download_type", 1);
-            if (getDownloadType() == UpdateCheckSource.CUSTOM_URL) {
-                map.put("Jenkins", entry);
-            }else{
-                map.put(getDownloadType().name(), entry);
-            }
+            map.put(Premium.getDownloadType().name(), entry);
             return map;
         }));
         metrics.addCustomChart(new Metrics.AdvancedPie("addon_tracker", () -> {
@@ -479,12 +475,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             valueMap.put("Custom Addons", custom);
             return valueMap;
         }));
-    }
-
-    public UpdateCheckSource getDownloadType () {
-        if ("%%__POLYMART__%%".equals("1")) return UpdateCheckSource.POLYMART;
-        if (!getPurchaseUserID().contains("_USER_")) return UpdateCheckSource.SPIGOT;
-        return UpdateCheckSource.CUSTOM_URL;
     }
 
     private void reloadSpawner() {
@@ -570,17 +560,5 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
         taskTimer.label("Finished looking for supported versions.");
         return supported;
-    }
-
-    public String getPurchaseUserID () {
-        return "%%__USER__%%";
-    }
-
-    public String getPremiumID () {
-        return "%%__RESOURCE__%%";
-    }
-
-    public String getPremiumUniqueID () {
-        return "%%__NONCE__%%";
     }
 }

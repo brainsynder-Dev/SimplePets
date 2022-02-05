@@ -7,6 +7,7 @@ import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.Premium;
 
 @ICommand(
         name = "premium",
@@ -21,8 +22,8 @@ public class PremiumCommand extends PetSubCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Purchase Users ID: "+getPlugin().getPurchaseUserID());
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Premium Resource ID: "+getPlugin().getPremiumID());
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Download ID: "+getPlugin().getPremiumUniqueID() + "(Unique for all downloads)");
+        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Purchase Users ID: "+ Premium.USER_ID);
+        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Premium Resource ID: "+Premium.USER_ID);
+        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Download ID: "+Premium.UNIQUE_DOWNLOAD_ID + "(Unique for all downloads)");
     }
 }

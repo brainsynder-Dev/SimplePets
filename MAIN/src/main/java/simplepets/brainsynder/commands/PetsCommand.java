@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.commands.list.*;
+import simplepets.brainsynder.utils.Premium;
 
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new DatabaseCommand (plugin));
         registerSub(new ReloadCommand(plugin));
 
-        if (!plugin.getPurchaseUserID().contains("_USER_"))
+        if (Premium.isPremium())
             registerSub(new PremiumCommand(plugin));
 
         ReportCommand reportCommand = new ReportCommand(plugin);

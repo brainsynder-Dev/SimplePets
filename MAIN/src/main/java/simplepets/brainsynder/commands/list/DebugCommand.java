@@ -19,6 +19,7 @@ import simplepets.brainsynder.commands.PetsCommand;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.utils.Premium;
 
 import java.io.*;
 import java.time.Instant;
@@ -89,7 +90,7 @@ public class DebugCommand extends PetSubCommand {
 
     public static void fetchDebug (Consumer<JsonObject> consumer, boolean skipJenkins) {
         JsonObject json = new JsonObject();
-        json.add("premium_purchase", (!PetCore.getInstance().getPurchaseUserID().contains("_USER_")));
+        json.add("premium_purchase", Premium.isPremium());
         json.add("reloaded", PetCore.getInstance().wasReloaded());
         PetCore.getInstance().checkWorldGuard(value -> json.add("worldguard_config_check", value));
         fetchServerInfo(object -> json.add("server", object));
