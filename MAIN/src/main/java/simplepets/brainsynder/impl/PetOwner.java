@@ -5,6 +5,7 @@ import lib.brainsynder.apache.Validate;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
+import lib.brainsynder.optional.BiOptional;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -174,8 +175,8 @@ public class PetOwner implements PetUser {
         ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
         if (spawnUtil == null) return false;
 
-        List<StorageTagCompound> respawnPets = this.respawnPets;
-        respawnPets.forEach(tag -> {
+        List<BiOptional<PetType, StorageTagCompound>> laterTasks = Lists.newArrayList();
+        this.respawnPets.forEach(tag -> {
             PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
                 // Will prevent people from spawning pets they did not purchase if enabled
                 if ((!ownedPets.contains(type)) && PetCore.getInstance().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) return;
@@ -187,11 +188,24 @@ public class PetOwner implements PetUser {
                     Player player = Bukkit.getPlayer(uuid);
                     if (player != null) {
                         if (!Utilities.hasPermission(player, type.getPermission())) return;
-                        spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
+                        if (hasPet(type)) {
+                            laterTasks.add(BiOptional.of(type, tag.getCompoundTag("data")));
+                        }else{
+                            spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
+                        }
                     }
                 });
             });
         });
+
+        if (!laterTasks.isEmpty()) laterTasks.forEach(biOptional -> {
+            PetType type = biOptional.first().get();
+            StorageTagCompound compound = biOptional.second().get();
+            removePet(type);
+
+            spawnUtil.spawnEntityPet(type, PetOwner.this, compound);
+        });
+
         this.respawnPets.clear();
         return true;
     }
