@@ -221,13 +221,13 @@ public class AddonManager {
     public boolean isSupported(String version) {
         if ((version == null) || (version.isEmpty())) return true;
         String plugin = PetCore.getInstance().getDescription().getVersion();
-        if (!plugin.contains("-BUILD-")) return false; // Seems to be a different format (Custom?)
-        if (!version.contains("-BUILD-")) return false; // Seems to be a different format (Custom?)
-        double main = Double.parseDouble(AdvString.before("-BUILD-", plugin));
-        double checkMain = Double.parseDouble(AdvString.before("-BUILD-", version));
+        if (!plugin.contains("-build-")) return false; // Seems to be a different format (Custom?)
+        if (!version.contains("-build-")) return false; // Seems to be a different format (Custom?)
+        double main = Double.parseDouble(AdvString.before("-build-", plugin));
+        double checkMain = Double.parseDouble(AdvString.before("-build-", version));
 
-        int build = Integer.parseInt(AdvString.after("-BUILD-", plugin));
-        int checkBuild = Integer.parseInt(AdvString.after("-BUILD-", version));
+        int build = Integer.parseInt(AdvString.after("-build-", plugin));
+        int checkBuild = Integer.parseInt(AdvString.after("-build-", version));
 
         if (main >= checkMain) {
             return build >= checkBuild;
