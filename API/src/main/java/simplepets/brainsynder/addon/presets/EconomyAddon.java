@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.utils.Colorize;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import simplepets.brainsynder.addon.AddonConfig;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.function.Consumer;
 
 /**
  * This preset addon class, is for making addons for any type of plugin that handles economy (EG: Vault/TokenManager)
@@ -143,6 +143,9 @@ public abstract class EconomyAddon extends PetAddon {
     }
 
     public abstract int getDefaultPrice ();
+    public void fetchBalance (UUID uuid, Consumer<Double> balanceConsumer) {
+        balanceConsumer.accept(getBalance(uuid));
+    }
     public abstract double getBalance (UUID uuid);
     public abstract void withdraw (UUID uuid, double amount);
 
@@ -181,37 +184,37 @@ public abstract class EconomyAddon extends PetAddon {
         // If player already owns the pet ignore
         if (user.getOwnedPets().contains(event.getPetType())) return;
 
-        double bal = getBalance(user.getPlayer().getUniqueId());
+        fetchBalance(user.getPlayer().getUniqueId(), bal -> {
+            // Checks the players balance (if they have a balance that is lower then the price)
+            if (bal < price) {
+                event.setCancelled(true);
+                user.getPlayer().sendMessage(Colorize.translateBungeeHex(insufficientFunds
+                        .replace("{price}", String.valueOf(price))
+                        .replace("{type}", event.getPetType().getName())
+                        .replace("{prefix}", prefix)
+                ));
+                return;
+            }
 
-        // Checks the players balance (if they have a balance that is lower then the price)
-        if (bal < price) {
-            event.setCancelled(true);
-            user.getPlayer().sendMessage(Colorize.translateBungeeHex(insufficientFunds
-                    .replace("{price}", String.valueOf(price))
-                    .replace("{type}", event.getPetType().getName())
-                    .replace("{prefix}", prefix)
-            ));
-            return;
-        }
+            // Checks if PayPerUse is enabled, if it is dont add the pet to the players purchased list
+            if (payPerUse) {
+                withdraw(user.getPlayer().getUniqueId(), price);
+                user.getPlayer().sendMessage(Colorize.translateBungeeHex(paid
+                        .replace("{price}", String.valueOf(price))
+                        .replace("{type}", event.getPetType().getName())
+                        .replace("{prefix}", prefix)
+                ));
+                return;
+            }
 
-        // Checks if PayPerUse is enabled, if it is dont add the pet to the players purchased list
-        if (payPerUse) {
+            // withdraw money, and add pet to the players purchased list
+            user.addOwnedPet(event.getPetType());
             withdraw(user.getPlayer().getUniqueId(), price);
-            user.getPlayer().sendMessage(Colorize.translateBungeeHex(paid
+            user.getPlayer().sendMessage(Colorize.translateBungeeHex(successfulPayment
                     .replace("{price}", String.valueOf(price))
                     .replace("{type}", event.getPetType().getName())
                     .replace("{prefix}", prefix)
             ));
-            return;
-        }
-
-        // withdraw money, and add pet to the players purchased list
-        user.addOwnedPet(event.getPetType());
-        withdraw(user.getPlayer().getUniqueId(), price);
-        user.getPlayer().sendMessage(Colorize.translateBungeeHex(successfulPayment
-                .replace("{price}", String.valueOf(price))
-                .replace("{type}", event.getPetType().getName())
-                .replace("{prefix}", prefix)
-        ));
+        });
     }
 }
