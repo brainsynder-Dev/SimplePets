@@ -1,12 +1,15 @@
 package simplepets.brainsynder.addon.presets;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import simplepets.brainsynder.addon.AddonConfig;
 import simplepets.brainsynder.addon.AddonPermissions;
 import simplepets.brainsynder.addon.PermissionData;
 import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
 import simplepets.brainsynder.api.event.entity.PetMountEvent;
 import simplepets.brainsynder.api.event.entity.PetMoveEvent;
@@ -107,18 +110,27 @@ public abstract class RegionAddon extends PetAddon {
     @EventHandler
     public void onRide (PetRideEvent event) {
         if (!ridingEnabled) return; // Ride checking is disabled
-        PetUser user = event.getEntity().getPetUser();
+        IEntityPet entityPet = event.getEntity();
+        PetUser user = entityPet.getPetUser();
         Player player = user.getPlayer();
         if (player.hasPermission(bypassPermission.getPermission())) return; // Player has bypass SKIPPING
 
         // Pet is allowed in region...
         if (isRidingAllowed(user, event.getTargetLocation())) return;
-        event.setCancelled(true);
         if (ridingRemove) {
-            user.removePet(event.getEntity().getPetType());
+            user.removePet(entityPet.getPetType());
+            return;
         }else if (ridingDismount){
-            user.setPetVehicle(event.getEntity().getPetType(), false);
+            if (entityPet.getEntity().getPassenger() != null) {
+                if (entityPet instanceof IEntityControllerPet) {
+                    ((IEntityControllerPet) entityPet).getDisplayEntity().ifPresent(Entity::eject);
+                } else {
+                    entityPet.getEntity().eject();
+                }
+            }
+            return;
         }
+        event.setCancelled(true);
     }
 
     @EventHandler
