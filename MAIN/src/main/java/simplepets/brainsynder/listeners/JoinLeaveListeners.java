@@ -15,12 +15,16 @@ public class JoinLeaveListeners implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent event) {
-        SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> ((PetOwner) user).markForRespawn());
+        SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
+            if (((PetOwner) user).isLoaded()) ((PetOwner) user).markForRespawn();
+        });
     }
 
     @EventHandler
     public void onKick(PlayerKickEvent event) {
-        SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> ((PetOwner) user).markForRespawn());
+        SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
+            if (((PetOwner) user).isLoaded()) ((PetOwner) user).markForRespawn();
+        });
     }
 
     @EventHandler

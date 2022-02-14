@@ -38,6 +38,8 @@ public class PetOwner implements PetUser {
     private final UUID uuid;
     private final String name;
 
+    private boolean isLoaded = false;
+
     private PetType vehicle = null;
     private final List<PetType> hatPets;
 
@@ -126,6 +128,8 @@ public class PetOwner implements PetUser {
                         });
                     });
                 }
+
+                isLoaded = true;
             }
         }.runTask(PetCore.getInstance());
     }
@@ -269,7 +273,15 @@ public class PetOwner implements PetUser {
             this.ownedPets.clear();
             this.petMap.clear();
             this.respawnPets.clear();
+            isLoaded = false;
         });
+    }
+
+    /**
+     * Checks if the players data was loaded from the database
+     */
+    public boolean isLoaded() {
+        return isLoaded;
     }
 
     /**
