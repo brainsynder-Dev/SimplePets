@@ -4,6 +4,7 @@ import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
+import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -44,6 +45,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderWalkToPlayer;
 import simplepets.brainsynder.versions.v1_17_R1.utils.EntityUtils;
+import simplepets.brainsynder.versions.v1_17_R1.utils.GlowAPI;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -67,6 +69,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     private boolean frozen = false;
     private boolean silent = false;
     private boolean visible = true;
+    private DyeColorWrapper glowColor = DyeColorWrapper.WHITE;
     private boolean ignoreVanish = false;
     private int standTime = 0;
     private int blockX = 0;
@@ -143,6 +146,19 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, getPetType());
             SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), location);
         });
+    }
+
+    @Override
+    public void setGlowColor(DyeColorWrapper glowColor) {
+        if (this.glowColor == glowColor) return; // No need for redundant setting
+
+        this.glowColor = glowColor;
+        GlowAPI.setColor(getEntity(), getPetUser().getPlayer(), glowColor);
+    }
+
+    @Override
+    public DyeColorWrapper getGlowColor() {
+        return glowColor;
     }
 
     @Override
@@ -238,6 +254,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
         object.setBoolean("frozen", isFrozen());
         object.setBoolean("burning", isBurning());
+        object.setEnum("glow-color", getGlowColor());
         return object;
     }
 
@@ -246,7 +263,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         if (object.hasKey("health")) {
             float health = object.getFloat("health", 20);
             if (health >= 2048) health = 2047; // Prevents crash caused by spigot
-            if (health < 1) health = 1; // Prevents pets from instant death
+            if (health < 1) health = 1; // Prevent pets from instant death
             setHealth(health);
         }
         if (object.hasKey("name")) {
@@ -255,6 +272,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             setPetName(name);
         }
 
+        if (object.hasKey("glow-color")) setGlowColor(object.getEnum("glow-color", DyeColorWrapper.class, DyeColorWrapper.WHITE));
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
         if (object.hasKey("visible")) setPetVisible(object.getBoolean("visible"));
 
@@ -487,12 +505,12 @@ public abstract class EntityPet extends Mob implements IEntityPet {
                 if (isPetVisible()) {
                     if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
                         if (isGlowing && (!ownerVanish))
-                            glowHandler(false);  // If the pet is glowing & owner is not vanished
+                            GlowAPI.setGlowing(getEntity(), player, false);  // If the pet is glowing & owner is not vanished
                         this.setInvisible(!this.isInvisible());
                     } else {
                         if (ownerVanish && canGlow)
                             if (((CraftPlayer) player).getHandle().isInvisible())
-                                glowHandler(true);
+                                GlowAPI.setGlowing(getEntity(), player, true);
                     }
                 }
             }
