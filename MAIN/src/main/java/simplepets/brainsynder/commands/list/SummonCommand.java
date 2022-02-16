@@ -180,8 +180,5 @@ public class SummonCommand extends PetSubCommand {
             }
             sender.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
         });
-
-
-
     }
 }

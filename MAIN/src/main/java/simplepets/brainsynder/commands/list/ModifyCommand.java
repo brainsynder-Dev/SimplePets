@@ -100,8 +100,16 @@ public class ModifyCommand extends PetSubCommand {
             String message = MessageFile.getTranslation(MessageOption.MODIFY_COMPOUND).replace("{compound}", compound.toString());
             if (!message.isEmpty()) sender.sendMessage(message.replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
             user.getPetEntity(type).ifPresent(entityPet -> {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.MODIFY_APPLIED).replace("{type}", type.getName()));
-                entityPet.applyCompound(compound);
+                try {
+                    entityPet.applyCompound(compound);
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.MODIFY_APPLIED).replace("{type}", type.getName()));
+                }catch (Exception e) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_NBT));
+
+                    String errorMessage = MessageFile.getTranslation(MessageOption.INVALID_NBT_MESSAGE)
+                            .replace("{message}", e.getMessage().replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
+                    if (!errorMessage.isEmpty()) sender.sendMessage(errorMessage);
+                }
             });
         });
 

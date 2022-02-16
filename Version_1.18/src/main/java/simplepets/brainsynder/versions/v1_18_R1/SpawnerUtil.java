@@ -80,7 +80,13 @@ public class SpawnerUtil implements ISpawnUtil {
                 customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
             }
 
-            if ((compound != null) && (!compound.hasNoTags())) customEntity.applyCompound(compound);
+            if ((compound != null) && (!compound.hasNoTags())) {
+                try {
+                    customEntity.applyCompound(compound);
+                } catch (Exception e) {
+                    return BiOptional.of(null, ChatColor.RED + e.getMessage());
+                }
+            }
 
             customEntity.setInvisible(false);
             customEntity.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
