@@ -33,6 +33,13 @@ public class PetEventListener implements Listener {
         if (!player.hasPermission("pet.name.color.hex") || !ConfigOption.INSTANCE.RENAME_COLOR_HEX.getValue())
             name = Colorize.removeHexColor(name);
 
+        if (ConfigOption.INSTANCE.RENAME_LIMIT_CHARS_ENABLED.getValue()) {
+            int limit = ConfigOption.INSTANCE.RENAME_LIMIT_CHARS_NUMBER.getValue();
+            if (name.length() > limit) {
+                name = name.substring(0, limit);
+            }
+        }
+
         event.setName(name);
     }
 
