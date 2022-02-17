@@ -1,5 +1,6 @@
 package simplepets.brainsynder.listeners;
 
+import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,6 +12,8 @@ import simplepets.brainsynder.api.event.user.PetRenameEvent;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
+
+import java.util.List;
 
 public class PetEventListener implements Listener {
 
@@ -26,6 +29,22 @@ public class PetEventListener implements Listener {
         if ((rawPattern != null) && (!rawPattern.isEmpty())) {
             if (event.getName().matches(rawPattern)) name = null;
         }
+        List<String> blockedWords = ConfigOption.INSTANCE.RENAME_BLOCKED_WORDS.getValue();
+        if (!blockedWords.isEmpty()) {
+            for (String word : blockedWords) {
+                if (word.startsWith("[") && word.endsWith("]")) {
+                    if (name.contains(AdvString.between("[", "]", word))) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+                if (name.contains(word)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
         name = Colorize.translateBungeeHex(name);
 
         if (!player.hasPermission("pet.name.color") || !ConfigOption.INSTANCE.RENAME_COLOR_ENABLED.getValue())
