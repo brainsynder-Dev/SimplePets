@@ -4,7 +4,6 @@ import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
-import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
@@ -23,6 +22,7 @@ import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
@@ -65,11 +65,11 @@ public abstract class EntityPet extends Mob implements IEntityPet {
 
 
     private final double jumpHeight = 0.5D;
-    private final boolean isGlowing = false;
+    private boolean isGlowing = false;
     private boolean frozen = false;
     private boolean silent = false;
     private boolean visible = true;
-    private DyeColorWrapper glowColor = DyeColorWrapper.WHITE;
+    private ChatColor glowColor = ChatColor.WHITE;
     private boolean ignoreVanish = false;
     private int standTime = 0;
     private int blockX = 0;
@@ -149,15 +149,15 @@ public abstract class EntityPet extends Mob implements IEntityPet {
     }
 
     @Override
-    public void setGlowColor(DyeColorWrapper glowColor) {
+    public void setGlowColor(ChatColor glowColor) {
         if (this.glowColor == glowColor) return; // No need for redundant setting
 
         this.glowColor = glowColor;
-        GlowAPI.setColor(getEntity(), getPetUser().getPlayer(), glowColor);
+        GlowAPI.setRawColor(getEntity(), glowColor);
     }
 
     @Override
-    public DyeColorWrapper getGlowColor() {
+    public ChatColor getGlowColor() {
         return glowColor;
     }
 
@@ -272,7 +272,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
             setPetName(name);
         }
 
-        if (object.hasKey("glow-color")) setGlowColor(object.getEnum("glow-color", DyeColorWrapper.class, DyeColorWrapper.WHITE));
+        if (object.hasKey("glow-color")) setGlowColor(object.getEnum("glow-color", ChatColor.class, ChatColor.WHITE));
         if (object.hasKey("silent")) silent = object.getBoolean("silent");
         if (object.hasKey("visible")) setPetVisible(object.getBoolean("visible"));
 
@@ -505,12 +505,12 @@ public abstract class EntityPet extends Mob implements IEntityPet {
                 if (isPetVisible()) {
                     if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
                         if (isGlowing && (!ownerVanish))
-                            GlowAPI.setGlowing(getEntity(), player, false);  // If the pet is glowing & owner is not vanished
+                            glowHandler(player, false);  // If the pet is glowing & owner is not vanished
                         this.setInvisible(!this.isInvisible());
                     } else {
                         if (ownerVanish && canGlow)
                             if (((CraftPlayer) player).getHandle().isInvisible())
-                                GlowAPI.setGlowing(getEntity(), player, true);
+                                glowHandler(player, true);
                     }
                 }
             }
@@ -566,51 +566,14 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
 
-    private void glowHandler(boolean glow) {
-//        try {
-            net.minecraft.world.entity.Entity pet = this;
-            if (this instanceof IEntityControllerPet) {
-                org.bukkit.entity.Entity ent = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
-                pet = ((CraftEntity) ent).getHandle();
-            }
-            // handleInvisible(glow, pet);
-//        } catch (IllegalAccessException ignored) {}
+    private void glowHandler(Player player, boolean glow) {
+        try {
+            Entity entity = getEntity();
+            if (this instanceof IEntityControllerPet) return;
+            GlowAPI.setGlowing(entity, player, glow);
+            isGlowing = glow;
+        } catch (Exception ignored) {}
     }
-
-//    private void handleInvisible (boolean glow, net.minecraft.world.entity.Entity pet) throws IllegalAccessException {
-//        SynchedEntityData toCloneDataWatcher = pet.getEntityData();
-//        SynchedEntityData newDataWatcher = new SynchedEntityData(pet);
-//
-//        String fieldName = "f";
-//        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> currentHashMap;
-//        try {
-//            currentHashMap = (Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>>)FieldUtils.readDeclaredField(toCloneDataWatcher, fieldName, true);
-//        }catch (Exception f){
-//            return;
-//        }
-//
-//        Int2ObjectOpenHashMap<SynchedEntityData.DataItem<?>> newHashMap = new Int2ObjectOpenHashMap<>();
-//        for (Integer integer : currentHashMap.keySet()) {
-//            newHashMap.put(integer, currentHashMap.get(integer).copy());
-//        }
-//
-//        SynchedEntityData.DataItem item = newHashMap.get(0);
-//        byte initialBitMask = (Byte) item.getValue();
-//
-//        // @link net.minecraft.world.entity.Entity#setGlowingTag(boolean)
-//        byte bitMaskIndex = (byte) 6;
-//        isGlowing = glow;
-//        if (glow) {
-//            item.setValue((byte) (initialBitMask | 1 << bitMaskIndex));
-//        } else {
-//            item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
-//        }
-//        FieldUtils.writeDeclaredField(newDataWatcher, fieldName, newHashMap, true);
-//
-//
-//        ClientboundSetEntityDataPacket metadataPacket = new ClientboundSetEntityDataPacket(pet.getId(), newDataWatcher, true);
-//        ((CraftPlayer) getPetUser().getPlayer()).getHandle().connection.send(metadataPacket);
-//    }
 
     // TODO: This literally fixed the shit with p2 and i'm so fucking mad
     public CraftEntity getBukkitEntity() {

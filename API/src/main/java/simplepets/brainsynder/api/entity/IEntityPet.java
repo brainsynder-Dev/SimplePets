@@ -1,7 +1,7 @@
 package simplepets.brainsynder.api.entity;
 
 import lib.brainsynder.nbt.StorageTagCompound;
-import lib.brainsynder.utils.DyeColorWrapper;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import simplepets.brainsynder.api.entity.misc.IBurnablePet;
 import simplepets.brainsynder.api.entity.misc.IEntityBase;
@@ -125,10 +125,10 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      *
      * @param color
      */
-    void setGlowColor (DyeColorWrapper color);
+    void setGlowColor (ChatColor color);
 
     /**
      * Returns what color the pet will glow as
      */
-    DyeColorWrapper getGlowColor ();
+    ChatColor getGlowColor ();
 }

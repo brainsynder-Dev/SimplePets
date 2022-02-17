@@ -16,6 +16,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.phys.Vec3;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -23,17 +24,21 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
+import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_18_R1.entity.special.EntityControllerPet;
+import simplepets.brainsynder.versions.v1_18_R1.utils.GlowAPI;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -52,6 +57,8 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     private boolean store = true;
     private boolean minime = false;
     private boolean frozen = false;
+    private boolean isGlowing = false;
+    private ChatColor glowColor = ChatColor.WHITE;
     private PetUser user;
     // private AnimationController walking = null; TODO: I disabled the animations
     private boolean restricted;
@@ -90,6 +97,19 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     public void setPetVisible(boolean visible) {
         this.visible = visible;
         setInvisible(!visible);
+    }
+
+    @Override
+    public void setGlowColor(ChatColor glowColor) {
+        if (this.glowColor == glowColor) return; // No need for redundant setting
+
+        this.glowColor = glowColor;
+        GlowAPI.setColor(getEntity(), getPetUser().getPlayer(), glowColor);
+    }
+
+    @Override
+    public ChatColor getGlowColor() {
+        return glowColor;
     }
 
     @Override
@@ -171,6 +191,11 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
 
         // Updates the size of the controller
         if (pet.isBaby() != isSmallStand()) pet.setBaby(isSmallStand());
+        if (isInvisible()) {
+            if (!isGlowing) glowHandler(getPetUser().getPlayer(), true);
+        } else {
+            if (isGlowing) glowHandler(getPetUser().getPlayer(), false);
+        }
 
         // Updates The Pets Name
         String name = pet.getEntity().getCustomName();
@@ -178,6 +203,17 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         if (name.isEmpty()) return;
         if (name.equals(getEntity().getCustomName())) return;
         getEntity().setCustomName(name);
+    }
+
+    private void glowHandler(Player player, boolean glow) {
+        try {
+            Entity entity = getEntity();
+            if (this instanceof IEntityControllerPet) {
+                entity = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
+            }
+            GlowAPI.setGlowing(entity, player, glow);
+            isGlowing = glow;
+        } catch (Exception ignored) {}
     }
 
     @Override
@@ -232,6 +268,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         object.setBoolean("small", isSmallStand());
         object.setBoolean("clone", isOwner());
         object.setBoolean("restricted", restricted);
+        object.setEnum("glow-color", getGlowColor());
         if (!isPetVisible()) object.setBoolean("visible", !isPetVisible());
 
         StorageTagCompound items = new StorageTagCompound();
@@ -254,6 +291,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
 
     @Override
     public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("glow-color")) setGlowColor(object.getEnum("glow-color", ChatColor.class, ChatColor.WHITE));
         if (object.hasKey("restricted")) setRestricted(object.getBoolean("restricted"));
         if (object.hasKey("small")) setSmallStand(object.getBoolean("small"));
         if (object.hasKey("clone")) setOwner(object.getBoolean("clone"));

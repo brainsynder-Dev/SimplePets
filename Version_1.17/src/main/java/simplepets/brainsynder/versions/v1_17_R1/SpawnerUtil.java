@@ -5,6 +5,7 @@ import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.storage.RandomCollection;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
@@ -21,6 +22,7 @@ import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.versions.v1_17_R1.entity.EntityPet;
 import simplepets.brainsynder.versions.v1_17_R1.entity.special.EntityControllerPet;
+import simplepets.brainsynder.versions.v1_17_R1.utils.GlowAPI;
 
 import java.util.*;
 
@@ -31,6 +33,7 @@ public class SpawnerUtil implements ISpawnUtil {
     public SpawnerUtil () {
         petMap = new HashMap<>();
         spawnCount = new HashMap<>();
+        GlowAPI.init();
 
         for (PetType type : PetType.values()) {
             if (type.getEntityClass() == null) continue;

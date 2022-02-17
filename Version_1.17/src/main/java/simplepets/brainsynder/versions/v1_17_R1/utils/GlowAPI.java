@@ -1,14 +1,15 @@
 package simplepets.brainsynder.versions.v1_17_R1.utils;
 
-import lib.brainsynder.utils.DyeColorWrapper;
+import lib.brainsynder.utils.AdvString;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
 import net.minecraft.network.protocol.game.ClientboundSetPlayerTeamPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -23,21 +24,42 @@ import java.util.UUID;
  * It has been extensively modified to fix the need of SimplePets
  */
 public class GlowAPI {
-    private static final Map<UUID, DyeColorWrapper> COLOR_MAP;
-    private static final Scoreboard SCOREBOARD;
+    private static Map<ChatColor, String> COLOR_KEY;
+    private static Map<UUID, ChatColor> COLOR_MAP;
+    private static Scoreboard SCOREBOARD;
 
-    static {
+
+    public static void init () {
+        COLOR_KEY = new HashMap<>();
         COLOR_MAP = new HashMap<>();
         SCOREBOARD = new Scoreboard();
-        for (DyeColorWrapper color : DyeColorWrapper.values()) {
-            SCOREBOARD.addPlayerTeam(String.valueOf(color.getChatChar())).setColor(ChatFormatting.getByCode(color.getChatChar()));
+        try {
+            for (ChatColor color : ChatColor.values()) {
+                if (!color.isColor()) continue;
+                ChatFormatting formatting = ChatFormatting.getByName(color.name());
+                if (formatting == null) formatting = ChatFormatting.getByCode(color.toString().toCharArray()[1]);
+                try {
+                    if (formatting == null) formatting = ChatFormatting.valueOf(color.name());
+                } catch (Exception ignored) {
+                }
+
+
+                String name = color.name() + AdvString.scramble(AdvString.scramble("1234"));
+                COLOR_KEY.put(color, name);
+                SCOREBOARD.addPlayerTeam(name).setColor(formatting);
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void setColor (Entity entity, Player player, DyeColorWrapper color) {
+    public static void setRawColor (Entity entity, ChatColor color) {
         COLOR_MAP.put(entity.getUniqueId(), color);
+    }
+
+    public static void setColor (Entity entity, Player player, ChatColor color) {
         try {
-            PlayerTeam team = SCOREBOARD.getPlayersTeam(String.valueOf(color.getChatChar()));
+            PlayerTeam team = SCOREBOARD.getPlayerTeam(COLOR_KEY.get(color));
             if (entity instanceof Player) {
                 SCOREBOARD.addPlayerToTeam(entity.getName(), team);
             } else {
@@ -53,7 +75,7 @@ public class GlowAPI {
     public static void removeColor (Entity entity, Player player) {
         if (!COLOR_MAP.containsKey(entity.getUniqueId())) return;
         try {
-            PlayerTeam team = SCOREBOARD.getPlayersTeam(String.valueOf(COLOR_MAP.get(entity.getUniqueId()).getChatChar()));
+            PlayerTeam team = SCOREBOARD.getPlayerTeam(COLOR_KEY.get(COLOR_MAP.get(entity.getUniqueId())));
             ClientboundSetPlayerTeamPacket packet = ClientboundSetPlayerTeamPacket.createPlayerPacket(team, String.valueOf(entity.getUniqueId()), ClientboundSetPlayerTeamPacket.Action.REMOVE);
             ((CraftPlayer) player).getHandle().connection.send(packet);
         } catch (Exception x) {
@@ -63,6 +85,13 @@ public class GlowAPI {
 
 
     public static void setGlowing(Entity entity, Player player, boolean glow) {
+//        Disabled till we can fix the issue with Scoreboard Teams & Bungee
+//        if (glow) {
+//            setColor(entity, player, COLOR_MAP.getOrDefault(entity.getUniqueId(), ChatColor.WHITE));
+//        }else{
+//            removeColor(entity, player);
+//        }
+
         try {
             net.minecraft.world.entity.Entity gEntity = ((CraftEntity) entity).getHandle();
             SynchedEntityData toCloneDataWatcher = gEntity.getEntityData();
