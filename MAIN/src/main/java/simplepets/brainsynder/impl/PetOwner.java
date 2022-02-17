@@ -23,8 +23,8 @@ import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ParticleManager;
 import simplepets.brainsynder.sql.PlayerSQL;
@@ -105,16 +105,13 @@ public class PetOwner implements PetUser {
                     });
                 }
 
-                if (compound.hasKey("spawned_pets") && PetCore.getInstance().getConfiguration().getBoolean("Respawn-Last-Pet-On-Login", true)) {
+                if (compound.hasKey("spawned_pets") && ConfigOption.INSTANCE.RESPAWN_LAST_PET_LOGIN.getValue()) {
                     StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
                     ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
                     list.getList().forEach(storageBase -> {
                         StorageTagCompound tag = (StorageTagCompound) storageBase;
                         respawnPets.remove(tag.getCompoundTag("data"));
                         PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                            // Will prevent people from spawning pets they did not purchase if enabled
-                            if ((!ownedPets.contains(type)) && PetCore.getInstance().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) return;
-
                             SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
                                 if (!config.isEnabled()) return;
                                 if (!type.isSupported()) return;
@@ -182,9 +179,6 @@ public class PetOwner implements PetUser {
         List<BiOptional<PetType, StorageTagCompound>> laterTasks = Lists.newArrayList();
         this.respawnPets.forEach(tag -> {
             PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                // Will prevent people from spawning pets they did not purchase if enabled
-                if ((!ownedPets.contains(type)) && PetCore.getInstance().getConfiguration().getBoolean(Config.ECONOMY_TOGGLE, false)) return;
-
                 SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
                     if (!config.isEnabled()) return;
                     if (!type.isSupported()) return;
@@ -588,7 +582,7 @@ public class PetOwner implements PetUser {
 
     @Override
     public boolean canSpawnMorePets() {
-        int maxAmount = PetCore.getInstance().getConfiguration().getInt("PetToggles.Default-Spawn-Limit");
+        int maxAmount = ConfigOption.INSTANCE.PET_TOGGLES_SPAWN_LIMIT.getValue();
         if (!getPlayer().isOnline()) return false;
         if (getPlayer().isOp()) return true;
         if (getPlayer().hasPermission("pet.amount.bypass")) return true;

@@ -8,6 +8,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.utils.Utilities;
@@ -42,11 +43,11 @@ public class ListCommand extends PetSubCommand {
                 color = ChatColor.YELLOW; // yellow
                 tooltip = color + "NOT REGISTERED";
             }else if (type.isInDevelopment()
-                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+                    && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue())) {
                 color = ChatColor.GRAY;
                 tooltip = color + "IN DEVELOPMENT";
             }
-            if (getPlugin().getConfiguration().getBoolean("ConfigToggles.HideCertainPets", false)) {
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_LIST_RESTRICTIONS.getValue()) {
                 if (color != ChatColor.GREEN) continue;
                 if (!Utilities.hasPermission(sender, type.getPermission())) continue;
             }

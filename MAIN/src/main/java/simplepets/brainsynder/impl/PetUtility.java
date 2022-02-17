@@ -8,9 +8,9 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.plugin.utils.IPetUtilities;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.files.Config;
 
 import java.util.List;
 
@@ -77,12 +77,12 @@ public class PetUtility implements IPetUtilities {
 
     @Override
     public String translatePetName(String name) {
-        boolean color = SimplePets.getConfiguration().getBoolean(Config.COLOR);
-        boolean magic = SimplePets.getConfiguration().getBoolean(Config.MAGIC);
+        boolean color = ConfigOption.INSTANCE.RENAME_COLOR_ENABLED.getValue();
+        boolean magic = ConfigOption.INSTANCE.RENAME_COLOR_MAGIC.getValue();
         if (!magic) name = name.replace("&k", "");
         if (!color) return name;
 
-        if (SimplePets.getConfiguration().getBoolean(Config.HEX)) {
+        if (ConfigOption.INSTANCE.RENAME_COLOR_HEX.getValue()) {
             name = Colorize.translateBungeeHex(name);
         } else {
             name = Colorize.translateBukkit(name);

@@ -11,7 +11,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
@@ -19,6 +18,7 @@ import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.MessageFile;
@@ -85,7 +85,7 @@ public class SelectionMenu extends CustomInventory {
         for (PetType type : PetType.values()) {
             if (!type.isSupported()) continue;
             if (type.isInDevelopment()
-                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false)))
+                    && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue()))
                 continue;
             Optional<IPetConfig> optional = SimplePets.getPetConfigManager().getPetConfig(type);
             if (!optional.isPresent()) continue;
@@ -138,13 +138,14 @@ public class SelectionMenu extends CustomInventory {
             placeHolder--;
         }
 
-        boolean removeNoPerms = PetCore.getInstance().getConfiguration().getBoolean("Permissions.Only-Show-Pets-Player-Can-Access");
+        boolean removeNoPerms = ConfigOption.INSTANCE.PERMISSIONS_PLAYER_ACCESS.getValue();
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
             PetTypeStorage storage = new PetTypeStorage(type);
             PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, storage.getType(), storage.getItem());
 
-            if (Utilities.hasPermission(player, type.getPermission())) {
+            if (Utilities.hasPermission(player, type.getPermission())
+                    || (user.getOwnedPets().contains(type) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
                 Bukkit.getPluginManager().callEvent(event);
             } else {
                 if (!removeNoPerms) {
@@ -157,7 +158,7 @@ public class SelectionMenu extends CustomInventory {
                 petTypes.add(storage.setItem(event.getItem()));
             }
         }
-        if ((petTypes.getSize() == 0) && (PetCore.getInstance().getConfiguration().getBoolean("Permissions.Needs-Pet-Permission-for-GUI"))) {
+        if ((petTypes.getSize() == 0) && (ConfigOption.INSTANCE.PERMISSIONS_OPEN_GUI.getValue())) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
             return;
         }

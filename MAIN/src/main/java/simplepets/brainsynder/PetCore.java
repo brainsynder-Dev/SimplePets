@@ -23,6 +23,7 @@ import simplepets.brainsynder.api.pet.PetConfigManager;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.IPetsPlugin;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.plugin.utils.IPetUtilities;
 import simplepets.brainsynder.api.user.UserManagement;
 import simplepets.brainsynder.commands.PetsCommand;
@@ -117,11 +118,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
+        configuration.initValues();
         taskTimer.label("init config");
 
-        reloaded = configuration.getBoolean("Reload-Detected", false);
+        reloaded = ConfigOption.INSTANCE.RELOAD_DETECT.getValue();
         debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: " + reloaded);
-        configuration.remove("Reload-Detected");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
         new InventorySQL();
@@ -232,7 +233,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     "To fix those, Simply RESTART your server",
                     "------------------------------------"
             ).setSync(false).setBroadcast(true).setLevel(DebugLevel.CRITICAL));
-            configuration.set("Reload-Detected", true);
+            ConfigOption.INSTANCE.RELOAD_DETECT.setValue(true, true);
         }
 
         configuration = null;
@@ -243,11 +244,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     }
 
     private void handleUpdateUtils() {
-        if (!configuration.getBoolean("Update-Checking.Enabled", true)) return;
-        int time = configuration.getInt("Update-Checking.time", 12);
+        if (!ConfigOption.INSTANCE.UPDATE_CHECK_ENABLED.getValue()) return;
+        int time = ConfigOption.INSTANCE.UPDATE_CHECK_TIME.getValue();
         TimeUnit unit;
 
-        String timeunit = configuration.getString("Update-Checking.unit", "HOURS");
+        String timeunit = ConfigOption.INSTANCE.UPDATE_CHECK_UNIT.getValue();
         try {
             unit = TimeUnit.valueOf(timeunit);
         } catch (Exception e) {
@@ -256,7 +257,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
 
         debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
-        if ((Premium.getDownloadType() == Premium.DownloadType.JENKINS) || configuration.getBoolean("Update-Checking.Check-Dev-Builds", true)) {
+        if ((Premium.getDownloadType() == Premium.DownloadType.JENKINS) || ConfigOption.INSTANCE.UPDATE_CHECK_DEV_BUILDS.getValue()) {
             updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
                     .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
                     .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
@@ -326,7 +327,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug.debug(DebugLevel.HIDDEN, "Registering plugin listeners");
 
         PluginManager manager = Bukkit.getPluginManager();
-        if (configuration.getBoolean("PetToggles.MobSpawnBypass", true))
+        if (ConfigOption.INSTANCE.PET_TOGGLES_SPAWN_BYPASS.getValue())
             manager.registerEvents(new PetSpawnListener(), this);
         manager.registerEvents(new AddonGUIListener(), this);
         manager.registerEvents(new ChunkUnloadListener(), this);
@@ -437,7 +438,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void handleMetrics() {
         SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Loading Metrics");
         Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("stupid_config_option_for_gui_command", () -> String.valueOf(configuration.getBoolean("Simpler-Pet-GUI-Command", false))));
+        metrics.addCustomChart(new Metrics.SimplePie("stupid_config_option_for_gui_command", () -> String.valueOf(ConfigOption.INSTANCE.SIMPLER_GUI.getValue())));
         metrics.addCustomChart(new Metrics.AdvancedPie("spawned_pet_counter", this::getSpawnedPetCounts));
         metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
         metrics.addCustomChart(new Metrics.DrilldownPie("loaded_addons", () -> {

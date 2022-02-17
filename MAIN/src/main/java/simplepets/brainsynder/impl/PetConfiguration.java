@@ -17,8 +17,8 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.*;
 import simplepets.brainsynder.api.pet.annotations.DisableDefault;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.debug.DebugLevel;
-import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.utils.Keys;
 import simplepets.brainsynder.utils.Utilities;
 
@@ -93,8 +93,8 @@ public class PetConfiguration implements PetConfigManager {
                     for (CommandReason reason : CommandReason.values()) reasons.add(reason.name(), new JsonArray());
                     setDefault("commands", reasons);
 
-                    setDefault("ride_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Ride-Speed"));
-                    setDefault("walk_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Walk-Speed"));
+                    setDefault("ride_speed", ConfigOption.INSTANCE.PET_TOGGLES_RIDE_SPEED.getValue());
+                    setDefault("walk_speed", ConfigOption.INSTANCE.PET_TOGGLES_WALK_SPEED.getValue());
                     setDefault("fly", canFlyDefault(type));
                     setDefault("float_down", false);
 
@@ -162,21 +162,21 @@ public class PetConfiguration implements PetConfigManager {
 
         @Override
         public boolean canHat(Player player) {
-            if (!plugin.getConfiguration().getBoolean(Config.HATS)) return false;
+            if (!ConfigOption.INSTANCE.PET_TOGGLES_HAT.getValue()) return false;
             if (JSON.getBoolean("hat", true)) return Utilities.hasPermission(player, type.getPermission("hat"));
             return false;
         }
 
         @Override
         public boolean canMount(Player player) {
-            if (!plugin.getConfiguration().getBoolean(Config.MOUNTABLE)) return false;
+            if (!ConfigOption.INSTANCE.PET_TOGGLES_MOUNTABLE.getValue()) return false;
             if (JSON.getBoolean("mount", true)) return Utilities.hasPermission(player, type.getPermission("mount"));
             return false;
         }
 
         @Override
         public boolean canFly(Player player) {
-            if (plugin.getConfiguration().getBoolean(Config.FLYABLE)) return true;
+            if (!ConfigOption.INSTANCE.PET_TOGGLES_FLYABLE.getValue()) return true;
             if (JSON.getBoolean("fly", true)) return Utilities.hasPermission(player, type.getPermission("fly"));
             return false;
         }
@@ -193,12 +193,12 @@ public class PetConfiguration implements PetConfigManager {
 
         @Override
         public double getRideSpeed() {
-            return JSON.getDouble("ride_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Ride-Speed"));
+            return JSON.getDouble("ride_speed", ConfigOption.INSTANCE.PET_TOGGLES_RIDE_SPEED.getValue());
         }
 
         @Override
         public double getWalkSpeed() {
-            return JSON.getDouble("walk_speed", plugin.getConfiguration().getDouble("PetToggles.Default-Walk-Speed"));
+            return JSON.getDouble("walk_speed", ConfigOption.INSTANCE.PET_TOGGLES_WALK_SPEED.getValue());
         }
 
         @Override

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.permissions.ServerOperator;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.debug.DebugLogger;
@@ -52,8 +53,10 @@ public class Debug implements DebugLogger {
             if (core.isEnabled() && (configuration != null)) {
                 runnable = () -> {
                     if ((configuration != null) && (builder.getLevel().getLevelName() != null)) {
-                        if (!configuration.getBoolean("Debug.Enabled")) return;
-                        if (!configuration.getBoolean("Debug.Levels."+builder.getLevel().getLevelName(), true)) return;
+                        if (!ConfigOption.INSTANCE.DEBUG_ENABLED.getValue()) return;
+                        if ((builder.getLevel() == DebugLevel.NORMAL) && (!ConfigOption.INSTANCE.DEBUG_NORMAL_LEVEL.getValue())) return;
+                        if ((builder.getLevel() == DebugLevel.WARNING) && (!ConfigOption.INSTANCE.DEBUG_WARNING_LEVEL.getValue())) return;
+                        if ((builder.getLevel() == DebugLevel.ERROR) && (!ConfigOption.INSTANCE.DEBUG_ERROR_LEVEL.getValue())) return;
                     }
                     if (builder.broadcast())
                         Bukkit.getOnlinePlayers().stream().filter(ServerOperator::isOp).forEach(player -> {
@@ -154,7 +157,7 @@ public class Debug implements DebugLogger {
                     messageBuilder.append(line).append(", ");
                     num++;
                 }
-                log.set(String.valueOf(builder.timestamp), "["+builder.getLevel()+"] "+messageBuilder.toString());
+                log.set(String.valueOf(builder.timestamp), "["+builder.getLevel()+"] "+ messageBuilder);
                 quickLog.set(s, log);
             }
         });

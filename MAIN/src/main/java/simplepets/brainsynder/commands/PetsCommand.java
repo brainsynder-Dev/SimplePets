@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.list.*;
 import simplepets.brainsynder.utils.Premium;
 
@@ -30,7 +31,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new ListCommand(plugin));
         registerSub(new GUICommand(plugin));
         registerSub(new DataCommand(plugin));
-        if (plugin.getConfiguration().getBoolean("RenamePet.Enabled", true))
+        if (ConfigOption.INSTANCE.RENAME_ENABLED.getValue())
             registerSub(new RenameCommand(plugin));
         registerSub(new PurchasedCommand (plugin));
         registerSub(new PermissionsCommand(this));
@@ -54,7 +55,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        if (plugin.getConfiguration().getBoolean("Simpler-Pet-GUI-Command", false)
+        if (ConfigOption.INSTANCE.SIMPLER_GUI.getValue()
                 && (sender instanceof Player)
                 && (args.length == 0)) {
             ((Player) sender).performCommand("pet gui");

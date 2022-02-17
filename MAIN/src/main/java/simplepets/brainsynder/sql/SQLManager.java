@@ -2,8 +2,8 @@ package simplepets.brainsynder.sql;
 
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.debug.DebugLevel;
-import simplepets.brainsynder.files.Config;
 
 import java.io.File;
 import java.io.IOException;
@@ -26,14 +26,13 @@ public abstract class SQLManager {
     }
 
     public SQLManager(boolean forceSqlite) {
-        PetCore plugin = PetCore.getInstance();
-        tablePrefix = plugin.getConfiguration().getString("MySQL.Table");
+        tablePrefix = ConfigOption.INSTANCE.MYSQL_TABLE.getValue();
         if (!tablePrefix.matches("^[_A-Za-z0-9]+$")) {
             SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Table prefix " + tablePrefix + " is not alphanumeric. Using simplepets...", true);
             tablePrefix = "simplepets";
         }
-        boolean enabled = plugin.getConfiguration().getBoolean("MySQL.Enabled", false);
-        databaseName = plugin.getConfiguration().getString("MySQL.DatabaseName");
+        boolean enabled = ConfigOption.INSTANCE.MYSQL_ENABLED.getValue();
+        databaseName = ConfigOption.INSTANCE.MYSQL_DATABASE.getValue();
 
         if (forceSqlite || !enabled) {
             //Debug.debug(DebugLevel.DEBUG, getClass().getSimpleName()+" Using SQLite - forced", true);
@@ -54,19 +53,18 @@ public abstract class SQLManager {
     // Forgot about thread safety and got told off for it in AT
     public Connection implementConnection() {
         Connection connection = null;
-        Config config = PetCore.getInstance().getConfiguration();
         if (usingSqlite) {
             connection = loadSqlite();
         } else {
             StringBuilder url = new StringBuilder();
-            url.append("jdbc:mysql://").append(config.getString("MySQL.Host")).append(":")
-                    .append(config.getInt("MySQL.Port")).append("/").append(databaseName);
-            url.append("?useSSL=").append(config.getBoolean("MySQL.Options.UseSSL"));
+            url.append("jdbc:mysql://").append(ConfigOption.INSTANCE.MYSQL_HOST.getValue()).append(":")
+                    .append(ConfigOption.INSTANCE.MYSQL_PORT.getValue()).append("/").append(databaseName);
+            url.append("?useSSL=").append(ConfigOption.INSTANCE.MYSQL_SSL.getValue());
             url.append("&autoReconnect=true");
 
             try {
                 connection = DriverManager.getConnection(url.toString(),
-                        config.getString("MySQL.Login.Username"), config.getString("MySQL.Login.Password"));
+                        ConfigOption.INSTANCE.MYSQL_USERNAME.getValue(), ConfigOption.INSTANCE.MYSQL_PASSWORD.getValue());
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }

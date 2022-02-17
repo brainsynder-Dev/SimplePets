@@ -18,6 +18,7 @@ import simplepets.brainsynder.api.other.ParticleHandler;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_18_R1.entity.EntityPet;
 
@@ -132,8 +133,8 @@ public class PathfinderWalkToPlayer extends Goal {
     private int getStoppingDistance() {
         if (SimplePets.getConfiguration() == null) return 0;
 
-        return large ? SimplePets.getConfiguration().getInt("Pathfinding.Stopping-Distance_LargePets")
-                : SimplePets.getConfiguration().getInt("Pathfinding.Stopping-Distance");
+        return large ? ConfigOption.INSTANCE.PATHFINDING_STOP_DISTANCE_LARGE.getValue()
+                : ConfigOption.INSTANCE.PATHFINDING_STOP_DISTANCE_SMALL.getValue();
     }
 
     /**

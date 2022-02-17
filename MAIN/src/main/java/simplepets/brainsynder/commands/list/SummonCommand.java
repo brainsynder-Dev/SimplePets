@@ -16,6 +16,7 @@ import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
@@ -71,7 +72,7 @@ public class SummonCommand extends PetSubCommand {
 
         PetType type = petType.get();
         if (type.isInDevelopment()
-                && (!PetCore.getInstance().getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+                && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue())) {
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
             return;
         }

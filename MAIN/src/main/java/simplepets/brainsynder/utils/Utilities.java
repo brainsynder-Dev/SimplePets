@@ -18,7 +18,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
@@ -26,6 +25,7 @@ import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -61,7 +61,7 @@ public class Utilities {
         timer.start();
         Player player = user.getPlayer();
         if (type.isInDevelopment()
-                && (!PetCore.getInstance().getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false))) {
+                && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue())) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
             timer.stop("in-development pet - end");
             return false;
@@ -79,6 +79,8 @@ public class Utilities {
             return false;
         }
 
+        // || (user.getOwnedPets().contains(type) && PetCore.getInstance().getConfiguration().getBoolean("Utilize-Purchased-Pets", false))
+        // TODO: Add utilize-purchased-pets config option here...
         if (!Utilities.hasPermission(player, type.getPermission())) {
             timer.stop("no permission - end");
             return false;
@@ -176,13 +178,13 @@ public class Utilities {
         //if (sender.isOp()) return true;
 
         int value = getPermission(sender, permission, strict);
-        if (PetCore.getInstance().getConfiguration().getStringList("Permissions.Ignored-List").contains(permission))
+        if (ConfigOption.INSTANCE.PERMISSIONS_IGNORE_LIST.getValue().contains(permission))
             return true;
         return value == 1;
     }
 
     public static int getPermission(CommandSender sender, String permission, boolean strict) {
-        if (PetCore.getInstance().getConfiguration().getBoolean("Permissions.Enabled")) {
+        if (ConfigOption.INSTANCE.PERMISSIONS_ENABLED.getValue()) {
             if (strict) {
                 for (PermissionAttachmentInfo info : sender.getEffectivePermissions()) {
                     if (info.getPermission().equalsIgnoreCase(permission)) {

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
@@ -104,7 +105,7 @@ public class RenameCommand extends PetSubCommand {
                 return;
             }
 
-            RenameType rename = getPlugin().getConfiguration().getEnum("RenamePet.Type", RenameType.class);
+            RenameType rename = RenameType.getType(ConfigOption.INSTANCE.RENAME_TYPE.getValue(), RenameType.ANVIL);
             switch (rename) {
                 case CHAT:
                     getPlugin().getRenameManager().renameViaChat(user, type);

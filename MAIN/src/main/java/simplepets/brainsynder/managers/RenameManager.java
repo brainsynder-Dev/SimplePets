@@ -8,11 +8,11 @@ import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.user.PetRenameEvent;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
@@ -64,8 +64,8 @@ public class RenameManager {
     public void renameViaSign (PetUser user, PetType type) {
         Plugin protocol = plugin.getServer().getPluginManager().getPlugin("ProtocolLib");
         if ((protocol == null) || (!protocol.isEnabled())) {
-            if (plugin.getConfiguration().getEnum("RenamePet.Type", RenameType.class) == RenameType.SIGN)
-                plugin.getConfiguration().setEnum("RenamePet.Type", RenameType.ANVIL);
+            if (RenameType.getType(ConfigOption.INSTANCE.RENAME_TYPE.getValue(), RenameType.ANVIL) == RenameType.SIGN)
+                ConfigOption.INSTANCE.RENAME_TYPE.setValue(RenameType.ANVIL.name(), true);
             return;
         }
         simplepets.brainsynder.hooks.ProtocolHook.renameViaSign(user, type);

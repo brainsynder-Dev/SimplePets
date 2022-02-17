@@ -5,6 +5,7 @@ import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.PetsCommand;
@@ -35,7 +36,7 @@ public class HelpCommand extends PetSubCommand {
                     return;
                 }
                 if (!permission.defaultAllow() && !sender.hasPermission(permission.permission())) return;
-                if (getPlugin().getConfiguration().getBoolean("ConfigToggles.IgnoreAllowsDefault", false)) {
+                if (ConfigOption.INSTANCE.MISC_TOGGLES_IGNORE_ALLOWS_DEFAULT.getValue()) {
                     if (!sender.hasPermission(permission.permission())) return;
                 }
             }

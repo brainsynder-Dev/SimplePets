@@ -8,6 +8,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.files.Config;
 
 public class DamageListener implements Listener {
@@ -28,13 +29,13 @@ public class DamageListener implements Listener {
                 Config configuration = PetCore.getInstance().getConfiguration();
 
                 if (config.canFly(player)) { // Checks if a pet is a flyable pet
-                    if (!configuration.getBoolean("PetToggles.FallDamage.Flyable-Pets", true)) return;
+                    if (!ConfigOption.INSTANCE.PET_TOGGLES_FALL_DAMAGE_FLY.getValue()) return;
                     event.setCancelled(true);
                     return;
                 }
 
                 // Pet is not flyable...
-                if (!configuration.getBoolean("PetToggles.FallDamage.Non-Flyable-Pets", true)) return;
+                if (!ConfigOption.INSTANCE.PET_TOGGLES_FALL_DAMAGE_NON_FLY.getValue()) return;
                 event.setCancelled(true);
             });
         });

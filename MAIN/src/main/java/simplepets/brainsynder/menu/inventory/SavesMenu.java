@@ -17,6 +17,7 @@ import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.SavesHolder;
@@ -106,7 +107,7 @@ public class SavesMenu extends CustomInventory {
         user.getSavedPets().forEach(entry -> {
             PetType type = entry.getKey();
             if (type.isInDevelopment()
-                    && (!SimplePets.getConfiguration().getBoolean("PetToggles.Allow-In-Development-Mobs", false)))
+                    && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue()))
                 return;
 
             SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {

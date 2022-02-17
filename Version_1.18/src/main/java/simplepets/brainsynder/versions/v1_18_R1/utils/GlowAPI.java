@@ -13,6 +13,7 @@ import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Field;
@@ -88,6 +89,7 @@ public class GlowAPI {
 
 
     public static void setGlowing(Entity entity, Player player, boolean glow) {
+        if (!ConfigOption.INSTANCE.PET_TOGGLES_GLOW_VANISH.getValue()) return;
 //        Disabled till we can fix the issue with Scoreboard Teams & Bungee
 //        if (glow) {
 //            setColor(entity, player, COLOR_MAP.getOrDefault(entity.getUniqueId(), ChatColor.WHITE));

@@ -1,6 +1,5 @@
 package simplepets.brainsynder.versions.v1_17_R1.entity;
 
-import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
@@ -41,6 +40,7 @@ import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.versions.v1_17_R1.pathfinder.PathfinderWalkToPlayer;
@@ -115,14 +115,12 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         this.noPhysics = false;
 
 
-        YamlFile configuration = SimplePets.getConfiguration();
-        pushable = configuration.getBoolean("PetToggles.Move-Pets-Get-Out-Da-Way", false);
-        canGlow = configuration.getBoolean("PetToggles.GlowWhenVanished", true);
-        autoRemove = configuration.getBoolean("PetToggles.AutoRemove.Enabled", true);
-        tickDelay = configuration.getInt("PetToggles.AutoRemove.TickDelay", 10000);
-        canGlow = configuration.getBoolean("PetToggles.GlowWhenVanished", true);//
-        hideNameShifting = configuration.getBoolean("PetToggles.HideNameOnShift", true);
-        displayName = configuration.getBoolean("PetToggles.ShowPetNames", true);
+        pushable = ConfigOption.INSTANCE.PET_TOGGLES_MOB_PUSHER.getValue();
+        canGlow = ConfigOption.INSTANCE.PET_TOGGLES_GLOW_VANISH.getValue();
+        autoRemove = ConfigOption.INSTANCE.AUTO_REMOVE_ENABLED.getValue();
+        tickDelay = ConfigOption.INSTANCE.AUTO_REMOVE_TICK.getValue();
+        hideNameShifting = ConfigOption.INSTANCE.PET_TOGGLES_SHIFT_HIDDEN_NAMES.getValue();
+        displayName = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             // TODO: fill in values
@@ -211,7 +209,7 @@ public abstract class EntityPet extends Mob implements IEntityPet {
         petName = Colorize.translateBungeeHex(event.getPrefix())
                 + SimplePets.getPetUtilities().translatePetName(event.getName())
                 + Colorize.translateBungeeHex(event.getSuffix());
-        getBukkitEntity().setCustomNameVisible(SimplePets.getConfiguration().getBoolean("PetToggles.ShowPetNames", true));
+        getBukkitEntity().setCustomNameVisible(ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue());
         getBukkitEntity().setCustomName(petName);
     }
 

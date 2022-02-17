@@ -7,6 +7,7 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
@@ -38,7 +39,7 @@ public class Remove extends Item {
     public void onShiftClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
         if (masterUser.getPetEntities().size() == 1) {
-            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RemovePet", true))
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_REMOVE.getValue())
                 masterUser.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
@@ -53,7 +54,7 @@ public class Remove extends Item {
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.RemovePet", true))
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_REMOVE.getValue())
                 user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override

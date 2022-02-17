@@ -6,6 +6,7 @@ import lib.brainsynder.nms.Tellraw;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -28,6 +29,7 @@ public class PetSubCommand extends SubCommand {
 
     @Override
     public boolean canExecute(CommandSender sender) {
+        if (!(sender instanceof Player)) return true;
         if (needsPermission()) {
             //sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
             return sender.hasPermission(getPermission());

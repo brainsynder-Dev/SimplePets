@@ -8,11 +8,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.PetDataHolder;
@@ -106,7 +106,7 @@ public class DataMenu extends CustomInventory {
                 IEntityPet finalPet = pet;
                 type.getPetData().forEach(petData -> {
                     if (!petData.isEnabled(finalPet)) return;
-                    if (PetCore.getInstance().getConfiguration().getBoolean("Permissions.Data-Permissions", true)
+                    if (ConfigOption.INSTANCE.PERMISSIONS_DATA_PERMS.getValue()
                             && (!user.getPlayer().hasPermission(type.getPermission("data."+petData.getNamespace().namespace())))) return;
                     if (!petData.isModifiable(finalPet)) return;
                     petData.getItem(finalPet).ifPresent(o -> {

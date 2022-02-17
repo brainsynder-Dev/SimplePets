@@ -17,6 +17,7 @@ import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -69,9 +70,9 @@ public class SpawnerUtil implements ISpawnUtil {
 
     @Override
     public BiOptional<IEntityPet, String> spawnEntityPet(PetType type, PetUser user, StorageTagCompound compound, Location location) {
-        if (SimplePets.getConfiguration().getBoolean("Worlds.Enabled", false)) {
-            if (!SimplePets.getConfiguration().getStringList("Worlds.Allowed-Worlds").contains(location.getWorld().getName()))
-                return BiOptional.of(null, Colorize.translateBungeeHex(SimplePets.getConfiguration().getString("Worlds.fail-message")));
+        if (ConfigOption.INSTANCE.WORLDS_ENABLED.getValue()) {
+            if (!ConfigOption.INSTANCE.WORLDS_ALLOWED_WORLDS.getValue().contains(location.getWorld().getName()))
+                return BiOptional.of(null, Colorize.translateBungeeHex(ConfigOption.INSTANCE.WORLDS_FAIL_MESSAGE.getValue()));
         }
 
         try {

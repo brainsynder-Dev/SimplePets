@@ -2,12 +2,12 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
@@ -27,7 +27,7 @@ public class Name extends Item {
 
     @Override
     public boolean addItemToInv(PetUser owner, CustomInventory inventory) {
-        return PetCore.getInstance().getConfiguration().getBoolean("RenamePet.Enabled");
+        return ConfigOption.INSTANCE.RENAME_ENABLED.getValue();
     }
 
     @Override

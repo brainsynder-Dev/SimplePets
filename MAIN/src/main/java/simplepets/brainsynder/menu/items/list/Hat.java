@@ -7,8 +7,8 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.files.Config;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
@@ -27,14 +27,14 @@ public class Hat extends Item {
 
     @Override
     public boolean addItemToInv(PetUser user, CustomInventory inventory) {
-        return PetCore.getInstance().getConfiguration().getBoolean(Config.HATS);
+        return ConfigOption.INSTANCE.PET_TOGGLES_HAT.getValue();
     }
 
     @Override
     public void onClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
         if (masterUser.getPetEntities().size() == 1) {
-            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.HatPet", true))
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 masterUser.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override
@@ -49,7 +49,7 @@ public class Hat extends Item {
 
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
-            if (PetCore.getInstance().getConfiguration().getBoolean("InventoryToggles.AutoClosing.HatPet", true))
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 user.getPlayer().closeInventory();
             new BukkitRunnable() {
                 @Override

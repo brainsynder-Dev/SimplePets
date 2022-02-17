@@ -9,7 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.other.ParticleHandler;
-import simplepets.brainsynder.files.Config;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 
 import java.io.File;
 
@@ -59,22 +59,22 @@ public class ParticleManager implements ParticleHandler {
         if (player == null) return;
         switch (reason) {
             case SPAWN:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.SPAWN_PARTICLE_TOGGLE, true)) spawnParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_SUMMON_TOGGLE.getValue()) spawnParticle.sendToPlayer(player, location);
                 break;
             case FAILED:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.FAILED_PARTICLE_TOGGLE, true)) failSpawnParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_FAILED_TOGGLE.getValue()) failSpawnParticle.sendToPlayer(player, location);
                 break;
             case RENAME:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.NAME_PARTICLE_TOGGLE, true)) renameParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_RENAME_TOGGLE.getValue()) renameParticle.sendToPlayer(player, location);
                 break;
             case REMOVE:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.REMOVE_PARTICLE_TOGGLE, true)) removeParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_REMOVE_TOGGLE.getValue()) removeParticle.sendToPlayer(player, location);
                 break;
             case TELEPORT:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.TELEPORT_PARTICLE_TOGGLE, true)) teleportParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_TELEPORT_TOGGLE.getValue()) teleportParticle.sendToPlayer(player, location);
                 break;
             case TASK_FAILED:
-                if (PetCore.getInstance().getConfiguration().getBoolean(Config.TELEPORT_PARTICLE_TOGGLE, true)) taskFailParticle.sendToPlayer(player, location);
+                if (ConfigOption.INSTANCE.PARTICLES_FAILED_TASK_TOGGLE.getValue()) taskFailParticle.sendToPlayer(player, location);
                 break;
         }
     }
