@@ -367,7 +367,7 @@ public enum ConfigOption {
                     This can be overridden in an individual pet JSON file using the 'walk_speed' key.
                     
                     Default: {default}""").setPastPaths("PetToggles.Default-Walk-Speed");
-    public final ConfigEntry<Double> PET_TOGGLES_RIDE_SPEED = createOption("pet-toggles.all-pets-flyable", 0.4000000238418579,
+    public final ConfigEntry<Double> PET_TOGGLES_RIDE_SPEED = createOption("pet-toggles.default-pet-ride-speed", 0.4000000238418579,
             """
                     The default ride speed each pet will go at when mounted.
                     This can be overridden in an individual pet .json file using the ride_speed key.
