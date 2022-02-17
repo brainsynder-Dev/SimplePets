@@ -12,6 +12,8 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.SavesMenu;
 import simplepets.brainsynder.menu.inventory.holders.SavesHolder;
@@ -28,8 +30,8 @@ public class SavesGUIListener implements Listener {
         if ((e.getWhoClicked() instanceof Player)) {
             e.setCancelled(true);
             e.setResult(Event.Result.DENY);
-            Player p = (Player) e.getWhoClicked();
-            Optional<PetUser> optionalUser = SimplePets.getUserManager().getPetUser(p);
+            Player player = (Player) e.getWhoClicked();
+            Optional<PetUser> optionalUser = SimplePets.getUserManager().getPetUser(player);
             if (!optionalUser.isPresent()) return;
             PetUser user = optionalUser.get();
             if (e.getCurrentItem() == null) return;
@@ -58,6 +60,14 @@ public class SavesGUIListener implements Listener {
                         }.runTaskLater(PetCore.getInstance(), 2);
                         return;
                     }
+
+                    if (!user.canSpawnMorePets()) {
+                        e.setCancelled(true);
+                        player.closeInventory();
+                        player.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                        return;
+                    }
+
                     if (compound.getString("PetType").equals("armor_stand"))
                         compound.setBoolean("restricted", true);
 
