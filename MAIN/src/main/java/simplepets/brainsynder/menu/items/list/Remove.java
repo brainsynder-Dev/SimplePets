@@ -31,6 +31,10 @@ public class Remove extends Item {
     @Override
     public void onClick(PetUser user, CustomInventory inventory) {
         if (!user.hasPets()) return;
+        if (!ConfigOption.INSTANCE.MISC_TOGGLES_REMOVE_ALL_PETS.getValue()) {
+            onShiftClick(user, inventory);
+            return;
+        }
         user.removePets();
         user.updateDataMenu();
     }

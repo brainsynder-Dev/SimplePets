@@ -285,6 +285,13 @@ public enum ConfigOption {
                     Should the Pet GUI close when they set a pet as a hat
                     
                     Default: {default}""").setPastPaths("InventoryToggles.AutoClosing.HatPet");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_REMOVE_ALL_PETS = createOption("misc-toggles.remove-all-pets", true,
+            """
+                    When clicking the "Remove Pet" item should all pets be removed
+                        (If true, the only way to select a specific pet would be to Shift-Click the item)
+                    Or should it open the Selection GUI to pick a pet to remove
+                    
+                    Default: {default}""");
 
 
     // Pet Toggles
