@@ -41,6 +41,7 @@ public class ReloadCommand extends PetSubCommand {
         switch (type) {
             case "config":
                 getPlugin().getConfiguration().reload();
+                getPlugin().getConfiguration().initValues();
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.CONFIG_RELOADED));
                 break;
             case "messages":

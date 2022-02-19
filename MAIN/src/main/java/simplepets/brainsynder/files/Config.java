@@ -15,11 +15,6 @@ public class Config extends YamlFile {
 
     @Override
     public void loadDefaults() {
-        // This is temporary till it gets added to BSLib...
-        getFile().setWritable(true, false);
-        getFile().setReadable(true, false);
-        getFile().setExecutable(true, false);
-
         ConfigOption.INSTANCE.getOptions().forEach((key, entry) -> {
             // Load the default values just in case
             if (entry.getDescription() == null) {
