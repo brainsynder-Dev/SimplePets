@@ -218,6 +218,11 @@ public interface PetUser {
      */
     void updateDataMenu ();
 
+    /**
+     * Updates the Pet Selection GUI (If it is open)
+     */
+    void updateSelectionMenu ();
+
 
     class Entry<K,V> {
         private final K key;

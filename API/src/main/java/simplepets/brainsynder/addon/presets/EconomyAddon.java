@@ -215,6 +215,7 @@ public abstract class EconomyAddon extends PetAddon {
                     .replace("{type}", event.getPetType().getName())
                     .replace("{prefix}", prefix)
             ));
+            user.updateSelectionMenu();
         });
     }
 }

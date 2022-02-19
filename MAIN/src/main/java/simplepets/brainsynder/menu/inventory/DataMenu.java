@@ -121,6 +121,7 @@ public class DataMenu extends CustomInventory {
     }
 
 
+    @Override
     public void update(PetUser user) {
         if (!isEnabled()) return;
         if (user == null) return;

@@ -156,6 +156,13 @@ public abstract class CustomInventory extends JsonFile {
     public void open(PetUser user, int page) {}
 
     /**
+     * Updates the currently opened GUI with updated items
+     *
+     * @param user
+     */
+    public void update (PetUser user) {}
+
+    /**
      * Is the inventory enabled?
      */
     public boolean isEnabled() {

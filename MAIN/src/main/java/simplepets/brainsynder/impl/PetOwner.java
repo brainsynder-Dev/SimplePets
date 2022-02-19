@@ -682,4 +682,9 @@ public class PetOwner implements PetUser {
     public void updateDataMenu() {
         InventoryManager.PET_DATA.update(this);
     }
+
+    @Override
+    public void updateSelectionMenu() {
+        InventoryManager.SELECTION.update(this);
+    }
 }

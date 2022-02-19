@@ -183,6 +183,79 @@ public class SelectionMenu extends CustomInventory {
         player.openInventory(inv);
     }
 
+    @Override
+    public void update(PetUser user) {
+        if (!isEnabled()) return;
+        if (user == null) return;
+        Player player = user.getPlayer();
+        if (!pageSave.containsKey(player.getName())) return;
+        int page = pageSave.getOrDefault(player.getName(), 1);
+
+        Inventory inv = player.getOpenInventory().getTopInventory();
+        if (inv.getHolder() == null) return;
+        if (!(inv.getHolder() instanceof SelectionHolder)) return;
+
+        int placeHolder = inv.getSize();
+        int maxPets = 0;
+        while (placeHolder > 0) {
+            int slot = (placeHolder - 1);
+            if (getSlots().containsKey(slot)) {
+                Item item = getSlots().get(slot);
+                if (item instanceof Air) {
+                    maxPets++;
+                } else {
+                    inv.setItem(placeHolder - 1, ItemManager.PLACEHOLDER.getItemBuilder().build());
+                }
+            } else {
+                inv.setItem(placeHolder - 1, ItemManager.PLACEHOLDER.getItemBuilder().build());
+            }
+            placeHolder--;
+        }
+
+        boolean removeNoPerms = ConfigOption.INSTANCE.PERMISSIONS_PLAYER_ACCESS.getValue();
+        IStorage<PetTypeStorage> petTypes = new StorageList<>();
+        for (PetType type : availableTypes) {
+            PetTypeStorage storage = new PetTypeStorage(type);
+            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, storage.getType(), storage.getItem());
+
+            if (Utilities.hasPermission(player, type.getPermission())
+                    || (user.getOwnedPets().contains(type) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
+                Bukkit.getPluginManager().callEvent(event);
+            } else {
+                if (!removeNoPerms) {
+                    Bukkit.getPluginManager().callEvent(event);
+                } else {
+                    continue;
+                }
+            }
+            if (!event.isCancelled()) {
+                petTypes.add(storage.setItem(event.getItem()));
+            }
+        }
+        if ((petTypes.getSize() == 0) && (ConfigOption.INSTANCE.PERMISSIONS_OPEN_GUI.getValue())) {
+            player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+            return;
+        }
+
+        ListPager<PetTypeStorage> pages = new ListPager<>(maxPets, petTypes.toArrayList());
+        pagerMap.put(player.getName(), pages);
+
+        getSlots().forEach((slot, item) -> {
+            if (item.isEnabled() && item.addItemToInv(user, this))
+                inv.setItem(slot, item.getItemBuilder().build());
+        });
+
+        if (!pages.isEmpty()) {
+            if (pages.exists(page)) {
+                for (PetTypeStorage storage : pages.getPage(page))
+                    inv.addItem(storage.getItem());
+                petMap.put(player.getName(), new StorageList<>(pages.getPage(page)));
+            } else {
+                SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
+            }
+        }
+    }
+
     public Map<String, IStorage<PetTypeStorage>> getPetMap() {
         return petMap;
     }
