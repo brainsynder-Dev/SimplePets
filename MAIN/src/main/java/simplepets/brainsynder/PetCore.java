@@ -38,6 +38,7 @@ import simplepets.brainsynder.impl.PetOwner;
 import simplepets.brainsynder.impl.PetUtility;
 import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
+import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
 import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
@@ -123,9 +124,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         reloaded = ConfigOption.INSTANCE.RELOAD_DETECT.getValue();
         debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: " + reloaded);
 
-        // debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
-        // new InventorySQL();
-        // taskTimer.label("init InventorySQL");
+        debug.debug(DebugLevel.HIDDEN, "Initializing Inventory SQL");
+        new InventorySQL();
+        taskTimer.label("init InventorySQL");
         reloadSpawner();
         taskTimer.label("located spawner util");
 
