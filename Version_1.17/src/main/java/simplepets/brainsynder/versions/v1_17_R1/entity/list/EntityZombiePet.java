@@ -37,7 +37,7 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setBoolean("raised_arms", isArmsRaised());
-        object.setBoolean("baby", isBaby());
+        object.setBoolean("baby", isBabySafe());
         object.setBoolean("shaking", isShaking());
         return object;
     }
@@ -45,7 +45,7 @@ public class EntityZombiePet extends EntityPet implements IEntityZombiePet {
     @Override
     public void applyCompound(StorageTagCompound object) {
         setArmsRaised(object.getBoolean("raised_arms", false));
-        setBaby(object.getBoolean("baby", false));
+        setBabySafe(object.getBoolean("baby", false));
         setShaking(object.getBoolean("shaking", false));
         super.applyCompound(object);
     }

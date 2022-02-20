@@ -22,11 +22,11 @@ public class AgeData extends PetData<IAgeablePet> {
 
     @Override
     public void onLeftClick(IAgeablePet entity) {
-        entity.setBaby(!entity.isBaby());
+        entity.setBabySafe(!entity.isBabySafe());
     }
 
     @Override
     public Object value(IAgeablePet entity) {
-        return entity.isBaby();
+        return entity.isBabySafe();
     }
 }
