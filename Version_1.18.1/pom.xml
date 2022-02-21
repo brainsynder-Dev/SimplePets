@@ -64,6 +64,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>NMS_Master</artifactId>
+            <version>${module.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -108,7 +114,7 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>${groupId}.versions.v1_18_R1</pattern>
+                                    <pattern>${groupId}.nms</pattern>
                                     <shadedPattern>${groupId}.versions.v1_18_1</shadedPattern>
                                 </relocation>
                                 <relocation>
