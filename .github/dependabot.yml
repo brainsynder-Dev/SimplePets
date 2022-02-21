@@ -5,7 +5,7 @@ updates:
     schedule:
       interval: daily
       time: "15:00"
-      timezone: "GMT/UTC"
+      timezone: "Europe/Zurich"
     open-pull-requests-limit: 10
     labels:
       - "dependabot"
