@@ -1,0 +1,48 @@
+fixed:
+  comment: |-
+    :wave: @{issue-author},
+
+    This issue has been fixed in the [latest build](https://ci.pluginwiki.us/job/SimplePets_v5/) or in a future build that will be released soon!
+  issues:
+    close: true
+
+fixed in v5:
+  comment: |-
+    :wave: @{issue-author},
+
+    This has already been fixed in v5! Please update to the latest version to get the fix.
+    Downloads:
+    - [Spigot](https://www.spigotmc.org/resources/100106/)
+    - [Polymart](https://polymart.org/resource/1952/)
+    - [Jenkins](https://ci.pluginwiki.us/job/SimplePets_v5/)
+  issues:
+    close: true
+
+bug:
+  comment: |-
+    :wave: @{issue-author},
+
+    Thank you for reporting this bug, we will try and respond as soon as we can to your issue.
+    In the mean time have a look at the [WIKI](https://brainsynder.gitbook.io/simplepets/) to see if we made any mention to it on there.
+
+Added in Latest Build:
+  comment: >
+    @{issue-author}, This was added in the latest build of SimplePets you can download the jar from the [Jenkins Server](https://ci.pluginwiki.us/job/SimplePets_v5/)
+  issues:
+    close: true
+
+blame-mojang:
+  comment: >
+    @{issue-author}, This is regarded as a Mojang issue we have no control over this.
+  issues:
+    close: true
+
+more info needed:
+  comment: |-
+    @{issue-author}, We need to collect a little more information reguarding this issue.
+    If this is a bug report: Please provide additional information to help us figure out what is happening
+    If this is a feature request: Please provide more information on what you would like requested
+
+question answered:
+  issues:
+    close: true
