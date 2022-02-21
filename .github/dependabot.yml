@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: maven
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "15:00"
+      timezone: "GMT/UTC"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependabot"
