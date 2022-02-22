@@ -1,6 +1,8 @@
 package simplepets.brainsynder.nms;
 
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -15,6 +17,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+
+    public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
+        stand.setItemSlot(enumitemslot, itemstack, silent);
+    }
 
     public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
         return level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);

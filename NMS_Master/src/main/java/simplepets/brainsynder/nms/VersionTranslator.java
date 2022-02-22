@@ -2,6 +2,8 @@ package simplepets.brainsynder.nms;
 
 import lib.brainsynder.ServerVersion;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -13,6 +15,10 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+
+    public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
 
     public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());

@@ -534,7 +534,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     public void setSlot(EquipmentSlot enumitemslot, ItemStack itemstack) {
-        super.setItemSlot(enumitemslot, toNMS(itemstack), false);
+        VersionTranslator.setItemSlot(this, enumitemslot, toNMS(itemstack), false);
     }
 
     private ItemStack checkItem(ItemStack item) {
