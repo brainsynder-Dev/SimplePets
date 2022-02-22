@@ -11,10 +11,16 @@ import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import java.lang.reflect.Field;
+
 @Deprecated
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+
+    public static Field getJumpField () {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());

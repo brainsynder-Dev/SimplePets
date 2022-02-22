@@ -1,7 +1,6 @@
 package simplepets.brainsynder.nms.utils;
 
 import lib.brainsynder.reflection.Reflection;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
@@ -13,20 +12,6 @@ import java.util.Map;
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
-    private static Field jumpingField;
-
-    static {
-        try{
-            jumpingField = LivingEntity.class.getDeclaredField("bn");
-            jumpingField.setAccessible(true);
-        }catch(Exception ex){
-            ex.printStackTrace();
-        }
-    }
-
-    public static Field getJumpingField() {
-        return jumpingField;
-    }
 
     public static VillagerType getTypeFromBiome(BiomeType type) {
         if (stored.isEmpty()) initStores();

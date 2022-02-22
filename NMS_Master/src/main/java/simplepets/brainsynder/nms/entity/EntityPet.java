@@ -40,7 +40,6 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.pathfinder.PathfinderWalkToPlayer;
-import simplepets.brainsynder.nms.utils.EntityUtils;
 import simplepets.brainsynder.nms.utils.GlowAPI;
 
 import java.lang.reflect.Field;
@@ -400,7 +399,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         double speed = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
 
-        Field jumpField = EntityUtils.getJumpingField();
+        Field jumpField = VersionTranslator.getJumpField();
         if ((jumpField != null) && (!passengers.isEmpty())) {
             SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
                 try {

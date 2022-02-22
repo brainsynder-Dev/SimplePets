@@ -1,7 +1,9 @@
 package simplepets.brainsynder.nms;
 
+import lib.brainsynder.ServerVersion;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -14,9 +16,24 @@ import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_17_R1.inventory.CraftItemStack;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
+import java.lang.reflect.Field;
+
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+    private static Field jumpingField = null;
+
+    public static Field getJumpField () {
+        if (jumpingField != null) return jumpingField;
+
+        try{
+            Field jumpingField = LivingEntity.class.getDeclaredField("bn");
+            jumpingField.setAccessible(true);
+            return VersionTranslator.jumpingField = jumpingField;
+        }catch(Exception ex){
+            throw new UnsupportedOperationException("Unable to find the correct jumpingField name for "+ ServerVersion.getVersion().name());
+        }
+    }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
         stand.setSlot(enumitemslot, itemstack, silent);
