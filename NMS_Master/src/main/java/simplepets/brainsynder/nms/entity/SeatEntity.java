@@ -6,6 +6,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.nms.VersionTranslator;
 
 public class SeatEntity extends ArmorStand {
     public SeatEntity(Level level, double x, double y, double z) {
@@ -24,7 +25,7 @@ public class SeatEntity extends ArmorStand {
 
     public static boolean attach(Entity rider, Entity entity) {
         var seat = new SeatEntity(entity.level, entity.getX(), entity.getY(), entity.getZ());
-        if (entity.level.addEntity(seat, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+        if (VersionTranslator.addEntity(entity.level, seat, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
             if (seat.startRiding(entity)) {
                 if (rider.startRiding(seat)) {
                     return true;

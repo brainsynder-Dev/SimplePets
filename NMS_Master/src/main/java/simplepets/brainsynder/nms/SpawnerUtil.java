@@ -6,7 +6,6 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.storage.RandomCollection;
 import lib.brainsynder.utils.Colorize;
-import net.minecraft.server.level.ServerLevel;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -119,7 +118,7 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (!location.getChunk().isLoaded()) location.getChunk().load();
 
-            if (VersionTranslator.<ServerLevel>getWorldHandle(location.getWorld()).addEntity(customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+            if (VersionTranslator.addEntity(VersionTranslator.getWorldHandle(location.getWorld()), customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
                 if (compound.hasKey("name")) {
                     String name = compound.getString("name");

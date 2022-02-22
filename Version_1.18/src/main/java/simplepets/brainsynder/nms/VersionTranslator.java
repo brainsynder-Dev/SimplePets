@@ -10,10 +10,15 @@ import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+
+    public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+        return level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
 
     public static <T extends Entity> T getEntityHandle(org.bukkit.entity.Entity entity) {
         return (T) ((CraftEntity)entity).getHandle();

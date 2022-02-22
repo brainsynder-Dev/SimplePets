@@ -7,11 +7,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 
 @Deprecated
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
+
+    public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
 
     public static <T extends Entity> T getEntityHandle(org.bukkit.entity.Entity entity) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());

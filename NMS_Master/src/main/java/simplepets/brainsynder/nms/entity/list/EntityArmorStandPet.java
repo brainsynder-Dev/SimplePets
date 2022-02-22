@@ -82,7 +82,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.setInvulnerable(true);
         stand.persist = true;
         stand.setSpecial(true);
-        VersionTranslator.getWorldHandle(location.getWorld()).addEntity(stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        VersionTranslator.addEntity(VersionTranslator.getWorldHandle(location.getWorld()), stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         return stand;
     }
 
@@ -534,7 +534,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     public void setSlot(EquipmentSlot enumitemslot, ItemStack itemstack) {
-        super.setSlot(enumitemslot, toNMS(itemstack), false);
+        super.setItemSlot(enumitemslot, toNMS(itemstack), false);
     }
 
     private ItemStack checkItem(ItemStack item) {
