@@ -62,6 +62,10 @@
                                     <pattern>com.jeff_media.updatechecker</pattern>
                                     <shadedPattern>${groupId}.internal.updatechecker</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bukkit.craftbukkit.v1_17_R1</pattern>
+                                    <shadedPattern>org.bukkit.craftbukkit.v1_18_R1</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
