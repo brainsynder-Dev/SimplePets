@@ -137,6 +137,11 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
     @Override
+    public boolean rideableUnderWater() {
+        return true;
+    }
+
+    @Override
     public ChatColor getGlowColor() {
         return glowColor;
     }
