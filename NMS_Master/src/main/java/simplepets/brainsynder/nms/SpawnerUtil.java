@@ -88,7 +88,7 @@ public class SpawnerUtil implements ISpawnUtil {
             EntityPet customEntity;
 
             if (type == PetType.ARMOR_STAND) {
-                customEntity = new EntityControllerPet(type, user);
+                customEntity = new EntityControllerPet(type, user, location);
             }else{
                 customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
             }

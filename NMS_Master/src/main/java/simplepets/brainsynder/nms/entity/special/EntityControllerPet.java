@@ -32,11 +32,11 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     private Entity displayEntity, displayRider = null;
     private final boolean moving = false;
 
-    public EntityControllerPet(PetType type, PetUser user) {
+    public EntityControllerPet(PetType type, PetUser user, Location location) {
         super(EntityType.ZOMBIE, type, user);
         switch (type) {
             case ARMOR_STAND:
-                pet = EntityArmorStandPet.spawn(getEntity().getLocation(), this);
+                pet = EntityArmorStandPet.spawn(location, this);
                 setDisplayEntity(pet.getBukkitEntity());
                 break;
             case SHULKER:
