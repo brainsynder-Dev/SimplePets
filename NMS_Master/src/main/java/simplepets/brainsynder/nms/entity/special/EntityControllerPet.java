@@ -49,7 +49,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     @Override
     public void playAmbientSound() {
         if (isPetSilent()) return;
-        SimplePets.getPetConfigManager().getPetConfig(getVisibleEntity().getPetType()).ifPresent(config -> {
+        SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
             SoundMaker sound = config.getSound();
             if (sound != null) sound.playSound(getEntity());
         });
@@ -75,8 +75,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         super.tick();
         if (!this.isInvisible()) this.setInvisible(true);
         if (!isSilent()) this.setSilent(true);
-        if (pet != null) if (isBaby()) setBaby((getVisibleEntity().getPetType() == PetType.SHULKER));
-        Player p = getVisibleEntity().getPetUser().getPlayer();
+        if (pet != null) if (isBaby()) setBaby((getPetType() == PetType.SHULKER));
+        Player p = getPetUser().getPlayer();
 
         if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {
@@ -161,6 +161,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     public void remove() {
         getBukkitEntity().remove();
         for (Entity ent : entities) ent.remove();
+        displayEntity = null;
+        displayRider = null;
     }
 
     @Override
@@ -229,14 +231,18 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public IEntityPet getVisibleEntity() {
-        Object handle = SimplePets.getSpawnUtil().getHandle(displayEntity);
-        if (handle instanceof IEntityPet) {
-            return (IEntityPet) handle;
-        } else {
+        if (displayEntity == null) {
+            remove();
+            return this;
+        }
+        Optional<Object> displayOption = SimplePets.getSpawnUtil().getHandle(displayEntity);
+        if (displayOption.isPresent() && (displayOption.get() instanceof IEntityPet)) {
+            return (IEntityPet) displayOption.get();
+        }else{
             if (displayEntity.getPassenger() != null) {
-                Object h = SimplePets.getSpawnUtil().getHandle(displayEntity.getPassenger());
-                if (h instanceof IEntityPet) {
-                    return (IEntityPet) h;
+                Optional<Object> displayOption1 = SimplePets.getSpawnUtil().getHandle(displayEntity.getPassenger());
+                if (displayOption1.isPresent() && (displayOption1.get() instanceof IEntityPet)) {
+                    return (IEntityPet) displayOption1.get();
                 }
             }
         }
