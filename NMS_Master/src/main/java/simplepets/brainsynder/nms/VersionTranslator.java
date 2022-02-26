@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms;
 
 import lib.brainsynder.ServerVersion;
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -51,6 +52,16 @@ public class VersionTranslator {
     }
 
     public static org.bukkit.inventory.ItemStack toBukkit(ItemStack itemStack) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+
+
+    public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static StorageTagCompound fromItemStack(org.bukkit.inventory.ItemStack item) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 }

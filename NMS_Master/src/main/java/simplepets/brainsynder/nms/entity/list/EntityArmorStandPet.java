@@ -2,7 +2,9 @@ package simplepets.brainsynder.nms.entity.list;
 
 import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
+import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
@@ -270,12 +272,12 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         if (!isPetVisible()) object.setBoolean("visible", !isPetVisible());
 
         StorageTagCompound items = new StorageTagCompound();
-        if (getHeadItem() != null) items.setString("head", parseItem(getHeadItem()));
-        if (getBodyItem() != null) items.setString("body", parseItem(getBodyItem()));
-        if (getLegItem() != null) items.setString("legs", parseItem(getLegItem()));
-        if (getFootItem() != null) items.setString("boots", parseItem(getFootItem()));
-        if (getLeftArmItem() != null) items.setString("left_arm", parseItem(getLeftArmItem()));
-        if (getRightArmItem() != null) items.setString("right_arm", parseItem(getRightArmItem()));
+        if (getHeadItem() != null) items.setTag("head", parseItem(getHeadItem()));
+        if (getBodyItem() != null) items.setTag("body", parseItem(getBodyItem()));
+        if (getLegItem() != null) items.setTag("legs", parseItem(getLegItem()));
+        if (getFootItem() != null) items.setTag("boots", parseItem(getFootItem()));
+        if (getLeftArmItem() != null) items.setTag("left_arm", parseItem(getLeftArmItem()));
+        if (getRightArmItem() != null) items.setTag("right_arm", parseItem(getRightArmItem()));
         if (!items.hasNoTags()) object.setTag("items", items);
 
         if (!additional.isEmpty()) {
@@ -297,12 +299,12 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         if (object.hasKey("visible")) setPetVisible(object.getBoolean("visible"));
         if (object.hasKey("items")) {
             StorageTagCompound items = object.getCompoundTag("items");
-            if (items.hasKey("head")) setHeadItem(parseString(items.getString("head")));
-            if (items.hasKey("body")) setBodyItem(parseString(items.getString("body")));
-            if (items.hasKey("legs")) setLegItem(parseString(items.getString("legs")));
-            if (items.hasKey("boots")) setFootItem(parseString(items.getString("boots")));
-            if (items.hasKey("left_arm")) setLeftArmItem(parseString(items.getString("left_arm")));
-            if (items.hasKey("right_arm")) setRightArmItem(parseString(items.getString("right_arm")));
+            if (items.hasKey("head")) setHeadItem(parseString(items.getTag("head")));
+            if (items.hasKey("body")) setBodyItem(parseString(items.getTag("body")));
+            if (items.hasKey("legs")) setLegItem(parseString(items.getTag("legs")));
+            if (items.hasKey("boots")) setFootItem(parseString(items.getTag("boots")));
+            if (items.hasKey("left_arm")) setLeftArmItem(parseString(items.getTag("left_arm")));
+            if (items.hasKey("right_arm")) setRightArmItem(parseString(items.getTag("right_arm")));
         }
 
         if (object.hasKey("additional")) {
@@ -543,20 +545,27 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         return item;
     }
 
-    private String parseItem (ItemStack stack) {
-        YamlConfiguration config = new YamlConfiguration();
-        config.set("item", stack);
-        return Base64Wrapper.encodeString(config.saveToString());
+    private StorageTagCompound parseItem (ItemStack stack) {
+        return VersionTranslator.fromItemStack(stack);
     }
 
-    private ItemStack parseString (String string) {
-        YamlConfiguration config = new YamlConfiguration();
-        try {
-            config.loadFromString(Base64Wrapper.decodeString(string));
-        } catch (InvalidConfigurationException e) {
-            e.printStackTrace();
+    private ItemStack parseString (StorageBase base) {
+        if (base instanceof StorageTagCompound) {
+            return VersionTranslator.toItemStack((StorageTagCompound) base);
+        }else if (base instanceof StorageTagString){
+            String string = ((StorageTagString) base).getString();
+            if (!Base64Wrapper.isEncoded(string)) {
+                throw new UnsupportedOperationException (String.format("'%s' is not a valid item format", string));
+            }
+            YamlConfiguration config = new YamlConfiguration();
+            try {
+                config.loadFromString(Base64Wrapper.decodeString(string));
+            } catch (InvalidConfigurationException e1) {
+                e1.printStackTrace();
+            }
+            return config.getItemStack("item");
         }
-        return config.getItemStack("item");
+        throw new InputMismatchException("ArmorStand Pet item is not in the correct format, See: https://brainsynder.gitbook.io/simplepets/faq#how-can-i-make-it-so-the-armor-stand-has-items-when-it-spawns");
     }
 
     private void handleCloning() {
