@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
@@ -100,6 +101,7 @@ public class ModifyCommand extends PetSubCommand {
             String message = MessageFile.getTranslation(MessageOption.MODIFY_COMPOUND).replace("{compound}", compound.toString());
             if (!message.isEmpty()) sender.sendMessage(message.replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
             user.getPetEntity(type).ifPresent(entityPet -> {
+                if (entityPet instanceof IEntityControllerPet) entityPet = ((IEntityControllerPet)entityPet).getVisibleEntity();
                 try {
                     entityPet.applyCompound(compound);
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.MODIFY_APPLIED).replace("{type}", type.getName()));

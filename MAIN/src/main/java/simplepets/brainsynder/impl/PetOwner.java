@@ -439,7 +439,11 @@ public class PetOwner implements PetUser {
 
     @Override
     public Optional<IEntityPet> getPetEntity(PetType type) {
-        if (petMap.containsKey(type)) return Optional.of(petMap.get(type));
+        if (petMap.containsKey(type)) {
+            IEntityPet entityPet = petMap.get(type);
+            if (entityPet instanceof IEntityControllerPet) entityPet = ((IEntityControllerPet)entityPet).getVisibleEntity();
+            return Optional.of(entityPet);
+        }
         return Optional.empty();
     }
 
