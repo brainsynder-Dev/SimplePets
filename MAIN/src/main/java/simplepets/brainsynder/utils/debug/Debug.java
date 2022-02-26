@@ -39,6 +39,12 @@ public class Debug implements DebugLogger {
     @Override
     public void debug(DebugBuilder builder) {
         Runnable runnable = null;
+        if (!builder.getMessages().isEmpty()) {
+            for (String message : builder.getMessages()) {
+                if (message.matches("Player ([a-zA-Z0-9_]+) exists.")) return;
+            }
+        }
+
         debugLog.addLast(builder);
 
         String className = builder.getCallerClassName();
