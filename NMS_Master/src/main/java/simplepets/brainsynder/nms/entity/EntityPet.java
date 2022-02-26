@@ -15,7 +15,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -38,6 +37,7 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
+import simplepets.brainsynder.nms.pathfinder.PathfinderFloatGoal;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.pathfinder.PathfinderWalkToPlayer;
 import simplepets.brainsynder.nms.utils.GlowAPI;
@@ -131,7 +131,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     public void setGlowColor(ChatColor glowColor) {
         if (this.glowColor == glowColor) return; // No need for redundant setting
-
         this.glowColor = glowColor;
         GlowAPI.setRawColor(getEntity(), glowColor);
     }
@@ -153,7 +152,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new FloatGoal(this));
+        goalSelector.addGoal(1, new PathfinderFloatGoal(this));
         goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
         goalSelector.addGoal(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
         goalSelector.addGoal(3, new RandomLookAroundGoal(this));
@@ -352,7 +351,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     private boolean isOnGround(net.minecraft.world.entity.Entity entity) {
         org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
-        return block.getType().isSolid();
+        return block.getType().isSolid() || block.isLiquid();
     }
 
     protected boolean isOwnerRiding() {
@@ -559,16 +558,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             isGlowing = glow;
         } catch (Exception ignored) {}
     }
-
-    // TODO: This literally fixed the shit with p2 and i'm so fucking mad
-//    public CraftEntity getBukkitEntity() {
-//        return new CraftLivingEntity(level.getCraftServer(), this) {
-//            @Override
-//            public org.bukkit.entity.EntityType getType() {
-//                return petType.getEntityType();
-//            }
-//        };
-//    }
 
     @Override
     public void move(MoverType enummovetype, Vec3 vec3d) {
