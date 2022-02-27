@@ -181,7 +181,7 @@ public class PathfinderWalkToPlayer extends Goal {
         if (pathtype != BlockPathTypes.WALKABLE) return false;
 
         // Translation: BlockPosition.subtract (BlockPosition)
-        BlockPos position = blockposition.e(this.entity.blockPosition());
+        BlockPos position = VersionTranslator.subtract(blockposition, this.entity.blockPosition());
         return this.entity.level.noCollision(this.entity, this.entity.getBoundingBox().move(position));
     }
 

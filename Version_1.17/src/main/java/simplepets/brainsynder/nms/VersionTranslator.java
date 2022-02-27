@@ -5,6 +5,8 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.world.entity.Entity;
@@ -73,6 +75,10 @@ public class VersionTranslator {
 
     public static org.bukkit.inventory.ItemStack toBukkit(ItemStack itemStack) {
         return CraftItemStack.asBukkitCopy(itemStack);
+    }
+
+    public static BlockPos subtract (BlockPos blockPos, Vec3i vec) {
+        return blockPos.e(vec);
     }
 
     public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {

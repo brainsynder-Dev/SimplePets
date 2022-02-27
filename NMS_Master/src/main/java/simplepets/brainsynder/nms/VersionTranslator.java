@@ -2,6 +2,8 @@ package simplepets.brainsynder.nms;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -52,6 +54,10 @@ public class VersionTranslator {
     }
 
     public static org.bukkit.inventory.ItemStack toBukkit(ItemStack itemStack) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static BlockPos subtract (BlockPos blockPos, Vec3i vec) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 
