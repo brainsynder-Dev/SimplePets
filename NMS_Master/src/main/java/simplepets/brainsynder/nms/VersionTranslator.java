@@ -4,6 +4,7 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -61,7 +62,9 @@ public class VersionTranslator {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 
-
+    public static void modifyGlowData (SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher, boolean glow) throws IllegalAccessException {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
 
     public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
