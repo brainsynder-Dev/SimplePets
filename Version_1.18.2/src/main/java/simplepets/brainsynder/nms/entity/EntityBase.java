@@ -1,16 +1,19 @@
 package simplepets.brainsynder.nms.entity;
 
+import net.minecraft.core.Registry;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
 
 import java.lang.reflect.Field;
+import java.util.IdentityHashMap;
 
 public class EntityBase extends Mob {
     protected  final EntityType<? extends Mob> entityType;
@@ -57,7 +60,20 @@ public class EntityBase extends Mob {
             field.setAccessible(true);
             EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);
-            return builder.build(petType.name().toLowerCase());
+            Registry<EntityType<?>> registry = Registry.ENTITY_TYPE;
+            PetCore.getInstance().getLogger().info("Registry: " + registry.getClass().getSimpleName());
+            // frozen field
+            Field frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
+            frozen.setAccessible(true);
+            frozen.set(registry, false);
+            // map field
+            Field map = registry.getClass().getSuperclass().getDeclaredField("bN");
+            map.setAccessible(true);
+            map.set(registry, new IdentityHashMap<>());
+            // screw you mojang, my power is unlimited
+            EntityType<? extends Mob> mob = builder.build(petType.name().toLowerCase());
+            frozen.set(registry, true);
+            return mob;
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
             return originalType;
