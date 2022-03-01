@@ -50,7 +50,7 @@
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>net.wesjd</pattern>
+                                    <pattern>anvil.brainsynder</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -94,7 +94,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.wesjd</groupId>
+            <groupId>anvil.brainsynder</groupId>
             <artifactId>anvilgui</artifactId>
             <version>${anvilgui.version}</version>
         </dependency>

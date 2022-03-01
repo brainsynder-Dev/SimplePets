@@ -1,7 +1,7 @@
 package simplepets.brainsynder.managers;
 
+import anvil.brainsynder.AnvilGUI;
 import lib.brainsynder.item.ItemBuilder;
-import net.wesjd.anvilgui.AnvilGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.conversations.ConversationContext;

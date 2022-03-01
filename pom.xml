@@ -31,9 +31,9 @@
         <!--suppress UnresolvedMavenProperty -->
         <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B98</bslib.version>
+        <bslib.version>B99</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
-        <anvilgui.version>1.5.7-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.5.9-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
@@ -121,7 +121,7 @@
                                 <includes>
                                     <include>simplepets.brainsynder:*</include>
                                     <include>lib.brainsynder:*</include>
-                                    <include>net.wesjd:*</include>
+                                    <include>anvil.brainsynder:*</include>
                                     <include>com.jeff_media:*</include>
                                     <include>commons-io:*</include>
                                     <include>resources:*</include>
@@ -133,7 +133,7 @@
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>net.wesjd</pattern>
+                                    <pattern>anvil.brainsynder</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                             </relocations>

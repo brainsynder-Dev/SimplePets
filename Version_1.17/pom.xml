@@ -61,7 +61,7 @@
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>net.wesjd</pattern>
+                                    <pattern>anvil.brainsynder</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -135,7 +135,7 @@
             <version>${module.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>net.wesjd</groupId>
+                    <groupId>anvil.brainsynder</groupId>
                     <artifactId>anvilgui</artifactId>
                 </exclusion>
                 <exclusion>

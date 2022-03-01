@@ -57,7 +57,7 @@
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>net.wesjd</pattern>
+                                    <pattern>anvil.brainsynder</pattern>
                                     <shadedPattern>${groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
