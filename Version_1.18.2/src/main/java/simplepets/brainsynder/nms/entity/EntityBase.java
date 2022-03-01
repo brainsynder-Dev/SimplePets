@@ -61,7 +61,6 @@ public class EntityBase extends Mob {
             EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);
             Registry<EntityType<?>> registry = Registry.ENTITY_TYPE;
-            PetCore.getInstance().getLogger().info("Registry: " + registry.getClass().getSimpleName());
             // frozen field
             Field frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
             frozen.setAccessible(true);
