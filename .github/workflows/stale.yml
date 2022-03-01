@@ -15,6 +15,6 @@ jobs:
           repo-token: ${{ secrets.TOKEN }}
           stale-issue-message: 'This issue has been marked as stale due to the lack of response on it. If this problem is still occurring, please comment saying so or the issue will be closed in 7 days.'
           stale-issue-label: 'stale'
-          exempt-issue-labels: 'addon idea,enhancement,feature request,successfully reproduced,dependabot'
+          exempt-issue-labels: 'addon idea,enhancement,feature request,successfully reproduced,dependabot,developer issue'
           days-before-stale: 30
           days-before-close: 7
