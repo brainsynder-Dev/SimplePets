@@ -182,6 +182,11 @@ public enum ConfigOption {
                     
                     Explanation: Pet is walking to player, they will stop within {default} blocks of the player
                     Default: {default}""").setPastPaths("Pathfinding.Stopping-Distance_LargePets");
+    public final ConfigEntry<Boolean> PATHFINDING_FOLLOW_WHEN_RIDING = createOption("pathfinding.follow-when-inside-vehicle", true,
+            """
+                    Should the pets follow the player when they are in a vehicle (or riding another pet)?
+                    
+                    Default: {default}""");
     public final ConfigEntry<Integer> PATHFINDING_MINIMUM_TELEPORT = createOption("pathfinding.distance-till-teleport", 20,
             """
                     How far away from the player does the pet have to be before it teleports closer
