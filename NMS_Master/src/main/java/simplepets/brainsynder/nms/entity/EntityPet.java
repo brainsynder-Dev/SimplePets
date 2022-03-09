@@ -14,6 +14,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
@@ -267,6 +268,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         if (object.hasKey("frozen")) setFrozen(object.getBoolean("frozen", false));
         if (object.hasKey("burning")) setBurning(object.getBoolean("burning", false));
+        if (object.hasKey("pose")) {
+            Pose pose = object.getEnum("pose", Pose.class);
+            if (pose != null) setPose(pose);
+        }
     }
 
     @Override
