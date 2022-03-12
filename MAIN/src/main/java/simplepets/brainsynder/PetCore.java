@@ -39,6 +39,7 @@ import simplepets.brainsynder.impl.PetUtility;
 import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.PlayerSQL;
+import simplepets.brainsynder.utils.JavaVersion;
 import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
 
@@ -90,6 +91,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.start();
 
         debug = new Debug(this);
+
+        if (!checkJavaVersion()){
+            setEnabled(false);
+            return;
+        }
 
         if (!fetchSupportedVersions()) {
             Bukkit.getPluginManager().registerEvents(new BrokenVersionListener(), this);
@@ -241,6 +247,38 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         addonManager = null;
         debug = null;
 
+    }
+
+    private boolean checkJavaVersion() {
+        if (ServerVersion.isEqualNew(ServerVersion.v1_18)
+                && (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))) {
+            debug.debug(DebugBuilder.build(getClass())
+                    .setLevel(DebugLevel.CRITICAL)
+                    .setBroadcast(true)
+                    .setMessages(
+                            "Your server does not support Java 17!",
+                            "Java 17 is required for servers 1.18+ (Mojang Requirement)",
+                            "Disabling the plugin..."
+                    )
+            );
+            return false;
+        }
+
+        if (ServerVersion.isEqualNew(ServerVersion.v1_17)
+                && ServerVersion.isOlder(ServerVersion.v1_18)
+                && (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_16))) {
+            debug.debug(DebugBuilder.build(getClass())
+                    .setLevel(DebugLevel.CRITICAL)
+                    .setBroadcast(true)
+                    .setMessages(
+                            "Your server does not support Java 16!",
+                            "Java 16 is required for servers 1.17-1.17.1 (Mojang Requirement)",
+                            "Disabling the plugin..."
+                    )
+            );
+            return false;
+        }
+        return true;
     }
 
     private void handleUpdateUtils() {
