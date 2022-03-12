@@ -1,9 +1,8 @@
 # SimplePets
 <div align="center">
   <img src="https://img.shields.io/maven-metadata/v?color=red&label=Current%20Version&metadataUrl=https%3A%2F%2Frepo.pluginwiki.us%2Frepository%2Fmaven-releases%2Fsimplepets%2Fbrainsynder%2FAPI%2Fmaven-metadata.xml"></br>
-  <img src="https://ci.pluginwiki.us/job/SimplePets/badge/icon?subject=Master (outdated)"> 
-  <img src="https://ci.pluginwiki.us/job/SimplePets-Experimental/badge/icon?subject=Experimental (1.15->1.16.5)"> 
-  <img src="https://ci.pluginwiki.us/job/SimplePets_v5/badge/icon?subject=v5%20Recode (1.17)"></br>
+  <a href="https://www.codefactor.io/repository/github/brainsynder-dev/simplepets"><img src="https://www.codefactor.io/repository/github/brainsynder-dev/simplepets/badge" alt="CodeFactor" /></a> 
+  <img src="https://ci.pluginwiki.us/job/SimplePets_v5/badge/icon?subject=v5%20Recode (1.17 -> LATEST)"></br>
   <img src="https://i.imgur.com/60pNn41.jpg" alt="SimplePets Logo">
 </div>
 
