@@ -29,6 +29,8 @@ import simplepets.brainsynder.api.pet.data.fox.FoxCrouchingData;
 import simplepets.brainsynder.api.pet.data.fox.FoxInterestData;
 import simplepets.brainsynder.api.pet.data.fox.FoxSittingData;
 import simplepets.brainsynder.api.pet.data.fox.FoxTypeData;
+import simplepets.brainsynder.api.pet.data.frog.CroakingData;
+import simplepets.brainsynder.api.pet.data.frog.FrogVariantData;
 import simplepets.brainsynder.api.pet.data.horse.ChestData;
 import simplepets.brainsynder.api.pet.data.horse.HorseArmorData;
 import simplepets.brainsynder.api.pet.data.horse.HorseColorData;
@@ -123,6 +125,11 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_FOX_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     FOX(IEntityFoxPet.class, "d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a",
             AgeData.class, SleepData.class, FoxInterestData.class, FoxCrouchingData.class, FoxTypeData.class, FoxSittingData.class),
+
+    @InDevelopment
+    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT)
+    FROG(IEntityFrogPet.class, "1b20e0c01e2a241fb6fbf45045b9c9dbfecf745c62a8fda6eb6522fc2d53e2cf",
+            FrogVariantData.class, CroakingData.class),
 
     @LargePet
     @PetCustomization(ambient = SoundMaker.ENTITY_GHAST_AMBIENT, weight = PetWeight.HEAVY)
@@ -271,6 +278,10 @@ public enum PetType {
     STRIDER(IEntityStriderPet.class, "cb7ffdda656c68d88851a8e05b48cd2493773ffc4ab7d64e9302229fe3571059",
             AgeData.class, SaddleData.class),
 
+    @InDevelopment
+    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK)
+    TADPOLE(IEntityTadpolePet.class, "6cc9b9740bd3adeba52e0ce0a77b3dfdef8d3a40555a4e8bb67d200cd62770d0"),
+
     @PetCustomization(ambient = SoundMaker.ENTITY_LLAMA_AMBIENT, weight = PetWeight.HEAVY)
     TRADER_LLAMA(IEntityTraderLlamaPet.class, "8424780b3c5c5351cf49fb5bf41fcb289491df6c430683c84d7846188db4f84d",
             AgeData.class, ChestData.class, ResetColorData.class, LlamaSkinData.class),
@@ -299,7 +310,9 @@ public enum PetType {
     WANDERING_TRADER(IEntityWanderingTraderPet.class, "5f1379a82290d7abe1efaabbc70710ff2ec02dd34ade386bc00c930c461cf932"),
 
     @LargePet
-    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"), // TODO: 1.18 Mob
+    @InDevelopment
+    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.HEAVY)
+    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_WITCH_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     WITCH(IEntityWitchPet.class, "20e13d18474fc94ed55aeb7069566e4687d773dac16f4c3f8722fc95bf9f2dfa",
