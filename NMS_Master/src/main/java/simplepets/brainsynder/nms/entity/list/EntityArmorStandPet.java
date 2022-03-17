@@ -9,6 +9,7 @@ import lib.brainsynder.utils.Base64Wrapper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.Rotations;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
@@ -144,6 +145,12 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     public void tick() {
         super.tick();
         Entity bukkitEntity = getBukkitEntity();
+        if ((this.pet == null)
+                || (this.pet.getBukkitEntity().isDead())
+                || (!this.pet.getBukkitEntity().isValid())) {
+            kill();
+            return;
+        }
 
         // Handles all other Pet Tasks...
         if (user == null
@@ -654,5 +661,21 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     @Override
     public void setBurning(boolean var) {
         super.hasVisualFire = var;
+    }
+
+
+    // TODO: These methods prevent pets from being saved in the worlds
+    @Override
+    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
+        return false;
+    }
+
+    @Override
+    public boolean save(CompoundTag nbttagcompound) {// Calls e
+        return false;
+    }
+
+    @Override
+    public void load(CompoundTag nbttagcompound) {
     }
 }
