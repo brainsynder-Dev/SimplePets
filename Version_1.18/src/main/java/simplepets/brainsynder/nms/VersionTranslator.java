@@ -6,7 +6,9 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.other.NBTException;
+import lib.brainsynder.storage.RandomCollection;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
@@ -30,6 +32,7 @@ import simplepets.brainsynder.nms.utils.FieldUtils;
 import simplepets.brainsynder.nms.utils.InvalidInputException;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
@@ -85,6 +88,15 @@ public class VersionTranslator {
 
     public static BlockPos subtract (BlockPos blockPos, Vec3i vec) {
         return blockPos.subtract(vec);
+    }
+
+    public static BlockPos relative (BlockPos blockPos) {
+        return blockPos.relative(RandomCollection.fromCollection(Arrays.asList(
+                Direction.NORTH,
+                Direction.EAST,
+                Direction.SOUTH,
+                Direction.WEST
+        )).next());
     }
 
     public static void modifyGlowData (SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher, boolean glow) throws IllegalAccessException {

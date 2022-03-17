@@ -62,6 +62,10 @@ public class VersionTranslator {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 
+    public static BlockPos relative (BlockPos blockPos) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
     public static void modifyGlowData (SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher, boolean glow) throws IllegalAccessException {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
