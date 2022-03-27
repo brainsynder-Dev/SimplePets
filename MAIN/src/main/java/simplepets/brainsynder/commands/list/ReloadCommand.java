@@ -64,6 +64,7 @@ public class ReloadCommand extends PetSubCommand {
                 break;
             default:
                 getPlugin().getConfiguration().reload();
+                getPlugin().getConfiguration().initValues();
                 MessageFile.getFile().reload();
                 getPlugin().getParticleHandler().reload(getPlugin());
                 getPlugin().reloadPetConfigManager();
