@@ -267,14 +267,14 @@ public class AddonManager {
     }
 
     public void fetchAddons(Consumer<List<AddonData>> consumer) {
-        WebConnector.getInputStreamString("https://pluginwiki.us/addons/addons.json", plugin, result -> {
+        WebConnector.getInputStreamString("https://bsdevelopment.org/addons/addons.json", plugin, result -> {
             List<AddonData> addons = Lists.newArrayList();
 
             JsonObject jsonObject = (JsonObject) Json.parse(result);
             jsonObject.forEach(member -> {
                 JsonObject json = (JsonObject) member.getValue();
                 AddonData data = new AddonData(
-                        "https://pluginwiki.us/addons/download/" + member.getName(),
+                        "https://bsdevelopment.org/addons/download/" + member.getName(),
                         member.getName(),
                         json.getString("author", "Unknown"),
                         Double.parseDouble(json.getString("version", "0.0"))
