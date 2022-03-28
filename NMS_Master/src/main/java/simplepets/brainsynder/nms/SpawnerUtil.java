@@ -9,6 +9,7 @@ import lib.brainsynder.utils.Colorize;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.ISpawnUtil;
@@ -160,7 +161,7 @@ public class SpawnerUtil implements ISpawnUtil {
     }
 
     private Location getRandomLocation (PetType type, Location center) {
-        List<Location> locationList = circle(center, modifyInt(type, 4), 1, false, false);
+        List<Location> locationList = circle(center, modifyInt(type, 4), 3, false, false);
         return RandomCollection.fromCollection(locationList).next();
     }
 
@@ -180,6 +181,8 @@ public class SpawnerUtil implements ISpawnUtil {
                     double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z) + (sphere ? (cy - y) * (cy - y) : 0.0D);
                     if (dist < radius * radius && (!hollow || dist >= (radius - 1.0D) * (radius - 1.0D))) {
                         Location l = new Location(loc.getWorld(), x, y, z);
+                        if ((!l.getBlock().isEmpty()) && (!l.getBlock().isPassable())) continue;
+                        if ((l.getBlock().getRelative(BlockFace.DOWN).isEmpty()) || (l.getBlock().getRelative(BlockFace.DOWN).isPassable())) continue;
                         circleblocks.add(l);
                     }
                 }
