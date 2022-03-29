@@ -80,8 +80,6 @@ public class Utilities {
             return false;
         }
 
-        // || (user.getOwnedPets().contains(type) && PetCore.getInstance().getConfiguration().getBoolean("Utilize-Purchased-Pets", false))
-        // TODO: Add utilize-purchased-pets config option here...
         if (!Utilities.hasPermission(player, type.getPermission())) {
             timer.stop("no permission - end");
             return false;

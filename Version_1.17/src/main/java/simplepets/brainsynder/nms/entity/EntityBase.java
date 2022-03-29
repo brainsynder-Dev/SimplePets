@@ -41,7 +41,9 @@ public class EntityBase extends Mob {
         return user;
     }
 
-    // TODO: This literally fixed the shit with p2 and i'm so fucking mad
+    /**
+     * This literally fixed the shit with p2 and i'm so fucking mad
+     */
     public CraftEntity getBukkitEntity() {
         return new CraftLivingEntity(level.getCraftServer(), this) {
             @Override

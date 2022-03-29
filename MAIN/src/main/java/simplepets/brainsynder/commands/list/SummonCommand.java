@@ -163,7 +163,6 @@ public class SummonCommand extends PetSubCommand {
 
             if (finalTarget == sender) {
                 // Will be treated like selecting a pet from the selection menu
-                // TODO - own thing?
                 PetSelectTypeEvent event = new PetSelectTypeEvent(type, user);
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;

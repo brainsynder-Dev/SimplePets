@@ -90,7 +90,6 @@ public class PlayerSQL extends SQLManager {
 
     @Override
     public void transferOldData() {
-        // TODO: Need to transfer the old data from the files
         File folder = new File(PetCore.getInstance().getDataFolder() + File.separator + "PlayerData");
         if (!folder.exists()) return;
         if (folder.listFiles() == null) return;

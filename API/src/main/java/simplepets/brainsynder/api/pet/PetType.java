@@ -57,7 +57,7 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_ARMORSTAND_FALL, weight = PetWeight.LIGHT)
     ARMOR_STAND(IEntityArmorStandPet.class, Material.ARMOR_STAND),
 
-    @PetCustomization(ambient = SoundMaker.ENTITY_AXOLOTL_IDLE_WATER, weight = PetWeight.LIGHT) // TODO: Add sound
+    @PetCustomization(ambient = SoundMaker.ENTITY_AXOLOTL_IDLE_WATER, weight = PetWeight.LIGHT)
     AXOLOTL(IEntityAxolotlPet.class, "5c138f401c67fc2e1e387d9c90a9691772ee486e8ddbf2ed375fc8348746f936",
             AgeData.class,
             AxolotlVariantData.class,

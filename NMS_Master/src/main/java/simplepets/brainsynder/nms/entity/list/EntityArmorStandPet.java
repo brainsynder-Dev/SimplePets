@@ -664,7 +664,9 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
 
-    // TODO: These methods prevent pets from being saved in the worlds
+    /**
+     * These methods prevent pets from being saved in the worlds
+     */
     @Override
     public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
         return false;

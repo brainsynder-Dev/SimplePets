@@ -106,7 +106,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         displayName = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-            // TODO: fill in values
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
             this.floatDown = config.canFloat();
@@ -520,7 +519,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         }
     }
 
-    // TODO: Handles Ambient sound
     /**
      * Handles the Ambient Sound playing
      * <p>
@@ -585,7 +583,9 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
 
-    // TODO: These methods prevent pets from being saved in the worlds
+    /**
+     * These methods prevent pets from being saved in the worlds
+     */
     @Override
     public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
         return false;
