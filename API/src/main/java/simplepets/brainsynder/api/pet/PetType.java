@@ -132,7 +132,7 @@ public enum PetType {
 
     @InDevelopment
     @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT)
-    FROG(IEntityFrogPet.class, "1b20e0c01e2a241fb6fbf45045b9c9dbfecf745c62a8fda6eb6522fc2d53e2cf",
+    FROG(IEntityFrogPet.class, "23ce6f9998ed2da757d1e6372f04efa20e57dfc17c3a06478657bbdf51c2f2a2",
             FrogVariantData.class, CroakingData.class),
 
     @LargePet
@@ -284,7 +284,7 @@ public enum PetType {
 
     @InDevelopment
     @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK)
-    TADPOLE(IEntityTadpolePet.class, "6cc9b9740bd3adeba52e0ce0a77b3dfdef8d3a40555a4e8bb67d200cd62770d0"),
+    TADPOLE(IEntityTadpolePet.class, "987035f5352334c2cba6ac4c65c2b9059739d6d0e839c1dd98d75d2e77957847"),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_LLAMA_AMBIENT, weight = PetWeight.HEAVY)
     TRADER_LLAMA(IEntityTraderLlamaPet.class, "8424780b3c5c5351cf49fb5bf41fcb289491df6c430683c84d7846188db4f84d",
