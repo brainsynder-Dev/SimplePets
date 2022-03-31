@@ -6,11 +6,11 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.FrogVariant;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
 /**
@@ -21,7 +21,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
 
     public EntityFrogPet(PetType type, PetUser user) {
-        super(EntityType.GOAT, type, user);
+        super(VersionTranslator.fetchEntityType("FROG"), type, user);
     }
 
     @Override

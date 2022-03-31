@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +17,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 
 import java.lang.reflect.Field;
+import java.util.Optional;
 
 @Deprecated
 public class VersionTranslator {
@@ -76,5 +78,18 @@ public class VersionTranslator {
 
     public static StorageTagCompound fromItemStack(org.bukkit.inventory.ItemStack item) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static float cube(float f) {
+        return f * f * f;
+    }
+
+    public static EntityType fetchEntityType (String name) {
+        // The EntityType.byString() method requires the name to start with `minecraft:` and the name of the mob to be lowercase
+        Optional<EntityType<?>> optional = EntityType.byString("minecraft:"+name.toLowerCase());
+        if (optional.isPresent()) return optional.get();
+
+        // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
+        return EntityType.GIANT;
     }
 }
