@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
@@ -502,7 +502,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
             int custom = 0;
             int registered = 0;
-            for (PetAddon addon : addonManager.getLoadedAddons()) {
+            for (PetModule addon : addonManager.getLoadedAddons()) {
                 if (addonManager.getRegisteredAddons().contains(addon.getNamespace().namespace())) {
                     registered++;
                 } else {
@@ -600,4 +600,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.label("Finished looking for supported versions.");
         return supported;
     }
+
+    /*
+    April fools
+     */
 }
