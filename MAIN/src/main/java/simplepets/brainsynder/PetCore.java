@@ -600,8 +600,4 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.label("Finished looking for supported versions.");
         return supported;
     }
-
-    /*
-    April fools
-     */
 }
