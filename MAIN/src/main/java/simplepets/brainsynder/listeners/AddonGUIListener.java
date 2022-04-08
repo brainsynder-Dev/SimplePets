@@ -49,13 +49,13 @@ public class AddonGUIListener implements Listener {
                 ItemStack stack = e.getCurrentItem();
                 ItemMeta meta = stack.getItemMeta();
                 PersistentDataContainer container = meta.getPersistentDataContainer();
-                String name = container.get(Keys.ADDON_NAME, PersistentDataType.STRING);
+                String name = container.get(Keys.MODULE_NAME, PersistentDataType.STRING);
                 if (container.has(Keys.ADDON_URL, PersistentDataType.STRING)) {
                     meta.setDisplayName(ChatColor.GRAY+"Downloading...");
                     stack.setItemMeta(meta);
                     e.getInventory().setItem(e.getRawSlot(), stack);
 
-                    PetCore.getInstance().getAddonManager().downloadAddon(name, container.get(Keys.ADDON_URL, PersistentDataType.STRING), () -> {
+                    PetCore.getInstance().getAddonManager().downloadViaName(name, container.get(Keys.ADDON_URL, PersistentDataType.STRING), () -> {
                         new BukkitRunnable() {
                             @Override
                             public void run() {
@@ -65,13 +65,13 @@ public class AddonGUIListener implements Listener {
                     });
                     return;
                 }
-                PetCore.getInstance().getAddonManager().fetchAddon(name).ifPresent(addon -> {
+                PetCore.getInstance().getAddonManager().fetchAddonModule(name).ifPresent(module -> {
                     if (e.isShiftClick() && container.has(Keys.ADDON_UPDATE, PersistentDataType.STRING)) {
                         meta.setDisplayName(ChatColor.GRAY+"Updating...");
                         stack.setItemMeta(meta);
                         e.getInventory().setItem(e.getRawSlot(), stack);
 
-                        PetCore.getInstance().getAddonManager().update(addon, container.get(Keys.ADDON_UPDATE, PersistentDataType.STRING), () -> {
+                        PetCore.getInstance().getAddonManager().update(module.getLocalData(), container.get(Keys.ADDON_UPDATE, PersistentDataType.STRING), () -> {
                             new BukkitRunnable() {
                                 @Override
                                 public void run() {
@@ -82,8 +82,8 @@ public class AddonGUIListener implements Listener {
                         return;
                     }
 
-                    boolean enabled = !addon.isEnabled();
-                    PetCore.getInstance().getAddonManager().toggleAddon(addon, enabled);
+                    boolean enabled = !module.isEnabled();
+                    PetCore.getInstance().getAddonManager().toggleAddonModule(module, enabled);
 
                     new BukkitRunnable() {
                         @Override

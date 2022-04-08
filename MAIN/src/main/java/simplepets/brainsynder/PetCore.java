@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.AddonLocalData;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
@@ -502,8 +502,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
             int custom = 0;
             int registered = 0;
-            for (PetAddon addon : addonManager.getLoadedAddons()) {
-                if (addonManager.getRegisteredAddons().contains(addon.getNamespace().namespace())) {
+            for (AddonLocalData localData : addonManager.getLocalDataMap().keySet()) {
+                if (addonManager.getRegisteredAddons().contains(localData.getName())) {
                     registered++;
                 } else {
                     custom++;

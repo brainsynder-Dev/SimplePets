@@ -29,7 +29,7 @@ public class AddonPermissions {
      *      true | They have permission
      *      false | They do not have permission
      */
-    public static boolean hasPermission (PetAddon addon, CommandSender sender, String permission) {
+    public static boolean hasPermission (PetModule addon, CommandSender sender, String permission) {
         if (sender.isOp()) return true;
         String name = addon.getNamespace().namespace();
         Map<PermissionData, List<PermissionData>> map = parentPermissions.getOrDefault(name, new HashMap<>());
@@ -52,7 +52,7 @@ public class AddonPermissions {
      * @param addon The addon that the permission is for
      * @param data = The data for the permission
      */
-    public static void register (PetAddon addon, PermissionData data) {
+    public static void register (PetModule addon, PermissionData data) {
         Objects.requireNonNull(addon);
         Objects.requireNonNull(data);
         String name = addon.getNamespace().namespace();
@@ -71,7 +71,7 @@ public class AddonPermissions {
      * @param addon The addon that the permission is for
      * @param data = The data for the permission
      */
-    public static void register (PetAddon addon, PermissionData parentPermission, PermissionData data) {
+    public static void register (PetModule addon, PermissionData parentPermission, PermissionData data) {
         Objects.requireNonNull(addon);
         Objects.requireNonNull(parentPermission);
         Objects.requireNonNull(data);

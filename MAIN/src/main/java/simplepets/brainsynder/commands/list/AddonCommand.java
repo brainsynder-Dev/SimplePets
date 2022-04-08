@@ -42,8 +42,8 @@ public class AddonCommand extends PetSubCommand {
 
         if (index == 2) {
             if (args[0].equalsIgnoreCase("update")) {
-                PetCore.getInstance().getAddonManager().getLoadedAddons().forEach(petAddon -> {
-                    completions.add(petAddon.getNamespace().namespace());
+                PetCore.getInstance().getAddonManager().getLocalDataMap().keySet().forEach(localData ->  {
+                    completions.add(localData.getName());
                 });
             }
         }
@@ -61,10 +61,10 @@ public class AddonCommand extends PetSubCommand {
                     return;
                 }
                 String target = args[1];
-                manager.fetchAddon(target).ifPresent(petAddon -> {
-                    String name = petAddon.getNamespace().namespace();
+                manager.fetchAddon(target).ifPresent(localData -> {
+                    String name = localData.getName();
 
-                    WebConnector.getInputStreamString("https://pluginwiki.us/addons/addons.json", getPlugin(), result -> {
+                    WebConnector.getInputStreamString("https://bsdevelopment.org/addons/addons.json", getPlugin(), result -> {
                         JsonObject json = (JsonObject) Json.parse(result);
                         if (!json.names().contains(name)) {
                             sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §c"+name+" is not in the addon database: https://pluginwiki.us/addons/");
@@ -77,7 +77,7 @@ public class AddonCommand extends PetSubCommand {
                             return;
                         }
 
-                        manager.update(petAddon, url, () -> {
+                        manager.update(localData, url, () -> {
                             sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7"+name+" has been successfully updated!");
                         });
                     });

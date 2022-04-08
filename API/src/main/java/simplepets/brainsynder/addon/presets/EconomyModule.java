@@ -9,7 +9,7 @@ import org.bukkit.event.EventPriority;
 import simplepets.brainsynder.addon.AddonConfig;
 import simplepets.brainsynder.addon.AddonPermissions;
 import simplepets.brainsynder.addon.PermissionData;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.pet.PetType;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 /**
  * This preset addon class, is for making addons for any type of plugin that handles economy (EG: Vault/TokenManager)
  */
-public abstract class EconomyAddon extends PetAddon {
+public abstract class EconomyModule extends PetModule {
     private final Map<PetType, Double> priceMap = Maps.newHashMap();
 
     private String prefix, bypassPerm, freePrice, bypassPrice, insufficientFunds, successfulPayment, paid, boolTrue, boolFalse;
