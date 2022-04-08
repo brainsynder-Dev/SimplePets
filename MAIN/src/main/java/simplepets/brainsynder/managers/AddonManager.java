@@ -43,6 +43,7 @@ public class AddonManager {
     private final YamlFile addonFile;
     private final PetCore plugin;
     private final File folder;
+    private final List<AddonCloudData> cloudAddons;
     private final List<String> registeredAddons;
     private final List<PetModule> rawAddons, loadedAddons;
     private final Map<AddonLocalData, List<PetModule>> localDataMap, tempMap;
@@ -51,6 +52,7 @@ public class AddonManager {
         this.plugin = plugin;
         tempMap = Maps.newHashMap();
         localDataMap = Maps.newHashMap();
+        cloudAddons = Lists.newArrayList();
         registeredAddons = Lists.newArrayList();
         rawAddons = Lists.newArrayList();
         loadedAddons = Lists.newArrayList();
@@ -245,6 +247,10 @@ public class AddonManager {
         return localDataMap;
     }
 
+    public List<AddonCloudData> getCloudAddons() {
+        return cloudAddons;
+    }
+
     public void downloadViaName (String name, String url, Runnable runnable) {
         CompletableFuture.runAsync(() -> {
             try {
@@ -263,6 +269,7 @@ public class AddonManager {
                     final File file = new File(folder.getAbsolutePath() + "/" + name);
                     file.delete();
                     FileUtils.copyURLToFile(new URL(url), file);
+                    runnable.run();
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -332,6 +339,13 @@ public class AddonManager {
         return Optional.empty();
     }
 
+    public Optional<AddonCloudData> fetchCloudData(String name) {
+        for (AddonCloudData cloudData : cloudAddons) {
+            if (cloudData.getName().equalsIgnoreCase(name)) return Optional.of(cloudData);
+        }
+        return Optional.empty();
+    }
+
     public Optional<PetModule> fetchAddonModule(String name) {
         return fetchAddonModule(null, name);
     }
@@ -370,13 +384,14 @@ public class AddonManager {
         fetchAddons(addons -> {
             List<AddonCloudData> updateNeeded = Lists.newArrayList();
 
-            addons.forEach(addon -> {
-                if (addonMap.containsKey(addon.getName())) {
-                    AddonLocalData localData = addonMap.get(addon.getName());
-                    if (addon.getVersion() > localData.getVersion()) {
-                        updateNeeded.add(addon);
+            addons.forEach(cloudAddon -> {
+                if (addonMap.containsKey(cloudAddon.getName())) {
+                    AddonLocalData localData = addonMap.get(cloudAddon.getName());
+                    if (cloudAddon.getVersion() > localData.getVersion()) {
+                        updateNeeded.add(cloudAddon);
                     }
                 }
+                cloudAddons.add(cloudAddon);
             });
 
             if (updateNeeded.isEmpty()) return;

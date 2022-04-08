@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.addon.AddonCloudData;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
@@ -19,6 +20,7 @@ import simplepets.brainsynder.menu.inventory.AddonMenu;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 
 @ICommand(
         name = "addon",
@@ -38,12 +40,18 @@ public class AddonCommand extends PetSubCommand {
         if ((index == 1)) {
             if (sender.hasPermission(getPermission("reload"))) completions.add("reload");
             if (sender.hasPermission(getPermission("update"))) completions.add("update");
+            if (sender.hasPermission(getPermission("install"))) completions.add("install");
         }
 
         if (index == 2) {
             if (args[0].equalsIgnoreCase("update")) {
                 PetCore.getInstance().getAddonManager().getLocalDataMap().keySet().forEach(localData ->  {
                     completions.add(localData.getName());
+                });
+            }
+            if (args[0].equalsIgnoreCase("install")) {
+                PetCore.getInstance().getAddonManager().getCloudAddons().forEach(cloudData ->  {
+                    completions.add(cloudData.getName());
                 });
             }
         }
@@ -83,6 +91,32 @@ public class AddonCommand extends PetSubCommand {
                     });
                 });
 
+                return;
+            }
+            if (args[0].equalsIgnoreCase("install") && sender.hasPermission(getPermission("install"))) {
+                AddonManager manager = PetCore.getInstance().getAddonManager();
+
+                if (args.length == 1) {
+                    sendUsage(sender);
+                    return;
+                }
+                String target = args[1];
+                Optional<AddonCloudData> cloudOptional = manager.fetchCloudData(target);
+                if (cloudOptional.isEmpty()) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §c"+target+" is not a valid addon in our database.");
+                    return;
+                }
+                AddonCloudData cloudData = cloudOptional.get();
+
+                if (manager.fetchAddon(cloudData.getName()).isPresent()) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §c"+target+" is already installed, Looking to update it try: §7/pet addon update "+target);
+                    return;
+                }
+
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Attempting to install: '"+target+"'");
+                manager.downloadViaName(cloudData.getName(), cloudData.getUrl(), () -> {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7"+target+" has been successfully installed!");
+                });
                 return;
             }
             if (args[0].equalsIgnoreCase("reload") && sender.hasPermission(getPermission("reload"))) {
