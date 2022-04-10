@@ -36,6 +36,7 @@ public final class SimplePets {
 
     /**
      * @throws {@link SecurityException} Only if the API is shaded into another plugin (It should not be shaded)
+     * @throws {@link IllegalStateException} If the plugin is disabled.
      * @return {@link IPetsPlugin}
      */
     public static IPetsPlugin getPlugin() {
@@ -63,6 +64,10 @@ public final class SimplePets {
             }
 
             throw new SecurityException (baseMessage);
+        }
+        // Check if the plugin has lost the will to live
+        if (!PLUGIN.isEnabled() || !PLUGIN.hasFullyStarted()) {
+            throw new IllegalStateException("The plugin (SimplePets) has not enabled successfully, please check your server logs whilst starting for more information.");
         }
         return PLUGIN;
     }

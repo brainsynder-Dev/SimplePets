@@ -61,6 +61,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private File itemFolder;
     private boolean reloaded = false;
+    private boolean fullyStarted = false;
 
     private Config configuration;
 
@@ -86,6 +87,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        SimplePets.setPLUGIN(this);
         taskTimer = new TaskTimer(this);
         taskTimer.start();
 
@@ -113,7 +115,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         petUtilities = new PetUtility();
 
-        SimplePets.setPLUGIN(this);
         taskTimer.label("registered api instance");
 
 
@@ -183,6 +184,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         });
         taskTimer.stop();
 
+        fullyStarted = true;
+
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
         new BukkitRunnable() {
@@ -246,7 +249,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         if (addonManager != null) addonManager.cleanup();
         addonManager = null;
         debug = null;
-
+        fullyStarted = false;
     }
 
     private void handleUpdateUtils() {
@@ -567,5 +570,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
         taskTimer.label("Finished looking for supported versions.");
         return supported;
+    }
+
+    public boolean hasFullyStarted() {
+        return fullyStarted;
     }
 }
