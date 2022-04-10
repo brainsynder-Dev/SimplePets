@@ -15,7 +15,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.AddonLocalData;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
 import simplepets.brainsynder.api.inventory.handler.ItemHandler;
@@ -39,6 +39,7 @@ import simplepets.brainsynder.impl.PetUtility;
 import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
 import simplepets.brainsynder.sql.PlayerSQL;
+import simplepets.brainsynder.utils.JavaVersion;
 import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
 
@@ -92,11 +93,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         taskTimer.start();
 
         debug = new Debug(this);
-        if (ServerVersion.isEqualNew(ServerVersion.v1_18_2)) {
-            debug.debug(DebugBuilder.build(getClass()).setBroadcast(true).setLevel(DebugLevel.CRITICAL).setMessages(
-                    "This version has not been fully tested yet, Please give us a bit to fully update the plugin to add support.",
-                    "You WILL have errors with this version..."
-            ));
+
+        if (!checkJavaVersion()){
+            setEnabled(false);
+            return;
         }
 
         if (!fetchSupportedVersions()) {
@@ -250,6 +250,38 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         addonManager = null;
         debug = null;
         fullyStarted = false;
+    }
+
+    private boolean checkJavaVersion() {
+        if (ServerVersion.isEqualNew(ServerVersion.v1_18)
+                && (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17))) {
+            debug.debug(DebugBuilder.build(getClass())
+                    .setLevel(DebugLevel.CRITICAL)
+                    .setBroadcast(true)
+                    .setMessages(
+                            "Your server does not support Java 17!",
+                            "Java 17 is required for servers 1.18+ (Mojang Requirement)",
+                            "Disabling the plugin..."
+                    )
+            );
+            return false;
+        }
+
+        if (ServerVersion.isEqualNew(ServerVersion.v1_17)
+                && ServerVersion.isOlder(ServerVersion.v1_18)
+                && (!JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_16))) {
+            debug.debug(DebugBuilder.build(getClass())
+                    .setLevel(DebugLevel.CRITICAL)
+                    .setBroadcast(true)
+                    .setMessages(
+                            "Your server does not support Java 16!",
+                            "Java 16 is required for servers 1.17-1.17.1 (Mojang Requirement)",
+                            "Disabling the plugin..."
+                    )
+            );
+            return false;
+        }
+        return true;
     }
 
     private void handleUpdateUtils() {
@@ -473,8 +505,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
             int custom = 0;
             int registered = 0;
-            for (PetAddon addon : addonManager.getLoadedAddons()) {
-                if (addonManager.getRegisteredAddons().contains(addon.getNamespace().namespace())) {
+            for (AddonLocalData localData : addonManager.getLocalDataMap().keySet()) {
+                if (addonManager.getRegisteredAddons().contains(localData.getName())) {
                     registered++;
                 } else {
                     custom++;

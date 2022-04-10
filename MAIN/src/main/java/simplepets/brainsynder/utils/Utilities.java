@@ -1,5 +1,6 @@
 package simplepets.brainsynder.utils;
 
+import lib.brainsynder.ServerVersion;
 import lib.brainsynder.files.YamlFile;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nms.Tellraw;
@@ -79,8 +80,6 @@ public class Utilities {
             return false;
         }
 
-        // || (user.getOwnedPets().contains(type) && PetCore.getInstance().getConfiguration().getBoolean("Utilize-Purchased-Pets", false))
-        // TODO: Add utilize-purchased-pets config option here...
         if (!Utilities.hasPermission(player, type.getPermission())) {
             timer.stop("no permission - end");
             return false;
@@ -214,7 +213,7 @@ public class Utilities {
 
     public static void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
-        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), "s", Integer.TYPE);
+        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), ((ServerVersion.isEqualNew(ServerVersion.v1_18_2)) ? "r" : "s"), Integer.TYPE);
 
         field.set(Reflection.getHandle(entity), 0);
     }

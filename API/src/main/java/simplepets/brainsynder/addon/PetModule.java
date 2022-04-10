@@ -1,6 +1,7 @@
 package simplepets.brainsynder.addon;
 
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.Material;
 import org.bukkit.event.Listener;
@@ -8,13 +9,13 @@ import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.Namespace;
 
 import java.io.File;
-import java.util.List;
 
-public abstract class PetAddon implements Listener {
+public abstract class PetModule implements Listener {
     private boolean loaded = false;
     private boolean enabled = false;
     private boolean update = false;
     private File addonFolder = null;
+    private AddonLocalData localData;
 
     /**
      * This method is used to generate the default values for the addons config file
@@ -46,46 +47,24 @@ public abstract class PetAddon implements Listener {
     }
 
     /**
-     * All PetAddon classes must have a Namespace Annotation to give it a name
+     * All PetModule classes must have a Namespace Annotation to give it a name
      * This method just retrieves it
      */
     public Namespace getNamespace() {
         if (getClass().isAnnotationPresent(Namespace.class)) return getClass().getAnnotation(Namespace.class);
-        throw new NullPointerException(getClass().getSimpleName() + " is missing @Namespace annotation for the addon");
+        throw new NullPointerException(getClass().getSimpleName() + " is missing @Namespace annotation for the module");
     }
 
     public ItemStack getAddonIcon (){
+        StringBuilder authors = new StringBuilder();
+        localData.getAuthors().forEach(s -> authors.append(s).append(", "));
         return new ItemBuilder (Material.PLAYER_HEAD)
                 .setTexture("http://textures.minecraft.net/texture/" +
                         (enabled ? "78d58a7651fedae4c03efebc226c03fd791eb74a132babb974e8d838ac6882" : "2da1508d47ed73b5c515e3b93928b728e4bc6278569a79b3723ab6972ce05357"))
-                .withName(Colorize.fetchColor("e1eb5b")+getNamespace().namespace()).withLore(getDescription())
-                .addLore("&r ", "&7Author: &e"+getAuthor()).build();
+                .withName(Colorize.fetchColor("e1eb5b")+getNamespace().namespace() + " Module").withLore(localData.getDescription())
+                .addLore("&r ", "&7Author: &e"+ AdvString.replaceLast(", ", "", authors.toString()))
+                .addLore("&7Addon: &e"+localData.getName()+" (v"+localData.getVersion()+")").build();
     }
-
-    /**
-     * What version is this addon
-     */
-    public abstract double getVersion ();
-
-    /**
-     * What version of SimplePets was the compiled for
-     *      Get this from the pom.xml, plugin.yml, or from /version SimplePets
-     *   Include the full version
-     *      Example: 5.0 (build 10)
-     */
-    public String getSupportedVersion () {
-        return "";
-    }
-
-    /**
-     * Who made the addon?
-     */
-    public abstract String getAuthor ();
-
-    /**
-     * Please describe the addon a bit
-     */
-    public abstract List<String> getDescription ();
 
     /**
      * Does the server have the addon enabled
@@ -108,6 +87,10 @@ public abstract class PetAddon implements Listener {
         return update;
     }
 
+    public AddonLocalData getLocalData() {
+        return localData;
+    }
+
     public void setAddonFolder(File addonFolder) {
         this.addonFolder = addonFolder;
     }
@@ -122,5 +105,9 @@ public abstract class PetAddon implements Listener {
 
     public void setHasUpdate(boolean update) {
         this.update = update;
+    }
+
+    public void setLocalData(AddonLocalData localData) {
+        this.localData = localData;
     }
 }

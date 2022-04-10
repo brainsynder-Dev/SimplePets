@@ -57,6 +57,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public List<Entity> getEntities() {
+        entities.add(getEntity());
         return entities;
     }
 
@@ -77,6 +78,13 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         if (!isSilent()) this.setSilent(true);
         if (pet != null) if (isBaby()) setBaby((getPetType() == PetType.SHULKER));
         Player p = getPetUser().getPlayer();
+        if ((this.displayEntity == null)
+                || (this.displayEntity.isDead())
+                || (!this.displayEntity.isValid())) {
+            displayEntity = null;
+            kill();
+            return;
+        }
 
         if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {

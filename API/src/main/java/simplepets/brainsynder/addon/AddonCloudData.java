@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 
-public class AddonData {
+public class AddonCloudData {
     private final String url;
     private final String name;
     private final String author;
@@ -12,19 +12,19 @@ public class AddonData {
     private final double version;
     private List<String> description = Lists.newArrayList();
 
-    public AddonData (String url, String name, String author, double version) {
+    public AddonCloudData(String url, String name, String author, double version) {
         this.url = url;
         this.name = name;
         this.author = author;
         this.version = version;
     }
 
-    public AddonData setDescription(List<String> description) {
+    public AddonCloudData setDescription(List<String> description) {
         this.description = description;
         return this;
     }
 
-    public AddonData setSupportedVersion(String supportedVersion) {
+    public AddonCloudData setSupportedVersion(String supportedVersion) {
         this.supportedVersion = supportedVersion;
         return this;
     }

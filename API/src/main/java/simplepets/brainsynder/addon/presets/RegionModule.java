@@ -7,7 +7,7 @@ import org.bukkit.event.EventHandler;
 import simplepets.brainsynder.addon.AddonConfig;
 import simplepets.brainsynder.addon.AddonPermissions;
 import simplepets.brainsynder.addon.PermissionData;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.entity.PetEntitySpawnEvent;
@@ -16,7 +16,7 @@ import simplepets.brainsynder.api.event.entity.PetMoveEvent;
 import simplepets.brainsynder.api.event.entity.movment.PetRideEvent;
 import simplepets.brainsynder.api.user.PetUser;
 
-public abstract class RegionAddon extends PetAddon {
+public abstract class RegionModule extends PetModule {
     private boolean spawningEnabled = true;
     private String spawningReason;
 

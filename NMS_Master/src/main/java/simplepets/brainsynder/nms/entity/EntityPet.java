@@ -14,6 +14,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
@@ -105,7 +106,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         displayName = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-            // TODO: fill in values
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
             this.floatDown = config.canFloat();
@@ -267,6 +267,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         if (object.hasKey("frozen")) setFrozen(object.getBoolean("frozen", false));
         if (object.hasKey("burning")) setBurning(object.getBoolean("burning", false));
+        if (object.hasKey("pose")) {
+            Pose pose = object.getEnum("pose", Pose.class);
+            if (pose != null) setPose(pose);
+        }
     }
 
     @Override
@@ -515,7 +519,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         }
     }
 
-    // TODO: Handles Ambient sound
     /**
      * Handles the Ambient Sound playing
      * <p>
@@ -580,7 +583,9 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
 
-    // TODO: These methods prevent pets from being saved in the worlds
+    /**
+     * These methods prevent pets from being saved in the worlds
+     */
     @Override
     public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
         return false;

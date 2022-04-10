@@ -9,6 +9,7 @@ public class Keys {
 
     public final static NamespacedKey BOOK_KEY;
 
+    public final static NamespacedKey MODULE_NAME;
     public final static NamespacedKey ADDON_NAME;
     public final static NamespacedKey ADDON_UPDATE;
     public final static NamespacedKey ADDON_URL;
@@ -19,6 +20,7 @@ public class Keys {
 
         BOOK_KEY = new NamespacedKey(PetCore.getInstance(), "book_key");
 
+        MODULE_NAME = new NamespacedKey(PetCore.getInstance(), "module_name");
         ADDON_NAME = new NamespacedKey(PetCore.getInstance(), "addon_name");
         ADDON_URL = new NamespacedKey(PetCore.getInstance(), "addon_url");
         ADDON_UPDATE = new NamespacedKey(PetCore.getInstance(), "addon_update_url");

@@ -96,8 +96,18 @@ public class DebugCommand extends PetSubCommand {
         fetchServerInfo(object -> json.add("server", object));
 
         JsonArray addons = new JsonArray();
-        PetCore.getInstance().getAddonManager().getLoadedAddons().forEach(addon -> {
-            addons.add(addon.getNamespace().namespace()+" (Made by: "+addon.getAuthor()+") [Version: "+addon.getVersion()+"] - Loaded: "+addon.isLoaded()+" | Enabled: "+addon.isEnabled());
+        PetCore.getInstance().getAddonManager().getLocalDataMap().forEach((localData, modules) -> {
+            JsonObject addonJson = new JsonObject();
+            JsonArray moduleArray = new JsonArray();
+            modules.forEach(module -> {
+                moduleArray.add("Module: '"+module.getNamespace().namespace()+"' | Loaded: "+module.isLoaded()+" | Enabled: "+module.isEnabled());
+            });
+
+            addonJson.add("addon-name", localData.getName() + "(v"+localData.getVersion()+") by: "+localData.getAuthors().toString()
+                    .replace("[", "").replace("]", ""));
+            addonJson.add("addon-file-name", localData.getFile().getName());
+            addonJson.add("addon-modules", moduleArray);
+            addons.add(addonJson);
         });
         json.set("loaded_addons", addons);
 
@@ -256,5 +266,11 @@ public class DebugCommand extends PetSubCommand {
         } catch (IOException var7) {
             var7.printStackTrace();
         }
+    }
+
+    private static JsonArray toArray (List<String> list) {
+        JsonArray array = new JsonArray();
+        list.forEach(array::add);
+        return array;
     }
 }

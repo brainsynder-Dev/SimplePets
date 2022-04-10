@@ -9,7 +9,7 @@ import org.bukkit.event.EventPriority;
 import simplepets.brainsynder.addon.AddonConfig;
 import simplepets.brainsynder.addon.AddonPermissions;
 import simplepets.brainsynder.addon.PermissionData;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.pet.PetType;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 /**
  * This preset addon class, is for making addons for any type of plugin that handles economy (EG: Vault/TokenManager)
  */
-public abstract class EconomyAddon extends PetAddon {
+public abstract class EconomyModule extends PetModule {
     private final Map<PetType, Double> priceMap = Maps.newHashMap();
 
     private String prefix, bypassPerm, freePrice, bypassPrice, insufficientFunds, successfulPayment, paid, boolTrue, boolFalse;
@@ -162,7 +162,7 @@ public abstract class EconomyAddon extends PetAddon {
         PetType type = event.getType();
         ItemBuilder maker = ItemBuilder.fromItem(event.getItem());
         String price = String.valueOf(priceMap.getOrDefault(type, 2000.0));
-        if (price.equals("-1")) price = freePrice;
+        if (this.priceMap.getOrDefault(type, 2000.0D) <= 0) price = freePrice;
 
         if (hidePrice && (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
         boolean contains = petArray.contains(type);
@@ -178,7 +178,7 @@ public abstract class EconomyAddon extends PetAddon {
         if (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(event.getPetType()))) return;
 
         double price = priceMap.getOrDefault(event.getPetType(), 2000.0);
-        if (price == -1) return; // The pet is free, return
+        if (price <= 0) return; // The pet is free, return
 
         PetUser user = event.getUser();
         // If player already owns the pet ignore

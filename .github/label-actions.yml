@@ -46,3 +46,7 @@ more info needed:
 question answered:
   issues:
     close: true
+
+completed:
+  issues:
+    close: true

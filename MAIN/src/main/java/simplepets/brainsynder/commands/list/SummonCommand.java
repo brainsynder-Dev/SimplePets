@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
@@ -162,7 +163,6 @@ public class SummonCommand extends PetSubCommand {
 
             if (finalTarget == sender) {
                 // Will be treated like selecting a pet from the selection menu
-                // TODO - own thing?
                 PetSelectTypeEvent event = new PetSelectTypeEvent(type, user);
                 Bukkit.getServer().getPluginManager().callEvent(event);
                 if (event.isCancelled()) return;
@@ -178,6 +178,9 @@ public class SummonCommand extends PetSubCommand {
 
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
                 return;
+            }
+            if (type == PetType.ARMOR_STAND) {
+                ((IEntityControllerPet)entityPet.first().get()).getVisibleEntity().applyCompound(finalCompound);
             }
             sender.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
         });

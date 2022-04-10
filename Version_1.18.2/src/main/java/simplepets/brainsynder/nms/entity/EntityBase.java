@@ -7,7 +7,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftLivingEntity;
-import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
@@ -23,7 +22,7 @@ public class EntityBase extends Mob {
 
     protected EntityBase(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
-        entityType = getEntityType(entitytypes);
+        entityType = getEntityType(entitytypes, containsFields());
         originalEntityType = entitytypes;
         getBukkitEntity().remove();
     }
@@ -32,7 +31,7 @@ public class EntityBase extends Mob {
         super(entitytypes, VersionTranslator.getWorldHandle(user.getPlayer().getLocation().getWorld()));
         this.user = user;
         this.petType = type;
-        entityType = getEntityType(entitytypes);
+        entityType = getEntityType(entitytypes, containsFields());
         originalEntityType = entitytypes;
     }
 
@@ -44,7 +43,9 @@ public class EntityBase extends Mob {
         return user;
     }
 
-    // TODO: This literally fixed the shit with p2 and i'm so fucking mad
+    /**
+     * This literally fixed the shit with p2 and i'm so fucking mad
+     */
     public CraftEntity getBukkitEntity() {
         return new CraftLivingEntity(level.getCraftServer(), this) {
             @Override
@@ -54,29 +55,42 @@ public class EntityBase extends Mob {
         };
     }
 
-    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
+    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields)  {
         try {
             Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);
             field.setAccessible(true);
             EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);
             Registry<EntityType<?>> registry = Registry.ENTITY_TYPE;
-            PetCore.getInstance().getLogger().info("Registry: " + registry.getClass().getSimpleName());
             // frozen field
-            Field frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
-            frozen.setAccessible(true);
-            frozen.set(registry, false);
+            Field frozen = null;
+            if (checkFields) {
+                frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
+                frozen.setAccessible(true);
+                frozen.set(registry, false);
+            }
             // map field
-            Field map = registry.getClass().getSuperclass().getDeclaredField("bN");
-            map.setAccessible(true);
-            map.set(registry, new IdentityHashMap<>());
+            if (checkFields) {
+                Field map = registry.getClass().getSuperclass().getDeclaredField("bN");
+                map.setAccessible(true);
+                map.set(registry, new IdentityHashMap<>());
+            }
             // screw you mojang, my power is unlimited
             EntityType<? extends Mob> mob = builder.build(petType.name().toLowerCase());
-            frozen.set(registry, true);
+            if (checkFields && (frozen != null)) frozen.set(registry, true);
             return mob;
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
             return originalType;
+        }
+    }
+
+    private boolean containsFields () {
+        try {
+            Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField("bL");
+            return true;
+        }catch (Exception e) {
+            return false;
         }
     }
 }

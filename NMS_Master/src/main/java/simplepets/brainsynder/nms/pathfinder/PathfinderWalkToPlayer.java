@@ -70,7 +70,8 @@ public class PathfinderWalkToPlayer extends Goal {
         if (entity == null) return false;
 
         if (!user.getPlayer().isOnline()) return false;
-        if (user.getPlayer().isInsideVehicle()) return false;
+        if (user.getPlayer().isInsideVehicle()
+                && !ConfigOption.INSTANCE.PATHFINDING_FOLLOW_WHEN_RIDING.getValue()) return false;
         if (!user.hasPets()) return false;
 
         if (user.getUserLocation().isPresent()) {
@@ -150,15 +151,17 @@ public class PathfinderWalkToPlayer extends Goal {
 
     private void tryTeleport() {
         BlockPos blockposition = player.blockPosition();
-        int distance = modifyInt(3);
+        int distance = modifyInt(5);
 
-        for (int i = 0; i < 10; ++i) {
+        for (int i = 0; i < 15; ++i) {
             int x = this.getRandomInt(-distance, distance);
             int y = this.getRandomInt(-1, 1);
             int z = this.getRandomInt(-distance, distance);
             boolean flag = this.tryTeleportTo(blockposition.getX() + x, blockposition.getY() + y, blockposition.getZ() + z);
             if (flag) return;
         }
+
+        entity.teleportToOwner();
     }
 
     private boolean tryTeleportTo(int x, int y, int z) {

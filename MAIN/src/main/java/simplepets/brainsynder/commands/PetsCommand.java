@@ -8,8 +8,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.commands.list.*;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.utils.Premium;
 
 import java.util.List;
@@ -47,6 +49,12 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         ReportCommand reportCommand = new ReportCommand(plugin);
         plugin.getServer().getPluginManager().registerEvents(reportCommand, plugin);
         registerSub(reportCommand);
+    }
+
+    @Override
+    protected void registerSub(PetSubCommand subCommand) {
+        SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "- Registering sub-command: "+subCommand.getCommand(subCommand.getClass()).name());
+        super.registerSub(subCommand);
     }
 
     public PetCore getPlugin() {

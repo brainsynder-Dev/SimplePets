@@ -17,8 +17,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import simplepets.brainsynder.PetCore;
-import simplepets.brainsynder.addon.AddonData;
-import simplepets.brainsynder.addon.PetAddon;
+import simplepets.brainsynder.addon.AddonCloudData;
+import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -35,7 +35,7 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class AddonMenu extends CustomInventory {
-    private Map<String, List<AddonData>> addonCache;
+    private Map<String, List<AddonCloudData>> addonCache;
     private Map<String, ListPager<ItemBuilder>> pagerMap;
     private Map<String, Boolean> installerMap;
 
@@ -52,7 +52,7 @@ public class AddonMenu extends CustomInventory {
         setDefault("_COMMENT_", "This menu is only viewed by people who have permission to it (Not recommended for regular users to have access to)");
         setDefault("size", 54);
         setDefault("title_comment", "The title of the GUI can support regular color codes '&c' and HEX color codes '&#FFFFFF'");
-        setDefault("title", "&#de9790[] &#b35349SimplePets Addons");
+        setDefault("title", "&#de9790[] &#b35349SimplePets Addon Modules");
 
 
         Map<Integer, String> object = new HashMap<>();
@@ -95,7 +95,7 @@ public class AddonMenu extends CustomInventory {
         Player player = user.getPlayer();
         installerMap.put(player.getName(), installer);
         pageSave.put(player.getName(), page);
-        Inventory inv = Bukkit.createInventory(new AddonHolder(), getInteger("size", 54), Colorize.translateBungeeHex(getString("title", "&#de9790[] &#b35349SimplePets Addons")));
+        Inventory inv = Bukkit.createInventory(new AddonHolder(), getInteger("size", 54), Colorize.translateBungeeHex(getString("title", "&#de9790[] &#b35349SimplePets Addon Modules")));
 
         int placeHolder = inv.getSize();
         int maxPets = 0;
@@ -128,24 +128,14 @@ public class AddonMenu extends CustomInventory {
 
             AddonManager manager = PetCore.getInstance().getAddonManager();
 
-            for (PetAddon addon : manager.getLoadedAddons()) {
-                String name = addon.getNamespace().namespace();
-                ItemBuilder builder = ItemBuilder.fromItem(addon.getAddonIcon());
-                builder.addLore("&r ", "&7Enabled: " + (addon.isEnabled() ? "&atrue" : "&cfalse"), "&7Version: &e"+addon.getVersion());
-//                The update checking should be handled elsewhere I think....
-//                if (addon.hasUpdate() || (addon.getVersion() > addon.getVersion())) {
-//                    if (!addon.hasUpdate())
-//                        FieldAccessor.getField(PetAddon.class, "update", Boolean.TYPE).set(addon, true);
-//                    builder.handleMeta(ItemMeta.class, itemMeta -> {
-//                        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-//                        container.set(Keys.ADDON_UPDATE, PersistentDataType.STRING, data.getUrl());
-//                        return itemMeta;
-//                    });
-//                    builder.addLore("&r ", "&7Update available! You are on " + addon.getVersion() + " new version " + data.getVersion(), "&c(Shift Click To Update)");
-//                }
+            for (PetModule module : manager.getLoadedAddons()) {
+                String name = module.getNamespace().namespace();
+                ItemBuilder builder = ItemBuilder.fromItem(module.getAddonIcon());
+                builder.addLore("&r ", "&7Enabled: " + (module.isEnabled() ? "&atrue" : "&cfalse"));
                 builder.handleMeta(ItemMeta.class, itemMeta -> {
                     PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-                    container.set(Keys.ADDON_NAME, PersistentDataType.STRING, name);
+                    container.set(Keys.MODULE_NAME, PersistentDataType.STRING, name);
+                    container.set(Keys.ADDON_NAME, PersistentDataType.STRING, module.getLocalData().getName());
                     return itemMeta;
                 });
                 items.add(builder);
@@ -170,10 +160,9 @@ public class AddonMenu extends CustomInventory {
 
             AddonManager manager = PetCore.getInstance().getAddonManager();
 
-            for (AddonData data : addons) {
+            for (AddonCloudData data : addons) {
                 String name = data.getName();
-                Optional<PetAddon> optional = manager.fetchAddon(name);
-                if (!optional.isPresent())  {
+                if (!manager.fetchAddon(name).isPresent())  {
                     ItemBuilder builder = master.clone();
                     builder.withName(Colorize.fetchColor("e1eb5b") + name);
                     List<String> description = Lists.newArrayList();
@@ -216,7 +205,7 @@ public class AddonMenu extends CustomInventory {
         open(user, page, false);
     }
 
-    public void handleFetch(String name, Consumer<List<AddonData>> consumer) {
+    public void handleFetch(String name, Consumer<List<AddonCloudData>> consumer) {
         if (addonCache.containsKey(name)) {
             consumer.accept(addonCache.get(name));
             return;
