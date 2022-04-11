@@ -66,7 +66,7 @@ public final class SimplePets {
             throw new SecurityException (baseMessage);
         }
         // Check if the plugin has lost the will to live
-        if (!PLUGIN.isEnabled() || !PLUGIN.hasFullyStarted()) {
+        if (!(PLUGIN.hasFullyStarted() || PLUGIN.isStarting())) {
             throw new IllegalStateException("The plugin (SimplePets) has not enabled successfully, please check your server logs whilst starting for more information.");
         }
         return PLUGIN;
