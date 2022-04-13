@@ -26,7 +26,7 @@
 
     <properties>
         <maven.compiler.source>16</maven.compiler.source>
-        <maven.compiler.target>116</maven.compiler.target>
+        <maven.compiler.target>16</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-API (DEVELOPERS ONLY)</module.info>
     </properties>
