@@ -43,6 +43,7 @@ import simplepets.brainsynder.api.pet.data.villager.VillagerBiomeData;
 import simplepets.brainsynder.api.pet.data.villager.VillagerLevelData;
 import simplepets.brainsynder.api.pet.data.villager.VillagerTypeData;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.wrappers.EntityPose;
 import simplepets.brainsynder.debug.DebugLevel;
 
 import java.lang.annotation.Annotation;
@@ -390,6 +391,7 @@ public enum PetType {
         list.addFirst(BurningData.class);
         list.addFirst(FrozenData.class);
         list.addFirst(Visible.class);
+        list.addFirst(PoseData.class);
         list.addAll(Lists.newArrayList(petData));
         this.builder = builder.withName(Colorize.translateBungeeHex("&#c8f792" + Capitalise.capitalize(name().toLowerCase().replace("_", " "))));
 
@@ -498,6 +500,16 @@ public enum PetType {
         } catch (NoSuchFieldException ignored) {
         }
         return Optional.empty();
+    }
+
+    public LinkedList<EntityPose> getEntityPoses () {
+        LinkedList<EntityPose> poseList = new LinkedList<>();
+        getCustomization().ifPresent(petCustomization -> {
+            for (EntityPose pose : petCustomization.poses()) {
+                poseList.addLast(pose);
+            }
+        });
+        return poseList;
     }
 
     public static Optional<PetType> getPetType(String name) {
