@@ -36,6 +36,9 @@ public class MessageFile {
                 addDefault(MessageOption.MODIFY_COMPOUND, "Message contains what the player has set the pets data to\nSet this as an empty string \"\" to prevent it from being sent");
                 addDefault(MessageOption.MODIFY_APPLIED, "Message that will be sent when the compound is applied to the entity");
 
+                addDefault(MessageOption.PET_SAVES_LIMIT_REACHED, "Message that will be sent when the player has reached their global limit for any pet type");
+                addDefault(MessageOption.PET_SAVES_LIMIT_REACHED_TYPE, "Message that will be sent when the player has reached their per-pet-type limit");
+
                 addDefault(MessageOption.PURCHASE_ADD, "Message that will be sent when a pet is added to the players purchased list (via '/pets purchased add')");
                 addDefault(MessageOption.PURCHASE_REMOVE, "Message that will be sent when a pet is removed from the players purchased list (via '/pets purchased remove')");
                 addDefault(MessageOption.PURCHASE_LIST_PREFIX, "Is what is sent before the pets are listed (via '/pets purchased list')");
