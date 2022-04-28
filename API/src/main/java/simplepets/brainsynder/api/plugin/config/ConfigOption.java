@@ -387,6 +387,25 @@ public enum ConfigOption {
                     Default: {default}""").setPastPaths("PetToggles.Default-Ride-Speed");
 
 
+    public final ConfigEntry<Boolean> PET_SAVES_ENABLED = createOption("pet-saves.enabled", true,
+            """
+                    Do you want players to be able to save the pets they have spawned
+                    so they don't have to re-customize the pet to their state
+                    
+                    This option will essentially disable the Saves GUI/Item
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Integer> PET_SAVES_LIMIT = createOption("pet-saves.default-limit", -1,
+            """
+                    How many pets do you want your players to be able to save?
+                    Set this to `-1` if you want no limit
+                    
+                    Can be overrode via the permission `pet.saves.<amount>`
+                    Bypass permission: `pet.saves.bypass`
+                    
+                    Default: {default}""");
+
+
 
     public final ConfigEntry<Boolean> RENAME_ENABLED = createOption("RenamePet.Enabled", true,
             """
