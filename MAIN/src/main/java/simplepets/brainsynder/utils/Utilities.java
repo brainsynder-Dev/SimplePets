@@ -199,6 +199,21 @@ public class Utilities {
         }
     }
 
+    public static int getPermissionAmount (Player player, int defaultValue, String partialPermission) {
+        int amount = defaultValue;
+        if (!partialPermission.endsWith(".")) return defaultValue;
+
+        for (PermissionAttachmentInfo permission : player.getEffectivePermissions()) {
+            if (!permission.getValue()) continue;
+            if (!permission.getPermission().startsWith(partialPermission)) continue;
+
+            String strAmount = permission.getPermission().substring( (partialPermission.lastIndexOf(".") + 1) );
+            int permAmount = Integer.parseInt(strAmount);
+            if (permAmount >= amount) amount = permAmount;
+        }
+        return amount;
+    }
+
     public static void removePassenger(Entity entity, Entity passenger) {
         try {
             entity.eject();

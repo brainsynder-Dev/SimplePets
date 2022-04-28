@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
@@ -340,15 +339,7 @@ public class PetOwner implements PetUser {
         if (getPlayer().isOp()) return true;
         if (getPlayer().hasPermission("pet.saves.bypass")) return true;
 
-        for (PermissionAttachmentInfo permission : getPlayer().getEffectivePermissions()) {
-            if (!permission.getValue()) continue;
-            if (!permission.getPermission().startsWith("pet.saves.")) continue;
-
-            String strAmount = permission.getPermission().substring(10);
-            int permAmount = Integer.parseInt(strAmount);
-            if (permAmount >= saveLimit) saveLimit = permAmount;
-        }
-        return savedPetData.size() < saveLimit;
+        return savedPetData.size() < Utilities.getPermissionAmount(getPlayer(), saveLimit, "pet.saves.");
     }
 
     @Override
@@ -611,14 +602,7 @@ public class PetOwner implements PetUser {
         if (!getPlayer().isOnline()) return false;
         if (getPlayer().isOp()) return true;
         if (getPlayer().hasPermission("pet.amount.bypass")) return true;
-        for (PermissionAttachmentInfo permission : getPlayer().getEffectivePermissions()) {
-            if (!permission.getValue()) continue;
-            if (!permission.getPermission().startsWith("pet.amount.")) continue;
-            String strAmount = permission.getPermission().substring(11);
-            int permAmount = Integer.parseInt(strAmount);
-            if (permAmount >= maxAmount) maxAmount = permAmount;
-        }
-        return petMap.size() < maxAmount;
+        return petMap.size() < Utilities.getPermissionAmount(getPlayer(), maxAmount, "pet.amount.");
     }
 
     @Override
