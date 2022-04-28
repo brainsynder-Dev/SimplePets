@@ -331,6 +331,27 @@ public class PetOwner implements PetUser {
     }
 
     @Override
+    public boolean canSaveMorePets() {
+        if (!ConfigOption.INSTANCE.PET_SAVES_ENABLED.getValue()) return false;
+
+        int saveLimit = ConfigOption.INSTANCE.PET_SAVES_LIMIT.getValue();
+        if (saveLimit < 0) return true;
+
+        if (getPlayer().isOp()) return true;
+        if (getPlayer().hasPermission("pet.saves.bypass")) return true;
+
+        for (PermissionAttachmentInfo permission : getPlayer().getEffectivePermissions()) {
+            if (!permission.getValue()) continue;
+            if (!permission.getPermission().startsWith("pet.saves.")) continue;
+
+            String strAmount = permission.getPermission().substring(10);
+            int permAmount = Integer.parseInt(strAmount);
+            if (permAmount >= saveLimit) saveLimit = permAmount;
+        }
+        return savedPetData.size() < saveLimit;
+    }
+
+    @Override
     public List<PetType> getOwnedPets() {
         return ownedPets;
     }
