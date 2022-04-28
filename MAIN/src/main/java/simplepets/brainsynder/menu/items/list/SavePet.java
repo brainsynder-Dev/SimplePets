@@ -29,6 +29,11 @@ public class SavePet extends Item {
     }
 
     @Override
+    public boolean addItemToInv(PetUser user, CustomInventory inventory) {
+        return user.canSaveMorePets();
+    }
+
+    @Override
     public void onClick(PetUser masterUser, CustomInventory inventory) {
         if (!masterUser.hasPets()) return;
         if (masterUser.getPetEntities().size() == 1) {
