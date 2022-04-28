@@ -404,6 +404,18 @@ public enum ConfigOption {
                     Bypass permission: `pet.saves.bypass`
                     
                     Default: {default}""");
+    public final ConfigEntry<List<String>> PET_SAVES_TYPE_LIMIT = createOption("pet-saves.pet-type-limits", Lists.newArrayList(""),
+            """
+                    This option allows you to list pet types and the limit for how many saves they can have
+                    
+                    Example: "COW-2"
+                    This example will make it so the COW pet type can only be saved 2 times
+                    
+                    Can be overrode via the permission `pet.saves.<type>.<amount>`
+                    Bypass permission: `pet.saves.bypass`
+                    Bypass permission: `pet.saves.<type>.bypass`
+                    
+                    Default: {default}""");
 
 
 
