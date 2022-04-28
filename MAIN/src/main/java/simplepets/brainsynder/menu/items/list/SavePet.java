@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.items.list;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
@@ -78,18 +79,21 @@ public class SavePet extends Item {
 
     private boolean canSavePet (PetUser user, IEntityPet entityPet) {
         if (!ConfigOption.INSTANCE.PET_SAVES_ENABLED.getValue()) return false;
+        Player player = user.getPlayer();
 
         if (!user.canSaveMorePets()) {
-            user.getPlayer().sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED));
+            player.sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED));
             return false;
         }
+        
+        if (player.hasPermission("pet.saves."+entityPet.getPetType().getName()+".bypass")) return true;
 
         int typeCount = 0;
         for (PetUser.Entry<PetType, StorageTagCompound> entry : user.getSavedPets()) {
             if (entry.getKey() == entityPet.getPetType()) typeCount++;
         }
-        if (typeCount >= Utilities.getPermissionAmount(user.getPlayer(), Utilities.parseTypeSaveLimit(entityPet.getPetType()), "pet.saves."+entityPet.getPetType().getName()+".")) {
-            user.getPlayer().sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED_TYPE).replace("{type}", entityPet.getPetType().getName()));
+        if (typeCount >= Utilities.getPermissionAmount(player, Utilities.parseTypeSaveLimit(entityPet.getPetType()), "pet.saves."+entityPet.getPetType().getName()+".")) {
+            player.sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED_TYPE).replace("{type}", entityPet.getPetType().getName()));
             return false;
         }
 
