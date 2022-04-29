@@ -88,11 +88,14 @@ public class SavePet extends Item {
         
         if (player.hasPermission("pet.saves."+entityPet.getPetType().getName()+".bypass")) return true;
 
+        int saveLimit = Utilities.parseTypeSaveLimit(entityPet.getPetType());
+        if (saveLimit < 0) return true;
+
         int typeCount = 0;
         for (PetUser.Entry<PetType, StorageTagCompound> entry : user.getSavedPets()) {
             if (entry.getKey() == entityPet.getPetType()) typeCount++;
         }
-        if (typeCount >= Utilities.getPermissionAmount(player, Utilities.parseTypeSaveLimit(entityPet.getPetType()), "pet.saves."+entityPet.getPetType().getName()+".")) {
+        if (typeCount >= Utilities.getPermissionAmount(player, saveLimit, "pet.saves."+entityPet.getPetType().getName()+".")) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED_TYPE).replace("{type}", entityPet.getPetType().getName()));
             return false;
         }
