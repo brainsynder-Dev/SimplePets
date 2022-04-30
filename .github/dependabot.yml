@@ -8,4 +8,4 @@ updates:
       timezone: "Europe/Zurich"
     open-pull-requests-limit: 10
     labels:
-      - "dependabot"
+      - "Type: Dependabot"

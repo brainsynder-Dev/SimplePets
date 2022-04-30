@@ -1,4 +1,4 @@
-fixed:
+"Status: Fixed":
   comment: |-
     :wave: @{issue-author},
 
@@ -18,12 +18,19 @@ fixed in v5:
   issues:
     close: true
 
-bug:
+"Type: Bug":
   comment: |-
-    :wave: @{issue-author},
+    @{issue-author},
 
     Thank you for reporting this bug, we will try and respond as soon as we can to your issue.
-    In the mean time have a look at the [WIKI](https://brainsynder.gitbook.io/simplepets/) to see if we made any mention to it on there.
+    In the meantime have a look at the [WIKI](https://brainsynder.gitbook.io/simplepets/) to see if we made any mention to it on there.
+
+"Status: Unsupported Version":
+  comment: |-
+    @{issue-author},
+
+    Your issue is based on an unsupported version of either Minecraft or SimplePets.
+    Please use up-to-date version and get back to us once you have tried it out on the latest versions.
 
 Added in Latest Build:
   comment: >
@@ -31,22 +38,35 @@ Added in Latest Build:
   issues:
     close: true
 
-blame-mojang:
+"Status: Blame Mojang":
   comment: >
     @{issue-author}, This is regarded as a Mojang issue we have no control over this.
   issues:
     close: true
 
-more info needed:
+"Status: Needs More Info":
   comment: |-
-    @{issue-author}, We need to collect a little more information reguarding this issue.
+    @{issue-author}, We need to collect a little more information regarding this issue.
     If this is a bug report: Please provide additional information to help us figure out what is happening
     If this is a feature request: Please provide more information on what you would like requested
 
-question answered:
+"Status: Unable to Reproduce":
+  comment: |-
+    @{issue-author},
+
+    Unfortunately we were unable to reproduce your issue.
+    Please provided more information regarding this issue such as:
+    - Your `/pet debug` link (Link generated after you run the command)
+    - Your `latest.log` (Or the log file that was around the time of the issue)
+    - Minecraft Version
+    - Spigot/Paper Version
+    - Video Evidence?
+    - Images?
+
+"Status: Answered":
   issues:
     close: true
 
-completed:
+"Status: Completed":
   issues:
     close: true
