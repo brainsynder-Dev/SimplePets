@@ -63,6 +63,13 @@ public interface PetUser {
         addPetSave(entity.asCompound());
     }
 
+    /**
+     * Whether the user is able to save more pets.
+     *
+     * If pet-saves is disabled, it will return false.
+     */
+    boolean canSaveMorePets ();
+
     boolean summonCachedPets ();
 
     /**
@@ -194,7 +201,7 @@ public interface PetUser {
     boolean hasPetVehicle();
 
     /**
-     * Whether or not the user should be able to spawn more pets.
+     * Whether the user should be able to spawn more pets.
      */
     boolean canSpawnMorePets();
 

@@ -40,6 +40,9 @@ public enum MessageOption implements YamlOption {
     RENAME_ANVIL_TAG ("rename.anvil.tag_name", "&#de9790NEW NAME"),
     RENAME_SIGN_TEXT ("rename.sign.lines", Lists.newArrayList("{input}", "&l^^^^^^^^", "&9&lPlease Enter", "&9&lPet Name")),
 
+    PET_SAVES_LIMIT_REACHED ("pet-saves.limit-reached", "{prefix} &cYou have reached your limit for saving pet"),
+    PET_SAVES_LIMIT_REACHED_TYPE("pet-saves.limit-reached-per-type", "{prefix} &cYou have reached your limit for saving {type} pets"),
+
     PET_FILES_REGEN ("admin.regenerate.pets", "{prefix} &7The Pets folder has been regenerated to the default files."),
     INV_FILES_REGEN ("admin.regenerate.inventories", "{prefix} &7The Inventories folder has been regenerated to the default files."),
     ITEM_FILES_REGEN ("admin.regenerate.items", "{prefix} &7The Items folder has been regenerated to the default files."),

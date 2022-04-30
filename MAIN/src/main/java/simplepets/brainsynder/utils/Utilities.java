@@ -199,6 +199,42 @@ public class Utilities {
         }
     }
 
+    public static int parseTypeSaveLimit (PetType type) {
+        for (String line : ConfigOption.INSTANCE.PET_SAVES_TYPE_LIMIT.getValue()) {
+            if (!line.contains("-")) continue;
+            String[] args = line.split("-");
+            if (args.length != 2) continue;
+
+            PetType target = PetType.getPetType(args[0]).orElse(null);
+            if (target == null) continue;
+
+            if (type != target) continue;
+            try {
+                return Integer.parseInt(args[1].trim());
+            }catch (NumberFormatException e) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to parse pet-type-limit for '"+args[0]+"', "+args[1]+" is not a valid number.");
+                return -1;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int getPermissionAmount (Player player, int defaultValue, String partialPermission) {
+        int amount = defaultValue;
+        if (!partialPermission.endsWith(".")) return defaultValue;
+
+        for (PermissionAttachmentInfo permission : player.getEffectivePermissions()) {
+            if (!permission.getValue()) continue;
+            if (!permission.getPermission().startsWith(partialPermission)) continue;
+
+            String strAmount = permission.getPermission().substring( (partialPermission.lastIndexOf(".") + 1) );
+            int permAmount = Integer.parseInt(strAmount);
+            if (permAmount >= amount) amount = permAmount;
+        }
+        return amount;
+    }
+
     public static void removePassenger(Entity entity, Entity passenger) {
         try {
             entity.eject();

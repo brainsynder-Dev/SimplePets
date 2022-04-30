@@ -17,6 +17,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
@@ -76,6 +77,11 @@ public class PetSelectorMenu extends CustomInventory {
     @Override
     public void onClick(int slot, ItemStack item, Player player) {
 
+    }
+
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.TYPE_SELECTION_GUI;
     }
 
     public void setTask (String name, BiTask<PetUser, PetType> task) {
