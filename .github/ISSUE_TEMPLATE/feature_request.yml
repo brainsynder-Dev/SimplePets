@@ -1,7 +1,7 @@
 name: 📝 Feature Request
 description: Suggest a new feature for the plugin
 title: "[Feature Request]: "
-labels: ["feature request"]
+labels: ["Type: Feature Request"]
 assignees:
   - brainsynder-Dev
   - Thatsmusic99

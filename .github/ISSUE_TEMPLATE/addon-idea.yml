@@ -1,7 +1,7 @@
 name: Addon Idea Submission
 description: You have an idea for a new addon
 title: "[Addon Idea]: "
-labels: ["addon idea"]
+labels: ["Type: Addon Suggestion"]
 assignees:
   - brainsynder-Dev
   - Thatsmusic99
