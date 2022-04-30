@@ -6,6 +6,7 @@ import lib.brainsynder.json.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -121,6 +122,8 @@ public abstract class CustomInventory extends JsonFile {
 
         return slots;
     }
+
+    public abstract InventoryType getInventoryType ();
 
     /**
      * Size of the inventory

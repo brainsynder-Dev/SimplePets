@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
@@ -62,6 +63,11 @@ public class DataMenu extends CustomInventory {
     @Override
     public void onClick(int slot, ItemStack item, Player player) {
 
+    }
+
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.DATA_GUI;
     }
 
     public PetType getType(Player player) {

@@ -21,6 +21,7 @@ import simplepets.brainsynder.addon.AddonCloudData;
 import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -85,6 +86,11 @@ public class AddonMenu extends CustomInventory {
     @Override
     public void onClick(int slot, ItemStack item, Player player) {
 
+    }
+
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.ADDON_GUI;
     }
 
     public boolean isInstallerGUI (PetUser user) {

@@ -12,6 +12,7 @@ import simplepets.brainsynder.addon.PermissionData;
 import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
@@ -156,6 +157,7 @@ public abstract class EconomyModule extends PetModule {
     @EventHandler
     public void onInventoryOpen(PetInventoryAddPetItemEvent event) {
         if (!isEnabled()) return;
+        if (event.getInventory().getInventoryType() != InventoryType.SUMMON_GUI) return;
         PetUser user = event.getUser();
         List<PetType> petArray = user.getOwnedPets();
 
