@@ -154,20 +154,12 @@ public enum ConfigOption {
 
 
     // Pathfinding
-    public final ConfigEntry<Double> PATHFINDING_DISTANCE_SMALL = createOption("pathfinding.distance-to-player.small.stand", 1.9,
+    public final ConfigEntry<Integer> PATHFINDING_UPDATE_COOLDOWN = createOption("pathfinding.update-cooldown", 10,
             """
-                    How far away can the pets stand near the player?
-                    Small pets can be considered: cow, chicken, enderman, armorstand, ETC...
+                    How often should the pet look for a location to walk to?
+                    This is in ticks (20 ticks is one second), Small increments is recommended
                     
-                    Explanation: Player is walking around the pet wont start to follow unless they are {default} blocks away
-                    Default: {default}""").setPastPaths("Pathfinding.Distance-to-Player");
-    public final ConfigEntry<Double> PATHFINDING_DISTANCE_LARGE = createOption("pathfinding.distance-to-player.large.stand", 2.9,
-            """
-                    How far away can the large pets stand near the player?
-                    Large pets can be considered: Ravager, Ghast, Giant, Wither, ETC...
-                    
-                    Explanation: Player is walking around the pet wont start to follow unless they are {default} blocks away
-                    Default: {default}""").setPastPaths("Pathfinding.Distance-to-Player_LargePets");
+                    Default: {default}""");
     public final ConfigEntry<Integer> PATHFINDING_STOP_DISTANCE_SMALL = createOption("pathfinding.distance-to-player.small.walk", 3,
             """
                     How far away can the pet be before it will stop walking near the player?
@@ -187,12 +179,6 @@ public enum ConfigOption {
                     Should the pets follow the player when they are in a vehicle (or riding another pet)?
                     
                     Default: {default}""");
-    public final ConfigEntry<Integer> PATHFINDING_MINIMUM_TELEPORT = createOption("pathfinding.distance-till-teleport", 20,
-            """
-                    How far away from the player does the pet have to be before it teleports closer
-                    This is the minimum distance required, there could be other reasons for a teleport.
-                    
-                    Default: {default}""").setPastPaths("Pathfinding.Min-Distance-For-Teleport");
 
 
     // Worlds

@@ -33,6 +33,7 @@ public class PathfinderWalkToPlayer extends Goal {
     private final PathNavigation navigation;
 
     private int updateCountdownTicks;
+    private final int updateCountdownTicksMaster;
     private final float maxDistance;
     private final float minDistance;
     private final boolean first = true;
@@ -49,6 +50,7 @@ public class PathfinderWalkToPlayer extends Goal {
             }
         }
 
+        updateCountdownTicksMaster = ConfigOption.INSTANCE.PATHFINDING_UPDATE_COOLDOWN.getValue();
 
         navigation = entity.getNavigation();
 
@@ -113,7 +115,7 @@ public class PathfinderWalkToPlayer extends Goal {
         // Translation: EntityInsentient.getLookControl().lookAt(EntityPlayer, 10.0F, (float)EntityInsentient.getLookPitchSpeed())
         //entity.getControllerLook().a(player, 10F, entity.O());
         if (--this.updateCountdownTicks <= 0) {
-            this.updateCountdownTicks = 10;
+            this.updateCountdownTicks = updateCountdownTicksMaster;
 
             // Will create a path to the player, and stop the pet within 5 (default) blocks of the player
             // it will stop around 10 blocks if it is a large pet
