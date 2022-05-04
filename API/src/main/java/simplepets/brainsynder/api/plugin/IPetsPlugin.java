@@ -15,35 +15,91 @@ import simplepets.brainsynder.debug.DebugLogger;
 
 import java.util.Optional;
 
+/**
+ * This is the main interface for the plugin, it is used to get the main classes of the plugin.
+ */
 public interface IPetsPlugin extends Plugin {
-     YamlFile getConfiguration ();
+    /**
+     * Get the configuration file for the plugin.
+     *
+     * @return The configuration file.
+     */
+    YamlFile getConfiguration();
 
-    IPetUtilities getPetUtilities ();
+    IPetUtilities getPetUtilities();
 
-    UserManagement getUserManager ();
+    /**
+     * Get the user manager.
+     *
+     * @return The UserManagement object.
+     */
+    UserManagement getUserManager();
 
+    /**
+     * Returns a spawn util object that can be used to spawn entities
+     *
+     * @return The SpawnUtil object.
+     */
     ISpawnUtil getSpawnUtil();
 
-    PetConfigManager getPetConfigManager ();
+    /**
+     * Fetches the per-pet-type config file for the selected pet type
+     *
+     * @return The PetConfigManager object.
+     */
+    PetConfigManager getPetConfigManager();
 
-    ItemHandler getItemHandler ();
+    /**
+     * Returns the item handler object, which allows you to register your own custom items
+     * as well as fetch already registered items
+     *
+     * @return The item handler.
+     */
+    ItemHandler getItemHandler();
 
-    GUIHandler getGUIHandler ();
+    /**
+     * Returns the GUIHandler object, which allows you to register your own custom GUIs
+     *
+     * @return The GUIHandler object.
+     */
+    GUIHandler getGUIHandler();
 
-    ParticleHandler getParticleHandler ();
+    /**
+     * Returns the particle handler, which allows you to spawn particles that the server owner customized
+     *
+     * @return The ParticleHandler object.
+     */
+    ParticleHandler getParticleHandler();
 
-    DebugLogger getDebugLogger ();
+    /**
+     * Returns the debug logger which allows you to send messages
+     * to either console or the OP staff, can be used for info, warnings, errors, & updates
+     *
+     * @return A reference to the DebugLogger object.
+     */
+    DebugLogger getDebugLogger();
 
+    /**
+     * Returns true if the server has fully started
+     *
+     * @return A boolean value.
+     */
     boolean hasFullyStarted();
 
+    /**
+     * Returns true if the server is starting
+     *
+     * @return A boolean value.
+     */
     boolean isStarting();
 
     /**
-     * Will check if the entity is a simplepets entity
+     * If the entity is a pet, return true, otherwise return false.
      *
-     * @param entity - Entity being checked
+     * @param entity The entity to check
+     * @return A boolean value.
      */
-    default boolean isPetEntity (Entity entity) {
+    default boolean isPetEntity(Entity entity) {
         Optional<Object> optional = getSpawnUtil().getHandle(entity);
         return optional.filter(o -> (o instanceof IEntityBase)).isPresent();
     }
