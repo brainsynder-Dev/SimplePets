@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 /**
  * This preset addon class, is for making addons for any type of plugin that handles economy (EG: Vault/TokenManager)
+ * This class is used to add a price to the pets, and will also add a lore line to the pet items in the GUI
  */
 public abstract class EconomyModule extends PetModule {
     private final Map<PetType, Double> priceMap = Maps.newHashMap();
@@ -38,7 +39,7 @@ public abstract class EconomyModule extends PetModule {
         PermissionData parent = new PermissionData(bypassPerm).setDescription("This is the master permission, Will ignore all individual bypass permissions listed below");
 
         typePermissions.forEach((type, s) -> {
-            AddonPermissions.register(this, parent, new PermissionData(s).setDescription("This is a bypass permission for the "+type.getName()+" pet, who ever has this permission will not have to pay for this pet"));
+            AddonPermissions.register(this, parent, new PermissionData(s).setDescription("This is a bypass permission for the " + type.getName() + " pet, who ever has this permission will not have to pay for this pet"));
         });
     }
 
@@ -55,7 +56,7 @@ public abstract class EconomyModule extends PetModule {
     public void loadDefaults(AddonConfig config) {
         this.typePermissions = Maps.newHashMap();
 
-        String bypassPermission = "pet."+getNamespace().namespace().toLowerCase().replace(" ", "_")+".bypass";
+        String bypassPermission = "pet." + getNamespace().namespace().toLowerCase().replace(" ", "_") + ".bypass";
 
         config.addDefault("Hide-Price-If-Bypassed", true,
                 "Disabling this will make the items show the price, but if the player has bypass permissions he wont have to pay\n" +
@@ -119,9 +120,9 @@ public abstract class EconomyModule extends PetModule {
             if (type == PetType.UNKNOWN) continue;
             if (!type.isSupported()) continue;
             config.addDefault("type." + type.getName(), getDefaultPrice(), "The price of the " + type.getName() + " pet");
-            config.addDefault("bypass_permissions.type."+type.getName(), bypassPermission+"."+type.getName(), "This is a bypass permission for the "+type.getName()+" pet, who ever has this permission will now have to pay for this pet");
+            config.addDefault("bypass_permissions.type." + type.getName(), bypassPermission + "." + type.getName(), "This is a bypass permission for the " + type.getName() + " pet, who ever has this permission will now have to pay for this pet");
 
-            typePermissions.put(type, config.getString("bypass_permissions.type."+type.getName(), bypassPermission+"."+type.getName()));
+            typePermissions.put(type, config.getString("bypass_permissions.type." + type.getName(), bypassPermission + "." + type.getName()));
             priceMap.put(type, config.getDouble("type." + type.getName(), getDefaultPrice()));
         }
 
@@ -143,14 +144,43 @@ public abstract class EconomyModule extends PetModule {
         lore = config.getStringList((config.getBoolean("Pay-Per-Use-Enabled") ? "Messages.Lore-Lines.Pay-Per-Use" : "Messages.Lore-Lines.One-Time-Purchase"));
     }
 
-    public abstract int getDefaultPrice ();
-    public void fetchBalance (UUID uuid, Consumer<Double> balanceConsumer) {
+    /**
+     * This function returns the default price of the item.
+     *
+     * @return The default price of the item.
+     */
+    public abstract int getDefaultPrice();
+
+    /**
+     * This function is used when an economy plugin needs to run async tasks Like <a href="https://www.spigotmc.org/resources/99531/">Treasury</a>
+     *
+     * @param uuid            The UUID of the player you want to fetch the balance of.
+     * @param balanceConsumer A Consumer<Double> that will be called when the balance is fetched.
+     */
+    public void fetchBalance(UUID uuid, Consumer<Double> balanceConsumer) {
         balanceConsumer.accept(getBalance(uuid));
     }
-    public abstract double getBalance (UUID uuid);
-    public abstract void withdraw (UUID uuid, double amount);
 
-    private String var (boolean value) {
+    /**
+     * Gets the balance of a player.
+     *
+     * @param uuid The UUID of the player you want to get the balance of.
+     * @return A double
+     * @since May 4th 2022
+     * @deprecated This method is replaced by {@link EconomyModule#fetchBalance(UUID, Consumer)}
+     */
+    @Deprecated
+    public abstract double getBalance(UUID uuid);
+
+    /**
+     * This function withdraws the specified amount from the account with the specified UUID.
+     *
+     * @param uuid   The UUID of the player to withdraw from
+     * @param amount The amount of money to withdraw.
+     */
+    public abstract void withdraw(UUID uuid, double amount);
+
+    private String var(boolean value) {
         return value ? boolTrue : boolFalse;
     }
 
@@ -166,7 +196,8 @@ public abstract class EconomyModule extends PetModule {
         String price = String.valueOf(priceMap.getOrDefault(type, 2000.0));
         if (this.priceMap.getOrDefault(type, 2000.0D) <= 0) price = freePrice;
 
-        if (hidePrice && (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
+        if (hidePrice && (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(type))))
+            price = bypassPrice;
         boolean contains = petArray.contains(type);
         for (String line : lore)
             maker.addLore(line.replace("{price}", price).replace("{purchased}", String.valueOf(var(contains))));
@@ -177,7 +208,8 @@ public abstract class EconomyModule extends PetModule {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onSelect(PetSelectTypeEvent event) {
         if (!isEnabled()) return;
-        if (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(event.getPetType()))) return;
+        if (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(event.getPetType())))
+            return;
 
         double price = priceMap.getOrDefault(event.getPetType(), 2000.0);
         if (price <= 0) return; // The pet is free, return
