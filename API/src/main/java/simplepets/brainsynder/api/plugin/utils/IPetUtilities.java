@@ -13,14 +13,16 @@ public interface IPetUtilities {
      * "Runs the commands for the pet of the given type for the given owner."
      * <p>
      * The first parameter is the reason for the commands to be run. This is an enum that can be one of the following:
-     * <p>
-     * * `CommandReason.SPAWN` - The pet has just been successfully spawned.
-     * * `CommandReason.REVOKE` - The pet was removed.
-     * * `CommandReason.RIDE` - The player just started riding their pet.
-     * * `CommandReason.RIDE_DISMOUNT` - The player has stopped riding their pet.
-     * * `CommandReason.HAT` - The pet was just toggled as a hat
-     * * `CommandReason.TELEPORT` - The pet was just teleported to the player
-     * * `CommandReason.FAILED` - A task failed to run for the pet (Could be failed spawn or something along those lines)
+     *
+     * <ul>
+     *     <li><b><u>CommandReason.SPAWN</u></b>  -  <i>The pet has just been successfully spawned</i></li>
+     *     <li><b><u>CommandReason.REVOKE</u></b>  -  <i>The pet was removed</i></li>
+     *     <li><b><u>CommandReason.RIDE</u></b>  -  <i>The player just started riding their pet</i></li>
+     *     <li><b><u>CommandReason.RIDE_DISMOUNT</u></b>  -  <i>The player has stopped riding their pet</i></li>
+     *     <li><b><u>CommandReason.HAT</u></b>  -  <i>The pet was just toggled as a hat</i></li>
+     *     <li><b><u>CommandReason.TELEPORT</u></b>  -  <i>The pet was just teleported to the player</i></li>
+     *     <li><b><u>CommandReason.FAILED</u></b>  -  <i>A task failed to run for the pet (Could be failed spawn or something along those lines)</i></li>
+     * </ul>
      *
      * @param reason The reason the command was run.
      * @param owner  The player who owns the pet.
@@ -32,14 +34,16 @@ public interface IPetUtilities {
      * "Runs the commands for the given pet type, for the given reason, at the given location."
      * <p>
      * The first parameter, `reason`, is the reason for the commands to be run. This can be one of the following:
-     * <p>
-     * * `CommandReason.SPAWN` - The pet has just been successfully spawned.
-     * * `CommandReason.REVOKE` - The pet was removed.
-     * * `CommandReason.RIDE` - The player just started riding their pet.
-     * * `CommandReason.RIDE_DISMOUNT` - The player has stopped riding their pet.
-     * * `CommandReason.HAT` - The pet was just toggled as a hat
-     * * `CommandReason.TELEPORT` - The pet was just teleported to the player
-     * * `CommandReason.FAILED` - A task failed to run for the pet (Could be failed spawn or something along those lines)
+     *
+     * <ul>
+     *     <li><b><u>CommandReason.SPAWN</u></b>  -  <i>The pet has just been successfully spawned</i></li>
+     *     <li><b><u>CommandReason.REVOKE</u></b>  -  <i>The pet was removed</i></li>
+     *     <li><b><u>CommandReason.RIDE</u></b>  -  <i>The player just started riding their pet</i></li>
+     *     <li><b><u>CommandReason.RIDE_DISMOUNT</u></b>  -  <i>The player has stopped riding their pet</i></li>
+     *     <li><b><u>CommandReason.HAT</u></b>  -  <i>The pet was just toggled as a hat</i></li>
+     *     <li><b><u>CommandReason.TELEPORT</u></b>  -  <i>The pet was just teleported to the player</i></li>
+     *     <li><b><u>CommandReason.FAILED</u></b>  -  <i>A task failed to run for the pet (Could be failed spawn or something along those lines)</i></li>
+     * </ul>
      *
      * @param reason   The reason the command was run.
      * @param owner    The player who owns the pet.
