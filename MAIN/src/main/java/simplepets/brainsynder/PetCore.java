@@ -333,6 +333,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
     }
 
+    @Override
+    public boolean isPremiumJar() {
+        return Premium.isPremium();
+    }
+
     public boolean wasReloaded() {
         return reloaded;
     }

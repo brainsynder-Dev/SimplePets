@@ -38,6 +38,8 @@ public interface IPetsPlugin extends Plugin {
 
     boolean isStarting();
 
+    boolean isPremiumJar ();
+
     /**
      * Will check if the entity is a simplepets entity
      *

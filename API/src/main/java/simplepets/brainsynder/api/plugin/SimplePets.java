@@ -140,4 +140,8 @@ public final class SimplePets {
     public static boolean isPetEntity (Entity entity) {
         return getPlugin().isPetEntity(entity);
     }
+
+    public static boolean isPremiumJar () {
+        return getPlugin().isPremiumJar();
+    }
 }
