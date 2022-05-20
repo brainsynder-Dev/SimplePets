@@ -418,6 +418,29 @@ public enum ConfigOption {
                     Default: {default}""");
 
 
+    public final ConfigEntry<String> PET_STORAGE_TITLE = createOption("pet-storage.title", "&#b35349{player}'s Item Storage",
+            """
+                    This is the title of the pet item storage gui.
+                    You can use the {player} placeholder for the pet owners name
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Integer> PET_STORAGE_DEFAULT_SIZE = createOption("pet-storage.default-size", 9,
+            """
+                    If the pet does not have a custom size listed in the gui-customization section,
+                    Then the default size of the GUI will be what you have set here
+                    
+                    Must be a multiple of 9
+                    
+                    Default: {default}""");
+    public final ConfigEntry<List<String>> PET_STORAGE_LIMIT = createOption("pet-storage.gui-size", Lists.newArrayList(""),
+            """
+                    This option allows you to list pet types and the limit for how many saves they can have
+                    
+                    Example: "COW-18"
+                    
+                    Default: {default}""");
+
+
 
     public final ConfigEntry<Boolean> RENAME_ENABLED = createOption("RenamePet.Enabled", true,
             """
