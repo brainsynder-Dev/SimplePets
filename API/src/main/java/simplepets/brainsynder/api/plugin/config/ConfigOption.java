@@ -421,7 +421,14 @@ public enum ConfigOption {
     public final ConfigEntry<String> PET_STORAGE_TITLE = createOption("pet-storage.title", "&#b35349{player}'s Item Storage",
             """
                     This is the title of the pet item storage gui.
-                    You can use the {player} placeholder for the pet owners name
+                    Placeholder you can use:
+                    - {player} ~~ for the pet owners name
+                    - {type} ~~ for the type of pet
+                    - Color codes (HEX and regular colors)
+                    
+                      Examples:
+                      ~ &7
+                      ~ &#b35349
                     
                     Default: {default}""");
     public final ConfigEntry<Integer> PET_STORAGE_DEFAULT_SIZE = createOption("pet-storage.default-size", 9,
