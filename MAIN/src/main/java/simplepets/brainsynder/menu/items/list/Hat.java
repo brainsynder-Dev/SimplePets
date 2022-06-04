@@ -5,8 +5,11 @@ import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.pet.IPetConfig;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
@@ -27,6 +30,11 @@ public class Hat extends Item {
 
     @Override
     public boolean addItemToInv(PetUser user, CustomInventory inventory) {
+        for (IEntityPet entity : user.getPetEntities()) {
+            IPetConfig config = SimplePets.getPetConfigManager().getPetConfig(entity.getPetType()).orElse(null);
+            if (config == null) continue;
+            if (config.canHat(user.getPlayer())) return true;
+        }
         return ConfigOption.INSTANCE.PET_TOGGLES_HAT.getValue();
     }
 

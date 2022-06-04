@@ -15,6 +15,7 @@ import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
@@ -77,6 +78,11 @@ public class SavesMenu extends CustomInventory {
     @Override
     public void onClick(int slot, ItemStack item, Player player) {
 
+    }
+
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.SAVES_GUI;
     }
 
     @Override
@@ -163,7 +169,7 @@ public class SavesMenu extends CustomInventory {
                         storageMap.put(compound, new PetUser.Entry<>(type, stack));
                     }
 
-                    PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, entry.getKey(), stack);
+                    PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(this, user, entry.getKey(), stack);
                     Bukkit.getPluginManager().callEvent(event);
 
 

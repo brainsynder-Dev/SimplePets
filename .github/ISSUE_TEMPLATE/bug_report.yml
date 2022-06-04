@@ -1,7 +1,7 @@
 name: 🐞 Bug Report
 description: Report a bug/issue with the plugin
 title: "[Bug]: "
-labels: ["bug"]
+labels: ["Type: Bug"]
 assignees:
   - brainsynder-Dev
   - Thatsmusic99

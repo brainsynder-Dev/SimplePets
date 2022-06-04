@@ -1,7 +1,7 @@
 name: ❓ Simple Question
 description: You have a question you would like answered
 title: "[Question]: "
-labels: ["question"]
+labels: ["Type: Question"]
 assignees:
   - brainsynder-Dev
   - Thatsmusic99

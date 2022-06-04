@@ -34,6 +34,10 @@ public interface IPetsPlugin extends Plugin {
 
     DebugLogger getDebugLogger ();
 
+    boolean hasFullyStarted();
+
+    boolean isStarting();
+
     /**
      * Will check if the entity is a simplepets entity
      *

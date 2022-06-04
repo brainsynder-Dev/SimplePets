@@ -62,6 +62,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private File itemFolder;
     private boolean reloaded = false;
+    private boolean fullyStarted = false;
+    private boolean isStarting = false;
 
     private Config configuration;
 
@@ -87,13 +89,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        SimplePets.setPLUGIN(this);
         taskTimer = new TaskTimer(this);
         taskTimer.start();
+        isStarting = true;
 
         debug = new Debug(this);
 
         if (!checkJavaVersion()){
             setEnabled(false);
+            isStarting = false;
             return;
         }
 
@@ -108,12 +113,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                             "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)"
                     )
             );
+            isStarting = false;
             return;
         }
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         petUtilities = new PetUtility();
 
-        SimplePets.setPLUGIN(this);
         taskTimer.label("registered api instance");
 
 
@@ -183,6 +188,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         });
         taskTimer.stop();
 
+        fullyStarted = true;
+
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
         new BukkitRunnable() {
@@ -208,6 +215,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     @Override
     public void onDisable() {
+        isStarting = false;
         outputTimings();
         supportedVersions.clear();
         if (petUtilities == null) return; // Failed to load this field due to unsupported version
@@ -246,7 +254,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         if (addonManager != null) addonManager.cleanup();
         addonManager = null;
         debug = null;
-
+        fullyStarted = false;
     }
 
     private boolean checkJavaVersion() {
@@ -599,5 +607,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
         taskTimer.label("Finished looking for supported versions.");
         return supported;
+    }
+
+    public boolean hasFullyStarted() {
+        return fullyStarted;
+    }
+
+    @Override
+    public boolean isStarting() {
+        return isStarting;
     }
 }
