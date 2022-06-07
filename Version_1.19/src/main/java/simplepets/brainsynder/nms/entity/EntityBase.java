@@ -65,13 +65,13 @@ public class EntityBase extends Mob {
             // frozen field
             Field frozen = null;
             if (checkFields) {
-                frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
+                frozen = registry.getClass().getSuperclass().getDeclaredField("ca");
                 frozen.setAccessible(true);
                 frozen.set(registry, false);
             }
             // map field
             if (checkFields) {
-                Field map = registry.getClass().getSuperclass().getDeclaredField("bN");
+                Field map = registry.getClass().getSuperclass().getDeclaredField("cc");
                 map.setAccessible(true);
                 map.set(registry, new IdentityHashMap<>());
             }
@@ -87,7 +87,7 @@ public class EntityBase extends Mob {
 
     private boolean containsFields () {
         try {
-            Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField("bL");
+            Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField("ca");
             return true;
         }catch (Exception e) {
             return false;
