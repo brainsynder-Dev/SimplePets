@@ -24,10 +24,10 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.nms.utils.FieldUtils;
 import simplepets.brainsynder.nms.utils.InvalidInputException;
@@ -38,14 +38,14 @@ import java.util.Optional;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
-    public static final String ENTITY_FACTORY_FIELD = "bn";
+    public static final String ENTITY_FACTORY_FIELD = "bs";
     private static Field jumpingField = null;
 
     public static Field getJumpField () {
         if (jumpingField != null) return jumpingField;
 
         try{
-            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.18.2
+            Field jumpingField = LivingEntity.class.getDeclaredField("be"); // For 1.19
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         }catch(Exception ex){
@@ -139,6 +139,10 @@ public class VersionTranslator {
         } catch (NBTException exception) {
             throw new InvalidInputException("Failed to convert item to NBT", exception);
         }
+    }
+
+    public static float cube(float f) {
+        return f * f * f;
     }
 
     public static EntityType fetchEntityType (String name) {
