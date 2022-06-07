@@ -31,6 +31,8 @@ import simplepets.brainsynder.api.pet.data.fox.FoxSittingData;
 import simplepets.brainsynder.api.pet.data.fox.FoxTypeData;
 import simplepets.brainsynder.api.pet.data.frog.CroakingData;
 import simplepets.brainsynder.api.pet.data.frog.FrogVariantData;
+import simplepets.brainsynder.api.pet.data.goat.LeftHornData;
+import simplepets.brainsynder.api.pet.data.goat.RightHornData;
 import simplepets.brainsynder.api.pet.data.horse.ChestData;
 import simplepets.brainsynder.api.pet.data.horse.HorseArmorData;
 import simplepets.brainsynder.api.pet.data.horse.HorseColorData;
@@ -150,7 +152,7 @@ public enum PetType {
 
     @PetCustomization(ambient = SoundMaker.ENTITY_GOAT_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     GOAT(IEntityGoatPet.class, "957607099d06b7a8b1327093cd0a488be7c9f50b6121b22151271b59170f3c21",
-            AgeData.class),
+            AgeData.class, LeftHornData.class, RightHornData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_GUARDIAN_AMBIENT, weight = PetWeight.HEAVY)
     GUARDIAN(IEntityGuardianPet.class, "a0bf34a71e7715b6ba52d5dd1bae5cb85f773dc9b0d457b4bfc5f9dd3cc7c94"),
