@@ -3,10 +3,12 @@ package simplepets.brainsynder.nms.entity.list;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
+import net.minecraft.core.Registry;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -21,7 +23,7 @@ import java.util.OptionalInt;
  */
 @SupportedVersion(version = ServerVersion.v1_19)
 public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
-    private static final EntityDataAccessor<Integer> DATA_VARIANT; // This is no longer an int, it is a FrogVariant
+    private static final EntityDataAccessor<net.minecraft.world.entity.animal.FrogVariant> DATA_VARIANT;
     private static final EntityDataAccessor<OptionalInt> TONGUE_TARGET_ID;
 
     public EntityFrogPet(PetType type, PetUser user) {
@@ -31,7 +33,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        entityData.define(DATA_VARIANT, 0);
+        entityData.define(DATA_VARIANT, net.minecraft.world.entity.animal.FrogVariant.TEMPERATE);
         entityData.define(TONGUE_TARGET_ID, OptionalInt.empty());
     }
 
@@ -55,18 +57,18 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     }
 
     static {
-        DATA_VARIANT = SynchedEntityData.defineId(EntityFrogPet.class, EntityDataSerializers.INT); // As per 1.19    INT -> FROG_VARIANT
+        DATA_VARIANT = SynchedEntityData.defineId(EntityFrogPet.class, EntityDataSerializers.FROG_VARIANT);
         TONGUE_TARGET_ID = SynchedEntityData.defineId(EntityFrogPet.class, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
     }
 
     @Override
     public void setVariant(FrogVariant variant) {
-        entityData.set(DATA_VARIANT, variant.ordinal());
+        entityData.set(DATA_VARIANT, Registry.FROG_VARIANT.get(CraftNamespacedKey.toMinecraft(variant.getKey())));
     }
 
     @Override
     public FrogVariant getVariant() {
-        return FrogVariant.getByID(entityData.get(DATA_VARIANT));
+        return FrogVariant.getByName(org.bukkit.Registry.FROG_VARIANT.get(CraftNamespacedKey.fromMinecraft(net.minecraft.core.Registry.FROG_VARIANT.getKey(entityData.get(DATA_VARIANT)))).name());
     }
 
     @Override
