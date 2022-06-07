@@ -3,6 +3,7 @@ package simplepets.brainsynder.nms.entity.list;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
@@ -20,7 +21,7 @@ import simplepets.brainsynder.nms.entity.EntityPet;
 @SupportedVersion(version = ServerVersion.v1_19)
 public class EntityAllayPet extends EntityPet implements IEntityAllayPet {
     public EntityAllayPet(PetType type, PetUser user) {
-        super(VersionTranslator.fetchEntityType("ALLAY"), type, user);
+        super(EntityType.ALLAY, type, user);
     }
 
     @Override

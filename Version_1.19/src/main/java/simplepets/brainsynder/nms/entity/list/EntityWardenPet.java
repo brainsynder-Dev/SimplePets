@@ -6,10 +6,10 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityWardenPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
 /**
@@ -20,7 +20,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
     protected static final EntityDataAccessor<Integer> TOP_ANGER;
 
     public EntityWardenPet(PetType type, PetUser user) {
-        super(VersionTranslator.fetchEntityType("WARDEN"), type, user);
+        super(EntityType.WARDEN, type, user);
     }
 
     @Override

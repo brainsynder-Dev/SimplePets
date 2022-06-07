@@ -8,12 +8,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.FrogVariant;
-import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
 import java.util.OptionalInt;
@@ -27,7 +27,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private static final EntityDataAccessor<OptionalInt> TONGUE_TARGET_ID;
 
     public EntityFrogPet(PetType type, PetUser user) {
-        super(VersionTranslator.fetchEntityType("FROG"), type, user);
+        super(EntityType.FROG, type, user);
     }
 
     @Override
