@@ -56,7 +56,7 @@ public enum PetType {
     UNKNOWN(new ItemBuilder(Material.STONE)),
 
     @InDevelopment
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT)
+    @PetCustomization(ambient = SoundMaker.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM, weight = PetWeight.LIGHT)
     ALLAY(IEntityAllayPet.class, "40e1c7064af7dee68677efaa95f6e6e01430b006dd91638ea2a61849254488ec"),
 
     @InDevelopment
@@ -133,7 +133,7 @@ public enum PetType {
             AgeData.class, SleepData.class, FoxInterestData.class, FoxCrouchingData.class, FoxTypeData.class, FoxSittingData.class),
 
     @InDevelopment
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.LIGHT)
+    @PetCustomization(ambient = SoundMaker.ENTITY_FROG_AMBIENT, weight = PetWeight.LIGHT)
     FROG(IEntityFrogPet.class, "23ce6f9998ed2da757d1e6372f04efa20e57dfc17c3a06478657bbdf51c2f2a2",
             FrogVariantData.class, CroakingData.class),
 
@@ -285,7 +285,7 @@ public enum PetType {
             AgeData.class, SaddleData.class),
 
     @InDevelopment
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK)
+    @PetCustomization(ambient = SoundMaker.ENTITY_TADPOLE_FLOP)
     TADPOLE(IEntityTadpolePet.class, "987035f5352334c2cba6ac4c65c2b9059739d6d0e839c1dd98d75d2e77957847"),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_LLAMA_AMBIENT, weight = PetWeight.HEAVY)
@@ -317,7 +317,7 @@ public enum PetType {
 
     @LargePet
     @InDevelopment
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.HEAVY)
+    @PetCustomization(ambient = SoundMaker.ENTITY_WARDEN_AMBIENT, weight = PetWeight.HEAVY)
     WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_WITCH_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
