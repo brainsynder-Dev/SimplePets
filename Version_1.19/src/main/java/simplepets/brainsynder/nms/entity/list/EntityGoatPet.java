@@ -5,7 +5,6 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.goat.Goat;
 import simplepets.brainsynder.api.entity.passive.IEntityGoatPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -80,7 +79,7 @@ public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
 
     static {
         DATA_IS_SCREAMING_GOAT = SynchedEntityData.defineId(EntityGoatPet.class, EntityDataSerializers.BOOLEAN);
-        DATA_HAS_LEFT_HORN = SynchedEntityData.defineId(Goat.class, EntityDataSerializers.BOOLEAN);
-        DATA_HAS_RIGHT_HORN = SynchedEntityData.defineId(Goat.class, EntityDataSerializers.BOOLEAN);
+        DATA_HAS_LEFT_HORN = SynchedEntityData.defineId(EntityGoatPet.class, EntityDataSerializers.BOOLEAN);
+        DATA_HAS_RIGHT_HORN = SynchedEntityData.defineId(EntityGoatPet.class, EntityDataSerializers.BOOLEAN);
     }
 }
