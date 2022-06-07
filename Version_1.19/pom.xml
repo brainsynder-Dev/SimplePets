@@ -121,6 +121,10 @@
                                     <pattern>org.bukkit.craftbukkit.${parent-module.nms}</pattern>
                                     <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bukkit.craftbukkit.v1_17_R1</pattern>
+                                    <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
+                                </relocation>
                             </relocations>
                         </configuration>
                     </execution>
