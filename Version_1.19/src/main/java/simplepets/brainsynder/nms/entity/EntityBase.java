@@ -1,6 +1,8 @@
 package simplepets.brainsynder.nms.entity;
 
 import net.minecraft.core.Registry;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -53,6 +55,20 @@ public class EntityBase extends Mob {
                 return petType.getEntityType();
             }
         };
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        try {
+            ClientboundAddEntityPacket packet = new ClientboundAddEntityPacket(this);
+            Field type = packet.getClass().getDeclaredField("e");
+            type.setAccessible(true);
+            type.set(packet, Registry.ENTITY_TYPE.getId(originalEntityType));
+            return packet;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return new ClientboundAddEntityPacket(this.getId(), this.getUUID(), getX(), getY(), getZ(), getYRot(), getXRot(), originalEntityType, 0, getDeltaMovement(), 0.0d);
     }
 
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields)  {
