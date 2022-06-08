@@ -16,6 +16,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,6 +29,7 @@ import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.utils.FieldUtils;
 import simplepets.brainsynder.nms.utils.InvalidInputException;
 
@@ -49,6 +51,11 @@ public class VersionTranslator {
         }catch(Exception ex){
             throw new UnsupportedOperationException("Unable to find the correct jumpingField name for "+ ServerVersion.getVersion().name());
         }
+    }
+
+    public static void setAttributes (EntityPet entityPet, double walkSpeed, double flySpeed) {
+        if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+        if (flySpeed != -1) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
     }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {

@@ -15,6 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.nms.entity.EntityPet;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -25,6 +26,10 @@ public class VersionTranslator {
     public static final String ENTITY_FACTORY_FIELD = "bm";
 
     public static Field getJumpField () {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static void setAttributes (EntityPet entityPet, double walkSpeed, double flySpeed) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 

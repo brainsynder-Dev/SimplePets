@@ -109,9 +109,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         });
 
         // needs to be faster but less then 6
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
-        getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
     }
+
+
 
     public boolean isJumping() {
         return jumping;
@@ -272,12 +273,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         if (object.hasKey("walkSpeed")) {
             walkSpeed = object.getDouble("walkSpeed");
-            getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+            VersionTranslator.setAttributes(this, walkSpeed, -1);
         }
         if (object.hasKey("rideSpeed")) rideSpeed = object.getDouble("rideSpeed");
         if (object.hasKey("flySpeed")) {
             flySpeed = object.getDouble("flySpeed");
-            getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+            VersionTranslator.setAttributes(this, -1, flySpeed);
         }
     }
 
@@ -519,10 +520,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             double current = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
                 if (current != rideSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(rideSpeed);
+                    VersionTranslator.setAttributes(this, rideSpeed, -1);
             } else {
                 if (current != walkSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+                    VersionTranslator.setAttributes(this, walkSpeed, -1);
             }
         }
     }
