@@ -104,11 +104,13 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
+            this.flySpeed = config.getFlySpeed();
             this.floatDown = config.canFloat();
         });
 
         // needs to be faster but less then 6
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
+        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+        getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
     }
 
     public boolean isJumping() {
