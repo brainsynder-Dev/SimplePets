@@ -45,7 +45,7 @@ public class VersionTranslator {
         if (jumpingField != null) return jumpingField;
 
         try{
-            Field jumpingField = LivingEntity.class.getDeclaredField("be"); // For 1.19
+            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         }catch(Exception ex){
