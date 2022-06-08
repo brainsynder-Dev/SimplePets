@@ -72,6 +72,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     // Theses fields are based off config options
     protected double walkSpeed = 0.6000000238418579;
     protected double rideSpeed = 0.4000000238418579;
+    protected double flySpeed = 0.10000000149011612;
     private boolean floatDown = false;
     private boolean pushable = false;
     private boolean canGlow = true;
@@ -265,6 +266,16 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (object.hasKey("pose")) {
             Pose pose = object.getEnum("pose", Pose.class);
             if (pose != null) setPose(pose);
+        }
+
+        if (object.hasKey("walkSpeed")) {
+            walkSpeed = object.getDouble("walkSpeed");
+            getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+        }
+        if (object.hasKey("rideSpeed")) rideSpeed = object.getDouble("rideSpeed");
+        if (object.hasKey("flySpeed")) {
+            flySpeed = object.getDouble("flySpeed");
+            getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
         }
     }
 
