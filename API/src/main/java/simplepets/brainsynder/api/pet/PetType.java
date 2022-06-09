@@ -318,7 +318,8 @@ public enum PetType {
     @LargePet
     @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_WARDEN_AMBIENT, weight = PetWeight.HEAVY)
-    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8"),
+    WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8",
+            WardenAngerData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_WITCH_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     WITCH(IEntityWitchPet.class, "20e13d18474fc94ed55aeb7069566e4687d773dac16f4c3f8722fc95bf9f2dfa",
