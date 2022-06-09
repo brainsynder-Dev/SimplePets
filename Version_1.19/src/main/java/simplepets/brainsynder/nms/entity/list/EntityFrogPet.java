@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.Registry;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -9,6 +10,10 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MoverType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
@@ -26,8 +31,39 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private static final EntityDataAccessor<net.minecraft.world.entity.animal.FrogVariant> DATA_VARIANT;
     private static final EntityDataAccessor<OptionalInt> TONGUE_TARGET_ID;
 
+    private boolean croaking = false;
+    private int croakingTick = 0;
+
     public EntityFrogPet(PetType type, PetUser user) {
         super(EntityType.FROG, type, user);
+        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        Pose pose = getPose();
+        if (croaking) {
+            if (pose == Pose.CROAKING) croakingTick++;
+
+            if (croakingTick >= MathUtils.random(120, 150)) {
+                setPose(Pose.STANDING);
+                setPose(Pose.CROAKING);
+                croakingTick = 0;
+            }
+        }
+    }
+
+    @Override
+    public void travel(Vec3 vec3d) {
+        if (!isOwnerRiding() && isInWater()) {
+            moveRelative(getSpeed(), vec3d);
+            move(MoverType.SELF, getDeltaMovement());
+            setDeltaMovement(getDeltaMovement().scale(0.9D));
+        } else {
+            super.travel(vec3d);
+        }
     }
 
     @Override
@@ -73,11 +109,16 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
 
     @Override
     public boolean isCroaking() {
-        return false;
+        return croaking;
     }
 
     @Override
     public void setCroaking(boolean value) {
-
+        croaking = value;
+        if (croaking) setPose(Pose.CROAKING);
+        if (!croaking) {
+            setPose(Pose.STANDING);
+            croakingTick = 0;
+        }
     }
 }
