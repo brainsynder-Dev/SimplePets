@@ -12,7 +12,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.ai.control.SmoothSwimmingMoveControl;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.craftbukkit.v1_19_R1.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
@@ -34,6 +33,9 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private boolean croaking = false;
     private int croakingTick = 0;
 
+    private boolean tongue = false;
+    private int tongueTick = 0;
+
     public EntityFrogPet(PetType type, PetUser user) {
         super(EntityType.FROG, type, user);
         //this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
@@ -43,15 +45,22 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     public void tick() {
         super.tick();
 
-        Pose pose = getPose();
         if (croaking) {
-            if (pose == Pose.CROAKING) croakingTick++;
-
-            if (croakingTick >= MathUtils.random(120, 150)) {
+            if (croakingTick <= 0) {
                 setPose(Pose.STANDING);
                 setPose(Pose.CROAKING);
-                croakingTick = 0;
+                croakingTick = MathUtils.random(120, 150);
             }
+            croakingTick--;
+        }
+
+        if (tongue) {
+            if (tongueTick <= 0) {
+                setPose(Pose.STANDING);
+                setPose(Pose.USING_TONGUE);
+                tongueTick = MathUtils.random(100, 150);
+            }
+            tongueTick--;
         }
     }
 
@@ -82,6 +91,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
         StorageTagCompound compound = super.asCompound();
         compound.setEnum("variant", getVariant());
         compound.setBoolean("croaking", isCroaking());
+        compound.setBoolean("tongue", isCroaking());
         return compound;
     }
 
@@ -89,6 +99,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("variant")) setVariant(object.getEnum("variant", FrogVariant.class, FrogVariant.TEMPERATE));
         if (object.hasKey("croaking")) setCroaking(object.getBoolean("croaking"));
+        if (object.hasKey("tongue")) setUsingTongue(object.getBoolean("tongue"));
         super.applyCompound(object);
     }
 
@@ -119,6 +130,21 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
         if (!croaking) {
             setPose(Pose.STANDING);
             croakingTick = 0;
+        }
+    }
+
+    @Override
+    public boolean isUsingTongue() {
+        return tongue;
+    }
+
+    @Override
+    public void setUsingTongue(boolean value) {
+        tongue = value;
+        if (tongue) setPose(Pose.USING_TONGUE);
+        if (!tongue) {
+            setPose(Pose.STANDING);
+            tongueTick = 0;
         }
     }
 }
