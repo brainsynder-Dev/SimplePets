@@ -36,7 +36,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
 
     public EntityFrogPet(PetType type, PetUser user) {
         super(EntityType.FROG, type, user);
-        this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
+        //this.moveControl = new SmoothSwimmingMoveControl(this, 85, 10, 0.02F, 0.1F, true);
     }
 
     @Override
