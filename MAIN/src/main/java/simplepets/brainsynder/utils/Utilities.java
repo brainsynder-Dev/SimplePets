@@ -160,7 +160,7 @@ public class Utilities {
 
     public static void setPassenger(Player player, Entity entity, Entity passenger) {
         try {
-            entity.setPassenger(passenger);
+            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Set passenger: " + entity.addPassenger(passenger) + " - " + entity.getClass().getName() + ", " + passenger.getClass().getName());
         } catch (Exception e) {
             SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
