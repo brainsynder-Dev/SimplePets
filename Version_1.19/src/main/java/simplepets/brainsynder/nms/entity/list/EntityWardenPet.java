@@ -8,7 +8,12 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.Pose;
+import net.minecraft.world.phys.Vec3;
+import org.bukkit.Bukkit;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityWardenPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -26,6 +31,8 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
 
     public EntityWardenPet(PetType type, PetUser user) {
         super(EntityType.WARDEN, type, user);
+        this.setPose(Pose.EMERGING);
+        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> this.setPose(Pose.STANDING), 135);
     }
 
     @Override
@@ -90,6 +97,18 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
         if (object.hasKey("anger-level")) setAngerLevel(object.getEnum("anger-level", AngerLevel.class, AngerLevel.CALM));
         if (object.hasKey("vibration")) setVibrationEffect(object.getBoolean("vibration"));
         super.applyCompound(object);
+    }
+
+    @Override
+    public void travel(Vec3 vec3d) {
+        // Don't move if the warden isn't standing
+        if (getPose() != Pose.STANDING) return;
+        super.travel(vec3d);
+    }
+
+    public void remove(Entity.RemovalReason entity_removalreason) {
+        this.setPose(Pose.DIGGING);
+        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> super.remove(entity_removalreason), 100);
     }
 
     static {
