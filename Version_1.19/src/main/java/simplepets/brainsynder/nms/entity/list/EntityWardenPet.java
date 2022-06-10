@@ -43,7 +43,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
             if (vibrationTick <= 0) {
                 level.broadcastEntityEvent(this, (byte)61);
                 this.playSound(SoundEvents.WARDEN_TENDRIL_CLICKS, 5.0F, this.getVoicePitch());
-                vibrationTick = MathUtils.random(80, 120);
+                vibrationTick = MathUtils.random(40, 60);
             }
             vibrationTick--;
         }
