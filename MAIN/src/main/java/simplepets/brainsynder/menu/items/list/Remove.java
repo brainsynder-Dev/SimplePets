@@ -25,7 +25,7 @@ public class Remove extends Item {
     @Override
     public ItemBuilder getDefaultItem() {
         return new ItemBuilder(Material.PLAYER_HEAD)
-                .withName("&#b35349&lRemove Pets").addLore("&#d1c9c9Click Here to remove all pets", "&#d1c9c9Shift+Click to select a pet")
+                .withName("&#b35349&lRemove Pets").addLore("&#d1c9c9Click Here to remove this pet", "&#d1c9c9... or all pets if you have the selector screen open.", "&#d1c9c9Shift+Click to select a pet")
                 .setTexture("http://textures.minecraft.net/texture/beb588b21a6f98ad1ff4e085c552dcb050efc9cab427f46048f18fc803475f7");
     }
 
