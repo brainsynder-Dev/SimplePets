@@ -163,4 +163,12 @@ public class VersionTranslator {
         // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
         return EntityType.GIANT;
     }
+
+    public static String getEntityTypeVariable() {
+        return "e";
+    }
+
+    public static boolean useInteger() {
+        return false;
+    }
 }

@@ -48,7 +48,7 @@ public class EntityBase extends Mob {
     public Packet<?> getAddEntityPacket() {
         try {
             ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
-            Field type = packet.getClass().getDeclaredField("c");
+            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
             type.setAccessible(true);
             type.set(packet, Registry.ENTITY_TYPE.getId(originalEntityType));
             return packet;
