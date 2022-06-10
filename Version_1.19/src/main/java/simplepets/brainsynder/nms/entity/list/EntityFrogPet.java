@@ -62,6 +62,12 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
             }
             tongueTick--;
         }
+
+        if (!isOnGround()) {
+            setPose(Pose.LONG_JUMPING);
+        } else {
+            setPose(Pose.STANDING);
+        }
     }
 
     @Override
