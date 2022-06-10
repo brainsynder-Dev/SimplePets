@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.items.list;
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
@@ -30,7 +31,7 @@ public class Saves extends Item {
     }
 
     @Override
-    public void onClick(PetUser user, CustomInventory inventory) {
+    public void onClick(PetUser user, CustomInventory inventory, IEntityPet pet) {
         InventoryManager.PET_SAVES.open(user);
     }
 }
