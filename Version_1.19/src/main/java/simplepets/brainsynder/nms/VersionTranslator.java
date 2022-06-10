@@ -58,7 +58,9 @@ public class VersionTranslator {
 
     public static void setAttributes (EntityPet entityPet, double walkSpeed, double flySpeed) {
         if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
-        if ((flySpeed != -1) && (entityPet instanceof IFlyableEntity)) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        if ((flySpeed != -1) && (entityPet instanceof IFlyableEntity) && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) {
+            entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        }
     }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
