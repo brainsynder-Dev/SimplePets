@@ -41,19 +41,19 @@ public class VersionTranslator {
     public static final String ENTITY_FACTORY_FIELD = "bn";
     private static Field jumpingField = null;
 
-    public static Field getJumpField () {
+    public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
-        try{
+        try {
             Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.18.2
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
-        }catch(Exception ex){
-            throw new UnsupportedOperationException("Unable to find the correct jumpingField name for "+ ServerVersion.getVersion().name());
+        } catch (Exception ex) {
+            throw new UnsupportedOperationException("Unable to find the correct jumpingField name for " + ServerVersion.getVersion().name());
         }
     }
 
-    public static void setAttributes (EntityPet entityPet, double walkSpeed, double flySpeed) {
+    public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
         if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
         if (flySpeed != -1) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
     }
@@ -62,20 +62,20 @@ public class VersionTranslator {
         stand.setItemSlot(enumitemslot, itemstack, silent);
     }
 
-    public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+    public static boolean addEntity(Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
         return level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public static <T extends Entity> T getEntityHandle(org.bukkit.entity.Entity entity) {
-        return (T) ((CraftEntity)entity).getHandle();
+        return (T) ((CraftEntity) entity).getHandle();
     }
 
     public static <T extends Level> T getWorldHandle(World world) {
-        return (T) ((CraftWorld)world).getHandle();
+        return (T) ((CraftWorld) world).getHandle();
     }
 
     public static BlockState getBlockState(BlockData blockData) {
-        return ((CraftBlockData)blockData).getState();
+        return ((CraftBlockData) blockData).getState();
     }
 
     public static BlockData fromNMS(BlockState blockData) {
@@ -90,11 +90,11 @@ public class VersionTranslator {
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 
-    public static BlockPos subtract (BlockPos blockPos, Vec3i vec) {
+    public static BlockPos subtract(BlockPos blockPos, Vec3i vec) {
         return blockPos.subtract(vec);
     }
 
-    public static BlockPos relative (BlockPos blockPos) {
+    public static BlockPos relative(BlockPos blockPos) {
         return blockPos.relative(RandomCollection.fromCollection(Arrays.asList(
                 Direction.NORTH,
                 Direction.EAST,
@@ -103,8 +103,11 @@ public class VersionTranslator {
         )).next());
     }
 
-    public static void modifyGlowData (SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher, boolean glow) throws IllegalAccessException {
-        Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap = (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher, ENTITY_DATA_MAP, true);
+    public static void modifyGlowData(SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher,
+                                      boolean glow) throws IllegalAccessException {
+        Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap =
+                (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher,
+                        ENTITY_DATA_MAP, true);
 
         SynchedEntityData.DataItem<Byte> item = newMap.get(0);
         byte initialBitMask = item.getValue();

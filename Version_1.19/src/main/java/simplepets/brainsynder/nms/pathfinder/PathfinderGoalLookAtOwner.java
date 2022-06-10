@@ -45,7 +45,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
     public boolean canContinueToUse() {
         if (this.player.isDead()) {
             return false;
-        } else if (this.entityPet.distanceToSqr(VersionTranslator.<ServerPlayer>getEntityHandle(player)) > (double)(this.range * this.range)) {
+        } else if (this.entityPet.distanceToSqr(VersionTranslator.<ServerPlayer>getEntityHandle(player)) > (double) (this.range * this.range)) {
             return false;
         } else {
             return this.lookTime > 0;

@@ -41,7 +41,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
 
         if (vibrationEffect) {
             if (vibrationTick <= 0) {
-                level.broadcastEntityEvent(this, (byte)61);
+                level.broadcastEntityEvent(this, (byte) 61);
                 this.playSound(SoundEvents.WARDEN_TENDRIL_CLICKS, 5.0F, this.getVoicePitch());
                 vibrationTick = MathUtils.random(40, 60);
             }
@@ -94,7 +94,8 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("raw-anger")) entityData.set(ANGER_LEVEL, object.getInteger("raw-anger"));
-        if (object.hasKey("anger-level")) setAngerLevel(object.getEnum("anger-level", AngerLevel.class, AngerLevel.CALM));
+        if (object.hasKey("anger-level"))
+            setAngerLevel(object.getEnum("anger-level", AngerLevel.class, AngerLevel.CALM));
         if (object.hasKey("vibration")) setVibrationEffect(object.getBoolean("vibration"));
         super.applyCompound(object);
     }

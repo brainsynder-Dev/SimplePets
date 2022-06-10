@@ -17,8 +17,8 @@ import java.lang.reflect.Field;
 import java.util.IdentityHashMap;
 
 public class EntityBase extends Mob {
-    protected  final EntityType<? extends Mob> entityType;
-    protected  final EntityType<? extends Mob> originalEntityType;
+    protected final EntityType<? extends Mob> entityType;
+    protected final EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
 
@@ -68,14 +68,17 @@ public class EntityBase extends Mob {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return new ClientboundAddEntityPacket(this.getId(), this.getUUID(), getX(), getY(), getZ(), getYRot(), getXRot(), originalEntityType, 0, getDeltaMovement(), 0.0d);
+        return new ClientboundAddEntityPacket(this.getId(), this.getUUID(), getX(), getY(), getZ(), getYRot(),
+                getXRot(), originalEntityType, 0, getDeltaMovement(), 0.0d);
     }
 
-    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields)  {
+    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields) {
         try {
             Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);
             field.setAccessible(true);
-            EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
+            EntityType.Builder<? extends Mob> builder =
+                    EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType),
+                            MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);
             Registry<EntityType<?>> registry = Registry.ENTITY_TYPE;
             // frozen field
@@ -101,11 +104,11 @@ public class EntityBase extends Mob {
         }
     }
 
-    private boolean containsFields () {
+    private boolean containsFields() {
         try {
             Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField("ca");
             return true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }

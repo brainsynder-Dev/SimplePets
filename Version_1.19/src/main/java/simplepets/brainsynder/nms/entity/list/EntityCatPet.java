@@ -49,7 +49,8 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("type")) setCatType(object.getEnum("type", CatType.class, CatType.TABBY));
-        if (object.hasKey("collar")) setCollarColor(object.getEnum("collar", DyeColorWrapper.class, DyeColorWrapper.WHITE));
+        if (object.hasKey("collar"))
+            setCollarColor(object.getEnum("collar", DyeColorWrapper.class, DyeColorWrapper.WHITE));
         if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping", false));
         if (object.hasKey("head_up")) setHeadUp(object.getBoolean("head_up", false));
         super.applyCompound(object);
@@ -67,7 +68,7 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
 
     @Override
     public DyeColorWrapper getCollarColor() {
-        return DyeColorWrapper.getByWoolData((byte)((int)entityData.get(COLLAR_COLOR)));
+        return DyeColorWrapper.getByWoolData((byte) ((int) entityData.get(COLLAR_COLOR)));
     }
 
     @Override
