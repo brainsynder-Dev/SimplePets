@@ -21,7 +21,7 @@ import simplepets.brainsynder.nms.entity.EntityPet;
 public class EntityAllayPet extends EntityPet implements IEntityAllayPet {
     public EntityAllayPet(PetType type, PetUser user) {
         super(EntityType.ALLAY, type, user);
-        this.moveControl = new FlyingMoveControl(this, 20, true);
+        this.moveControl = new FlyingMoveControl(this, 20, false);
     }
 
     @Override
@@ -40,7 +40,6 @@ public class EntityAllayPet extends EntityPet implements IEntityAllayPet {
             this.calculateEntityAnimation(this, false);
             return;
         }
-
         if (this.isInWater()) {
             this.moveRelative(0.02F, vec3);
             this.move(MoverType.SELF, this.getDeltaMovement());
