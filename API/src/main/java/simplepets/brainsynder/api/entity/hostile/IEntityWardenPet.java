@@ -13,4 +13,7 @@ public interface IEntityWardenPet extends IEntityPet {
 
     void setAngerLevel (AngerLevel level);
     AngerLevel getAngerLevel ();
+
+    void setVibrationEffect (boolean value);
+    boolean getVibrationEffect ();
 }

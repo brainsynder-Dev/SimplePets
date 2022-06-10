@@ -1,4 +1,4 @@
-package simplepets.brainsynder.api.pet.data;
+package simplepets.brainsynder.api.pet.data.warden;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
