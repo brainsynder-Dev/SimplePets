@@ -55,7 +55,7 @@ public class VersionTranslator {
 
     public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
         if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
-        if (flySpeed != -1) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        if (flySpeed != -1 && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
     }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
@@ -147,5 +147,13 @@ public class VersionTranslator {
         } catch (NBTException exception) {
             throw new InvalidInputException("Failed to convert item to NBT", exception);
         }
+    }
+
+    public static String getEntityTypeVariable() {
+        return "c";
+    }
+
+    public static boolean useInteger() {
+        return true;
     }
 }

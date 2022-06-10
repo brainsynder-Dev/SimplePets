@@ -57,21 +57,6 @@ public class EntityBase extends Mob {
         };
     }
 
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        try {
-            ClientboundAddEntityPacket packet = new ClientboundAddEntityPacket(this);
-            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
-            type.setAccessible(true);
-            type.set(packet, originalEntityType);
-            return packet;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return new ClientboundAddEntityPacket(this.getId(), this.getUUID(), getX(), getY(), getZ(), getYRot(),
-                getXRot(), originalEntityType, 0, getDeltaMovement(), 0.0d);
-    }
-
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields) {
         try {
             Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);

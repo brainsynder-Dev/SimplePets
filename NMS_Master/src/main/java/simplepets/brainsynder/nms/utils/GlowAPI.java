@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import org.bukkit.craftbukkit.libs.org.apache.commons.lang3.reflect.FieldUtils;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
@@ -97,8 +99,17 @@ public class GlowAPI {
             SynchedEntityData toCloneDataWatcher = gEntity.getEntityData();
             SynchedEntityData newDataWatcher = new SynchedEntityData(gEntity);
 
-            VersionTranslator.modifyGlowData(toCloneDataWatcher, newDataWatcher, glow);
+            Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap = (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher, VersionTranslator.ENTITY_DATA_MAP, true);
 
+            SynchedEntityData.DataItem<Byte> item = newMap.get(0);
+            byte initialBitMask = item.getValue();
+            byte bitMaskIndex = (byte) 6;
+            if (glow) {
+                item.setValue((byte) (initialBitMask | 1 << bitMaskIndex));
+            } else {
+                item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+            }
+            FieldUtils.writeDeclaredField(newDataWatcher, VersionTranslator.ENTITY_DATA_MAP, newMap, true);
             ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.getEntityId(), newDataWatcher, true);
             VersionTranslator.<ServerPlayer>getEntityHandle(player).connection.send(packet);
         } catch (Exception ignored) {
