@@ -206,13 +206,22 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     public Packet<?> getAddEntityPacket() {
         try {
-            ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
+            packet = new ClientboundAddMobPacket(this);
+        } catch (NoClassDefFoundError e) {
+            // y'all here sum'n?
+            packet = new ClientboundAddEntityPacket(this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
+        }
+
+        try {
             Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
             type.setAccessible(true);
             type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
             return packet;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
         }
         return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
