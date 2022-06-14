@@ -205,6 +205,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     public Packet<?> getAddEntityPacket() {
+        Packet<?> packet;
         try {
             packet = new ClientboundAddMobPacket(this);
         } catch (NoClassDefFoundError e) {
