@@ -15,4 +15,7 @@ public interface IEntityFrogPet extends IAgeablePet {
 
     boolean isCroaking ();
     void setCroaking (boolean value);
+
+    boolean isUsingTongue ();
+    void setUsingTongue (boolean value);
 }
