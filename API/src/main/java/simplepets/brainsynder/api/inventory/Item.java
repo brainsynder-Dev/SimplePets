@@ -6,6 +6,7 @@ import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagTools;
 import lib.brainsynder.utils.DyeColorWrapper;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -26,8 +27,21 @@ public abstract class Item extends JsonFile {
      * @param user - User clicking the item
      * @param inventory - The inventory they are clicking in
      */
-    public abstract void onClick(PetUser user, CustomInventory inventory);
-    public void onShiftClick(PetUser user, CustomInventory inventory) {}
+    public void onClick(PetUser user, CustomInventory inventory) {
+        onClick(user, inventory, null);
+    }
+    public void onShiftClick(PetUser user, CustomInventory inventory) {
+        onShiftClick(user, inventory, null);
+    }
+
+    /**
+     * This method gets called when the user clicks this item
+     *
+     * @param user - User clicking the item
+     * @param inventory - The inventory they are clicking in
+     */
+    public abstract void onClick(PetUser user, CustomInventory inventory, IEntityPet pet);
+    public void onShiftClick(PetUser user, CustomInventory inventory, IEntityPet pet) {}
 
     /**
      * Should the item be added to the inventory

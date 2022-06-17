@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.pathfinder;
 
+import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -189,7 +190,7 @@ public class PathfinderWalkToPlayer extends Goal {
     }
 
     private int getRandomInt(int min, int max) {
-        return entity.getRandom().nextInt(max - min + 1) + min;
+        return MathUtils.random(max - min) + min;
     }
 
     private Path fixThisStupidThing() {

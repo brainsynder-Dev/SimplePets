@@ -14,6 +14,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -24,28 +25,30 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_19_R1.block.data.CraftBlockData;
+import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R1.inventory.CraftItemStack;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.api.entity.misc.IFlyableEntity;
 import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.utils.FieldUtils;
 import simplepets.brainsynder.nms.utils.InvalidInputException;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
-    public static final String ENTITY_FACTORY_FIELD = "bn";
+    public static final String ENTITY_FACTORY_FIELD = "bs";
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
         try {
-            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.18.2
+            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
@@ -55,7 +58,9 @@ public class VersionTranslator {
 
     public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
         if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
-        if (flySpeed != -1 && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        if ((flySpeed != -1) && (entityPet instanceof IFlyableEntity) && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) {
+            entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
+        }
     }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
@@ -149,11 +154,25 @@ public class VersionTranslator {
         }
     }
 
+    public static float cube(float f) {
+        return f * f * f;
+    }
+
+    public static EntityType fetchEntityType(String name) {
+        // The EntityType.byString() method requires the name to start with `minecraft:` and the name of the mob to
+        // be lowercase
+        Optional<EntityType<?>> optional = EntityType.byString("minecraft:" + name.toLowerCase());
+        if (optional.isPresent()) return optional.get();
+
+        // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
+        return EntityType.GIANT;
+    }
+
     public static String getEntityTypeVariable() {
-        return "c";
+        return "e";
     }
 
     public static boolean useInteger() {
-        return true;
+        return false;
     }
 }

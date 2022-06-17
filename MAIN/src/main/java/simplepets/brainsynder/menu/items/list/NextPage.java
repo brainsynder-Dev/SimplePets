@@ -4,6 +4,7 @@ import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.utils.ListPager;
 import org.bukkit.Material;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
@@ -41,7 +42,7 @@ public class NextPage extends Item {
     }
 
     @Override
-    public void onClick(PetUser owner, CustomInventory inventory) {
+    public void onClick(PetUser owner, CustomInventory inventory, IEntityPet pet) {
         if (inventory instanceof SelectionMenu) {
             SelectionMenu menu = (SelectionMenu)inventory;
             ListPager<PetTypeStorage> pages = menu.getPages(owner);
