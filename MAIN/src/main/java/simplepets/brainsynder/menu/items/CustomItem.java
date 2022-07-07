@@ -3,6 +3,7 @@ package simplepets.brainsynder.menu.items;
 import lib.brainsynder.json.JsonArray;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.user.PetUser;
@@ -41,7 +42,7 @@ public abstract class CustomItem extends Item {
     }
 
     @Override
-    public void onClick(PetUser user, CustomInventory inventory) {
+    public void onClick(PetUser user, CustomInventory inventory, IEntityPet pet) {
         runCommands(user);
     }
 }

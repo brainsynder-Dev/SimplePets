@@ -1,5 +1,10 @@
 package simplepets.brainsynder.nms.entity;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -38,8 +43,6 @@ public class EntityBase extends Mob {
     public PetUser getUser() {
         return user;
     }
-
-
 
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
         try {

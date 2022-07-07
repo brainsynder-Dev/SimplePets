@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.utils;
 
+import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.utils.AdvString;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.protocol.game.ClientboundSetEntityDataPacket;
@@ -9,11 +10,13 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
 import org.bukkit.ChatColor;
+import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.nms.VersionTranslator;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -97,8 +100,19 @@ public class GlowAPI {
             SynchedEntityData toCloneDataWatcher = gEntity.getEntityData();
             SynchedEntityData newDataWatcher = new SynchedEntityData(gEntity);
 
-            VersionTranslator.modifyGlowData(toCloneDataWatcher, newDataWatcher, glow);
+            Field mapField = toCloneDataWatcher.getClass().getDeclaredField(VersionTranslator.ENTITY_DATA_MAP);
+            Reflection.setFieldAccessible(mapField);
+            Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap = (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) mapField.get(toCloneDataWatcher);
 
+            SynchedEntityData.DataItem<Byte> item = newMap.get(0);
+            byte initialBitMask = item.getValue();
+            byte bitMaskIndex = (byte) 6;
+            if (glow) {
+                item.setValue((byte) (initialBitMask | 1 << bitMaskIndex));
+            } else {
+                item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
+            }
+            mapField.set(newDataWatcher, newMap);
             ClientboundSetEntityDataPacket packet = new ClientboundSetEntityDataPacket(entity.getEntityId(), newDataWatcher, true);
             VersionTranslator.<ServerPlayer>getEntityHandle(player).connection.send(packet);
         } catch (Exception ignored) {

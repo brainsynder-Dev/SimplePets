@@ -55,16 +55,23 @@ public interface IPetConfig {
     /**
      * How fast should the pet be able to move when riding
      * <p>
-     * Example: 0.2500000138418579
+     * Example: 0.200004838418579
      */
     double getRideSpeed();
 
     /**
      * How fast should the pet be able to move when following the player
      * <p>
-     * Example: 0.6000000138418579
+     * Example: 0.580804838418579
      */
     double getWalkSpeed();
+
+    /**
+     * How fast should the pet be able to fly around
+     * <p>
+     * Example: 0.300000438418579
+     */
+    double getFlySpeed();
 
     /**
      * What type of entity is the pet

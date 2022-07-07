@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
@@ -31,8 +32,19 @@ public class Name extends Item {
     }
 
     @Override
-    public void onClick(PetUser masterUser, CustomInventory inventory) {
+    public void onClick(PetUser masterUser, CustomInventory inventory, IEntityPet pet) {
         if (!masterUser.hasPets()) return;
+
+        if (pet != null) {
+            masterUser.getPlayer().closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    masterUser.getPlayer().performCommand("pet rename " + pet.getPetType().getName());
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
+        }
+
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPlayer().closeInventory();

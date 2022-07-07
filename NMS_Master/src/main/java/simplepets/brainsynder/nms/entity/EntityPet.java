@@ -77,6 +77,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     // Theses fields are based off config options
     protected double walkSpeed = 0.6000000238418579;
     protected double rideSpeed = 0.4000000238418579;
+    protected double flySpeed = 0.10000000149011612;
     private boolean floatDown = false;
     private boolean pushable = false;
     private boolean canGlow = true;
@@ -108,12 +109,15 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
+            this.flySpeed = config.getFlySpeed();
             this.floatDown = config.canFloat();
         });
 
         // needs to be faster but less then 6
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
+        VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
     }
+
+
 
     public boolean isJumping() {
         return jumping;
@@ -200,6 +204,30 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
     @Override
+    public Packet<?> getAddEntityPacket() {
+        Packet<?> packet;
+        try {
+            packet = new ClientboundAddMobPacket(this);
+        } catch (NoClassDefFoundError e) {
+            // y'all here sum'n?
+            packet = new ClientboundAddEntityPacket(this);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
+        }
+
+        try {
+            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
+            type.setAccessible(true);
+            type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
+            return packet;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
+    }
+
+    @Override
     public Optional<String> getPetName() {
         if (petName != null) return Optional.of(petName);
 
@@ -270,6 +298,16 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (object.hasKey("pose")) {
             Pose pose = object.getEnum("pose", Pose.class);
             if (pose != null) setPose(pose);
+        }
+
+        if (object.hasKey("walkSpeed")) {
+            walkSpeed = object.getDouble("walkSpeed");
+            VersionTranslator.setAttributes(this, walkSpeed, -1);
+        }
+        if (object.hasKey("rideSpeed")) rideSpeed = object.getDouble("rideSpeed");
+        if (object.hasKey("flySpeed")) {
+            flySpeed = object.getDouble("flySpeed");
+            VersionTranslator.setAttributes(this, -1, flySpeed);
         }
     }
 
@@ -511,10 +549,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             double current = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
                 if (current != rideSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(rideSpeed);
+                    VersionTranslator.setAttributes(this, rideSpeed, -1);
             } else {
                 if (current != walkSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+                    VersionTranslator.setAttributes(this, walkSpeed, -1);
             }
         }
     }
@@ -537,20 +575,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     public EntityType<?> getType() {
         return entityType;
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        try {
-            ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
-            Field type = packet.getClass().getDeclaredField("c");
-            type.setAccessible(true);
-            type.set(packet, Registry.ENTITY_TYPE.getId(originalEntityType));
-            return packet;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
 
     private void glowHandler(Player player, boolean glow) {

@@ -39,8 +39,21 @@ public class Hat extends Item {
     }
 
     @Override
-    public void onClick(PetUser masterUser, CustomInventory inventory) {
+    public void onClick(PetUser masterUser, CustomInventory inventory, IEntityPet pet) {
         if (!masterUser.hasPets()) return;
+
+        if (pet != null) {
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
+                masterUser.getPlayer().closeInventory();
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    masterUser.setPetHat(pet.getPetType(), !masterUser.isPetHat(pet.getPetType()));
+                }
+            }.runTaskLater(PetCore.getInstance(), 2);
+            return;
+        }
+
         if (masterUser.getPetEntities().size() == 1) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 masterUser.getPlayer().closeInventory();
