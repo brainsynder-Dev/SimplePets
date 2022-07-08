@@ -40,7 +40,7 @@
                     <finalName>SimplePets</finalName>
                     <appendAssemblyId>false</appendAssemblyId>
                 </configuration>
-                <version>3.3.0</version>
+                <version>3.4.1</version>
                 <executions>
                     <execution>
                         <id>package-all</id>
