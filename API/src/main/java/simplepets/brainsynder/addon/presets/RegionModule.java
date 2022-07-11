@@ -99,6 +99,7 @@ public abstract class RegionModule extends PetModule {
     public void onMove (PetMoveEvent event) {
         if (!movingEnabled) return; // Move checking is disabled
         Player player = event.getEntity().getPetUser().getPlayer();
+        if (player == null) return;
         if (player.hasPermission(bypassPermission.getPermission())) return; // Player has bypass SKIPPING
 
         // Pet is allowed in region...
