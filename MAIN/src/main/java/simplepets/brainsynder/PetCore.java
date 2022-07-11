@@ -96,7 +96,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug = new Debug(this);
 
-        if (!checkJavaVersion()){
+        if (!checkJavaVersion()) {
             setEnabled(false);
             isStarting = false;
             return;
@@ -345,7 +345,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer", "server");
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
-                Method isRunning = Reflection.getMethod(nmsClass, new String[]{"isRunning", "ab"});
+
+                String methodName = "isRunning"; // 1.17 - 1.17.1
+                if (ServerVersion.isEqualNew(ServerVersion.v1_18) && ServerVersion.isOlder(ServerVersion.v1_19))
+                    methodName = "v"; // 1.18 - 1.18.2
+                if (ServerVersion.isEqualNew(ServerVersion.v1_19))
+                    methodName = "u"; // 1.19
+
+                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
                 return !((boolean) Reflection.invoke(isRunning, server));
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
