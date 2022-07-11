@@ -58,7 +58,6 @@ import java.util.Optional;
 public enum PetType {
     UNKNOWN(new ItemBuilder(Material.STONE)),
 
-    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_ALLAY_AMBIENT_WITHOUT_ITEM, weight = PetWeight.LIGHT)
     ALLAY(IEntityAllayPet.class, "40e1c7064af7dee68677efaa95f6e6e01430b006dd91638ea2a61849254488ec"),
 
@@ -135,7 +134,6 @@ public enum PetType {
     FOX(IEntityFoxPet.class, "d8954a42e69e0881ae6d24d4281459c144a0d5a968aed35d6d3d73a3c65d26a",
             AgeData.class, SleepData.class, FoxInterestData.class, FoxCrouchingData.class, FoxTypeData.class, FoxSittingData.class),
 
-    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_FROG_AMBIENT, weight = PetWeight.LIGHT)
     FROG(IEntityFrogPet.class, "23ce6f9998ed2da757d1e6372f04efa20e57dfc17c3a06478657bbdf51c2f2a2",
             FrogVariantData.class, CroakingData.class, TongueData.class),
@@ -287,7 +285,6 @@ public enum PetType {
     STRIDER(IEntityStriderPet.class, "cb7ffdda656c68d88851a8e05b48cd2493773ffc4ab7d64e9302229fe3571059",
             AgeData.class, SaddleData.class),
 
-    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_TADPOLE_FLOP)
     TADPOLE(IEntityTadpolePet.class, "987035f5352334c2cba6ac4c65c2b9059739d6d0e839c1dd98d75d2e77957847"),
 
@@ -319,7 +316,6 @@ public enum PetType {
     WANDERING_TRADER(IEntityWanderingTraderPet.class, "5f1379a82290d7abe1efaabbc70710ff2ec02dd34ade386bc00c930c461cf932"),
 
     @LargePet
-    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_WARDEN_AMBIENT, weight = PetWeight.HEAVY)
     WARDEN(IEntityWardenPet.class, "1dfd13ca08bf973bfef0293d770704a11ef5a9fe20d40671fb066724d3e18d8",
             WardenAngerData.class, WardenVibrationData.class),
