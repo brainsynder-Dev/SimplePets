@@ -23,15 +23,43 @@
         <module>DIST</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>build-number</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- Override only if necessary -->
+                <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>job-name</id>
+            <activation>
+                <property>
+                    <name>env.JOB_NAME</name>
+                </property>
+            </activation>
+            <properties>
+                <!-- Override only if necessary -->
+                <jenkins.name>${env.JOB_NAME}</jenkins.name>
+            </properties>
+        </profile>
+    </profiles>
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <module.info>-parent</module.info>
-        <!--suppress UnresolvedMavenProperty -->
-        <jenkins.name>${env.JOB_NAME}</jenkins.name>
-        <!--suppress UnresolvedMavenProperty -->
-        <jenkins.buildNumber>${env.BUILD_NUMBER}</jenkins.buildNumber>
+
+        <jenkins.name>SimplePets_v5</jenkins.name>
+        <jenkins.buildNumber>0</jenkins.buildNumber>
+
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
         <bslib.version>B103</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
