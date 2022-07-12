@@ -228,7 +228,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             });
 
         DebugCommand.fetchDebug(json -> {
-            json.set("reloaded", !isShuttingDown());
+            json.set("reloaded", wasPluginReloaded());
             DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
             SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
@@ -239,7 +239,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         SPAWN_UTIL = null;
 
         // Detected a reload...
-        if (!isShuttingDown()) {
+        if (wasPluginReloaded()) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
                     "------------------------------------",
                     "    The plugin has detected a reload",
@@ -337,10 +337,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return reloaded;
     }
 
-    private boolean isShuttingDown() {
+    private boolean wasPluginReloaded() {
         try {
             Method isStopping = Bukkit.class.getDeclaredMethod("isStopping");
-            return (boolean) Reflection.invoke(isStopping, null);
+            return !((boolean) Reflection.invoke(isStopping, null));
         } catch (Exception e) {
             Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer", "server");
             try {
@@ -353,12 +353,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     methodName = "u"; // 1.19
 
                 Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
-                return !((boolean) Reflection.invoke(isRunning, server));
+                return (boolean) Reflection.invoke(isRunning, server);
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
             }
         }
-        return true;
+        return false;
     }
 
     private void handleManagers() {
