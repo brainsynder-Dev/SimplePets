@@ -65,7 +65,7 @@ public class AddonManager {
             }
         };
 
-        if (!folder.exists()) return;
+        if (!folder.exists()) folder.mkdirs();
         for (File file : folder.listFiles()) {
             loadAddon(file);
         }
