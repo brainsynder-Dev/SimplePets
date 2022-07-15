@@ -1,6 +1,6 @@
 name: 🐞 Bug Report
 description: Report a bug/issue with the plugin
-title: "[Bug]: "
+title: " "
 labels: ["Type: Bug"]
 assignees:
   - brainsynder-Dev
