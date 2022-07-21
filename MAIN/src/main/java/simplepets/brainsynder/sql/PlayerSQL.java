@@ -369,11 +369,13 @@ public class PlayerSQL extends SQLManager {
     }
 
     public CompletableFuture<Boolean> updateData(UUID uuid, String name, StorageTagCompound compound) {
+        if (uuid.version() != 4) return CompletableFuture.completedFuture(false);
         return CompletableFuture.supplyAsync(() -> updateDataSync(uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public CompletableFuture<Boolean> insertData(UUID uuid, String name, StorageTagCompound compound) {
+        if (uuid.version() != 4) return CompletableFuture.completedFuture(false);
         return CompletableFuture.supplyAsync(() -> insertDataSync(uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
