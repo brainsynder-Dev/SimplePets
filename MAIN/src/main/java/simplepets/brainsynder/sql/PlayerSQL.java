@@ -1,3 +1,5 @@
+
+
 package simplepets.brainsynder.sql;
 
 import lib.brainsynder.files.StorageFile;
@@ -23,7 +25,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -330,6 +334,37 @@ public class PlayerSQL extends SQLManager {
         } catch (SQLException exception) {
             exception.printStackTrace();
             return false;
+        }
+    }
+
+    public void removeNPCs () {
+        List<String> list = new ArrayList<>();
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM \""+tablePrefix+"_players\" WHERE \"uuid\" LIKE '________-____-2___-____-____________';");
+
+            ResultSet result = statement.executeQuery();
+            int size = 0;
+            while (result.next()) {
+                ++size;
+                list.add(result.getString("uuid"));
+            }
+
+            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Number of NPC players: "+size);
+
+            if (list.isEmpty()) {
+                SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "There was no NPC players to delete");
+                return;
+            }
+            statement = connection.prepareStatement("DELETE FROM \""+tablePrefix+"_players\" WHERE \"uuid\"=?");
+
+            for (String string : list) {
+                statement.setString(1, string);
+                statement.addBatch();
+            }
+
+            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "SQL Entries deleted: "+statement.executeBatch().length);
+        } catch (SQLException exception) {
+            exception.printStackTrace();
         }
     }
 
