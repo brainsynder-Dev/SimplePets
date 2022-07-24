@@ -186,6 +186,10 @@ public class SelectionMenu extends CustomInventory {
                 SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
         }
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 

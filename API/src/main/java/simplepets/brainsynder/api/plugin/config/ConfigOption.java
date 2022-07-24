@@ -297,6 +297,13 @@ public enum ConfigOption {
                     Or should it open the Selection GUI to pick a pet to remove
                     
                     Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS = createOption("misc-toggles.remove-all-placeholders", false,
+            """
+                    This option allows for the removal of the placeholder items (The glass panes)
+                    
+                    NOTE: these are still required to be in the GUI, this will simply remove them afterwards
+                    
+                    Default: {default}""");
 
 
     // Pet Toggles

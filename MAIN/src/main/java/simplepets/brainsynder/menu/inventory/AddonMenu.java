@@ -23,6 +23,7 @@ import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.managers.AddonManager;
@@ -158,6 +159,10 @@ public class AddonMenu extends CustomInventory {
                 }
 
             }
+
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+                inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
             player.openInventory(inv);
             return;
         }
@@ -201,6 +206,10 @@ public class AddonMenu extends CustomInventory {
                 }
 
             }
+
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+                inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
             player.openInventory(inv);
 
         });
