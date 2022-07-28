@@ -63,7 +63,7 @@
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
         <bslib.version>B103</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
-        <anvilgui.version>1.6.0-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.1-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
