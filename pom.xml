@@ -20,6 +20,7 @@
         <module>Version_1.18.1</module>
         <module>Version_1.18.2</module>
         <module>Version_1.19</module>
+        <module>Version_1.19.1</module>
         <module>DIST</module>
     </modules>
 
@@ -61,9 +62,9 @@
         <jenkins.buildNumber>0</jenkins.buildNumber>
 
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B103</bslib.version>
+        <bslib.version>B104</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
-        <anvilgui.version>1.6.0-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.1-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
