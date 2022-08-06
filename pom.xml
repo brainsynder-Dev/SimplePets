@@ -179,7 +179,7 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
+            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>
