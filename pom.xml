@@ -21,6 +21,7 @@
         <module>Version_1.18.2</module>
         <module>Version_1.19</module>
         <module>Version_1.19.1</module>
+        <module>Version_1.19.2</module>
         <module>DIST</module>
     </modules>
 
@@ -62,9 +63,9 @@
         <jenkins.buildNumber>0</jenkins.buildNumber>
 
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B104</bslib.version>
+        <bslib.version>B105</bslib.version>
         <spigot.version>1.17-R0.1-SNAPSHOT</spigot.version>
-        <anvilgui.version>1.6.2-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.3-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
@@ -178,7 +179,7 @@
     <distributionManagement>
         <repository>
             <id>maven-releases</id>
-            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
+            <url>http://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
         <snapshotRepository>
             <id>maven-snapshots</id>
