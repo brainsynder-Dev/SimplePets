@@ -165,6 +165,7 @@ public class PermissionsCommand extends PetSubCommand {
             builder.append("    ").append(permission).append(".*:  # Will grant access to spawn the pet as well as all the other permissions for this pet").append("\n");
 
             builder.append(def);
+            builder.append("            ").append(permission).append(": true  # Will allow ").append(type.getName()).append(" to be spawned (if enabled)\n");
             builder.append("            ").append(permission).append(".fly: true  # Will allow ").append(type.getName()).append(" to fly (if enabled)\n");
             builder.append("            ").append(permission).append(".hat: true  # Will allow ").append(type.getName()).append(" to be a hat (if enabled)\n");
             builder.append("            ").append(permission).append(".mount: true  # Will allow ").append(type.getName()).append(" to be mounted (if enabled)\n");
