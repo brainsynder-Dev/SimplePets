@@ -99,12 +99,12 @@ permissions:
             pet.commands.regenerate: true
             pet.commands.debug: true
             pet.commands.addon: true
+            pet.commands.addon.install: true
             pet.commands.addon.reload: true
             pet.commands.addon.update: true
             pet.commands.database: true
             pet.commands.reload: true
             pet.commands.issue_report: true
-
 
 
     pet.type.*:  # Grants access to all pets
@@ -281,12 +281,258 @@ permissions:
             pet.type.zombifiedpiglin.data.*: true
 
 
+    pet.type.*.fly:  # Will allow all pets to fly (if enabled)
+        default: false
+        children:
+            pet.type.allay.fly: true
+            pet.type.armorstand.fly: true
+            pet.type.axolotl.fly: true
+            pet.type.bat.fly: true
+            pet.type.bee.fly: true
+            pet.type.blaze.fly: true
+            pet.type.cat.fly: true
+            pet.type.cavespider.fly: true
+            pet.type.chicken.fly: true
+            pet.type.cod.fly: true
+            pet.type.cow.fly: true
+            pet.type.creeper.fly: true
+            pet.type.dolphin.fly: true
+            pet.type.donkey.fly: true
+            pet.type.drowned.fly: true
+            pet.type.elderguardian.fly: true
+            pet.type.enderman.fly: true
+            pet.type.endermite.fly: true
+            pet.type.evoker.fly: true
+            pet.type.fox.fly: true
+            pet.type.frog.fly: true
+            pet.type.ghast.fly: true
+            pet.type.giant.fly: true
+            pet.type.glowsquid.fly: true
+            pet.type.goat.fly: true
+            pet.type.guardian.fly: true
+            pet.type.hoglin.fly: true
+            pet.type.horse.fly: true
+            pet.type.husk.fly: true
+            pet.type.illusioner.fly: true
+            pet.type.irongolem.fly: true
+            pet.type.llama.fly: true
+            pet.type.magmacube.fly: true
+            pet.type.mooshroom.fly: true
+            pet.type.mule.fly: true
+            pet.type.ocelot.fly: true
+            pet.type.panda.fly: true
+            pet.type.parrot.fly: true
+            pet.type.phantom.fly: true
+            pet.type.pig.fly: true
+            pet.type.piglin.fly: true
+            pet.type.piglinbrute.fly: true
+            pet.type.pillager.fly: true
+            pet.type.polarbear.fly: true
+            pet.type.pufferfish.fly: true
+            pet.type.rabbit.fly: true
+            pet.type.ravager.fly: true
+            pet.type.salmon.fly: true
+            pet.type.sheep.fly: true
+            pet.type.shulker.fly: true
+            pet.type.silverfish.fly: true
+            pet.type.skeleton.fly: true
+            pet.type.skeletonhorse.fly: true
+            pet.type.slime.fly: true
+            pet.type.snowman.fly: true
+            pet.type.spider.fly: true
+            pet.type.squid.fly: true
+            pet.type.stray.fly: true
+            pet.type.strider.fly: true
+            pet.type.tadpole.fly: true
+            pet.type.traderllama.fly: true
+            pet.type.tropicalfish.fly: true
+            pet.type.turtle.fly: true
+            pet.type.vex.fly: true
+            pet.type.villager.fly: true
+            pet.type.vindicator.fly: true
+            pet.type.wanderingtrader.fly: true
+            pet.type.warden.fly: true
+            pet.type.witch.fly: true
+            pet.type.wither.fly: true
+            pet.type.witherskeleton.fly: true
+            pet.type.wolf.fly: true
+            pet.type.zoglin.fly: true
+            pet.type.zombie.fly: true
+            pet.type.zombiehorse.fly: true
+            pet.type.zombievillager.fly: true
+            pet.type.zombifiedpiglin.fly: true
+
+
+    pet.type.*.hat:  # Will allow all pets to be a hat (if enabled)
+        default: false
+        children:
+            pet.type.allay.hat: true
+            pet.type.armorstand.hat: true
+            pet.type.axolotl.hat: true
+            pet.type.bat.hat: true
+            pet.type.bee.hat: true
+            pet.type.blaze.hat: true
+            pet.type.cat.hat: true
+            pet.type.cavespider.hat: true
+            pet.type.chicken.hat: true
+            pet.type.cod.hat: true
+            pet.type.cow.hat: true
+            pet.type.creeper.hat: true
+            pet.type.dolphin.hat: true
+            pet.type.donkey.hat: true
+            pet.type.drowned.hat: true
+            pet.type.elderguardian.hat: true
+            pet.type.enderman.hat: true
+            pet.type.endermite.hat: true
+            pet.type.evoker.hat: true
+            pet.type.fox.hat: true
+            pet.type.frog.hat: true
+            pet.type.ghast.hat: true
+            pet.type.giant.hat: true
+            pet.type.glowsquid.hat: true
+            pet.type.goat.hat: true
+            pet.type.guardian.hat: true
+            pet.type.hoglin.hat: true
+            pet.type.horse.hat: true
+            pet.type.husk.hat: true
+            pet.type.illusioner.hat: true
+            pet.type.irongolem.hat: true
+            pet.type.llama.hat: true
+            pet.type.magmacube.hat: true
+            pet.type.mooshroom.hat: true
+            pet.type.mule.hat: true
+            pet.type.ocelot.hat: true
+            pet.type.panda.hat: true
+            pet.type.parrot.hat: true
+            pet.type.phantom.hat: true
+            pet.type.pig.hat: true
+            pet.type.piglin.hat: true
+            pet.type.piglinbrute.hat: true
+            pet.type.pillager.hat: true
+            pet.type.polarbear.hat: true
+            pet.type.pufferfish.hat: true
+            pet.type.rabbit.hat: true
+            pet.type.ravager.hat: true
+            pet.type.salmon.hat: true
+            pet.type.sheep.hat: true
+            pet.type.shulker.hat: true
+            pet.type.silverfish.hat: true
+            pet.type.skeleton.hat: true
+            pet.type.skeletonhorse.hat: true
+            pet.type.slime.hat: true
+            pet.type.snowman.hat: true
+            pet.type.spider.hat: true
+            pet.type.squid.hat: true
+            pet.type.stray.hat: true
+            pet.type.strider.hat: true
+            pet.type.tadpole.hat: true
+            pet.type.traderllama.hat: true
+            pet.type.tropicalfish.hat: true
+            pet.type.turtle.hat: true
+            pet.type.vex.hat: true
+            pet.type.villager.hat: true
+            pet.type.vindicator.hat: true
+            pet.type.wanderingtrader.hat: true
+            pet.type.warden.hat: true
+            pet.type.witch.hat: true
+            pet.type.wither.hat: true
+            pet.type.witherskeleton.hat: true
+            pet.type.wolf.hat: true
+            pet.type.zoglin.hat: true
+            pet.type.zombie.hat: true
+            pet.type.zombiehorse.hat: true
+            pet.type.zombievillager.hat: true
+            pet.type.zombifiedpiglin.hat: true
+
+
+    pet.type.*.mount:  # Will allow all pets to be mounted (if enabled)
+        default: false
+        children:
+            pet.type.allay.mount: true
+            pet.type.armorstand.mount: true
+            pet.type.axolotl.mount: true
+            pet.type.bat.mount: true
+            pet.type.bee.mount: true
+            pet.type.blaze.mount: true
+            pet.type.cat.mount: true
+            pet.type.cavespider.mount: true
+            pet.type.chicken.mount: true
+            pet.type.cod.mount: true
+            pet.type.cow.mount: true
+            pet.type.creeper.mount: true
+            pet.type.dolphin.mount: true
+            pet.type.donkey.mount: true
+            pet.type.drowned.mount: true
+            pet.type.elderguardian.mount: true
+            pet.type.enderman.mount: true
+            pet.type.endermite.mount: true
+            pet.type.evoker.mount: true
+            pet.type.fox.mount: true
+            pet.type.frog.mount: true
+            pet.type.ghast.mount: true
+            pet.type.giant.mount: true
+            pet.type.glowsquid.mount: true
+            pet.type.goat.mount: true
+            pet.type.guardian.mount: true
+            pet.type.hoglin.mount: true
+            pet.type.horse.mount: true
+            pet.type.husk.mount: true
+            pet.type.illusioner.mount: true
+            pet.type.irongolem.mount: true
+            pet.type.llama.mount: true
+            pet.type.magmacube.mount: true
+            pet.type.mooshroom.mount: true
+            pet.type.mule.mount: true
+            pet.type.ocelot.mount: true
+            pet.type.panda.mount: true
+            pet.type.parrot.mount: true
+            pet.type.phantom.mount: true
+            pet.type.pig.mount: true
+            pet.type.piglin.mount: true
+            pet.type.piglinbrute.mount: true
+            pet.type.pillager.mount: true
+            pet.type.polarbear.mount: true
+            pet.type.pufferfish.mount: true
+            pet.type.rabbit.mount: true
+            pet.type.ravager.mount: true
+            pet.type.salmon.mount: true
+            pet.type.sheep.mount: true
+            pet.type.shulker.mount: true
+            pet.type.silverfish.mount: true
+            pet.type.skeleton.mount: true
+            pet.type.skeletonhorse.mount: true
+            pet.type.slime.mount: true
+            pet.type.snowman.mount: true
+            pet.type.spider.mount: true
+            pet.type.squid.mount: true
+            pet.type.stray.mount: true
+            pet.type.strider.mount: true
+            pet.type.tadpole.mount: true
+            pet.type.traderllama.mount: true
+            pet.type.tropicalfish.mount: true
+            pet.type.turtle.mount: true
+            pet.type.vex.mount: true
+            pet.type.villager.mount: true
+            pet.type.vindicator.mount: true
+            pet.type.wanderingtrader.mount: true
+            pet.type.warden.mount: true
+            pet.type.witch.mount: true
+            pet.type.wither.mount: true
+            pet.type.witherskeleton.mount: true
+            pet.type.wolf.mount: true
+            pet.type.zoglin.mount: true
+            pet.type.zombie.mount: true
+            pet.type.zombiehorse.mount: true
+            pet.type.zombievillager.mount: true
+            pet.type.zombifiedpiglin.mount: true
+
+
     pet.type.allay.*:  # Will grant access to spawn the pet as well as all the other permissions for this pet
         default: false
         children:
             pet.type.allay.fly: true  # Will allow allay to fly (if enabled)
             pet.type.allay.hat: true  # Will allow allay to be a hat (if enabled)
-            pet.type.allay.mount: true  # Will allow allay to mount (if enabled)
+            pet.type.allay.mount: true  # Will allow allay to be mounted (if enabled)
             pet.type.allay.data.*: true
 
 
@@ -295,7 +541,7 @@ permissions:
         children:
             pet.type.armorstand.fly: true  # Will allow armor_stand to fly (if enabled)
             pet.type.armorstand.hat: true  # Will allow armor_stand to be a hat (if enabled)
-            pet.type.armorstand.mount: true  # Will allow armor_stand to mount (if enabled)
+            pet.type.armorstand.mount: true  # Will allow armor_stand to be mounted (if enabled)
             pet.type.armorstand.data.*: true
 
 
@@ -304,7 +550,7 @@ permissions:
         children:
             pet.type.axolotl.fly: true  # Will allow axolotl to fly (if enabled)
             pet.type.axolotl.hat: true  # Will allow axolotl to be a hat (if enabled)
-            pet.type.axolotl.mount: true  # Will allow axolotl to mount (if enabled)
+            pet.type.axolotl.mount: true  # Will allow axolotl to be mounted (if enabled)
             pet.type.axolotl.data.*: true
 
 
@@ -313,7 +559,7 @@ permissions:
         children:
             pet.type.bat.fly: true  # Will allow bat to fly (if enabled)
             pet.type.bat.hat: true  # Will allow bat to be a hat (if enabled)
-            pet.type.bat.mount: true  # Will allow bat to mount (if enabled)
+            pet.type.bat.mount: true  # Will allow bat to be mounted (if enabled)
             pet.type.bat.data.*: true
 
 
@@ -322,7 +568,7 @@ permissions:
         children:
             pet.type.bee.fly: true  # Will allow bee to fly (if enabled)
             pet.type.bee.hat: true  # Will allow bee to be a hat (if enabled)
-            pet.type.bee.mount: true  # Will allow bee to mount (if enabled)
+            pet.type.bee.mount: true  # Will allow bee to be mounted (if enabled)
             pet.type.bee.data.*: true
 
 
@@ -331,7 +577,7 @@ permissions:
         children:
             pet.type.blaze.fly: true  # Will allow blaze to fly (if enabled)
             pet.type.blaze.hat: true  # Will allow blaze to be a hat (if enabled)
-            pet.type.blaze.mount: true  # Will allow blaze to mount (if enabled)
+            pet.type.blaze.mount: true  # Will allow blaze to be mounted (if enabled)
             pet.type.blaze.data.*: true
 
 
@@ -340,7 +586,7 @@ permissions:
         children:
             pet.type.cat.fly: true  # Will allow cat to fly (if enabled)
             pet.type.cat.hat: true  # Will allow cat to be a hat (if enabled)
-            pet.type.cat.mount: true  # Will allow cat to mount (if enabled)
+            pet.type.cat.mount: true  # Will allow cat to be mounted (if enabled)
             pet.type.cat.data.*: true
 
 
@@ -349,7 +595,7 @@ permissions:
         children:
             pet.type.cavespider.fly: true  # Will allow cave_spider to fly (if enabled)
             pet.type.cavespider.hat: true  # Will allow cave_spider to be a hat (if enabled)
-            pet.type.cavespider.mount: true  # Will allow cave_spider to mount (if enabled)
+            pet.type.cavespider.mount: true  # Will allow cave_spider to be mounted (if enabled)
             pet.type.cavespider.data.*: true
 
 
@@ -358,7 +604,7 @@ permissions:
         children:
             pet.type.chicken.fly: true  # Will allow chicken to fly (if enabled)
             pet.type.chicken.hat: true  # Will allow chicken to be a hat (if enabled)
-            pet.type.chicken.mount: true  # Will allow chicken to mount (if enabled)
+            pet.type.chicken.mount: true  # Will allow chicken to be mounted (if enabled)
             pet.type.chicken.data.*: true
 
 
@@ -367,7 +613,7 @@ permissions:
         children:
             pet.type.cod.fly: true  # Will allow cod to fly (if enabled)
             pet.type.cod.hat: true  # Will allow cod to be a hat (if enabled)
-            pet.type.cod.mount: true  # Will allow cod to mount (if enabled)
+            pet.type.cod.mount: true  # Will allow cod to be mounted (if enabled)
             pet.type.cod.data.*: true
 
 
@@ -376,7 +622,7 @@ permissions:
         children:
             pet.type.cow.fly: true  # Will allow cow to fly (if enabled)
             pet.type.cow.hat: true  # Will allow cow to be a hat (if enabled)
-            pet.type.cow.mount: true  # Will allow cow to mount (if enabled)
+            pet.type.cow.mount: true  # Will allow cow to be mounted (if enabled)
             pet.type.cow.data.*: true
 
 
@@ -385,7 +631,7 @@ permissions:
         children:
             pet.type.creeper.fly: true  # Will allow creeper to fly (if enabled)
             pet.type.creeper.hat: true  # Will allow creeper to be a hat (if enabled)
-            pet.type.creeper.mount: true  # Will allow creeper to mount (if enabled)
+            pet.type.creeper.mount: true  # Will allow creeper to be mounted (if enabled)
             pet.type.creeper.data.*: true
 
 
@@ -394,7 +640,7 @@ permissions:
         children:
             pet.type.dolphin.fly: true  # Will allow dolphin to fly (if enabled)
             pet.type.dolphin.hat: true  # Will allow dolphin to be a hat (if enabled)
-            pet.type.dolphin.mount: true  # Will allow dolphin to mount (if enabled)
+            pet.type.dolphin.mount: true  # Will allow dolphin to be mounted (if enabled)
             pet.type.dolphin.data.*: true
 
 
@@ -403,7 +649,7 @@ permissions:
         children:
             pet.type.donkey.fly: true  # Will allow donkey to fly (if enabled)
             pet.type.donkey.hat: true  # Will allow donkey to be a hat (if enabled)
-            pet.type.donkey.mount: true  # Will allow donkey to mount (if enabled)
+            pet.type.donkey.mount: true  # Will allow donkey to be mounted (if enabled)
             pet.type.donkey.data.*: true
 
 
@@ -412,7 +658,7 @@ permissions:
         children:
             pet.type.drowned.fly: true  # Will allow drowned to fly (if enabled)
             pet.type.drowned.hat: true  # Will allow drowned to be a hat (if enabled)
-            pet.type.drowned.mount: true  # Will allow drowned to mount (if enabled)
+            pet.type.drowned.mount: true  # Will allow drowned to be mounted (if enabled)
             pet.type.drowned.data.*: true
 
 
@@ -421,7 +667,7 @@ permissions:
         children:
             pet.type.elderguardian.fly: true  # Will allow elder_guardian to fly (if enabled)
             pet.type.elderguardian.hat: true  # Will allow elder_guardian to be a hat (if enabled)
-            pet.type.elderguardian.mount: true  # Will allow elder_guardian to mount (if enabled)
+            pet.type.elderguardian.mount: true  # Will allow elder_guardian to be mounted (if enabled)
             pet.type.elderguardian.data.*: true
 
 
@@ -430,7 +676,7 @@ permissions:
         children:
             pet.type.enderman.fly: true  # Will allow enderman to fly (if enabled)
             pet.type.enderman.hat: true  # Will allow enderman to be a hat (if enabled)
-            pet.type.enderman.mount: true  # Will allow enderman to mount (if enabled)
+            pet.type.enderman.mount: true  # Will allow enderman to be mounted (if enabled)
             pet.type.enderman.data.*: true
 
 
@@ -439,7 +685,7 @@ permissions:
         children:
             pet.type.endermite.fly: true  # Will allow endermite to fly (if enabled)
             pet.type.endermite.hat: true  # Will allow endermite to be a hat (if enabled)
-            pet.type.endermite.mount: true  # Will allow endermite to mount (if enabled)
+            pet.type.endermite.mount: true  # Will allow endermite to be mounted (if enabled)
             pet.type.endermite.data.*: true
 
 
@@ -448,7 +694,7 @@ permissions:
         children:
             pet.type.evoker.fly: true  # Will allow evoker to fly (if enabled)
             pet.type.evoker.hat: true  # Will allow evoker to be a hat (if enabled)
-            pet.type.evoker.mount: true  # Will allow evoker to mount (if enabled)
+            pet.type.evoker.mount: true  # Will allow evoker to be mounted (if enabled)
             pet.type.evoker.data.*: true
 
 
@@ -457,7 +703,7 @@ permissions:
         children:
             pet.type.fox.fly: true  # Will allow fox to fly (if enabled)
             pet.type.fox.hat: true  # Will allow fox to be a hat (if enabled)
-            pet.type.fox.mount: true  # Will allow fox to mount (if enabled)
+            pet.type.fox.mount: true  # Will allow fox to be mounted (if enabled)
             pet.type.fox.data.*: true
 
 
@@ -466,7 +712,7 @@ permissions:
         children:
             pet.type.frog.fly: true  # Will allow frog to fly (if enabled)
             pet.type.frog.hat: true  # Will allow frog to be a hat (if enabled)
-            pet.type.frog.mount: true  # Will allow frog to mount (if enabled)
+            pet.type.frog.mount: true  # Will allow frog to be mounted (if enabled)
             pet.type.frog.data.*: true
 
 
@@ -475,7 +721,7 @@ permissions:
         children:
             pet.type.ghast.fly: true  # Will allow ghast to fly (if enabled)
             pet.type.ghast.hat: true  # Will allow ghast to be a hat (if enabled)
-            pet.type.ghast.mount: true  # Will allow ghast to mount (if enabled)
+            pet.type.ghast.mount: true  # Will allow ghast to be mounted (if enabled)
             pet.type.ghast.data.*: true
 
 
@@ -484,7 +730,7 @@ permissions:
         children:
             pet.type.giant.fly: true  # Will allow giant to fly (if enabled)
             pet.type.giant.hat: true  # Will allow giant to be a hat (if enabled)
-            pet.type.giant.mount: true  # Will allow giant to mount (if enabled)
+            pet.type.giant.mount: true  # Will allow giant to be mounted (if enabled)
             pet.type.giant.data.*: true
 
 
@@ -493,7 +739,7 @@ permissions:
         children:
             pet.type.glowsquid.fly: true  # Will allow glow_squid to fly (if enabled)
             pet.type.glowsquid.hat: true  # Will allow glow_squid to be a hat (if enabled)
-            pet.type.glowsquid.mount: true  # Will allow glow_squid to mount (if enabled)
+            pet.type.glowsquid.mount: true  # Will allow glow_squid to be mounted (if enabled)
             pet.type.glowsquid.data.*: true
 
 
@@ -502,7 +748,7 @@ permissions:
         children:
             pet.type.goat.fly: true  # Will allow goat to fly (if enabled)
             pet.type.goat.hat: true  # Will allow goat to be a hat (if enabled)
-            pet.type.goat.mount: true  # Will allow goat to mount (if enabled)
+            pet.type.goat.mount: true  # Will allow goat to be mounted (if enabled)
             pet.type.goat.data.*: true
 
 
@@ -511,7 +757,7 @@ permissions:
         children:
             pet.type.guardian.fly: true  # Will allow guardian to fly (if enabled)
             pet.type.guardian.hat: true  # Will allow guardian to be a hat (if enabled)
-            pet.type.guardian.mount: true  # Will allow guardian to mount (if enabled)
+            pet.type.guardian.mount: true  # Will allow guardian to be mounted (if enabled)
             pet.type.guardian.data.*: true
 
 
@@ -520,7 +766,7 @@ permissions:
         children:
             pet.type.hoglin.fly: true  # Will allow hoglin to fly (if enabled)
             pet.type.hoglin.hat: true  # Will allow hoglin to be a hat (if enabled)
-            pet.type.hoglin.mount: true  # Will allow hoglin to mount (if enabled)
+            pet.type.hoglin.mount: true  # Will allow hoglin to be mounted (if enabled)
             pet.type.hoglin.data.*: true
 
 
@@ -529,7 +775,7 @@ permissions:
         children:
             pet.type.horse.fly: true  # Will allow horse to fly (if enabled)
             pet.type.horse.hat: true  # Will allow horse to be a hat (if enabled)
-            pet.type.horse.mount: true  # Will allow horse to mount (if enabled)
+            pet.type.horse.mount: true  # Will allow horse to be mounted (if enabled)
             pet.type.horse.data.*: true
 
 
@@ -538,7 +784,7 @@ permissions:
         children:
             pet.type.husk.fly: true  # Will allow husk to fly (if enabled)
             pet.type.husk.hat: true  # Will allow husk to be a hat (if enabled)
-            pet.type.husk.mount: true  # Will allow husk to mount (if enabled)
+            pet.type.husk.mount: true  # Will allow husk to be mounted (if enabled)
             pet.type.husk.data.*: true
 
 
@@ -547,7 +793,7 @@ permissions:
         children:
             pet.type.illusioner.fly: true  # Will allow illusioner to fly (if enabled)
             pet.type.illusioner.hat: true  # Will allow illusioner to be a hat (if enabled)
-            pet.type.illusioner.mount: true  # Will allow illusioner to mount (if enabled)
+            pet.type.illusioner.mount: true  # Will allow illusioner to be mounted (if enabled)
             pet.type.illusioner.data.*: true
 
 
@@ -556,7 +802,7 @@ permissions:
         children:
             pet.type.irongolem.fly: true  # Will allow iron_golem to fly (if enabled)
             pet.type.irongolem.hat: true  # Will allow iron_golem to be a hat (if enabled)
-            pet.type.irongolem.mount: true  # Will allow iron_golem to mount (if enabled)
+            pet.type.irongolem.mount: true  # Will allow iron_golem to be mounted (if enabled)
             pet.type.irongolem.data.*: true
 
 
@@ -565,7 +811,7 @@ permissions:
         children:
             pet.type.llama.fly: true  # Will allow llama to fly (if enabled)
             pet.type.llama.hat: true  # Will allow llama to be a hat (if enabled)
-            pet.type.llama.mount: true  # Will allow llama to mount (if enabled)
+            pet.type.llama.mount: true  # Will allow llama to be mounted (if enabled)
             pet.type.llama.data.*: true
 
 
@@ -574,7 +820,7 @@ permissions:
         children:
             pet.type.magmacube.fly: true  # Will allow magma_cube to fly (if enabled)
             pet.type.magmacube.hat: true  # Will allow magma_cube to be a hat (if enabled)
-            pet.type.magmacube.mount: true  # Will allow magma_cube to mount (if enabled)
+            pet.type.magmacube.mount: true  # Will allow magma_cube to be mounted (if enabled)
             pet.type.magmacube.data.*: true
 
 
@@ -583,7 +829,7 @@ permissions:
         children:
             pet.type.mooshroom.fly: true  # Will allow mooshroom to fly (if enabled)
             pet.type.mooshroom.hat: true  # Will allow mooshroom to be a hat (if enabled)
-            pet.type.mooshroom.mount: true  # Will allow mooshroom to mount (if enabled)
+            pet.type.mooshroom.mount: true  # Will allow mooshroom to be mounted (if enabled)
             pet.type.mooshroom.data.*: true
 
 
@@ -592,7 +838,7 @@ permissions:
         children:
             pet.type.mule.fly: true  # Will allow mule to fly (if enabled)
             pet.type.mule.hat: true  # Will allow mule to be a hat (if enabled)
-            pet.type.mule.mount: true  # Will allow mule to mount (if enabled)
+            pet.type.mule.mount: true  # Will allow mule to be mounted (if enabled)
             pet.type.mule.data.*: true
 
 
@@ -601,7 +847,7 @@ permissions:
         children:
             pet.type.ocelot.fly: true  # Will allow ocelot to fly (if enabled)
             pet.type.ocelot.hat: true  # Will allow ocelot to be a hat (if enabled)
-            pet.type.ocelot.mount: true  # Will allow ocelot to mount (if enabled)
+            pet.type.ocelot.mount: true  # Will allow ocelot to be mounted (if enabled)
             pet.type.ocelot.data.*: true
 
 
@@ -610,7 +856,7 @@ permissions:
         children:
             pet.type.panda.fly: true  # Will allow panda to fly (if enabled)
             pet.type.panda.hat: true  # Will allow panda to be a hat (if enabled)
-            pet.type.panda.mount: true  # Will allow panda to mount (if enabled)
+            pet.type.panda.mount: true  # Will allow panda to be mounted (if enabled)
             pet.type.panda.data.*: true
 
 
@@ -619,7 +865,7 @@ permissions:
         children:
             pet.type.parrot.fly: true  # Will allow parrot to fly (if enabled)
             pet.type.parrot.hat: true  # Will allow parrot to be a hat (if enabled)
-            pet.type.parrot.mount: true  # Will allow parrot to mount (if enabled)
+            pet.type.parrot.mount: true  # Will allow parrot to be mounted (if enabled)
             pet.type.parrot.data.*: true
 
 
@@ -628,7 +874,7 @@ permissions:
         children:
             pet.type.phantom.fly: true  # Will allow phantom to fly (if enabled)
             pet.type.phantom.hat: true  # Will allow phantom to be a hat (if enabled)
-            pet.type.phantom.mount: true  # Will allow phantom to mount (if enabled)
+            pet.type.phantom.mount: true  # Will allow phantom to be mounted (if enabled)
             pet.type.phantom.data.*: true
 
 
@@ -637,7 +883,7 @@ permissions:
         children:
             pet.type.pig.fly: true  # Will allow pig to fly (if enabled)
             pet.type.pig.hat: true  # Will allow pig to be a hat (if enabled)
-            pet.type.pig.mount: true  # Will allow pig to mount (if enabled)
+            pet.type.pig.mount: true  # Will allow pig to be mounted (if enabled)
             pet.type.pig.data.*: true
 
 
@@ -646,7 +892,7 @@ permissions:
         children:
             pet.type.piglin.fly: true  # Will allow piglin to fly (if enabled)
             pet.type.piglin.hat: true  # Will allow piglin to be a hat (if enabled)
-            pet.type.piglin.mount: true  # Will allow piglin to mount (if enabled)
+            pet.type.piglin.mount: true  # Will allow piglin to be mounted (if enabled)
             pet.type.piglin.data.*: true
 
 
@@ -655,7 +901,7 @@ permissions:
         children:
             pet.type.piglinbrute.fly: true  # Will allow piglin_brute to fly (if enabled)
             pet.type.piglinbrute.hat: true  # Will allow piglin_brute to be a hat (if enabled)
-            pet.type.piglinbrute.mount: true  # Will allow piglin_brute to mount (if enabled)
+            pet.type.piglinbrute.mount: true  # Will allow piglin_brute to be mounted (if enabled)
             pet.type.piglinbrute.data.*: true
 
 
@@ -664,7 +910,7 @@ permissions:
         children:
             pet.type.pillager.fly: true  # Will allow pillager to fly (if enabled)
             pet.type.pillager.hat: true  # Will allow pillager to be a hat (if enabled)
-            pet.type.pillager.mount: true  # Will allow pillager to mount (if enabled)
+            pet.type.pillager.mount: true  # Will allow pillager to be mounted (if enabled)
             pet.type.pillager.data.*: true
 
 
@@ -673,7 +919,7 @@ permissions:
         children:
             pet.type.polarbear.fly: true  # Will allow polarbear to fly (if enabled)
             pet.type.polarbear.hat: true  # Will allow polarbear to be a hat (if enabled)
-            pet.type.polarbear.mount: true  # Will allow polarbear to mount (if enabled)
+            pet.type.polarbear.mount: true  # Will allow polarbear to be mounted (if enabled)
             pet.type.polarbear.data.*: true
 
 
@@ -682,7 +928,7 @@ permissions:
         children:
             pet.type.pufferfish.fly: true  # Will allow pufferfish to fly (if enabled)
             pet.type.pufferfish.hat: true  # Will allow pufferfish to be a hat (if enabled)
-            pet.type.pufferfish.mount: true  # Will allow pufferfish to mount (if enabled)
+            pet.type.pufferfish.mount: true  # Will allow pufferfish to be mounted (if enabled)
             pet.type.pufferfish.data.*: true
 
 
@@ -691,7 +937,7 @@ permissions:
         children:
             pet.type.rabbit.fly: true  # Will allow rabbit to fly (if enabled)
             pet.type.rabbit.hat: true  # Will allow rabbit to be a hat (if enabled)
-            pet.type.rabbit.mount: true  # Will allow rabbit to mount (if enabled)
+            pet.type.rabbit.mount: true  # Will allow rabbit to be mounted (if enabled)
             pet.type.rabbit.data.*: true
 
 
@@ -700,7 +946,7 @@ permissions:
         children:
             pet.type.ravager.fly: true  # Will allow ravager to fly (if enabled)
             pet.type.ravager.hat: true  # Will allow ravager to be a hat (if enabled)
-            pet.type.ravager.mount: true  # Will allow ravager to mount (if enabled)
+            pet.type.ravager.mount: true  # Will allow ravager to be mounted (if enabled)
             pet.type.ravager.data.*: true
 
 
@@ -709,7 +955,7 @@ permissions:
         children:
             pet.type.salmon.fly: true  # Will allow salmon to fly (if enabled)
             pet.type.salmon.hat: true  # Will allow salmon to be a hat (if enabled)
-            pet.type.salmon.mount: true  # Will allow salmon to mount (if enabled)
+            pet.type.salmon.mount: true  # Will allow salmon to be mounted (if enabled)
             pet.type.salmon.data.*: true
 
 
@@ -718,7 +964,7 @@ permissions:
         children:
             pet.type.sheep.fly: true  # Will allow sheep to fly (if enabled)
             pet.type.sheep.hat: true  # Will allow sheep to be a hat (if enabled)
-            pet.type.sheep.mount: true  # Will allow sheep to mount (if enabled)
+            pet.type.sheep.mount: true  # Will allow sheep to be mounted (if enabled)
             pet.type.sheep.data.*: true
 
 
@@ -727,7 +973,7 @@ permissions:
         children:
             pet.type.shulker.fly: true  # Will allow shulker to fly (if enabled)
             pet.type.shulker.hat: true  # Will allow shulker to be a hat (if enabled)
-            pet.type.shulker.mount: true  # Will allow shulker to mount (if enabled)
+            pet.type.shulker.mount: true  # Will allow shulker to be mounted (if enabled)
             pet.type.shulker.data.*: true
 
 
@@ -736,7 +982,7 @@ permissions:
         children:
             pet.type.silverfish.fly: true  # Will allow silverfish to fly (if enabled)
             pet.type.silverfish.hat: true  # Will allow silverfish to be a hat (if enabled)
-            pet.type.silverfish.mount: true  # Will allow silverfish to mount (if enabled)
+            pet.type.silverfish.mount: true  # Will allow silverfish to be mounted (if enabled)
             pet.type.silverfish.data.*: true
 
 
@@ -745,7 +991,7 @@ permissions:
         children:
             pet.type.skeleton.fly: true  # Will allow skeleton to fly (if enabled)
             pet.type.skeleton.hat: true  # Will allow skeleton to be a hat (if enabled)
-            pet.type.skeleton.mount: true  # Will allow skeleton to mount (if enabled)
+            pet.type.skeleton.mount: true  # Will allow skeleton to be mounted (if enabled)
             pet.type.skeleton.data.*: true
 
 
@@ -754,7 +1000,7 @@ permissions:
         children:
             pet.type.skeletonhorse.fly: true  # Will allow skeleton_horse to fly (if enabled)
             pet.type.skeletonhorse.hat: true  # Will allow skeleton_horse to be a hat (if enabled)
-            pet.type.skeletonhorse.mount: true  # Will allow skeleton_horse to mount (if enabled)
+            pet.type.skeletonhorse.mount: true  # Will allow skeleton_horse to be mounted (if enabled)
             pet.type.skeletonhorse.data.*: true
 
 
@@ -763,7 +1009,7 @@ permissions:
         children:
             pet.type.slime.fly: true  # Will allow slime to fly (if enabled)
             pet.type.slime.hat: true  # Will allow slime to be a hat (if enabled)
-            pet.type.slime.mount: true  # Will allow slime to mount (if enabled)
+            pet.type.slime.mount: true  # Will allow slime to be mounted (if enabled)
             pet.type.slime.data.*: true
 
 
@@ -772,7 +1018,7 @@ permissions:
         children:
             pet.type.snowman.fly: true  # Will allow snowman to fly (if enabled)
             pet.type.snowman.hat: true  # Will allow snowman to be a hat (if enabled)
-            pet.type.snowman.mount: true  # Will allow snowman to mount (if enabled)
+            pet.type.snowman.mount: true  # Will allow snowman to be mounted (if enabled)
             pet.type.snowman.data.*: true
 
 
@@ -781,7 +1027,7 @@ permissions:
         children:
             pet.type.spider.fly: true  # Will allow spider to fly (if enabled)
             pet.type.spider.hat: true  # Will allow spider to be a hat (if enabled)
-            pet.type.spider.mount: true  # Will allow spider to mount (if enabled)
+            pet.type.spider.mount: true  # Will allow spider to be mounted (if enabled)
             pet.type.spider.data.*: true
 
 
@@ -790,7 +1036,7 @@ permissions:
         children:
             pet.type.squid.fly: true  # Will allow squid to fly (if enabled)
             pet.type.squid.hat: true  # Will allow squid to be a hat (if enabled)
-            pet.type.squid.mount: true  # Will allow squid to mount (if enabled)
+            pet.type.squid.mount: true  # Will allow squid to be mounted (if enabled)
             pet.type.squid.data.*: true
 
 
@@ -799,7 +1045,7 @@ permissions:
         children:
             pet.type.stray.fly: true  # Will allow stray to fly (if enabled)
             pet.type.stray.hat: true  # Will allow stray to be a hat (if enabled)
-            pet.type.stray.mount: true  # Will allow stray to mount (if enabled)
+            pet.type.stray.mount: true  # Will allow stray to be mounted (if enabled)
             pet.type.stray.data.*: true
 
 
@@ -808,7 +1054,7 @@ permissions:
         children:
             pet.type.strider.fly: true  # Will allow strider to fly (if enabled)
             pet.type.strider.hat: true  # Will allow strider to be a hat (if enabled)
-            pet.type.strider.mount: true  # Will allow strider to mount (if enabled)
+            pet.type.strider.mount: true  # Will allow strider to be mounted (if enabled)
             pet.type.strider.data.*: true
 
 
@@ -817,7 +1063,7 @@ permissions:
         children:
             pet.type.tadpole.fly: true  # Will allow tadpole to fly (if enabled)
             pet.type.tadpole.hat: true  # Will allow tadpole to be a hat (if enabled)
-            pet.type.tadpole.mount: true  # Will allow tadpole to mount (if enabled)
+            pet.type.tadpole.mount: true  # Will allow tadpole to be mounted (if enabled)
             pet.type.tadpole.data.*: true
 
 
@@ -826,7 +1072,7 @@ permissions:
         children:
             pet.type.traderllama.fly: true  # Will allow trader_llama to fly (if enabled)
             pet.type.traderllama.hat: true  # Will allow trader_llama to be a hat (if enabled)
-            pet.type.traderllama.mount: true  # Will allow trader_llama to mount (if enabled)
+            pet.type.traderllama.mount: true  # Will allow trader_llama to be mounted (if enabled)
             pet.type.traderllama.data.*: true
 
 
@@ -835,7 +1081,7 @@ permissions:
         children:
             pet.type.tropicalfish.fly: true  # Will allow tropical_fish to fly (if enabled)
             pet.type.tropicalfish.hat: true  # Will allow tropical_fish to be a hat (if enabled)
-            pet.type.tropicalfish.mount: true  # Will allow tropical_fish to mount (if enabled)
+            pet.type.tropicalfish.mount: true  # Will allow tropical_fish to be mounted (if enabled)
             pet.type.tropicalfish.data.*: true
 
 
@@ -844,7 +1090,7 @@ permissions:
         children:
             pet.type.turtle.fly: true  # Will allow turtle to fly (if enabled)
             pet.type.turtle.hat: true  # Will allow turtle to be a hat (if enabled)
-            pet.type.turtle.mount: true  # Will allow turtle to mount (if enabled)
+            pet.type.turtle.mount: true  # Will allow turtle to be mounted (if enabled)
             pet.type.turtle.data.*: true
 
 
@@ -853,7 +1099,7 @@ permissions:
         children:
             pet.type.vex.fly: true  # Will allow vex to fly (if enabled)
             pet.type.vex.hat: true  # Will allow vex to be a hat (if enabled)
-            pet.type.vex.mount: true  # Will allow vex to mount (if enabled)
+            pet.type.vex.mount: true  # Will allow vex to be mounted (if enabled)
             pet.type.vex.data.*: true
 
 
@@ -862,7 +1108,7 @@ permissions:
         children:
             pet.type.villager.fly: true  # Will allow villager to fly (if enabled)
             pet.type.villager.hat: true  # Will allow villager to be a hat (if enabled)
-            pet.type.villager.mount: true  # Will allow villager to mount (if enabled)
+            pet.type.villager.mount: true  # Will allow villager to be mounted (if enabled)
             pet.type.villager.data.*: true
 
 
@@ -871,7 +1117,7 @@ permissions:
         children:
             pet.type.vindicator.fly: true  # Will allow vindicator to fly (if enabled)
             pet.type.vindicator.hat: true  # Will allow vindicator to be a hat (if enabled)
-            pet.type.vindicator.mount: true  # Will allow vindicator to mount (if enabled)
+            pet.type.vindicator.mount: true  # Will allow vindicator to be mounted (if enabled)
             pet.type.vindicator.data.*: true
 
 
@@ -880,7 +1126,7 @@ permissions:
         children:
             pet.type.wanderingtrader.fly: true  # Will allow wandering_trader to fly (if enabled)
             pet.type.wanderingtrader.hat: true  # Will allow wandering_trader to be a hat (if enabled)
-            pet.type.wanderingtrader.mount: true  # Will allow wandering_trader to mount (if enabled)
+            pet.type.wanderingtrader.mount: true  # Will allow wandering_trader to be mounted (if enabled)
             pet.type.wanderingtrader.data.*: true
 
 
@@ -889,7 +1135,7 @@ permissions:
         children:
             pet.type.warden.fly: true  # Will allow warden to fly (if enabled)
             pet.type.warden.hat: true  # Will allow warden to be a hat (if enabled)
-            pet.type.warden.mount: true  # Will allow warden to mount (if enabled)
+            pet.type.warden.mount: true  # Will allow warden to be mounted (if enabled)
             pet.type.warden.data.*: true
 
 
@@ -898,7 +1144,7 @@ permissions:
         children:
             pet.type.witch.fly: true  # Will allow witch to fly (if enabled)
             pet.type.witch.hat: true  # Will allow witch to be a hat (if enabled)
-            pet.type.witch.mount: true  # Will allow witch to mount (if enabled)
+            pet.type.witch.mount: true  # Will allow witch to be mounted (if enabled)
             pet.type.witch.data.*: true
 
 
@@ -907,7 +1153,7 @@ permissions:
         children:
             pet.type.wither.fly: true  # Will allow wither to fly (if enabled)
             pet.type.wither.hat: true  # Will allow wither to be a hat (if enabled)
-            pet.type.wither.mount: true  # Will allow wither to mount (if enabled)
+            pet.type.wither.mount: true  # Will allow wither to be mounted (if enabled)
             pet.type.wither.data.*: true
 
 
@@ -916,7 +1162,7 @@ permissions:
         children:
             pet.type.witherskeleton.fly: true  # Will allow wither_skeleton to fly (if enabled)
             pet.type.witherskeleton.hat: true  # Will allow wither_skeleton to be a hat (if enabled)
-            pet.type.witherskeleton.mount: true  # Will allow wither_skeleton to mount (if enabled)
+            pet.type.witherskeleton.mount: true  # Will allow wither_skeleton to be mounted (if enabled)
             pet.type.witherskeleton.data.*: true
 
 
@@ -925,7 +1171,7 @@ permissions:
         children:
             pet.type.wolf.fly: true  # Will allow wolf to fly (if enabled)
             pet.type.wolf.hat: true  # Will allow wolf to be a hat (if enabled)
-            pet.type.wolf.mount: true  # Will allow wolf to mount (if enabled)
+            pet.type.wolf.mount: true  # Will allow wolf to be mounted (if enabled)
             pet.type.wolf.data.*: true
 
 
@@ -934,7 +1180,7 @@ permissions:
         children:
             pet.type.zoglin.fly: true  # Will allow zoglin to fly (if enabled)
             pet.type.zoglin.hat: true  # Will allow zoglin to be a hat (if enabled)
-            pet.type.zoglin.mount: true  # Will allow zoglin to mount (if enabled)
+            pet.type.zoglin.mount: true  # Will allow zoglin to be mounted (if enabled)
             pet.type.zoglin.data.*: true
 
 
@@ -943,7 +1189,7 @@ permissions:
         children:
             pet.type.zombie.fly: true  # Will allow zombie to fly (if enabled)
             pet.type.zombie.hat: true  # Will allow zombie to be a hat (if enabled)
-            pet.type.zombie.mount: true  # Will allow zombie to mount (if enabled)
+            pet.type.zombie.mount: true  # Will allow zombie to be mounted (if enabled)
             pet.type.zombie.data.*: true
 
 
@@ -952,7 +1198,7 @@ permissions:
         children:
             pet.type.zombiehorse.fly: true  # Will allow zombie_horse to fly (if enabled)
             pet.type.zombiehorse.hat: true  # Will allow zombie_horse to be a hat (if enabled)
-            pet.type.zombiehorse.mount: true  # Will allow zombie_horse to mount (if enabled)
+            pet.type.zombiehorse.mount: true  # Will allow zombie_horse to be mounted (if enabled)
             pet.type.zombiehorse.data.*: true
 
 
@@ -961,7 +1207,7 @@ permissions:
         children:
             pet.type.zombievillager.fly: true  # Will allow zombie_villager to fly (if enabled)
             pet.type.zombievillager.hat: true  # Will allow zombie_villager to be a hat (if enabled)
-            pet.type.zombievillager.mount: true  # Will allow zombie_villager to mount (if enabled)
+            pet.type.zombievillager.mount: true  # Will allow zombie_villager to be mounted (if enabled)
             pet.type.zombievillager.data.*: true
 
 
@@ -970,7 +1216,7 @@ permissions:
         children:
             pet.type.zombifiedpiglin.fly: true  # Will allow zombified_piglin to fly (if enabled)
             pet.type.zombifiedpiglin.hat: true  # Will allow zombified_piglin to be a hat (if enabled)
-            pet.type.zombifiedpiglin.mount: true  # Will allow zombified_piglin to mount (if enabled)
+            pet.type.zombifiedpiglin.mount: true  # Will allow zombified_piglin to be mounted (if enabled)
             pet.type.zombifiedpiglin.data.*: true
 
 
