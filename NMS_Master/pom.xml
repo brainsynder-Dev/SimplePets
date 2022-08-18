@@ -92,5 +92,11 @@
             <artifactId>API</artifactId>
             <version>${module.version}</version>
         </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>MAIN</artifactId>
+            <version>${module.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

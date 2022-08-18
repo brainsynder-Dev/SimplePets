@@ -4,10 +4,12 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -96,6 +98,10 @@ public class VersionTranslator {
 
         // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
         return EntityType.GIANT;
+    }
+
+    public static Packet<?> getAddEntityPacket(LivingEntity livingEntity, EntityType<?> originalEntityType, BlockPos pos) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 
     public static String getEntityTypeVariable() {
