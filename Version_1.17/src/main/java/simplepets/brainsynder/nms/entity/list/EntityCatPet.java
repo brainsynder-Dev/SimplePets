@@ -13,7 +13,7 @@ import simplepets.brainsynder.api.wrappers.CatType;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityCat}
+ * NMS: {@link net.minecraft.world.entity.animal.Cat}
  */
 public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     private static final EntityDataAccessor<Integer> TYPE;

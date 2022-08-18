@@ -11,7 +11,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityGoat}
+ * NMS: {@link net.minecraft.world.entity.animal.goat.Goat}
  */
 public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
     private static final EntityDataAccessor<Boolean> DATA_IS_SCREAMING_GOAT;
