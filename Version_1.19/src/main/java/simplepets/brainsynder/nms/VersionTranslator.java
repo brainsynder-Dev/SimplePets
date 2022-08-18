@@ -9,9 +9,12 @@ import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.storage.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -166,6 +169,27 @@ public class VersionTranslator {
 
         // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
         return EntityType.GIANT;
+    }
+
+    public static Packet<?> getAddEntityPacket(LivingEntity livingEntity, EntityType<?> originalEntityType, BlockPos pos) {
+        Packet<?> packet;
+        try {
+            // y'all here sum'n?
+            packet = new ClientboundAddEntityPacket(livingEntity);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ClientboundAddEntityPacket(livingEntity, 0, pos);
+        }
+
+        try {
+            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
+            type.setAccessible(true);
+            type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
+            return packet;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return new ClientboundAddEntityPacket(livingEntity, 0, pos);
     }
 
     public static String getEntityTypeVariable() {

@@ -10,23 +10,25 @@
     <modelVersion>4.0.0</modelVersion>
     <version>${module.version}</version>
 
-    <artifactId>Version_1.18</artifactId>
+    <artifactId>Version_${minecraft.version}</artifactId>
 
     <properties>
-        <spigot.version>1.18-R0.1-SNAPSHOT</spigot.version>
+        <minecraft.version>1.18</minecraft.version>
+
+        <current-module.version>v1_18</current-module.version>
+        <current-module.nms>v1_18_R1</current-module.nms>
+
+        <!-- Nothing should have to be changed below this point -->
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.18</module.info>
+
+
+        <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
+        <module.info>-${minecraft.version}</module.info>
     </properties>
 
     <build>
-        <resources>
-            <resource>
-                <directory>${project.parent.basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -48,8 +50,13 @@
                             <relocations>
                                 <relocation>
                                     <pattern>${groupId}.nms</pattern>
-                                    <shadedPattern>${groupId}.versions.v1_18</shadedPattern>
+                                    <shadedPattern>${groupId}.versions.${current-module.version}</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>org.bukkit.craftbukkit.${spigot.nms}</pattern>
+                                    <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
+                                </relocation>
+
                                 <relocation>
                                     <pattern>org.apache.commons</pattern>
                                     <shadedPattern>${groupId}.internal.apache</shadedPattern>
@@ -61,10 +68,6 @@
                                 <relocation>
                                     <pattern>com.jeff_media.updatechecker</pattern>
                                     <shadedPattern>${groupId}.internal.updatechecker</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.bukkit.craftbukkit.v1_17_R1</pattern>
-                                    <shadedPattern>org.bukkit.craftbukkit.v1_18_R1</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -97,9 +100,9 @@
                         </goals>
                         <id>remap-obf</id>
                         <configuration>
-                            <srgIn>org.spigotmc:minecraft-server:1.18-R0.1-SNAPSHOT:txt:maps-mojang</srgIn>
+                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:txt:maps-mojang</srgIn>
                             <reverse>true</reverse>
-                            <remappedDependencies>org.spigotmc:spigot:1.18-R0.1-SNAPSHOT:jar:remapped-mojang</remappedDependencies>
+                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-mojang</remappedDependencies>
                             <remappedArtifactAttached>true</remappedArtifactAttached>
                             <remappedClassifierName>remapped-obf</remappedClassifierName>
                         </configuration>
@@ -112,13 +115,19 @@
                         <id>remap-spigot</id>
                         <configuration>
                             <inputFile>${project.build.directory}/${project.artifactId}-${project.version}-remapped-obf.jar</inputFile>
-                            <srgIn>org.spigotmc:minecraft-server:1.18-R0.1-SNAPSHOT:csrg:maps-spigot</srgIn>
-                            <remappedDependencies>org.spigotmc:spigot:1.18-R0.1-SNAPSHOT:jar:remapped-obf</remappedDependencies>
+                            <srgIn>org.spigotmc:minecraft-server:${spigot.version}:csrg:maps-spigot</srgIn>
+                            <remappedDependencies>org.spigotmc:spigot:${spigot.version}:jar:remapped-obf</remappedDependencies>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.parent.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <dependencies>
