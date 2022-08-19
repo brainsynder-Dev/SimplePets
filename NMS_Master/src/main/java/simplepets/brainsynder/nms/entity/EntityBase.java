@@ -1,7 +1,5 @@
 package simplepets.brainsynder.nms.entity;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -52,10 +50,5 @@ public class EntityBase extends Mob {
             e.printStackTrace();
             return originalType;
         }
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
     }
 }

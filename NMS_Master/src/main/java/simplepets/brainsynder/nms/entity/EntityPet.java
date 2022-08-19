@@ -3,7 +3,9 @@ package simplepets.brainsynder.nms.entity;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -608,5 +610,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     protected void handleNetherPortal() {
         // fuck around and find out
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
     }
 }
