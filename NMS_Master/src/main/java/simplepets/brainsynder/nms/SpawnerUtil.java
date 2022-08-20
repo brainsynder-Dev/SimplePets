@@ -24,7 +24,6 @@ import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.entity.special.EntityControllerPet;
-import simplepets.brainsynder.nms.utils.GlowAPI;
 
 import java.util.*;
 
@@ -35,7 +34,6 @@ public class SpawnerUtil implements ISpawnUtil {
     public SpawnerUtil () {
         petMap = new HashMap<>();
         spawnCount = new HashMap<>();
-        GlowAPI.init();
 
         for (PetType type : PetType.values()) {
             if (type.getEntityClass() == null) continue;
@@ -53,7 +51,7 @@ public class SpawnerUtil implements ISpawnUtil {
                     }
                 }
                 petMap.put(type, clazz);
-            }catch (ClassNotFoundException ignored) {
+            }catch (Exception ignored) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
                         "Failed to register the '"+type.getName()+"' pet (Missing '"+name+"' class for your version) [Will not effect your server]"
                 ));

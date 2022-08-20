@@ -4,11 +4,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +13,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -38,10 +36,9 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
-import simplepets.brainsynder.nms.pathfinder.PathfinderFloatGoal;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.pathfinder.PathfinderWalkToPlayer;
-import simplepets.brainsynder.nms.utils.GlowAPI;
+import simplepets.brainsynder.nms.utils.EntityUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -136,7 +133,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public void setGlowColor(ChatColor glowColor) {
         if (this.glowColor == glowColor) return; // No need for redundant setting
         this.glowColor = glowColor;
-        GlowAPI.setRawColor(getEntity(), glowColor);
     }
 
     @Override
@@ -156,7 +152,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new PathfinderFloatGoal(this));
+        goalSelector.addGoal(1, new FloatGoal(this));
         goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
         goalSelector.addGoal(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
         goalSelector.addGoal(3, new RandomLookAroundGoal(this));
@@ -201,30 +197,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
                 + Colorize.translateBungeeHex(event.getSuffix());
         getBukkitEntity().setCustomNameVisible(ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue());
         getBukkitEntity().setCustomName(petName);
-    }
-
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        Packet<?> packet;
-        try {
-            packet = new ClientboundAddMobPacket(this);
-        } catch (NoClassDefFoundError e) {
-            // y'all here sum'n?
-            packet = new ClientboundAddEntityPacket(this);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
-        }
-
-        try {
-            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
-            type.setAccessible(true);
-            type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
-            return packet;
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
     }
 
     @Override
@@ -580,9 +552,15 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     private void glowHandler(Player player, boolean glow) {
         try {
             Entity entity = getEntity();
-            if (this instanceof IEntityControllerPet) return;
-            GlowAPI.setGlowing(entity, player, glow);
+            if (this instanceof IEntityControllerPet controllerPet) {
+                entity = controllerPet.getVisibleEntity().getEntity();
+            }
             isGlowing = glow;
+            if (glow) {
+                EntityUtils.getGlowingInstance().setGlowing(entity, player, getGlowColor());
+            }else{
+                EntityUtils.getGlowingInstance().unsetGlowing(entity, player);
+            }
         } catch (Exception ignored) {}
     }
 
@@ -632,5 +610,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     protected void handleNetherPortal() {
         // fuck around and find out
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
     }
 }
