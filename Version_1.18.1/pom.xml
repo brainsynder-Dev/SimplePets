@@ -8,14 +8,12 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>Version_${mc.version}</artifactId>
     <version>${module.version}</version>
 
-    <properties>
-        <mc.version>1.18.1</mc.version>
+    <artifactId>Version_${minecraft.version}</artifactId>
 
-        <parent.module>Version_1.18</parent.module>
-        <parent.module.version>v1_18</parent.module.version>
+    <properties>
+        <minecraft.version>1.18.1</minecraft.version>
 
         <current-module.version>v1_18_1</current-module.version>
         <current-module.nms>v1_18_R1</current-module.nms>
@@ -25,8 +23,9 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <spigot.version>${mc.version}-R0.1-SNAPSHOT</spigot.version>
-        <module.info>-${mc.version}</module.info>
+
+        <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
+        <module.info>-${minecraft.version}</module.info>
     </properties>
 
     <build>
@@ -50,7 +49,7 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>${groupId}.versions.${parent.module.version}</pattern>
+                                    <pattern>${groupId}.nms</pattern>
                                     <shadedPattern>${groupId}.versions.${current-module.version}</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -131,13 +130,6 @@
         </resources>
     </build>
 
-    <repositories>
-        <repository>
-            <id>bs-nms</id>
-            <url>https://repo.pluginwiki.us/repository/nms/</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.spigotmc</groupId>
@@ -145,12 +137,6 @@
             <version>${spigot.version}</version>
             <classifier>remapped-mojang</classifier>
             <scope>provided</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.spigotmc</groupId>
-                    <artifactId>minecraft-server</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
@@ -174,7 +160,7 @@
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
-            <artifactId>${parent.module}</artifactId>
+            <artifactId>NMS_Master</artifactId>
             <version>${module.version}</version>
             <scope>compile</scope>
         </dependency>
