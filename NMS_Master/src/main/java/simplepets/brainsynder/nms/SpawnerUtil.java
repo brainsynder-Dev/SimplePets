@@ -31,7 +31,7 @@ public class SpawnerUtil implements ISpawnUtil {
     private final Map<PetType, Class<?>> petMap;
     private final Map<PetType, Integer> spawnCount;
 
-    public SpawnerUtil () {
+    public SpawnerUtil (ClassLoader classLoader) {
         petMap = new HashMap<>();
         spawnCount = new HashMap<>();
 
@@ -40,7 +40,7 @@ public class SpawnerUtil implements ISpawnUtil {
 
             String name = type.getEntityClass().getSimpleName().replaceFirst("I", "");
             try {
-                Class<?> clazz = Class.forName("simplepets.brainsynder.versions."+ ServerVersion.getVersion().name() +".entity.list."+name);
+                Class<?> clazz = Class.forName("simplepets.brainsynder.versions."+ ServerVersion.getVersion().name() +".entity.list."+name, false, classLoader);
                 if (clazz.isAnnotationPresent(SupportedVersion.class)) {
                     SupportedVersion version = clazz.getAnnotation(SupportedVersion.class);
                     if (!ServerVersion.isEqualNew(version.version())) {
