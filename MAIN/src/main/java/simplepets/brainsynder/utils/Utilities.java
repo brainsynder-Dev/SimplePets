@@ -80,7 +80,8 @@ public class Utilities {
             return false;
         }
 
-        if (!Utilities.hasPermission(player, type.getPermission())) {
+        if (!Utilities.hasPermission(player, type.getPermission())
+                && ((!user.getOwnedPets().contains(type)) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
             timer.stop("no permission - end");
             return false;
         }
