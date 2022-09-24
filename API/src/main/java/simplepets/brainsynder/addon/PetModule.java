@@ -13,12 +13,16 @@ import java.io.File;
 public abstract class PetModule implements Listener {
     private boolean loaded = false;
     private boolean enabled = false;
-    private boolean update = false;
+    private final boolean update = false;
     private File addonFolder = null;
     private AddonLocalData localData;
 
     /**
-     * This method is used to generate the default values for the addons config file
+     * "This function is called when the addon is loaded, and is used to set default values for the addon's configuration."
+     *
+     * The `config` parameter is an instance of the `AddonConfig` class, which is used to store the addon's configuration
+     *
+     * @param config The AddonConfig object that is being loaded.
      */
     public void loadDefaults (AddonConfig config) {}
 
@@ -33,28 +37,38 @@ public abstract class PetModule implements Listener {
     public void cleanup (){}
 
     /**
-     * Should the plugin enable (could be used when linking into another plugin)
+     * Should the addon enable (could be used when linking into another plugin)
      */
     public boolean shouldEnable () {
         return true;
     }
 
     /**
-     * Will return the folder the Addon jar file is located in
+     * It returns the folder where the addon jar is located
+     *
+     * @return The addon folder.
      */
     public File getAddonFolder() {
         return addonFolder;
     }
 
     /**
-     * All PetModule classes must have a Namespace Annotation to give it a name
-     * This method just retrieves it
+     * If the class has a Namespace annotation, return it. If not, throw a NullPointerException
+     *
+     * @return The Namespace annotation for the module.
+     *
+     * @throws {@link NullPointerException} The pet module is missing the {@link Namespace} annotation
      */
     public Namespace getNamespace() {
         if (getClass().isAnnotationPresent(Namespace.class)) return getClass().getAnnotation(Namespace.class);
         throw new NullPointerException(getClass().getSimpleName() + " is missing @Namespace annotation for the module");
     }
 
+    /**
+     * It returns an ItemStack that represents the addon
+     *
+     * @return An ItemStack
+     */
     public ItemStack getAddonIcon (){
         StringBuilder authors = new StringBuilder();
         localData.getAuthors().forEach(s -> authors.append(s).append(", "));
@@ -67,46 +81,56 @@ public abstract class PetModule implements Listener {
     }
 
     /**
-     * Does the server have the addon enabled
+     * Returns true if the addon module is enabled, false otherwise.
+     *
+     * @return The value of the enabled variable.
      */
     public boolean isEnabled() {
         return enabled;
     }
 
     /**
-     * Was the plugin able to load the addon from the file
+     * Returns true if the addon module is loaded, false otherwise.
+     *
+     * @return The boolean value of the loaded variable.
      */
     public boolean isLoaded() {
         return loaded;
     }
 
     /**
-     * does this addon have a new version available?
+     * This function returns the local data of the addon.
+     *
+     * @return The localData object.
      */
-    public boolean hasUpdate () {
-        return update;
-    }
-
     public AddonLocalData getLocalData() {
         return localData;
     }
 
+    @Deprecated
     public void setAddonFolder(File addonFolder) {
         this.addonFolder = addonFolder;
     }
 
+    /**
+     * This function sets the enabled variable to the value of the enabled parameter.
+     *
+     * @param enabled This is a boolean value that determines whether the user is enabled or not.
+     */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
+    /**
+     * > This function sets the value of the loaded variable to the value of the loaded parameter
+     *
+     * @param loaded This is a boolean value that indicates whether the data has been loaded or not.
+     */
     public void setLoaded(boolean loaded) {
         this.loaded = loaded;
     }
 
-    public void setHasUpdate(boolean update) {
-        this.update = update;
-    }
-
+    @Deprecated
     public void setLocalData(AddonLocalData localData) {
         this.localData = localData;
     }

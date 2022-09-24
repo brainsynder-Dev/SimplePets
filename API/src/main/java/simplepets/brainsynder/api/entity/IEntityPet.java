@@ -16,7 +16,7 @@ import java.util.function.Function;
 
 public interface IEntityPet extends IEntityBase, IBurnablePet {
     /**
-     * Will teleport the pet to its owner
+     * Teleports the pet to its owners location
      */
     void teleportToOwner ();
 
@@ -29,12 +29,24 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
     void handleAdditionalStorage (String pluginKey, Function<StorageTagCompound, StorageTagCompound> compound);
 
     /**
-     * UUID of the pets owner
+     * Returns the UUID of the pets owner.
+     *
+     * @return The owner's UUID.
      */
     UUID getOwnerUUID();
 
+    /**
+     * Get the pet user.
+     *
+     * @return The PetUser object.
+     */
     PetUser getPetUser();
 
+    /**
+     * Returns the pet type.
+     *
+     * @return The PetType object.
+     */
     PetType getPetType();
 
     /**
@@ -43,23 +55,38 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      */
     Entity getEntity();
 
+    /**
+     * This function is called when the player starts riding the pet
+     * It handles how the player mounts, For instance when riding horse pets
+     * the plugin will add a SeatEntity as a controller for the pet
+     *
+     * See this GitHub Pull Request for more info
+     * <a href="https://github.com/brainsynder-Dev/SimplePets/pull/114">#114</a>
+     *
+     * @return A boolean value.
+     */
     boolean attachOwner();
 
     /**
-     * Will return all the entities involved in the pet
+     * Returns a list of entities that are involved in the pet.
+     *
+     * @return A list containing the entities.
      */
     default List<Entity> getEntities() {
         return Collections.singletonList(getEntity());
     }
 
     /**
-     * Will save all the pets current data to a STC
+     * Returns a StorageTagCompound object that represents the pets data and features.
+     *
+     * @return A StorageTagCompound object.
      */
     StorageTagCompound asCompound();
 
     /**
-     * Will apply data to the pet EG: if the pet is a baby
-     * @param object - The data to modify the pet with
+     * It applies the given compound to the pet
+     *
+     * @param object The object to apply the compound to.
      */
     void applyCompound(StorageTagCompound object);
 
@@ -68,12 +95,20 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
     }
 
     /**
+     * Returns true if the pet is silent, false otherwise.
      * Will the pet make its ambient sounds?
+     *
+     * @return false
      */
     default boolean isPetSilent() {
         return false;
     }
 
+    /**
+     * Sets whether the pet is silent or not.
+     *
+     * @param silent If true, the pet will not make any sounds.
+     */
     default void setPetSilent(boolean silent) {}
 
     /**
@@ -81,54 +116,61 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      *  - If the name was previously modified via {@link IEntityPet#setPetName(String)} it will return that name
      *  - If the player has a default name for it
      *  - empty if there is no name
+     *
+     * @return Optional<String>
      */
     Optional<String> getPetName ();
 
     /**
-     * Sets the player pets name
-     * @param name - name of the pet
+     * This function sets the pet's name.
+     *
+     * @param name The name of the pet.
      */
     void setPetName (String name);
 
     /**
-     * Added in 1.17
+     * Returns true if the pet is frozen (shaking)
      *
-     * This checks if the pet is frozen, if it is it will shake
+     * @since MC 1.17
+     * @return false
      */
     default boolean isFrozen () {
         return false;
     }
 
     /**
-     * Added in 1.17
-     *
      * This will toggle weather the pet is fully frozen or not
      *
+     * @since MC 1.17
      * @param frozen
      */
     default void setFrozen (boolean frozen) {}
 
     /**
-     * Is the pet visible to players
+     * Returns true if the pet is visible.
+     *
+     * @return A boolean value.
      */
     boolean isPetVisible ();
 
     /**
-     * This will toggle weather the pet is visible to players or not
+     * Sets the visibility of the pet
      *
-     * @param visible
+     * @param visible true to make the pet visible, false to hide it.
      */
     void setPetVisible (boolean visible);
 
     /**
-     * This will set the color the pet will glow as
+     * Sets the color of the glow effect on the pet.
      *
-     * @param color
+     * @param color The color of the glow.
      */
-    void setGlowColor (ChatColor color);
+    @Deprecated void setGlowColor (ChatColor color);
 
     /**
-     * Returns what color the pet will glow as
+     * Returns the color of the glow effect
+     *
+     * @return The glow color of the pet.
      */
     ChatColor getGlowColor ();
 }
