@@ -10,14 +10,21 @@ import simplepets.brainsynder.internal.glowingentities.GlowingEntities;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
     private static final GlowingEntities GLOWING_ENTITIES;
+    private static final Random RANDOM;
 
     static {
+        RANDOM = new Random();
         GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+    }
+
+    public static Random getRandom() {
+        return RANDOM;
     }
 
     public static GlowingEntities getGlowingInstance () {
