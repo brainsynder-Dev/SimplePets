@@ -41,7 +41,7 @@ public class RemoveCommand extends PetSubCommand {
                 if (user.removePet(type)) integer.incrementAndGet();
             });
 
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.REMOVED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.REMOVED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
             return;
         }
         AtomicInteger index = new AtomicInteger(0);
@@ -52,7 +52,7 @@ public class RemoveCommand extends PetSubCommand {
             if (selected != null) {
                 target = selected;
                 if (!sender.hasPermission(getPermission("other"))) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 index.getAndIncrement();
@@ -61,7 +61,7 @@ public class RemoveCommand extends PetSubCommand {
 
         if (target == null) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED+"You must be a player to run this command for yourself.");
+                sendMessage(sender, ChatColor.RED+"You must be a player to run this command for yourself.");
             }else{
                 target = (Player) sender;
             }
@@ -76,14 +76,14 @@ public class RemoveCommand extends PetSubCommand {
                     if (user.removePet(type)) integer.incrementAndGet();
             });
 
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.REMOVED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.REMOVED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
 
             return;
         }
 
         Optional<PetType> petType = PetType.getPetType(args[index.get()]);
         if (!petType.isPresent()) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[index.get()]));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[index.get()]));
             return;
         }
 
@@ -91,11 +91,11 @@ public class RemoveCommand extends PetSubCommand {
 
         getPlugin().getUserManager().getPetUser(finalTarget).ifPresent(user -> {
             if (!user.removePet(type)) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.REMOVED_PET).replace("{type}", type.getName()));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.REMOVED_PET).replace("{type}", type.getName()));
                 return;
             }
 
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.REMOVED_PET).replace("{type}", type.getName()));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.REMOVED_PET).replace("{type}", type.getName()));
         });
     }
 }

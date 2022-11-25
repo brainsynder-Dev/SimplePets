@@ -44,8 +44,8 @@ public class HelpCommand extends PetSubCommand {
         });
 
         if (adminCommands.isEmpty()) return;
-        sender.sendMessage(ChatColor.RESET.toString());
-        sender.sendMessage(Colorize.translateBungeeHex("&r &r &#e1eb5b[] &#d1c9c9----- &#b35349&lADMIN COMMANDS&r&#d1c9c9 ----- &#e1eb5b[]"));
+        sendMessage(sender, ChatColor.RESET.toString());
+        sendMessage(sender, Colorize.translateBungeeHex("&r &r &#e1eb5b[] &#d1c9c9----- &#b35349&lADMIN COMMANDS&r&#d1c9c9 ----- &#e1eb5b[]"));
         adminCommands.forEach(petSubCommand -> petSubCommand.sendUsage(sender));
     }
 }

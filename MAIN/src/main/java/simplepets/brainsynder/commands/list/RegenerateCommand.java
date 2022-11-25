@@ -61,7 +61,7 @@ public class RegenerateCommand extends PetSubCommand {
                 @Override
                 public void run() {
                     ((PetConfiguration)SimplePets.getPetConfigManager()).reset();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_FILES_REGEN));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_FILES_REGEN));
                 }
             }.runTaskLater(getPlugin(), 2);
             return;
@@ -73,7 +73,7 @@ public class RegenerateCommand extends PetSubCommand {
                 @Override
                 public void run() {
                     ((InventoryManager)getPlugin().getGUIHandler()).initiate();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INV_FILES_REGEN));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.INV_FILES_REGEN));
                 }
             }.runTaskLater(getPlugin(), 2);
             return;
@@ -85,7 +85,7 @@ public class RegenerateCommand extends PetSubCommand {
                 @Override
                 public void run() {
                     ((ItemManager)getPlugin().getItemHandler()).initiate();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.ITEM_FILES_REGEN));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.ITEM_FILES_REGEN));
                 }
             }.runTaskLater(getPlugin(), 2);
             return;
@@ -97,7 +97,7 @@ public class RegenerateCommand extends PetSubCommand {
                 @Override
                 public void run() {
                     getPlugin().getParticleHandler().reload(getPlugin());
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PARTICLE_FILES_REGEN));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PARTICLE_FILES_REGEN));
                 }
             }.runTaskLater(getPlugin(), 2);
             return;
@@ -111,7 +111,7 @@ public class RegenerateCommand extends PetSubCommand {
 
             Optional<PetType> optional = PetType.getPetType(args[1]);
             if (!optional.isPresent()) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[1]));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[1]));
                 return;
             }
 
@@ -122,7 +122,7 @@ public class RegenerateCommand extends PetSubCommand {
                 @Override
                 public void run() {
                     ((PetConfiguration)SimplePets.getPetConfigManager()).reset(type);
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_TYPE_FILE_REGEN).replace("{type}", type.getName()));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_TYPE_FILE_REGEN).replace("{type}", type.getName()));
                 }
             }.runTaskLater(getPlugin(), 1);
         }

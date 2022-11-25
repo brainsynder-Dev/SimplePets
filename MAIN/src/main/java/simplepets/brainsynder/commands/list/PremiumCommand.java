@@ -22,8 +22,8 @@ public class PremiumCommand extends PetSubCommand {
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Purchase Users ID: "+ Premium.USER_ID);
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Premium Resource ID: "+Premium.USER_ID);
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + "§7Download ID: "+Premium.UNIQUE_DOWNLOAD_ID + "(Unique for all downloads)");
+        sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX) + "§7Purchase Users ID: "+ Premium.USER_ID);
+        sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX) + "§7Premium Resource ID: "+Premium.USER_ID);
+        sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX) + "§7Download ID: "+Premium.UNIQUE_DOWNLOAD_ID + "(Unique for all downloads)");
     }
 }

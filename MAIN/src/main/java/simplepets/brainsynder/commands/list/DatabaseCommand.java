@@ -28,8 +28,8 @@ public class DatabaseCommand extends PetSubCommand {
         PlayerSQL.getInstance().fetchRowCount(playerDataCount -> {
             InventorySQL.getInstance().fetchRowCount(invCount -> {
                 try {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Player Data SQL &#b35349======&#de9790-------"));
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79a" + (PlayerSQL.getInstance().isUsingSqlite() ? "SQLite" : "MySQL")));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Player Data SQL &#b35349======&#de9790-------"));
+                    sendMessage(sender, Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79a" + (PlayerSQL.getInstance().isUsingSqlite() ? "SQLite" : "MySQL")));
                     Tellraw raw = Tellraw.fromLegacy(" &#e1eb5b- &#d1c9c9Status: ");
                     if (PlayerSQL.getInstance().isUsingSqlite()) {
                         raw.then("CONNECTED").color(ChatColor.GREEN).tooltip("&7SQLite connections are kept connected");
@@ -37,14 +37,14 @@ public class DatabaseCommand extends PetSubCommand {
                         raw.then("IDLE").color("#e3aa4f").tooltip("&7MySQL connections are kept closed until they are needed","&7That's what the IDLE state is");
                     }
                     raw.send(sender);
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Players In Database: &#e3c79a"+playerDataCount));
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Inventory Data SQL &#b35349====&#de9790------"));
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79aSQLite"));
+                    sendMessage(sender, Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Players In Database: &#e3c79a"+playerDataCount));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+Colorize.translateBungeeHex(" &#d1c9c9Inventory Data SQL &#b35349====&#de9790------"));
+                    sendMessage(sender, Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Type: &#e3c79aSQLite"));
                     Tellraw.fromLegacy(" &#e1eb5b- &#d1c9c9Status: ").then("CONNECTED").color(ChatColor.GREEN).tooltip("&7SQLite connections are kept connected").send(sender);
-                    sender.sendMessage(Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Inventories In Database: &#e3c79a"+invCount));
+                    sendMessage(sender, Colorize.translateBungeeHex(" &#e1eb5b- &#d1c9c9Inventories In Database: &#e3c79a"+invCount));
                 }catch (Exception e) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.RED + "Failed to fetch database information");
-                    sender.sendMessage(ChatColor.RED + e.getMessage());
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.RED + "Failed to fetch database information");
+                    sendMessage(sender, ChatColor.RED + e.getMessage());
                 }
             });
         });

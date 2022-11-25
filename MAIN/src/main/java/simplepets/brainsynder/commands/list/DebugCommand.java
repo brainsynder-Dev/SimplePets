@@ -46,13 +46,13 @@ public class DebugCommand extends PetSubCommand {
 
     @Override
     public void run(CommandSender sender) {
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Fetching Debug Information...");
+        sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+" §7Fetching Debug Information...");
         fetchDebug(json -> {
             log(getPlugin().getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Generated §e'plugins/SimplePets/debug.json'");
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+" §7Generated §e'plugins/SimplePets/debug.json'");
 
             WebConnector.uploadPaste(PetCore.getInstance(), json.toString(WriterConfig.PRETTY_PRINT), s -> {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + " §7Uploaded to PasteLog:§e " + s);
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX) + " §7Uploaded to PasteLog:§e " + s);
             });
         }, false);
     }

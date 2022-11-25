@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.files.options.MessageOption;
+import simplepets.brainsynder.files.MessageFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,4 +205,12 @@ public class PetSubCommand extends SubCommand {
     public boolean isUsername (String string) {
         return (string.length() < 17) && (string.length() > 2) && string.replace("_", "").matches("[A-Za-z0-9]+");
     }
+
+    public void sendMessage(CommandSender sender, MessageOption messageOption) {
+        String message = MessageFile.getTranslation(messageOption);
+        if (!message.isEmpty()) {
+            sender.sendMessage(message);
+        }
+    }
+
 }

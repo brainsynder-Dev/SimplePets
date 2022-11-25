@@ -61,35 +61,35 @@ public class SummonCommand extends PetSubCommand {
                 });
             }
 
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.SUMMONED_ALL_PETS).replace("{count}", String.valueOf(integer.get())));
             return;
         }
 
         Optional<PetType> petType = PetType.getPetType(args[0]);
         if (!petType.isPresent()) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[0]));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[0]));
             return;
         }
 
         PetType type = petType.get();
         if (type.isInDevelopment()
                 && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue())) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
             return;
         }
 
         if (!type.isSupported()) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
             return;
         }
 
         if (!Utilities.hasPermission(sender, type.getPermission())) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
             return;
         }
 
         if (!SimplePets.getSpawnUtil().isRegistered(type)) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
             return;
         }
 
@@ -101,11 +101,11 @@ public class SummonCommand extends PetSubCommand {
             if (isUsername(args[1])) {
                 target = Bukkit.getPlayerExact(args[1]);
                 if (target == null) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE).replace("{player}", args[1]));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE).replace("{player}", args[1]));
                     return;
                 }
                 if ((!sender.hasPermission(getPermission("other"))) && (!target.getName().equals(sender.getName()))) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 argStart++;
@@ -127,8 +127,8 @@ public class SummonCommand extends PetSubCommand {
                 try {
                     compound = JsonToNBT.getTagFromJson(json);
                 } catch (NBTException e) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_NBT));
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_NBT_MESSAGE).replace("{message}", e.getMessage()));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_NBT));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_NBT_MESSAGE).replace("{message}", e.getMessage()));
                     return;
                 }
             }
@@ -157,7 +157,7 @@ public class SummonCommand extends PetSubCommand {
         Player finalTarget = target;
         getPlugin().getUserManager().getPetUser(target.getUniqueId()).ifPresent(user -> {
             if (!user.canSpawnMorePets() && finalTarget == sender) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
                 return;
             }
 
@@ -176,13 +176,13 @@ public class SummonCommand extends PetSubCommand {
                     return;
                 }
 
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
                 return;
             }
             if (type == PetType.ARMOR_STAND) {
                 ((IEntityControllerPet)entityPet.first().get()).getVisibleEntity().applyCompound(finalCompound);
             }
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
         });
     }
 }

@@ -29,7 +29,7 @@ public class GUICommand extends PetSubCommand {
             String selector = args[0];
             Player target = Bukkit.getPlayerExact(selector);
             if (target == null) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE));
                 return;
             }
 

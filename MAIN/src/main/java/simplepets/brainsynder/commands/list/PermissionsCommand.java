@@ -41,7 +41,7 @@ public class PermissionsCommand extends PetSubCommand {
             generatePluginPermissions(Boolean.parseBoolean(args[0]));
         }
 
-        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
+        sendMessage(sender, MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"Generated the permissions.yml file");
     }
 
     private void addPermission (StringBuilder builder, String permission, String comment, String defaultType) {
