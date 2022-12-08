@@ -68,7 +68,7 @@
         <spigot.version>1.19.2-R0.1-SNAPSHOT</spigot.version>
         <spigot.nms>v1_19_R1</spigot.nms>
 
-        <anvilgui.version>1.6.4-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.5-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
