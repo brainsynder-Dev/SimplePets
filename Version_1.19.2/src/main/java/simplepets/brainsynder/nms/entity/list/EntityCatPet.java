@@ -2,7 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
-import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.Registry;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -30,7 +30,7 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     @Override
     protected void registerDatawatchers() {
         super.registerDatawatchers();
-        entityData.define(TYPE, BuiltInRegistries.CAT_VARIANT.getOrThrow(CatVariant.TABBY));
+        entityData.define(TYPE, CatVariant.TABBY);
         entityData.define(SLEEPING_WITH_OWNER, false);
         entityData.define(HEAD_UP, false);
         entityData.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
@@ -58,12 +58,12 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
 
     @Override
     public CatType getCatType() {
-        return CatType.getByID(BuiltInRegistries.CAT_VARIANT.getId(entityData.get(TYPE)));
+        return CatType.getByID(Registry.CAT_VARIANT.getId(entityData.get(TYPE)));
     }
 
     @Override
     public void setCatType(CatType type) {
-        entityData.set(TYPE, BuiltInRegistries.CAT_VARIANT.byId(type.ordinal()));
+        entityData.set(TYPE, Registry.CAT_VARIANT.byId(type.ordinal()));
     }
 
     @Override

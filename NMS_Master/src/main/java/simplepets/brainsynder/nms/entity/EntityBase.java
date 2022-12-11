@@ -51,4 +51,8 @@ public class EntityBase extends Mob {
             return originalType;
         }
     }
+
+    public boolean alwaysAccepts() {
+        return super.alwaysAccepts();
+    }
 }

@@ -354,6 +354,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     methodName = "v"; // 1.18 - 1.18.2
                 if (ServerVersion.isEqualNew(ServerVersion.v1_19))
                     methodName = "u"; // 1.19
+                if (ServerVersion.isEqualNew(ServerVersion.v1_19_3))
+                    methodName = "Q"; // 1.19.3
 
                 Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
                 return (boolean) Reflection.invoke(isRunning, server);
