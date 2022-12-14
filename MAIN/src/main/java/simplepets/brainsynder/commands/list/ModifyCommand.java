@@ -45,7 +45,7 @@ public class ModifyCommand extends PetSubCommand {
             if (selected != null) {
                 target = selected;
                 if (!sender.hasPermission(getPermission("other"))) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 argStart.getAndIncrement();
@@ -54,7 +54,7 @@ public class ModifyCommand extends PetSubCommand {
 
         if (target == null) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED+"You must be a player to run this command for yourself.");
+                sendMessage(sender, ChatColor.RED+"You must be a player to run this command for yourself.");
             }else{
                 target = (Player) sender;
             }
@@ -64,14 +64,14 @@ public class ModifyCommand extends PetSubCommand {
 
             Optional<PetType> petType = PetType.getPetType(args[argStart.get()]);
             if (!petType.isPresent()) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[1]));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[1]));
                 return;
             }
 
             PetType type = petType.get();
 
             if (!SimplePets.getSpawnUtil().isRegistered(type)) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
                 return;
             }
 
@@ -90,27 +90,27 @@ public class ModifyCommand extends PetSubCommand {
             try {
                 compound = JsonToNBT.getTagFromJson(json);
             } catch (NBTException e) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_NBT));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_NBT));
 
                 String message = MessageFile.getTranslation(MessageOption.INVALID_NBT_MESSAGE)
                         .replace("{message}", e.getMessage().replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
-                if (!message.isEmpty()) sender.sendMessage(message);
+                if (!message.isEmpty()) sendMessage(sender, message);
                 return;
             }
 
             String message = MessageFile.getTranslation(MessageOption.MODIFY_COMPOUND).replace("{compound}", compound.toString());
-            if (!message.isEmpty()) sender.sendMessage(message.replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
+            if (!message.isEmpty()) sendMessage(sender, message.replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
             user.getPetEntity(type).ifPresent(entityPet -> {
                 if (entityPet instanceof IEntityControllerPet) entityPet = ((IEntityControllerPet)entityPet).getVisibleEntity();
                 try {
                     entityPet.applyCompound(compound);
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.MODIFY_APPLIED).replace("{type}", type.getName()));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.MODIFY_APPLIED).replace("{type}", type.getName()));
                 }catch (Exception e) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_NBT));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_NBT));
 
                     String errorMessage = MessageFile.getTranslation(MessageOption.INVALID_NBT_MESSAGE)
                             .replace("{message}", e.getMessage().replaceAll("(?i):0b", ":false").replaceAll("(?i):1b", ":true"));
-                    if (!errorMessage.isEmpty()) sender.sendMessage(errorMessage);
+                    if (!errorMessage.isEmpty()) sendMessage(sender, errorMessage);
                 }
             });
         });

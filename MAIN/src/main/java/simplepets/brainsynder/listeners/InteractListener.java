@@ -40,12 +40,15 @@ public class InteractListener implements Listener {
         SimplePets.getSpawnUtil().getHandle(e.getRightClicked()).ifPresent(handle -> {
             if (handle instanceof IEntityPet) {
                 e.setCancelled(true);
-                IEntityPet entity = (IEntityPet) handle;
-                if (entity.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
-                    if (InventoryManager.PET_DATA.getType(e.getPlayer()) != entity.getPetType()) InventoryManager.PET_DATA.setType(e.getPlayer(), entity.getPetType());
-                    InventoryManager.PET_DATA.open(entity.getPetUser());
+                if (e.getPlayer().hasPermission("pet.open.data.changer")) {
+                    IEntityPet entity = (IEntityPet) handle;
+                    if (entity.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
+                        if (InventoryManager.PET_DATA.getType(e.getPlayer()) != entity.getPetType()) InventoryManager.PET_DATA.setType(e.getPlayer(), entity.getPetType());
+                        InventoryManager.PET_DATA.open(entity.getPetUser());
+                    }
                 }
             }
         });
     }
+
 }

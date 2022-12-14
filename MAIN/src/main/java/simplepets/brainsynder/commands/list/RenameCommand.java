@@ -68,7 +68,7 @@ public class RenameCommand extends PetSubCommand {
             if (selected != null) {
                 target = selected;
                 if (!sender.hasPermission(getPermission("other"))) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 index.getAndIncrement();
@@ -77,7 +77,7 @@ public class RenameCommand extends PetSubCommand {
 
         if (target == null) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED+"You must be a player to run this command for yourself.");
+                sendMessage(sender, ChatColor.RED+"You must be a player to run this command for yourself.");
             }else{
                 target = (Player) sender;
             }
@@ -88,14 +88,14 @@ public class RenameCommand extends PetSubCommand {
 
             Optional<PetType> petType = PetType.getPetType(args[index.get()]);
             if (!petType.isPresent()) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[index.get()]));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.INVALID_PET_TYPE).replace("{arg}", args[index.get()]));
                 return;
             }
 
             PetType type = petType.get();
 
             if (!SimplePets.getSpawnUtil().isRegistered(type)) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
                 return;
             }
 

@@ -44,8 +44,8 @@ public class ReportCommand extends PetSubCommand implements Listener {
     @Override
     public void run(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "You need to be a player to run this command.");
-            sender.sendMessage(ChatColor.RED + "Or report the issue here:§r https://github.com/brainsynder-Dev/SimplePets/issues/new/choose");
+            sendMessage(sender, ChatColor.RED + "You need to be a player to run this command.");
+            sendMessage(sender, ChatColor.RED + "Or report the issue here:§r https://github.com/brainsynder-Dev/SimplePets/issues/new/choose");
             return;
         }
 

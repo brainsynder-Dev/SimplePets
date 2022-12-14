@@ -70,7 +70,7 @@ public class PurchasedCommand extends PetSubCommand {
         }
 
         if (target == null) {
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE));
+            sendMessage(sender, MessageFile.getTranslation(MessageOption.PLAYER_NOT_ONLINE));
             return;
         }
 
@@ -78,18 +78,18 @@ public class PurchasedCommand extends PetSubCommand {
         SimplePets.getUserManager().getPetUser(target).ifPresent(user -> {
             if (args[0].equalsIgnoreCase("add")) {
                 if (!sender.hasPermission(getPermission("add"))){
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
 
                 if (args.length == 2) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
                     return;
                 }
 
                 PetType.getPetType(args[2]).ifPresent(type -> {
                     user.addOwnedPet(type);
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PURCHASE_ADD)
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PURCHASE_ADD)
                             .replace("{player}", finalTarget.getName())
                             .replace("{type}", type.getName())
                     );
@@ -99,17 +99,17 @@ public class PurchasedCommand extends PetSubCommand {
 
             if (args[0].equalsIgnoreCase("remove")) {
                 if (!sender.hasPermission(getPermission("remove"))){
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
                 if (args.length == 2) {
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.MISSING_PET_TYPE));
                     return;
                 }
 
                 PetType.getPetType(args[2]).ifPresent(type -> {
                     user.removeOwnedPet(type);
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PURCHASE_REMOVE)
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.PURCHASE_REMOVE)
                             .replace("{player}", finalTarget.getName())
                             .replace("{type}", type.getName())
                     );
@@ -119,7 +119,7 @@ public class PurchasedCommand extends PetSubCommand {
 
             if (args[0].equalsIgnoreCase("list")) {
                 if (!sender.hasPermission(getPermission("list"))){
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+                    sendMessage(sender, MessageFile.getTranslation(MessageOption.NO_PERMISSION));
                     return;
                 }
 

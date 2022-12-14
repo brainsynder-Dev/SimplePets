@@ -42,25 +42,25 @@ public class ReloadCommand extends PetSubCommand {
             case "config":
                 getPlugin().getConfiguration().reload();
                 getPlugin().getConfiguration().initValues();
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.CONFIG_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.CONFIG_RELOADED));
                 break;
             case "messages":
                 MessageFile.getFile().reload();
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.MESSAGES_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.MESSAGES_RELOADED));
                 break;
             case "inventories":
                 ((InventoryManager) getPlugin().getGUIHandler()).initiate();
                 ((ItemManager) getPlugin().getItemHandler()).initiate();
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.INVENTORIES_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.INVENTORIES_RELOADED));
                 break;
             case "particles":
                 getPlugin().getParticleHandler().reload(getPlugin());
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PARTICLES_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PARTICLES_RELOADED));
                 break;
             case "pets":
                 getPlugin().reloadPetConfigManager();
                 InventoryManager.SELECTION.reloadAvailableTypes();
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PETS_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.PETS_RELOADED));
                 break;
             default:
                 getPlugin().getConfiguration().reload();
@@ -70,7 +70,7 @@ public class ReloadCommand extends PetSubCommand {
                 getPlugin().reloadPetConfigManager();
                 ((InventoryManager) getPlugin().getGUIHandler()).initiate();
                 ((ItemManager) getPlugin().getItemHandler()).initiate();
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.ALL_RELOADED));
+                sendMessage(sender, MessageFile.getTranslation(MessageOption.ALL_RELOADED));
                 break;
         }
 
