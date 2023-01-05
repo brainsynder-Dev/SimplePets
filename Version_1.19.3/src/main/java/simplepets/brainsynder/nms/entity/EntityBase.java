@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.entity;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
+import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -59,6 +59,7 @@ public class EntityBase extends Mob {
         };
     }
 
+    // TODO: THIS METHOD NEEDS TO BE LOOKED AT CAUSES SOME ISSUES ON 1.19.3
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields) {
         try {
             Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);
@@ -67,7 +68,7 @@ public class EntityBase extends Mob {
                     EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType),
                             MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);
-            Registry<EntityType<?>> registry = BuiltInRegistries.ENTITY_TYPE;
+            DefaultedRegistry<EntityType<?>> registry = BuiltInRegistries.ENTITY_TYPE;
             // frozen field
             Field frozen = null;
             if (checkFields) {
