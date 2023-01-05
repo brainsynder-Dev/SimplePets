@@ -340,6 +340,11 @@ public enum ConfigOption {
                     Are spider type pets able to climb walls?
                     
                     Default: {default}""").setPastPaths("PetToggles.SpiderClimbing");
+    public final ConfigEntry<Boolean> PET_TOGGLES_WARDEN_ANIMATIONS = createOption("pet-toggles.traits.warden-animations", true,
+            """
+                    Should the spawning/de-spawning animation for the warden be used or just make them appear/disappear
+                    
+                    Default: {default}""");
     public final ConfigEntry<Boolean> PET_TOGGLES_GLOW_VANISH = createOption("pet-toggles.traits.glow-when-vanished", true,
             """
                     When the owner is vanished should the owner see their pet with the glow effect?
