@@ -11,7 +11,6 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
-import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.impl.PetConfiguration;
@@ -138,14 +137,11 @@ public class PetConfigCommand extends PetSubCommand {
 
             } else if (original.isNumber()) {
                 if (original.toString().contains(".")) {
-                    SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Original contains a .");
                     try {
-                        SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "parsing double...");
                         double value = Double.parseDouble(newValue);
                         jsonFile.set(key, value);
                         updated = true;
                     } catch (NumberFormatException e) {
-                        SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "failed parse: "+e.getMessage());
                         sender.sendMessage(MessageFile.getTranslation(MessageOption.CONFIG_INVALID_DOUBLE)
                                 .replace("{key}", key)
                                 .replace("{value}", newValue));
@@ -153,12 +149,10 @@ public class PetConfigCommand extends PetSubCommand {
                     }
                 }else{
                     try {
-                        SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "parsing int...");
                         int value = Integer.parseInt(newValue);
                         jsonFile.set(key, value);
                         updated = true;
                     } catch (NumberFormatException e) {
-                        SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "failed parse: "+e.getMessage());
                         sender.sendMessage(MessageFile.getTranslation(MessageOption.CONFIG_INVALID_INT)
                                 .replace("{key}", key)
                                 .replace("{value}", newValue));
