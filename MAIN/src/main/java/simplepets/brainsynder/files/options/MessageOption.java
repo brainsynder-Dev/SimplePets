@@ -54,7 +54,15 @@ public enum MessageOption implements YamlOption {
     INVENTORIES_RELOADED("admin.reload.inventories", "{prefix} &7Items and inventories have been reloaded!"),
     PARTICLES_RELOADED("admin.reload.particles", "{prefix} &7Particles have been reloaded!"),
     PETS_RELOADED("admin.reload.pets", "{prefix} &7Pets have been reloaded!"),
-    ALL_RELOADED("admin.reload.all", "{prefix} &7All plugin elements have been reloaded!");
+    ALL_RELOADED("admin.reload.all", "{prefix} &7All plugin elements have been reloaded!"),
+
+    CONFIG_UNKNOWN_KEY("admin.pet-config.unknown-key", "{prefix} &7{key} &cis not a key for the pets json file."),
+    CONFIG_INVALID_BOOLEAN("admin.pet-config.invalid-boolean", "{prefix} &7{value} &cis not a valid boolean, please use true/false"),
+    CONFIG_INVALID_INT("admin.pet-config.invalid-integer", "{prefix} &7{value} &cis not a valid integer."),
+    CONFIG_INVALID_DOUBLE("admin.pet-config.invalid-double", "{prefix} &7{value} &cis not a valid double."),
+    CONFIG_UNABLE_TO_UPDATE("admin.pet-config.unable-to-update", "{prefix} &cUnable to update this key."),
+    CONFIG_VALUE_UPDATED("admin.pet-config.value-set", "{prefix} &a{key} &7has been set to &e{value}"),
+    CONFIG_VALUE_RESET("admin.pet-config.value-reset", "{prefix} &a{key} &7has been reset to the default value");
 
     private final String path;
     private final Object defaultValue;

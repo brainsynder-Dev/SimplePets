@@ -64,6 +64,28 @@ public class MessageFile {
                 addDefault(MessageOption.PARTICLES_RELOADED, "Message that will be sent when the particles manager has been reloaded.");
                 addDefault(MessageOption.PETS_RELOADED, "Message that will be sent when the pets manager has been reloaded.");
                 addDefault(MessageOption.ALL_RELOADED, "Message that will be sent when all plugin elements have been reloaded.");
+
+                addDefault(MessageOption.CONFIG_UNKNOWN_KEY, "The key entered is not in the selected pets json file");
+                addDefault(MessageOption.CONFIG_INVALID_BOOLEAN, "The value entered is not a boolean (aka it is not true or false)");
+                addDefault(MessageOption.CONFIG_INVALID_INT, "The value entered is not a valid integer (1,2,3)");
+                addDefault(MessageOption.CONFIG_INVALID_DOUBLE, "The value entered is not a valid double (0.1, 0.02, 0.003)");
+                addDefault(MessageOption.CONFIG_UNABLE_TO_UPDATE, "The key entered is not able to be updated via the command (probably is an array or an object)");
+                addDefault(MessageOption.CONFIG_VALUE_UPDATED, """
+                        The key has been updated with the new value
+                        
+                        Placeholders:
+                        {key} - The target key
+                        {value} - The new value
+                        {type} - The type of pet selected
+                        """);
+                addDefault(MessageOption.CONFIG_VALUE_RESET, """
+                        The key has been reset with the default value
+                        
+                        Placeholders:
+                        {key} - The target key
+                        {value} - The new value
+                        {type} - The type of pet selected
+                        """);
             }
         };
     }
