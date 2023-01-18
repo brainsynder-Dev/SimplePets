@@ -24,10 +24,10 @@ import java.util.Optional;
 
 @ICommand(
         name = "addon",
-        usage = "[reload|update] [addon]",
+        usage = "[install|reload|update] [addon]",
         description = "Opens a GUI to download/toggle addons for the plugin"
 )
-@Permission(permission = "addon", adminCommand = true, additionalPermissions = {"reload", "update"})
+@Permission(permission = "addon", adminCommand = true, additionalPermissions = {"install", "reload", "update"})
 public class AddonCommand extends PetSubCommand {
 
     public AddonCommand(PetCore plugin) {

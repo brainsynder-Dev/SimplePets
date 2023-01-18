@@ -22,6 +22,7 @@ import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.managers.ItemManager;
@@ -147,6 +148,10 @@ public class PetSelectorMenu extends CustomInventory {
             }
 
         }
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 

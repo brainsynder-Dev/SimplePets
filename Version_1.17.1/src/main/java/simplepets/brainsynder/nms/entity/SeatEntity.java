@@ -1,6 +1,6 @@
 package simplepets.brainsynder.nms.entity;
 
-import net.minecraft.tags.TagKey;
+import net.minecraft.tags.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.level.Level;
@@ -70,7 +70,7 @@ public class SeatEntity extends ArmorStand {
     // Never let seats eject themselves if they are in water, the passenger has
     // to decide that.
     @Override
-    public boolean isEyeInFluid(TagKey<Fluid> tagkey) {
+    public boolean isEyeInFluid(Tag<Fluid> tag) {
         return false;
     }
 }

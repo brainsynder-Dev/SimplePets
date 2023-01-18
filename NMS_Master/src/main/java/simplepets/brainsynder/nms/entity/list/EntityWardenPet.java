@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.hostile.IEntityWardenPet;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.AngerLevel;
 import simplepets.brainsynder.nms.entity.EntityPet;
@@ -31,8 +32,10 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
 
     public EntityWardenPet(PetType type, PetUser user) {
         super(EntityType.WARDEN, type, user);
-        this.setPose(Pose.EMERGING);
-        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> this.setPose(Pose.STANDING), 135);
+        if (ConfigOption.INSTANCE.PET_TOGGLES_WARDEN_ANIMATIONS.getValue()) {
+            this.setPose(Pose.EMERGING);
+            Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> this.setPose(Pose.STANDING), 135);
+        }
     }
 
     @Override
@@ -108,6 +111,11 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
     }
 
     public void remove(Entity.RemovalReason entity_removalreason) {
+        if (!ConfigOption.INSTANCE.PET_TOGGLES_WARDEN_ANIMATIONS.getValue()) {
+            super.remove(entity_removalreason);
+            return;
+        }
+
         this.setPose(Pose.DIGGING);
         Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> super.remove(entity_removalreason), 100);
     }

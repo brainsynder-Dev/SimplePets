@@ -9,11 +9,16 @@ import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.storage.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -39,6 +44,10 @@ import java.util.Arrays;
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bn";
+
+    public static final String REGISTRY_FROZEN_FIELD = "bL";
+    public static final String REGISTRY_ENTRY_MAP_FIELD = "bN";
+
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
@@ -147,6 +156,29 @@ public class VersionTranslator {
         } catch (NBTException exception) {
             throw new InvalidInputException("Failed to convert item to NBT", exception);
         }
+    }
+
+    public static Packet<?> getAddEntityPacket(LivingEntity livingEntity, EntityType<?> originalEntityType, BlockPos pos) {
+        Packet<?> packet;
+        try {
+            packet = new ClientboundAddMobPacket(livingEntity);
+        } catch (NoClassDefFoundError e) {
+            // y'all here sum'n?
+            packet = new ClientboundAddEntityPacket(livingEntity);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ClientboundAddEntityPacket(livingEntity, originalEntityType, 0, pos);
+        }
+
+        try {
+            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
+            type.setAccessible(true);
+            type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
+            return packet;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return new ClientboundAddEntityPacket(livingEntity, originalEntityType, 0, pos);
     }
 
     public static String getEntityTypeVariable() {

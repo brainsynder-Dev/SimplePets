@@ -184,6 +184,10 @@ public class SavesMenu extends CustomInventory {
             });
         }
         itemMap.put(player.getName(), storageMap);
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 

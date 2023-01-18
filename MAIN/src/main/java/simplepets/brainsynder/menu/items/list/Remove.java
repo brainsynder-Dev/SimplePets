@@ -11,6 +11,7 @@ import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
+import simplepets.brainsynder.menu.inventory.DataMenu;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
@@ -38,11 +39,11 @@ public class Remove extends Item {
         }
         if (pet != null) {
             user.removePet(pet.getPetType());
-            user.updateDataMenu();
+            if (inventory instanceof DataMenu) user.updateDataMenu();
             return;
         }
         user.removePets();
-        user.updateDataMenu();
+        if (inventory instanceof DataMenu) user.updateDataMenu();
     }
 
     @Override
@@ -56,7 +57,7 @@ public class Remove extends Item {
                 public void run() {
                     masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
                         masterUser.removePet(iEntityPet.getPetType());
-                        masterUser.updateDataMenu();
+                        if (inventory instanceof DataMenu) masterUser.updateDataMenu();
                     });
                 }
             }.runTaskLater(PetCore.getInstance(), 2);
@@ -70,7 +71,7 @@ public class Remove extends Item {
                 @Override
                 public void run() {
                     user.removePet(type);
-                    user.updateDataMenu();
+                    if (inventory instanceof DataMenu) user.updateDataMenu();
                 }
             }.runTaskLater(PetCore.getInstance(), 2);
         });

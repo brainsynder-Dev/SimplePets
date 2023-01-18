@@ -10,76 +10,31 @@
     <modelVersion>4.0.0</modelVersion>
     <version>${module.version}</version>
 
-    <artifactId>Version_1.19</artifactId>
+    <artifactId>Version_${minecraft.version}</artifactId>
 
     <properties>
-        <spigot.version>1.19-R0.1-SNAPSHOT</spigot.version>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <module.info>-1.19</module.info>
-
-        <parent.module>Version_1.18.2</parent.module>
-        <parent-module.version>v1_18_2</parent-module.version>
-        <parent-module.nms>v1_18_R2</parent-module.nms>
+        <minecraft.version>1.19</minecraft.version>
 
         <current-module.version>v1_19</current-module.version>
         <current-module.nms>v1_19_R1</current-module.nms>
+
+        <!-- Nothing should have to be changed below this point -->
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+
+        <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
+        <module.info>-${minecraft.version}</module.info>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>${spigot.version}</version>
-            <classifier>remapped-mojang</classifier>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>API</artifactId>
-            <version>${module.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>MAIN</artifactId>
-            <version>${module.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>anvil.brainsynder</groupId>
-                    <artifactId>anvilgui</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.jeff_media</groupId>
-                    <artifactId>SpigotUpdateChecker</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>NMS_Master</artifactId>
-            <version>${module.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>${parent.module}</artifactId>
-            <version>${module.version}</version>
-        </dependency>
-    </dependencies>
-
     <build>
-        <resources>
-            <resource>
-                <directory>${project.parent.basedir}/src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.4.0</version>
                 <configuration>
                     <minimizeJar>false</minimizeJar>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -98,12 +53,11 @@
                                     <pattern>${groupId}.nms</pattern>
                                     <shadedPattern>${groupId}.versions.${current-module.version}</shadedPattern>
                                 </relocation>
-
-                                <!-- Will relocate the parent module to the current module -->
                                 <relocation>
-                                    <pattern>${groupId}.versions.${parent-module.version}</pattern>
-                                    <shadedPattern>${groupId}.versions.${current-module.version}</shadedPattern>
+                                    <pattern>org.bukkit.craftbukkit.${spigot.nms}</pattern>
+                                    <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
                                 </relocation>
+
 
                                 <relocation>
                                     <pattern>org.apache.commons</pattern>
@@ -116,14 +70,6 @@
                                 <relocation>
                                     <pattern>com.jeff_media.updatechecker</pattern>
                                     <shadedPattern>${groupId}.internal.updatechecker</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.bukkit.craftbukkit.${parent-module.nms}</pattern>
-                                    <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>org.bukkit.craftbukkit.v1_17_R1</pattern>
-                                    <shadedPattern>org.bukkit.craftbukkit.${current-module.nms}</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -142,7 +88,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.3.0</version>
             </plugin>
             <plugin>
                 <groupId>net.md-5</groupId>
@@ -178,5 +124,47 @@
                 </executions>
             </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>${project.parent.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot</artifactId>
+            <version>${spigot.version}</version>
+            <classifier>remapped-mojang</classifier>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>API</artifactId>
+            <version>${module.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>MAIN</artifactId>
+            <version>${module.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>anvil.brainsynder</groupId>
+                    <artifactId>anvilgui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.jeff_media</groupId>
+                    <artifactId>SpigotUpdateChecker</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>NMS_Master</artifactId>
+            <version>${module.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
 </project>

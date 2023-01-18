@@ -118,7 +118,7 @@ public class DebugCommand extends PetSubCommand {
             return;
         }
         fetchConfig(conf -> {
-            json.set("config", conf+".yml");
+            json.set("config", conf);
 
             fetchJenkinsInfo(object -> {
                 json.add("jenkins", object);

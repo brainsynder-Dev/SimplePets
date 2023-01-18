@@ -572,6 +572,7 @@ public class PetOwner implements PetUser {
                 } else {
                     Utilities.removePassenger(vehicle, ent);
                 }
+                entityPet.teleportToOwner();
                 if (riderMob != null)
                     Utilities.setPassenger(getPlayer(), vehicle, riderMob);
                 Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);

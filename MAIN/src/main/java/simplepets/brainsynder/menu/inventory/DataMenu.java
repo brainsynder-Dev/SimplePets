@@ -122,6 +122,10 @@ public class DataMenu extends CustomInventory {
             });
         }
 
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
         setType(player, type);
     }

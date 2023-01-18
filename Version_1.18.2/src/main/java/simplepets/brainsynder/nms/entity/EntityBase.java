@@ -1,6 +1,8 @@
 package simplepets.brainsynder.nms.entity;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
@@ -67,13 +69,13 @@ public class EntityBase extends Mob {
             // frozen field
             Field frozen = null;
             if (checkFields) {
-                frozen = registry.getClass().getSuperclass().getDeclaredField("bL");
+                frozen = registry.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_FROZEN_FIELD);
                 frozen.setAccessible(true);
                 frozen.set(registry, false);
             }
             // map field
             if (checkFields) {
-                Field map = registry.getClass().getSuperclass().getDeclaredField("bN");
+                Field map = registry.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_ENTRY_MAP_FIELD);
                 map.setAccessible(true);
                 map.set(registry, new IdentityHashMap<>());
             }
@@ -89,10 +91,15 @@ public class EntityBase extends Mob {
 
     private boolean containsFields() {
         try {
-            Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField("bL");
+            Registry.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_FROZEN_FIELD);
             return true;
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public Packet<?> getAddEntityPacket() {
+        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
     }
 }

@@ -68,7 +68,7 @@ public class PetConfiguration implements PetConfigManager {
         return Optional.empty();
     }
 
-    private class PetConfig implements IPetConfig {
+    public class PetConfig implements IPetConfig {
         private final PetType type;
         private final JsonFile JSON;
         private final Map<String, JsonObject> additional;
@@ -149,6 +149,10 @@ public class PetConfiguration implements PetConfigManager {
 
             // Makes sure all the pet data is added to the file.
             type.getPetData().forEach(this::checkPetData);
+        }
+
+        public JsonFile getJSON() {
+            return JSON;
         }
 
         @Override
