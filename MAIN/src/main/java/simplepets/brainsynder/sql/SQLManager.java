@@ -7,8 +7,9 @@ import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
-import java.util.concurrent.CompletableFuture;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * This class was provided by {@link https://github.com/Thatsmusic99}
@@ -88,42 +89,6 @@ public abstract class SQLManager {
             e.printStackTrace();
         }
         return null;
-    }
-
-    //SHOW COLUMNS FROM `tbl_name`; // Lists columns
-    public CompletableFuture<Boolean> hasColumn(String table, String column) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                DatabaseMetaData md2 = connection.getMetaData();
-                ResultSet rsTables = md2.getColumns(null, null, tablePrefix + table, column);
-                return rsTables.next();
-            } catch (Exception e) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to check if '" + column + "' exists in the database");
-                return false;
-            }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
-    }
-
-    public void modifyColumn(String table, String column, String type) {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` MODIFY COLUMN " + column + " " + type + " NOT NULL");
-            } catch (SQLException throwables) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-            }
-        }, PetCore.getInstance().async);
-    }
-
-    public void addColumn(String table, String column, String type) {
-        CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                Statement statement = connection.createStatement();
-                statement.executeUpdate("ALTER TABLE `" + tablePrefix + table + "` ADD " + column + " " + type + " NOT NULL");
-            } catch (SQLException throwables) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to add '" + column + "' to the database");
-            }
-        }, PetCore.getInstance().async);
     }
 
     public abstract void createTable();
