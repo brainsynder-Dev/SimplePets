@@ -1,10 +1,16 @@
 package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.nbt.StorageTagCompound;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.animal.Bucketable;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import simplepets.brainsynder.api.entity.passive.IEntityAxolotlPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -14,7 +20,9 @@ import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 /**
  * NMS: {@link net.minecraft.server.v1_16_R3.EntityAxolotl}
  */
-public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotlPet {
+// Implement Bucketable so the server resends the entity when the client tries
+// to pick it up with a bucket
+public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotlPet, Bucketable {
     private static final EntityDataAccessor<Integer> DATA_VARIANT;
     private static final EntityDataAccessor<Boolean> DATA_PLAYING_DEAD;
     private static final EntityDataAccessor<Boolean> FROM_BUCKET;
@@ -64,6 +72,34 @@ public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotl
     @Override
     public void setVariant(AxolotlVariant variant) {
         entityData.set(DATA_VARIANT, variant.ordinal());
+    }
+
+    @Override
+    public boolean fromBucket() {
+        return entityData.get(FROM_BUCKET);
+    }
+
+    @Override
+    public void setFromBucket(boolean b) {
+        entityData.set(FROM_BUCKET, b);
+    }
+
+    @Override
+    public void saveToBucketTag(ItemStack itemStack) {
+    }
+
+    @Override
+    public void loadFromBucketTag(CompoundTag compoundTag) {
+    }
+
+    @Override
+    public ItemStack getBucketItemStack() {
+        return new ItemStack(Items.WATER_BUCKET);
+    }
+
+    @Override
+    public SoundEvent getPickupSound() {
+        return SoundEvents.BUCKET_FILL_FISH;
     }
 
     static {
