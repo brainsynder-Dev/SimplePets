@@ -12,12 +12,17 @@ import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.utils.Triple;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.impl.PetOwner;
 
 import java.io.File;
@@ -344,10 +349,10 @@ public class PlayerSQL extends SQLManager {
         }
     }
 
-    public void removeNPCs () {
+    public void removeDuplicates(CommandSender sender) {
         List<String> list = new ArrayList<>();
         try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM \""+tablePrefix+"_players\" WHERE \"uuid\" LIKE '________-____-2___-____-____________';");
+            PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
             ResultSet result = statement.executeQuery();
             int size = 0;
@@ -355,21 +360,79 @@ public class PlayerSQL extends SQLManager {
                 ++size;
                 list.add(result.getString("uuid"));
             }
-
-            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Number of NPC players: "+size);
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of duplicate accounts found: "+size);
 
             if (list.isEmpty()) {
-                SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "There was no NPC players to delete");
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No duplicate entries found that needed to be deleted");
                 return;
             }
-            statement = connection.prepareStatement("DELETE FROM \""+tablePrefix+"_players\" WHERE \"uuid\"=?");
+
+            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
 
             for (String string : list) {
                 statement.setString(1, string);
                 statement.addBatch();
             }
 
-            SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "SQL Entries deleted: "+statement.executeBatch().length);
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of duplicate entries deleted: "+statement.executeBatch().length);
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void findDuplicates (Consumer<List<Triple<UUID, String, Integer>>> consumer) {
+        CompletableFuture.runAsync(() -> {
+            List<Triple<UUID, String, Integer>> list = new ArrayList<>();
+
+            try (Connection connection  = implementConnection()) {
+                PreparedStatement statement = connection.prepareStatement("SELECT `uuid`,`name`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
+
+                ResultSet result = statement.executeQuery();
+                while (result.next()) {
+                    list.add(Triple.of(UUID.fromString(result.getString(1)), result.getString(2), result.getInt(3)));
+                }
+
+                result.close();
+                statement.close();
+            }catch (SQLException ignored) {}
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    consumer.accept(list);
+                }
+            }.runTask(SimplePets.getPlugin());
+        });
+    }
+
+    public void removeNPCs(CommandSender sender) {
+        List<String> list = new ArrayList<>();
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
+
+            ResultSet result = statement.executeQuery();
+            int size = 0;
+            while (result.next()) {
+                ++size;
+                list.add(result.getString("uuid"));
+            }
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of NPC accounts found: "+size);
+
+            if (list.isEmpty()) {
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No entries found that needed to be deleted");
+                return;
+            }
+
+            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
+
+            for (String string : list) {
+                statement.setString(1, string);
+                statement.addBatch();
+            }
+
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of entries deleted: "+statement.executeBatch().length);
+            statement.close();
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
