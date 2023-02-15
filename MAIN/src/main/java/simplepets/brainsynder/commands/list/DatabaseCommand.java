@@ -5,9 +5,11 @@ package simplepets.brainsynder.commands.list;
 import lib.brainsynder.commands.annotations.ICommand;
 import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.utils.Colorize;
+import lib.brainsynder.web.WebConnector;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.files.MessageFile;
@@ -15,14 +17,28 @@ import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.sql.InventorySQL;
 import simplepets.brainsynder.sql.PlayerSQL;
 
+import java.util.List;
+
 @ICommand(
         name = "database",
         description = "Shows information about the database"
 )
-@Permission(permission = "database", adminCommand = true)
+@Permission(permission = "database", adminCommand = true, additionalPermissions = {"removenpcs", "removeduplicates", "findduplicates"})
 public class DatabaseCommand extends PetSubCommand {
     public DatabaseCommand(PetCore plugin) {
         super(plugin);
+    }
+
+
+    @Override
+    public List<String> handleCompletions(List<String> completions, CommandSender sender, int index, String[] args) {
+        if (!canExecute(sender)) return super.handleCompletions(completions, sender, index, args);
+        if ((index == 1)) {
+            if (sender.hasPermission(getPermission("removenpcs"))) completions.add("removenpcs");
+            if (sender.hasPermission(getPermission("removeduplicates"))) completions.add("removeduplicates");
+            if (sender.hasPermission(getPermission("findduplicates"))) completions.add("findduplicates");
+        }
+        return super.handleCompletions(completions, sender, index, args);
     }
 
     @Override
@@ -32,9 +48,37 @@ public class DatabaseCommand extends PetSubCommand {
             return;
         }
 
-        // This is a temp subcommand to test deleting NPCs from the database
-        if (args[0].equalsIgnoreCase("delete")) {
-            PlayerSQL.getInstance().removeNPCs();
+        // Clears the database of any NPC/offline UUIDs
+        if (args[0].equalsIgnoreCase("removenpcs")) {
+            PlayerSQL.getInstance().removeNPCs(sender);
+            return;
+        }
+
+        // Clears the database of all duplicate players
+        if (args[0].equalsIgnoreCase("removeduplicates")) {
+            PlayerSQL.getInstance().removeDuplicates(sender);
+            return;
+        }
+
+        // Fetches a list of all duplicate players in the database
+        if (args[0].equalsIgnoreCase("findduplicates")) {
+            PlayerSQL.getInstance().findDuplicates(triples -> {
+                if (triples.isEmpty()) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No duplicate players were found in the database.");
+                    return;
+                }
+
+                StringBuilder builder = new StringBuilder();
+
+                triples.forEach(triple -> {
+                    builder.append("[Count: ").append(triple.right).append("]   '").append(triple.middle).append("'    (").append(triple.left.toString()).append(")").append("\n");
+                });
+
+                WebConnector.uploadPaste(SimplePets.getPlugin(), builder.toString(), s -> {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Here is a list of duplicated players: ");
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" "+s);
+                });
+            });
             return;
         }
 
