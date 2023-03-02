@@ -304,6 +304,11 @@ public enum ConfigOption {
                     NOTE: these are still required to be in the GUI, this will simply remove them afterwards
                     
                     Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_CONSOLE_BYPASS_LIMIT = createOption("misc-toggles.console-bypasses-pet-limit", true,
+            """
+                    When summoning a pet for a player via the servers console should the pet limit be enforced
+                    
+                    Default: {default}""");
 
 
     // Pet Toggles
