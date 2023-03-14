@@ -13,11 +13,11 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.craftbukkit.v1_19_R2.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.FrogVariant;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
 import java.util.OptionalInt;
@@ -116,12 +116,12 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
 
     @Override
     public void setVariant(FrogVariant variant) {
-        entityData.set(DATA_VARIANT, BuiltInRegistries.FROG_VARIANT.get(CraftNamespacedKey.toMinecraft(variant.getKey())));
+        entityData.set(DATA_VARIANT, BuiltInRegistries.FROG_VARIANT.get(VersionTranslator.toMinecraftResource(variant.getKey())));
     }
 
     @Override
     public FrogVariant getVariant() {
-        return FrogVariant.getByName(org.bukkit.Registry.FROG_VARIANT.get(CraftNamespacedKey.fromMinecraft(BuiltInRegistries.FROG_VARIANT.getKey(entityData.get(DATA_VARIANT)))).name());
+        return FrogVariant.getByName(org.bukkit.Registry.FROG_VARIANT.get(VersionTranslator.toBukkitNamespace(BuiltInRegistries.FROG_VARIANT.getKey(entityData.get(DATA_VARIANT)))).name());
     }
 
     @Override

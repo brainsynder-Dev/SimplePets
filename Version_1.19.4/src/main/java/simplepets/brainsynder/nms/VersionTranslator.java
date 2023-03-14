@@ -16,7 +16,10 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -26,13 +29,16 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_19_R3.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R3.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_19_R3.util.CraftNamespacedKey;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.entity.misc.IFlyableEntity;
 import simplepets.brainsynder.nms.entity.EntityPet;
@@ -64,6 +70,17 @@ public class VersionTranslator {
         if (jumpingField != null) return jumpingField;
 
         try {
+            /*
+                net.minecraft.world.entity.EntityLiving
+
+                protected int bl
+                public float bm
+                public boolean bn  <---- This one
+                public float bo
+                public float bp
+                public float bq
+                protected int br
+             */
             Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19.3
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
@@ -213,5 +230,28 @@ public class VersionTranslator {
 
     public static boolean useInteger() {
         return false;
+    }
+
+
+    // ADDED DURING 1.19.4 DEVELOPMENT
+    public static final EntityDataSerializer<Optional<BlockState>> OPTIONAL_BLOCK_STATE = EntityDataSerializers.OPTIONAL_BLOCK_STATE;
+
+    public static void calculateEntityAnimation (LivingEntity entity, boolean var) {
+        entity.calculateEntityAnimation(var);
+    }
+
+    public static void setMapUpStep (Entity entity, float value) {
+        entity.setMaxUpStep(value);
+    }
+    public static BlockPos getPosition (Entity entity) {
+        return BlockPos.containing(new Vec3(entity.getX(), entity.getY(), entity.getZ()));
+    }
+
+    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
+        return CraftNamespacedKey.toMinecraft(key);
+    }
+
+    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
+        return CraftNamespacedKey.fromMinecraft(resource);
     }
 }

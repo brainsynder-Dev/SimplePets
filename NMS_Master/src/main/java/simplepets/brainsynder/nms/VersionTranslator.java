@@ -6,7 +6,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -114,5 +117,25 @@ public class VersionTranslator {
 
     public static boolean useInteger() {
         return true;
+    }
+
+
+    // ADDED DURING 1.19.4 DEVELOPMENT
+    public static final EntityDataSerializer<Optional<BlockState>> OPTIONAL_BLOCK_STATE = null;
+
+    public static void calculateEntityAnimation (LivingEntity entity, boolean var) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static void setMapUpStep (Entity entity, float value) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static BlockPos getPosition (Entity entity) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 }
