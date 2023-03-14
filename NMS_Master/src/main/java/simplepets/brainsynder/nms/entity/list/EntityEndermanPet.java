@@ -96,7 +96,7 @@ public class EntityEndermanPet extends EntityPet implements IEntityEndermanPet {
 
 
     static {
-        CARRIED_BLOCK = SynchedEntityData.defineId(EntityEndermanPet.class, EntityDataSerializers.BLOCK_STATE);
+        CARRIED_BLOCK = SynchedEntityData.defineId(EntityEndermanPet.class, VersionTranslator.OPTIONAL_BLOCK_STATE);
         SCREAMING = SynchedEntityData.defineId(EntityEndermanPet.class, EntityDataSerializers.BOOLEAN);
     }
 }
