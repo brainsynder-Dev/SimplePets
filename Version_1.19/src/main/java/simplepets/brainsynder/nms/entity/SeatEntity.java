@@ -59,10 +59,10 @@ public class SeatEntity extends ArmorStand {
     // If a passenger has their eyes in water and this returns false, the
     // passenger ejects themselves from the vehicle.
     @Override
-    public boolean dismountsUnderwater() { // rideableUnderWater() {
+    public boolean rideableUnderWater() {
         if (getVehicle() != null) {
             // let vehicle decide what should happen
-            return getVehicle().dismountsUnderwater(); // rideableUnderWater();
+            return getVehicle().rideableUnderWater();
         }
         return false;
     }

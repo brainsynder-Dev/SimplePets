@@ -39,6 +39,11 @@ public class EntityBase extends Mob {
         originalEntityType = entitytypes;
     }
 
+    // 1.19.3 and below
+    public boolean rideableUnderWater() {
+        return true;
+    }
+
     public PetType getPetType() {
         return petType;
     }

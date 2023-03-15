@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.entity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
@@ -37,6 +36,12 @@ public class EntityBase extends Mob {
         this.petType = type;
         entityType = getEntityType(entitytypes, containsFields());
         originalEntityType = entitytypes;
+    }
+
+    // 1.19.4+   Replaces boolean rideableUnderWater()
+    @Override
+    public boolean dismountsUnderwater() {
+        return false;
     }
 
     public PetType getPetType() {
@@ -103,6 +108,6 @@ public class EntityBase extends Mob {
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
+        return VersionTranslator.getAddEntityPacket(this, originalEntityType, VersionTranslator.getPosition(this));
     }
 }
