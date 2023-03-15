@@ -52,10 +52,10 @@ import java.util.Optional;
 public class VersionTranslator {
     // net.minecraft.network.syncher.DataWatcher
     // private static final it.unimi.dsi.fastutil.objects.Object2IntMap<java.lang.Class<? extends net.minecraft.world.entity.Entity>>
-    public static final String ENTITY_DATA_MAP = "e";
+    public static final String ENTITY_DATA_MAP = "b";
     // net.minecraft.world.entity.EntityTypes
     // private final net.minecraft.world.entity.EntityTypes.b<T>
-    public static final String ENTITY_FACTORY_FIELD = "bu";
+    public static final String ENTITY_FACTORY_FIELD = "bA";
 
     // net.minecraft.core.RegistryMaterials
     // private boolean
@@ -73,15 +73,15 @@ public class VersionTranslator {
             /*
                 net.minecraft.world.entity.EntityLiving
 
-                protected int bl
-                public float bm
-                public boolean bn  <---- This one
-                public float bo
-                public float bp
-                public float bq
-                protected int br
+                protected int bg
+                public float bh
+                protected boolean bi  <---- This one
+                public float bj
+                public float bk
+                public float bl
+                protected int bm
              */
-            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19.3
+            Field jumpingField = LivingEntity.class.getDeclaredField("bi"); // For 1.19.4
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
