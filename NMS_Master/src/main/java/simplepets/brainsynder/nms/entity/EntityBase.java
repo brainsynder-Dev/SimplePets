@@ -31,6 +31,12 @@ public class EntityBase extends Mob {
         originalEntityType = entitytypes;
     }
 
+    // 1.19.4+   Replaces boolean rideableUnderWater()
+    @Override
+    public boolean dismountsUnderwater() {
+        return false;
+    }
+
     public PetType getPetType() {
         return petType;
     }

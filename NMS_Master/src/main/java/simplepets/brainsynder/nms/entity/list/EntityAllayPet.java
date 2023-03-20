@@ -12,6 +12,7 @@ import net.minecraft.world.phys.Vec3;
 import simplepets.brainsynder.api.entity.passive.IEntityAllayPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
 /**
@@ -37,7 +38,7 @@ public class EntityAllayPet extends EntityPet implements IEntityAllayPet {
     public void travel(Vec3 vec3) {
         if (isOwnerRiding()) {
             super.travel(vec3);
-            this.calculateEntityAnimation(this, false);
+            VersionTranslator.calculateEntityAnimation(this, false);
             return;
         }
         if (this.isInWater()) {
@@ -54,6 +55,6 @@ public class EntityAllayPet extends EntityPet implements IEntityAllayPet {
             this.setDeltaMovement(this.getDeltaMovement().scale(0.9100000262260437D));
         }
 
-        this.calculateEntityAnimation(this, false);
+        VersionTranslator.calculateEntityAnimation(this, false);
     }
 }

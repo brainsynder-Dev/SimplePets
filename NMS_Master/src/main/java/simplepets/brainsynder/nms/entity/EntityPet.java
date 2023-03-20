@@ -89,7 +89,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         super(entitytypes, type, user);
         this.additional = new HashMap<>();
 
-        maxUpStep = 1;
+        VersionTranslator.setMapUpStep(this, 1);
         this.collides = false;
         this.noPhysics = false;
 
@@ -131,11 +131,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public void setGlowColor(ChatColor glowColor) {
         if (this.glowColor == glowColor) return; // No need for redundant setting
         this.glowColor = glowColor;
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return true;
     }
 
     @Override
