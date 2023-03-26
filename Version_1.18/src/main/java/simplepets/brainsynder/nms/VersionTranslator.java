@@ -16,7 +16,10 @@ import net.minecraft.nbt.TagParser;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -27,12 +30,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R1.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R1.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R1.util.CraftNamespacedKey;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.utils.FieldUtils;
@@ -40,6 +45,7 @@ import simplepets.brainsynder.nms.utils.InvalidInputException;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
@@ -187,5 +193,28 @@ public class VersionTranslator {
 
     public static boolean useInteger() {
         return true;
+    }
+
+
+    // ADDED DURING 1.19.4 DEVELOPMENT
+    public static final EntityDataSerializer<Optional<BlockState>> OPTIONAL_BLOCK_STATE = EntityDataSerializers.BLOCK_STATE;
+
+    public static void calculateEntityAnimation (LivingEntity entity, boolean var) {
+        entity.calculateEntityAnimation(entity, var);
+    }
+
+    public static void setMapUpStep (Entity entity, float value) {
+        entity.maxUpStep = value;
+    }
+    public static BlockPos getPosition (Entity entity) {
+        return new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+    }
+
+    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
+        return CraftNamespacedKey.toMinecraft(key);
+    }
+
+    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
+        return CraftNamespacedKey.fromMinecraft(resource);
     }
 }

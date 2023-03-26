@@ -6,7 +6,6 @@ import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -338,7 +337,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return VersionTranslator.getAddEntityPacket(this, EntityType.ARMOR_STAND, new BlockPos(getX(), getY(), getZ()));
+        return VersionTranslator.getAddEntityPacket(this, EntityType.ARMOR_STAND, VersionTranslator.getPosition(this));
     }
 
     @Override

@@ -1,6 +1,5 @@
 package simplepets.brainsynder.nms.entity;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
@@ -9,8 +8,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_19_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
@@ -39,9 +38,10 @@ public class EntityBase extends Mob {
         originalEntityType = entitytypes;
     }
 
-    // 1.19.3 and below
-    public boolean rideableUnderWater() {
-        return true;
+    // 1.19.4+   Replaces boolean rideableUnderWater()
+    @Override
+    public boolean dismountsUnderwater() {
+        return false;
     }
 
     public PetType getPetType() {
@@ -108,6 +108,6 @@ public class EntityBase extends Mob {
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return VersionTranslator.getAddEntityPacket(this, originalEntityType, new BlockPos(getX(), getY(), getZ()));
+        return VersionTranslator.getAddEntityPacket(this, originalEntityType, VersionTranslator.getPosition(this));
     }
 }
