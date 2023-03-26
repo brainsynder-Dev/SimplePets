@@ -53,6 +53,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     private final double jumpHeight = 0.5D;
     private boolean isGlowing = false;
     private boolean frozen = false;
+    private boolean onFire = false;
     private boolean silent = false;
     private boolean visible = true;
     private ChatColor glowColor = ChatColor.WHITE;
@@ -153,12 +154,13 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     public boolean isBurning() {
-        return hasVisualFire;
+        return onFire;
     }
 
     @Override
     public void setBurning(boolean var) {
-        this.hasVisualFire = var;
+        this.onFire = var;
+        setRemainingFireTicks(var ? 150 : 0);
     }
 
     @Override
@@ -481,6 +483,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         }
 
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
+        if (this.onFire && (getRemainingFireTicks() < 140)) setRemainingFireTicks(150);
 
         if (getPetUser ().getPlayer() != null) {
             Player player = getPetUser ().getPlayer();
