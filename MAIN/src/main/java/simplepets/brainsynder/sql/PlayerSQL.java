@@ -62,6 +62,7 @@ public class PlayerSQL extends SQLManager {
                     if (result.next()) size = result.getInt(1);
                 }
                 result.close();
+                statement.close();
 
                 int finalSize = size;
                 new BukkitRunnable() {
@@ -88,8 +89,9 @@ public class PlayerSQL extends SQLManager {
                         "`NeedsRespawn` " + getStupidTextThing() + " NOT NULL," +
                         "`SavedPets` " + getStupidTextThing() + " NOT NULL" +
                         ")";
-                PreparedStatement createTable = connection.prepareStatement(table);
-                createTable.executeUpdate();
+                try (PreparedStatement createTable = connection.prepareStatement(table)) {
+                    createTable.executeUpdate();
+                }
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -248,19 +250,20 @@ public class PlayerSQL extends SQLManager {
     public CompletableFuture<StorageTagCompound> fetchData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "_players WHERE uuid = ?");
-                statement.setString(1, uuid.toString());
-                ResultSet results = statement.executeQuery();
-                if (!results.next()) {
-                    results.close();
-                    return new StorageTagCompound();
-                }
-                try {
-                    StorageTagCompound compound = rowToCompound(uuid, results, false);
-                    results.close();
-                    return compound;
-                } catch (NullPointerException | IllegalArgumentException ex) {
-                    return new StorageTagCompound();
+                try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "_players WHERE uuid = ?")) {
+                    statement.setString(1, uuid.toString());
+                    ResultSet results = statement.executeQuery();
+                    if (!results.next()) {
+                        results.close();
+                        return new StorageTagCompound();
+                    }
+                    try {
+                        StorageTagCompound compound = rowToCompound(uuid, results, false);
+                        results.close();
+                        return compound;
+                    } catch (NullPointerException | IllegalArgumentException ex) {
+                        return new StorageTagCompound();
+                    }
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -341,9 +344,9 @@ public class PlayerSQL extends SQLManager {
     public boolean isPlayerInDatabaseSync(Connection connection, UUID uuid) {
         try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1")) {
 
-            ResultSet result = statement.executeQuery();
-
-            return result.next();
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next();
+            }
         } catch (SQLException throwables) {
             return false;
         }
@@ -354,11 +357,12 @@ public class PlayerSQL extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
-            ResultSet result = statement.executeQuery();
             int size = 0;
-            while (result.next()) {
-                ++size;
-                list.add(result.getString("uuid"));
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    ++size;
+                    list.add(result.getString("uuid"));
+                }
             }
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of duplicate accounts found: "+size);
 
@@ -411,11 +415,12 @@ public class PlayerSQL extends SQLManager {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
 
-            ResultSet result = statement.executeQuery();
             int size = 0;
-            while (result.next()) {
-                ++size;
-                list.add(result.getString("uuid"));
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    ++size;
+                    list.add(result.getString("uuid"));
+                }
             }
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of NPC accounts found: "+size);
 
