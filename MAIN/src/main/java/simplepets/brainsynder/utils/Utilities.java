@@ -200,7 +200,7 @@ public class Utilities {
         }
     }
 
-    public static int parseTypeSaveLimit (PetType type) {
+    public static int parseTypeSaveLimit(PetType type) {
         for (String line : ConfigOption.INSTANCE.PET_SAVES_TYPE_LIMIT.getValue()) {
             if (!line.contains("-")) continue;
             String[] args = line.split("-");
@@ -212,8 +212,8 @@ public class Utilities {
             if (type != target) continue;
             try {
                 return Integer.parseInt(args[1].trim());
-            }catch (NumberFormatException e) {
-                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to parse pet-type-limit for '"+args[0]+"', "+args[1]+" is not a valid number.");
+            } catch (NumberFormatException e) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to parse pet-type-limit for '" + args[0] + "', " + args[1] + " is not a valid number.");
                 return -1;
             }
         }
@@ -221,7 +221,7 @@ public class Utilities {
         return -1;
     }
 
-    public static int getPermissionAmount (Player player, int defaultValue, String partialPermission) {
+    public static int getPermissionAmount(Player player, int defaultValue, String partialPermission) {
         int amount = defaultValue;
         if (!partialPermission.endsWith(".")) return defaultValue;
 
@@ -229,7 +229,7 @@ public class Utilities {
             if (!permission.getValue()) continue;
             if (!permission.getPermission().startsWith(partialPermission)) continue;
 
-            String strAmount = permission.getPermission().substring( (partialPermission.lastIndexOf(".") + 1) );
+            String strAmount = permission.getPermission().substring((partialPermission.lastIndexOf(".") + 1));
             int permAmount = Integer.parseInt(strAmount);
             if (permAmount >= amount) amount = permAmount;
         }
@@ -250,7 +250,15 @@ public class Utilities {
 
     public static void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
-        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), ((ServerVersion.isEqualNew(ServerVersion.v1_18_2)) ? "r" : "s"), Integer.TYPE);
+
+        String targetField = "s";
+        if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)) {
+            targetField = "G";
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_18_2)) {
+            targetField = "r";
+        }
+
+        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), targetField, Integer.TYPE);
 
         field.set(Reflection.getHandle(entity), 0);
     }
