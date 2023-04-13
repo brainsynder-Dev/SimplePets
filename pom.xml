@@ -65,7 +65,7 @@
         <jenkins.buildNumber>0</jenkins.buildNumber>
 
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B114</bslib.version>
+        <bslib.version>V2-B0115.8.8</bslib.version>
 
         <minecraft.version>1.19.4</minecraft.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
