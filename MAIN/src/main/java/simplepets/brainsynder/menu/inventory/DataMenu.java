@@ -17,7 +17,6 @@ import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.ItemManager;
 import simplepets.brainsynder.menu.inventory.holders.PetDataHolder;
-import simplepets.brainsynder.menu.items.list.Air;
 
 import java.io.File;
 import java.util.*;
@@ -103,23 +102,7 @@ public class DataMenu extends CustomInventory {
         });
 
         if (user.hasPet(type)) {
-            user.getPetEntity(type).ifPresent(entityPet -> {
-                IEntityPet pet = entityPet;
-                if (entityPet instanceof IEntityControllerPet) {
-                    pet = ((IEntityControllerPet)entityPet).getVisibleEntity();
-                }
-
-                IEntityPet finalPet = pet;
-                type.getPetData().forEach(petData -> {
-                    if (!petData.isEnabled(finalPet)) return;
-                    if (ConfigOption.INSTANCE.PERMISSIONS_DATA_PERMS.getValue()
-                            && (!user.getPlayer().hasPermission(type.getPermission("data."+petData.getNamespace().namespace())))) return;
-                    if (!petData.isModifiable(finalPet)) return;
-                    petData.getItem(finalPet).ifPresent(o -> {
-                        inv.addItem(((ItemBuilder) o).build());
-                    });
-                });
-            });
+            user.getPetEntity(type).ifPresent(entityPet -> addPetData(inv, entityPet));
         }
 
 
@@ -145,23 +128,45 @@ public class DataMenu extends CustomInventory {
         if (inv.getHolder() == null) return;
         if (!(inv.getHolder() instanceof PetDataHolder)) return;
 
-        getSlots().forEach((slot, item) -> {
-            if (item instanceof Air)
-                if (item.isEnabled() && item.addItemToInv(user, this))
-                    inv.setItem(slot, item.getItemBuilder().build());
-        });
         PetType type = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
+        int placeHolder = inv.getSize();
+        while (placeHolder > 0) {
+            inv.setItem(placeHolder - 1, ItemManager.PLACEHOLDER.getItemBuilder().build());
+            placeHolder--;
+        }
 
         if (!user.hasPet(type)) {
             player.closeInventory();
             return;
         }
 
-        user.getPetEntity(type).ifPresent(entityPet -> {
-            type.getPetData().forEach(petData -> {
-                petData.getItem(entityPet).ifPresent(o -> {
-                    inv.addItem(((ItemBuilder) o).build());
-                });
+        getSlots().forEach((slot, item) -> {
+            if (item.isEnabled() && item.addItemToInv(user, this))
+                inv.setItem(slot, item.getItemBuilder().build());
+        });
+
+        user.getPetEntity(type).ifPresent(entityPet -> addPetData(inv, entityPet));
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+    }
+
+    private void addPetData (Inventory inv, IEntityPet entityPet) {
+        PetType type = entityPet.getPetType();
+
+        IEntityPet pet = entityPet;
+        if (entityPet instanceof IEntityControllerPet) {
+            pet = ((IEntityControllerPet)entityPet).getVisibleEntity();
+        }
+
+        IEntityPet finalPet = pet;
+        type.getPetData().forEach(petData -> {
+            if (!petData.isEnabled(finalPet)) return;
+            if (ConfigOption.INSTANCE.PERMISSIONS_DATA_PERMS.getValue()
+                    && (!entityPet.getPetUser().getPlayer().hasPermission(type.getPermission("data."+petData.getNamespace().namespace())))) return;
+            if (!petData.isModifiable(finalPet)) return;
+            petData.getItem(finalPet).ifPresent(o -> {
+                inv.addItem(((ItemBuilder) o).build());
             });
         });
     }
