@@ -114,7 +114,7 @@ public class AddonCommand extends PetSubCommand {
                 }
 
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Attempting to install: '"+target+"'");
-                manager.downloadViaName(cloudData.getName(), cloudData.getUrl(), () -> {
+                manager.downloadViaName(cloudData.getName(), cloudData.getDownloadURL(), () -> {
                     sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7"+target+" has been successfully installed!");
                 });
                 return;

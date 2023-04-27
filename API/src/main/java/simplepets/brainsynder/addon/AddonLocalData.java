@@ -14,7 +14,7 @@ public class AddonLocalData {
     private final String name;
     private final List<String> authors;
     private final int supportedBuild;
-    private final double version;
+    private final String version;
     private final List<String> description = Lists.newArrayList();
     private final List<String> classChecks = Lists.newArrayList();
     private final List<SupportData> pluginSupport = Lists.newArrayList();
@@ -28,7 +28,7 @@ public class AddonLocalData {
         }else if (json.names().contains("authors")) {
             ((JsonArray)json.get("authors")).forEach(jsonValue -> authors.add(jsonValue.asString()));
         }
-        this.version = json.getDouble("version", 0.0);
+        this.version = String.valueOf(json.getDouble("version", 0.0));
         this.supportedBuild = json.getInt("supported-build", -1);
 
         if (json.names().contains("description")) {
@@ -62,7 +62,7 @@ public class AddonLocalData {
         return file;
     }
 
-    public double getVersion() {
+    public String getVersion() {
         return version;
     }
 

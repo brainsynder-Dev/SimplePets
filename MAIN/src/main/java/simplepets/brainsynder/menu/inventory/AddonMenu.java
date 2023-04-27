@@ -187,7 +187,7 @@ public class AddonMenu extends CustomInventory {
                     builder.withLore(description).addLore("&r ", "&7Click here to install the", "&7" + name + " addon to your server");
                     builder.handleMeta(ItemMeta.class, itemMeta -> {
                         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-                        container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getUrl());
+                        container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getDownloadURL());
                         container.set(Keys.ADDON_NAME, PersistentDataType.STRING, name);
                         return itemMeta;
                     });

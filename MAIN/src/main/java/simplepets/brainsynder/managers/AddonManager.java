@@ -24,7 +24,6 @@ import simplepets.brainsynder.debug.DebugLevel;
 
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.net.URLConnection;
@@ -254,7 +253,7 @@ public class AddonManager {
     public void downloadViaName (String name, String url, Runnable runnable) {
         CompletableFuture.runAsync(() -> {
             try {
-                download(new URL(url), name, file -> {
+                download(url, name, file -> {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -264,7 +263,7 @@ public class AddonManager {
                         }
                     }.runTask(plugin);
                 });
-            } catch (MalformedURLException e) {
+            } catch (Exception e) {
                 try {
                     final File file = new File(folder.getAbsolutePath() + "/" + name);
                     file.delete();
@@ -280,7 +279,7 @@ public class AddonManager {
     public void downloadAddon(File original, String url, Runnable runnable) {
         CompletableFuture.runAsync(() -> {
             try {
-                download(new URL(url), original.getName(), file -> {
+                download(url, original.getName(), file -> {
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -290,7 +289,7 @@ public class AddonManager {
                         }
                     }.runTask(plugin);
                 });
-            } catch (MalformedURLException e) {
+            } catch (Exception e) {
                 try {
                     final File file = new File(folder.getAbsolutePath() + "/" + original.getName());
                     original.delete();
@@ -342,6 +341,7 @@ public class AddonManager {
     public Optional<AddonCloudData> fetchCloudData(String name) {
         for (AddonCloudData cloudData : cloudAddons) {
             if (cloudData.getName().equalsIgnoreCase(name)) return Optional.of(cloudData);
+            if (cloudData.getId().equalsIgnoreCase(name)) return Optional.of(cloudData);
         }
         return Optional.empty();
     }
@@ -387,7 +387,7 @@ public class AddonManager {
             addons.forEach(cloudAddon -> {
                 if (addonMap.containsKey(cloudAddon.getName())) {
                     AddonLocalData localData = addonMap.get(cloudAddon.getName());
-                    if (cloudAddon.getVersion() > localData.getVersion()) {
+                    if (!localData.getVersion().equals(cloudAddon.getVersion())) {
                         updateNeeded.add(cloudAddon);
                     }
                 }
@@ -409,27 +409,22 @@ public class AddonManager {
     }
 
     public void fetchAddons(Consumer<List<AddonCloudData>> consumer) {
-        WebConnector.getInputStreamString("https://bsdevelopment.org/addons/addons.json", plugin, result -> {
+        WebConnector.getInputStreamString("https://bsdevelopment.org/api/addons/list/SimplePets", plugin, result -> {
             List<AddonCloudData> addons = Lists.newArrayList();
 
-            JsonObject jsonObject = (JsonObject) Json.parse(result);
-            jsonObject.forEach(member -> {
-                JsonObject json = (JsonObject) member.getValue();
+            JsonArray array = Json.parse(result).asArray();
+            array.forEach(jsonValue -> {
+                JsonObject json = jsonValue.asObject();
                 AddonCloudData data = new AddonCloudData(
-                        "https://bsdevelopment.org/addons/download/" + member.getName(),
-                        member.getName(),
-                        json.get("author_info").asObject().getString("name", "Unknown"),
-                        Double.parseDouble(json.getString("version", "0.0"))
+                        json.get("id").asString(),
+                        json.get("name").asString(),
+                        json.get("description").asString(),
+                        json.get("author").asString(),
+                        json.get("version").asString(),
+                        json.get("download_url").asString(),
+                        json.get("last_updated").asString(),
+                        json.get("download_count").asInt()
                 );
-
-                if (json.names().contains("supportedVersion"))
-                    data.setSupportedVersion(json.getString("supportedVersion", "Unknown"));
-
-                if (json.names().contains("description")) {
-                    List<String> description = Lists.newArrayList();
-                    ((JsonArray) json.get("description")).forEach(value -> description.add(value.asString()));
-                    data.setDescription(description);
-                }
 
                 addons.add(data);
                 registeredAddons.add(data.getName());
@@ -442,26 +437,24 @@ public class AddonManager {
         return registeredAddons;
     }
 
-    private void download (URL url, String backup, Consumer<File> fileConsumer) {
+    private void download (String rawURL, String backup, Consumer<File> fileConsumer) {
         try {
-            URLConnection con = url.openConnection();
-
-            String fieldValue = con.getHeaderField("Content-Disposition");
-            if (fieldValue == null || !fieldValue.contains("filename=\"")) {
-                File file = new File(folder.getAbsolutePath() + "/" + backup);
-                file.delete();
-                FileUtils.copyURLToFile(url, file);
-                fileConsumer.accept(file);
-                return;
-            }
+            URL url = new URL(rawURL);
+            URLConnection connection = url.openConnection();
+            connection.addRequestProperty("User-Agent", "Mozilla/5.0");
+            connection.addRequestProperty("Content-Encoding", "gzip");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(10000);
 
             // parse the file name from the header field
-            String filename = fieldValue.substring(fieldValue.indexOf("filename=\"") + 10, fieldValue.length() - 1);
+            // The Modrinth download always ends with the File name at the end
+            // If for some reason its missing the code will have to be changed
+            String filename = AdvString.afterLast("/", rawURL);
             // create file in systems temporary directory
             File download = new File(folder, filename);
 
             // open the stream and download
-            ReadableByteChannel rbc = Channels.newChannel(con.getInputStream());
+            ReadableByteChannel rbc = Channels.newChannel(connection.getInputStream());
             FileOutputStream fos = new FileOutputStream(download);
             try {
                 fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
@@ -469,6 +462,8 @@ public class AddonManager {
                 fos.close();
                 fileConsumer.accept(download);
             }
-        }catch (Exception e) {}
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
