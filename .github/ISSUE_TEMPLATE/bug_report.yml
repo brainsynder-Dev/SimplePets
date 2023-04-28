@@ -1,7 +1,7 @@
 name: 🐞 Bug Report
 description: Report a bug/issue with the plugin
-title: "[Bug]: "
-labels: ["bug"]
+title: "[Bug]: ???"
+labels: ["Type: Bug"]
 assignees:
   - brainsynder-Dev
   - Thatsmusic99
@@ -15,7 +15,11 @@ body:
     id: debug-link
     attributes:
       label: Debug Log
-      description: Input the link generated from `/pet debug` ( REQUIRED )
+      description: |
+        Input the link generated from `/pet debug` ( REQUIRED )
+
+        If a link is not generated you can also upload the contents of the `plugins/SimplePets/debug.json` file
+        to an alternate paste site (like pastebin as an example)
       placeholder: ex. https://pastelog.us/...
     validations:
       required: true

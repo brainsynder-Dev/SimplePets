@@ -15,6 +15,7 @@ import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -101,6 +102,11 @@ public class SelectionMenu extends CustomInventory {
 
     }
 
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.SUMMON_GUI;
+    }
+
     public void reloadAvailableTypes() {
         availableTypes.clear();
 
@@ -142,7 +148,7 @@ public class SelectionMenu extends CustomInventory {
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
             PetTypeStorage storage = new PetTypeStorage(type);
-            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, storage.getType(), storage.getItem());
+            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(this, user, storage.getType(), storage.getItem());
 
             if (Utilities.hasPermission(player, type.getPermission())
                     || (user.getOwnedPets().contains(type) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
@@ -180,6 +186,10 @@ public class SelectionMenu extends CustomInventory {
                 SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "Page does not exist (Page " + page + " / " + pages.totalPages() + ")");
             }
         }
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 
@@ -216,7 +226,7 @@ public class SelectionMenu extends CustomInventory {
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (PetType type : availableTypes) {
             PetTypeStorage storage = new PetTypeStorage(type);
-            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, storage.getType(), storage.getItem());
+            PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(this, user, storage.getType(), storage.getItem());
 
             if (Utilities.hasPermission(player, type.getPermission())
                     || (user.getOwnedPets().contains(type) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {

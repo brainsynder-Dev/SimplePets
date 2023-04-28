@@ -6,13 +6,10 @@ import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.core.Rotations;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -39,9 +36,7 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.special.EntityControllerPet;
-import simplepets.brainsynder.nms.utils.GlowAPI;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -86,6 +81,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.persist = true;
         stand.setSpecial(true);
         VersionTranslator.addEntity(VersionTranslator.getWorldHandle(location.getWorld()), stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
+        pet.setIgnoreVanish(true);
         return stand;
     }
 
@@ -127,7 +123,6 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         if (this.glowColor == glowColor) return; // No need for redundant setting
 
         this.glowColor = glowColor;
-        GlowAPI.setColor(getEntity(), getPetUser().getPlayer(), glowColor);
     }
 
     @Override
@@ -218,7 +213,6 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
             if (this instanceof IEntityControllerPet) {
                 entity = ((IEntityControllerPet) this).getVisibleEntity().getEntity();
             }
-            GlowAPI.setGlowing(entity, player, glow);
             isGlowing = glow;
         } catch (Exception ignored) {}
     }
@@ -342,17 +336,8 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     @Override
-    public Packet<?> getAddEntityPacket() {
-        try {
-            ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
-            Field type = packet.getClass().getDeclaredField("c");
-            type.setAccessible(true);
-            type.set(packet, Registry.ENTITY_TYPE.getId(EntityType.ARMOR_STAND));
-            return packet;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return new ClientboundAddEntityPacket(this, EntityType.ARMOR_STAND, 0, new BlockPos(getX(), getY(), getZ()));
+    public Packet<ClientGamePacketListener> getAddEntityPacket() {
+        return VersionTranslator.getAddEntityPacket(this, EntityType.ARMOR_STAND, VersionTranslator.getPosition(this));
     }
 
     @Override

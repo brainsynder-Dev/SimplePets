@@ -1,3 +1,5 @@
+
+
 package simplepets.brainsynder.sql;
 
 import lib.brainsynder.files.StorageFile;
@@ -10,12 +12,17 @@ import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.utils.Base64Wrapper;
+import lib.brainsynder.utils.Triple;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.impl.PetOwner;
 
 import java.io.File;
@@ -23,7 +30,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -53,6 +62,7 @@ public class PlayerSQL extends SQLManager {
                     if (result.next()) size = result.getInt(1);
                 }
                 result.close();
+                statement.close();
 
                 int finalSize = size;
                 new BukkitRunnable() {
@@ -79,8 +89,9 @@ public class PlayerSQL extends SQLManager {
                         "`NeedsRespawn` " + getStupidTextThing() + " NOT NULL," +
                         "`SavedPets` " + getStupidTextThing() + " NOT NULL" +
                         ")";
-                PreparedStatement createTable = connection.prepareStatement(table);
-                createTable.executeUpdate();
+                try (PreparedStatement createTable = connection.prepareStatement(table)) {
+                    createTable.executeUpdate();
+                }
             } catch (SQLException exception) {
                 exception.printStackTrace();
             }
@@ -239,19 +250,20 @@ public class PlayerSQL extends SQLManager {
     public CompletableFuture<StorageTagCompound> fetchData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
             try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "_players WHERE uuid = ?");
-                statement.setString(1, uuid.toString());
-                ResultSet results = statement.executeQuery();
-                if (!results.next()) {
-                    results.close();
-                    return new StorageTagCompound();
-                }
-                try {
-                    StorageTagCompound compound = rowToCompound(uuid, results, false);
-                    results.close();
-                    return compound;
-                } catch (NullPointerException | IllegalArgumentException ex) {
-                    return new StorageTagCompound();
+                try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "_players WHERE uuid = ?")) {
+                    statement.setString(1, uuid.toString());
+                    ResultSet results = statement.executeQuery();
+                    if (!results.next()) {
+                        results.close();
+                        return new StorageTagCompound();
+                    }
+                    try {
+                        StorageTagCompound compound = rowToCompound(uuid, results, false);
+                        results.close();
+                        return compound;
+                    } catch (NullPointerException | IllegalArgumentException ex) {
+                        return new StorageTagCompound();
+                    }
                 }
             } catch (SQLException ex) {
                 ex.printStackTrace();
@@ -261,28 +273,38 @@ public class PlayerSQL extends SQLManager {
     }
 
     public CompletableFuture<Object> uploadData(PetUser user) {
-        return isPlayerInDatabase(user.getOwnerUUID()).thenApply(data -> {
-            if (data) {
-                return updateData(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
-            } else {
-                return insertData(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
-            }
-        });
+        StorageTagCompound compound = ((PetOwner) user).toCompound();
+
+        return CompletableFuture.<Void>supplyAsync(() -> {
+            Connection connection = implementConnection();
+            isPlayerInDatabase(connection, user.getOwnerUUID()).thenApply(data -> {
+                if (data) {
+                    return updateData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
+                } else {
+                    return insertData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
+                }
+            });
+            return null;
+        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public boolean uploadDataSync(PetUser user) {
-        if (isPlayerInDatabaseSync(user.getOwnerUUID())) {
-            return updateDataSync(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
-        } else {
-            return insertDataSync(user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
+        try (Connection connection = implementConnection()) {
+            if (isPlayerInDatabaseSync(connection, user.getOwnerUUID())) {
+                return updateDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
+            } else {
+                return insertDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
+            }
+        } catch (SQLException exception) {
+            return false;
         }
     }
 
     /**
      * Sync methods should be used for shutdown only
      */
-    public boolean updateDataSync(UUID uuid, String name, StorageTagCompound compound) {
-        try (Connection connection = implementConnection()) {
+    public boolean updateDataSync(Connection connection, UUID uuid, String name, StorageTagCompound compound) {
+        try {
             PreparedStatement statement = connection.prepareStatement("UPDATE `" + tablePrefix + "_players` SET " +
                     "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
             statement.setString(1, name);
@@ -300,8 +322,8 @@ public class PlayerSQL extends SQLManager {
         }
     }
 
-    public boolean insertDataSync(UUID uuid, String name, StorageTagCompound compound) {
-        try (Connection connection = implementConnection()) {
+    public boolean insertDataSync(Connection connection, UUID uuid, String name, StorageTagCompound compound) {
+        try {
             PreparedStatement statement = connection.prepareStatement("INSERT INTO `" + tablePrefix + "_players` " +
                     "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
             statement.setString(1, uuid.toString());
@@ -319,32 +341,124 @@ public class PlayerSQL extends SQLManager {
         }
     }
 
-    public boolean isPlayerInDatabaseSync(UUID uuid) {
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE uuid = ?");
-            statement.setString(1, uuid.toString());
-            ResultSet results = statement.executeQuery();
-            boolean next = results.next();
-            results.close();
-            return next;
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+    public boolean isPlayerInDatabaseSync(Connection connection, UUID uuid) {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1")) {
+
+            try (ResultSet result = statement.executeQuery()) {
+                return result.next();
+            }
+        } catch (SQLException throwables) {
             return false;
         }
     }
 
-    public CompletableFuture<Boolean> updateData(UUID uuid, String name, StorageTagCompound compound) {
-        return CompletableFuture.supplyAsync(() -> updateDataSync(uuid, name, compound), PetCore.getInstance().async)
+    public void removeDuplicates(CommandSender sender) {
+        List<String> list = new ArrayList<>();
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
+
+            int size = 0;
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    ++size;
+                    list.add(result.getString("uuid"));
+                }
+            }
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of duplicate accounts found: "+size);
+
+            if (list.isEmpty()) {
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No duplicate entries found that needed to be deleted");
+                return;
+            }
+
+            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
+
+            for (String string : list) {
+                statement.setString(1, string);
+                statement.addBatch();
+            }
+
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of duplicate entries deleted: "+statement.executeBatch().length);
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public void findDuplicates (Consumer<List<Triple<UUID, String, Integer>>> consumer) {
+        CompletableFuture.runAsync(() -> {
+            List<Triple<UUID, String, Integer>> list = new ArrayList<>();
+
+            try (Connection connection  = implementConnection()) {
+                PreparedStatement statement = connection.prepareStatement("SELECT `uuid`,`name`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
+
+                ResultSet result = statement.executeQuery();
+                while (result.next()) {
+                    list.add(Triple.of(UUID.fromString(result.getString(1)), result.getString(2), result.getInt(3)));
+                }
+
+                result.close();
+                statement.close();
+            }catch (SQLException ignored) {}
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    consumer.accept(list);
+                }
+            }.runTask(SimplePets.getPlugin());
+        });
+    }
+
+    public void removeNPCs(CommandSender sender) {
+        List<String> list = new ArrayList<>();
+        try (Connection connection = implementConnection()) {
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
+
+            int size = 0;
+            try (ResultSet result = statement.executeQuery()) {
+                while (result.next()) {
+                    ++size;
+                    list.add(result.getString("uuid"));
+                }
+            }
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of NPC accounts found: "+size);
+
+            if (list.isEmpty()) {
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No entries found that needed to be deleted");
+                return;
+            }
+
+            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
+
+            for (String string : list) {
+                statement.setString(1, string);
+                statement.addBatch();
+            }
+
+            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of entries deleted: "+statement.executeBatch().length);
+            statement.close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+    }
+
+    public CompletableFuture<Boolean> updateData(Connection connection, UUID uuid, String name, StorageTagCompound compound) {
+        // Prevents Offline UUIDs from being saved into the database
+        if (uuid.version()  != 4) return CompletableFuture.completedFuture(false);
+        return CompletableFuture.supplyAsync(() -> updateDataSync(connection, uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
-    public CompletableFuture<Boolean> insertData(UUID uuid, String name, StorageTagCompound compound) {
-        return CompletableFuture.supplyAsync(() -> insertDataSync(uuid, name, compound), PetCore.getInstance().async)
+    public CompletableFuture<Boolean> insertData(Connection connection, UUID uuid, String name, StorageTagCompound compound) {
+        // Prevents Offline UUIDs from being saved into the database
+        if (uuid.version()  != 4) return CompletableFuture.completedFuture(false);
+        return CompletableFuture.supplyAsync(() -> insertDataSync(connection, uuid, name, compound), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
-    public CompletableFuture<Boolean> isPlayerInDatabase(UUID uuid) {
-        return CompletableFuture.supplyAsync(() -> isPlayerInDatabaseSync(uuid), PetCore.getInstance().async)
+    public CompletableFuture<Boolean> isPlayerInDatabase(Connection connection, UUID uuid) {
+        return CompletableFuture.supplyAsync(() -> isPlayerInDatabaseSync(connection, uuid), PetCore.getInstance().async)
                 .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 }

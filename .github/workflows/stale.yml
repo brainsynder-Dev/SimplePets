@@ -14,7 +14,7 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           stale-issue-message: 'This issue has been marked as stale due to the lack of response on it. If this problem is still occurring, please comment saying so or the issue will be closed in 7 days.'
-          stale-issue-label: 'stale'
-          exempt-issue-labels: 'addon idea,enhancement,feature request,successfully reproduced,dependabot,developer issue,todo'
-          days-before-stale: 30
+          stale-issue-label: 'Status: Stale'
+          exempt-issue-labels: 'Type: Addon Suggestion,Type: Enhancement,Type: Feature Request,Status: Reproduced,Type: Dependabot,Type: Developer Report,Type: Todo'
+          days-before-stale: 20
           days-before-close: 7

@@ -68,7 +68,7 @@ public class PetConfiguration implements PetConfigManager {
         return Optional.empty();
     }
 
-    private class PetConfig implements IPetConfig {
+    public class PetConfig implements IPetConfig {
         private final PetType type;
         private final JsonFile JSON;
         private final Map<String, JsonObject> additional;
@@ -95,6 +95,7 @@ public class PetConfiguration implements PetConfigManager {
 
                     setDefault("ride_speed", ConfigOption.INSTANCE.PET_TOGGLES_RIDE_SPEED.getValue());
                     setDefault("walk_speed", ConfigOption.INSTANCE.PET_TOGGLES_WALK_SPEED.getValue());
+                    setDefault("fly_speed", ConfigOption.INSTANCE.PET_TOGGLES_FLY_SPEED.getValue());
                     setDefault("fly", canFlyDefault(type));
                     setDefault("float_down", false);
 
@@ -150,6 +151,10 @@ public class PetConfiguration implements PetConfigManager {
             type.getPetData().forEach(this::checkPetData);
         }
 
+        public JsonFile getJSON() {
+            return JSON;
+        }
+
         @Override
         public void handleAdditionalStorage(String pluginKey, Function<JsonObject, JsonObject> json) {
             additional.put(pluginKey, json.apply(additional.getOrDefault(pluginKey, new JsonObject())));
@@ -199,6 +204,11 @@ public class PetConfiguration implements PetConfigManager {
         @Override
         public double getWalkSpeed() {
             return JSON.getDouble("walk_speed", ConfigOption.INSTANCE.PET_TOGGLES_WALK_SPEED.getValue());
+        }
+
+        @Override
+        public double getFlySpeed() {
+            return JSON.getDouble("fly_speed", ConfigOption.INSTANCE.PET_TOGGLES_FLY_SPEED.getValue());
         }
 
         @Override

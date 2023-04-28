@@ -14,6 +14,8 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class PetEventListener implements Listener {
 
@@ -47,10 +49,15 @@ public class PetEventListener implements Listener {
 
         name = Colorize.translateBungeeHex(name);
 
-        if (!player.hasPermission("pet.name.color") || !ConfigOption.INSTANCE.RENAME_COLOR_ENABLED.getValue())
-            name = ChatColor.stripColor(Colorize.removeHexColor(name));
-        if (!player.hasPermission("pet.name.color.hex") || !ConfigOption.INSTANCE.RENAME_COLOR_HEX.getValue())
-            name = Colorize.removeHexColor(name);
+        if (ConfigOption.INSTANCE.RENAME_COLOR_ENABLED.getValue()) {
+            if ((!player.hasPermission("pet.name.color.hex") || !ConfigOption.INSTANCE.RENAME_COLOR_HEX.getValue())) {
+                name = removeHexColor(name).replace('&', '§');
+            }
+
+            if (!player.hasPermission("pet.name.color")) {
+                name = ChatColor.stripColor(name);
+            }
+        }
 
         if (ConfigOption.INSTANCE.RENAME_LIMIT_CHARS_ENABLED.getValue()) {
             int limit = ConfigOption.INSTANCE.RENAME_LIMIT_CHARS_NUMBER.getValue();
@@ -72,5 +79,39 @@ public class PetEventListener implements Listener {
                 });
             });
         }
+    }
+
+
+    /**
+     * A modified method from BSLib as a temp fix for it not removing post-translated colors
+     */
+    private String removeHexColor(String text) {
+        // String is empty
+        if ((text == null) || text.isEmpty()) return text;
+
+        // The String does not contain any valid hex
+        //if (!containsHexColors(text)) return text;
+
+        // Replaces the COLOR_CHAR('§') to '&'
+        text = text.replace(net.md_5.bungee.api.ChatColor.COLOR_CHAR, '&');
+        Pattern word = Pattern.compile("&x");
+        Matcher matcher = word.matcher(text);
+
+        char[] chars = text.toCharArray();
+        while (matcher.find()) {
+            StringBuilder builder = new StringBuilder();
+            int start = matcher.start();
+            int end = (start + 14);
+
+            // If the '&x' is at the end of the string ignore it
+            if (end > text.length()) continue;
+            for (int i = start; i < end; i++) builder.append(chars[i]);
+
+            String hex = builder.toString();
+            hex = hex.replace("&x", "").replace("&", "");
+            text = text.replace(builder.toString(), "");
+        }
+
+        return text;
     }
 }

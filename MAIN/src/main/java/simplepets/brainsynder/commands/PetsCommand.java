@@ -42,6 +42,7 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
         registerSub(new AddonCommand (plugin));
         registerSub(new DatabaseCommand (plugin));
         registerSub(new ReloadCommand(plugin));
+        registerSub(new PetConfigCommand(plugin));
 
         if (Premium.isPremium())
             registerSub(new PremiumCommand(plugin));

@@ -94,6 +94,7 @@ public class DebugCommand extends PetSubCommand {
         json.add("reloaded", PetCore.getInstance().wasReloaded());
         PetCore.getInstance().checkWorldGuard(value -> json.add("worldguard_config_check", value));
         fetchServerInfo(object -> json.add("server", object));
+        json.add("plugins", fetchPlugins());
 
         JsonArray addons = new JsonArray();
         PetCore.getInstance().getAddonManager().getLocalDataMap().forEach((localData, modules) -> {
@@ -111,14 +112,13 @@ public class DebugCommand extends PetSubCommand {
         });
         json.set("loaded_addons", addons);
 
-        fetchPlugins(values -> json.add("plugins", values));
         if (skipJenkins) {
             fetchDebugMessages(values -> json.add("debug_log", values));
             consumer.accept(json);
             return;
         }
         fetchConfig(conf -> {
-            json.set("config", conf+".yml");
+            json.set("config", conf);
 
             fetchJenkinsInfo(object -> {
                 json.add("jenkins", object);
@@ -190,7 +190,7 @@ public class DebugCommand extends PetSubCommand {
         });
     }
 
-    private static void fetchPlugins (Consumer<JsonArray> consumer) {
+    private static JsonArray fetchPlugins () {
         // Fetches the plugins the server uses (used for finding conflicts)
         JsonArray array = new JsonArray();
         List<String> plugins = new ArrayList<>();
@@ -204,7 +204,7 @@ public class DebugCommand extends PetSubCommand {
         plugins.sort(Comparator.naturalOrder());
         plugins.forEach(array::add);
 
-        consumer.accept(array);
+        return array;
     }
 
     private static void fetchServerInfo(Consumer<JsonObject> consumer) {

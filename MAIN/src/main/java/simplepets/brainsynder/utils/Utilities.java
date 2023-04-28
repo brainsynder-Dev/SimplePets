@@ -80,7 +80,8 @@ public class Utilities {
             return false;
         }
 
-        if (!Utilities.hasPermission(player, type.getPermission())) {
+        if (!Utilities.hasPermission(player, type.getPermission())
+                && ((!user.getOwnedPets().contains(type)) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
             timer.stop("no permission - end");
             return false;
         }
@@ -160,7 +161,7 @@ public class Utilities {
 
     public static void setPassenger(Player player, Entity entity, Entity passenger) {
         try {
-            entity.setPassenger(passenger);
+            SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Set passenger: " + entity.addPassenger(passenger) + " - " + entity.getClass().getName() + ", " + passenger.getClass().getName());
         } catch (Exception e) {
             SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Could not run method IEntityPet#setPassenger");
             e.printStackTrace();
@@ -199,6 +200,42 @@ public class Utilities {
         }
     }
 
+    public static int parseTypeSaveLimit(PetType type) {
+        for (String line : ConfigOption.INSTANCE.PET_SAVES_TYPE_LIMIT.getValue()) {
+            if (!line.contains("-")) continue;
+            String[] args = line.split("-");
+            if (args.length != 2) continue;
+
+            PetType target = PetType.getPetType(args[0]).orElse(null);
+            if (target == null) continue;
+
+            if (type != target) continue;
+            try {
+                return Integer.parseInt(args[1].trim());
+            } catch (NumberFormatException e) {
+                SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Unable to parse pet-type-limit for '" + args[0] + "', " + args[1] + " is not a valid number.");
+                return -1;
+            }
+        }
+
+        return -1;
+    }
+
+    public static int getPermissionAmount(Player player, int defaultValue, String partialPermission) {
+        int amount = defaultValue;
+        if (!partialPermission.endsWith(".")) return defaultValue;
+
+        for (PermissionAttachmentInfo permission : player.getEffectivePermissions()) {
+            if (!permission.getValue()) continue;
+            if (!permission.getPermission().startsWith(partialPermission)) continue;
+
+            String strAmount = permission.getPermission().substring((partialPermission.lastIndexOf(".") + 1));
+            int permAmount = Integer.parseInt(strAmount);
+            if (permAmount >= amount) amount = permAmount;
+        }
+        return amount;
+    }
+
     public static void removePassenger(Entity entity, Entity passenger) {
         try {
             entity.eject();
@@ -213,7 +250,15 @@ public class Utilities {
 
     public static void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
-        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), ((ServerVersion.isEqualNew(ServerVersion.v1_18_2)) ? "r" : "s"), Integer.TYPE);
+
+        String targetField = "s";
+        if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)) {
+            targetField = "G";
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_18_2)) {
+            targetField = "r";
+        }
+
+        field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), targetField, Integer.TYPE);
 
         field.set(Reflection.getHandle(entity), 0);
     }

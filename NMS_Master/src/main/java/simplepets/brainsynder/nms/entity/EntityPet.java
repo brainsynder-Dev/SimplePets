@@ -3,12 +3,7 @@ package simplepets.brainsynder.nms.entity;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
-import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +11,7 @@ import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.FloatGoal;
 import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
@@ -38,10 +34,9 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
-import simplepets.brainsynder.nms.pathfinder.PathfinderFloatGoal;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.pathfinder.PathfinderWalkToPlayer;
-import simplepets.brainsynder.nms.utils.GlowAPI;
+import simplepets.brainsynder.nms.utils.EntityUtils;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -58,6 +53,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     private final double jumpHeight = 0.5D;
     private boolean isGlowing = false;
     private boolean frozen = false;
+    private boolean onFire = false;
     private boolean silent = false;
     private boolean visible = true;
     private ChatColor glowColor = ChatColor.WHITE;
@@ -77,6 +73,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     // Theses fields are based off config options
     protected double walkSpeed = 0.6000000238418579;
     protected double rideSpeed = 0.4000000238418579;
+    protected double flySpeed = 0.10000000149011612;
     private boolean floatDown = false;
     private boolean pushable = false;
     private boolean canGlow = true;
@@ -93,7 +90,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         super(entitytypes, type, user);
         this.additional = new HashMap<>();
 
-        maxUpStep = 1;
+        VersionTranslator.setMapUpStep(this, 1);
         this.collides = false;
         this.noPhysics = false;
 
@@ -108,12 +105,15 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             this.walkSpeed = config.getWalkSpeed();
             this.rideSpeed = config.getRideSpeed();
+            this.flySpeed = config.getFlySpeed();
             this.floatDown = config.canFloat();
         });
 
         // needs to be faster but less then 6
-        getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(0.500000238418579);
+        VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
     }
+
+
 
     public boolean isJumping() {
         return jumping;
@@ -132,12 +132,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public void setGlowColor(ChatColor glowColor) {
         if (this.glowColor == glowColor) return; // No need for redundant setting
         this.glowColor = glowColor;
-        GlowAPI.setRawColor(getEntity(), glowColor);
-    }
-
-    @Override
-    public boolean rideableUnderWater() {
-        return true;
     }
 
     @Override
@@ -152,7 +146,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     protected void registerGoals() {
-        goalSelector.addGoal(1, new PathfinderFloatGoal(this));
+        goalSelector.addGoal(1, new FloatGoal(this));
         goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
         goalSelector.addGoal(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
         goalSelector.addGoal(3, new RandomLookAroundGoal(this));
@@ -160,12 +154,13 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     public boolean isBurning() {
-        return hasVisualFire;
+        return onFire;
     }
 
     @Override
     public void setBurning(boolean var) {
-        this.hasVisualFire = var;
+        this.onFire = var;
+        setRemainingFireTicks(var ? 150 : 0);
     }
 
     @Override
@@ -270,6 +265,16 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (object.hasKey("pose")) {
             Pose pose = object.getEnum("pose", Pose.class);
             if (pose != null) setPose(pose);
+        }
+
+        if (object.hasKey("walkSpeed")) {
+            walkSpeed = object.getDouble("walkSpeed");
+            VersionTranslator.setAttributes(this, walkSpeed, -1);
+        }
+        if (object.hasKey("rideSpeed")) rideSpeed = object.getDouble("rideSpeed");
+        if (object.hasKey("flySpeed")) {
+            flySpeed = object.getDouble("flySpeed");
+            VersionTranslator.setAttributes(this, -1, flySpeed);
         }
     }
 
@@ -478,6 +483,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         }
 
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
+        if (this.onFire && (getRemainingFireTicks() < 140)) setRemainingFireTicks(150);
 
         if (getPetUser ().getPlayer() != null) {
             Player player = getPetUser ().getPlayer();
@@ -511,10 +517,10 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             double current = getAttribute(Attributes.MOVEMENT_SPEED).getValue();
             if (isOwnerRiding()) {
                 if (current != rideSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(rideSpeed);
+                    VersionTranslator.setAttributes(this, rideSpeed, -1);
             } else {
                 if (current != walkSpeed)
-                    getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+                    VersionTranslator.setAttributes(this, walkSpeed, -1);
             }
         }
     }
@@ -539,26 +545,18 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         return entityType;
     }
 
-    @Override
-    public Packet<?> getAddEntityPacket() {
-        try {
-            ClientboundAddMobPacket packet = new ClientboundAddMobPacket(this);
-            Field type = packet.getClass().getDeclaredField("c");
-            type.setAccessible(true);
-            type.set(packet, Registry.ENTITY_TYPE.getId(originalEntityType));
-            return packet;
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return new ClientboundAddEntityPacket(this, originalEntityType, 0, new BlockPos(getX(), getY(), getZ()));
-    }
-
     private void glowHandler(Player player, boolean glow) {
         try {
             Entity entity = getEntity();
-            if (this instanceof IEntityControllerPet) return;
-            GlowAPI.setGlowing(entity, player, glow);
+            if (this instanceof IEntityControllerPet controllerPet) {
+                entity = controllerPet.getVisibleEntity().getEntity();
+            }
             isGlowing = glow;
+            if (glow) {
+                EntityUtils.getGlowingInstance().setGlowing(entity, player, getGlowColor());
+            }else{
+                EntityUtils.getGlowingInstance().unsetGlowing(entity, player);
+            }
         } catch (Exception ignored) {}
     }
 

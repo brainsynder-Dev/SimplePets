@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
+import simplepets.brainsynder.nms.utils.EntityUtils;
 
 import java.util.EnumSet;
 
@@ -33,7 +34,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
             this.player = user.getPlayer();
         }
 
-        if (this.entityPet.getRandom().nextFloat() >= this.chance) {
+        if (EntityUtils.getRandom().nextFloat() >= this.chance) {
             return false;
         } else {
             return this.user != null;
@@ -55,7 +56,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
     // Translation: start
     @Override
     public void start() {
-        this.lookTime = 40 + this.entityPet.getRandom().nextInt(40);
+        this.lookTime = 40 + EntityUtils.getRandom().nextInt(40);
     }
 
     // Translation: tick

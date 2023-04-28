@@ -31,6 +31,12 @@ public class EntityBase extends Mob {
         originalEntityType = entitytypes;
     }
 
+    // 1.19.4+   Replaces boolean rideableUnderWater()
+    @Override
+    public boolean dismountsUnderwater() {
+        return false;
+    }
+
     public PetType getPetType() {
         return petType;
     }
@@ -38,8 +44,6 @@ public class EntityBase extends Mob {
     public PetUser getUser() {
         return user;
     }
-
-
 
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
         try {
@@ -52,5 +56,9 @@ public class EntityBase extends Mob {
             e.printStackTrace();
             return originalType;
         }
+    }
+
+    public boolean alwaysAccepts() {
+        return super.alwaysAccepts();
     }
 }

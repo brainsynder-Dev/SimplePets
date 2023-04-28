@@ -4,17 +4,24 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.nms.entity.EntityPet;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
@@ -24,7 +31,14 @@ public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
 
+    public static final String REGISTRY_FROZEN_FIELD = "UNKNOWN";
+    public static final String REGISTRY_ENTRY_MAP_FIELD = "UNKNOWN";
+
     public static Field getJumpField () {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static void setAttributes (EntityPet entityPet, double walkSpeed, double flySpeed) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 
@@ -91,5 +105,37 @@ public class VersionTranslator {
 
         // This is a simple placeholder mob that does not have any datawatchers just in case the code fails
         return EntityType.GIANT;
+    }
+
+    public static Packet<ClientGamePacketListener> getAddEntityPacket(LivingEntity livingEntity, EntityType<?> originalEntityType, BlockPos pos) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    public static String getEntityTypeVariable() {
+        return "c";
+    }
+
+    public static boolean useInteger() {
+        return true;
+    }
+
+
+    // ADDED DURING 1.19.4 DEVELOPMENT
+    public static final EntityDataSerializer<Optional<BlockState>> OPTIONAL_BLOCK_STATE = null;
+
+    public static void calculateEntityAnimation (LivingEntity entity, boolean var) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static void setMapUpStep (Entity entity, float value) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static BlockPos getPosition (Entity entity) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 }

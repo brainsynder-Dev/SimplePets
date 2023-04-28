@@ -15,6 +15,8 @@ import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
+import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
@@ -80,6 +82,11 @@ public class SavesMenu extends CustomInventory {
     }
 
     @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.SAVES_GUI;
+    }
+
+    @Override
     public void open(PetUser user, int page) {
         if (!isEnabled()) return;
         Player player = Bukkit.getPlayer(user.getPlayer().getUniqueId());
@@ -135,6 +142,8 @@ public class SavesMenu extends CustomInventory {
         if (!pages.isEmpty()) {
             pages.getPage(page).forEach(entry -> {
                 PetType type = entry.getKey();
+                IPetConfig petConfig = SimplePets.getPetConfigManager().getPetConfig(type).orElse(null);
+
                 StorageTagCompound compound = entry.getValue();
                 if (type != null) {
                     ItemStack stack;
@@ -142,19 +151,22 @@ public class SavesMenu extends CustomInventory {
                         stack = storageMap.get(compound).getValue();
                     }else {
                         ItemBuilder builder = type.getBuilder().clone();
+                        if (petConfig != null) builder = petConfig.getBuilder();
                         builder.clearLore();
                         if (compound.hasKey("name") && (!compound.getString("name").equals("null")))
                             builder.withName(compound.getString("name").replaceAll("%player%", player.getName()));
+
+                        ItemBuilder finalBuilder = builder;
                         compound.getKeySet().forEach(key -> {
                             if (!key.equals("name")) {
                                 StorageBase base = compound.getTag(key);
                                 if (base instanceof StorageTagCompound) {
-                                    builder.addLore("  §e" + key + "§6:");
+                                    finalBuilder.addLore("  §e" + key + "§6:");
                                     for (String keys : ((StorageTagCompound)base).getKeySet()) {
-                                        builder.addLore("  - §e" + keys + "§6: §7" + fetchValue(compound.getTag(keys)));
+                                        finalBuilder.addLore("  - §e" + keys + "§6: §7" + fetchValue(compound.getTag(keys)));
                                     }
                                 }else{
-                                    builder.addLore("  §e" + key + "§6: §7" + fetchValue(base));
+                                    finalBuilder.addLore("  §e" + key + "§6: §7" + fetchValue(base));
                                 }
                             }
                         });
@@ -163,7 +175,7 @@ public class SavesMenu extends CustomInventory {
                         storageMap.put(compound, new PetUser.Entry<>(type, stack));
                     }
 
-                    PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(user, entry.getKey(), stack);
+                    PetInventoryAddPetItemEvent event = new PetInventoryAddPetItemEvent(this, user, entry.getKey(), stack);
                     Bukkit.getPluginManager().callEvent(event);
 
 
@@ -172,6 +184,10 @@ public class SavesMenu extends CustomInventory {
             });
         }
         itemMap.put(player.getName(), storageMap);
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 

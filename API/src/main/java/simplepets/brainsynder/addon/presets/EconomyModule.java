@@ -12,6 +12,7 @@ import simplepets.brainsynder.addon.PermissionData;
 import simplepets.brainsynder.addon.PetModule;
 import simplepets.brainsynder.api.event.inventory.PetInventoryAddPetItemEvent;
 import simplepets.brainsynder.api.event.inventory.PetSelectTypeEvent;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 
@@ -153,16 +154,22 @@ public abstract class EconomyModule extends PetModule {
         return value ? boolTrue : boolFalse;
     }
 
+    // I don't remember why I was adding this method...
+    public boolean isPetFree (PetType type) {
+        return (priceMap.getOrDefault(type, 2000.0D) <= 0);
+    }
+
     @EventHandler
     public void onInventoryOpen(PetInventoryAddPetItemEvent event) {
         if (!isEnabled()) return;
+        if (event.getInventory().getInventoryType() != InventoryType.SUMMON_GUI) return;
         PetUser user = event.getUser();
         List<PetType> petArray = user.getOwnedPets();
 
         PetType type = event.getType();
         ItemBuilder maker = ItemBuilder.fromItem(event.getItem());
         String price = String.valueOf(priceMap.getOrDefault(type, 2000.0));
-        if (this.priceMap.getOrDefault(type, 2000.0D) <= 0) price = freePrice;
+        if (isPetFree(type)) price = freePrice;
 
         if (hidePrice && (AddonPermissions.hasPermission(this, event.getUser().getPlayer(), typePermissions.get(type)))) price = bypassPrice;
         boolean contains = petArray.contains(type);

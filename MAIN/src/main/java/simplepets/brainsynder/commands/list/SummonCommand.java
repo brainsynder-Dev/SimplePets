@@ -161,6 +161,13 @@ public class SummonCommand extends PetSubCommand {
                 return;
             }
 
+            if ((!user.canSpawnMorePets())
+                    && (!ConfigOption.INSTANCE.MISC_TOGGLES_CONSOLE_BYPASS_LIMIT.getValue())
+                    && (!(sender instanceof Player))) {
+                finalTarget.sendMessage(MessageFile.getTranslation(MessageOption.CANT_SPAWN_MORE_PETS));
+                return;
+            }
+
             if (finalTarget == sender) {
                 // Will be treated like selecting a pet from the selection menu
                 PetSelectTypeEvent event = new PetSelectTypeEvent(type, user);

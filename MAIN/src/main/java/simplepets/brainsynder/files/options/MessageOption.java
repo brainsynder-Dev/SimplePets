@@ -40,6 +40,9 @@ public enum MessageOption implements YamlOption {
     RENAME_ANVIL_TAG ("rename.anvil.tag_name", "&#de9790NEW NAME"),
     RENAME_SIGN_TEXT ("rename.sign.lines", Lists.newArrayList("{input}", "&l^^^^^^^^", "&9&lPlease Enter", "&9&lPet Name")),
 
+    PET_SAVES_LIMIT_REACHED ("pet-saves.limit-reached", "{prefix} &cYou have reached your limit for saving pet"),
+    PET_SAVES_LIMIT_REACHED_TYPE("pet-saves.limit-reached-per-type", "{prefix} &cYou have reached your limit for saving {type} pets"),
+
     PET_FILES_REGEN ("admin.regenerate.pets", "{prefix} &7The Pets folder has been regenerated to the default files."),
     INV_FILES_REGEN ("admin.regenerate.inventories", "{prefix} &7The Inventories folder has been regenerated to the default files."),
     ITEM_FILES_REGEN ("admin.regenerate.items", "{prefix} &7The Items folder has been regenerated to the default files."),
@@ -51,7 +54,15 @@ public enum MessageOption implements YamlOption {
     INVENTORIES_RELOADED("admin.reload.inventories", "{prefix} &7Items and inventories have been reloaded!"),
     PARTICLES_RELOADED("admin.reload.particles", "{prefix} &7Particles have been reloaded!"),
     PETS_RELOADED("admin.reload.pets", "{prefix} &7Pets have been reloaded!"),
-    ALL_RELOADED("admin.reload.all", "{prefix} &7All plugin elements have been reloaded!");
+    ALL_RELOADED("admin.reload.all", "{prefix} &7All plugin elements have been reloaded!"),
+
+    CONFIG_UNKNOWN_KEY("admin.pet-config.unknown-key", "{prefix} &7{key} &cis not a key for the pets json file."),
+    CONFIG_INVALID_BOOLEAN("admin.pet-config.invalid-boolean", "{prefix} &7{value} &cis not a valid boolean, please use true/false"),
+    CONFIG_INVALID_INT("admin.pet-config.invalid-integer", "{prefix} &7{value} &cis not a valid integer."),
+    CONFIG_INVALID_DOUBLE("admin.pet-config.invalid-double", "{prefix} &7{value} &cis not a valid double."),
+    CONFIG_UNABLE_TO_UPDATE("admin.pet-config.unable-to-update", "{prefix} &cUnable to update this key."),
+    CONFIG_VALUE_UPDATED("admin.pet-config.value-set", "{prefix} &a{key} &7has been set to &e{value}"),
+    CONFIG_VALUE_RESET("admin.pet-config.value-reset", "{prefix} &a{key} &7has been reset to the default value");
 
     private final String path;
     private final Object defaultValue;

@@ -3,15 +3,21 @@ package simplepets.brainsynder.menu.items.list;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
+import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.files.MessageFile;
+import simplepets.brainsynder.files.options.MessageOption;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
 
@@ -29,13 +35,36 @@ public class SavePet extends Item {
     }
 
     @Override
-    public void onClick(PetUser masterUser, CustomInventory inventory) {
+    public boolean addItemToInv(PetUser user, CustomInventory inventory) {
+        return user.canSaveMorePets();
+    }
+
+    @Override
+    public void onClick(PetUser masterUser, CustomInventory inventory, IEntityPet pet) {
         if (!masterUser.hasPets()) return;
+
+        if (pet != null) {
+            if (canSavePet(masterUser, pet)) {
+                StorageTagCompound compound = pet.asCompound();
+                if (pet.getPetType() == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
+                masterUser.addPetSave(compound);
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    inventory.open(masterUser);
+                }
+            }.runTaskLater(PetCore.getInstance(), 1);
+            return;
+        }
+
         if (masterUser.getPetEntities().size() == 1) {
             masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
-                StorageTagCompound compound = iEntityPet.asCompound();
-                if (iEntityPet.getPetType() == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
-                masterUser.addPetSave(compound);
+                if (canSavePet(masterUser, iEntityPet)) {
+                    StorageTagCompound compound = iEntityPet.asCompound();
+                    if (iEntityPet.getPetType() == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
+                    masterUser.addPetSave(compound);
+                }
             });
             new BukkitRunnable() {
                 @Override
@@ -48,9 +77,11 @@ public class SavePet extends Item {
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPetEntity(type).ifPresent(entity -> {
-                StorageTagCompound compound = entity.asCompound();
-                if (type == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
-                user.addPetSave(compound);
+                if (canSavePet(user, entity)) {
+                    StorageTagCompound compound = entity.asCompound();
+                    if (type == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
+                    user.addPetSave(compound);
+                }
             });
             new BukkitRunnable() {
                 @Override
@@ -60,5 +91,31 @@ public class SavePet extends Item {
             }.runTaskLater(PetCore.getInstance(), 1);
         });
         menu.open(masterUser, 1, inventory.getTitle());
+    }
+
+    private boolean canSavePet (PetUser user, IEntityPet entityPet) {
+        if (!ConfigOption.INSTANCE.PET_SAVES_ENABLED.getValue()) return false;
+        Player player = user.getPlayer();
+
+        if (!user.canSaveMorePets()) {
+            player.sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED));
+            return false;
+        }
+        
+        if (player.hasPermission("pet.saves."+entityPet.getPetType().getName()+".bypass")) return true;
+
+        int saveLimit = Utilities.parseTypeSaveLimit(entityPet.getPetType());
+        if (saveLimit < 0) return true;
+
+        int typeCount = 0;
+        for (PetUser.Entry<PetType, StorageTagCompound> entry : user.getSavedPets()) {
+            if (entry.getKey() == entityPet.getPetType()) typeCount++;
+        }
+
+        if (typeCount < Utilities.getPermissionAmount(player, saveLimit, "pet.saves."+entityPet.getPetType().getName()+".")) {
+            return true;
+        }
+        player.sendMessage(MessageFile.getTranslation(MessageOption.PET_SAVES_LIMIT_REACHED_TYPE).replace("{type}", entityPet.getPetType().getName()));
+        return false;
     }
 }

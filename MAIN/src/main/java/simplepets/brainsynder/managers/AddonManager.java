@@ -65,7 +65,7 @@ public class AddonManager {
             }
         };
 
-        if (!folder.exists()) return;
+        if (!folder.exists()) folder.mkdirs();
         for (File file : folder.listFiles()) {
             loadAddon(file);
         }
@@ -418,7 +418,7 @@ public class AddonManager {
                 AddonCloudData data = new AddonCloudData(
                         "https://bsdevelopment.org/addons/download/" + member.getName(),
                         member.getName(),
-                        json.getString("author", "Unknown"),
+                        json.get("author_info").asObject().getString("name", "Unknown"),
                         Double.parseDouble(json.getString("version", "0.0"))
                 );
 

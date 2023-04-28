@@ -7,6 +7,6 @@ jobs:
       - uses: "actions/checkout@master"
       - name: "TODO to Issue"
         uses: "alstr/todo-to-issue-action@v3.0.2-beta"
-        id: "todo"
+        id: "Type: Todo"
         with:
           TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.menu.inventory;
 
+import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.storage.IStorage;
@@ -17,8 +18,11 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.event.inventory.PetTypeStorage;
 import simplepets.brainsynder.api.inventory.CustomInventory;
 import simplepets.brainsynder.api.inventory.Item;
+import simplepets.brainsynder.api.inventory.handler.InventoryType;
+import simplepets.brainsynder.api.pet.IPetConfig;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.managers.ItemManager;
@@ -78,6 +82,11 @@ public class PetSelectorMenu extends CustomInventory {
 
     }
 
+    @Override
+    public InventoryType getInventoryType() {
+        return InventoryType.TYPE_SELECTION_GUI;
+    }
+
     public void setTask (String name, BiTask<PetUser, PetType> task) {
         taskMap.put(name, task);
     }
@@ -109,7 +118,10 @@ public class PetSelectorMenu extends CustomInventory {
 
         IStorage<PetTypeStorage> petTypes = new StorageList<>();
         for (IEntityPet entity : user.getPetEntities()) {
-            petTypes.add(new PetTypeStorage(entity.getPetType()).setItem(entity.getPetType().getBuilder().clearLore().handleMeta(ItemMeta.class, itemMeta -> {
+            IPetConfig petConfig = SimplePets.getPetConfigManager().getPetConfig(entity.getPetType()).orElse(null);
+            ItemBuilder builder = entity.getPetType().getBuilder();
+            if (petConfig != null) builder = petConfig.getBuilder();
+            petTypes.add(new PetTypeStorage(entity.getPetType()).setItem(builder.clearLore().handleMeta(ItemMeta.class, itemMeta -> {
                 itemMeta.getPersistentDataContainer().set(Keys.GUI_ITEM, PersistentDataType.INTEGER, 1);
                 itemMeta.getPersistentDataContainer().set(Keys.PET_TYPE_ITEM, PersistentDataType.STRING, entity.getPetType().getName());
                 return itemMeta;
@@ -136,6 +148,10 @@ public class PetSelectorMenu extends CustomInventory {
             }
 
         }
+
+        if (ConfigOption.INSTANCE.MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS.getValue())
+            inv.remove(ItemManager.PLACEHOLDER.getItemBuilder().build());
+
         player.openInventory(inv);
     }
 

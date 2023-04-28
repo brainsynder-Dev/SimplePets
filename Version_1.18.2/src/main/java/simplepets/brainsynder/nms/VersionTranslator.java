@@ -9,66 +9,88 @@ import lib.brainsynder.nbt.other.NBTException;
 import lib.brainsynder.storage.RandomCollection;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Registry;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.TagParser;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundAddMobPacket;
+import net.minecraft.network.syncher.EntityDataSerializer;
+import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.block.data.CraftBlockData;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_18_R2.inventory.CraftItemStack;
+import org.bukkit.craftbukkit.v1_18_R2.util.CraftNamespacedKey;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.utils.FieldUtils;
 import simplepets.brainsynder.nms.utils.InvalidInputException;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Optional;
 
 public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bn";
+
+    public static final String REGISTRY_FROZEN_FIELD = "bL";
+    public static final String REGISTRY_ENTRY_MAP_FIELD = "bN";
+
     private static Field jumpingField = null;
 
-    public static Field getJumpField () {
+    public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
-        try{
+        try {
             Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.18.2
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
-        }catch(Exception ex){
-            throw new UnsupportedOperationException("Unable to find the correct jumpingField name for "+ ServerVersion.getVersion().name());
+        } catch (Exception ex) {
+            throw new UnsupportedOperationException("Unable to find the correct jumpingField name for " + ServerVersion.getVersion().name());
         }
+    }
+
+    public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
+        if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
+        if (flySpeed != -1 && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) entityPet.getAttribute(Attributes.FLYING_SPEED).setBaseValue(flySpeed);
     }
 
     public static void setItemSlot(ArmorStand stand, EquipmentSlot enumitemslot, ItemStack itemstack, boolean silent) {
         stand.setItemSlot(enumitemslot, itemstack, silent);
     }
 
-    public static boolean addEntity (Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
+    public static boolean addEntity(Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
         return level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
 
     public static <T extends Entity> T getEntityHandle(org.bukkit.entity.Entity entity) {
-        return (T) ((CraftEntity)entity).getHandle();
+        return (T) ((CraftEntity) entity).getHandle();
     }
 
     public static <T extends Level> T getWorldHandle(World world) {
-        return (T) ((CraftWorld)world).getHandle();
+        return (T) ((CraftWorld) world).getHandle();
     }
 
     public static BlockState getBlockState(BlockData blockData) {
-        return ((CraftBlockData)blockData).getState();
+        return ((CraftBlockData) blockData).getState();
     }
 
     public static BlockData fromNMS(BlockState blockData) {
@@ -83,11 +105,11 @@ public class VersionTranslator {
         return CraftItemStack.asBukkitCopy(itemStack);
     }
 
-    public static BlockPos subtract (BlockPos blockPos, Vec3i vec) {
+    public static BlockPos subtract(BlockPos blockPos, Vec3i vec) {
         return blockPos.subtract(vec);
     }
 
-    public static BlockPos relative (BlockPos blockPos) {
+    public static BlockPos relative(BlockPos blockPos) {
         return blockPos.relative(RandomCollection.fromCollection(Arrays.asList(
                 Direction.NORTH,
                 Direction.EAST,
@@ -96,8 +118,11 @@ public class VersionTranslator {
         )).next());
     }
 
-    public static void modifyGlowData (SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher, boolean glow) throws IllegalAccessException {
-        Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap = (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher, ENTITY_DATA_MAP, true);
+    public static void modifyGlowData(SynchedEntityData toCloneDataWatcher, SynchedEntityData newDataWatcher,
+                                      boolean glow) throws IllegalAccessException {
+        Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap =
+                (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher,
+                        ENTITY_DATA_MAP, true);
 
         SynchedEntityData.DataItem<Byte> item = newMap.get(0);
         byte initialBitMask = item.getValue();
@@ -137,5 +162,59 @@ public class VersionTranslator {
         } catch (NBTException exception) {
             throw new InvalidInputException("Failed to convert item to NBT", exception);
         }
+    }
+
+    public static Packet<?> getAddEntityPacket(LivingEntity livingEntity, EntityType<?> originalEntityType, BlockPos pos) {
+        Packet<?> packet;
+        try {
+            packet = new ClientboundAddMobPacket(livingEntity);
+        } catch (NoClassDefFoundError e) {
+            // y'all here sum'n?
+            packet = new ClientboundAddEntityPacket(livingEntity);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return new ClientboundAddEntityPacket(livingEntity, originalEntityType, 0, pos);
+        }
+
+        try {
+            Field type = packet.getClass().getDeclaredField(VersionTranslator.getEntityTypeVariable());
+            type.setAccessible(true);
+            type.set(packet, VersionTranslator.useInteger() ? Registry.ENTITY_TYPE.getId(originalEntityType) : originalEntityType);
+            return packet;
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return new ClientboundAddEntityPacket(livingEntity, originalEntityType, 0, pos);
+    }
+
+    public static String getEntityTypeVariable() {
+        return "c";
+    }
+
+    public static boolean useInteger() {
+        return true;
+    }
+
+
+    // ADDED DURING 1.19.4 DEVELOPMENT
+    public static final EntityDataSerializer<Optional<BlockState>> OPTIONAL_BLOCK_STATE = EntityDataSerializers.BLOCK_STATE;
+
+    public static void calculateEntityAnimation (LivingEntity entity, boolean var) {
+        entity.calculateEntityAnimation(entity, var);
+    }
+
+    public static void setMapUpStep (Entity entity, float value) {
+        entity.maxUpStep = value;
+    }
+    public static BlockPos getPosition (Entity entity) {
+        return new BlockPos(entity.getX(), entity.getY(), entity.getZ());
+    }
+
+    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
+        return CraftNamespacedKey.toMinecraft(key);
+    }
+
+    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
+        return CraftNamespacedKey.fromMinecraft(resource);
     }
 }

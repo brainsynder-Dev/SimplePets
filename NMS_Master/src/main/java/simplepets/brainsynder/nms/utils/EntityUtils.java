@@ -3,15 +3,33 @@ package simplepets.brainsynder.nms.utils;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
+import simplepets.brainsynder.internal.glowingentities.GlowingEntities;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
+    private static final GlowingEntities GLOWING_ENTITIES;
+    private static final Random RANDOM;
+
+    static {
+        RANDOM = new Random();
+        GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+    }
+
+    public static Random getRandom() {
+        return RANDOM;
+    }
+
+    public static GlowingEntities getGlowingInstance () {
+        return GLOWING_ENTITIES;
+    }
 
     public static VillagerType getTypeFromBiome(BiomeType type) {
         if (stored.isEmpty()) initStores();

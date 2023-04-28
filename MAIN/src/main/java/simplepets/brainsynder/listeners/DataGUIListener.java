@@ -33,19 +33,20 @@ public class DataGUIListener implements Listener {
             SimplePets.getUserManager().getPetUser(player).ifPresent(user -> {
                 if (e.getCurrentItem() == null) return;
 
-                Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(e.getCurrentItem());
-                if (optionalItem.isPresent()) {
-                    if (e.getClick().isShiftClick()) {
-                        optionalItem.get().onShiftClick(user, menu);
-                        return;
-                    }
-                    optionalItem.get().onClick(user, menu);
-                    return;
-                }
-
                 PetType type = menu.getType(player);
 
                 user.getPetEntity(type).ifPresent(entityPet -> {
+
+                    Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(e.getCurrentItem());
+                    if (optionalItem.isPresent()) {
+                        if (e.getClick().isShiftClick()) {
+                            optionalItem.get().onShiftClick(user, menu, entityPet);
+                            return;
+                        }
+                        optionalItem.get().onClick(user, menu, entityPet);
+                        return;
+                    }
+
                     type.getPetData().forEach(petData -> {
                         petData.getItem(entityPet).ifPresent(o -> {
                             ItemBuilder builder = (ItemBuilder) o;

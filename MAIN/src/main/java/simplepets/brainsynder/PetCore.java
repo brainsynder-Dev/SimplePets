@@ -62,6 +62,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private File itemFolder;
     private boolean reloaded = false;
+    private boolean fullyStarted = false;
+    private boolean isStarting = false;
 
     private Config configuration;
 
@@ -77,6 +79,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private UpdateUtils updateUtils;
     private UpdateResult updateResult;
 
+    private Class<?> spawnutilClass = null;
+
     private Debug debug;
     private IPetUtilities petUtilities;
     private TaskTimer taskTimer;
@@ -87,13 +91,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        SimplePets.setPLUGIN(this);
         taskTimer = new TaskTimer(this);
         taskTimer.start();
+        isStarting = true;
 
         debug = new Debug(this);
 
-        if (!checkJavaVersion()){
+        if (!checkJavaVersion()) {
             setEnabled(false);
+            isStarting = false;
             return;
         }
 
@@ -105,15 +112,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     .setMessages(
                             "OH NO! We could not find any support for your servers version " + ServerVersion.getVersion().name().replace("v", "").replace("_", "."),
                             "Please check the Jenkins for an updated build: https://ci.pluginwiki.us/job/SimplePets_v5/",
-                            "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)"
+                            "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)",
+                            "Current SimplePets jar name: "+getJarName()
                     )
             );
+            isStarting = false;
             return;
         }
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         petUtilities = new PetUtility();
 
-        SimplePets.setPLUGIN(this);
         taskTimer.label("registered api instance");
 
 
@@ -183,6 +191,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         });
         taskTimer.stop();
 
+        fullyStarted = true;
+
         if (Bukkit.getOnlinePlayers().isEmpty()) return;
         // Delay it for a second to actually have the database load
         new BukkitRunnable() {
@@ -208,6 +218,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     @Override
     public void onDisable() {
+        isStarting = false;
         outputTimings();
         supportedVersions.clear();
         if (petUtilities == null) return; // Failed to load this field due to unsupported version
@@ -220,7 +231,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             });
 
         DebugCommand.fetchDebug(json -> {
-            json.set("reloaded", !isShuttingDown());
+            json.set("reloaded", wasPluginReloaded());
             DebugCommand.log(getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
             SimplePets.getDebugLogger().debug(DebugLevel.DEBUG, "Generated debug information while disabling", false);
         }, true);
@@ -231,7 +242,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         SPAWN_UTIL = null;
 
         // Detected a reload...
-        if (!isShuttingDown()) {
+        if (wasPluginReloaded()) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build().setMessages(
                     "------------------------------------",
                     "    The plugin has detected a reload",
@@ -246,7 +257,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         if (addonManager != null) addonManager.cleanup();
         addonManager = null;
         debug = null;
-
+        fullyStarted = false;
     }
 
     private boolean checkJavaVersion() {
@@ -329,21 +340,30 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return reloaded;
     }
 
-    private boolean isShuttingDown() {
+    private boolean wasPluginReloaded() {
         try {
             Method isStopping = Bukkit.class.getDeclaredMethod("isStopping");
-            return (boolean) Reflection.invoke(isStopping, null);
+            return !((boolean) Reflection.invoke(isStopping, null));
         } catch (Exception e) {
             Class<?> nmsClass = Reflection.getNmsClass("MinecraftServer", "server");
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
-                Method isRunning = Reflection.getMethod(nmsClass, new String[]{"isRunning", "ab"});
-                return !((boolean) Reflection.invoke(isRunning, server));
+
+                String methodName = "isRunning"; // 1.17 - 1.17.1
+                if (ServerVersion.isEqualNew(ServerVersion.v1_18) && ServerVersion.isOlder(ServerVersion.v1_19))
+                    methodName = "v"; // 1.18 - 1.18.2
+                if (ServerVersion.isEqualNew(ServerVersion.v1_19))
+                    methodName = "u"; // 1.19
+                if (ServerVersion.isEqualNew(ServerVersion.v1_19_3))
+                    methodName = "Q"; // 1.19.3
+
+                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
+                return (boolean) Reflection.invoke(isRunning, server);
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
             }
         }
-        return true;
+        return false;
     }
 
     private void handleManagers() {
@@ -519,10 +539,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private void reloadSpawner() {
         ServerVersion version = ServerVersion.getVersion();
         try {
-            Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + version.name() + ".SpawnerUtil");
-            if (clazz == null) return;
-            if (ISpawnUtil.class.isAssignableFrom(clazz)) {
-                SPAWN_UTIL = (ISpawnUtil) clazz.getConstructor().newInstance();
+            if (spawnutilClass == null) return;
+            if (ISpawnUtil.class.isAssignableFrom(spawnutilClass)) {
+                SPAWN_UTIL = (ISpawnUtil) spawnutilClass.getConstructor(ClassLoader.class).newInstance(getClassLoader());
                 debug.debug(DebugLevel.HIDDEN, "Successfully Linked to " + version.name() + " SpawnUtil Class");
             }
         } catch (Exception e) {
@@ -532,7 +551,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     .setMessages(
                             "OH NO! We could not find any support for your servers version " + ServerVersion.getVersion().name().replace("v", "").replace("_", "."),
                             "Please check the Jenkins for an updated build: https://ci.pluginwiki.us/job/SimplePets_v5/",
-                            "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)"
+                            "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)",
+                            " ",
+                            "Error: "+e.getMessage()
                     )
             );
         }
@@ -576,14 +597,20 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             if (version.name().equals(current) && (!supported)) supported = true;
             try {
                 Class<?> clazz = Class.forName(packageName.replace("<VER>", version.name()), false, getClassLoader());
-                if (clazz != null) supportedVersions.add(version.name());
+                if (clazz != null) {
+                    if (version.name().equals(current)) spawnutilClass = clazz;
+                    supportedVersions.add(version.name());
+                }
             } catch (Exception ignored) {
             }
         }
         if (!supported) {
             try {
                 Class<?> clazz = Class.forName(packageName.replace("<VER>", current), false, getClassLoader());
-                if (clazz != null) supportedVersions.add(current);
+                if (clazz != null) {
+                    spawnutilClass = clazz;
+                    supportedVersions.add(current);
+                }
             } catch (Exception ignored) {
             }
         }
@@ -599,5 +626,25 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
         taskTimer.label("Finished looking for supported versions.");
         return supported;
+    }
+
+    public boolean hasFullyStarted() {
+        return fullyStarted;
+    }
+
+    @Override
+    public boolean isStarting() {
+        return isStarting;
+    }
+
+    public String getJarName () {
+        try {
+            Method getFileMethod = JavaPlugin.class.getDeclaredMethod("getFile");
+            getFileMethod.setAccessible(true);
+            File file = (File) getFileMethod.invoke(this);
+            return file.getName();
+        }catch (Exception e) {
+            return "Error: " + e.getMessage();
+        }
     }
 }

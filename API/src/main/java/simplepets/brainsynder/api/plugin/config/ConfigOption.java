@@ -297,6 +297,18 @@ public enum ConfigOption {
                     Or should it open the Selection GUI to pick a pet to remove
                     
                     Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_CLEAR_ALL_PLACEHOLDERS = createOption("misc-toggles.remove-all-placeholders", false,
+            """
+                    This option allows for the removal of the placeholder items (The glass panes)
+                    
+                    NOTE: these are still required to be in the GUI, this will simply remove them afterwards
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_CONSOLE_BYPASS_LIMIT = createOption("misc-toggles.console-bypasses-pet-limit", true,
+            """
+                    When summoning a pet for a player via the servers console should the pet limit be enforced
+                    
+                    Default: {default}""");
 
 
     // Pet Toggles
@@ -333,6 +345,11 @@ public enum ConfigOption {
                     Are spider type pets able to climb walls?
                     
                     Default: {default}""").setPastPaths("PetToggles.SpiderClimbing");
+    public final ConfigEntry<Boolean> PET_TOGGLES_WARDEN_ANIMATIONS = createOption("pet-toggles.traits.warden-animations", true,
+            """
+                    Should the spawning/de-spawning animation for the warden be used or just make them appear/disappear
+                    
+                    Default: {default}""");
     public final ConfigEntry<Boolean> PET_TOGGLES_GLOW_VANISH = createOption("pet-toggles.traits.glow-when-vanished", true,
             """
                     When the owner is vanished should the owner see their pet with the glow effect?
@@ -373,18 +390,55 @@ public enum ConfigOption {
                     This can be overridden using pet.amount.<Number>, e.g. pet.amount.1 to only allow 1 at once.
                     
                     Default: {default}""").setPastPaths("PetToggles.Default-Spawn-Limit");
-    public final ConfigEntry<Double> PET_TOGGLES_WALK_SPEED = createOption("pet-toggles.default-pet-walk-speed", 0.6000000238418579,
+    public final ConfigEntry<Double> PET_TOGGLES_WALK_SPEED = createOption("pet-toggles.default-pet-walk-speed", 0.580804838418579,
             """
                     The default walk speed each pet will go at.
                     This can be overridden in an individual pet JSON file using the 'walk_speed' key.
                     
                     Default: {default}""").setPastPaths("PetToggles.Default-Walk-Speed");
-    public final ConfigEntry<Double> PET_TOGGLES_RIDE_SPEED = createOption("pet-toggles.default-pet-ride-speed", 0.4000000238418579,
+    public final ConfigEntry<Double> PET_TOGGLES_RIDE_SPEED = createOption("pet-toggles.default-pet-ride-speed", 0.200004838418579,
             """
                     The default ride speed each pet will go at when mounted.
                     This can be overridden in an individual pet .json file using the ride_speed key.
                     
                     Default: {default}""").setPastPaths("PetToggles.Default-Ride-Speed");
+    public final ConfigEntry<Double> PET_TOGGLES_FLY_SPEED = createOption("pet-toggles.default-pet-fly-speed", 0.300000438418579,
+            """
+                    The default ride speed each pet will go at when mounted.
+                    This can be overridden in an individual pet .json file using the ride_speed key.
+                    
+                    Default: {default}""").setPastPaths("PetToggles.Default-Ride-Speed");
+
+
+    public final ConfigEntry<Boolean> PET_SAVES_ENABLED = createOption("pet-saves.enabled", true,
+            """
+                    Do you want players to be able to save the pets they have spawned
+                    so they don't have to re-customize the pet to their state
+                    
+                    This option will essentially disable the Saves GUI/Item
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Integer> PET_SAVES_LIMIT = createOption("pet-saves.default-limit", -1,
+            """
+                    How many pets do you want your players to be able to save?
+                    Set this to `-1` if you want no limit
+                    
+                    Can be overrode via the permission `pet.saves.<amount>`
+                    Bypass permission: `pet.saves.bypass`
+                    
+                    Default: {default}""");
+    public final ConfigEntry<List<String>> PET_SAVES_TYPE_LIMIT = createOption("pet-saves.pet-type-limits", Lists.newArrayList(""),
+            """
+                    This option allows you to list pet types and the limit for how many saves they can have
+                    
+                    Example: "COW-2"
+                    This example will make it so the COW pet type can only be saved 2 times
+                    
+                    Can be overrode via the permission `pet.saves.<type>.<amount>`
+                    Bypass permission: `pet.saves.bypass`
+                    Bypass permission: `pet.saves.<type>.bypass`
+                    
+                    Default: {default}""");
 
 
 
