@@ -309,6 +309,11 @@ public enum ConfigOption {
                     When summoning a pet for a player via the servers console should the pet limit be enforced
                     
                     Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_DISABLE_CLICKING = createOption("misc-toggles.disable-pet-right-clicking", false,
+            """
+                    Should pet owners be able to open their pets data menu when right clicking the pet.
+                    
+                    Default: {default}""");
 
 
     // Pet Toggles

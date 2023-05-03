@@ -7,16 +7,17 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.managers.InventoryManager;
 
 public class InteractListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onManipulate(PlayerArmorStandManipulateEvent e) {
         SimplePets.getSpawnUtil().getHandle(e.getRightClicked()).ifPresent(handle -> {
-            if (handle instanceof IEntityPet) {
+            if (handle instanceof IEntityPet entity) {
                 e.setCancelled(true);
-                IEntityPet entity = (IEntityPet) handle;
                 if (entity.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
+                    if (ConfigOption.INSTANCE.MISC_TOGGLES_DISABLE_CLICKING.getValue()) return;
                     if (InventoryManager.PET_DATA.getType(e.getPlayer()) != entity.getPetType()) InventoryManager.PET_DATA.setType(e.getPlayer(), entity.getPetType());
                     InventoryManager.PET_DATA.open(entity.getPetUser());
                 }
@@ -38,10 +39,10 @@ public class InteractListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onInteract(PlayerInteractEntityEvent e) {
         SimplePets.getSpawnUtil().getHandle(e.getRightClicked()).ifPresent(handle -> {
-            if (handle instanceof IEntityPet) {
+            if (handle instanceof IEntityPet entity) {
                 e.setCancelled(true);
-                IEntityPet entity = (IEntityPet) handle;
                 if (entity.getOwnerUUID().equals(e.getPlayer().getUniqueId())) {
+                    if (ConfigOption.INSTANCE.MISC_TOGGLES_DISABLE_CLICKING.getValue()) return;
                     if (InventoryManager.PET_DATA.getType(e.getPlayer()) != entity.getPetType()) InventoryManager.PET_DATA.setType(e.getPlayer(), entity.getPetType());
                     InventoryManager.PET_DATA.open(entity.getPetUser());
                 }
