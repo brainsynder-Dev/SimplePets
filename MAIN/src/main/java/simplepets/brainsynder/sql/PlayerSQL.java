@@ -35,6 +35,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 public class PlayerSQL extends SQLManager {
@@ -51,36 +53,38 @@ public class PlayerSQL extends SQLManager {
 
     public void fetchRowCount(Consumer<Integer> consumer) {
         CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players`");
-                ResultSet result = statement.executeQuery();
-                int size = 0;
-                if (usingSqlite) {
-                    while (result.next()) size++;
-                } else {
-                    result = statement.executeQuery("SELECT COUNT(*) FROM `" + tablePrefix + "_players`");
-                    if (result.next()) size = result.getInt(1);
-                }
-                result.close();
-                statement.close();
-
-                int finalSize = size;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        consumer.accept(finalSize);
+            fetchConnection(connection -> {
+                try {
+                    PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players`");
+                    ResultSet result = statement.executeQuery();
+                    int size = 0;
+                    if (usingSqlite) {
+                        while (result.next()) size++;
+                    } else {
+                        result = statement.executeQuery("SELECT COUNT(*) FROM `" + tablePrefix + "_players`");
+                        if (result.next()) size = result.getInt(1);
                     }
-                }.runTask(PetCore.getInstance());
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+                    result.close();
+                    statement.close();
+
+                    int finalSize = size;
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            consumer.accept(finalSize);
+                        }
+                    }.runTask(PetCore.getInstance());
+                } catch (SQLException exception) {
+                    exception.printStackTrace();
+                }
+            });
         });
     }
 
     @Override
     public void createTable() {
         CompletableFuture.runAsync(() -> {
-            try (Connection connection = implementConnection()) {
+            fetchConnection(connection -> {
                 String table = "CREATE TABLE IF NOT EXISTS " + tablePrefix + "_players (" +
                         "`uuid` VARCHAR(265) NOT NULL," +
                         "`name` VARCHAR(265) NOT NULL," +
@@ -91,10 +95,10 @@ public class PlayerSQL extends SQLManager {
                         ")";
                 try (PreparedStatement createTable = connection.prepareStatement(table)) {
                     createTable.executeUpdate();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (SQLException exception) {
-                exception.printStackTrace();
-            }
+            });
             transferOldData();
         });
     }
@@ -249,26 +253,29 @@ public class PlayerSQL extends SQLManager {
 
     public CompletableFuture<StorageTagCompound> fetchData(UUID uuid) {
         return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
+            AtomicReference<StorageTagCompound> reference = new AtomicReference<>(new StorageTagCompound());
+
+            fetchConnection(connection -> {
                 try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + tablePrefix + "_players WHERE uuid = ?")) {
                     statement.setString(1, uuid.toString());
                     ResultSet results = statement.executeQuery();
                     if (!results.next()) {
                         results.close();
-                        return new StorageTagCompound();
+                        reference.set(new StorageTagCompound());
+                        return;
                     }
                     try {
                         StorageTagCompound compound = rowToCompound(uuid, results, false);
                         results.close();
-                        return compound;
+                        reference.set(compound);
                     } catch (NullPointerException | IllegalArgumentException ex) {
-                        return new StorageTagCompound();
+                        reference.set(new StorageTagCompound());
                     }
+                } catch (SQLException e) {
+                    reference.set(new StorageTagCompound());
                 }
-            } catch (SQLException ex) {
-                ex.printStackTrace();
-                return new StorageTagCompound();
-            }
+            });
+            return reference.get();
         }, PetCore.getInstance().async).thenApplyAsync(compound -> compound, PetCore.getInstance().sync);
     }
 
@@ -276,28 +283,29 @@ public class PlayerSQL extends SQLManager {
         StorageTagCompound compound = ((PetOwner) user).toCompound();
 
         return CompletableFuture.<Void>supplyAsync(() -> {
-            Connection connection = implementConnection();
-            isPlayerInDatabase(connection, user.getOwnerUUID()).thenApply(data -> {
-                if (data) {
-                    return updateData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
-                } else {
-                    return insertData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
-                }
+            fetchConnection(connection -> {
+                isPlayerInDatabase(connection, user.getOwnerUUID()).thenApply(data -> {
+                    if (data) {
+                        return updateData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
+                    } else {
+                        return insertData(connection, user.getOwnerUUID(), user.getOwnerName(), compound);
+                    }
+                });
             });
             return null;
         }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     public boolean uploadDataSync(PetUser user) {
-        try (Connection connection = implementConnection()) {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+        fetchConnection(connection -> {
             if (isPlayerInDatabaseSync(connection, user.getOwnerUUID())) {
-                return updateDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
+                atomicBoolean.set(updateDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound()));
             } else {
-                return insertDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound());
+                atomicBoolean.set(insertDataSync(connection, user.getOwnerUUID(), user.getOwnerName(), ((PetOwner) user).toCompound()));
             }
-        } catch (SQLException exception) {
-            return false;
-        }
+        });
+        return atomicBoolean.get();
     }
 
     /**
@@ -354,52 +362,56 @@ public class PlayerSQL extends SQLManager {
 
     public void removeDuplicates(CommandSender sender) {
         List<String> list = new ArrayList<>();
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
+        fetchConnection(connection -> {
+            try {
+                PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
-            int size = 0;
-            try (ResultSet result = statement.executeQuery()) {
-                while (result.next()) {
-                    ++size;
-                    list.add(result.getString("uuid"));
+                int size = 0;
+                try (ResultSet result = statement.executeQuery()) {
+                    while (result.next()) {
+                        ++size;
+                        list.add(result.getString("uuid"));
+                    }
                 }
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of duplicate accounts found: "+size);
+
+                if (list.isEmpty()) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No duplicate entries found that needed to be deleted");
+                    return;
+                }
+
+                statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
+
+                for (String string : list) {
+                    statement.setString(1, string);
+                    statement.addBatch();
+                }
+
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of duplicate entries deleted: "+statement.executeBatch().length);
+                statement.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of duplicate accounts found: "+size);
-
-            if (list.isEmpty()) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No duplicate entries found that needed to be deleted");
-                return;
-            }
-
-            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
-
-            for (String string : list) {
-                statement.setString(1, string);
-                statement.addBatch();
-            }
-
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of duplicate entries deleted: "+statement.executeBatch().length);
-            statement.close();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        });
     }
 
     public void findDuplicates (Consumer<List<Triple<UUID, String, Integer>>> consumer) {
         CompletableFuture.runAsync(() -> {
             List<Triple<UUID, String, Integer>> list = new ArrayList<>();
 
-            try (Connection connection  = implementConnection()) {
-                PreparedStatement statement = connection.prepareStatement("SELECT `uuid`,`name`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
+            fetchConnection(connection -> {
+                try {
+                    PreparedStatement statement = connection.prepareStatement("SELECT `uuid`,`name`, COUNT(`uuid`) FROM `"+tablePrefix+"_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
-                ResultSet result = statement.executeQuery();
-                while (result.next()) {
-                    list.add(Triple.of(UUID.fromString(result.getString(1)), result.getString(2), result.getInt(3)));
-                }
+                    ResultSet result = statement.executeQuery();
+                    while (result.next()) {
+                        list.add(Triple.of(UUID.fromString(result.getString(1)), result.getString(2), result.getInt(3)));
+                    }
 
-                result.close();
-                statement.close();
-            }catch (SQLException ignored) {}
+                    result.close();
+                    statement.close();
+                }catch (SQLException ignored) {}
+            });
 
             new BukkitRunnable() {
                 @Override
@@ -412,35 +424,37 @@ public class PlayerSQL extends SQLManager {
 
     public void removeNPCs(CommandSender sender) {
         List<String> list = new ArrayList<>();
-        try (Connection connection = implementConnection()) {
-            PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
+        fetchConnection(connection -> {
+            try {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + tablePrefix + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
 
-            int size = 0;
-            try (ResultSet result = statement.executeQuery()) {
-                while (result.next()) {
-                    ++size;
-                    list.add(result.getString("uuid"));
+                int size = 0;
+                try (ResultSet result = statement.executeQuery()) {
+                    while (result.next()) {
+                        ++size;
+                        list.add(result.getString("uuid"));
+                    }
                 }
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of NPC accounts found: "+size);
+
+                if (list.isEmpty()) {
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No entries found that needed to be deleted");
+                    return;
+                }
+
+                statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
+
+                for (String string : list) {
+                    statement.setString(1, string);
+                    statement.addBatch();
+                }
+
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of entries deleted: "+statement.executeBatch().length);
+                statement.close();
+            } catch (SQLException exception) {
+                exception.printStackTrace();
             }
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" Number of NPC accounts found: "+size);
-
-            if (list.isEmpty()) {
-                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ChatColor.GRAY+" No entries found that needed to be deleted");
-                return;
-            }
-
-            statement = connection.prepareStatement("DELETE FROM `" + tablePrefix + "_players` WHERE `uuid`=?");
-
-            for (String string : list) {
-                statement.setString(1, string);
-                statement.addBatch();
-            }
-
-            sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+" Number of entries deleted: "+statement.executeBatch().length);
-            statement.close();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
+        });
     }
 
     public CompletableFuture<Boolean> updateData(Connection connection, UUID uuid, String name, StorageTagCompound compound) {

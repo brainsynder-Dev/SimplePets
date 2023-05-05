@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.function.Consumer;
 
 /**
  * This class was provided by {@link https://github.com/Thatsmusic99}
@@ -21,6 +22,7 @@ public abstract class SQLManager {
     protected String tablePrefix;
     private final String databaseName;
     protected volatile boolean usingSqlite;
+    private Connection sqliteConnection;
 
     public SQLManager() {
         this(false);
@@ -53,10 +55,11 @@ public abstract class SQLManager {
 
     // Forgot about thread safety and got told off for it in AT
     public Connection implementConnection() {
-        Connection connection = null;
         if (usingSqlite) {
-            connection = loadSqlite();
+            if (sqliteConnection != null) return sqliteConnection;
+            return sqliteConnection = loadSqlite();
         } else {
+            Connection connection = null;
             StringBuilder url = new StringBuilder();
             url.append("jdbc:mysql://").append(ConfigOption.INSTANCE.MYSQL_HOST.getValue()).append(":")
                     .append(ConfigOption.INSTANCE.MYSQL_PORT.getValue()).append("/").append(databaseName);
@@ -69,8 +72,22 @@ public abstract class SQLManager {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
+            return connection;
         }
-        return connection;
+    }
+
+    public void fetchConnection (Consumer<Connection> consumer) {
+        if (usingSqlite) {
+            if (sqliteConnection != null) sqliteConnection = loadSqlite();
+            consumer.accept(sqliteConnection);
+            return;
+        }
+
+        try (Connection connection = implementConnection()) {
+            consumer.accept(connection);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String getTable(String suffix) {
