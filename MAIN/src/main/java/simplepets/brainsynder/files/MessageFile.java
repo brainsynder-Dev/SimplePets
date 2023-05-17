@@ -19,6 +19,8 @@ public class MessageFile {
             public void loadDefaults() {
                 addSectionHeader(MessageOption.PREFIX.getPath(), "NOTICE: All the messages in this file can be customized with color codes\nThat includes the HEX color codes added in 1.16\nExample HEX color: &#ff0000 = RED");
                 addDefault(MessageOption.PREFIX, "Will replace the {prefix} placeholder");
+                addDefault(MessageOption.NO_PERMISSION, "Message will be sent when the player does not have permission for when a permission is required");
+                addDefault(MessageOption.NO_PETS_UNLOCKED, "This message will only be used if the player does not have any pets unlocked and 'Needs-Pet-Permission-for-GUI' is TRUE");
                 addDefault(MessageOption.SUMMONED_ALL_PETS, "Message that will be sent when pets are spawned via '/pet summon all' (Mostly for OPs to show off)");
                 addDefault(MessageOption.SUMMONED_PET, "Message that will be sent when a pet is spawned via '/pet summon'");
                 addDefault(MessageOption.MISSING_PET_TYPE, "The pet type is missing");
