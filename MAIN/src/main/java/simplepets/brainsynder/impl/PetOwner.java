@@ -26,7 +26,6 @@ import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.managers.ParticleManager;
-import simplepets.brainsynder.sql.PlayerSQL;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.*;
@@ -218,7 +217,7 @@ public class PetOwner implements PetUser {
 
         // If the server is shutting down, JUST IN CASE
         if (!PetCore.getInstance().isEnabled()) {
-            PlayerSQL.getInstance().uploadDataSync(this);
+            PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound());
             return;
         }
 
@@ -253,7 +252,7 @@ public class PetOwner implements PetUser {
         });
         // If the server is shutting down
         if (!PetCore.getInstance().isEnabled()) {
-            PlayerSQL.getInstance().uploadDataSync(this);
+            PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound());
             return;
         }
         updateDatabase().thenAccept(callback -> {
@@ -281,7 +280,9 @@ public class PetOwner implements PetUser {
      * Will update the data that is in the database
      */
     public CompletableFuture<Object> updateDatabase() {
-        return PlayerSQL.getInstance().uploadData(this);
+        return CompletableFuture
+                .supplyAsync(() -> PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound()), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }
 
     @Override
@@ -555,8 +556,7 @@ public class PetOwner implements PetUser {
                 hatPets.remove(type);
                 PostPetHatEvent hatEvent = new PostPetHatEvent (PetOwner.this, entityPet, PostPetHatEvent.Type.REMOVE);
                 Bukkit.getPluginManager().callEvent(hatEvent);
-                if (entityPet instanceof IEntityControllerPet) {
-                    IEntityControllerPet controller = ((IEntityControllerPet) entityPet);
+                if (entityPet instanceof IEntityControllerPet controller) {
                     Optional<Entity> riderOptional = controller.getDisplayRider();
 
                     if (riderOptional.isPresent()) {
