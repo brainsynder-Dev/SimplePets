@@ -54,7 +54,7 @@ public class SQLiteHandler implements SQLHandler {
     }
 
     @Override
-    public boolean setDataSync (UUID uuid, String name, StorageTagCompound compound) {
+    public boolean setDataSync(UUID uuid, String name, StorageTagCompound compound) {
         try {
             Connection connection = implementConnection();
             // Checks if the uuid is in the MySQL database
@@ -79,7 +79,7 @@ public class SQLiteHandler implements SQLHandler {
                 statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
                 statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
                 statement.setString(6, uuid.toString());
-            }else{
+            } else {
                 statement = connection.prepareStatement("INSERT INTO `" + SQLData.TABLE_PREFIX + "_players` " +
                         "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
                 statement.setString(1, uuid.toString());
@@ -94,7 +94,7 @@ public class SQLiteHandler implements SQLHandler {
 
             statement.close();
             return true;
-        }catch (SQLException exception) {
+        } catch (SQLException exception) {
             return false;
         }
     }
@@ -113,17 +113,19 @@ public class SQLiteHandler implements SQLHandler {
             if (results.next()) {
                 try {
                     compound = rowToCompound(uuid, results, false);
-                } catch (NullPointerException | IllegalArgumentException ignored) {}
+                } catch (NullPointerException | IllegalArgumentException ignored) {
+                }
             }
 
             results.close();
             statement.close();
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return compound;
     }
 
     @Override
-    public int getRowCount () {
+    public int getRowCount() {
         int count = 0;
 
         try {
@@ -138,7 +140,8 @@ public class SQLiteHandler implements SQLHandler {
             count = size;
 
             statement.close();
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return count;
     }
 
@@ -231,7 +234,8 @@ public class SQLiteHandler implements SQLHandler {
             }
 
             statement.close();
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
         return list;
     }
 }
