@@ -4,9 +4,9 @@ import lib.brainsynder.nbt.JsonToNBT;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.other.NBTException;
+import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.utils.Base64Wrapper;
 import lib.brainsynder.utils.Triple;
-import org.bukkit.command.CommandSender;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.debug.DebugBuilder;
 import simplepets.brainsynder.debug.DebugLevel;
@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface SQLHandler {
     String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + SQLData.TABLE_PREFIX + "_players (" +
@@ -31,13 +32,13 @@ public interface SQLHandler {
 
     void createTable();
 
-    boolean setDataSync (UUID uuid, String name, StorageTagCompound compound);
-    StorageTagCompound fetchData(UUID uuid);
-    int getRowCount ();
+    CompletableFuture<Boolean> sendPlayerData(UUID uuid, String name, StorageTagCompound compound);
+    CompletableFuture<StorageTagCompound> fetchData(UUID uuid);
+    CompletableFuture<Integer> getRowCount ();
 
-    void removeDuplicates(CommandSender sender);
-    void removeNPCs(CommandSender sender);
-    List<Triple<UUID, String, Integer>> findDuplicates ();
+    CompletableFuture<BiOptional<Integer, Integer>> removeDuplicates();
+    CompletableFuture<BiOptional<Integer, Integer>> removeNPCs();
+    CompletableFuture<List<Triple<UUID, String, Integer>>> findDuplicates ();
 
     /**
      * This function returns either "TEXT" or "LONGTEXT" depending on the value of SQLData.USE_SQLITE.
