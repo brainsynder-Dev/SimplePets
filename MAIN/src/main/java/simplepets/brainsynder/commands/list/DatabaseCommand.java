@@ -49,7 +49,6 @@ public class DatabaseCommand extends PetSubCommand {
 
         // Clears the database of any NPC/offline UUIDs
         if (args[0].equalsIgnoreCase("removenpcs")) {
-            // Not Async yet...
             PetCore.getInstance().getSqlHandler().removeNPCs().whenComplete((biOptional, throwable) -> {
                 int rawCount = biOptional.first().orElse(0);
                 int totalCount = biOptional.second().orElse(0);
