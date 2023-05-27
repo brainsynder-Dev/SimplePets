@@ -39,7 +39,7 @@ public class SQLiteHandler implements SQLHandler {
     }
 
     @Override
-    public void createTable() {
+    public void initiateDatabase() {
         try {
             Connection connection = implementConnection();
             PreparedStatement statement = connection.prepareStatement(CREATE_TABLE);
@@ -53,50 +53,55 @@ public class SQLiteHandler implements SQLHandler {
 
     @Override
     public CompletableFuture<Boolean> sendPlayerData(UUID uuid, String name, StorageTagCompound compound) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Connection connection = implementConnection();
-                // Checks if the uuid is in the MySQL database
-                boolean hasEntry;
-                {
-                    PreparedStatement statement = connection.prepareStatement(
-                            "SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1");
-                    ResultSet result = statement.executeQuery();
-                    hasEntry = result.next();
+        return CompletableFuture
+                .supplyAsync(() -> sendPlayerDataSync(uuid, name, compound), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
+    }
 
-                    statement.close();
-                }
-
-                PreparedStatement statement;
-                if (hasEntry) {
-                    statement = connection.prepareStatement("UPDATE `" + SQLData.TABLE_PREFIX + "_players` SET " +
-                            "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
-                    statement.setString(1, name);
-
-                    statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                    statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                    statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                    statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                    statement.setString(6, uuid.toString());
-                } else {
-                    statement = connection.prepareStatement("INSERT INTO `" + SQLData.TABLE_PREFIX + "_players` " +
-                            "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
-                    statement.setString(1, uuid.toString());
-                    statement.setString(2, name);
-
-                    statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                    statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                    statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                    statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                }
-                statement.executeUpdate();
+    @Override
+    public boolean sendPlayerDataSync(UUID uuid, String name, StorageTagCompound compound) {
+        try {
+            Connection connection = implementConnection();
+            // Checks if the uuid is in the MySQL database
+            boolean hasEntry;
+            {
+                PreparedStatement statement = connection.prepareStatement(
+                        "SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1");
+                ResultSet result = statement.executeQuery();
+                hasEntry = result.next();
 
                 statement.close();
-                return true;
-            } catch (SQLException exception) {
-                return false;
             }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
+
+            PreparedStatement statement;
+            if (hasEntry) {
+                statement = connection.prepareStatement("UPDATE `" + SQLData.TABLE_PREFIX + "_players` SET " +
+                        "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
+                statement.setString(1, name);
+
+                statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+                statement.setString(6, uuid.toString());
+            } else {
+                statement = connection.prepareStatement("INSERT INTO `" + SQLData.TABLE_PREFIX + "_players` " +
+                        "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
+                statement.setString(1, uuid.toString());
+                statement.setString(2, name);
+
+                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+                statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+            }
+            statement.executeUpdate();
+
+            statement.close();
+            return true;
+        } catch (SQLException exception) {
+            return false;
+        }
     }
 
     @Override

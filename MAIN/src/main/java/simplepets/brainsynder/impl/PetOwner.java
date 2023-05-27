@@ -218,7 +218,7 @@ public class PetOwner implements PetUser {
         // If the server is shutting down, JUST IN CASE
         if (!PetCore.getInstance().isEnabled()) {
             // TBD: We want to block the thread to save everything...
-            PetCore.getInstance().getSqlHandler().sendPlayerData(uuid, name, toCompound()).join();
+            PetCore.getInstance().getSqlHandler().sendPlayerDataSync(uuid, name, toCompound());
             return;
         }
 
@@ -254,7 +254,7 @@ public class PetOwner implements PetUser {
         // If the server is shutting down
         if (!PetCore.getInstance().isEnabled()) {
             // TBD: We want to block the thread to save everything...
-            PetCore.getInstance().getSqlHandler().sendPlayerData(uuid, name, toCompound()).join();
+            PetCore.getInstance().getSqlHandler().sendPlayerDataSync(uuid, name, toCompound());
             return;
         }
         updateDatabase().thenAccept(callback -> {

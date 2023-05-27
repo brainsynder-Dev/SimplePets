@@ -35,7 +35,7 @@ public class MySQLHandler implements SQLHandler {
     }
 
     @Override
-    public void createTable() {
+    public void initiateDatabase() {
         try (Connection connection = implementConnection()) {
             PreparedStatement statement = connection.prepareStatement(CREATE_TABLE);
             statement.executeUpdate();
@@ -48,45 +48,50 @@ public class MySQLHandler implements SQLHandler {
 
     @Override
     public CompletableFuture<Boolean> sendPlayerData(UUID uuid, String name, StorageTagCompound compound) {
-        return CompletableFuture.supplyAsync(() -> {
-            try (Connection connection = implementConnection()) {
-                // Checks if the uuid is in the MySQL database
-                boolean hasEntry;
-                {
-                    PreparedStatement statement = connection.prepareStatement(
-                            "SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1");
-                    ResultSet result = statement.executeQuery();
-                    hasEntry = result.next();
-                }
+        return CompletableFuture
+                .supplyAsync(() -> sendPlayerDataSync(uuid, name, compound), PetCore.getInstance().async)
+                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
+    }
 
-                PreparedStatement statement;
-                if (hasEntry) {
-                    statement = connection.prepareStatement("UPDATE `" + SQLData.TABLE_PREFIX + "_players` SET " +
-                            "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
-                    statement.setString(1, name);
-
-                    statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                    statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                    statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                    statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                    statement.setString(6, uuid.toString());
-                }else{
-                    statement = connection.prepareStatement("INSERT INTO `" + SQLData.TABLE_PREFIX + "_players` " +
-                            "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
-                    statement.setString(1, uuid.toString());
-                    statement.setString(2, name);
-
-                    statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
-                    statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
-                    statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
-                    statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
-                }
-                statement.executeUpdate();
-                return true;
-            }catch (SQLException exception) {
-                return false;
+    @Override
+    public boolean sendPlayerDataSync(UUID uuid, String name, StorageTagCompound compound) {
+        try (Connection connection = implementConnection()) {
+            // Checks if the uuid is in the MySQL database
+            boolean hasEntry;
+            {
+                PreparedStatement statement = connection.prepareStatement(
+                        "SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players` WHERE uuid = '" + uuid.toString() + "' LIMIT 1");
+                ResultSet result = statement.executeQuery();
+                hasEntry = result.next();
             }
-        }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
+
+            PreparedStatement statement;
+            if (hasEntry) {
+                statement = connection.prepareStatement("UPDATE `" + SQLData.TABLE_PREFIX + "_players` SET " +
+                        "name=?, UnlockedPets=?, PetName=?, NeedsRespawn=?, SavedPets=? WHERE uuid = ?");
+                statement.setString(1, name);
+
+                statement.setString(2, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+                statement.setString(6, uuid.toString());
+            } else {
+                statement = connection.prepareStatement("INSERT INTO `" + SQLData.TABLE_PREFIX + "_players` " +
+                        "(`uuid`, `name`, `UnlockedPets`, `PetName`, `NeedsRespawn`, `SavedPets`) VALUES (?, ?, ?, ?, ?, ?)");
+                statement.setString(1, uuid.toString());
+                statement.setString(2, name);
+
+                statement.setString(3, Base64Wrapper.encodeString(compound.getTag("owned_pets").toString()));
+                statement.setString(4, Base64Wrapper.encodeString(compound.getTag("pet_names").toString()));
+                statement.setString(5, Base64Wrapper.encodeString(compound.getTag("spawned_pets").toString()));
+                statement.setString(6, Base64Wrapper.encodeString(compound.getTag("saved_pets").toString()));
+            }
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException exception) {
+            return false;
+        }
     }
 
     @Override
@@ -94,7 +99,7 @@ public class MySQLHandler implements SQLHandler {
         return CompletableFuture.supplyAsync(() -> {
             StorageTagCompound compound = new StorageTagCompound();
 
-            try (Connection connection = implementConnection()){
+            try (Connection connection = implementConnection()) {
 
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM " + SQLData.TABLE_PREFIX + "_players WHERE uuid = ?");
                 statement.setString(1, uuid.toString());
@@ -121,7 +126,7 @@ public class MySQLHandler implements SQLHandler {
         return CompletableFuture.supplyAsync(() -> {
             int count = 0;
 
-            try (Connection connection = implementConnection()){
+            try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players`");
                 ResultSet result = statement.executeQuery();
 
@@ -144,7 +149,7 @@ public class MySQLHandler implements SQLHandler {
             int rawCount = 0;
             int totalCount = 0;
 
-            try (Connection connection = implementConnection()){
+            try (Connection connection = implementConnection()) {
 
                 PreparedStatement statement = connection.prepareStatement("SELECT `uuid`, COUNT(`uuid`) FROM `" + SQLData.TABLE_PREFIX + "_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
@@ -179,7 +184,7 @@ public class MySQLHandler implements SQLHandler {
             int rawCount = 0;
             int totalCount = 0;
 
-            try (Connection connection = implementConnection()){
+            try (Connection connection = implementConnection()) {
 
                 PreparedStatement statement = connection.prepareStatement("SELECT * FROM `" + SQLData.TABLE_PREFIX + "_players` WHERE `uuid` LIKE '________-____-2___-____-____________';");
 
@@ -212,7 +217,7 @@ public class MySQLHandler implements SQLHandler {
     public CompletableFuture<List<Triple<UUID, String, Integer>>> findDuplicates() {
         return CompletableFuture.supplyAsync(() -> {
             List<Triple<UUID, String, Integer>> list = new ArrayList<>();
-            try (Connection connection = implementConnection()){
+            try (Connection connection = implementConnection()) {
                 PreparedStatement statement = connection.prepareStatement("SELECT `uuid`,`name`, COUNT(`uuid`) FROM `" + SQLData.TABLE_PREFIX + "_players` GROUP BY `uuid` HAVING COUNT(`uuid`) > 1;");
 
                 ResultSet result = statement.executeQuery();
@@ -225,7 +230,8 @@ public class MySQLHandler implements SQLHandler {
                 }
 
                 statement.close();
-            } catch (SQLException ignored) {}
+            } catch (SQLException ignored) {
+            }
             return list;
         }, PetCore.getInstance().async).thenApplyAsync(result -> result, PetCore.getInstance().sync);
     }

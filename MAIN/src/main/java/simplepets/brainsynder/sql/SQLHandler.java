@@ -54,6 +54,25 @@ public interface SQLHandler {
     CompletableFuture<Boolean> sendPlayerData(UUID uuid, String name, StorageTagCompound compound);
 
     /**
+     * This function is used to send player data synchronization with a UUID, name, and storage
+     * tag compound.
+     *
+     * @param uuid The UUID (Universally Unique Identifier) of the player whose data is being sent. This is a unique
+     * identifier assigned to each player by Minecraft.
+     * @param name The name parameter is a String that represents the name of the player whose data is being synchronized.
+     * @param compound The "compound" parameter is likely a StorageTagCompound object, which is a data structure used to
+     * store and manipulate NBT (Named Binary Tag) data. NBT is a format used by Minecraft to store various types of game
+     * data, such as player inventories, entity data, and world information
+     * @return The method is marked as deprecated, which means it is no longer recommended to use it. However, based on the
+     * method signature, it appears that it used to return a boolean value indicating whether the player data
+     * synchronization was successful or not.
+     *
+     * @Deprecated Might be removed in favor of a different way
+     */
+    @Deprecated
+    boolean sendPlayerDataSync(UUID uuid, String name, StorageTagCompound compound);
+
+    /**
      * The function returns a CompletableFuture object that fetches a StorageTagCompound object associated with a given
      * UUID.
      *
