@@ -35,7 +35,7 @@ public interface SQLHandler {
      */
     Connection implementConnection();
 
-    void createTable();
+    void initiateDatabase();
 
     /**
      * This function sends player data, identified by UUID and name, along with a StorageTagCompound object, and returns a

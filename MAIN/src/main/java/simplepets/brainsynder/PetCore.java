@@ -157,6 +157,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }else{
             sqlHandler = new MySQLHandler();
         }
+        sqlHandler.initiateDatabase();
         taskTimer.label("init SQLHandler");
 
         handleMetrics();
