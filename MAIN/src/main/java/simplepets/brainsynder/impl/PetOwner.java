@@ -217,7 +217,8 @@ public class PetOwner implements PetUser {
 
         // If the server is shutting down, JUST IN CASE
         if (!PetCore.getInstance().isEnabled()) {
-            PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound());
+            // TBD: We want to block the thread to save everything...
+            PetCore.getInstance().getSqlHandler().sendPlayerData(uuid, name, toCompound()).join();
             return;
         }
 
@@ -252,7 +253,8 @@ public class PetOwner implements PetUser {
         });
         // If the server is shutting down
         if (!PetCore.getInstance().isEnabled()) {
-            PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound());
+            // TBD: We want to block the thread to save everything...
+            PetCore.getInstance().getSqlHandler().sendPlayerData(uuid, name, toCompound()).join();
             return;
         }
         updateDatabase().thenAccept(callback -> {
@@ -279,10 +281,8 @@ public class PetOwner implements PetUser {
     /**
      * Will update the data that is in the database
      */
-    public CompletableFuture<Object> updateDatabase() {
-        return CompletableFuture
-                .supplyAsync(() -> PetCore.getInstance().getSqlHandler().setDataSync(uuid, name, toCompound()), PetCore.getInstance().async)
-                .thenApplyAsync(result -> result, PetCore.getInstance().sync);
+    public CompletableFuture<Boolean> updateDatabase() {
+        return PetCore.getInstance().getSqlHandler().sendPlayerData(uuid, name, toCompound());
     }
 
     @Override
