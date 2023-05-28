@@ -33,7 +33,7 @@ public class DebugMarker {
     private int distanceSquared;
     private final List<Player> seen;
     private ScheduledExecutorService executorService = Executors.newScheduledThreadPool(1);
-    
+
     public DebugMarker(org.bukkit.Location location, Color color, String name, int duration, List<Player> showTo) throws InvocationTargetException {
         this(location, color, name, duration);
         for (Player player : showTo) {
@@ -52,7 +52,7 @@ public class DebugMarker {
         data.writeInt(color.getRGB()); // color
         data.writeUtf(name); // name
         data.writeInt(duration); // lifetime of marker
-        
+
         marker.getMinecraftKeys().write(0, new MinecraftKey("debug/game_test_add_marker"));
         marker.getSpecificModifier(FriendlyByteBuf.class).write(0, data);
     }
@@ -89,7 +89,7 @@ public class DebugMarker {
         };
         executorService.scheduleAtFixedRate(run, 0, 200, TimeUnit.MILLISECONDS);
     }
-    
+
     public void stop() {
         setData(location, new Color(0, 0, 0, 0), "", 0);
         for (Player p : location.getWorld().getPlayers()) {
@@ -100,7 +100,7 @@ public class DebugMarker {
         seen.clear();
         executorService.shutdownNow();
     }
-    
+
     public void stopAll(int distance) throws InvocationTargetException {
         int distanceSquared = distance < 0 ? -1 : distance * distance;
         // probably not the most efficient way of doing this
@@ -124,7 +124,7 @@ public class DebugMarker {
             }
         }
     }
-    
+
     private void setData(org.bukkit.Location location, Color color, String name, int duration) {
         data = new FriendlyByteBuf(Unpooled.buffer());
         data.writeBlockPos(new BlockPos(location.getBlockX(), location.getBlockY(), location.getBlockZ()));
@@ -133,7 +133,7 @@ public class DebugMarker {
         data.writeInt(duration);
         marker.getSpecificModifier(FriendlyByteBuf.class).write(0, data);
     }
-    
+
     public void setLocation(org.bukkit.Location location) {
         this.location = location;
         setData(this.location, this.color, this.name, this.duration);
@@ -150,7 +150,7 @@ public class DebugMarker {
         this.duration = duration;
         setData(this.location, this.color, this.name, this.duration);
     }
-    
+
     public org.bukkit.Location getLocation() {
         return location;
     }
@@ -163,7 +163,7 @@ public class DebugMarker {
     public int getDuration() {
         return duration;
     }
-    
+
     private boolean isCloseEnough(org.bukkit.Location location) {
         return distanceSquared == -1 ||
                 this.location.distanceSquared(location) <= distanceSquared;
