@@ -78,19 +78,11 @@ public class DebugMarker {
             for (Player p : location.getWorld().getPlayers()) {
                 if (isCloseEnough(p.getLocation()) && !seen.contains(p)) {
                     setData(location, color, name, (int) (endTime - System.currentTimeMillis())); // make sure death time is the same for all players
-                    try {
-                        ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
                     seen.add(p);
                 } else if (!isCloseEnough(p.getLocation()) && seen.contains(p)) {
                     setData(location, new Color(0, 0, 0, 0), "", 0);
-                    try {
-                        ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
-                    } catch (InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
+                    ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
                     seen.remove(p);
                 }
             }
@@ -102,11 +94,7 @@ public class DebugMarker {
         setData(location, new Color(0, 0, 0, 0), "", 0);
         for (Player p : location.getWorld().getPlayers()) {
             if (distanceSquared == -1 || this.location.distanceSquared(p.getLocation()) <= distanceSquared) {
-                try {
-                    ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                }
+                ProtocolLibrary.getProtocolManager().sendServerPacket(p, marker);
             }
         }
         seen.clear();

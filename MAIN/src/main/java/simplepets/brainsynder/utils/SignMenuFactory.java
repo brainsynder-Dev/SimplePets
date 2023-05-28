@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,11 +109,7 @@ public final class SignMenuFactory {
             PacketContainer openSign = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
             BlockPosition position = new BlockPosition(location.getBlockX(), location.getBlockY(), location.getBlockZ());
             openSign.getBlockPositionModifier().write(0, position);
-            try {
-                ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
-            } catch (InvocationTargetException exception) {
-                exception.printStackTrace();
-            }
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player, openSign);
             inputReceivers.put(player, this);
         }
 
