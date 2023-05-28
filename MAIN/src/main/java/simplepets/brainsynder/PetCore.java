@@ -38,7 +38,10 @@ import simplepets.brainsynder.impl.PetOwner;
 import simplepets.brainsynder.impl.PetUtility;
 import simplepets.brainsynder.listeners.*;
 import simplepets.brainsynder.managers.*;
-import simplepets.brainsynder.sql.PlayerSQL;
+import simplepets.brainsynder.sql.SQLData;
+import simplepets.brainsynder.sql.SQLHandler;
+import simplepets.brainsynder.sql.handlers.MySQLHandler;
+import simplepets.brainsynder.sql.handlers.SQLiteHandler;
 import simplepets.brainsynder.utils.JavaVersion;
 import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
@@ -84,6 +87,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private Debug debug;
     private IPetUtilities petUtilities;
     private TaskTimer taskTimer;
+    private SQLHandler sqlHandler;
 
     public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
     public final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(this, task);
@@ -147,9 +151,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         handleManagers();
         taskTimer.label("init managers");
 
-        debug.debug(DebugLevel.HIDDEN, "Initializing Player SQL");
-        new PlayerSQL();
-        taskTimer.label("init PlayerSQL");
+        debug.debug(DebugLevel.HIDDEN, "Initializing SQL Handler");
+        if (SQLData.USE_SQLITE) {
+            sqlHandler = new SQLiteHandler();
+        }else{
+            sqlHandler = new MySQLHandler();
+        }
+        sqlHandler.initiateDatabase();
+        taskTimer.label("init SQLHandler");
 
         handleMetrics();
         taskTimer.label("init metrics");
@@ -429,6 +438,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         return USER_MANAGER;
     }
 
+    public SQLHandler getSqlHandler() {
+        return sqlHandler;
+    }
 
     public double getJavaVersion() {
         try {

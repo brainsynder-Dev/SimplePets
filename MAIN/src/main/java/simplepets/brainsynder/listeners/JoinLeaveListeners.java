@@ -5,11 +5,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.impl.PetOwner;
-import simplepets.brainsynder.sql.PlayerSQL;
 
 public class JoinLeaveListeners implements Listener {
 
@@ -29,17 +27,10 @@ public class JoinLeaveListeners implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                PlayerSQL.getInstance().fetchData(event.getPlayer().getUniqueId()).thenAccept(data -> {
-                    // Always reload the data in case we're part of a multi-
-                    // server network and the data was changed on another server
-                    SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
-                        ((PetOwner) user).loadCompound(data);
-                    });
-                });
-            }
-        }.runTaskLater(PetCore.getInstance(), 10);
+        PetCore.getInstance().getSqlHandler().fetchData(event.getPlayer().getUniqueId()).whenComplete((data, throwable) -> {
+            SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
+                ((PetOwner) user).loadCompound(data);
+            });
+        });
     }
 }
