@@ -78,11 +78,11 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.entityData.define(STATUS, (byte) 0);
-        if (ServerVersion.isOlder(ServerVersion.v1_19_4)) this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
+        if (!ServerVersion.isNewer(ServerVersion.v1_19_4)) this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     static {
         STATUS = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.BYTE);
-        if (ServerVersion.isOlder(ServerVersion.v1_19_4)) OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.OPTIONAL_UUID);
+        if (!ServerVersion.isNewer(ServerVersion.v1_19_4)) OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.OPTIONAL_UUID);
     }
 }
