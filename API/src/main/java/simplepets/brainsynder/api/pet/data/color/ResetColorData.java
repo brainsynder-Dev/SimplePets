@@ -34,15 +34,15 @@ public class ResetColorData extends PetData<IResetColor> {
         if (optional.isPresent()) {
             // We have to do this to replace the placholders if there is any
 
-            ColorWrapper previous = ColorWrapper.getPrevious(entity.getColor());
-            ColorWrapper next = ColorWrapper.getNext(entity.getColor());
+            ColorWrapper previous = ColorWrapper.getPrevious(entity.getColorWrapper());
+            ColorWrapper next = ColorWrapper.getNext(entity.getColorWrapper());
 
             ItemBuilder builder = optional.get();
             builder.replaceString("{previousColor}", previous.getChatColor())
-                    .replaceString("{currentColor}", entity.getColor().getChatColor())
+                    .replaceString("{currentColor}", entity.getColorWrapper().getChatColor())
                     .replaceString("{nextColor}", next.getChatColor())
                     .replaceString("{previousName}", WordUtils.capitalize(previous.name().toLowerCase().replace("_", " ")))
-                    .replaceString("{currentName}", WordUtils.capitalize(entity.getColor().name().toLowerCase().replace("_", " ")))
+                    .replaceString("{currentName}", WordUtils.capitalize(entity.getColorWrapper().name().toLowerCase().replace("_", " ")))
                     .replaceString("{nextName}", WordUtils.capitalize(next.name().toLowerCase().replace("_", " ")));
             return Optional.of(builder);
         }
@@ -51,16 +51,16 @@ public class ResetColorData extends PetData<IResetColor> {
 
     @Override
     public void onLeftClick(IResetColor entity) {
-        entity.setColor(ColorWrapper.getNext(entity.getColor()));
+        entity.setColorWrapper(ColorWrapper.getNext(entity.getColorWrapper()));
     }
 
     @Override
     public void onRightClick(IResetColor entity) {
-        entity.setColor(ColorWrapper.getPrevious(entity.getColor()));
+        entity.setColorWrapper(ColorWrapper.getPrevious(entity.getColorWrapper()));
     }
 
     @Override
     public Object value(IResetColor entity) {
-        return entity.getColor();
+        return entity.getColorWrapper();
     }
 }
