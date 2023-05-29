@@ -6,6 +6,8 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.animal.horse.Markings;
+import net.minecraft.world.entity.animal.horse.Variant;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
@@ -18,7 +20,7 @@ import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.branch.EntityHorseAbstractPet;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityHorse}
+ * NMS: {@link net.minecraft.world.entity.animal.horse.Horse}
  */
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
     private static final EntityDataAccessor<Integer> HORSE_VARIANT;
@@ -82,28 +84,60 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public HorseStyleType getStyle() {
-        return HorseStyleType.values()[this.getVariant() >>> 8];
+        return HorseStyleType.values()[(this.getTypeVariant() & '\uff00') >> 8];
     }
 
     @Override
     public void setStyle(HorseStyleType style) {
-        this.entityData.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
+        setVariantAndMarkings(getVariant(), Markings.byId(style.ordinal()));
     }
 
     @Override
     public HorseColorType getColor() {
-        return HorseColorType.values()[this.getVariant() & 255];
+        return HorseColorType.values()[this.getTypeVariant() & 255];
     }
 
     @Override
     public void setColor(HorseColorType color) {
-        this.entityData.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
-
+        setVariantAndMarkings(net.minecraft.world.entity.animal.horse.Variant.byId(color.ordinal()), getMarkings());
     }
 
-    private int getVariant() {
+    private int getTypeVariant() {
         return this.entityData.get(HORSE_VARIANT);
     }
+
+    // ----- START NMS METHODS ----- //
+
+    /*
+
+    Note: It seems the data is getting set but the entity is not
+          getting updated for the actual user...
+
+          I am not sure if it is just the owner or all players...
+
+     */
+
+    @Deprecated
+    private void setVariantAndMarkings(Variant var0, Markings var1) {
+        this.setTypeVariant(var0.getId() & 255 | var1.getId() << 8 & '\uff00');
+    }
+
+    @Deprecated
+    private void setTypeVariant(int var0) {
+        this.entityData.set(HORSE_VARIANT, var0);
+    }
+
+    @Deprecated
+    private Variant getVariant() {
+        return Variant.byId(this.getTypeVariant() & 255);
+    }
+
+    @Deprecated
+    private Markings getMarkings() {
+        return Markings.byId((this.getTypeVariant() & '\uff00') >> 8);
+    }
+
+    // ----- END NMS METHODS ----- //
 
     static {
         HORSE_VARIANT = SynchedEntityData.defineId(EntityHorsePet.class, EntityDataSerializers.INT);

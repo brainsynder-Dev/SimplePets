@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.branch;
 
+import lib.brainsynder.ServerVersion;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,7 +18,7 @@ import java.util.UUID;
 
 public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAbstract {
     private static final EntityDataAccessor<Byte> STATUS;
-    private static final EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID;
+    private static EntityDataAccessor<Optional<UUID>> OWNER_UNIQUE_ID;
 
     protected boolean isJumping;
 
@@ -77,11 +78,11 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
     protected void registerDatawatchers() {
         super.registerDatawatchers();
         this.entityData.define(STATUS, (byte) 0);
-        this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
+        if (ServerVersion.isOlder(ServerVersion.v1_19_4)) this.entityData.define(OWNER_UNIQUE_ID, Optional.empty());
     }
 
     static {
         STATUS = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.BYTE);
-        OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.OPTIONAL_UUID);
+        if (ServerVersion.isOlder(ServerVersion.v1_19_4)) OWNER_UNIQUE_ID = SynchedEntityData.defineId(EntityHorseAbstractPet.class, EntityDataSerializers.OPTIONAL_UUID);
     }
 }
