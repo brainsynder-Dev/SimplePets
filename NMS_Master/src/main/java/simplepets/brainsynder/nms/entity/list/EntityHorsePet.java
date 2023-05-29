@@ -6,8 +6,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.animal.horse.Markings;
-import net.minecraft.world.entity.animal.horse.Variant;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
@@ -62,21 +60,13 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     @Override
     public void setArmor(HorseArmorType armor) {
         this.armor = armor;
-        Material material = Material.AIR;
-        switch (armor) {
-            case LEATHER:
-                material = Material.LEATHER_HORSE_ARMOR;
-                break;
-            case IRON:
-                material = Material.IRON_HORSE_ARMOR;
-                break;
-            case GOLD:
-                material = Material.GOLDEN_HORSE_ARMOR;
-                break;
-            case DIAMOND:
-                material = Material.DIAMOND_HORSE_ARMOR;
-                break;
-        }
+        Material material = switch (armor) {
+            case LEATHER -> Material.LEATHER_HORSE_ARMOR;
+            case IRON -> Material.IRON_HORSE_ARMOR;
+            case GOLD -> Material.GOLDEN_HORSE_ARMOR;
+            case DIAMOND -> Material.DIAMOND_HORSE_ARMOR;
+            default -> Material.AIR;
+        };
         ItemStack stack = new ItemStack(material);
         this.setItemSlot(EquipmentSlot.CHEST, VersionTranslator.toNMSStack(stack));
         this.setDropChance(EquipmentSlot.CHEST, 0.0F);
@@ -89,7 +79,7 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public void setStyle(HorseStyleType style) {
-        setVariantAndMarkings(getVariant(), Markings.byId(style.ordinal()));
+        updateHorse(getColor(), style);
     }
 
     @Override
@@ -99,45 +89,16 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public void setColor(HorseColorType color) {
-        setVariantAndMarkings(net.minecraft.world.entity.animal.horse.Variant.byId(color.ordinal()), getMarkings());
+        updateHorse(color, getStyle());
     }
 
     private int getTypeVariant() {
         return this.entityData.get(HORSE_VARIANT);
     }
 
-    // ----- START NMS METHODS ----- //
-
-    /*
-
-    Note: It seems the data is getting set but the entity is not
-          getting updated for the actual user...
-
-          I am not sure if it is just the owner or all players...
-
-     */
-
-    @Deprecated
-    private void setVariantAndMarkings(Variant var0, Markings var1) {
-        this.setTypeVariant(var0.getId() & 255 | var1.getId() << 8 & '\uff00');
+    private void updateHorse (HorseColorType colorType, HorseStyleType styleType) {
+        this.entityData.set(HORSE_VARIANT, ( colorType.ordinal() & 255 | styleType.ordinal() << 8 & '\uff00' ));
     }
-
-    @Deprecated
-    private void setTypeVariant(int var0) {
-        this.entityData.set(HORSE_VARIANT, var0);
-    }
-
-    @Deprecated
-    private Variant getVariant() {
-        return Variant.byId(this.getTypeVariant() & 255);
-    }
-
-    @Deprecated
-    private Markings getMarkings() {
-        return Markings.byId((this.getTypeVariant() & '\uff00') >> 8);
-    }
-
-    // ----- END NMS METHODS ----- //
 
     static {
         HORSE_VARIANT = SynchedEntityData.defineId(EntityHorsePet.class, EntityDataSerializers.INT);
