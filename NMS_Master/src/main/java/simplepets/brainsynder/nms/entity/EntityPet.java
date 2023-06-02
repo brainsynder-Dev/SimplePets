@@ -147,7 +147,8 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     protected void registerGoals() {
         goalSelector.addGoal(1, new FloatGoal(this));
-        goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
+        if (getPetType() != PetType.SHULKER)
+            goalSelector.addGoal(2, new PathfinderWalkToPlayer(this, 3, 10));
         goalSelector.addGoal(3, new PathfinderGoalLookAtOwner(this, 3f, 0.2f));
         goalSelector.addGoal(3, new RandomLookAroundGoal(this));
     }
