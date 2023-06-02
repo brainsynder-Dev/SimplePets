@@ -19,31 +19,47 @@ import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.list.EntityArmorStandPet;
+import simplepets.brainsynder.nms.entity.list.EntityShulkerPet;
 import simplepets.brainsynder.nms.entity.list.EntityZombiePet;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class EntityControllerPet extends EntityZombiePet implements IEntityControllerPet {
 
-    private final List<Entity> entities = new ArrayList<>();
-    private final LivingEntity pet;
+    private final LinkedList<Entity> ENTITIES = new LinkedList<>();
+    private final LivingEntity PET;
     private Entity displayEntity, displayRider = null;
-    private final boolean moving = false;
 
     public EntityControllerPet(PetType type, PetUser user, Location location) {
         super(EntityType.ZOMBIE, type, user);
+        ENTITIES.addLast(getEntity());
         switch (type) {
-            case ARMOR_STAND:
-                pet = EntityArmorStandPet.spawn(location, this);
-                setDisplayEntity(pet.getBukkitEntity());
-                break;
-            case SHULKER:
-                throw new IllegalStateException("Not yet initialised!");
-            default:
-                throw new IllegalStateException("This pet does not use controller pets!");
+            case ARMOR_STAND -> {
+                PET = EntityArmorStandPet.spawn(location, this);
+                ENTITIES.addLast(PET.getBukkitEntity());
+                displayEntity = PET.getBukkitEntity();
+            }
+            case SHULKER -> {
+                EntityGhostStand ghostStand = EntityGhostStand.spawn(location, this);
+                ghostStand.setSmall(true);
+                ghostStand.setNoGravity(true);
+                Entity ghost = ghostStand.getBukkitEntity();
+                ENTITIES.addLast(ghost);
+
+                PET = EntityShulkerPet.spawn(location, this);
+                PET.collides = false;
+                Entity shulker = PET.getBukkitEntity();
+                ghost.addPassenger(shulker);
+                ENTITIES.addLast(shulker);
+
+                displayRider = shulker;
+                displayEntity = ghost;
+            }
+            default -> throw new IllegalStateException("This pet does not use controller pets!");
         }
+        collides = false;
     }
 
     @Override
@@ -57,8 +73,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public List<Entity> getEntities() {
-        entities.add(getEntity());
-        return entities;
+        return ENTITIES;
     }
 
     @Override
@@ -76,7 +91,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         super.tick();
         if (!this.isInvisible()) this.setInvisible(true);
         if (!isSilent()) this.setSilent(true);
-        if (pet != null) if (isBaby()) setBaby((getPetType() == PetType.SHULKER));
+        if ((!isBaby()) && (getPetType() == PetType.SHULKER)) setBaby((getPetType() == PetType.SHULKER));
         Player p = getPetUser().getPlayer();
         if ((this.displayEntity == null)
                 || (this.displayEntity.isDead())
@@ -154,21 +169,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public void setDisplayEntity(Entity entity) {
-        if (!entities.contains(entity))
-            entities.add(entity);
-        if (entity.getPassenger() != null) {
-            displayRider = entity.getPassenger();
-            if (!entities.contains(entity.getPassenger()))
-                entities.add(entity.getPassenger());
-        }
-
-        displayEntity = entity;
     }
 
     @Override
     public void remove() {
         getBukkitEntity().remove();
-        for (Entity ent : entities) ent.remove();
+        for (Entity ent : ENTITIES) ent.remove();
         displayEntity = null;
         displayRider = null;
     }
@@ -179,7 +185,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             net.minecraft.world.entity.Entity displayEntity = VersionTranslator.getEntityHandle(this.displayEntity);
             Location loc;
             if (this.displayRider != null) {
-                if (this.displayRider.getType().equals(EntityType.SHULKER)) {
+                if (getPetType() == PetType.SHULKER) {
                     loc = getBukkitEntity().getLocation().clone().subtract(0, 0.735, 0);
                 } else {
                     loc = getBukkitEntity().getLocation().clone();
@@ -190,8 +196,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
             displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
-                if (entity instanceof Player) {
-                    Player player = (Player) entity;
+                if (entity instanceof Player player) {
                     ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(displayEntity);
                     VersionTranslator.<ServerPlayer>getEntityHandle(player).connection.send(packet);
                 }
@@ -214,8 +219,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
         displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
-            if (entity instanceof Player) {
-                Player player = (Player) entity;
+            if (entity instanceof Player player) {
                 ClientboundTeleportEntityPacket packet = new ClientboundTeleportEntityPacket(displayEntity);
                 VersionTranslator.<ServerPlayer>getEntityHandle(player).connection.send(packet);
             }
@@ -252,6 +256,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 if (displayOption1.isPresent() && (displayOption1.get() instanceof IEntityPet)) {
                     return (IEntityPet) displayOption1.get();
                 }
+            }
+        }
+        if (displayRider != null) {
+            Optional<Object> displayOption1 = SimplePets.getSpawnUtil().getHandle(displayRider);
+            if (displayOption1.isPresent() && (displayOption1.get() instanceof IEntityPet)) {
+                return (IEntityPet) displayOption1.get();
             }
         }
         return this;
