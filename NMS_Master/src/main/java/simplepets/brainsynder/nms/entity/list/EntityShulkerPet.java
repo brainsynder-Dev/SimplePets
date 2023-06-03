@@ -103,12 +103,12 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     }
 
     @Override
-    public boolean isClosed() {
+    public boolean isShulkerClosed() {
         return getRawPeekAmount() == 0;
     }
 
     @Override
-    public void setClosed(boolean var) {
+    public void setShulkerClosed(boolean var) {
         int value = 100;
         if (var) value = 0;
         setRawPeekAmount(value);

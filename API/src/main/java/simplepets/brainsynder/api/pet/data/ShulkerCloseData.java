@@ -24,11 +24,11 @@ public class ShulkerCloseData extends PetData<IEntityShulkerPet> {
 
     @Override
     public void onLeftClick(IEntityShulkerPet entity) {
-        entity.setClosed(!entity.isClosed());
+        entity.setShulkerClosed(!entity.isShulkerClosed());
     }
 
     @Override
     public Object value(IEntityShulkerPet entity) {
-        return entity.isClosed();
+        return entity.isShulkerClosed();
     }
 }

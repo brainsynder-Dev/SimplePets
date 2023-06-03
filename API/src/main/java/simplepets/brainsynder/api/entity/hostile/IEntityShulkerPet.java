@@ -8,7 +8,7 @@ import simplepets.brainsynder.api.pet.PetType;
 
 @EntityPetType(petType = PetType.SHULKER)
 public interface IEntityShulkerPet extends IResetColor, IRainbow, IDisplayEntity {
-    boolean isClosed();
+    boolean isShulkerClosed();
 
-    void setClosed(boolean var);
+    void setShulkerClosed(boolean var);
 }
