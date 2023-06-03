@@ -126,7 +126,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
 
     @Override
     public void setColorWrapper(ColorWrapper color) {
-        getEntityData().set(DATA_COLOR_ID, color == null ? 16 : (byte)color.getWoolData());
+        getEntityData().set(DATA_COLOR_ID, ((color == null) || (color == ColorWrapper.NONE)) ? 16 : (byte)color.getWoolData());
     }
 
     @Override
