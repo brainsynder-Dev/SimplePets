@@ -82,6 +82,11 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_BLAZE_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"),
 
+    @InDevelopment // TODO: Remove this when finished with the mob
+    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.SLIGHTLY_HEAVY)
+    CAMEL(IEntityCamelPet.class, "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445",
+            AgeData.class, SittingData.class, DashingData.class),
+
     @PetCustomization(ambient = SoundMaker.ENTITY_CAT_AMBIENT, weight = PetWeight.LIGHT)
     CAT(IEntityCatPet.class, "6b253fc6b656988453a2d7138fca4d1f2752f47691f0c434e432183771cfe1",
             AgeData.class, TamedData.class, SittingData.class, SleepData.class, CatCollarData.class, CatTypeData.class, CatTiltData.class),
@@ -454,8 +459,7 @@ public enum PetType {
             }
 
             for (Annotation annotation : getClass().getField(this.name()).getAnnotations()) {
-                if (annotation instanceof EnumVersion) {
-                    EnumVersion support = (EnumVersion) annotation;
+                if (annotation instanceof EnumVersion support) {
                     if (support.maxVersion() == ServerVersion.UNKNOWN) {
                         return ServerVersion.isEqualNew(support.version());
                     }
