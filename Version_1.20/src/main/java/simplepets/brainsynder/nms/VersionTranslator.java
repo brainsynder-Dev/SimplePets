@@ -81,7 +81,7 @@ public class VersionTranslator {
                 public float bl
                 protected int bm
              */
-            Field jumpingField = LivingEntity.class.getDeclaredField("bi"); // For 1.20
+            Field jumpingField = LivingEntity.class.getDeclaredField("bk"); // For 1.20
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
