@@ -71,7 +71,7 @@
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
         <spigot.nms>v1_19_R3</spigot.nms>
 
-        <anvilgui.version>1.6.7-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.8-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
