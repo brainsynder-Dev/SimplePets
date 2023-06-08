@@ -19,6 +19,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.AngerLevel;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
 /**
@@ -44,7 +45,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
 
         if (vibrationEffect) {
             if (vibrationTick <= 0) {
-                level.broadcastEntityEvent(this, (byte) 61);
+                VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte) 61);
                 this.playSound(SoundEvents.WARDEN_TENDRIL_CLICKS, 5.0F, this.getVoicePitch());
                 vibrationTick = MathUtils.random(40, 60);
             }

@@ -214,4 +214,9 @@ public class VersionTranslator {
     public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
         return CraftNamespacedKey.fromMinecraft(resource);
     }
+
+    // ADDED DURING 1.20 DEVELOPMENT
+    public static Level getEntityLevel (Entity entity) {
+        return entity.level;
+    }
 }

@@ -8,6 +8,7 @@ import simplepets.brainsynder.api.entity.hostile.IEntitySpiderPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
 /**
@@ -30,7 +31,7 @@ public class EntitySpiderPet extends EntityPet implements IEntitySpiderPet {
     @Override
     public void tick() {
         super.tick();
-        if ((!this.level.isClientSide) && wallClimbing) this.setWallClimb(this.horizontalCollision);
+        if ((!VersionTranslator.getEntityLevel(this).isClientSide) && wallClimbing) this.setWallClimb(this.horizontalCollision);
     }
 
     @Override

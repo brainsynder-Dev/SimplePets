@@ -56,7 +56,7 @@ public class EntityBase extends Mob {
      * This literally fixed the shit with p2 and i'm so fucking mad
      */
     public CraftEntity getBukkitEntity() {
-        return new CraftLivingEntity(level.getCraftServer(), this) {
+        return new CraftLivingEntity(VersionTranslator.getEntityLevel(this).getCraftServer(), this) {
             @Override
             public org.bukkit.entity.EntityType getType() {
                 return petType.getEntityType();

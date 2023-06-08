@@ -6,6 +6,7 @@ import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.hostile.IEntityRavagerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.branch.EntityRaiderPet;
 
 /**
@@ -45,7 +46,7 @@ public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerP
         if (this.attackTick <= 0) {
             this.attackTick = 20;
             this.playSound(SoundEvents.RAVAGER_ATTACK, 1.0F, 1.0F);
-            this.level.broadcastEntityEvent(this, (byte)4);
+            VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte)4);
         }
     }
 

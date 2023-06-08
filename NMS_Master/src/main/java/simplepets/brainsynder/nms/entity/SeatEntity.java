@@ -24,8 +24,8 @@ public class SeatEntity extends ArmorStand {
     }
 
     public static boolean attach(Entity rider, Entity entity) {
-        var seat = new SeatEntity(entity.level, entity.getX(), entity.getY(), entity.getZ());
-        if (VersionTranslator.addEntity(entity.level, seat, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+        var seat = new SeatEntity(VersionTranslator.getEntityLevel(entity), entity.getX(), entity.getY(), entity.getZ());
+        if (VersionTranslator.addEntity(VersionTranslator.getEntityLevel(entity), seat, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
             if (seat.startRiding(entity)) {
                 if (rider.startRiding(seat)) {
                     return true;
