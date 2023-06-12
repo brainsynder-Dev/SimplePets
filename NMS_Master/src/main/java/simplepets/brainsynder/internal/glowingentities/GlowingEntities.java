@@ -446,7 +446,7 @@ public class GlowingEntities implements Listener {
 						.getDeclaredConstructor(teamClass);
 				createTeam = teamClass.getDeclaredConstructor(scoreboardClass, String.class);
 				scoreboardDummy = scoreboardClass.getDeclaredConstructor().newInstance();
-				pushNever = pushClass.getDeclaredField("b").get(null);
+				pushNever = pushClass.getDeclaredField("b").get(null); // public static final EnumTeamPush - ScoreboardTeamBase$EnumTeamPush
 				setTeamPush = teamClass.getDeclaredMethod(mappings.getTeamSetCollision(), pushClass);
 				setTeamColor = teamClass.getDeclaredMethod(mappings.getTeamSetColor(), chatFormatClass);
 				getColorConstant = chatFormatClass.getDeclaredMethod("a", char.class);
@@ -641,7 +641,7 @@ public class GlowingEntities implements Listener {
 								}
 							}
 						}
-					} else if (packetBundle != null && msg.getClass().equals(packetBundle)) {
+					} else if (msg.getClass().equals(packetBundle)) {
 						handlePacketBundle(msg);
 					}
 					super.write(ctx, msg, promise);
@@ -827,7 +827,29 @@ public class GlowingEntities implements Listener {
 				public String getMetadataItems() {
 					return versionMinor < 3 ? "b" : "c";
 				}
-			};
+			},
+			V1_20(
+					20, // What major version of MC is this for?
+					"an", // [watcherFlags]     protected static final net.minecraft.network.syncher.DataWatcherObject<Byte> - Entity.class
+					"am", // [markerTypeId]     public static final net.minecraft.world.entity.EntityTypes<Marker> - EntityTypes.class
+					"am", // [watcherAccessor]  protected final DataWatcher - Entity.class
+					"c",  // [playerConnection] public PlayerConnection - EntityPlayer.class
+					"h",  // [networkManager]   private final NetworkManager - PlayerConnection.class
+					"a",  // [sendPacket]       public void a(Packet) - PlayerConnection.class
+					"m",  // [channel]          public Channel - NetworkManager.class
+					"a",  // [teamSetCollision] private static String a(EnumTeamPush) - ScoreboardTeamBase$EnumTeamPush.class
+					"a",  // [teamSetColor]     private static String a((EnumChatFormat)) - ScoreboardTeamBase$EnumTeamPush.class
+					"b",  // [metadataEntity]   private final int - PacketPlayOutEntityMetadata.class
+					"c"   // [metadataItems]    private final java.util.List<net.minecraft.network.syncher.DataWatcher.b<?>> - PacketPlayOutEntityMetadata.class
+			);
+
+
+
+
+
+
+
+
 
 			private final int major;
 			private final String watcherFlags;
@@ -837,14 +859,14 @@ public class GlowingEntities implements Listener {
 			private final String networkManager;
 			private final String sendPacket;
 			private final String channel;
-			private final String teamSetCollsion;
+			private final String teamSetCollision;
 			private final String teamSetColor;
 			private final String metadataEntity;
 			private final String metadataItems;
 
 			ProtocolMappings(int major, String watcherFlags, String markerTypeId, String watcherAccessor,
 							 String playerConnection, String networkManager, String sendPacket, String channel,
-							 String teamSetCollsion, String teamSetColor, String metdatataEntity, String metadataItems) {
+							 String teamSetCollision, String teamSetColor, String metdatataEntity, String metadataItems) {
 				this.major = major;
 				this.watcherFlags = watcherFlags;
 				this.markerTypeId = markerTypeId;
@@ -853,7 +875,7 @@ public class GlowingEntities implements Listener {
 				this.networkManager = networkManager;
 				this.sendPacket = sendPacket;
 				this.channel = channel;
-				this.teamSetCollsion = teamSetCollsion;
+				this.teamSetCollision = teamSetCollision;
 				this.teamSetColor = teamSetColor;
 				this.metadataEntity = metdatataEntity;
 				this.metadataItems = metadataItems;
@@ -892,7 +914,7 @@ public class GlowingEntities implements Listener {
 			}
 
 			public String getTeamSetCollision() {
-				return teamSetCollsion;
+				return teamSetCollision;
 			}
 
 			public String getTeamSetColor() {

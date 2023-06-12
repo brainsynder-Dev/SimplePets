@@ -51,7 +51,7 @@ public class ControllerSlime extends MoveControl {
             this.operation = Operation.WAIT;
             this.mob.setSpeed((float)(this.speedModifier * this.mob.getAttribute(Attributes.MOVEMENT_SPEED).getValue()));
             // If the slime is on the ground or simply stuck,
-            if (this.mob.isOnGround() || lastJump > 60) {
+            if (this.mob.onGround || lastJump > 60) {
                 if (this.jumpDelay-- <= 0) {
                     // Reset the jump delay (shortened since otherwise the slime is too slow)
                     this.jumpDelay = (new Random().nextInt(20) + 10) / 3;

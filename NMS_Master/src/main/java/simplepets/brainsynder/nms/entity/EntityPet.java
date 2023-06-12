@@ -607,4 +607,11 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     protected void handleNetherPortal() {
         // fuck around and find out
     }
+
+
+    // Added in 1.20
+    public boolean isOnGround() {
+        org.bukkit.block.Block block = getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid() || block.isLiquid();
+    }
 }
