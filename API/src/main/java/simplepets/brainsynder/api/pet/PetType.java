@@ -83,7 +83,7 @@ public enum PetType {
     BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"),
 
     @InDevelopment // TODO: Remove this when finished with the mob
-    @PetCustomization(ambient = SoundMaker.UI_BUTTON_CLICK, weight = PetWeight.SLIGHTLY_HEAVY)
+    @PetCustomization(ambient = SoundMaker.ENTITY_CAMEL_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     CAMEL(IEntityCamelPet.class, "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445",
             AgeData.class, SittingData.class),
 
@@ -271,6 +271,12 @@ public enum PetType {
 
     @PetCustomization(ambient = SoundMaker.ENTITY_SLIME_SQUISH, weight = PetWeight.SLIGHTLY_HEAVY)
     SLIME(IEntitySlimePet.class, "bb13133a8fb4ef00b71ef9bab639a66fbc7d5cffcc190c1df74bf2161dfd3ec7", SizeData.class),
+
+    @InDevelopment // TODO: Remove this when finished with the mob
+    @LargePet
+    @PetCustomization(ambient = SoundMaker.ENTITY_SNIFFER_IDLE, weight = PetWeight.HEAVY)
+    SNIFFER(IEntitySnifferPet.class, "87ad920a66e38cc3426a5bff084667e8772116915e298098567c139f222e2c42",
+            AgeData.class, SnifferStateData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_SNOWMAN_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     SNOWMAN(IEntitySnowmanPet.class, "9aed9fe4ed0893e325f4fbd32b093c1cc562cba27ff73359d356f1c288e441f9",
