@@ -26,6 +26,7 @@
         <module>Version_1.19.3</module>
         <module>Version_1.19.4</module>
         <module>Version_1.20</module>
+        <module>Version_1.20.1</module>
         <module>DIST</module>
     </modules>
 
@@ -67,13 +68,13 @@
         <jenkins.buildNumber>0</jenkins.buildNumber>
 
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B115</bslib.version>
+        <bslib.version>B116</bslib.version>
 
-        <minecraft.version>1.20</minecraft.version>
+        <minecraft.version>1.20.1</minecraft.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
         <spigot.nms>v1_20_R1</spigot.nms>
 
-        <anvilgui.version>1.6.8-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.9-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
