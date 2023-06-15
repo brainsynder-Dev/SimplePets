@@ -16,7 +16,7 @@
         <minecraft.version>1.20.1</minecraft.version>
 
         <current-module.version>v1_20_1</current-module.version>
-        <current-module.nms>v1_20_1_R1</current-module.nms>
+        <current-module.nms>v1_20_R1</current-module.nms>
 
         <!-- Nothing should have to be changed below this point -->
         <maven.compiler.source>17</maven.compiler.source>
