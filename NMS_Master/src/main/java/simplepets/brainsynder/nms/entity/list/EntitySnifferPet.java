@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -13,6 +14,7 @@ import simplepets.brainsynder.api.wrappers.SnifferState;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
+// TODO: Implement a state reset task, it will reset the state after a bit and reset it to do the animations
 /**
  * NMS: {@link net.minecraft.world.entity.animal.sniffer.Sniffer}
  */
@@ -31,6 +33,19 @@ public class EntitySnifferPet extends EntityAgeablePet implements IEntitySniffer
         super.defineSynchedData();
         this.entityData.define(DATA_STATE, Sniffer.State.IDLING);
         this.entityData.define(DATA_DROP_SEED_AT_TICK, 0);
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setEnum("state", getSnifferState());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey("state")) setSnifferState(object.getEnum("state", SnifferState.class, SnifferState.IDLING));
+        super.applyCompound(object);
     }
 
     @Override
