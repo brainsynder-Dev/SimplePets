@@ -28,8 +28,8 @@ public class EntityCamelPet extends EntityHorseAbstractPet implements IEntityCam
         this(EntityType.CAMEL, type, user);
     }
 
-    public EntityCamelPet(EntityType<? extends Mob> llama, PetType type, PetUser user) {
-        super(llama, type, user);
+    public EntityCamelPet(EntityType<? extends Mob> entityType, PetType type, PetUser user) {
+        super(entityType, type, user);
         doIndirectAttach = false;
     }
 
@@ -43,13 +43,13 @@ public class EntityCamelPet extends EntityHorseAbstractPet implements IEntityCam
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-
+        object.setBoolean("sitting", isSitting());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        // if (object.hasKey("skin")) setSkinColor(LlamaColor.getByName(object.getString("skin")));
+        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
         super.applyCompound(object);
     }
 
