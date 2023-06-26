@@ -11,7 +11,4 @@ import simplepets.brainsynder.api.pet.PetType;
 @SupportedVersion(version = ServerVersion.v1_20)
 @EntityPetType(petType = PetType.CAMEL)
 public interface IEntityCamelPet extends IHorseAbstract, ISpecialRiding, ISitting {
-    boolean isDashing();
-
-    void setDashing(boolean dashing);
 }

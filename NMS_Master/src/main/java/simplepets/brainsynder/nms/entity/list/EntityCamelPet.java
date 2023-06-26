@@ -73,16 +73,6 @@ public class EntityCamelPet extends EntityHorseAbstractPet implements IEntityCam
         }
     }
 
-    @Override
-    public boolean isDashing() {
-        return entityData.get(DASH);
-    }
-
-    @Override
-    public void setDashing(boolean dashing) {
-        entityData.set(DASH, dashing);
-    }
-
 
     //  ---- Implemented methods directly from the NMS Code ---- //
     public void sitDown() {
