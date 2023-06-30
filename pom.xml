@@ -14,8 +14,9 @@
         <module>MAIN</module>
         <!-- <module>v1_16_R3</module> -->
         <module>NMS_Master</module>
-        <module>Version_1.17</module>
-        <module>Version_1.17.1</module>
+        <!-- Removed 1.17 - 1.17.1 support on: June 7th, 2023 -->
+        <!-- <module>Version_1.17</module> -->
+        <!-- <module>Version_1.17.1</module> -->
         <module>Version_1.18</module>
         <module>Version_1.18.1</module>
         <module>Version_1.18.2</module>
@@ -24,6 +25,8 @@
         <module>Version_1.19.2</module>
         <module>Version_1.19.3</module>
         <module>Version_1.19.4</module>
+        <module>Version_1.20</module>
+        <module>Version_1.20.1</module>
         <module>DIST</module>
     </modules>
 
@@ -65,13 +68,13 @@
         <jenkins.buildNumber>0</jenkins.buildNumber>
 
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
-        <bslib.version>B114</bslib.version>
+        <bslib.version>B116</bslib.version>
 
-        <minecraft.version>1.19.4</minecraft.version>
+        <minecraft.version>1.20.1</minecraft.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
-        <spigot.nms>v1_19_R3</spigot.nms>
+        <spigot.nms>v1_20_R1</spigot.nms>
 
-        <anvilgui.version>1.6.7-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.10-CUSTOM</anvilgui.version>
     </properties>
 
     <build>
@@ -239,7 +242,7 @@
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.8.0</version>
+            <version>5.0.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -138,4 +138,9 @@ public class VersionTranslator {
     public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
+
+    // ADDED DURING 1.20 DEVELOPMENT
+    public static Level getEntityLevel (Entity entity) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
 }

@@ -18,7 +18,7 @@ import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.branch.EntityHorseAbstractPet;
 
 /**
- * NMS: {@link net.minecraft.server.v1_16_R3.EntityHorse}
+ * NMS: {@link net.minecraft.world.entity.animal.horse.Horse}
  */
 public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHorsePet {
     private static final EntityDataAccessor<Integer> HORSE_VARIANT;
@@ -60,21 +60,13 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     @Override
     public void setArmor(HorseArmorType armor) {
         this.armor = armor;
-        Material material = Material.AIR;
-        switch (armor) {
-            case LEATHER:
-                material = Material.LEATHER_HORSE_ARMOR;
-                break;
-            case IRON:
-                material = Material.IRON_HORSE_ARMOR;
-                break;
-            case GOLD:
-                material = Material.GOLDEN_HORSE_ARMOR;
-                break;
-            case DIAMOND:
-                material = Material.DIAMOND_HORSE_ARMOR;
-                break;
-        }
+        Material material = switch (armor) {
+            case LEATHER -> Material.LEATHER_HORSE_ARMOR;
+            case IRON -> Material.IRON_HORSE_ARMOR;
+            case GOLD -> Material.GOLDEN_HORSE_ARMOR;
+            case DIAMOND -> Material.DIAMOND_HORSE_ARMOR;
+            default -> Material.AIR;
+        };
         ItemStack stack = new ItemStack(material);
         this.setItemSlot(EquipmentSlot.CHEST, VersionTranslator.toNMSStack(stack));
         this.setDropChance(EquipmentSlot.CHEST, 0.0F);
@@ -82,27 +74,30 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public HorseStyleType getStyle() {
-        return HorseStyleType.values()[this.getVariant() >>> 8];
+        return HorseStyleType.values()[(this.getTypeVariant() & '\uff00') >> 8];
     }
 
     @Override
     public void setStyle(HorseStyleType style) {
-        this.entityData.set(HORSE_VARIANT, this.getColor().ordinal() & 255 | style.ordinal() << 8);
+        updateHorse(getColor(), style);
     }
 
     @Override
     public HorseColorType getColor() {
-        return HorseColorType.values()[this.getVariant() & 255];
+        return HorseColorType.values()[this.getTypeVariant() & 255];
     }
 
     @Override
     public void setColor(HorseColorType color) {
-        this.entityData.set(HORSE_VARIANT, color.ordinal() & 255 | this.getStyle().ordinal() << 8);
-
+        updateHorse(color, getStyle());
     }
 
-    private int getVariant() {
+    private int getTypeVariant() {
         return this.entityData.get(HORSE_VARIANT);
+    }
+
+    private void updateHorse (HorseColorType colorType, HorseStyleType styleType) {
+        this.entityData.set(HORSE_VARIANT, ( colorType.ordinal() & 255 | styleType.ordinal() << 8 & '\uff00' ));
     }
 
     static {

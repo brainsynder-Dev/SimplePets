@@ -14,6 +14,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityPandaPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.PandaGene;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 
 import java.util.List;
@@ -129,10 +130,10 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
         double x = (this.getX() - (double)(this.getBbWidth() + 1.0F) * 0.5D * (double) Mth.sin(this.yBodyRot * 0.017453292F));
         double y = (this.getY() + this.getEyeY() - 0.10000000149011612D);
         double z = (this.getZ() + (double)(this.getBbHeight() + 1.0F) * 0.5D * (double)Mth.cos(this.yBodyRot * 0.017453292F));
-        this.level.addParticle(ParticleTypes.SNEEZE, x, y, z, var0.x, 0.0D, var0.z);
+        VersionTranslator.getEntityLevel(this).addParticle(ParticleTypes.SNEEZE, x, y, z, var0.x, 0.0D, var0.z);
         this.playSound(SoundEvents.PANDA_SNEEZE, 1.0F, 1.0F);
 
-        List<EntityPandaPet> nearby = this.level.getNearbyEntities(EntityPandaPet.class, TargetingConditions.forNonCombat(), this, this.getBoundingBox().inflate(10.0D));
+        List<EntityPandaPet> nearby = VersionTranslator.getEntityLevel(this).getNearbyEntities(EntityPandaPet.class, TargetingConditions.forNonCombat(), this, this.getBoundingBox().inflate(10.0D));
         nearby.forEach(panda -> {
             if (panda.onGround && !panda.isInWater() && panda.isSpookedBySneeze()) {
                 panda.jumpFromGround();

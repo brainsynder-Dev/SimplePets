@@ -165,7 +165,7 @@ public class SelectionMenu extends CustomInventory {
             }
         }
         if ((petTypes.getSize() == 0) && (ConfigOption.INSTANCE.PERMISSIONS_OPEN_GUI.getValue())) {
-            player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+            player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PETS_UNLOCKED));
             return;
         }
 
@@ -243,7 +243,7 @@ public class SelectionMenu extends CustomInventory {
             }
         }
         if ((petTypes.getSize() == 0) && (ConfigOption.INSTANCE.PERMISSIONS_OPEN_GUI.getValue())) {
-            player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PERMISSION));
+            player.sendMessage(MessageFile.getTranslation(MessageOption.NO_PETS_UNLOCKED));
             return;
         }
 
