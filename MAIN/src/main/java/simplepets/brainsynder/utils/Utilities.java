@@ -251,8 +251,13 @@ public class Utilities {
     public static void resetRideCooldown(Entity entity) {
         FieldAccessor<Integer> field;
 
+        // Class: net.minecraft.world.entity.Entity
+        // protected int    (Below public com.google.common.collect.ImmutableList<Entity>)
+
         String targetField = "s";
-        if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)) {
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20)) {
+            targetField = "I";
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)) {
             targetField = "G";
         } else if (ServerVersion.isEqualNew(ServerVersion.v1_18_2)) {
             targetField = "r";
