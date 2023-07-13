@@ -1,38 +1,34 @@
 package simplepets.brainsynder.addon;
 
 import com.google.common.collect.Lists;
-import lib.brainsynder.utils.AdvString;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.StringTokenizer;
 
 public class AddonCloudData {
-    private final String url;
+    private final String id;
     private final String name;
     private final String author;
-    private String supportedVersion = "";
-    private final double version;
-    private List<String> description = Lists.newArrayList();
+    private final String version;
+    private final String downloadURL;
+    private final String lastUpdated;
+    private final int downloadCount;
 
-    public AddonCloudData(String url, String name, String author, double version) {
-        this.url = url;
+
+    private final List<String> description = Lists.newArrayList();
+
+    public AddonCloudData(String id, String name, String description, String author, String version, String downloadURL, String lastUpdated, int downloadCount) {
+        this.id = id;
         this.name = name;
         this.author = author;
         this.version = version;
-    }
+        this.downloadURL = downloadURL;
+        this.lastUpdated = lastUpdated;
+        this.downloadCount = downloadCount;
 
-    public AddonCloudData setDescription(List<String> description) {
-        StringBuilder builder = new StringBuilder();
-        for (String line : description) builder.append(line).append(" ");
 
-        String combinedDescription = AdvString.replaceLast(" ", "", builder.toString());
-        List<String> updatedDescription = new ArrayList<>();
-        Collections.addAll(updatedDescription, splitString(combinedDescription, 6).split("\n"));
-
-        this.description = updatedDescription;
-        return this;
+        Collections.addAll(this.description, splitString(description, 6).split("\n"));
     }
 
     /**
@@ -43,9 +39,9 @@ public class AddonCloudData {
      * @return A string with new lines inserted.
      */
     private String splitString(String text, int wordsPerLine) {
-        final StringBuilder newText = new StringBuilder();
+        StringBuilder newText = new StringBuilder();
 
-        final StringTokenizer wordTokenizer = new StringTokenizer(text);
+        StringTokenizer wordTokenizer = new StringTokenizer(text);
         long wordCount = 1;
         while (wordTokenizer.hasMoreTokens()) {
             newText.append(wordTokenizer.nextToken());
@@ -60,20 +56,19 @@ public class AddonCloudData {
         return newText.toString();
     }
 
-    public AddonCloudData setSupportedVersion(String supportedVersion) {
-        this.supportedVersion = supportedVersion;
-        return this;
-    }
-
-    public String getUrl() {
-        return url;
+    public String getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public double getVersion() {
+    public String getAuthor() {
+        return author;
+    }
+
+    public String getVersion() {
         return version;
     }
 
@@ -81,11 +76,15 @@ public class AddonCloudData {
         return description;
     }
 
-    public String getSupportedVersion() {
-        return supportedVersion;
+    public String getDownloadURL() {
+        return downloadURL;
     }
 
-    public String getAuthor() {
-        return author;
+    public String getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public int getDownloadCount() {
+        return downloadCount;
     }
 }

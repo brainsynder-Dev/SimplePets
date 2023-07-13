@@ -180,14 +180,16 @@ public class AddonMenu extends CustomInventory {
                     if (!data.getDescription().isEmpty())
                         data.getDescription().forEach(s -> description.add(ChatColor.GRAY + s));
                     description.add("&r ");
+                    description.add("&7Modrinth ID: &e" + data.getId());
                     description.add("&7Author: &e" + data.getAuthor());
                     description.add("&7Version: &e" + data.getVersion());
-                    if (!data.getSupportedVersion().isEmpty())
-                        description.add("&7Supported Version: &e" + data.getSupportedVersion() + " [And up]");
+                    description.add("&7Last Update: &e" + data.getLastUpdated());
+                    description.add("&7Total Downloads: &e" + data.getDownloadCount());
+
                     builder.withLore(description).addLore("&r ", "&7Click here to install the", "&7" + name + " addon to your server");
                     builder.handleMeta(ItemMeta.class, itemMeta -> {
                         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-                        container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getUrl());
+                        container.set(Keys.ADDON_URL, PersistentDataType.STRING, data.getDownloadURL());
                         container.set(Keys.ADDON_NAME, PersistentDataType.STRING, name);
                         return itemMeta;
                     });

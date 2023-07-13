@@ -9,6 +9,7 @@ import net.minecraft.world.entity.EntityType;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 
 /**
@@ -32,14 +33,14 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         super.tick();
         if (furWet) {
             if (ticks == -1) {
-                this.level.broadcastEntityEvent(this, (byte)8); // Wolf shaking
+                VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte)8); // Wolf shaking
                 ticks = 0;
             }
 
             ticks++;
             if (ticks >= 27) {
                 ticks = 0;
-                this.level.broadcastEntityEvent(this, (byte)8); // Wolf shaking
+                VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte)8); // Wolf shaking
             }
         }
         if (this.angry && (entityData.get(ANGER_TIME) < 50)) entityData.set(ANGER_TIME, 500);
@@ -118,7 +119,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     public void setShaking(boolean shaking) {
         this.furWet = shaking;
 
-        if (!shaking) this.level.broadcastEntityEvent(this, (byte)56);
+        if (!shaking) VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte)56);
         this.ticks = -1;
     }
 }

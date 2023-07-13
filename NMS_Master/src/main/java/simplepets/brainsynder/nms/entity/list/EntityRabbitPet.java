@@ -14,6 +14,7 @@ import simplepets.brainsynder.api.entity.passive.IEntityRabbitPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.RabbitType;
+import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.entity.controller.ControllerJumpRabbit;
 import simplepets.brainsynder.nms.entity.controller.ControllerMoveRabbit;
@@ -151,7 +152,7 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
             }
         }
 
-        if (!this.level.isClientSide) this.level.broadcastEntityEvent(this, (byte)1);
+        if (!VersionTranslator.getEntityLevel(this).isClientSide) VersionTranslator.getEntityLevel(this).broadcastEntityEvent(this, (byte)1);
     }
 
     private Path getPath() {

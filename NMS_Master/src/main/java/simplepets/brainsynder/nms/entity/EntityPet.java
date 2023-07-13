@@ -492,7 +492,9 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             if (displayName && hideNameShifting)
                 getEntity().setCustomNameVisible((!shifting));
 
-            if (!canIgnoreVanish()) {
+            // Checks if the pet can actually be toggled to match their owners
+            // player visibility status
+            if ((!canIgnoreVanish()) && ConfigOption.INSTANCE.MISC_TOGGLES_PET_VANISHING.getValue()) {
                 boolean ownerVanish = (VersionTranslator.getEntityHandle(player).isInvisible()
                         // Added this check for SuperVanish and PremiumVanish since they recommend using this method to check
                         || SimplePets.getPetUtilities().isVanished(player)
@@ -607,5 +609,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     protected void handleNetherPortal() {
         // fuck around and find out
+    }
+
+
+    // Added in 1.20
+    public boolean isOnGround() {
+        org.bukkit.block.Block block = getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        return block.getType().isSolid() || block.isLiquid();
     }
 }

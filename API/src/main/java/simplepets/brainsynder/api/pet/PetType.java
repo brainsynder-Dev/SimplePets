@@ -82,6 +82,10 @@ public enum PetType {
     @PetCustomization(ambient = SoundMaker.ENTITY_BLAZE_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     BLAZE(IEntityBlazePet.class, "b78ef2e4cf2c41a2d14bfde9caff10219f5b1bf5b35a49eb51c6467882cb5f0"),
 
+    @PetCustomization(ambient = SoundMaker.ENTITY_CAMEL_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
+    CAMEL(IEntityCamelPet.class, "92b31239520511ca7b6712ef0ecfb55b6c56b9347240f4cbf9925ce0bf0fa445",
+            AgeData.class, SittingData.class),
+
     @PetCustomization(ambient = SoundMaker.ENTITY_CAT_AMBIENT, weight = PetWeight.LIGHT)
     CAT(IEntityCatPet.class, "6b253fc6b656988453a2d7138fca4d1f2752f47691f0c434e432183771cfe1",
             AgeData.class, TamedData.class, SittingData.class, SleepData.class, CatCollarData.class, CatTypeData.class, CatTiltData.class),
@@ -266,6 +270,11 @@ public enum PetType {
 
     @PetCustomization(ambient = SoundMaker.ENTITY_SLIME_SQUISH, weight = PetWeight.SLIGHTLY_HEAVY)
     SLIME(IEntitySlimePet.class, "bb13133a8fb4ef00b71ef9bab639a66fbc7d5cffcc190c1df74bf2161dfd3ec7", SizeData.class),
+
+    @LargePet
+    @PetCustomization(ambient = SoundMaker.ENTITY_SNIFFER_IDLE, weight = PetWeight.HEAVY)
+    SNIFFER(IEntitySnifferPet.class, "87ad920a66e38cc3426a5bff084667e8772116915e298098567c139f222e2c42",
+            AgeData.class, SnifferStateData.class),
 
     @PetCustomization(ambient = SoundMaker.ENTITY_SNOWMAN_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     SNOWMAN(IEntitySnowmanPet.class, "9aed9fe4ed0893e325f4fbd32b093c1cc562cba27ff73359d356f1c288e441f9",
@@ -454,8 +463,7 @@ public enum PetType {
             }
 
             for (Annotation annotation : getClass().getField(this.name()).getAnnotations()) {
-                if (annotation instanceof EnumVersion) {
-                    EnumVersion support = (EnumVersion) annotation;
+                if (annotation instanceof EnumVersion support) {
                     if (support.maxVersion() == ServerVersion.UNKNOWN) {
                         return ServerVersion.isEqualNew(support.version());
                     }

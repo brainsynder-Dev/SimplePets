@@ -13,6 +13,7 @@ import simplepets.brainsynder.api.entity.misc.IEntityWizard;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.WizardSpell;
+import simplepets.brainsynder.nms.VersionTranslator;
 
 public class EntityIllagerWizardPet extends EntityIllagerAbstractPet implements IEntityWizard {
     private static final EntityDataAccessor<Byte> SPELL;
@@ -62,8 +63,8 @@ public class EntityIllagerWizardPet extends EntityIllagerAbstractPet implements 
             float value = this.yBodyRot * 0.017453292F + Mth.cos(this.tickCount * 0.6662F) * 0.25F;
             float offsetX = Mth.cos(value);
             float offsetZ = Mth.sin(value);
-            this.level.addParticle(ParticleTypes.ENTITY_EFFECT, getX() + offsetX * 0.6D, getY() + 1.8D, getZ() + offsetZ * 0.6D, velocityX, velocityY, velocityZ);
-            this.level.addParticle(ParticleTypes.ENTITY_EFFECT, getX() - offsetX * 0.6D, getY() + 1.8D, getZ() - offsetZ * 0.6D, velocityX, velocityY, velocityZ);
+            VersionTranslator.getEntityLevel(this).addParticle(ParticleTypes.ENTITY_EFFECT, getX() + offsetX * 0.6D, getY() + 1.8D, getZ() + offsetZ * 0.6D, velocityX, velocityY, velocityZ);
+            VersionTranslator.getEntityLevel(this).addParticle(ParticleTypes.ENTITY_EFFECT, getX() - offsetX * 0.6D, getY() + 1.8D, getZ() - offsetZ * 0.6D, velocityX, velocityY, velocityZ);
         }
 
     }
