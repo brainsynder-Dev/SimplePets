@@ -12,7 +12,6 @@ import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.addon.AddonCloudData;
 import simplepets.brainsynder.addon.AddonConfig;
@@ -254,14 +253,11 @@ public class AddonManager {
         CompletableFuture.runAsync(() -> {
             try {
                 download(url, name, file -> {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            loadAddon(file);
-                            initialize();
-                            runnable.run();
-                        }
-                    }.runTask(plugin);
+                    plugin.getScheduler().getImpl().runNextTick(() -> {
+                        loadAddon(file);
+                        initialize();
+                        runnable.run();
+                    });
                 });
             } catch (Exception e) {
                 try {
@@ -280,28 +276,22 @@ public class AddonManager {
         CompletableFuture.runAsync(() -> {
             try {
                 download(url, original.getName(), file -> {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            loadAddon(file);
-                            initialize();
-                            runnable.run();
-                        }
-                    }.runTask(plugin);
+                    plugin.getScheduler().getImpl().runNextTick(() -> {
+                        loadAddon(file);
+                        initialize();
+                        runnable.run();
+                    });
                 });
             } catch (Exception e) {
                 try {
                     final File file = new File(folder.getAbsolutePath() + "/" + original.getName());
                     original.delete();
                     FileUtils.copyURLToFile(new URL(url), file);
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            loadAddon(file);
-                            initialize();
-                            runnable.run();
-                        }
-                    }.runTask(plugin);
+                    plugin.getScheduler().getImpl().runNextTick(() -> {
+                        loadAddon(file);
+                        initialize();
+                        runnable.run();
+                    });
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

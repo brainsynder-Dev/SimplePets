@@ -229,6 +229,10 @@
             <id>jeff-media-public</id>
             <url>https://hub.jeff-media.com/nexus/repository/jeff-media-public/</url>
         </repository>
+        <repository>
+            <id>devmart-other</id>
+            <url>https://nexuslite.gcnt.net/repos/other/</url>
+        </repository>
     </repositories>
 
     <pluginRepositories>

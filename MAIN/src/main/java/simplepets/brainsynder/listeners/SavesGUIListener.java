@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -20,6 +19,7 @@ import simplepets.brainsynder.menu.inventory.holders.SavesHolder;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class SavesGUIListener implements Listener {
     @EventHandler
@@ -52,12 +52,7 @@ public class SavesGUIListener implements Listener {
                 if (Utilities.isSimilar(entry.getValue(), e.getCurrentItem())) {
                     if (e.getClick().isRightClick()) {
                         user.removePetSave(compound);
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                menu.open(user);
-                            }
-                        }.runTaskLater(PetCore.getInstance(), 2);
+                        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> menu.open(user), 100L, TimeUnit.MILLISECONDS);
                         return;
                     }
 
@@ -82,10 +77,11 @@ public class SavesGUIListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SavesHolder)) return;
         SavesMenu menu = InventoryManager.PET_SAVES;
-        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> {
-            if (!(e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof SavesHolder)) {
-                SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+        Player player = (Player) e.getPlayer();
+        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> {
+            if (!(player.getOpenInventory().getTopInventory().getHolder() instanceof SavesHolder)) {
+                SimplePets.getUserManager().getPetUser(player).ifPresent(menu::reset);
             }
-        }, 3);
+        }, 150L, TimeUnit.MILLISECONDS);
     }
 }

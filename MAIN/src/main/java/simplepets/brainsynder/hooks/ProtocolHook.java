@@ -2,8 +2,6 @@ package simplepets.brainsynder.hooks;
 
 import com.google.common.collect.Maps;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.event.user.PetRenameEvent;
 import simplepets.brainsynder.api.pet.PetType;
@@ -43,19 +41,15 @@ public class ProtocolHook {
                     if ((line[0] == null) || line[0].isEmpty()) return false;
                     PetType petType = typeMap.getOrDefault(player.getName(), PetType.UNKNOWN);
                     if (petType == PetType.UNKNOWN) return false;  // failure. becaues reopenIfFail was called, menu will reopen when closed.
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            SimplePets.getUserManager().getPetUser(player).ifPresent(user1 -> {
-                                if (line[0].equalsIgnoreCase("reset")) line[0] = null;
 
-                                PetRenameEvent renameEvent = new PetRenameEvent (user1, petType, line[0]);
-                                Bukkit.getPluginManager().callEvent(renameEvent);
+                    PetCore.getInstance().getScheduler().getImpl().runNextTick(() -> SimplePets.getUserManager().getPetUser(player).ifPresent(user1 -> {
+                        if (line[0].equalsIgnoreCase("reset")) line[0] = null;
 
-                                if (!renameEvent.isCancelled()) user1.setPetName(renameEvent.getName(), petType);
-                            });
-                        }
-                    }.runTask(PetCore.getInstance());
+                        PetRenameEvent renameEvent = new PetRenameEvent (user1, petType, line[0]);
+                        Bukkit.getPluginManager().callEvent(renameEvent);
+
+                        if (!renameEvent.isCancelled()) user1.setPetName(renameEvent.getName(), petType);
+                    }));
                     return true;
                 }).open(user.getPlayer());
     }

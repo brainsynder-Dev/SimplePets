@@ -10,7 +10,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -30,6 +29,7 @@ import simplepets.brainsynder.utils.Utilities;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class PetOwner implements PetUser {
 
@@ -71,62 +71,60 @@ public class PetOwner implements PetUser {
         petMap.clear();
         nameMap.clear();
         ownedPets.clear();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (compound.hasKey("pet_names")) {
-                    StorageTagList names = (StorageTagList) compound.getTag("pet_names");
-                    names.getList().forEach(storageBase -> {
-                        StorageTagCompound data = (StorageTagCompound) storageBase;
-                        PetType.getPetType(data.getString("type", "unknown")).ifPresent(type -> {
 
-                            nameMap.put(type, data.getString("name"));
-                        });
+        PetCore.getInstance().getScheduler().getImpl().runNextTick(() -> {
+            if (compound.hasKey("pet_names")) {
+                StorageTagList names = (StorageTagList) compound.getTag("pet_names");
+                names.getList().forEach(storageBase -> {
+                    StorageTagCompound data = (StorageTagCompound) storageBase;
+                    PetType.getPetType(data.getString("type", "unknown")).ifPresent(type -> {
+
+                        nameMap.put(type, data.getString("name"));
                     });
-                }
-
-                if (compound.hasKey("owned_pets")) {
-                    StorageTagList list = (StorageTagList) compound.getTag("owned_pets");
-                    list.getList().forEach(storageBase -> {
-                        StorageTagString string = (StorageTagString) storageBase;
-                        PetType.getPetType(string.getString()).ifPresent(ownedPets::add);
-                    });
-                }
-
-                if (compound.hasKey("saved_pets")) {
-                    StorageTagList list = (StorageTagList) compound.getTag("saved_pets");
-                    list.getList().forEach(base -> {
-                        StorageTagCompound tag = (StorageTagCompound) base;
-                        PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                            savedPetData.add(tag.getCompoundTag("data"));
-                        });
-                    });
-                }
-
-                if (compound.hasKey("spawned_pets") && ConfigOption.INSTANCE.RESPAWN_LAST_PET_LOGIN.getValue()) {
-                    StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
-                    ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
-                    list.getList().forEach(storageBase -> {
-                        StorageTagCompound tag = (StorageTagCompound) storageBase;
-                        respawnPets.remove(tag.getCompoundTag("data"));
-                        PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-                                if (!config.isEnabled()) return;
-                                if (!type.isSupported()) return;
-                                if (!spawnUtil.isRegistered(type)) return;
-                                Player player = Bukkit.getPlayer(uuid);
-                                if (player != null) {
-                                    if (!Utilities.hasPermission(player, type.getPermission())) return;
-                                    spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
-                                }
-                            });
-                        });
-                    });
-                }
-
-                isLoaded = true;
+                });
             }
-        }.runTask(PetCore.getInstance());
+
+            if (compound.hasKey("owned_pets")) {
+                StorageTagList list = (StorageTagList) compound.getTag("owned_pets");
+                list.getList().forEach(storageBase -> {
+                    StorageTagString string = (StorageTagString) storageBase;
+                    PetType.getPetType(string.getString()).ifPresent(ownedPets::add);
+                });
+            }
+
+            if (compound.hasKey("saved_pets")) {
+                StorageTagList list = (StorageTagList) compound.getTag("saved_pets");
+                list.getList().forEach(base -> {
+                    StorageTagCompound tag = (StorageTagCompound) base;
+                    PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                        savedPetData.add(tag.getCompoundTag("data"));
+                    });
+                });
+            }
+
+            if (compound.hasKey("spawned_pets") && ConfigOption.INSTANCE.RESPAWN_LAST_PET_LOGIN.getValue()) {
+                StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
+                ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
+                list.getList().forEach(storageBase -> {
+                    StorageTagCompound tag = (StorageTagCompound) storageBase;
+                    respawnPets.remove(tag.getCompoundTag("data"));
+                    PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                            if (!config.isEnabled()) return;
+                            if (!type.isSupported()) return;
+                            if (!spawnUtil.isRegistered(type)) return;
+                            Player player = Bukkit.getPlayer(uuid);
+                            if (player != null) {
+                                if (!Utilities.hasPermission(player, type.getPermission())) return;
+                                spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
+                            }
+                        });
+                    });
+                });
+            }
+
+            isLoaded = true;
+        });
     }
 
     public StorageTagCompound toCompound() {
@@ -534,13 +532,10 @@ public class PetOwner implements PetUser {
                 Bukkit.getPluginManager().callEvent(hatEvent);
                 // Set the pet as a hat
                 Entity finalEnt = ent;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
-                        Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
-                    }
-                }.runTaskLater(PetCore.getInstance(), delay);
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(getPlayer(), () -> {
+                    Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
+                    Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
+                }, 50L * delay, TimeUnit.MILLISECONDS);
             } else {
                 // If pet is a hat, remove the hat from the player
                 if (!isPetHat(type)) return;
@@ -676,14 +671,7 @@ public class PetOwner implements PetUser {
                 entityPet.teleportToOwner();
             }
 
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    entityPet.attachOwner();
-
-                }
-            }.runTaskLater(PetCore.getInstance(), 2L);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(getPlayer(), entityPet::attachOwner, 100L, TimeUnit.MILLISECONDS);
         });
         return false;
     }

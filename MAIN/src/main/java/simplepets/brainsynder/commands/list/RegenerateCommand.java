@@ -3,7 +3,6 @@ package simplepets.brainsynder.commands.list;
 import com.google.common.collect.Lists;
 import lib.brainsynder.commands.annotations.ICommand;
 import org.bukkit.command.CommandSender;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -18,6 +17,7 @@ import simplepets.brainsynder.managers.ItemManager;
 import java.io.File;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @ICommand(
         name = "regenerate",
@@ -57,49 +57,37 @@ public class RegenerateCommand extends PetSubCommand {
 
         if (args[0].equalsIgnoreCase("pets")) {
             deleteFiles(petsFolder);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ((PetConfiguration)SimplePets.getPetConfigManager()).reset();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_FILES_REGEN));
-                }
-            }.runTaskLater(getPlugin(), 2);
+            getPlugin().getScheduler().getImpl().runLater(() -> {
+                ((PetConfiguration)SimplePets.getPetConfigManager()).reset();
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_FILES_REGEN));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
         if (args[0].equalsIgnoreCase("inventories")) {
             deleteFiles(inventoryFolder);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ((InventoryManager)getPlugin().getGUIHandler()).initiate();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.INV_FILES_REGEN));
-                }
-            }.runTaskLater(getPlugin(), 2);
+            getPlugin().getScheduler().getImpl().runLater(() -> {
+                ((InventoryManager)getPlugin().getGUIHandler()).initiate();
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.INV_FILES_REGEN));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
         if (args[0].equalsIgnoreCase("items")) {
             deleteFiles(itemFolder);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ((ItemManager)getPlugin().getItemHandler()).initiate();
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.ITEM_FILES_REGEN));
-                }
-            }.runTaskLater(getPlugin(), 2);
+            getPlugin().getScheduler().getImpl().runLater(() -> {
+                ((ItemManager)getPlugin().getItemHandler()).initiate();
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.ITEM_FILES_REGEN));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
         if (args[0].equalsIgnoreCase("particles")) {
             deleteFiles(particleFolder);
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    getPlugin().getParticleHandler().reload(getPlugin());
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PARTICLE_FILES_REGEN));
-                }
-            }.runTaskLater(getPlugin(), 2);
+            getPlugin().getScheduler().getImpl().runLater(() -> {
+                getPlugin().getParticleHandler().reload(getPlugin());
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PARTICLE_FILES_REGEN));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
@@ -118,13 +106,10 @@ public class RegenerateCommand extends PetSubCommand {
             PetType type = optional.get();
             File petFile = new File(petsFolder, type.getName()+".json");
             petFile.delete();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    ((PetConfiguration)SimplePets.getPetConfigManager()).reset(type);
-                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_TYPE_FILE_REGEN).replace("{type}", type.getName()));
-                }
-            }.runTaskLater(getPlugin(), 1);
+            getPlugin().getScheduler().getImpl().runLater(() -> {
+                ((PetConfiguration)SimplePets.getPetConfigManager()).reset(type);
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PET_TYPE_FILE_REGEN).replace("{type}", type.getName()));
+            }, 50L, TimeUnit.MILLISECONDS);
         }
 
         sendUsage(sender);

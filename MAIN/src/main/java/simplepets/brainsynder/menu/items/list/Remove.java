@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -15,6 +14,7 @@ import simplepets.brainsynder.menu.inventory.DataMenu;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Namespace(namespace = "remove")
 public class Remove extends Item {
@@ -52,28 +52,20 @@ public class Remove extends Item {
         if (masterUser.getPetEntities().size() == 1) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_REMOVE.getValue())
                 masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
-                        masterUser.removePet(iEntityPet.getPetType());
-                        if (inventory instanceof DataMenu) masterUser.updateDataMenu();
-                    });
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(masterUser.getPlayer(), () -> masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                masterUser.removePet(iEntityPet.getPetType());
+                if (inventory instanceof DataMenu) masterUser.updateDataMenu();
+            }), 100L, TimeUnit.MILLISECONDS);
             return;
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_REMOVE.getValue())
                 user.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    user.removePet(type);
-                    if (inventory instanceof DataMenu) user.updateDataMenu();
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(user.getPlayer(), () -> {
+                user.removePet(type);
+                if (inventory instanceof DataMenu) user.updateDataMenu();
+            }, 100L, TimeUnit.MILLISECONDS);
         });
         menu.open(masterUser, 1, inventory.getTitle());
     }
