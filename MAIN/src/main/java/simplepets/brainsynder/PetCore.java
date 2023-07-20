@@ -177,7 +177,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         handleListeners();
         taskTimer.label("registered listeners");
-        handleUpdateUtils();
+//        handleUpdateUtils();
         taskTimer.label("init update checking");
 
         addonManager = new AddonManager(this);
