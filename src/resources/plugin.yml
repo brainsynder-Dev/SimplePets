@@ -6,6 +6,8 @@ loadbefore: [mcMMO, ProtocolSupport]
 authors: [brainsynder, Thatsmusic99]
 contributors: [traksag]
 api-version: 1.16
+folia-supported: true
+
 commands:
     pet:
         description: Main SimplePets command
