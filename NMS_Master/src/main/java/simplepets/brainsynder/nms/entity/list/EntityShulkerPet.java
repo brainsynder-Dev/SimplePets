@@ -45,7 +45,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     }
 
     public EntityShulkerPet(EntityControllerPet pet, PetUser user) {
-        super(EntityType.SHULKER, pet.level);
+        super(EntityType.SHULKER, VersionTranslator.getEntityLevel(pet));
         this.pet = pet;
         pet.setBaby(true);
         this.user = user;
