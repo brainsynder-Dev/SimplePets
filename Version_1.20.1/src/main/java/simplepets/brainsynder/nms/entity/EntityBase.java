@@ -8,8 +8,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_20_R1.entity.CraftLivingEntity;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.VersionTranslator;
@@ -50,18 +48,6 @@ public class EntityBase extends Mob {
 
     public PetUser getUser() {
         return user;
-    }
-
-    /**
-     * This literally fixed the shit with p2 and i'm so fucking mad
-     */
-    public CraftEntity getBukkitEntity() {
-        return new CraftLivingEntity(VersionTranslator.getEntityLevel(this).getCraftServer(), this) {
-            @Override
-            public org.bukkit.entity.EntityType getType() {
-                return petType.getEntityType();
-            }
-        };
     }
 
     // TODO: THIS METHOD NEEDS TO BE LOOKED AT CAUSES SOME ISSUES ON 1.19.3
