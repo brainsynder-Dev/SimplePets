@@ -37,7 +37,8 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     private ChatColor glowColor = ChatColor.WHITE;
     private PetUser user;
 
-    private boolean rainbow = false;
+    private boolean rainbow = false; // Off by default
+    private boolean closed = true; // Closed by default
     private int toggle = 0;
 
     public EntityShulkerPet(ServerLevel world) {
@@ -111,11 +112,13 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
 
     @Override
     public boolean isShulkerClosed() {
-        return getRawPeekAmount() == 0;
+        return closed;
     }
 
     @Override
     public void setShulkerClosed(boolean var) {
+        closed = var;
+
         int value = 100;
         if (var) value = 0;
         setRawPeekAmount(value);
@@ -169,6 +172,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
                 bukkitEntity.remove();
             return;
         }
+        if ((!this.closed) && (getRawPeekAmount() < 100)) setRawPeekAmount(100);
 
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
 
