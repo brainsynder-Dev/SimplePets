@@ -64,6 +64,13 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     }
 
     @Override
+    public void togglePetHatTask(boolean value) {
+        if (!value) {
+            ghostStand.getBukkitEntity().addPassenger(getBukkitEntity());
+        }
+    }
+
+    @Override
     public org.bukkit.entity.EntityType getPetEntityType() {
         return org.bukkit.entity.EntityType.SHULKER;
     }

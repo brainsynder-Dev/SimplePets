@@ -539,6 +539,7 @@ public class PetOwner implements PetUser {
                     public void run() {
                         Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
                         Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
+                        entityPet.togglePetHatTask(hat);
                     }
                 }.runTaskLater(PetCore.getInstance(), delay);
             } else {
@@ -572,6 +573,7 @@ public class PetOwner implements PetUser {
                 } else {
                     Utilities.removePassenger(vehicle, ent);
                 }
+                entityPet.togglePetHatTask(hat);
                 entityPet.teleportToOwner();
                 if (riderMob != null)
                     Utilities.setPassenger(getPlayer(), vehicle, riderMob);
