@@ -314,6 +314,11 @@ public enum ConfigOption {
                     Should pet owners be able to open their pets data menu when right clicking the pet.
                     
                     Default: {default}""");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_PET_VANISHING = createOption("misc-toggles.enable-pet-vanishing", true,
+            """
+                    Should pets turn invisible when their owner is not visible (either via Spectator or Invisibility potions)
+
+                    Default: {default}""");
 
 
     // Pet Toggles

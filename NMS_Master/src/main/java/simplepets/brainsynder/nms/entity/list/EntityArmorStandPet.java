@@ -65,7 +65,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     public EntityArmorStandPet(EntityControllerPet pet, PetUser user) {
-        super(EntityType.ARMOR_STAND, pet.level);
+        super(EntityType.ARMOR_STAND, VersionTranslator.getEntityLevel(pet));
         this.pet = pet;
         this.user = user;
         this.additional = new HashMap<>();

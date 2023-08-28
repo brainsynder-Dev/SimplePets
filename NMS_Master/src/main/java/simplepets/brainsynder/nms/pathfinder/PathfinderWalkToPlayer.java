@@ -181,12 +181,12 @@ public class PathfinderWalkToPlayer extends Goal {
     }
 
     private boolean canTeleportTo(BlockPos blockposition) {
-        BlockPathTypes pathtype = WalkNodeEvaluator.getBlockPathTypeStatic(this.entity.level, blockposition.mutable());
+        BlockPathTypes pathtype = WalkNodeEvaluator.getBlockPathTypeStatic(VersionTranslator.getEntityLevel(entity), blockposition.mutable());
         if (pathtype != BlockPathTypes.WALKABLE) return false;
 
         // Translation: BlockPosition.subtract (BlockPosition)
         BlockPos position = VersionTranslator.subtract(blockposition, this.entity.blockPosition());
-        return this.entity.level.noCollision(this.entity, this.entity.getBoundingBox().move(position));
+        return VersionTranslator.getEntityLevel(entity).noCollision(this.entity, this.entity.getBoundingBox().move(position));
     }
 
     private int getRandomInt(int min, int max) {
