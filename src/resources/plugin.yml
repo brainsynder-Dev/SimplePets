@@ -69,6 +69,9 @@ permissions:
     pet.commands.reload: # Grants access to the '/pet reload' command
         default: op # Only Operators should be given this permission
 
+    pet.commands.petconfig: # Grants access to the '/pet petconfig' command
+        default: op # Only Operators should be given this permission
+
     pet.commands.issue_report: # Grants access to the '/pet report' command
         default: op # Only Operators should be given this permission
 
@@ -105,7 +108,11 @@ permissions:
             pet.commands.addon.reload: true
             pet.commands.addon.update: true
             pet.commands.database: true
+            pet.commands.database.removenpcs: true
+            pet.commands.database.removeduplicates: true
+            pet.commands.database.findduplicates: true
             pet.commands.reload: true
+            pet.commands.petconfig: true
             pet.commands.issue_report: true
 
 
@@ -122,6 +129,7 @@ permissions:
             pet.type.axolotl.*: true
             pet.type.bat.*: true
             pet.type.bee.*: true
+            pet.type.camel.*: true
             pet.type.cat.*: true
             pet.type.chicken.*: true
             pet.type.cod.*: true
@@ -145,6 +153,7 @@ permissions:
             pet.type.salmon.*: true
             pet.type.sheep.*: true
             pet.type.skeletonhorse.*: true
+            pet.type.sniffer.*: true
             pet.type.snowman.*: true
             pet.type.squid.*: true
             pet.type.strider.*: true
@@ -210,6 +219,7 @@ permissions:
             pet.type.bat.data.*: true
             pet.type.bee.data.*: true
             pet.type.blaze.data.*: true
+            pet.type.camel.data.*: true
             pet.type.cat.data.*: true
             pet.type.cavespider.data.*: true
             pet.type.chicken.data.*: true
@@ -258,6 +268,7 @@ permissions:
             pet.type.skeleton.data.*: true
             pet.type.skeletonhorse.data.*: true
             pet.type.slime.data.*: true
+            pet.type.sniffer.data.*: true
             pet.type.snowman.data.*: true
             pet.type.spider.data.*: true
             pet.type.squid.data.*: true
@@ -292,6 +303,7 @@ permissions:
             pet.type.bat.fly: true
             pet.type.bee.fly: true
             pet.type.blaze.fly: true
+            pet.type.camel.fly: true
             pet.type.cat.fly: true
             pet.type.cavespider.fly: true
             pet.type.chicken.fly: true
@@ -340,6 +352,7 @@ permissions:
             pet.type.skeleton.fly: true
             pet.type.skeletonhorse.fly: true
             pet.type.slime.fly: true
+            pet.type.sniffer.fly: true
             pet.type.snowman.fly: true
             pet.type.spider.fly: true
             pet.type.squid.fly: true
@@ -374,6 +387,7 @@ permissions:
             pet.type.bat.hat: true
             pet.type.bee.hat: true
             pet.type.blaze.hat: true
+            pet.type.camel.hat: true
             pet.type.cat.hat: true
             pet.type.cavespider.hat: true
             pet.type.chicken.hat: true
@@ -422,6 +436,7 @@ permissions:
             pet.type.skeleton.hat: true
             pet.type.skeletonhorse.hat: true
             pet.type.slime.hat: true
+            pet.type.sniffer.hat: true
             pet.type.snowman.hat: true
             pet.type.spider.hat: true
             pet.type.squid.hat: true
@@ -456,6 +471,7 @@ permissions:
             pet.type.bat.mount: true
             pet.type.bee.mount: true
             pet.type.blaze.mount: true
+            pet.type.camel.mount: true
             pet.type.cat.mount: true
             pet.type.cavespider.mount: true
             pet.type.chicken.mount: true
@@ -504,6 +520,7 @@ permissions:
             pet.type.skeleton.mount: true
             pet.type.skeletonhorse.mount: true
             pet.type.slime.mount: true
+            pet.type.sniffer.mount: true
             pet.type.snowman.mount: true
             pet.type.spider.mount: true
             pet.type.squid.mount: true
@@ -587,6 +604,16 @@ permissions:
             pet.type.blaze.hat: true  # Will allow blaze to be a hat (if enabled)
             pet.type.blaze.mount: true  # Will allow blaze to be mounted (if enabled)
             pet.type.blaze.data.*: true
+
+
+    pet.type.camel.*:  # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.camel: true  # Will allow camel to be spawned (if enabled)
+            pet.type.camel.fly: true  # Will allow camel to fly (if enabled)
+            pet.type.camel.hat: true  # Will allow camel to be a hat (if enabled)
+            pet.type.camel.mount: true  # Will allow camel to be mounted (if enabled)
+            pet.type.camel.data.*: true
 
 
     pet.type.cat.*:  # Will grant access to spawn the pet as well as all the other permissions for this pet
@@ -1069,6 +1096,16 @@ permissions:
             pet.type.slime.data.*: true
 
 
+    pet.type.sniffer.*:  # Will grant access to spawn the pet as well as all the other permissions for this pet
+        default: false
+        children:
+            pet.type.sniffer: true  # Will allow sniffer to be spawned (if enabled)
+            pet.type.sniffer.fly: true  # Will allow sniffer to fly (if enabled)
+            pet.type.sniffer.hat: true  # Will allow sniffer to be a hat (if enabled)
+            pet.type.sniffer.mount: true  # Will allow sniffer to be mounted (if enabled)
+            pet.type.sniffer.data.*: true
+
+
     pet.type.snowman.*:  # Will grant access to spawn the pet as well as all the other permissions for this pet
         default: false
         children:
@@ -1360,6 +1397,17 @@ permissions:
             pet.type.blaze.data.frozen: true
             pet.type.blaze.data.burning: true
             pet.type.blaze.data.silent: true
+
+
+    pet.type.camel.data.*:  # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.camel.data.visible: true
+            pet.type.camel.data.frozen: true
+            pet.type.camel.data.burning: true
+            pet.type.camel.data.silent: true
+            pet.type.camel.data.baby: true
+            pet.type.camel.data.sitting: true
 
 
     pet.type.cat.data.*:  # Grants access to all the data permissions for this pet
@@ -1885,6 +1933,17 @@ permissions:
             pet.type.slime.data.burning: true
             pet.type.slime.data.silent: true
             pet.type.slime.data.size: true
+
+
+    pet.type.sniffer.data.*:  # Grants access to all the data permissions for this pet
+        default: false
+        children:
+            pet.type.sniffer.data.visible: true
+            pet.type.sniffer.data.frozen: true
+            pet.type.sniffer.data.burning: true
+            pet.type.sniffer.data.silent: true
+            pet.type.sniffer.data.baby: true
+            pet.type.sniffer.data.state: true
 
 
     pet.type.snowman.data.*:  # Grants access to all the data permissions for this pet
