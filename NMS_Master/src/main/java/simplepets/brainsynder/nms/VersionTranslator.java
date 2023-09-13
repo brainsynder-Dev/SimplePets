@@ -34,6 +34,8 @@ public class VersionTranslator {
     public static final String REGISTRY_FROZEN_FIELD = "UNKNOWN";
     public static final String REGISTRY_ENTRY_MAP_FIELD = "UNKNOWN";
 
+    public static final String REGISTRY_ENTITY_FIELD_NAME = "UNKNOWN";
+
     public static Field getJumpField () {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }

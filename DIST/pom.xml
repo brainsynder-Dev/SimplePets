@@ -78,27 +78,6 @@
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18.1</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18.2</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
             <artifactId>Version_1.19</artifactId>
             <version>${module.version}</version>
             <type>jar</type>

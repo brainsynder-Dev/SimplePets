@@ -15,11 +15,13 @@
         <!-- <module>v1_16_R3</module> -->
         <module>NMS_Master</module>
         <!-- Removed 1.17 - 1.17.1 support on: June 7th, 2023 -->
-        <!-- <module>Version_1.17</module> -->
+        <!-- <module>Version_1.17</module>   -->
         <!-- <module>Version_1.17.1</module> -->
-        <module>Version_1.18</module>
-        <module>Version_1.18.1</module>
-        <module>Version_1.18.2</module>
+
+        <!-- Removed 1.18 - 1.18.2 support on: September 13th, 2023 -->
+        <!-- <module>Version_1.18</module>   -->
+        <!-- <module>Version_1.18.1</module> -->
+        <!-- <module>Version_1.18.2</module> -->
         <module>Version_1.19</module>
         <module>Version_1.19.1</module>
         <module>Version_1.19.2</module>

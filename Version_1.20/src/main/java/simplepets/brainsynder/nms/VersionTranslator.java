@@ -64,6 +64,10 @@ public class VersionTranslator {
     // @Nullable private java.util.Map<T, net.minecraft.core.Holder.c<T>>
     public static final String REGISTRY_ENTRY_MAP_FIELD = "m";
 
+    //net.minecraft.core.registries.BuiltInRegistries
+    // net.minecraft.core.RegistryBlocks<net.minecraft.world.entity.EntityTypes<?>>
+    public static final String REGISTRY_ENTITY_FIELD_NAME = "h";
+
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
