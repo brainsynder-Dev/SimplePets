@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.phys.Vec3;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -23,13 +24,16 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.ColorWrapper;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.special.EntityControllerPet;
+import simplepets.brainsynder.nms.entity.special.EntityGhostStand;
 
 import java.util.*;
 import java.util.function.Function;
 
 public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     private Map<String, StorageTagCompound> additional;
+
     private EntityControllerPet pet;
+    private EntityGhostStand ghostStand;
 
     private boolean visible = true;
     private boolean frozen = false;
@@ -45,16 +49,17 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         super(EntityType.SHULKER, world);
     }
 
-    public EntityShulkerPet(EntityControllerPet pet, PetUser user) {
+    public EntityShulkerPet(EntityControllerPet pet, EntityGhostStand ghostStand, PetUser user) {
         super(EntityType.SHULKER, VersionTranslator.getEntityLevel(pet));
         this.pet = pet;
-        pet.setBaby(true);
+        this.ghostStand = ghostStand;
+        pet.setBabySafe(true);
         this.user = user;
         this.additional = new HashMap<>();
     }
 
-    public static EntityShulkerPet spawn(Location location, EntityControllerPet pet) {
-        EntityShulkerPet shulker = new EntityShulkerPet(pet, pet.getPetUser());
+    public static EntityShulkerPet spawn(Location location, EntityControllerPet pet, EntityGhostStand ghostStand) {
+        EntityShulkerPet shulker = new EntityShulkerPet(pet, ghostStand, pet.getPetUser());
         shulker.setPos(location.getX(), location.getY(), location.getZ());
         shulker.setInvulnerable(true);
         shulker.setNoAi(true);
@@ -69,6 +74,11 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         if (!value) {
             ghostStand.getBukkitEntity().addPassenger(getBukkitEntity());
         }
+    }
+
+    @Override
+    public void travel(Vec3 vec3d) {
+        pet.travel(vec3d);
     }
 
     @Override
@@ -177,7 +187,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         if (this.frozen && (getTicksFrozen() < 140)) setTicksFrozen(150);
 
         // Updates the size of the controller
-        if (!pet.isBaby()) pet.setBaby(true);
+        if (!pet.isBabySafe()) pet.setBabySafe(true);
         if (isInvisible()) {
             if (!isGlowing) glowHandler(getPetUser().getPlayer(), true);
         } else {

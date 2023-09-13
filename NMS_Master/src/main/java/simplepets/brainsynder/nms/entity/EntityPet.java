@@ -113,7 +113,9 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
     }
 
-
+    public void setDisplayName(boolean displayName) {
+        this.displayName = displayName;
+    }
 
     public boolean isJumping() {
         return jumping;
@@ -489,7 +491,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (getPetUser ().getPlayer() != null) {
             Player player = getPetUser ().getPlayer();
             boolean shifting = player.isSneaking();
-            if (displayName && hideNameShifting)
+            if ((displayName && hideNameShifting)  && (getPetType() != PetType.SHULKER))
                 getEntity().setCustomNameVisible((!shifting));
 
             // Checks if the pet can actually be toggled to match their owners

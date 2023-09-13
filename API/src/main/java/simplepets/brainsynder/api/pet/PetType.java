@@ -253,6 +253,7 @@ public enum PetType {
     SHEEP(IEntitySheepPet.class, "f31f9ccc6b3e32ecf13b8a11ac29cd33d18c95fc73db8a66c5d657ccb8be70",
             AgeData.class, ColorData.class, RainbowData.class, ShearData.class),
 
+    @InDevelopment
     @PetCustomization(ambient = SoundMaker.ENTITY_SHULKER_AMBIENT, weight = PetWeight.SLIGHTLY_HEAVY)
     SHULKER(IEntityShulkerPet.class, "1433a4b73273a64c8ab2830b0fff777a61a488c92f60f83bfb3e421f428a44",
             ResetColorData.class, RainbowData.class, ShulkerCloseData.class),

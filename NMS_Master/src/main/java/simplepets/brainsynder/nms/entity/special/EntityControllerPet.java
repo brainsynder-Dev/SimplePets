@@ -4,6 +4,8 @@ import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
@@ -34,6 +36,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     public EntityControllerPet(PetType type, PetUser user, Location location) {
         super(EntityType.ZOMBIE, type, user);
+        setDisplayName(false);
+
         ENTITIES.addLast(getEntity());
         switch (type) {
             case ARMOR_STAND -> {
@@ -48,7 +52,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 Entity ghost = ghostStand.getBukkitEntity();
                 ENTITIES.addLast(ghost);
 
-                PET = EntityShulkerPet.spawn(location, this);
+                PET = EntityShulkerPet.spawn(location, this, ghostStand);
                 PET.collides = false;
                 Entity shulker = PET.getBukkitEntity();
                 ghost.addPassenger(shulker);
@@ -89,6 +93,8 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     @Override
     public void tick() {
         super.tick();
+        if (isCustomNameVisible()) setCustomNameVisible(false);
+
         if (!this.isInvisible()) this.setInvisible(true);
         if (!isSilent()) this.setSilent(true);
         if ((!isBaby()) && (getPetType() == PetType.SHULKER)) setBaby((getPetType() == PetType.SHULKER));
@@ -101,7 +107,19 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             return;
         }
 
-        if (this.displayEntity != null) {
+        if (displayRider != null) {
+            if (this.displayRider.isValid()) {
+                net.minecraft.world.entity.Entity entity = VersionTranslator.getEntityHandle(displayRider);
+                updateName(entity);
+                if (!canIgnoreVanish()) {
+                    if (VersionTranslator.getEntityHandle(p).isInvisible() != entity.isInvisible()) entity.setInvisible(!entity.isInvisible());
+                }
+            }else{
+                displayEntity = null;
+                kill();
+                return;
+            }
+        }else if (this.displayEntity != null) {
             if (this.displayEntity.isValid()) {
                 net.minecraft.world.entity.Entity entity = VersionTranslator.getEntityHandle(displayEntity);
                 if (!displayEntity.getPassengers().isEmpty()){
@@ -130,6 +148,11 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     @Override
+    public InteractionResult interactAt(net.minecraft.world.entity.player.Player entityhuman, Vec3 vec3d, InteractionHand enumhand) {
+        return InteractionResult.FAIL;
+    }
+
+    @Override
     public void move(MoverType enummovetype, Vec3 vec3d) {
         super.move(enummovetype, vec3d);
         if (displayEntity == null) return;
@@ -137,7 +160,6 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
     }
 
     public void updateName(net.minecraft.world.entity.Entity entity) {
-        if (isCustomNameVisible()) setCustomNameVisible(false);
         if (!entity.isCustomNameVisible()) entity.setCustomNameVisible(true);
         if (hasCustomName() && (!getCustomName().equals(entity.getCustomName()))) entity.setCustomName(getCustomName());
     }
