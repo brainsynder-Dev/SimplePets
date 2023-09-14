@@ -78,7 +78,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     private boolean immovable = false;
     private boolean glowVanishToggle = true;
     private boolean autoRemoveToggle = true;
-    private boolean displayNameVisability = true;
+    private boolean displayNameVisibility = true;
     private boolean hideNameShifting = true;
     private int autoRemoveTick = 10000;
 
@@ -100,7 +100,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         autoRemoveToggle = ConfigOption.INSTANCE.AUTO_REMOVE_ENABLED.getValue();
         autoRemoveTick = ConfigOption.INSTANCE.AUTO_REMOVE_TICK.getValue();
         hideNameShifting = ConfigOption.INSTANCE.PET_TOGGLES_SHIFT_HIDDEN_NAMES.getValue();
-        displayNameVisability = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
+        displayNameVisibility = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             this.walkSpeed = config.getWalkSpeed();
@@ -113,7 +113,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
     public void setDisplayName(boolean displayName) {
-        this.displayNameVisability = displayName;
+        this.displayNameVisibility = displayName;
     }
 
     public boolean isJumping() {
@@ -490,7 +490,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (getPetUser ().getPlayer() != null) {
             Player player = getPetUser ().getPlayer();
             boolean shifting = player.isSneaking();
-            if ((displayNameVisability && hideNameShifting)  && (getPetType() != PetType.SHULKER))
+            if ((displayNameVisibility && hideNameShifting)  && (getPetType() != PetType.SHULKER))
                 getEntity().setCustomNameVisible((!shifting));
 
             // Checks if the pet can actually be toggled to match their owners
