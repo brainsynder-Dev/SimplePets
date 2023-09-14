@@ -58,7 +58,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     private boolean visible = true;
     private ChatColor glowColor = ChatColor.WHITE;
     private boolean ignoreVanish = false;
-    private int standTime = 0;
+    private int standStillTicks = 0;
     private int blockX = 0;
     private int blockZ = 0;
     private int blockY = 0;
@@ -75,12 +75,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     protected double rideSpeed = 0.4000000238418579;
     protected double flySpeed = 0.10000000149011612;
     private boolean floatDown = false;
-    private boolean pushable = false;
-    private boolean canGlow = true;
-    private boolean autoRemove = true;
-    private boolean displayName = true;
+    private boolean immovable = false;
+    private boolean glowVanishToggle = true;
+    private boolean autoRemoveToggle = true;
+    private boolean displayNameVisability = true;
     private boolean hideNameShifting = true;
-    private int tickDelay = 10000;
+    private int autoRemoveTick = 10000;
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
@@ -95,12 +95,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         this.noPhysics = false;
 
 
-        pushable = ConfigOption.INSTANCE.PET_TOGGLES_MOB_PUSHER.getValue();
-        canGlow = ConfigOption.INSTANCE.PET_TOGGLES_GLOW_VANISH.getValue();
-        autoRemove = ConfigOption.INSTANCE.AUTO_REMOVE_ENABLED.getValue();
-        tickDelay = ConfigOption.INSTANCE.AUTO_REMOVE_TICK.getValue();
+        immovable = ConfigOption.INSTANCE.PET_TOGGLES_MOB_PUSHER.getValue();
+        glowVanishToggle = ConfigOption.INSTANCE.PET_TOGGLES_GLOW_VANISH.getValue();
+        autoRemoveToggle = ConfigOption.INSTANCE.AUTO_REMOVE_ENABLED.getValue();
+        autoRemoveTick = ConfigOption.INSTANCE.AUTO_REMOVE_TICK.getValue();
         hideNameShifting = ConfigOption.INSTANCE.PET_TOGGLES_SHIFT_HIDDEN_NAMES.getValue();
-        displayName = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
+        displayNameVisability = ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue();
 
         SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
             this.walkSpeed = config.getWalkSpeed();
@@ -109,12 +109,11 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             this.floatDown = config.canFloat();
         });
 
-        // needs to be faster but less then 6
         VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
     }
 
     public void setDisplayName(boolean displayName) {
-        this.displayName = displayName;
+        this.displayNameVisability = displayName;
     }
 
     public boolean isJumping() {
@@ -449,7 +448,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         Entity bukkitEntity = getBukkitEntity();
         // This section handles the Auto-removal of pets after (tickDelay) Ticks of being stationary...
-        if (autoRemove && (bukkitEntity != null)) {
+        if (autoRemoveToggle && (bukkitEntity != null)) {
             Location location = bukkitEntity.getLocation();
             if ((blockX != location.getBlockX())
                     || (blockY != location.getBlockY())
@@ -457,16 +456,16 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
                 blockX = location.getBlockX();
                 blockY = location.getBlockY();
                 blockZ = location.getBlockZ();
-                if (standTime != 0) standTime = 0;
+                if (standStillTicks != 0) standStillTicks = 0;
             } else {
-                if (standTime == tickDelay) {
+                if (standStillTicks == autoRemoveTick) {
                     if (getPetUser () != null) {
                         getPetUser ().removePet(getPetType());
                     } else {
                         bukkitEntity.remove();
                     }
                 }
-                standTime++;
+                standStillTicks++;
             }
         }
 
@@ -491,7 +490,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (getPetUser ().getPlayer() != null) {
             Player player = getPetUser ().getPlayer();
             boolean shifting = player.isSneaking();
-            if ((displayName && hideNameShifting)  && (getPetType() != PetType.SHULKER))
+            if ((displayNameVisability && hideNameShifting)  && (getPetType() != PetType.SHULKER))
                 getEntity().setCustomNameVisible((!shifting));
 
             // Checks if the pet can actually be toggled to match their owners
@@ -507,7 +506,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
                             glowHandler(player, false);  // If the pet is glowing & owner is not vanished
                         this.setInvisible(!this.isInvisible());
                     } else {
-                        if (ownerVanish && canGlow)
+                        if (ownerVanish && glowVanishToggle)
                             if (VersionTranslator.getEntityHandle(player).isInvisible())
                                 glowHandler(player, true);
                     }
@@ -581,7 +580,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
      */
     @Override
     public void push(double x, double y, double z) {
-        if (!pushable) return;
+        if (!immovable) return;
         super.push(x, y, z);
     }
 
