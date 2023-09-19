@@ -11,6 +11,7 @@ import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
+import org.bukkit.Bukkit;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -25,8 +26,11 @@ public class CitizensFixer {
 
     private static DefaultedRegistry<EntityType<?>> customRegistry = null;
 
+    private static final boolean CITIZENS_FOUND;
 
     static {
+        CITIZENS_FOUND = (Bukkit.getServer().getPluginManager().getPlugin("Citizens") != null);
+
         MODIFIERS = Reflection.getField(Field.class, "modifiers");
 
         try {
@@ -40,12 +44,14 @@ public class CitizensFixer {
     }
 
     public static void resetCustomRegistry () {
+        if (!CITIZENS_FOUND) return;
         if (customRegistry == null) return;
 
         overrideRegistry(customRegistry);
     }
 
     public static void overrideRegistry(DefaultedRegistry<EntityType<?>> entityRegistry) {
+        if (!CITIZENS_FOUND) return;
         // Fetch the field in the BuiltInRegistries pertaining to the entity registry
         MethodHandle registrySetter = createStaticFinalSetter(BuiltInRegistries.class, VersionTranslator.REGISTRY_ENTITY_FIELD_NAME);
 
@@ -58,6 +64,7 @@ public class CitizensFixer {
     }
 
     public static DefaultedRegistry<EntityType<?>> getVanillaRegistry(DefaultedRegistry mappedRegistry) {
+        if (!CITIZENS_FOUND) return mappedRegistry;
         if (!mappedRegistry.getClass().getName().equals(DefaultedMappedRegistry.class.getName())) {
             // If a custom registry was found (Citizens) store the registry instance for later use...
             if(customRegistry == null) customRegistry = mappedRegistry;

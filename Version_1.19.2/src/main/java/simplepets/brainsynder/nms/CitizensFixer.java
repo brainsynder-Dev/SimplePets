@@ -9,11 +9,19 @@ import lib.brainsynder.reflection.Reflection;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.MappedRegistry;
 import net.minecraft.world.entity.EntityType;
+import org.bukkit.Bukkit;
 
 import java.lang.reflect.Field;
 
 public class CitizensFixer {
+    private static final boolean CITIZENS_FOUND;
+
+    static {
+        CITIZENS_FOUND = (Bukkit.getServer().getPluginManager().getPlugin("Citizens") != null);
+    }
+
     public static DefaultedRegistry<EntityType<?>> getVanillaRegistry(DefaultedRegistry mappedRegistry) {
+        if (!CITIZENS_FOUND) return mappedRegistry;
         if (!mappedRegistry.getClass().getName().equals(DefaultedRegistry.class.getName())) {
 
             for (Field field : mappedRegistry.getClass().getDeclaredFields()) {
