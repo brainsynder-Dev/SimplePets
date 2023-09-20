@@ -248,6 +248,6 @@ public enum VersionFields implements FieldValues {
 
     @Override
     public String getEntityJumpField() {
-        return null;
+        return entityJump;
     }
 }
