@@ -1,11 +1,13 @@
 package simplepets.brainsynder.nms.entity;
 
+import lib.brainsynder.ServerVersion;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.VersionFields;
 import simplepets.brainsynder.nms.VersionTranslator;
 
 import java.lang.reflect.Field;
@@ -47,7 +49,7 @@ public class EntityBase extends Mob {
 
     EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType)  {
         try {
-            Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);
+            Field field = EntityType.class.getDeclaredField(VersionFields.fromServerVersion(ServerVersion.getVersion()).getEntityFactoryField());
             field.setAccessible(true);
             EntityType.Builder<? extends Mob> builder = EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType), MobCategory.AMBIENT);
             builder.sized(0.1f, 0.1f);

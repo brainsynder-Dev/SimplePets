@@ -5,6 +5,7 @@
 
 package simplepets.brainsynder.nms;
 
+import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.core.DefaultedMappedRegistry;
 import net.minecraft.core.DefaultedRegistry;
@@ -12,6 +13,8 @@ import net.minecraft.core.MappedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.entity.EntityType;
 import org.bukkit.Bukkit;
+import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.debug.DebugLevel;
 
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
@@ -27,9 +30,12 @@ public class CitizensFixer {
     private static DefaultedRegistry<EntityType<?>> customRegistry = null;
 
     private static final boolean CITIZENS_FOUND;
+    private static final ServerVersion SERVER_VERSION;
 
     static {
         CITIZENS_FOUND = (Bukkit.getServer().getPluginManager().getPlugin("Citizens") != null);
+
+        SERVER_VERSION = ServerVersion.getVersion();
 
         MODIFIERS = Reflection.getField(Field.class, "modifiers");
 
@@ -53,7 +59,7 @@ public class CitizensFixer {
     public static void overrideRegistry(DefaultedRegistry<EntityType<?>> entityRegistry) {
         if (!CITIZENS_FOUND) return;
         // Fetch the field in the BuiltInRegistries pertaining to the entity registry
-        MethodHandle registrySetter = createStaticFinalSetter(BuiltInRegistries.class, VersionTranslator.REGISTRY_ENTITY_FIELD_NAME);
+        MethodHandle registrySetter = createStaticFinalSetter(BuiltInRegistries.class, VersionFields.fromServerVersion(SERVER_VERSION).getEntityRegistryField());
 
         try {
             // Set the field to use the specified registry
@@ -90,7 +96,10 @@ public class CitizensFixer {
 
     public static MethodHandle createStaticFinalSetter(Class<?> className, String fieldName) {
         Field field = Reflection.getField(className, fieldName);
-        if (field == null) return null;
+        if (field == null) {
+            SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Failed to find field: "+className.getName()+"$"+fieldName);
+            return null;
+        }
 
         // This check is a precaution if the modifiers field is not available
         if (MODIFIERS == null) {
@@ -99,6 +108,7 @@ public class CitizensFixer {
 
                 return MethodHandles.insertArguments(PUT_OBJECT, 0, className, offset);
             } catch (Throwable throwable) {
+                SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Failed to modify field: "+className.getName()+"$"+fieldName);
                 throw new RuntimeException("Failed to modify field '"+fieldName+"' in the "+className+" class", throwable);
             }
         }
@@ -106,7 +116,9 @@ public class CitizensFixer {
         try {
             MODIFIERS.setInt(field, field.getModifiers() & ~Modifier.FINAL);
             return METHOD_LOOKUP.unreflectSetter(field);
-        } catch (Exception ignored) {}
+        } catch (Exception e) {
+            SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Failed to find field... Reason: "+e.getMessage());
+        }
         return null;
     }
 

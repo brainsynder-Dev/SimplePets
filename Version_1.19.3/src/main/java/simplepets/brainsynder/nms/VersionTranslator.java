@@ -49,31 +49,13 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class VersionTranslator {
-    // net.minecraft.network.syncher.DataWatcher
-    // private static final it.unimi.dsi.fastutil.objects.Object2IntMap<java.lang.Class<? extends net.minecraft.world.entity.Entity>>
-    public static final String ENTITY_DATA_MAP = "e";
-    // net.minecraft.world.entity.EntityTypes
-    // private final net.minecraft.world.entity.EntityTypes.b<T>
-    public static final String ENTITY_FACTORY_FIELD = "bu";
-
-    // net.minecraft.core.RegistryMaterials
-    // private boolean
-    public static final String REGISTRY_FROZEN_FIELD = "l";
-    // net.minecraft.core.RegistryMaterials
-    // @Nullable private java.util.Map<T, net.minecraft.core.Holder.c<T>>
-    public static final String REGISTRY_ENTRY_MAP_FIELD = "m";
-
-    //net.minecraft.core.registries.BuiltInRegistries
-    // net.minecraft.core.RegistryBlocks<net.minecraft.world.entity.EntityTypes<?>>
-    public static final String REGISTRY_ENTITY_FIELD_NAME = "h";
-
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
         try {
-            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19.3
+            Field jumpingField = LivingEntity.class.getDeclaredField(VersionFields.v1_19_3.getEntityJumpField()); // For 1.19.3
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
@@ -137,7 +119,7 @@ public class VersionTranslator {
                                       boolean glow) throws IllegalAccessException {
         Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap =
                 (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher,
-                        ENTITY_DATA_MAP, true);
+                        VersionFields.v1_19_3.getEntityDataMapField(), true);
 
         SynchedEntityData.DataItem<Byte> item = newMap.get(0);
         byte initialBitMask = item.getValue();
@@ -147,7 +129,7 @@ public class VersionTranslator {
         } else {
             item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
         }
-        FieldUtils.writeDeclaredField(newDataWatcher, ENTITY_DATA_MAP, newMap, true);
+        FieldUtils.writeDeclaredField(newDataWatcher, VersionFields.v1_19_3.getEntityDataMapField(), newMap, true);
     }
 
     public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {
