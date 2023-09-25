@@ -457,7 +457,7 @@ public class GlowingEntities implements Listener {
 						"Glowing Entities reflection failed to initialize. The util is disabled. Please ensure your version ("
 								+ Bukkit.getServer().getClass().getPackage().getName() + ") is supported.";
 				if (logger == null) {
-					ex.printStackTrace();
+					// ex.printStackTrace();
 					System.err.println(errorMsg);
 				} else {
 					logger.log(Level.SEVERE, errorMsg, ex);

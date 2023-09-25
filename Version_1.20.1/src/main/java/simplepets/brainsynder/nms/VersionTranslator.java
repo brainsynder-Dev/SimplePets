@@ -56,17 +56,6 @@ public class VersionTranslator {
         if (jumpingField != null) return jumpingField;
 
         try {
-            /*
-                net.minecraft.world.entity.EntityLiving
-
-                protected int bg
-                public float bh
-                protected boolean bi  <---- This one
-                public float bj
-                public float bk
-                public float bl
-                protected int bm
-             */
             Field jumpingField = LivingEntity.class.getDeclaredField(VersionFields.v1_20_1.getEntityJumpField()); // For 1.20.1
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;

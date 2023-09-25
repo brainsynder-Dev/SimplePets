@@ -254,13 +254,17 @@ public class Utilities {
         // Class: net.minecraft.world.entity.Entity
         // protected int    (Below public com.google.common.collect.ImmutableList<Entity>)
 
-        String targetField = "s";
-        if (ServerVersion.isEqualNew(ServerVersion.v1_20)) {
+        String targetField;
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20_2)) {
+            targetField = "J";
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_20)) {
             targetField = "I";
         } else if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)) {
             targetField = "G";
         } else if (ServerVersion.isEqualNew(ServerVersion.v1_18_2)) {
             targetField = "r";
+        }else{
+            targetField = "s";
         }
 
         field = FieldAccessor.getField(Reflection.getNmsClass("Entity", "world.entity"), targetField, Integer.TYPE);
