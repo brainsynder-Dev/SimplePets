@@ -7,7 +7,7 @@
     <groupId>simplepets.brainsynder</groupId>
     <artifactId>SimplePets</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <modules>
         <module>API</module>
@@ -29,7 +29,6 @@
         <module>Version_1.19.4</module>
         <module>Version_1.20</module>
         <module>Version_1.20.1</module>
-        <module>Version_1.20.2</module>
         <module>DIST</module>
     </modules>
 
@@ -73,11 +72,11 @@
         <module.version>5.0-BUILD-${jenkins.buildNumber}</module.version>
         <bslib.version>B119</bslib.version>
 
-        <minecraft.version>1.20.2</minecraft.version>
+        <minecraft.version>1.20.1</minecraft.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
-        <spigot.nms>v1_20_R2</spigot.nms>
+        <spigot.nms>v1_20_R1</spigot.nms>
 
-        <anvilgui.version>1.6.12-CUSTOM</anvilgui.version>
+        <anvilgui.version>1.6.12</anvilgui.version>
     </properties>
 
     <build>
@@ -190,35 +189,27 @@
 
     <distributionManagement>
         <repository>
-            <id>maven-releases</id>
-            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
+            <id>bs-repo-releases</id>
+            <url>https://repo.bsdevelopment.org/releases</url>
         </repository>
-        <snapshotRepository>
-            <id>maven-snapshots</id>
-            <url>https://repo.pluginwiki.us/repository/maven-snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <repositories>
         <repository>
-            <id>bs-nms</id>
-            <url>https://repo.pluginwiki.us/repository/nms/</url>
+            <id>bs-repo-nms</id>
+            <url>https://repo.bsdevelopment.org/nms</url>
         </repository>
         <repository>
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>bs-public</id>
-            <url>https://repo.pluginwiki.us/repository/maven-releases/</url>
+            <id>bs-repo-releases</id>
+            <url>https://repo.bsdevelopment.org/releases</url>
         </repository>
         <repository>
             <id>nms-repo</id>
             <url>https://repo.codemc.org/repository/nms/</url>
-        </repository>
-        <repository>
-            <id>bs-repo</id>
-            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>dmulloy2-repo</id>
