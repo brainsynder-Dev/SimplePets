@@ -15,12 +15,16 @@ import java.util.Random;
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
-    private static final GlowingEntities GLOWING_ENTITIES;
     private static final Random RANDOM;
+    private static GlowingEntities GLOWING_ENTITIES;
 
     static {
         RANDOM = new Random();
-        GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+        try {
+            GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+        }catch (Exception e) {
+            GLOWING_ENTITIES = null;
+        }
     }
 
     public static Random getRandom() {

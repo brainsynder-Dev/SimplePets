@@ -559,10 +559,13 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
                 entity = controllerPet.getVisibleEntity().getEntity();
             }
             isGlowing = glow;
-            if (glow) {
-                EntityUtils.getGlowingInstance().setGlowing(entity, player, getGlowColor());
-            }else{
-                EntityUtils.getGlowingInstance().unsetGlowing(entity, player);
+
+            if (EntityUtils.getGlowingInstance() != null) {
+                if (glow) {
+                    EntityUtils.getGlowingInstance().setGlowing(entity, player, getGlowColor());
+                } else {
+                    EntityUtils.getGlowingInstance().unsetGlowing(entity, player);
+                }
             }
         } catch (Exception ignored) {}
     }
