@@ -64,9 +64,7 @@ public class CitizensFixer {
         try {
             // Set the field to use the specified registry
             registrySetter.invoke(entityRegistry);
-        } catch (Throwable e) {
-            throw new RuntimeException("Failed to override the entity registry", e);
-        }
+        } catch (Throwable ignored) {}
     }
 
     public static DefaultedRegistry<EntityType<?>> getVanillaRegistry(DefaultedRegistry mappedRegistry) {
