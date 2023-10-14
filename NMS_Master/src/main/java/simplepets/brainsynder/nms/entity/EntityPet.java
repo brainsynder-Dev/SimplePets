@@ -48,6 +48,7 @@ import java.util.function.Function;
 public abstract class EntityPet extends EntityBase implements IEntityPet {
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
+    private final EntityType<? extends Mob> rawEntityType;
 
 
     private final double jumpHeight = 0.5D;
@@ -84,10 +85,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
+        rawEntityType = EntityType.PIG;
     }
 
     public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+        rawEntityType = entitytypes;
         this.additional = new HashMap<>();
 
         VersionTranslator.setMapUpStep(this, 1);
@@ -546,7 +549,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     public EntityType<?> getType() {
-        return entityType;
+        return rawEntityType;
     }
 
     private void glowHandler(Player player, boolean glow) {
