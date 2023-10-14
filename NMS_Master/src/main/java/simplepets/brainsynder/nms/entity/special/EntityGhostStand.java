@@ -32,6 +32,11 @@ public class EntityGhostStand extends ArmorStand {
         this.controllerPet = controllerPet;
     }
 
+    @Override
+    public EntityType<?> getType() {
+        return EntityType.ARMOR_STAND;
+    }
+
     public static EntityGhostStand spawn(Location location, EntityControllerPet pet) {
         EntityGhostStand stand = new EntityGhostStand(EntityType.ARMOR_STAND, Reflection.getWorldHandle(location.getWorld()), pet);
         stand.setPos(location.getX(), location.getY(), location.getZ());

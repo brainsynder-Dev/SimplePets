@@ -72,6 +72,11 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         // walking = new AnimationController(this, AnimationManager.WALKING_ANIMATION); TODO: I disabled the animations
     }
 
+    @Override
+    public EntityType<?> getType() {
+        return EntityType.ARMOR_STAND;
+    }
+
     public static EntityArmorStandPet spawn(Location location, EntityControllerPet pet) {
         EntityArmorStandPet stand = new EntityArmorStandPet(pet, pet.getPetUser());
         stand.setPos(location.getX(), location.getY(), location.getZ());
