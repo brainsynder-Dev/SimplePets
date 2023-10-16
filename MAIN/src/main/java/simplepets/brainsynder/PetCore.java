@@ -9,6 +9,7 @@ import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
 import lib.brainsynder.utils.TaskTimer;
+import lib.brainsynder.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -160,9 +161,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         sqlHandler.initiateDatabase();
         taskTimer.label("init SQLHandler");
 
-        handleMetrics();
-        taskTimer.label("init metrics");
-
         try {
             debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
@@ -176,15 +174,30 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         handleUpdateUtils();
         taskTimer.label("init update checking");
 
-        addonManager = new AddonManager(this);
+        {
+            TimeUnit unit;
 
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                addonManager.initialize();
-                addonManager.checkAddons();
+            String timeunit = ConfigOption.INSTANCE.ADDON_LOAD_UNIT.getValue();
+            try {
+                unit = TimeUnit.valueOf(timeunit);
+            } catch (Exception e) {
+                unit = TimeUnit.SECONDS;
+                debug.debug(DebugLevel.ERROR, "Could not find unit for '" + timeunit + "'");
             }
-        }.runTaskLater(this, 60);
+
+            debug.debug(SimplePets.ADDON, "Loading addons in '"+ ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue()+ " " + timeunit + "'");
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    addonManager = new AddonManager(PetCore.this);
+                    addonManager.initialize();
+                    addonManager.checkAddons();
+
+                    handleMetrics();
+                }
+            }.runTaskLater(this, Utilities.toUnit(ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue(), unit));
+        }
         taskTimer.label("init addons");
         taskTimer.label("addon update check");
 

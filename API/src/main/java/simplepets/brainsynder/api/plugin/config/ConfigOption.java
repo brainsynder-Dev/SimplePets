@@ -83,6 +83,31 @@ public enum ConfigOption {
                     Default: {default}""");
 
 
+    // Addon Config
+    public final ConfigEntry<String> ADDON_LOAD_UNIT = createOption("addon-initialization.unit", TimeUnit.SECONDS.name(),
+            """
+                    The unit of time for when the addons should be loaded
+                    
+                    Time Units:
+                    - SECONDS
+                    - MINUTES
+                    - HOURS
+                    - DAYS
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Integer> ADDON_LOAD_TIME = createOption("addon-initialization.time", 5, """
+                    The integer value which correlates to the selected unit
+                    
+                    Example:
+                        unit: HOURS
+                        time: 12
+                    Will be 12 Hours till the addons initiate
+                    
+                    Default: {default}
+                    """);
+
+
+
     public final ConfigEntry<Boolean> REMOVE_PET_ON_WORLD_CHANGE = createOption("RemovePetsOnWorldChange", true,
             """
                     Disabling this will remove a players pet when they change worlds
