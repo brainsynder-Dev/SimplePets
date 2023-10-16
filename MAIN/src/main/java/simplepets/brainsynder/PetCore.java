@@ -87,7 +87,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private Debug debug;
     private IPetUtilities petUtilities;
-    private TaskTimer taskTimer;
     private SQLHandler sqlHandler;
 
     public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
@@ -97,8 +96,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     public void onEnable() {
         instance = this;
         SimplePets.setPLUGIN(this);
-        taskTimer = new TaskTimer(this);
-        taskTimer.start();
         isStarting = true;
 
         debug = new Debug(this);
@@ -127,18 +124,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         petUtilities = new PetUtility();
 
-        taskTimer.label("registered api instance");
-
-
         itemFolder = new File(getDataFolder() + File.separator + "Items");
 
         MessageFile.init(getDataFolder());
-        taskTimer.label("init messages");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
         configuration.initValues();
-        taskTimer.label("init config");
 
         reloaded = ConfigOption.INSTANCE.RELOAD_DETECT.getValue();
         debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: " + reloaded);
@@ -147,10 +139,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 //        new InventorySQL();
 //        taskTimer.label("init InventorySQL");
         reloadSpawner();
-        taskTimer.label("located spawner util");
 
         handleManagers();
-        taskTimer.label("init managers");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing SQL Handler");
         if (SQLData.USE_SQLITE) {
@@ -159,20 +149,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             sqlHandler = new MySQLHandler();
         }
         sqlHandler.initiateDatabase();
-        taskTimer.label("init SQLHandler");
 
         try {
             debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
-            taskTimer.label("init commands");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         handleListeners();
-        taskTimer.label("registered listeners");
         handleUpdateUtils();
-        taskTimer.label("init update checking");
 
         {
             TimeUnit unit;
@@ -198,8 +184,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 }
             }.runTaskLater(this, Utilities.toUnit(ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue(), unit));
         }
-        taskTimer.label("init addons");
-        taskTimer.label("addon update check");
 
         checkWorldGuard(value -> {
             if (value) {
@@ -211,7 +195,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                         ));
             }
         });
-        taskTimer.stop();
 
         fullyStarted = true;
 
@@ -618,7 +601,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private boolean fetchSupportedVersions() {
         if (!supportedVersions.isEmpty()) return supportedVersions.contains(ServerVersion.getVersion().name());
-        taskTimer.label("Looking for Supported Versions...");
         supportedVersions.clear();
         String current = ServerVersion.getVersion().name();
         boolean supported = false;
@@ -645,16 +627,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             }
         }
 
-        if (!supportedVersions.contains(current)) {
-            taskTimer.label("Finished looking for supported versions.");
-            return false;
-        }
+        if (!supportedVersions.contains(current)) return false;
 
         if (!supportedVersions.isEmpty()) {
             debug.debug("Found support for version(s): " + supportedVersions.toString().replace("v", "").replace("_", "."));
             debug.debug("Targeting version: " + ServerVersion.getVersion().name().replace("v", "").replace("_", "."));
         }
-        taskTimer.label("Finished looking for supported versions.");
         return supported;
     }
 
