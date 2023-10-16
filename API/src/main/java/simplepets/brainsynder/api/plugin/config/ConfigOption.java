@@ -314,10 +314,17 @@ public enum ConfigOption {
                     Should pet owners be able to open their pets data menu when right clicking the pet.
                     
                     Default: {default}""");
-    public final ConfigEntry<Boolean> MISC_TOGGLES_PET_VANISHING = createOption("misc-toggles.enable-pet-vanishing", true,
+    public final ConfigEntry<Boolean> MISC_TOGGLES_PET_VANISHING = createOption("misc-toggles.vanishing.pet-visibility", true,
             """
                     Should pets turn invisible when their owner is not visible (either via Spectator or Invisibility potions)
 
+                    Default: {default}""").setPastPaths("misc-toggles.enable-pet-vanishing");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_REMOVED_VANISH = createOption("misc-toggles.vanishing.remove-pet-when-vanished", false,
+            """
+                    When the owner is vanished should the pets the player has active be removed?
+                    
+                    NOTE: This will override the 'pet-visibility' option
+                    
                     Default: {default}""");
 
 

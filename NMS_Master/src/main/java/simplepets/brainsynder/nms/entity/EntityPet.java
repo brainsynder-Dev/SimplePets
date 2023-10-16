@@ -498,11 +498,17 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
             // Checks if the pet can actually be toggled to match their owners
             // player visibility status
+            boolean ownerVanish = (VersionTranslator.getEntityHandle(player).isInvisible()
+                    // Added this check for SuperVanish and PremiumVanish since they recommend using this method to check
+                    || SimplePets.getPetUtilities().isVanished(player)
+            );
+
+            if (ownerVanish && ConfigOption.INSTANCE.MISC_TOGGLES_REMOVED_VANISH.getValue()) {
+                getPetUser ().removePet(getPetType());
+                return;
+            }
+
             if ((!canIgnoreVanish()) && ConfigOption.INSTANCE.MISC_TOGGLES_PET_VANISHING.getValue()) {
-                boolean ownerVanish = (VersionTranslator.getEntityHandle(player).isInvisible()
-                        // Added this check for SuperVanish and PremiumVanish since they recommend using this method to check
-                        || SimplePets.getPetUtilities().isVanished(player)
-                );
                 if (isPetVisible()) {
                     if (ownerVanish != this.isInvisible()) { // If Owner is invisible & pet is not
                         if (isGlowing && (!ownerVanish))
