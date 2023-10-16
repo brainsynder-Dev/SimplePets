@@ -8,7 +8,6 @@ import lib.brainsynder.metric.bukkit.Metrics;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
-import lib.brainsynder.utils.TaskTimer;
 import lib.brainsynder.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -48,8 +47,6 @@ import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -211,20 +208,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     }
 
-    private void outputTimings() {
-        File file = new File(getDataFolder(), "Timings.json");
-        if (file.exists()) file.delete();
-        try (PrintWriter writer = new PrintWriter(file)) {
-            writer.write(TaskTimer.fetchAllCompletedTimers().toString(WriterConfig.PRETTY_PRINT));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onDisable() {
         isStarting = false;
-        outputTimings();
         supportedVersions.clear();
         if (petUtilities == null) return; // Failed to load this field due to unsupported version
         SimplePets.getDebugLogger().debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
