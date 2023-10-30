@@ -7,7 +7,6 @@ import lib.brainsynder.nms.Tellraw;
 import lib.brainsynder.optional.BiOptional;
 import lib.brainsynder.reflection.FieldAccessor;
 import lib.brainsynder.reflection.Reflection;
-import lib.brainsynder.utils.TaskTimer;
 import org.apache.commons.io.FileUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -58,37 +57,30 @@ public class Utilities {
     }
 
     public static boolean handlePetSpawning(PetUser user, PetType type, StorageTagCompound compound, boolean checkDataPermissions) {
-        TaskTimer timer = new TaskTimer(Utilities.class, "handlePetSpawning");
-        timer.start();
         Player player = user.getPlayer();
         if (type.isInDevelopment()
                 && (!ConfigOption.INSTANCE.PET_TOGGLES_DEV_MOBS.getValue())) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_IN_DEVELOPMENT).replace("{type}", type.getName()));
-            timer.stop("in-development pet - end");
             return false;
         }
 
         if (!type.isSupported()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_SUPPORTED).replace("{type}", type.getName()));
-            timer.stop("unsupported type - end");
             return false;
         }
 
         if (!SimplePets.getSpawnUtil().isRegistered(type)) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.PET_NOT_REGISTERED).replace("{type}", type.getName()));
-            timer.stop("unregistered type - end");
             return false;
         }
 
         if (!Utilities.hasPermission(player, type.getPermission())
                 && ((!user.getOwnedPets().contains(type)) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue())) {
-            timer.stop("no permission - end");
             return false;
         }
 
         ISpawnUtil spawner = SimplePets.getSpawnUtil();
         if (spawner == null) {
-            timer.stop("spawner is null - end");
             return false;
         }
 
@@ -101,26 +93,21 @@ public class Utilities {
                     compound.set(petData.getNamespace().namespace(), o);
                 });
             }
-            timer.label("loaded default data");
         }
 
         BiOptional<IEntityPet, String> entityPet = spawner.spawnEntityPet(type, user, compound);
-        timer.label("spawned pet entity");
 
         if (entityPet.isFirstPresent()) {
             player.sendMessage(MessageFile.getTranslation(MessageOption.SUMMONED_PET).replace("{type}", type.getName()));
-            timer.stop("successful spawn - end");
             return true;
         } else {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED, player, player.getLocation());
             if (entityPet.isSecondPresent()) {
                 Tellraw.fromLegacy(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()))
                         .tooltip(entityPet.second().get()).send(player);
-                timer.stop("failed spawn - end");
                 return false;
             }
 
-            timer.stop("unknown fail reason - end");
             player.sendMessage(MessageFile.getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));
             return false;
         }
