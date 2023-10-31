@@ -51,20 +51,22 @@ public abstract class CustomItem extends Item {
 
         if (target.equals("ALL")) {
             owner.getPetEntities().forEach(entityPet -> {
-                String loc = "";
+                String loc;
 
                 if (owner.hasPets()) {
                     Location location = entityPet.getEntity().getLocation();
                     loc = location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
+                } else {
+                    loc = "";
                 }
 
-                for (Object o : array) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.valueOf(o)
+                array.forEach(jsonValue -> {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), jsonValue.asString()
                             .replace("{location}", loc)
                             .replace("{name}", owner.getPlayer().getName())
                             .replace("{type}", entityPet.getPetType().getName())
                     );
-                }
+                });
             });
             return;
         }
@@ -74,12 +76,12 @@ public abstract class CustomItem extends Item {
             Location location = player.getLocation();
             String loc = location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
 
-            for (Object o : array) {
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.valueOf(o)
+            array.forEach(jsonValue -> {
+                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), jsonValue.asString()
                         .replace("{location}", loc)
                         .replace("{name}", owner.getPlayer().getName())
                 );
-            }
+            });
             return;
         }
 
@@ -88,13 +90,13 @@ public abstract class CustomItem extends Item {
                 Location location = entityPet.getEntity().getLocation();
                 String loc = location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ();
 
-                for (Object o : array) {
-                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.valueOf(o)
+                array.forEach(jsonValue -> {
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), jsonValue.asString()
                             .replace("{location}", loc)
                             .replace("{name}", owner.getPlayer().getName())
                             .replace("{type}", entityPet.getPetType().getName())
                     );
-                }
+                });
             });
         });
     }
