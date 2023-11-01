@@ -111,6 +111,7 @@ public class SavesMenu extends CustomInventory {
         ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
 
         List<PetUser.Entry<PetType, StorageTagCompound>> savedPets = Lists.newArrayList();
+        boolean removeNoPerms = ConfigOption.INSTANCE.PERMISSIONS_PLAYER_ACCESS.getValue();
         user.getSavedPets().forEach(entry -> {
             PetType type = entry.getKey();
             if (type.isInDevelopment()
@@ -122,7 +123,7 @@ public class SavesMenu extends CustomInventory {
                 if (!type.isSupported()) return;
                 if (!spawnUtil.isRegistered(type)) return;
                 if (player instanceof Player) {
-                    if (!Utilities.hasPermission(player, type.getPermission())) return;
+                    if (removeNoPerms && (!Utilities.hasPermission(player, type.getPermission()))) return;
                     savedPets.add(entry);
                 }
             });
@@ -214,8 +215,7 @@ public class SavesMenu extends CustomInventory {
             return String.valueOf(((StorageTagShort) base).getShort());
         if (base instanceof StorageTagString)
             return String.valueOf(((StorageTagString) base).getString());
-        if (base instanceof StorageTagList) {
-            StorageTagList list = (StorageTagList) base;
+        if (base instanceof StorageTagList list) {
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < list.tagCount(); i++) {
                 builder.append(fetchValue(list.get(i)));
