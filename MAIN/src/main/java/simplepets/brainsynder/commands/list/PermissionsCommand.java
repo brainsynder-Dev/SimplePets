@@ -209,6 +209,19 @@ public class PermissionsCommand extends PetSubCommand {
         }
 
 
+        List<StringBuilder> savesBypass = new ArrayList<>();
+        savesBypass.add(new StringBuilder()
+                .append("    pet.saves.bypass:  # Will allow all player to bypass the saves limit (if enabled)").append("\n")
+                .append("        default: false").append("\n")
+                .append("        children:").append("\n")
+        );
+        for (PetType type : PetType.values()) {
+            if (type == PetType.UNKNOWN) continue;
+            savesBypass.add(new StringBuilder()
+                    .append("            pet.saves.").append(type.name().toLowerCase().replace("_", "")).append(".bypass: true").append("\n")
+            );
+        }
+
         List<StringBuilder> mount = new ArrayList<>();
         mount.add(new StringBuilder()
                 .append("    pet.type.*.mount:  # Will allow all pets to be mounted (if enabled)").append("\n")
@@ -223,8 +236,10 @@ public class PermissionsCommand extends PetSubCommand {
             );
         }
 
+        savesBypass.forEach(master::append);
 
         master
+                .append("\n")
                 .append("    pet.type.*:  # Grants access to all pets").append("\n")
                 .append(def)
                 .append("            pet.type.passive: true").append("\n")
