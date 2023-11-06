@@ -75,6 +75,7 @@ public abstract class Item extends JsonFile {
                 return ItemBuilder.fromCompound(StorageTagTools.fromJsonObject((JsonObject) getValue("item")));
             } catch (IllegalArgumentException ex) {
                 SimplePets.getDebugLogger().debug(DebugLevel.ERROR, "Error thrown when creating item for " + getClass().getSimpleName() + ".");
+                // new RuntimeException(ex).printStackTrace();
                 return getDefaultItem();
             }
         }
