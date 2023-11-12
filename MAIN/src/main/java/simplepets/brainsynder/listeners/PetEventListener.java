@@ -22,6 +22,8 @@ public class PetEventListener implements Listener {
     @EventHandler
     public void onRename(PetRenameEvent event) {
         String name = event.getName();
+        // Name is null, no need to check any further...
+        if (name == null) return;
 
         Player player = event.getUser().getPlayer();
 
@@ -31,6 +33,13 @@ public class PetEventListener implements Listener {
         if ((rawPattern != null) && (!rawPattern.isEmpty())) {
             if (event.getName().matches(rawPattern)) name = null;
         }
+
+        // If the name is nullified by the above check just set the name and return...
+        if (name == null) {
+            event.setName(name);
+            return;
+        }
+
         List<String> blockedWords = ConfigOption.INSTANCE.RENAME_BLOCKED_WORDS.getValue();
         if (!blockedWords.isEmpty()) {
             for (String word : blockedWords) {
