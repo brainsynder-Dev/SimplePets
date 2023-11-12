@@ -518,8 +518,8 @@ public enum ConfigOption {
     public final ConfigEntry<List<String>> RENAME_BLOCKED_WORDS = createOption("RenamePet.Blocked-Words", Lists.newArrayList("jeb_"),
             """
                     Are there words you don't want in a pets name?
-                       If you put word in between [] it will check if it contains ANY part of the word
-                             Example: [ass] will also flag glass because it contains the word in it
+                       If You put an ^ at the start of the word/text it will ignore case
+                             Example: ^ass will also flag ASS because it will ignore what case the letters are
                        If you put word in between () it will check if it contains ANY part of the word
                              Example: (ass) will also flag glass because it contains the word in it
                        If you just have the word it will check for the exact word
