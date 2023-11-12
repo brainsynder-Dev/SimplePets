@@ -520,6 +520,8 @@ public enum ConfigOption {
                     Are there words you don't want in a pets name?
                        If you put word in between [] it will check if it contains ANY part of the word
                              Example: [ass] will also flag glass because it contains the word in it
+                       If you put word in between () it will check if it contains ANY part of the word
+                             Example: (ass) will also flag glass because it contains the word in it
                        If you just have the word it will check for the exact word
                              Example: 'ass' will just be flagged so 'glass' can be said
                     

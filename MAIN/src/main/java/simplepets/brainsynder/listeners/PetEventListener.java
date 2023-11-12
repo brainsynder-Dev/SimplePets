@@ -34,11 +34,24 @@ public class PetEventListener implements Listener {
         List<String> blockedWords = ConfigOption.INSTANCE.RENAME_BLOCKED_WORDS.getValue();
         if (!blockedWords.isEmpty()) {
             for (String word : blockedWords) {
-                if (word.startsWith("[") && word.endsWith("]")) {
-                    if (name.contains(AdvString.between("[", "]", word))) {
+                boolean ignoreCase = word.startsWith("^");
+                if (ignoreCase) word = word.replaceFirst("\\^", "");
+
+                if (word.startsWith("(") && word.endsWith(")")) {
+                    if (ignoreCase && (name.toLowerCase().contains(AdvString.between("(", ")", word).toLowerCase()))) {
                         event.setCancelled(true);
                         return;
                     }
+
+                    if (name.contains(AdvString.between("(", ")", word))) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+
+                if (ignoreCase && (name.toLowerCase().contains(word.toLowerCase()))) {
+                    event.setCancelled(true);
+                    return;
                 }
                 if (name.contains(word)) {
                     event.setCancelled(true);
