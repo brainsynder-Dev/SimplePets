@@ -33,6 +33,7 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.api.wrappers.EntityPose;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.pathfinder.PathfinderWalkToPlayer;
@@ -177,6 +178,16 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public void setFrozen(boolean frozen) {
         this.frozen = frozen;
         setTicksFrozen(frozen ? 150 : 0);
+    }
+
+    @Override
+    public void setPetPose(EntityPose pose) {
+        super.setPose(Pose.valueOf(pose.name()));
+    }
+
+    @Override
+    public EntityPose getPetPose() {
+        return EntityPose.valueOf(getPose().name());
     }
 
     @Override

@@ -7,6 +7,7 @@ import simplepets.brainsynder.api.entity.misc.IBurnablePet;
 import simplepets.brainsynder.api.entity.misc.IEntityBase;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.api.wrappers.EntityPose;
 
 import java.util.Collections;
 import java.util.List;
@@ -133,4 +134,7 @@ public interface IEntityPet extends IEntityBase, IBurnablePet {
      * Returns what color the pet will glow as
      */
     ChatColor getGlowColor ();
+
+    void setPetPose(EntityPose pose);
+    EntityPose getPetPose();
 }

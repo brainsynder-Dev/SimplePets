@@ -2,6 +2,7 @@ package simplepets.brainsynder.api.pet.annotations;
 
 import lib.brainsynder.sounds.SoundMaker;
 import simplepets.brainsynder.api.pet.PetWeight;
+import simplepets.brainsynder.api.wrappers.EntityPose;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,4 +14,5 @@ import java.lang.annotation.Target;
 public @interface PetCustomization {
     SoundMaker ambient ();
     PetWeight weight () default PetWeight.NONE;
+    EntityPose[] poses () default EntityPose.STANDING;
 }
