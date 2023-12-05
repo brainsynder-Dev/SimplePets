@@ -97,6 +97,11 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug = new Debug(this);
 
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING, " *** This version is still under development any issues found please report");
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING, " *** On the Github: https://tiny.bsdevelopment.org/pet-issues");
+        }
+
         if (!checkJavaVersion()) {
             setEnabled(false);
             isStarting = false;
