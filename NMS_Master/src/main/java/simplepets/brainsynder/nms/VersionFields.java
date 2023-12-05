@@ -232,6 +232,34 @@ public enum VersionFields implements FieldValues {
             // protected boolean jumping;
             // public float xxa;
             "bj" // entityJump
+    ),
+    v1_20_3 (
+            // net.minecraft.network.syncher.DataWatcher
+            // private static final it.unimi.dsi.fastutil.objects.Object2IntMap<java.lang.Class<? extends net.minecraft.world.entity.Entity>>
+            "b", // entityDataField
+
+            // net.minecraft.world.entity.EntityTypes
+            // private final net.minecraft.world.entity.EntityTypes.b<T>
+            "bC", // entityFactory
+
+            // net.minecraft.core.RegistryMaterials
+            // private boolean
+            "l", // registryFrozen
+
+            // net.minecraft.core.RegistryMaterials
+            // @Nullable private java.util.Map<T, net.minecraft.core.Holder.c<T>>
+            "m", // registryIntrusive
+
+            // net.minecraft.core.registries.BuiltInRegistries
+            // net.minecraft.core.RegistryBlocks<net.minecraft.world.entity.EntityTypes<?>>
+            "g", // entityRegistry
+
+            // net.minecraft.world.entity.EntityLiving
+            // protected int deathScore;
+            // public float lastHurt;
+            // protected boolean jumping;
+            // public float xxa;
+            "bj" // entityJump
     );
 
     public static VersionFields fromServerVersion (ServerVersion version) {

@@ -340,6 +340,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
 
+                // Class: net.minecraft.server.MinecraftServer
+                // private volatile boolean (below 'private PlayerList')
                 String methodName = "isRunning"; // 1.17 - 1.17.1
                 if (ServerVersion.isEqualNew(ServerVersion.v1_18) && ServerVersion.isOlder(ServerVersion.v1_19))
                     methodName = "v"; // 1.18 - 1.18.2
@@ -352,8 +354,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                         || ServerVersion.isEqualNew(ServerVersion.v1_20_1)
                         || ServerVersion.isEqualNew(ServerVersion.v1_20_2))
                     methodName = "R"; // 1.19.4 / 1.20 / 1.20.1 / 1.20.2
+                if (ServerVersion.isEqualNew(ServerVersion.v1_20_3))
+                    methodName = "S"; // 1.20.3
 
-                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
+                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName}); // Remapped Field Name: running
                 return (boolean) Reflection.invoke(isRunning, server);
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
