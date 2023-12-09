@@ -360,7 +360,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                         || ServerVersion.isEqualNew(ServerVersion.v1_20_2))
                     methodName = "R"; // 1.19.4 / 1.20 / 1.20.1 / 1.20.2
                 if (ServerVersion.isEqualNew(ServerVersion.v1_20_3))
-                    methodName = "S"; // 1.20.3
+                    methodName = "S"; // 1.20.3 / 1.20.4
 
                 Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName}); // Remapped Field Name: running
                 return (boolean) Reflection.invoke(isRunning, server);
