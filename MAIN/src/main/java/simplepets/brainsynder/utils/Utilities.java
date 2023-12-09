@@ -242,7 +242,9 @@ public class Utilities {
         // protected int    (Below public com.google.common.collect.ImmutableList<Entity>)
 
         String targetField;
-        if (ServerVersion.isEqualNew(ServerVersion.v1_20_2)) {
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
+            targetField = "r";
+        } else if (ServerVersion.isEqualNew(ServerVersion.v1_20_2)) {
             targetField = "J";
         } else if (ServerVersion.isEqualNew(ServerVersion.v1_20)) {
             targetField = "I";
