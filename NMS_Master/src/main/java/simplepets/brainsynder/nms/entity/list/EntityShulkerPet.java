@@ -77,7 +77,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     @Override
     public void togglePetHatTask(boolean value) {
         if (!value) {
-            ghostStand.getBukkitEntity().addPassenger(getBukkitEntity());
+            VersionTranslator.getBukkitEntity(ghostStand).addPassenger(VersionTranslator.getBukkitEntity(this));
         }
     }
 
@@ -170,10 +170,10 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     @Override
     public void tick() {
         super.tick();
-        Entity bukkitEntity = getBukkitEntity();
+        Entity bukkitEntity = VersionTranslator.getBukkitEntity(this);
         if ((this.pet == null)
-                || (this.pet.getBukkitEntity().isDead())
-                || (!this.pet.getBukkitEntity().isValid())) {
+                || (VersionTranslator.getBukkitEntity(pet).isDead())
+                || (!VersionTranslator.getBukkitEntity(pet).isValid())) {
             kill();
             return;
         }
@@ -258,7 +258,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
 
     @Override
     public org.bukkit.entity.Shulker getEntity() {
-        return (org.bukkit.entity.Shulker) getBukkitEntity();
+        return (org.bukkit.entity.Shulker) VersionTranslator.getBukkitEntity(this);
     }
 
     @Override
@@ -267,7 +267,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         var owner = user.getPlayer();
         if (owner != null) {
             SimplePets.getPetUtilities().runPetCommands(CommandReason.RIDE, user, getPetType());
-            return getBukkitEntity().addPassenger(owner);
+            return VersionTranslator.getBukkitEntity(this).addPassenger(owner);
         }
         return false;
     }

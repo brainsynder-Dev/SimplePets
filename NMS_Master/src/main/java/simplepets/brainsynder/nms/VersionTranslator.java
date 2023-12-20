@@ -28,6 +28,10 @@ import java.util.Optional;
 
 @Deprecated
 public class VersionTranslator {
+    public static org.bukkit.entity.Entity getBukkitEntity (Entity entity) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
     public static Field getJumpField () {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }

@@ -42,19 +42,19 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         switch (type) {
             case ARMOR_STAND -> {
                 PET = EntityArmorStandPet.spawn(location, this);
-                ENTITIES.addLast(PET.getBukkitEntity());
-                displayEntity = PET.getBukkitEntity();
+                ENTITIES.addLast(VersionTranslator.getBukkitEntity(PET));
+                displayEntity = VersionTranslator.getBukkitEntity(PET);
             }
             case SHULKER -> {
                 EntityGhostStand ghostStand = EntityGhostStand.spawn(location, this);
                 ghostStand.setSmall(true);
                 ghostStand.setNoGravity(true);
-                Entity ghost = ghostStand.getBukkitEntity();
+                Entity ghost = VersionTranslator.getBukkitEntity(ghostStand);
                 ENTITIES.addLast(ghost);
 
                 PET = EntityShulkerPet.spawn(location, this, ghostStand);
                 PET.collides = false;
-                Entity shulker = PET.getBukkitEntity();
+                Entity shulker = VersionTranslator.getBukkitEntity(PET);
                 ghost.addPassenger(shulker);
                 ENTITIES.addLast(shulker);
 
@@ -195,7 +195,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
 
     @Override
     public void remove() {
-        getBukkitEntity().remove();
+        VersionTranslator.getBukkitEntity(this).remove();
         for (Entity ent : ENTITIES) ent.remove();
         displayEntity = null;
         displayRider = null;
@@ -208,12 +208,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             Location loc;
             if (this.displayRider != null) {
                 if (getPetType() == PetType.SHULKER) {
-                    loc = getBukkitEntity().getLocation().clone().subtract(0, 0.735, 0);
+                    loc = VersionTranslator.getBukkitEntity(this).getLocation().clone().subtract(0, 0.735, 0);
                 } else {
-                    loc = getBukkitEntity().getLocation().clone();
+                    loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
                 }
             } else {
-                loc = getBukkitEntity().getLocation().clone();
+                loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
             }
 
             displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
@@ -231,12 +231,12 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
         Location loc;
         if (this.displayRider != null) {
             if (this.displayRider.getType().equals(EntityType.SHULKER)) {
-                loc = getBukkitEntity().getLocation().clone().add(0, 0.75, 0);
+                loc = VersionTranslator.getBukkitEntity(this).getLocation().clone().add(0, 0.75, 0);
             } else {
-                loc = getBukkitEntity().getLocation().clone();
+                loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
             }
         } else {
-            loc = getBukkitEntity().getLocation().clone();
+            loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
         }
 
         displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());

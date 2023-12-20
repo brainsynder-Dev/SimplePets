@@ -75,6 +75,11 @@ public class VersionTranslator {
         }
     }
 
+    public static org.bukkit.entity.Entity getBukkitEntity (Entity entity) {
+        org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity craftEntity = entity.getBukkitEntity();
+        return craftEntity;
+    }
+
     public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
         if (walkSpeed != -1) entityPet.getAttribute(Attributes.MOVEMENT_SPEED).setBaseValue(walkSpeed);
         if ((flySpeed != -1) && (entityPet instanceof IFlyableEntity) && entityPet.getAttribute(Attributes.FLYING_SPEED) != null) {

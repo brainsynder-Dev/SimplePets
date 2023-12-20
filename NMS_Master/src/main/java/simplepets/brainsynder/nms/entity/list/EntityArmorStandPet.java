@@ -144,10 +144,10 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     @Override
     public void tick() {
         super.tick();
-        Entity bukkitEntity = getBukkitEntity();
+        Entity bukkitEntity = VersionTranslator.getBukkitEntity(this);
         if ((this.pet == null)
-                || (this.pet.getBukkitEntity().isDead())
-                || (!this.pet.getBukkitEntity().isValid())) {
+                || (VersionTranslator.getBukkitEntity(pet).isDead())
+                || (!VersionTranslator.getBukkitEntity(pet).isValid())) {
             kill();
             return;
         }
@@ -254,7 +254,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
 
     @Override
     public org.bukkit.entity.ArmorStand getEntity() {
-        return (org.bukkit.entity.ArmorStand) getBukkitEntity();
+        return (org.bukkit.entity.ArmorStand) VersionTranslator.getBukkitEntity(this);
     }
 
     @Override
@@ -263,7 +263,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         var owner = user.getPlayer();
         if (owner != null) {
             SimplePets.getPetUtilities().runPetCommands(CommandReason.RIDE, user, getPetType());
-            return getBukkitEntity().addPassenger(owner);
+            return VersionTranslator.getBukkitEntity(this).addPassenger(owner);
         }
         return false;
     }
@@ -436,82 +436,82 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
 
     @Override
     public void setHeadAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setHeadPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setHeadPose(angle);
     }
 
     @Override
     public void setBodyAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setBodyPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setBodyPose(angle);
     }
 
     @Override
     public void setLeftArmAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setLeftArmPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setLeftArmPose(angle);
     }
 
     @Override
     public void setRightArmAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setRightArmPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setRightArmPose(angle);
     }
 
     @Override
     public void setLeftLegAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setLeftLegPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setLeftLegPose(angle);
     }
 
     @Override
     public void setRightLegAngle(EulerAngle angle) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setRightLegPose(angle);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setRightLegPose(angle);
     }
 
     @Override
     public EulerAngle getHeadAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getHeadPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getHeadPose();
     }
 
     @Override
     public EulerAngle getBodyAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getBodyPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getBodyPose();
     }
 
     @Override
     public EulerAngle getLeftArmAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getLeftArmPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getLeftArmPose();
     }
 
     @Override
     public EulerAngle getRightArmAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getRightArmPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getRightArmPose();
     }
 
     @Override
     public EulerAngle getLeftLegAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getLeftLegPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getLeftLegPose();
     }
 
     @Override
     public EulerAngle getRightLegAngle() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).getRightLegPose();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).getRightLegPose();
     }
 
     @Override
     public void setBasePlateVisibility(boolean flag) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setBasePlate(flag);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setBasePlate(flag);
     }
 
     @Override
     public boolean hasBasePlateVisibility() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).hasBasePlate();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).hasBasePlate();
     }
 
     @Override
     public boolean hasArmsVisibile() {
-        return ((org.bukkit.entity.ArmorStand)getBukkitEntity()).hasArms();
+        return ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).hasArms();
     }
 
     @Override
     public void setArmsVisibile(boolean flag) {
-        ((org.bukkit.entity.ArmorStand)getBukkitEntity()).setArms(flag);
+        ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setArms(flag);
     }
 
     // CONVERSIONS

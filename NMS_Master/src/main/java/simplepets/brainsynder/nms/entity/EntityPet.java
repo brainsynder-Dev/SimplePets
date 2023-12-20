@@ -195,8 +195,8 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         petName = Colorize.translateBungeeHex(event.getPrefix())
                 + SimplePets.getPetUtilities().translatePetName(event.getName())
                 + Colorize.translateBungeeHex(event.getSuffix());
-        getBukkitEntity().setCustomNameVisible(ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue());
-        getBukkitEntity().setCustomName(petName);
+        VersionTranslator.getBukkitEntity(this).setCustomNameVisible(ConfigOption.INSTANCE.PET_TOGGLES_SHOW_NAMES.getValue());
+        VersionTranslator.getBukkitEntity(this).setCustomName(petName);
     }
 
     @Override
@@ -306,7 +306,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     @Override
     public Entity getEntity() {
-        return getBukkitEntity();
+        return VersionTranslator.getBukkitEntity(this);
     }
 
     @Override
@@ -316,7 +316,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         if (owner != null) {
             SimplePets.getPetUtilities().runPetCommands(CommandReason.RIDE, getPetUser (), getPetType());
             if (!doIndirectAttach) {
-                return getBukkitEntity().addPassenger(owner);
+                return VersionTranslator.getBukkitEntity(this).addPassenger(owner);
             } else {
                 return SeatEntity.attach(VersionTranslator.getEntityHandle(owner), this);
             }
@@ -364,7 +364,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
     private boolean isOnGround(net.minecraft.world.entity.Entity entity) {
-        org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        org.bukkit.block.Block block = VersionTranslator.getBukkitEntity(entity).getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid() || block.isLiquid();
     }
 
@@ -449,7 +449,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public void tick() {
         super.tick();
 
-        Entity bukkitEntity = getBukkitEntity();
+        Entity bukkitEntity = VersionTranslator.getBukkitEntity(this);
         // This section handles the Auto-removal of pets after (tickDelay) Ticks of being stationary...
         if (autoRemoveToggle && (bukkitEntity != null)) {
             Location location = bukkitEntity.getLocation();
@@ -627,7 +627,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     // Added in 1.20
     public boolean isOnGround() {
-        org.bukkit.block.Block block = getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        org.bukkit.block.Block block = VersionTranslator.getBukkitEntity(this).getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid() || block.isLiquid();
     }
 }

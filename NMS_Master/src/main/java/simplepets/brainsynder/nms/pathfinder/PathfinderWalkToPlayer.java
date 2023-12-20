@@ -78,7 +78,7 @@ public class PathfinderWalkToPlayer extends Goal {
         if (user.getUserLocation().isPresent()) {
             Location location = user.getUserLocation().get();
 
-            if (!location.getWorld().getName().equals(entity.getBukkitEntity().getLocation().getWorld().getName()))
+            if (!location.getWorld().getName().equals(VersionTranslator.getBukkitEntity(entity).getLocation().getWorld().getName()))
                 return false;
 
             double distance = entity.distanceToSqr(player);

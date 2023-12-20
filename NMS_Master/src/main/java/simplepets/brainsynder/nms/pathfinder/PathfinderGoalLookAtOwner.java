@@ -62,7 +62,7 @@ public class PathfinderGoalLookAtOwner extends Goal {
     // Translation: tick
     @Override
     public void tick() {
-        Location location = entityPet.getBukkitEntity().getLocation();
+        Location location = VersionTranslator.getBukkitEntity(entityPet).getLocation();
         location.add(location.getDirection().multiply(4.0));
         if (!user.isPetHat(entityPet.getPetType()))
             location.setY(VersionTranslator.<ServerPlayer>getEntityHandle(player).getEyeY());

@@ -30,7 +30,7 @@ public class EntityBase extends Mob {
         super(entitytypes, world);
         entityType = getEntityType(entitytypes);
         originalEntityType = entitytypes;
-        getBukkitEntity().remove();
+        VersionTranslator.getBukkitEntity(this).remove();
     }
 
     public EntityBase(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
