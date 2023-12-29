@@ -9,6 +9,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.Level;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_20_R3.entity.CraftLivingEntity;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.CitizensFixer;
@@ -23,6 +25,7 @@ public class EntityBase extends Mob {
     protected final EntityType<? extends Mob> originalEntityType;
     private PetUser user;
     private PetType petType;
+    private volatile CraftEntity bukkitEntity;
 
     protected EntityBase(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
@@ -94,6 +97,18 @@ public class EntityBase extends Mob {
         builder.sized(0.1f, 0.1f);
 
         return builder.build(petType.name().toLowerCase());
+    }
+
+    @Override
+    public CraftEntity getBukkitEntity() {
+        if (this.bukkitEntity == null) {
+            synchronized (this) {
+                if (this.bukkitEntity == null) {
+                    return this.bukkitEntity = new CraftLivingEntity(this.level().getCraftServer(), this) {};
+                }
+            }
+        }
+        return this.bukkitEntity;
     }
 
     @Override
