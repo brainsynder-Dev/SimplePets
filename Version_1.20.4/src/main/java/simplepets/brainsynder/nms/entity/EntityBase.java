@@ -111,6 +111,13 @@ public class EntityBase extends Mob {
         return this.bukkitEntity;
     }
 
+    /**
+     * Overrides the Paper method
+     */
+    public CraftLivingEntity getBukkitLivingEntity() {
+        return (CraftLivingEntity) this.getBukkitEntity();
+    }
+
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return VersionTranslator.getAddEntityPacket(this, originalEntityType, VersionTranslator.getPosition(this));
