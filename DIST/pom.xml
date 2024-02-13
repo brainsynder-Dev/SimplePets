@@ -5,7 +5,7 @@
     <parent>
         <artifactId>SimplePets</artifactId>
         <groupId>simplepets.brainsynder</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -78,27 +78,6 @@
         </dependency>
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18.1</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
-            <artifactId>Version_1.18.2</artifactId>
-            <version>${module.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>simplepets.brainsynder</groupId>
             <artifactId>Version_1.19</artifactId>
             <version>${module.version}</version>
             <type>jar</type>
@@ -142,6 +121,27 @@
         <dependency>
             <groupId>simplepets.brainsynder</groupId>
             <artifactId>Version_1.20.1</artifactId>
+            <version>${module.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>Version_1.20.2</artifactId>
+            <version>${module.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>Version_1.20.3</artifactId>
+            <version>${module.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>simplepets.brainsynder</groupId>
+            <artifactId>Version_1.20.4</artifactId>
             <version>${module.version}</version>
             <type>jar</type>
             <scope>compile</scope>

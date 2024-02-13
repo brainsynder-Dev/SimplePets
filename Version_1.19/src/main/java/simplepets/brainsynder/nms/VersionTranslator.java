@@ -48,24 +48,23 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class VersionTranslator {
-    public static final String ENTITY_DATA_MAP = "f";
-    public static final String ENTITY_FACTORY_FIELD = "bs";
-
-    public static final String REGISTRY_FROZEN_FIELD = "ca";
-    public static final String REGISTRY_ENTRY_MAP_FIELD = "cc";
-
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
         try {
-            Field jumpingField = LivingEntity.class.getDeclaredField("bn"); // For 1.19
+            Field jumpingField = LivingEntity.class.getDeclaredField(VersionFields.v1_19.getEntityJumpField()); // For 1.19
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
             throw new UnsupportedOperationException("Unable to find the correct jumpingField name for " + ServerVersion.getVersion().name());
         }
+    }
+
+    public static org.bukkit.entity.Entity getBukkitEntity (Entity entity) {
+        org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity craftEntity = entity.getBukkitEntity();
+        return craftEntity;
     }
 
     public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
@@ -124,7 +123,7 @@ public class VersionTranslator {
                                       boolean glow) throws IllegalAccessException {
         Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap =
                 (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher,
-                        ENTITY_DATA_MAP, true);
+                        VersionFields.v1_19.getEntityDataMapField(), true);
 
         SynchedEntityData.DataItem<Byte> item = newMap.get(0);
         byte initialBitMask = item.getValue();
@@ -134,7 +133,7 @@ public class VersionTranslator {
         } else {
             item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
         }
-        FieldUtils.writeDeclaredField(newDataWatcher, ENTITY_DATA_MAP, newMap, true);
+        FieldUtils.writeDeclaredField(newDataWatcher, VersionFields.v1_19.getEntityDataMapField(), newMap, true);
     }
 
     public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {

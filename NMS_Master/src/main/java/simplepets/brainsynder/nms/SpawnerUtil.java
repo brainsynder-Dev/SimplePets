@@ -45,7 +45,7 @@ public class SpawnerUtil implements ISpawnUtil {
                     SupportedVersion version = clazz.getAnnotation(SupportedVersion.class);
                     if (!ServerVersion.isEqualNew(version.version())) {
                         SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
-                                "Failed to register the '"+type.getName()+"' pet ('"+name+"' not supported) [Will not effect your server]"
+                                "The '"+type.getName()+"' pet is not supported for your server version [will NOT affect your server]"
                         ));
                         continue;
                     }
@@ -53,7 +53,7 @@ public class SpawnerUtil implements ISpawnUtil {
                 petMap.put(type, clazz);
             }catch (Exception ignored) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
-                        "Failed to register the '"+type.getName()+"' pet (Missing '"+name+"' class for your version) [Will not effect your server]"
+                        "The '"+type.getName()+" ("+name+")' pet is not available for your server version [will NOT affect your server]"
                 ));
             }
         }
@@ -86,7 +86,7 @@ public class SpawnerUtil implements ISpawnUtil {
         try {
             EntityPet customEntity;
 
-            if (type == PetType.ARMOR_STAND) {
+            if ((type == PetType.ARMOR_STAND) || (type == PetType.SHULKER)) {
                 customEntity = new EntityControllerPet(type, user, location);
             }else{
                 customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);

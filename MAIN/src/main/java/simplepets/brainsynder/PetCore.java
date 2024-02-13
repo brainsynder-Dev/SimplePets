@@ -9,7 +9,7 @@ import lib.brainsynder.metric.bukkit.Metrics;
 import lib.brainsynder.reflection.Reflection;
 import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.update.UpdateUtils;
-import lib.brainsynder.utils.TaskTimer;
+import lib.brainsynder.utils.Utilities;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -47,8 +47,6 @@ import simplepets.brainsynder.utils.Premium;
 import simplepets.brainsynder.utils.debug.Debug;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -88,7 +86,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private Debug debug;
     private IPetUtilities petUtilities;
-    private TaskTimer taskTimer;
     private SQLHandler sqlHandler;
 
     public final Executor sync = task -> getScheduler().getImpl().runNextTick(task);
@@ -100,11 +97,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         scheduler = new FoliaLib(this);
 
         SimplePets.setPLUGIN(this);
-        taskTimer = new TaskTimer(this);
-        taskTimer.start();
         isStarting = true;
 
         debug = new Debug(this);
+
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING, " *** This version is still under development any issues found please report");
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING, " *** On the Github: https://tiny.bsdevelopment.org/pet-issues");
+        }
 
         if (!checkJavaVersion()) {
             setEnabled(false);
@@ -130,18 +130,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug.debug(DebugLevel.HIDDEN, "Setting API instance");
         petUtilities = new PetUtility();
 
-        taskTimer.label("registered api instance");
-
-
         itemFolder = new File(getDataFolder() + File.separator + "Items");
 
         MessageFile.init(getDataFolder());
-        taskTimer.label("init messages");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing Config file");
         configuration = new Config(this);
         configuration.initValues();
-        taskTimer.label("init config");
 
         reloaded = ConfigOption.INSTANCE.RELOAD_DETECT.getValue();
         debug.debug(DebugLevel.HIDDEN, "Plugin reloaded: " + reloaded);
@@ -150,10 +145,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 //        new InventorySQL();
 //        taskTimer.label("init InventorySQL");
         reloadSpawner();
-        taskTimer.label("located spawner util");
 
         handleManagers();
-        taskTimer.label("init managers");
 
         debug.debug(DebugLevel.HIDDEN, "Initializing SQL Handler");
         if (SQLData.USE_SQLITE) {
@@ -162,32 +155,38 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             sqlHandler = new MySQLHandler();
         }
         sqlHandler.initiateDatabase();
-        taskTimer.label("init SQLHandler");
-
-        handleMetrics();
-        taskTimer.label("init metrics");
 
         try {
             debug.debug(DebugLevel.HIDDEN, "Registering commands");
             new CommandRegistry<>(this).register(new PetsCommand(this));
-            taskTimer.label("init commands");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         handleListeners();
-        taskTimer.label("registered listeners");
-//        handleUpdateUtils();
-        taskTimer.label("init update checking");
+        handleUpdateUtils();
 
-        addonManager = new AddonManager(this);
+        {
+            TimeUnit unit;
 
-        getScheduler().getImpl().runLater(() -> {
-            addonManager.initialize();
-            addonManager.checkAddons();
-        }, 3L, TimeUnit.SECONDS);
-        taskTimer.label("init addons");
-        taskTimer.label("addon update check");
+            String timeunit = ConfigOption.INSTANCE.ADDON_LOAD_UNIT.getValue();
+            try {
+                unit = TimeUnit.valueOf(timeunit);
+            } catch (Exception e) {
+                unit = TimeUnit.SECONDS;
+                debug.debug(DebugLevel.ERROR, "Could not find unit for '" + timeunit + "'");
+            }
+
+            debug.debug(SimplePets.ADDON, "Loading addons in '"+ ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue()+ " " + timeunit + "'");
+
+            getScheduler().getImpl().runLater(() -> {
+                addonManager = new AddonManager(PetCore.this);
+                addonManager.initialize();
+                addonManager.checkAddons();
+
+                handleMetrics();
+            }, ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue(), unit);
+        }
 
         checkWorldGuard(value -> {
             if (value) {
@@ -199,7 +198,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                         ));
             }
         });
-        taskTimer.stop();
 
         fullyStarted = true;
 
@@ -216,20 +214,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     }
 
-    private void outputTimings() {
-        File file = new File(getDataFolder(), "Timings.json");
-        if (file.exists()) file.delete();
-        try (PrintWriter writer = new PrintWriter(file)) {
-            writer.write(TaskTimer.fetchAllCompletedTimers().toString(WriterConfig.PRETTY_PRINT));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public void onDisable() {
         isStarting = false;
-        outputTimings();
         supportedVersions.clear();
         if (petUtilities == null) return; // Failed to load this field due to unsupported version
         SimplePets.getDebugLogger().debug(DebugLevel.NORMAL, "Saving player pets (if there are any)", false);
@@ -359,6 +346,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             try {
                 Object server = Reflection.getMethod(nmsClass, "getServer").invoke(null);
 
+                // Class: net.minecraft.server.MinecraftServer
+                // private volatile boolean (below 'private PlayerList')
                 String methodName = "isRunning"; // 1.17 - 1.17.1
                 if (ServerVersion.isEqualNew(ServerVersion.v1_18) && ServerVersion.isOlder(ServerVersion.v1_19))
                     methodName = "v"; // 1.18 - 1.18.2
@@ -366,8 +355,15 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     methodName = "u"; // 1.19
                 if (ServerVersion.isEqualNew(ServerVersion.v1_19_3))
                     methodName = "Q"; // 1.19.3
+                if (ServerVersion.isEqualNew(ServerVersion.v1_19_4)
+                        || ServerVersion.isEqualNew(ServerVersion.v1_20)
+                        || ServerVersion.isEqualNew(ServerVersion.v1_20_1)
+                        || ServerVersion.isEqualNew(ServerVersion.v1_20_2))
+                    methodName = "R"; // 1.19.4 / 1.20 / 1.20.1 / 1.20.2
+                if (ServerVersion.isEqualNew(ServerVersion.v1_20_3))
+                    methodName = "S"; // 1.20.3 / 1.20.4
 
-                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName});
+                Method isRunning = Reflection.getMethod(nmsClass, new String[]{methodName}); // Remapped Field Name: running
                 return (boolean) Reflection.invoke(isRunning, server);
             } catch (IllegalAccessException | InvocationTargetException exception) {
                 exception.printStackTrace();
@@ -601,7 +597,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private boolean fetchSupportedVersions() {
         if (!supportedVersions.isEmpty()) return supportedVersions.contains(ServerVersion.getVersion().name());
-        taskTimer.label("Looking for Supported Versions...");
         supportedVersions.clear();
         String current = ServerVersion.getVersion().name();
         boolean supported = false;
@@ -628,16 +623,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             }
         }
 
-        if (!supportedVersions.contains(current)) {
-            taskTimer.label("Finished looking for supported versions.");
-            return false;
-        }
+        if (!supportedVersions.contains(current)) return false;
 
         if (!supportedVersions.isEmpty()) {
             debug.debug("Found support for version(s): " + supportedVersions.toString().replace("v", "").replace("_", "."));
             debug.debug("Targeting version: " + ServerVersion.getVersion().name().replace("v", "").replace("_", "."));
         }
-        taskTimer.label("Finished looking for supported versions.");
         return supported;
     }
 

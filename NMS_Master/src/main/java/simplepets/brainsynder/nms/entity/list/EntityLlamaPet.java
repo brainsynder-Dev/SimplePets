@@ -43,7 +43,7 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setString("skin", getSkinColor().name());
-        object.setString("color", getColor().name());
+        object.setString("color", getColorWrapper().name());
         return object;
     }
 
@@ -51,7 +51,7 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("skin")) setSkinColor(LlamaColor.getByName(object.getString("skin")));
         if (object.hasKey("color"))
-            setColor(ColorWrapper.getByName(object.getString("color")));
+            setColorWrapper(ColorWrapper.getByName(object.getString("color")));
         super.applyCompound(object);
     }
 
@@ -66,14 +66,14 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     }
 
     @Override
-    public ColorWrapper getColor() {
+    public ColorWrapper getColorWrapper() {
         ColorWrapper color = ColorWrapper.getByWoolData((byte) ((int) entityData.get(COLOR)));
         if (color == null) color = ColorWrapper.getByDyeData((byte) ((int) entityData.get(COLOR)));
         return color;
     }
 
     @Override
-    public void setColor(ColorWrapper color) {
+    public void setColorWrapper(ColorWrapper color) {
         if (color == ColorWrapper.NONE) {
             entityData.set(COLOR, -1);
             return;

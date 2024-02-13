@@ -535,6 +535,7 @@ public class PetOwner implements PetUser {
                 PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(getPlayer(), () -> {
                     Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
                     Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
+                    entityPet.togglePetHatTask(hat);
                 }, 50L * delay, TimeUnit.MILLISECONDS);
             } else {
                 // If pet is a hat, remove the hat from the player
@@ -567,6 +568,7 @@ public class PetOwner implements PetUser {
                 } else {
                     Utilities.removePassenger(vehicle, ent);
                 }
+                entityPet.togglePetHatTask(hat);
                 entityPet.teleportToOwner();
                 if (riderMob != null)
                     Utilities.setPassenger(getPlayer(), vehicle, riderMob);

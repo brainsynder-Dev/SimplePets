@@ -1,10 +1,12 @@
 package simplepets.brainsynder.nms.utils;
 
+import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
+import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.internal.glowingentities.GlowingEntities;
 
 import java.lang.reflect.Field;
@@ -15,12 +17,21 @@ import java.util.Random;
 public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
-    private static final GlowingEntities GLOWING_ENTITIES;
     private static final Random RANDOM;
+    private static GlowingEntities GLOWING_ENTITIES;
 
     static {
         RANDOM = new Random();
-        GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+        if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
+            GLOWING_ENTITIES = null;
+            SimplePets.getDebugLogger().debug(DebugLevel.WARNING , "GlowingEntities class is currently unavailable in this version...");
+        }else{
+            try {
+                GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+            }catch (Exception e) {
+                GLOWING_ENTITIES = null;
+            }
+        }
     }
 
     public static Random getRandom() {

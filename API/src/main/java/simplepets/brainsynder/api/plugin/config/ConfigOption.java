@@ -83,6 +83,31 @@ public enum ConfigOption {
                     Default: {default}""");
 
 
+    // Addon Config
+    public final ConfigEntry<String> ADDON_LOAD_UNIT = createOption("addon-initialization.unit", TimeUnit.SECONDS.name(),
+            """
+                    The unit of time for when the addons should be loaded
+                    
+                    Time Units:
+                    - SECONDS
+                    - MINUTES
+                    - HOURS
+                    - DAYS
+                    
+                    Default: {default}""");
+    public final ConfigEntry<Integer> ADDON_LOAD_TIME = createOption("addon-initialization.time", 5, """
+                    The integer value which correlates to the selected unit
+                    
+                    Example:
+                        unit: HOURS
+                        time: 12
+                    Will be 12 Hours till the addons initiate
+                    
+                    Default: {default}
+                    """);
+
+
+
     public final ConfigEntry<Boolean> REMOVE_PET_ON_WORLD_CHANGE = createOption("RemovePetsOnWorldChange", true,
             """
                     Disabling this will remove a players pet when they change worlds
@@ -314,10 +339,17 @@ public enum ConfigOption {
                     Should pet owners be able to open their pets data menu when right clicking the pet.
                     
                     Default: {default}""");
-    public final ConfigEntry<Boolean> MISC_TOGGLES_PET_VANISHING = createOption("misc-toggles.enable-pet-vanishing", true,
+    public final ConfigEntry<Boolean> MISC_TOGGLES_PET_VANISHING = createOption("misc-toggles.vanishing.pet-visibility", true,
             """
                     Should pets turn invisible when their owner is not visible (either via Spectator or Invisibility potions)
 
+                    Default: {default}""").setPastPaths("misc-toggles.enable-pet-vanishing");
+    public final ConfigEntry<Boolean> MISC_TOGGLES_REMOVED_VANISH = createOption("misc-toggles.vanishing.remove-pet-when-vanished", false,
+            """
+                    When the owner is vanished should the pets the player has active be removed?
+                    
+                    NOTE: This will override the 'pet-visibility' option
+                    
                     Default: {default}""");
 
 
@@ -486,8 +518,10 @@ public enum ConfigOption {
     public final ConfigEntry<List<String>> RENAME_BLOCKED_WORDS = createOption("RenamePet.Blocked-Words", Lists.newArrayList("jeb_"),
             """
                     Are there words you don't want in a pets name?
-                       If you put word in between [] it will check if it contains ANY part of the word
-                             Example: [ass] will also flag glass because it contains the word in it
+                       If You put an ^ at the start of the word/text it will ignore case
+                             Example: ^ass will also flag ASS because it will ignore what case the letters are
+                       If you put word in between () it will check if it contains ANY part of the word
+                             Example: (ass) will also flag glass because it contains the word in it
                        If you just have the word it will check for the exact word
                              Example: 'ass' will just be flagged so 'glass' can be said
                     

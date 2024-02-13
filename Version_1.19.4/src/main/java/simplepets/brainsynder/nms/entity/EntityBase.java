@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity;
 
+import lib.brainsynder.reflection.Reflection;
 import net.minecraft.core.DefaultedRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.Packet;
@@ -12,6 +13,8 @@ import org.bukkit.craftbukkit.v1_19_R3.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_19_R3.entity.CraftLivingEntity;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
+import simplepets.brainsynder.nms.CitizensFixer;
+import simplepets.brainsynder.nms.VersionFields;
 import simplepets.brainsynder.nms.VersionTranslator;
 
 import java.lang.reflect.Field;
@@ -25,16 +28,16 @@ public class EntityBase extends Mob {
 
     protected EntityBase(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
-        entityType = getEntityType(entitytypes, containsFields());
+        entityType = getEntityType(entitytypes);
         originalEntityType = entitytypes;
-        getBukkitEntity().remove();
+        VersionTranslator.getBukkitEntity(this).remove();
     }
 
     public EntityBase(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, VersionTranslator.getWorldHandle(user.getPlayer().getLocation().getWorld()));
         this.user = user;
         this.petType = type;
-        entityType = getEntityType(entitytypes, containsFields());
+        entityType = getEntityType(entitytypes);
         originalEntityType = entitytypes;
     }
 
@@ -64,32 +67,30 @@ public class EntityBase extends Mob {
         };
     }
 
-    // TODO: THIS METHOD NEEDS TO BE LOOKED AT CAUSES SOME ISSUES ON 1.19.3
-    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType, boolean checkFields) {
+    EntityType<? extends Mob> getEntityType(EntityType<? extends Mob> originalType) {
         try {
-            Field field = EntityType.class.getDeclaredField(VersionTranslator.ENTITY_FACTORY_FIELD);
-            field.setAccessible(true);
-            EntityType.Builder<? extends Mob> builder =
-                    EntityType.Builder.of((EntityType.EntityFactory<? extends Mob>) field.get(originalType),
-                            MobCategory.AMBIENT);
-            builder.sized(0.1f, 0.1f);
-            DefaultedRegistry<EntityType<?>> registry = BuiltInRegistries.ENTITY_TYPE;
-            // frozen field
-            Field frozen = null;
-            if (checkFields) {
-                frozen = registry.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_FROZEN_FIELD);
-                frozen.setAccessible(true);
-                frozen.set(registry, false);
-            }
-            // map field
-            if (checkFields) {
-                Field map = registry.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_ENTRY_MAP_FIELD);
-                map.setAccessible(true);
-                map.set(registry, new IdentityHashMap<>());
-            }
-            // screw you mojang, my power is unlimited
-            EntityType<? extends Mob> mob = builder.build(petType.name().toLowerCase());
-            if (checkFields && (frozen != null)) frozen.set(registry, true);
+            DefaultedRegistry<EntityType<?>> registry = CitizensFixer.getVanillaRegistry(BuiltInRegistries.ENTITY_TYPE);
+
+            // Resets the Entity Registry to the vanilla one...
+            CitizensFixer.overrideRegistry(registry);
+
+            // Melts the frozen status, so we can register the mob...
+            Field frozen = Reflection.getField(registry.getClass().getSuperclass(), VersionFields.v1_19_4.getRegistryFrozenField());
+            if (frozen != null) frozen.set(registry, false);
+
+            // Clears the intrusive holder field to an empty map
+            Field intrusiveField = Reflection.getField(registry.getClass().getSuperclass(), VersionFields.v1_19_4.getRegistryIntrusiveField());
+            if (intrusiveField != null) intrusiveField.set(registry, new IdentityHashMap<>());
+
+            // Fetch the entity type instance before we resume
+            EntityType<? extends Mob> mob = handleMobBuilder(originalType);
+
+            // Puts the registry back in the freezer... (Buuurrrrrr)
+            if (frozen != null) frozen.set(registry, true);
+
+            // If a custom registry was found before, reset it back so that plugin can continue to work...
+            // COUGH COUGH... Citizens... COUGH COUGH...
+            CitizensFixer.resetCustomRegistry();
             return mob;
         } catch (IllegalAccessException | NoSuchFieldException e) {
             e.printStackTrace();
@@ -97,13 +98,16 @@ public class EntityBase extends Mob {
         }
     }
 
-    private boolean containsFields() {
-        try {
-            BuiltInRegistries.ENTITY_TYPE.getClass().getSuperclass().getDeclaredField(VersionTranslator.REGISTRY_FROZEN_FIELD);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    private EntityType<? extends Mob> handleMobBuilder(EntityType<? extends Mob> originalType) throws NoSuchFieldException, IllegalAccessException {
+        Field field = Reflection.getField(EntityType.class, VersionFields.v1_19_4.getEntityFactoryField());
+
+        EntityType.Builder<? extends Mob> builder = EntityType.Builder.of(
+                (EntityType.EntityFactory<? extends Mob>) field.get(originalType),
+                MobCategory.AMBIENT
+        );
+        builder.sized(0.1f, 0.1f);
+
+        return builder.build(petType.name().toLowerCase());
     }
 
     @Override

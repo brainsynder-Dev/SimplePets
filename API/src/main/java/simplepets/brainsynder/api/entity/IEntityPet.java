@@ -15,6 +15,8 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public interface IEntityPet extends IEntityBase, IBurnablePet {
+    default void togglePetHatTask (boolean value) {}
+
     /**
      * Will teleport the pet to its owner
      */

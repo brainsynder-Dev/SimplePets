@@ -4,7 +4,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.wrappers.ColorWrapper;
 
 public interface IResetColor extends IEntityPet {
-    ColorWrapper getColor();
+    ColorWrapper getColorWrapper();
 
-    void setColor(ColorWrapper i);
+    void setColorWrapper(ColorWrapper i);
 }

@@ -116,6 +116,89 @@ permissions:
             pet.commands.issue_report: true
 
 
+    pet.saves.bypass:  # Will allow all player to bypass the saves limit (if enabled)
+        default: false
+        children:
+            pet.saves.allay.bypass: true
+            pet.saves.armorstand.bypass: true
+            pet.saves.axolotl.bypass: true
+            pet.saves.bat.bypass: true
+            pet.saves.bee.bypass: true
+            pet.saves.blaze.bypass: true
+            pet.saves.camel.bypass: true
+            pet.saves.cat.bypass: true
+            pet.saves.cavespider.bypass: true
+            pet.saves.chicken.bypass: true
+            pet.saves.cod.bypass: true
+            pet.saves.cow.bypass: true
+            pet.saves.creeper.bypass: true
+            pet.saves.dolphin.bypass: true
+            pet.saves.donkey.bypass: true
+            pet.saves.drowned.bypass: true
+            pet.saves.elderguardian.bypass: true
+            pet.saves.enderman.bypass: true
+            pet.saves.endermite.bypass: true
+            pet.saves.evoker.bypass: true
+            pet.saves.fox.bypass: true
+            pet.saves.frog.bypass: true
+            pet.saves.ghast.bypass: true
+            pet.saves.giant.bypass: true
+            pet.saves.glowsquid.bypass: true
+            pet.saves.goat.bypass: true
+            pet.saves.guardian.bypass: true
+            pet.saves.hoglin.bypass: true
+            pet.saves.horse.bypass: true
+            pet.saves.husk.bypass: true
+            pet.saves.illusioner.bypass: true
+            pet.saves.irongolem.bypass: true
+            pet.saves.llama.bypass: true
+            pet.saves.magmacube.bypass: true
+            pet.saves.mooshroom.bypass: true
+            pet.saves.mule.bypass: true
+            pet.saves.ocelot.bypass: true
+            pet.saves.panda.bypass: true
+            pet.saves.parrot.bypass: true
+            pet.saves.phantom.bypass: true
+            pet.saves.pig.bypass: true
+            pet.saves.piglin.bypass: true
+            pet.saves.piglinbrute.bypass: true
+            pet.saves.pillager.bypass: true
+            pet.saves.polarbear.bypass: true
+            pet.saves.pufferfish.bypass: true
+            pet.saves.rabbit.bypass: true
+            pet.saves.ravager.bypass: true
+            pet.saves.salmon.bypass: true
+            pet.saves.sheep.bypass: true
+            pet.saves.shulker.bypass: true
+            pet.saves.silverfish.bypass: true
+            pet.saves.skeleton.bypass: true
+            pet.saves.skeletonhorse.bypass: true
+            pet.saves.slime.bypass: true
+            pet.saves.sniffer.bypass: true
+            pet.saves.snowman.bypass: true
+            pet.saves.spider.bypass: true
+            pet.saves.squid.bypass: true
+            pet.saves.stray.bypass: true
+            pet.saves.strider.bypass: true
+            pet.saves.tadpole.bypass: true
+            pet.saves.traderllama.bypass: true
+            pet.saves.tropicalfish.bypass: true
+            pet.saves.turtle.bypass: true
+            pet.saves.vex.bypass: true
+            pet.saves.villager.bypass: true
+            pet.saves.vindicator.bypass: true
+            pet.saves.wanderingtrader.bypass: true
+            pet.saves.warden.bypass: true
+            pet.saves.witch.bypass: true
+            pet.saves.wither.bypass: true
+            pet.saves.witherskeleton.bypass: true
+            pet.saves.wolf.bypass: true
+            pet.saves.zoglin.bypass: true
+            pet.saves.zombie.bypass: true
+            pet.saves.zombiehorse.bypass: true
+            pet.saves.zombievillager.bypass: true
+            pet.saves.zombifiedpiglin.bypass: true
+
     pet.type.*:  # Grants access to all pets
         default: false
         children:
@@ -2198,6 +2281,3 @@ permissions:
             pet.type.zombifiedpiglin.data.silent: true
             pet.type.zombifiedpiglin.data.baby: true
             pet.type.zombifiedpiglin.data.raised_arms: true
-
-
-

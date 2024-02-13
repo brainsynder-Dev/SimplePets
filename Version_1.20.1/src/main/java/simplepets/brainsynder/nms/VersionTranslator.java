@@ -50,43 +50,23 @@ import java.util.Arrays;
 import java.util.Optional;
 
 public class VersionTranslator {
-    // net.minecraft.network.syncher.DataWatcher
-    // private static final it.unimi.dsi.fastutil.objects.Object2IntMap<java.lang.Class<? extends net.minecraft.world.entity.Entity>>
-    public static final String ENTITY_DATA_MAP = "b";
-    // net.minecraft.world.entity.EntityTypes
-    // private final net.minecraft.world.entity.EntityTypes.b<T>
-    public static final String ENTITY_FACTORY_FIELD = "bA";
-
-    // net.minecraft.core.RegistryMaterials
-    // private boolean
-    public static final String REGISTRY_FROZEN_FIELD = "l";
-    // net.minecraft.core.RegistryMaterials
-    // @Nullable private java.util.Map<T, net.minecraft.core.Holder.c<T>>
-    public static final String REGISTRY_ENTRY_MAP_FIELD = "m";
-
     private static Field jumpingField = null;
 
     public static Field getJumpField() {
         if (jumpingField != null) return jumpingField;
 
         try {
-            /*
-                net.minecraft.world.entity.EntityLiving
-
-                protected int bg
-                public float bh
-                protected boolean bi  <---- This one
-                public float bj
-                public float bk
-                public float bl
-                protected int bm
-             */
-            Field jumpingField = LivingEntity.class.getDeclaredField("bk"); // For 1.20.1
+            Field jumpingField = LivingEntity.class.getDeclaredField(VersionFields.v1_20_1.getEntityJumpField()); // For 1.20.1
             jumpingField.setAccessible(true);
             return VersionTranslator.jumpingField = jumpingField;
         } catch (Exception ex) {
             throw new UnsupportedOperationException("Unable to find the correct jumpingField name for " + ServerVersion.getVersion().name());
         }
+    }
+
+    public static org.bukkit.entity.Entity getBukkitEntity (Entity entity) {
+        org.bukkit.craftbukkit.v1_20_R1.entity.CraftEntity craftEntity = entity.getBukkitEntity();
+        return craftEntity;
     }
 
     public static void setAttributes(EntityPet entityPet, double walkSpeed, double flySpeed) {
@@ -145,7 +125,7 @@ public class VersionTranslator {
                                       boolean glow) throws IllegalAccessException {
         Int2ObjectMap<SynchedEntityData.DataItem<Byte>> newMap =
                 (Int2ObjectMap<SynchedEntityData.DataItem<Byte>>) FieldUtils.readDeclaredField(toCloneDataWatcher,
-                        ENTITY_DATA_MAP, true);
+                        VersionFields.v1_20_1.getEntityDataMapField(), true);
 
         SynchedEntityData.DataItem<Byte> item = newMap.get(0);
         byte initialBitMask = item.getValue();
@@ -155,7 +135,7 @@ public class VersionTranslator {
         } else {
             item.setValue((byte) (initialBitMask & ~(1 << bitMaskIndex)));
         }
-        FieldUtils.writeDeclaredField(newDataWatcher, ENTITY_DATA_MAP, newMap, true);
+        FieldUtils.writeDeclaredField(newDataWatcher, VersionFields.v1_20_1.getEntityDataMapField(), newMap, true);
     }
 
     public static org.bukkit.inventory.ItemStack toItemStack(StorageTagCompound compound) {

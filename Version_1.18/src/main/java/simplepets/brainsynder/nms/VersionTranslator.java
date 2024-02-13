@@ -51,8 +51,8 @@ public class VersionTranslator {
     public static final String ENTITY_DATA_MAP = "f";
     public static final String ENTITY_FACTORY_FIELD = "bm";
 
-    public static final String REGISTRY_FROZEN_FIELD = "UNKNOWN";
-    public static final String REGISTRY_ENTRY_MAP_FIELD = "UNKNOWN";
+    public static final String REGISTRY_FROZEN_FIELD = "bL";
+    public static final String REGISTRY_ENTRY_MAP_FIELD = "bN";
 
     private static Field jumpingField = null;
 

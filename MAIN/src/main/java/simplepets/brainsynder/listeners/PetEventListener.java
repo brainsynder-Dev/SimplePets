@@ -22,6 +22,8 @@ public class PetEventListener implements Listener {
     @EventHandler
     public void onRename(PetRenameEvent event) {
         String name = event.getName();
+        // Name is null, no need to check any further...
+        if (name == null) return;
 
         Player player = event.getUser().getPlayer();
 
@@ -31,14 +33,34 @@ public class PetEventListener implements Listener {
         if ((rawPattern != null) && (!rawPattern.isEmpty())) {
             if (event.getName().matches(rawPattern)) name = null;
         }
+
+        // If the name is nullified by the above check just set the name and return...
+        if (name == null) {
+            event.setName(name);
+            return;
+        }
+
         List<String> blockedWords = ConfigOption.INSTANCE.RENAME_BLOCKED_WORDS.getValue();
         if (!blockedWords.isEmpty()) {
             for (String word : blockedWords) {
-                if (word.startsWith("[") && word.endsWith("]")) {
-                    if (name.contains(AdvString.between("[", "]", word))) {
+                boolean ignoreCase = word.startsWith("^");
+                if (ignoreCase) word = word.replaceFirst("\\^", "");
+
+                if (word.startsWith("(") && word.endsWith(")")) {
+                    if (ignoreCase && (name.toLowerCase().contains(AdvString.between("(", ")", word).toLowerCase()))) {
                         event.setCancelled(true);
                         return;
                     }
+
+                    if (name.contains(AdvString.between("(", ")", word))) {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+
+                if (ignoreCase && (name.toLowerCase().contains(word.toLowerCase()))) {
+                    event.setCancelled(true);
+                    return;
                 }
                 if (name.contains(word)) {
                     event.setCancelled(true);

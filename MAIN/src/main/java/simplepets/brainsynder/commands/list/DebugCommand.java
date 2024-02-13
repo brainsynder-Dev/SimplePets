@@ -33,6 +33,7 @@ import java.util.regex.Pattern;
 
 @ICommand(
         name = "debug",
+        usage = "[skip-jenkins]",
         description = "Generates debug information"
 )
 @Permission(permission = "debug", adminCommand = true)
@@ -45,8 +46,12 @@ public class DebugCommand extends PetSubCommand {
     }
 
     @Override
-    public void run(CommandSender sender) {
+    public void run(CommandSender sender, String[] args) {
         sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Fetching Debug Information...");
+        boolean skipJenkins = false;
+
+        if (args.length > 0) skipJenkins = Boolean.parseBoolean(args[0]);
+
         fetchDebug(json -> {
             log(getPlugin().getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
             sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+" §7Generated §e'plugins/SimplePets/debug.json'");
@@ -54,7 +59,7 @@ public class DebugCommand extends PetSubCommand {
             WebConnector.uploadPaste(PetCore.getInstance(), json.toString(WriterConfig.PRETTY_PRINT), s -> {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + " §7Uploaded to PasteLog:§e " + s);
             });
-        }, false);
+        }, skipJenkins);
     }
 
     private static void fetchConfig (Consumer<String> consumer) {
