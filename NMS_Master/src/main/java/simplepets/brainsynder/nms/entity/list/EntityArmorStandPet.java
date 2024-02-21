@@ -11,6 +11,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MoverType;
@@ -653,6 +654,15 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         super.hasVisualFire = var;
     }
 
+    protected boolean damageEntity0(DamageSource damagesource, float f) {
+        return false;
+    }
+
+    // God damnit Spigot changing the method name...
+    // See: https://tiny.bsdevelopment.org/spigot-changed-damage-method
+    protected boolean actuallyHurt(DamageSource damagesource, float f) {
+        return false;
+    }
 
     /**
      * These methods prevent pets from being saved in the worlds
