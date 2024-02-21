@@ -69,8 +69,13 @@ public class EntityGhostStand extends ArmorStand {
         return InteractionResult.FAIL;
     }
 
-    @Override
     protected boolean damageEntity0(DamageSource damagesource, float f) {
+        return false;
+    }
+
+    // God damnit Spigot changing the method name...
+    // See: https://tiny.bsdevelopment.org/spigot-changed-damage-method
+    protected boolean actuallyHurt(DamageSource damagesource, float f) {
         return false;
     }
 
