@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 /**
  * A Spigot util to easily make entities glow.
  * <p>
- * <b>1.17 -> 1.20.2</b>
+ * <b>1.17 -> 1.20.4</b>
  *
  * @version 1.3.1
  * @author SkytAsul
@@ -375,8 +375,7 @@ public class GlowingEntities implements Listener {
 				mappings = ProtocolMappings.getMappings(version, versionMinor);
 				if (mappings == null) {
 					mappings = ProtocolMappings.values()[ProtocolMappings.values().length - 1];
-					logger.warning("Loaded not matching version of the mappings for your server version (1." + version + "."
-							+ versionMinor + ")");
+					logger.warning("Loaded not matching version of the mappings for your server version");
 				}
 				logger.info("Loaded mappings " + mappings.name());
 
@@ -922,7 +921,7 @@ public class GlowingEntities implements Listener {
 					20,
 					0,
 					"an",
-					"ab",
+					"am",
 					"aj",
 					"c",
 					"h",
@@ -945,8 +944,21 @@ public class GlowingEntities implements Listener {
 					null,
 					null,
 					null,
-					null)
-			;
+					null),
+			V1_20_3(
+					20,
+					3,
+					null,
+					"an",
+					"an",
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null,
+					null);
 
 			private final int major, minor;
 			private final String watcherFlags;
@@ -1053,18 +1065,23 @@ public class GlowingEntities implements Listener {
 			}
 
 			public static ProtocolMappings getMappings(int major, int minor) {
-				ProtocolMappings lastGoodMajor = null;
+				ProtocolMappings lastGood = null;
 				for (ProtocolMappings map : values()) {
+					// loop in ascending version order
 					if (major == map.getMajor()) {
-						lastGoodMajor = map;
-
 						if (minor == map.getMinor())
-							return map;
-					} else if (lastGoodMajor != null) {
-						return lastGoodMajor;
+							return map; // perfect match
+
+						if (minor > map.getMinor())
+							lastGood = map; // looking for newer minor version
+
+						if (minor < map.getMinor())
+							return lastGood; // looking for older minor version: we get the last correct one
 					}
 				}
-				return null;
+				// will return either null if no mappings matched the major => fallback to latest major with a
+				// warning, either the last mappings with same major and smaller minor
+				return lastGood;
 			}
 
 		}
