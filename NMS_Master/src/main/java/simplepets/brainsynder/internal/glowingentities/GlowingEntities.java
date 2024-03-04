@@ -13,6 +13,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
+import simplepets.brainsynder.PetCore;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -733,13 +734,13 @@ public class GlowingEntities implements Listener {
 								// editing a bundle packet is annoying, so we'll let it go to the player
 								// and then send a metadata packet containing the correct glowing flag.
 
-								Bukkit.getScheduler().runTaskLaterAsynchronously(playerData.instance.plugin, () -> {
+								PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(playerData.player, () -> {
 									try {
 										updateGlowingState(glowingData);
 									} catch (ReflectiveOperationException e) {
 										e.printStackTrace();
 									}
-								}, 1L);
+								}, 50L, TimeUnit.MILLISECONDS);
 								return;
 							}
 						}

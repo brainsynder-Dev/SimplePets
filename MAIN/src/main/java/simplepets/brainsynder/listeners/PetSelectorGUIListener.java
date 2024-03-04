@@ -20,6 +20,7 @@ import simplepets.brainsynder.menu.inventory.holders.SelectorHolder;
 import simplepets.brainsynder.utils.Keys;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class PetSelectorGUIListener implements Listener {
     @EventHandler
@@ -58,10 +59,12 @@ public class PetSelectorGUIListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof SelectorHolder)) return;
         PetSelectorMenu menu = InventoryManager.SELECTOR;
-        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> {
-            if (!(e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof SelectorHolder)) {
-                SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+
+        Player player = (Player) e.getPlayer();
+        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> {
+            if (!(player.getOpenInventory().getTopInventory().getHolder() instanceof SelectorHolder)) {
+                SimplePets.getUserManager().getPetUser(player).ifPresent(menu::reset);
             }
-        }, 3);
+        }, 150L, TimeUnit.MILLISECONDS);
     }
 }

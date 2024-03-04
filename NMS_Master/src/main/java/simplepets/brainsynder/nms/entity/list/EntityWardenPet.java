@@ -22,6 +22,8 @@ import simplepets.brainsynder.api.wrappers.AngerLevel;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.warden.Warden}
  */
@@ -35,7 +37,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
         super(EntityType.WARDEN, type, user);
         if (ConfigOption.INSTANCE.PET_TOGGLES_WARDEN_ANIMATIONS.getValue()) {
             this.setPose(Pose.EMERGING);
-            Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> this.setPose(Pose.STANDING), 135);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(this.getEntity(), () -> this.setPose(Pose.STANDING), 6750, TimeUnit.MILLISECONDS);
         }
     }
 
@@ -118,7 +120,7 @@ public class EntityWardenPet extends EntityPet implements IEntityWardenPet {
         }
 
         this.setPose(Pose.DIGGING);
-        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> super.remove(entity_removalreason), 100);
+        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(this.getEntity(), () -> super.remove(entity_removalreason), 5L, TimeUnit.SECONDS);
     }
 
     static {

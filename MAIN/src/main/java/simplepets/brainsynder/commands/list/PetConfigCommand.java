@@ -18,6 +18,7 @@ import simplepets.brainsynder.managers.InventoryManager;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @ICommand(
         name = "petconfig",
@@ -169,7 +170,7 @@ public class PetConfigCommand extends PetSubCommand {
                 jsonFile.save();
 
                 boolean finalReset = reset;
-                Bukkit.getScheduler().runTaskLater(SimplePets.getPlugin(), () -> {
+                getPlugin().getScheduler().getImpl().runLater(() -> {
                     // Reloads the data to use the new values
                     ((PetConfiguration)PetCore.getInstance().getPetConfigManager()).reset();
                     InventoryManager.SELECTION.reloadAvailableTypes();
@@ -185,7 +186,7 @@ public class PetConfigCommand extends PetSubCommand {
                                 .replace("{value}", newValue)
                                 .replace("{type}", type.getName()));
                     }
-                }, 5);
+                }, 250L, TimeUnit.MILLISECONDS);
             } else {
                 sender.sendMessage(MessageFile.getTranslation(MessageOption.CONFIG_UNABLE_TO_UPDATE)
                         .replace("{key}", key)

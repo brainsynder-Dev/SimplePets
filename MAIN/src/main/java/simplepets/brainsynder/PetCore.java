@@ -1,6 +1,7 @@
 package simplepets.brainsynder;
 
 import com.jeff_media.updatechecker.UpdateChecker;
+import com.tcoded.folialib.FoliaLib;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
 import lib.brainsynder.json.WriterConfig;
@@ -14,7 +15,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.addon.AddonLocalData;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.inventory.handler.GUIHandler;
@@ -61,6 +61,8 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private final List<String> supportedVersions = new ArrayList<>();
     private static PetCore instance;
 
+    private FoliaLib scheduler;
+
     private File itemFolder;
     private boolean reloaded = false;
     private boolean fullyStarted = false;
@@ -86,12 +88,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private IPetUtilities petUtilities;
     private SQLHandler sqlHandler;
 
-    public final Executor sync = task -> Bukkit.getScheduler().runTask(this, task);
-    public final Executor async = task -> Bukkit.getScheduler().runTaskAsynchronously(this, task);
+    public final Executor sync = task -> getScheduler().getImpl().runNextTick(task);
+    public final Executor async = task -> getScheduler().getImpl().runAsync(task);
 
     @Override
     public void onEnable() {
         instance = this;
+        scheduler = new FoliaLib(this);
+
         SimplePets.setPLUGIN(this);
         isStarting = true;
 
@@ -175,16 +179,13 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
             debug.debug(SimplePets.ADDON, "Loading addons in '"+ ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue()+ " " + timeunit + "'");
 
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    addonManager = new AddonManager(PetCore.this);
-                    addonManager.initialize();
-                    addonManager.checkAddons();
+            getScheduler().getImpl().runLater(() -> {
+                addonManager = new AddonManager(PetCore.this);
+                addonManager.initialize();
+                addonManager.checkAddons();
 
-                    handleMetrics();
-                }
-            }.runTaskLater(this, Utilities.toUnit(ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue(), unit));
+                handleMetrics();
+            }, ConfigOption.INSTANCE.ADDON_LOAD_TIME.getValue(), unit);
         }
 
         checkWorldGuard(value -> {
@@ -200,16 +201,16 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         fullyStarted = true;
 
-        if (Bukkit.getOnlinePlayers().isEmpty()) return;
+        if (Bukkit.getOnlinePlayers().isEmpty()) {
+            return;
+        }
+
         // Delay it for a second to actually have the database load
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                debug.debug(DebugLevel.HIDDEN, "Respawning pets for players (if there are any)");
-                UserManagement userManager = SimplePets.getUserManager();
-                Bukkit.getOnlinePlayers().forEach(userManager::getPetUser);
-            }
-        }.runTaskLater(this, 20);
+        getScheduler().getImpl().runLater(() -> {
+            debug.debug(DebugLevel.HIDDEN, "Respawning pets for players (if there are any)");
+            UserManagement userManager = SimplePets.getUserManager();
+            Bukkit.getOnlinePlayers().forEach(userManager::getPetUser);
+        }, 1L, TimeUnit.SECONDS);
 
     }
 
@@ -649,5 +650,9 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }catch (Exception e) {
             return "Error: " + e.getMessage();
         }
+    }
+
+    public FoliaLib getScheduler() {
+        return scheduler;
     }
 }

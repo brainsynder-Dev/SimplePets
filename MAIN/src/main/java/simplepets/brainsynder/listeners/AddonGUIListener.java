@@ -12,7 +12,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -22,6 +21,7 @@ import simplepets.brainsynder.menu.inventory.holders.AddonHolder;
 import simplepets.brainsynder.utils.Keys;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 public class AddonGUIListener implements Listener {
     @EventHandler
@@ -56,12 +56,10 @@ public class AddonGUIListener implements Listener {
                     e.getInventory().setItem(e.getRawSlot(), stack);
 
                     PetCore.getInstance().getAddonManager().downloadViaName(name, container.get(Keys.ADDON_URL, PersistentDataType.STRING), () -> {
-                        new BukkitRunnable() {
-                            @Override
-                            public void run() {
-                                menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
-                            }
-                        }.runTaskLater(PetCore.getInstance(), 10);
+                        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () ->
+                            menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user)),
+                            500L, TimeUnit.MILLISECONDS
+                        );
                     });
                     return;
                 }
@@ -72,12 +70,10 @@ public class AddonGUIListener implements Listener {
                         e.getInventory().setItem(e.getRawSlot(), stack);
 
                         PetCore.getInstance().getAddonManager().update(module.getLocalData(), container.get(Keys.ADDON_UPDATE, PersistentDataType.STRING), () -> {
-                            new BukkitRunnable() {
-                                @Override
-                                public void run() {
-                                    menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
-                                }
-                            }.runTaskLater(PetCore.getInstance(), 2);
+                            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () ->
+                                menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user)),
+                                100L, TimeUnit.MILLISECONDS
+                            );
                         });
                         return;
                     }
@@ -85,12 +81,10 @@ public class AddonGUIListener implements Listener {
                     boolean enabled = !module.isEnabled();
                     PetCore.getInstance().getAddonManager().toggleAddonModule(module, enabled);
 
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user));
-                        }
-                    }.runTaskLater(PetCore.getInstance(), 2);
+                    PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () ->
+                        menu.open(user, menu.getCurrentPage(user), menu.isInstallerGUI(user)),
+                        100L, TimeUnit.MILLISECONDS
+                    );
                 });
 
             });
@@ -102,10 +96,11 @@ public class AddonGUIListener implements Listener {
         if (e.getInventory().getHolder() == null) return;
         if (!(e.getInventory().getHolder() instanceof AddonHolder)) return;
         AddonMenu menu = InventoryManager.ADDONS;
-        Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> {
-            if (!(e.getPlayer().getOpenInventory().getTopInventory().getHolder() instanceof AddonHolder)) {
-                SimplePets.getUserManager().getPetUser((Player) e.getPlayer()).ifPresent(menu::reset);
+        Player player = (Player) e.getPlayer();
+        PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> {
+            if (!(player.getOpenInventory().getTopInventory().getHolder() instanceof AddonHolder)) {
+                SimplePets.getUserManager().getPetUser(player).ifPresent(menu::reset);
             }
-        }, 3);
+        }, 150L, TimeUnit.MILLISECONDS);
     }
 }

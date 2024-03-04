@@ -7,7 +7,6 @@ import lib.brainsynder.web.WebConnector;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.addon.AddonCloudData;
 import simplepets.brainsynder.api.plugin.SimplePets;
@@ -20,7 +19,9 @@ import simplepets.brainsynder.menu.inventory.AddonMenu;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 @ICommand(
         name = "addon",
@@ -123,16 +124,13 @@ public class AddonCommand extends PetSubCommand {
                 AddonManager manager = PetCore.getInstance().getAddonManager();
                 manager.cleanup();
                 File folder = manager.getFolder();
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (!folder.exists()) return;
-                        for (File file : folder.listFiles()) {
-                            manager.loadAddon(file);
-                        }
-                        sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"All Addons have been reloaded");
+                getPlugin().getScheduler().getImpl().runLater(() -> {
+                    if (!folder.exists()) return;
+                    for (File file : Objects.requireNonNull(folder.listFiles())) {
+                        manager.loadAddon(file);
                     }
-                }.runTaskLater(PetCore.getInstance(), 1);
+                    sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX)+ ChatColor.GRAY+"All Addons have been reloaded");
+                }, 50L, TimeUnit.MILLISECONDS);
                 return;
             }
         }

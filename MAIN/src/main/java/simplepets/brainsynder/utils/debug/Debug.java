@@ -6,7 +6,6 @@ import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.ServerOperator;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.debug.DebugBuilder;
@@ -105,13 +104,7 @@ public class Debug implements DebugLogger {
         if (runnable == null) return;
 
         if (builder.sync()) {
-            Runnable finalRunnable = runnable;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    finalRunnable.run();
-                }
-            }.runTask(core);
+            core.getScheduler().getImpl().runNextTick(runnable);
         } else {
             runnable.run();
         }

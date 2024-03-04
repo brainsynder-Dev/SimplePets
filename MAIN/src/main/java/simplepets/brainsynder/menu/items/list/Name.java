@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -14,6 +13,7 @@ import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Namespace(namespace = "name")
 public class Name extends Item {
@@ -37,23 +37,19 @@ public class Name extends Item {
 
         if (pet != null) {
             masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.getPlayer().performCommand("pet rename " + pet.getPetType().getName());
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(masterUser.getPlayer(), () ->
+                masterUser.getPlayer().performCommand("pet rename " + pet.getPetType().getName()),
+                100L, TimeUnit.MILLISECONDS
+            );
         }
 
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             user.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    user.getPlayer().performCommand("pet rename "+type.getName());
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(user.getPlayer(), () ->
+                user.getPlayer().performCommand("pet rename "+type.getName()),
+                100L, TimeUnit.MILLISECONDS
+            );
         });
         menu.open(masterUser, 1, inventory.getTitle());
     }
