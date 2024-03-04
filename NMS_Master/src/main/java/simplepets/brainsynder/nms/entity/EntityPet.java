@@ -143,8 +143,13 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         return glowColor;
     }
 
-    @Override
     protected boolean damageEntity0(DamageSource damagesource, float f) {
+        return false;
+    }
+
+    // God damnit Spigot changing the method name...
+    // See: https://tiny.bsdevelopment.org/spigot-changed-damage-method
+    protected boolean actuallyHurt(DamageSource damagesource, float f) {
         return false;
     }
 

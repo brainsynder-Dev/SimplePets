@@ -5,6 +5,7 @@ import lib.brainsynder.reflection.Reflection;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
 import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.internal.glowingentities.GlowingEntities;
@@ -18,18 +19,20 @@ public class EntityUtils {
     private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
     private static final Random RANDOM;
-    private static GlowingEntities GLOWING_ENTITIES;
+    private static GlowingEntities GLOWING_ENTITIES = null;
 
     static {
         RANDOM = new Random();
-        if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
-            GLOWING_ENTITIES = null;
-            SimplePets.getDebugLogger().debug(DebugLevel.WARNING , "GlowingEntities class is currently unavailable in this version...");
-        }else{
-            try {
-                GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
-            }catch (Exception e) {
+        if (ConfigOption.INSTANCE.PET_TOGGLES_GLOW_VANISH.getValue()) {
+            if (ServerVersion.isEqualNew(ServerVersion.v1_20_3)) {
                 GLOWING_ENTITIES = null;
+                SimplePets.getDebugLogger().debug(DebugLevel.WARNING, "GlowingEntities class is currently unavailable in this version...");
+            } else {
+                try {
+                    GLOWING_ENTITIES = new GlowingEntities(SimplePets.getPlugin());
+                } catch (Exception e) {
+                    GLOWING_ENTITIES = null;
+                }
             }
         }
     }
