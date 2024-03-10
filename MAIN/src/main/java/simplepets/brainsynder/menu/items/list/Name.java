@@ -43,6 +43,7 @@ public class Name extends Item {
                     masterUser.getPlayer().performCommand("pet rename " + pet.getPetType().getName());
                 }
             }.runTaskLater(PetCore.getInstance(), 2);
+            return;
         }
 
         PetSelectorMenu menu = InventoryManager.SELECTOR;
