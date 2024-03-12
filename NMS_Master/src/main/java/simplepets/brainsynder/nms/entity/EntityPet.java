@@ -113,6 +113,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         });
 
         VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
+        EntityUtils.fetchTeam(user.getPlayer()).addEntry(getUUID().toString());
     }
 
     public void setDisplayName(boolean displayName) {
@@ -595,11 +596,12 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
      * Search for: this.hasImpulse = true;
      * Class: Entity
      */
-    @Override
-    public void push(double x, double y, double z) {
-        if (!immovable) return;
-        super.push(x, y, z);
-    }
+//    Blame Paper for making the method final preventing me from overriding it...
+//    @Override
+//    public void push(double x, double y, double z) {
+//        if (!immovable) return;
+//        super.push(x, y, z);
+//    }
 
 
     /**

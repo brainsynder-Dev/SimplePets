@@ -4,6 +4,10 @@ import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.wrappers.villager.BiomeType;
@@ -20,6 +24,19 @@ public class EntityUtils {
     private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
     private static final Random RANDOM;
     private static GlowingEntities GLOWING_ENTITIES = null;
+    private static Scoreboard scoreboard;
+
+    public static Team fetchTeam (Player player) {
+        String key = "SimplePets-"+player.getName();
+        Team team = getScoreboard().getTeam(key);
+        if (team == null) {
+            team = getScoreboard().registerNewTeam(key);
+            team.setOption(Team.Option.COLLISION_RULE, Team.OptionStatus.NEVER);
+            team.addEntry(player.getName());
+            team.setCanSeeFriendlyInvisibles(true);
+        }
+        return team;
+    }
 
     static {
         RANDOM = new Random();
@@ -35,6 +52,11 @@ public class EntityUtils {
                 }
             }
         }
+    }
+
+    public static Scoreboard getScoreboard () {
+        if (scoreboard == null) scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
+        return scoreboard;
     }
 
     public static Random getRandom() {
