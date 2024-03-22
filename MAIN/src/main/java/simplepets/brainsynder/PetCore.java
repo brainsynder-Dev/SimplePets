@@ -319,7 +319,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             updateUtils = new UpdateUtils(this, updateResult);
             updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
         }
-        if (Premium.getDownloadType() != Premium.DownloadType.JENKINS) {
+        if ((Premium.getDownloadType() == Premium.DownloadType.SPIGOT) || (Premium.getDownloadType() == Premium.DownloadType.POLYMART)) {
             int resourceID = Integer.parseInt(Premium.RESOURCE_ID);
             new UpdateChecker(this, Premium.getDownloadType().toSource(), Premium.RESOURCE_ID)
                     .setChangelogLink(resourceID)
