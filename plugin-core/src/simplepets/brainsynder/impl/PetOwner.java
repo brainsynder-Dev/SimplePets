@@ -7,10 +7,13 @@ import lib.brainsynder.nbt.StorageTagList;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.optional.BiOptional;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.BlockIterator;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -30,6 +33,7 @@ import simplepets.brainsynder.utils.Utilities;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class PetOwner implements PetUser {
 
@@ -47,6 +51,8 @@ public class PetOwner implements PetUser {
     private final Map<PetType, IEntityPet> petMap;
     private final Map<PetType, String> nameMap;
 
+    private final Set<UUID> pendingRemovalEntityUUIDs;
+
     public PetOwner(Player player) {
         Validate.notNull(player, "Player can not be null (They Offline?)");
         this.uuid = player.getUniqueId();
@@ -58,6 +64,7 @@ public class PetOwner implements PetUser {
         petMap = new HashMap<>();
         nameMap = new HashMap<>();
         ownedPets = new ArrayList<>();
+        pendingRemovalEntityUUIDs = new HashSet<>();
     }
 
     public PetOwner(String username) {
@@ -71,62 +78,63 @@ public class PetOwner implements PetUser {
         petMap.clear();
         nameMap.clear();
         ownedPets.clear();
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                if (compound.hasKey("pet_names")) {
-                    StorageTagList names = (StorageTagList) compound.getTag("pet_names");
-                    names.getList().forEach(storageBase -> {
-                        StorageTagCompound data = (StorageTagCompound) storageBase;
-                        PetType.getPetType(data.getString("type", "unknown")).ifPresent(type -> {
+        pendingRemovalEntityUUIDs.clear();
 
-                            nameMap.put(type, data.getString("name"));
-                        });
+        PetCore.getInstance().getScheduler().getImpl().runNextTick(() -> {
+            if (compound.hasKey("pet_names")) {
+                StorageTagList names = (StorageTagList) compound.getTag("pet_names");
+                names.getList().forEach(storageBase -> {
+                    StorageTagCompound data = (StorageTagCompound) storageBase;
+                    PetType.getPetType(data.getString("type", "unknown")).ifPresent(type -> {
+
+                        nameMap.put(type, data.getString("name"));
                     });
-                }
-
-                if (compound.hasKey("owned_pets")) {
-                    StorageTagList list = (StorageTagList) compound.getTag("owned_pets");
-                    list.getList().forEach(storageBase -> {
-                        StorageTagString string = (StorageTagString) storageBase;
-                        PetType.getPetType(string.getString()).ifPresent(ownedPets::add);
-                    });
-                }
-
-                if (compound.hasKey("saved_pets")) {
-                    StorageTagList list = (StorageTagList) compound.getTag("saved_pets");
-                    list.getList().forEach(base -> {
-                        StorageTagCompound tag = (StorageTagCompound) base;
-                        PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                            savedPetData.add(tag.getCompoundTag("data"));
-                        });
-                    });
-                }
-
-                if (compound.hasKey("spawned_pets") && ConfigOption.INSTANCE.RESPAWN_LAST_PET_LOGIN.getValue()) {
-                    StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
-                    ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
-                    list.getList().forEach(storageBase -> {
-                        StorageTagCompound tag = (StorageTagCompound) storageBase;
-                        respawnPets.remove(tag.getCompoundTag("data"));
-                        PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
-                            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-                                if (!config.isEnabled()) return;
-                                if (!type.isSupported()) return;
-                                if (!spawnUtil.isRegistered(type)) return;
-                                Player player = Bukkit.getPlayer(uuid);
-                                if (player != null) {
-                                    if (!Utilities.hasPermission(player, type.getPermission())) return;
-                                    spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
-                                }
-                            });
-                        });
-                    });
-                }
-
-                isLoaded = true;
+                });
             }
-        }.runTask(PetCore.getInstance());
+
+            if (compound.hasKey("owned_pets")) {
+                StorageTagList list = (StorageTagList) compound.getTag("owned_pets");
+                list.getList().forEach(storageBase -> {
+                    StorageTagString string = (StorageTagString) storageBase;
+                    PetType.getPetType(string.getString()).ifPresent(ownedPets::add);
+                });
+            }
+
+            if (compound.hasKey("saved_pets")) {
+                StorageTagList list = (StorageTagList) compound.getTag("saved_pets");
+                list.getList().forEach(base -> {
+                    StorageTagCompound tag = (StorageTagCompound) base;
+                    PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                        savedPetData.add(tag.getCompoundTag("data"));
+                    });
+                });
+            }
+
+            if (compound.hasKey("spawned_pets") && ConfigOption.INSTANCE.RESPAWN_LAST_PET_LOGIN.getValue()) {
+                StorageTagList list = (StorageTagList) compound.getTag("spawned_pets");
+                ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
+                list.getList().forEach(storageBase -> {
+                    StorageTagCompound tag = (StorageTagCompound) storageBase;
+                    respawnPets.remove(tag.getCompoundTag("data"));
+                    PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
+                        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                            if (!config.isEnabled()) return;
+                            if (!type.isSupported()) return;
+                            if (!spawnUtil.isRegistered(type)) return;
+                            Player player = Bukkit.getPlayer(uuid);
+                            if (player != null) {
+                                if (!Utilities.hasPermission(player, type.getPermission())) return;
+                                PetCore.getInstance().getScheduler().getImpl().runAtLocation(player.getLocation(), () -> {
+                                    spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
+                                });
+                            }
+                        });
+                    });
+                });
+            }
+
+            isLoaded = true;
+        });
     }
 
     public StorageTagCompound toCompound() {
@@ -174,6 +182,37 @@ public class PetOwner implements PetUser {
         ISpawnUtil spawnUtil = SimplePets.getSpawnUtil();
         if (spawnUtil == null) return false;
 
+        Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return false;
+
+        if (!petMap.isEmpty()) {
+            petMap.forEach((type, entityPet) -> {
+                entityPet.getEntities().forEach(entity -> {
+                    try {
+                        entity.remove();
+                    } catch (Exception ignored) {}
+                });
+            });
+            petMap.clear();
+        }
+
+        if (!pendingRemovalEntityUUIDs.isEmpty()) {
+            Set<UUID> toRemove = new HashSet<>(pendingRemovalEntityUUIDs);
+            pendingRemovalEntityUUIDs.clear();
+
+            for (org.bukkit.World world : Bukkit.getWorlds()) {
+                for (Entity entity : world.getEntities()) {
+                    if (toRemove.contains(entity.getUniqueId())) {
+                        PetCore.getInstance().getScheduler().getImpl().runAtEntity(entity, () -> {
+                            if (entity.isValid() && !entity.isDead()) {
+                                entity.remove();
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
         List<BiOptional<PetType, StorageTagCompound>> laterTasks = Lists.newArrayList();
         this.respawnPets.forEach(tag -> {
             PetType.getPetType(tag.getString("type", "unknown")).ifPresent(type -> {
@@ -181,14 +220,13 @@ public class PetOwner implements PetUser {
                     if (!config.isEnabled()) return;
                     if (!type.isSupported()) return;
                     if (!spawnUtil.isRegistered(type)) return;
-                    Player player = Bukkit.getPlayer(uuid);
-                    if (player != null) {
-                        if (!Utilities.hasPermission(player, type.getPermission())) return;
-                        if (hasPet(type)) {
-                            laterTasks.add(BiOptional.of(type, tag.getCompoundTag("data")));
-                        } else {
+                    if (!Utilities.hasPermission(player, type.getPermission())) return;
+                    if (hasPet(type)) {
+                        laterTasks.add(BiOptional.of(type, tag.getCompoundTag("data")));
+                    } else {
+                        PetCore.getInstance().getScheduler().getImpl().runAtLocation(player.getLocation(), () -> {
                             spawnUtil.spawnEntityPet(type, PetOwner.this, tag.getCompoundTag("data"));
-                        }
+                        });
                     }
                 });
             });
@@ -199,7 +237,9 @@ public class PetOwner implements PetUser {
             StorageTagCompound compound = biOptional.second().get();
             removePet(type);
 
-            spawnUtil.spawnEntityPet(type, PetOwner.this, compound);
+            PetCore.getInstance().getScheduler().getImpl().runAtLocation(player.getLocation(), () -> {
+                spawnUtil.spawnEntityPet(type, PetOwner.this, compound);
+            });
         });
 
         this.respawnPets.clear();
@@ -208,37 +248,46 @@ public class PetOwner implements PetUser {
 
     @Override
     public void cacheAndRemove() {
+        Player player = getPlayer();
+
+        if (player != null && !hatPets.isEmpty()) {
+            player.eject();
+            hatPets.clear();
+        }
+
         petMap.forEach((type, entityPet) -> {
             respawnPets.add(new StorageTagCompound()
                 .setTag("data", entityPet.asCompound())
                 .setString("type", type.getName())
             );
+
+            PetRemoveEvent event = new PetRemoveEvent(this, entityPet);
+            Bukkit.getPluginManager().callEvent(event);
+            Utilities.runPetCommands(CommandReason.REVOKE, this, type);
+
+            entityPet.getEntities().forEach(entity -> {
+                pendingRemovalEntityUUIDs.add(entity.getUniqueId());
+            });
+
+            entityPet.getEntities().forEach(entity -> {
+                PetCore.getInstance().getScheduler().getImpl().runAtEntity(entity, () -> {
+                    if (entity.isValid() && !entity.isDead()) {
+                        SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, player, entity.getLocation());
+                        entity.remove();
+                    }
+                    pendingRemovalEntityUUIDs.remove(entity.getUniqueId());
+                });
+            });
         });
 
-        // If the server is shutting down, JUST IN CASE
+        petMap.clear();
+
         if (!PetCore.getInstance().isEnabled()) {
-            // TBD: We want to block the thread to save everything...
             PetCore.getInstance().getSqlHandler().sendPlayerDataSync(uuid, name, toCompound());
             return;
         }
 
-        updateDatabase().thenAccept(callback -> {
-            // Just remove the pets, the player didn't disconnect
-            petMap.forEach((type, entityPet) -> {
-                if (!hasPet(type)) return;
-                if (isPetHat(type)) setPetHat(type, false);
-                PetRemoveEvent event = new PetRemoveEvent(this, petMap.get(type));
-                Bukkit.getPluginManager().callEvent(event);
-                Utilities.runPetCommands(CommandReason.REVOKE, this, type);
-
-                entityPet.getEntities().forEach(entity -> {
-                    SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
-                    entity.remove();
-                });
-            });
-
-            petMap.clear();
-        });
+        updateDatabase();
     }
 
     /**
@@ -267,6 +316,7 @@ public class PetOwner implements PetUser {
             this.ownedPets.clear();
             this.petMap.clear();
             this.respawnPets.clear();
+            this.pendingRemovalEntityUUIDs.clear();
             isLoaded = false;
         });
     }
@@ -415,10 +465,10 @@ public class PetOwner implements PetUser {
             .setTag("data", entityPet.asCompound())
             .setString("type", type.getName()));
 
-        entityPet.getEntities().forEach(entity -> {
+        entityPet.getEntities().forEach(entity -> PetCore.getInstance().getScheduler().getImpl().runAtLocation(entity.getLocation(), () -> {
             SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
             entity.remove();
-        });
+        }));
         petMap.remove(type);
         return true;
     }
@@ -438,7 +488,7 @@ public class PetOwner implements PetUser {
 
             entityPet.getEntities().forEach(entity -> {
                 SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.REMOVE, getPlayer(), entity.getLocation());
-                entity.remove();
+                PetCore.getInstance().getScheduler().getImpl().runAtEntity(entity, entity::remove);
             });
         });
         petMap.clear();
@@ -535,14 +585,13 @@ public class PetOwner implements PetUser {
                 Bukkit.getPluginManager().callEvent(hatEvent);
                 // Set the pet as a hat
                 Entity finalEnt = ent;
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
-                        Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
-                        entityPet.togglePetHatTask(hat);
-                    }
-                }.runTaskLater(PetCore.getInstance(), delay);
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(finalEnt, () -> {
+                    // Verify entity is still valid before attempting hat operation
+                    if (!finalEnt.isValid() || finalEnt.isDead()) return;
+                    Utilities.runPetCommands(CommandReason.HAT, PetOwner.this, type);
+                    Utilities.setPassenger(getPlayer(), getTopEntity(getPlayer()), finalEnt);
+                    entityPet.togglePetHatTask(hat);
+                }, 50L * delay, TimeUnit.MILLISECONDS);
             } else {
                 // If pet is a hat, remove the hat from the player
                 if (!isPetHat(type)) return;
@@ -669,6 +718,14 @@ public class PetOwner implements PetUser {
                 return;
             }
 
+            if (ConfigOption.INSTANCE.MISC_TOGGLES_LINE_OF_SIGHT_REQUIRED.getValue()
+                    && !hasLineOfSight(player, entityPet.getEntity())) {
+                Utilities.runPetCommands(CommandReason.FAILED, PetOwner.this, type);
+                SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.FAILED, player, entityPet.getEntity().getLocation());
+                this.vehicle = null;
+                return;
+            }
+
             PetMountEvent event = new PetMountEvent(entityPet);
             Bukkit.getPluginManager().callEvent(event);
 
@@ -687,16 +744,52 @@ public class PetOwner implements PetUser {
                 entityPet.teleportToOwner();
             }
 
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    entityPet.attachOwner();
-
-                }
-            }.runTaskLater(PetCore.getInstance(), 2L);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(entityPet.getEntity(), () -> {
+                // Verify entity is still valid before attempting mount
+                if (!entityPet.getEntity().isValid() || entityPet.getEntity().isDead()) return;
+                entityPet.attachOwner();
+            }, 100L, TimeUnit.MILLISECONDS);
         });
         return false;
+    }
+
+    /**
+     * Checks if a player has clear line of sight to the target entity.
+     * This prevents exploits where players mount pets through walls.
+     *
+     * @param player The player to check line of sight from
+     * @param target The entity the player is trying to interact with
+     * @return true if the player can see the target entity, false if blocked
+     */
+    private static boolean hasLineOfSight(Player player, Entity target) {
+        Location eye = player.getEyeLocation();
+        Location targetLoc = target.getLocation().add(0, target.getHeight() / 2, 0);
+        Material eyeMaterial = eye.getBlock().getType();
+        boolean passThroughWater = (eyeMaterial == Material.WATER);
+
+        double distance = eye.distance(targetLoc);
+        int maxDistance = (int) Math.ceil(distance) + 1;
+
+        try {
+            BlockIterator iterator = new BlockIterator(player.getLocation(), player.getEyeHeight(), maxDistance);
+            while (iterator.hasNext()) {
+                Block block = iterator.next();
+                Location blockCenter = block.getLocation().add(0.5, 0.5, 0.5);
+
+                if (blockCenter.distance(targetLoc) < 1.5) {
+                    return true;
+                }
+
+                Material type = block.getType();
+                if (!Tag.REPLACEABLE.isTagged(type) && (!passThroughWater || type != Material.WATER)) {
+                    return false;
+                }
+            }
+        } catch (IllegalStateException ignored) {
+            return false;
+        }
+
+        return true;
     }
 
     @Override

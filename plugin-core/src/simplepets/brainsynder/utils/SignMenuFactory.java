@@ -12,11 +12,13 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import simplepets.brainsynder.PetCore;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.function.BiPredicate;
 
 /**
@@ -56,13 +58,13 @@ public final class SignMenuFactory {
                 boolean success = menu.response.test(player, event.getPacket().getStringArrays().read(0));
 
                 if (!success && menu.reopenIfFail && !menu.forceClose) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> menu.open(player), 2L);
+                    PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> menu.open(player), 100L, TimeUnit.MILLISECONDS);
                 }
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(player, () -> {
                     if (player.isOnline()) {
                         player.sendBlockChange(menu.location, menu.location.getBlock().getBlockData());
                     }
-                }, 2L);
+                }, 100L, TimeUnit.MILLISECONDS);
             }
         });
     }

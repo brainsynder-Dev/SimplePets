@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lib.brainsynder.utils.Colorize;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetType;
@@ -20,15 +21,16 @@ public class PetUtility implements IPetUtilities {
     }
 
     public void runPetCommands(CommandReason reason, PetUser owner, PetType type, Location location) {
-        SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
-            List<String> commands = config.getCommands().getOrDefault(reason, Lists.newArrayList());
-            if (owner.getPetEntity(type).isPresent()) {
-                commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handlePlaceholders(owner, owner.getPetEntity(type).get(), null, command)));
-                return;
-            }
-            commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handlePlaceholders(owner, null, location, command)));
+        PetCore.getInstance().getScheduler().getImpl().runNextTick(() -> {
+            SimplePets.getPetConfigManager().getPetConfig(type).ifPresent(config -> {
+                List<String> commands = config.getCommands().getOrDefault(reason, Lists.newArrayList());
+                if (owner.getPetEntity(type).isPresent()) {
+                    commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handlePlaceholders(owner, owner.getPetEntity(type).get(), null, command)));
+                    return;
+                }
+                commands.forEach(command -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), handlePlaceholders(owner, null, location, command)));
+            });
         });
-
     }
 
 

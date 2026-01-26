@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -16,6 +15,7 @@ import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Namespace(namespace = "hat")
 public class Hat extends Item {
@@ -45,26 +45,24 @@ public class Hat extends Item {
         if (pet != null) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.setPetHat(pet.getPetType(), !masterUser.isPetHat(pet.getPetType()));
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            // Schedule on pet entity to avoid Folia cross-region thread access issues
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(pet.getEntity(), () -> {
+                if (!pet.getEntity().isValid() || pet.getEntity().isDead()) return;
+                masterUser.setPetHat(pet.getPetType(), !masterUser.isPetHat(pet.getPetType()));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
         if (masterUser.getPetEntities().size() == 1) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
-                        masterUser.setPetHat(iEntityPet.getPetType(), !masterUser.isPetHat(iEntityPet.getPetType()));
-                    });
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                // Schedule on pet entity to avoid Folia cross-region thread access issues
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(iEntityPet.getEntity(), () -> {
+                    if (!iEntityPet.getEntity().isValid() || iEntityPet.getEntity().isDead()) return;
+                    masterUser.setPetHat(iEntityPet.getPetType(), !masterUser.isPetHat(iEntityPet.getPetType()));
+                }, 100L, TimeUnit.MILLISECONDS);
+            });
             return;
         }
 
@@ -72,12 +70,13 @@ public class Hat extends Item {
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_HAT.getValue())
                 user.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+            // Get pet entity and schedule on it to avoid Folia cross-region thread access issues
+            user.getPetEntity(type).ifPresent(entityPet -> {
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(entityPet.getEntity(), () -> {
+                    if (!entityPet.getEntity().isValid() || entityPet.getEntity().isDead()) return;
                     user.setPetHat(type, !user.isPetHat(type));
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+                }, 100L, TimeUnit.MILLISECONDS);
+            });
         });
         menu.open(masterUser, 1, inventory.getTitle());
     }

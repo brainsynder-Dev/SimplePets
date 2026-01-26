@@ -1,6 +1,7 @@
 package simplepets.brainsynder.nms.entity.list;
 
 import com.mojang.authlib.GameProfile;
+import io.papermc.lib.PaperLib;
 import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageBase;
@@ -245,8 +246,8 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     @Override
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
-            setPos(location.getX(), location.getY(), location.getZ());
-            pet.setPos(location.getX(), location.getY(), location.getZ());
+            PaperLib.teleportAsync(getEntity(), location);
+            PaperLib.teleportAsync(pet.getEntity(), location);
             SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, getPetType());
             SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), location);
         });

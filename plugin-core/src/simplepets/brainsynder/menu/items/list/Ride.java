@@ -2,7 +2,6 @@ package simplepets.brainsynder.menu.items.list;
 
 import lib.brainsynder.item.ItemBuilder;
 import org.bukkit.Material;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -16,6 +15,7 @@ import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Namespace(namespace = "ride")
 public class Ride extends Item {
@@ -45,38 +45,37 @@ public class Ride extends Item {
         if (pet != null) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_RIDE.getValue())
                 masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.setPetVehicle(pet.getPetType(), !masterUser.isPetVehicle(pet.getPetType()));
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            // Schedule on pet entity to avoid Folia cross-region thread access issues
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(pet.getEntity(), () -> {
+                if (!pet.getEntity().isValid() || pet.getEntity().isDead()) return;
+                masterUser.setPetVehicle(pet.getPetType(), !masterUser.isPetVehicle(pet.getPetType()));
+            }, 100L, TimeUnit.MILLISECONDS);
             return;
         }
 
         if (masterUser.getPetEntities().size() == 1) {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_RIDE.getValue())
                 masterUser.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
-                        masterUser.setPetVehicle(iEntityPet.getPetType(), !masterUser.isPetVehicle(iEntityPet.getPetType()));
-                    });
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+            masterUser.getPetEntities().stream().findFirst().ifPresent(iEntityPet -> {
+                // Schedule on pet entity to avoid Folia cross-region thread access issues
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(iEntityPet.getEntity(), () -> {
+                    if (!iEntityPet.getEntity().isValid() || iEntityPet.getEntity().isDead()) return;
+                    masterUser.setPetVehicle(iEntityPet.getPetType(), !masterUser.isPetVehicle(iEntityPet.getPetType()));
+                }, 100L, TimeUnit.MILLISECONDS);
+            });
             return;
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
         menu.setTask(masterUser.getPlayer().getName(), (user, type) -> {
             if (ConfigOption.INSTANCE.MISC_TOGGLES_AUTO_CLOSE_RIDE.getValue())
                 user.getPlayer().closeInventory();
-            new BukkitRunnable() {
-                @Override
-                public void run() {
+            // Get pet entity and schedule on it to avoid Folia cross-region thread access issues
+            user.getPetEntity(type).ifPresent(entityPet -> {
+                PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(entityPet.getEntity(), () -> {
+                    if (!entityPet.getEntity().isValid() || entityPet.getEntity().isDead()) return;
                     user.setPetVehicle(type, !user.isPetVehicle(type));
-                }
-            }.runTaskLater(PetCore.getInstance(), 2);
+                }, 100L, TimeUnit.MILLISECONDS);
+            });
         });
         menu.open(masterUser, 1, inventory.getTitle());
     }

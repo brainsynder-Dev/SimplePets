@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import io.papermc.lib.PaperLib;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.protocol.Packet;
@@ -240,8 +241,8 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     @Override
     public void teleportToOwner() {
         user.getUserLocation().ifPresent(location -> {
-            setPos(location.getX(), location.getY(), location.getZ());
-            pet.setPos(location.getX(), location.getY(), location.getZ());
+            PaperLib.teleportAsync(getEntity(), location);
+            PaperLib.teleportAsync(pet.getEntity(), location);
             SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, getPetType());
             SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), location);
         });

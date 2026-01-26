@@ -150,17 +150,9 @@ public class SpawnerUtil implements ISpawnUtil {
                 customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
             }
 
-            if ((compound != null) && (!compound.hasNoTags())) {
-                try {
-                    customEntity.applyCompound(compound);
-                } catch (Exception e) {
-                    return BiOptional.of(null, ChatColor.RED + e.getMessage());
-                }
-            }
-
+            customEntity.snapTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             customEntity.setInvisible(false);
             customEntity.setInvulnerable(true);
-            customEntity.snapTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             customEntity.setPersistenceRequired();
 
             // Call the spawn event
@@ -178,6 +170,17 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if (VersionTranslator.addEntity(VersionTranslator.getWorldHandle(location.getWorld()), customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
+
+                if ((compound != null) && (!compound.hasNoTags())) {
+                    try {
+                        customEntity.applyCompound(compound);
+                    } catch (Exception e) {
+                        SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
+                                "Failed to apply compound to pet: " + e.getMessage()
+                        ));
+                    }
+                }
+
                 if (compound.hasKey("name")) {
                     String name = compound.getString("name");
                     if (name != null) name = name.replace("~", " ");

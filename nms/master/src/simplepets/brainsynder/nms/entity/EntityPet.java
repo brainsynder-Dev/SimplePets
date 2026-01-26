@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity;
 
+import io.papermc.lib.PaperLib;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
@@ -118,7 +119,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         });
 
         VersionTranslator.setAttributes(this, walkSpeed, flySpeed);
-        EntityUtils.fetchTeam(user.getPlayer()).addEntry(getUUID().toString());
+        //EntityUtils.fetchTeam(user.getPlayer()).addEntry(getUUID().toString());
 
         verticalWorldConfines = ConfigOption.INSTANCE.MISC_TOGGLES_WORLD_CONFINES_PET_LIMITS.getValue();
         maxHeight = getEntity().getWorld().getMaxHeight();
@@ -193,7 +194,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     public void teleportToOwner() {
         getPetUser().getUserLocation().ifPresent(location -> {
-            setPos(location.getX(), location.getY(), location.getZ());
+            PaperLib.teleportAsync(getEntity(), location);
             SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, getPetUser(), getPetType());
             SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, getPetUser().getPlayer(), location);
         });

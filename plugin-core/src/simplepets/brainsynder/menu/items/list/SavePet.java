@@ -4,7 +4,6 @@ import lib.brainsynder.item.ItemBuilder;
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.Namespace;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -20,6 +19,7 @@ import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 import simplepets.brainsynder.utils.Utilities;
 
 import java.io.File;
+import java.util.concurrent.TimeUnit;
 
 @Namespace(namespace = "savepet")
 public class SavePet extends Item {
@@ -49,12 +49,7 @@ public class SavePet extends Item {
                 if (pet.getPetType() == PetType.ARMOR_STAND) compound.setBoolean("restricted", true);
                 masterUser.addPetSave(compound);
             }
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    inventory.open(masterUser);
-                }
-            }.runTaskLater(PetCore.getInstance(), 1);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(masterUser.getPlayer(), () -> inventory.open(masterUser), 50L, TimeUnit.MILLISECONDS);
             return;
         }
 
@@ -66,12 +61,7 @@ public class SavePet extends Item {
                     masterUser.addPetSave(compound);
                 }
             });
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    inventory.open(masterUser);
-                }
-            }.runTaskLater(PetCore.getInstance(), 1);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(masterUser.getPlayer(), () -> inventory.open(masterUser), 50L, TimeUnit.MILLISECONDS);
             return;
         }
         PetSelectorMenu menu = InventoryManager.SELECTOR;
@@ -83,12 +73,7 @@ public class SavePet extends Item {
                     user.addPetSave(compound);
                 }
             });
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    inventory.open(user);
-                }
-            }.runTaskLater(PetCore.getInstance(), 1);
+            PetCore.getInstance().getScheduler().getImpl().runAtEntityLater(user.getPlayer(), () -> inventory.open(user), 50L, TimeUnit.MILLISECONDS);
         });
         menu.open(masterUser, 1, inventory.getTitle());
     }
