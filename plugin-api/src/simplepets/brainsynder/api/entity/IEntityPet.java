@@ -1,5 +1,6 @@
 package simplepets.brainsynder.api.entity;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
@@ -15,6 +16,14 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public interface IEntityPet extends IEntityBase, IBurnablePet {
+    /**
+     * This method is used to generate debug information on the pets
+     *
+     * @Deprecated Internal use only
+     */
+    @Deprecated
+    void fetchPetDebugInformation (JsonObject debugInfo);
+
     default void togglePetHatTask(boolean value) {}
 
     /**

@@ -10,13 +10,13 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.syncher.EntityDataSerializer;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerEntity;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.craftbukkit.v1_21_R2.util.CraftNamespacedKey;
+import org.bukkit.craftbukkit.v1_21_R7.util.CraftNamespacedKey;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.nms.entity.EntityPet;
 
@@ -159,12 +159,6 @@ public class VersionTranslator {
     public static BlockPos getPosition (Entity entity) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
-    public static ResourceLocation toMinecraftResource (NamespacedKey key) {
-        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
-    }
-    public static NamespacedKey toBukkitNamespace (ResourceLocation resource) {
-        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
-    }
 
     // ADDED DURING 1.20 DEVELOPMENT
     public static Level getEntityLevel (Entity entity) {
@@ -191,6 +185,19 @@ public class VersionTranslator {
     }
 
     public static ClientboundTeleportEntityPacket getTeleportPacket (Entity entity) {
+        throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+    }
+
+    // ADDED DURING 1.21.4 DEVELOPMENT
+    public static void setupFlyingNavigation (EntityPet entityPet, Level level, FlyingPathNavigation navigation) {
+        // throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
+        navigation.setCanOpenDoors(false);
+        navigation.setCanFloat(false);
+        // navigation.setCanPassDoors(true);
+    }
+
+    // ADDED DURING 1.21.5 DEVELOPMENT
+    public static void moveTo (Entity entityPet, double x, double y, double z, float yaw, float pitch) {
         throw new UnsupportedOperationException ("Missing support for "+ ServerVersion.getVersion().name());
     }
 }

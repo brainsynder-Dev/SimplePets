@@ -112,7 +112,8 @@ public class SpawnerUtil implements ISpawnUtil {
             }
 
             customEntity.setInvisible(false);
-            customEntity.moveTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+            customEntity.setInvulnerable(true);
+            VersionTranslator.moveTo(customEntity, location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             customEntity.setPersistenceRequired();
 
             // Call the spawn event

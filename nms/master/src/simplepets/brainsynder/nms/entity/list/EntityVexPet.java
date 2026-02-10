@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,6 +20,11 @@ public class EntityVexPet extends EntityFlyablePet implements IEntityVexPet {
 
     public EntityVexPet(PetType type, PetUser user) {
         super(EntityType.VEX, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("powered", isPowered());
     }
 
     @Override

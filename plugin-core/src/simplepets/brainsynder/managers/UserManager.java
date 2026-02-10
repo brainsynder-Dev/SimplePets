@@ -1,7 +1,7 @@
 package simplepets.brainsynder.managers;
 
-import lib.brainsynder.web.PlayerData;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.user.PetUser;
@@ -29,25 +29,15 @@ public class UserManager implements UserManagement {
             return;
         }
 
-        // Searches for the users profile data
-        PlayerData.findProfile(username, PLUGIN, members -> {
-
-            // fetches the UUID from the JSON
-            String raw = members.getString("uuid_formatted", null);
-
-            // If the UUID is null it means the site could not find the information
-            if (raw == null) {
-                consumer.accept(Optional.empty());
-                return;
-            }
-
-            UUID uuid = UUID.fromString(raw);
-
-            // Cache the result only if a valid UUID is found
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(username);
+        if (offlinePlayer.hasPlayedBefore() || offlinePlayer.isOnline()) {
+            UUID uuid = offlinePlayer.getUniqueId();
             uuidCache.put(username, uuid);
-
             consumer.accept(getPetUser(uuid));
-        }, throwable -> consumer.accept(Optional.empty()));
+            return;
+        }
+
+        consumer.accept(Optional.empty());
     }
 
     @Override

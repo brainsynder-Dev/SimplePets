@@ -31,6 +31,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeMap;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -125,7 +126,6 @@ public class VersionTranslator {
         stand.setItemSlot(enumitemslot, itemstack, silent);
     }
 
-    // TODO: This is throwing a 'NoSuchElementException: No value present' at CraftEntityType.minecraftToBukkit
     public static boolean addEntity(Level level, Entity entity, CreatureSpawnEvent.SpawnReason reason) {
         return level.addFreshEntity(entity, CreatureSpawnEvent.SpawnReason.CUSTOM);
     }
@@ -305,5 +305,12 @@ public class VersionTranslator {
 
     public static ClientboundTeleportEntityPacket getTeleportPacket (Entity entity) {
         return new ClientboundTeleportEntityPacket(entity);
+    }
+
+    // ADDED DURING 1.21.4 DEVELOPMENT
+    public static void setupFlyingNavigation (EntityPet entityPet, Level level, FlyingPathNavigation navigation) {
+        navigation.setCanOpenDoors(false);
+        navigation.setCanFloat(false);
+        navigation.setCanPassDoors(true);
     }
 }

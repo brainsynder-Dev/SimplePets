@@ -113,11 +113,11 @@ public class AddonManager {
 
             if (missingSupport) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build().setLevel(SimplePets.ADDON).setMessages(
-                    "The " + (localData.getName().endsWith("Addon") ? localData.getName() : localData.getName() + "Addon") + " could not find plugin requirements:"
+                        "The " + (localData.getName().endsWith("Addon") ? localData.getName() : localData.getName() + "Addon") + " could not find plugin requirements:"
                 ));
                 localData.getPluginSupport().forEach(supportData -> {
                     SimplePets.getDebugLogger().debug(DebugBuilder.build().setLevel(SimplePets.ADDON).setMessages(
-                        " - " + supportData.url() + " (" + supportData.name() + ")"
+                            " - " + supportData.url() + " (" + supportData.name() + ")"
                     ));
                 });
                 return;
@@ -131,7 +131,7 @@ public class AddonManager {
                     Class.forName(path, false, PetCore.getInstance().getClass().getClassLoader());
                 } catch (Exception e) {
                     SimplePets.getDebugLogger().debug(DebugBuilder.build().setLevel(DebugLevel.ERROR).setMessages(
-                        "Failed to locate '" + path + "' used for the " + localData.getName() + " addon."
+                            "Failed to locate '" + path + "' used for the " + localData.getName() + " addon."
                     ));
                     return;
                 }
@@ -168,13 +168,13 @@ public class AddonManager {
 
             if (rawAddons.isEmpty())
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
-                    "Could not find a class that extends PetModule",
-                    "Are you sure '" + file.getName() + "' is an addon?"
+                        "Could not find a class that extends PetModule",
+                        "Are you sure '" + file.getName() + "' is an addon?"
                 ));
         } catch (IOException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(
-                "Failed to load addon: " + file.getName(),
-                "Error Message: " + e.getMessage()
+                    "Failed to load addon: " + file.getName(),
+                    "Error Message: " + e.getMessage()
             ));
             e.printStackTrace();
         }
@@ -194,7 +194,7 @@ public class AddonManager {
         tempMap.forEach((localData, modules) -> {
             if (!isSupported(localData.getSupportedBuild())) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
-                    localData.getName() + " (by " + localData.getAuthors() + ") is not supported for version " + PetCore.getInstance().getDescription().getVersion()
+                        localData.getName() + " (by " + localData.getAuthors() + ") is not supported for version " + PetCore.getInstance().getDescription().getVersion()
                 ));
                 return;
             }
@@ -232,7 +232,7 @@ public class AddonManager {
                     }
                 } catch (Exception e) {
                     SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(SimplePets.ADDON).setMessages(
-                        "Failed to initialize addon module: " + module.getClass().getSimpleName()
+                            "Failed to initialize addon module: " + module.getClass().getSimpleName()
                     ));
                     e.printStackTrace();
                 }
@@ -398,7 +398,7 @@ public class AddonManager {
             updateNeeded.forEach(addonData -> {
 
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.UPDATE).setMessages(
-                    "There is an update for the addon '" + addonData.getName() + "' version " + addonData.getVersion()
+                        "There is an update for the addon '" + addonData.getName() + "' version " + addonData.getVersion()
                 ));
             });
         });
@@ -415,19 +415,35 @@ public class AddonManager {
             JsonArray array = Json.parse(result).asArray();
             array.forEach(jsonValue -> {
                 JsonObject json = jsonValue.asObject();
-                AddonCloudData data = new AddonCloudData(
-                    json.get("id").asString(),
-                    json.get("name").asString(),
-                    json.get("description").asString(),
-                    json.get("author").asString(),
-                    json.get("version").asString(),
-                    json.get("download_url").asString(),
-                    json.get("last_updated").asString(),
-                    json.get("download_count").asInt()
-                );
 
-                addons.add(data);
-                registeredAddons.add(data.getName());
+                // Check if the json object is empty, output an error if it is
+                if (json.isEmpty())
+                    throw new AddonParsingException("Json object is not empty: '" + jsonValue + "'");
+
+                // Check for missing fields, output an error if any are missing containing the json object
+//                for (String key : Arrays.asList("id", "name", "description", "author", "version", "download_url", "last_updated", "download_count")) {
+//                    if (!json.names().contains(key))
+//                        throw new AddonParsingException("Missing '" + key + "' field in addon data: '" + jsonValue + "'");
+//                }
+
+                try {
+                    AddonCloudData data = new AddonCloudData(
+                            json.get("id").asString(),
+                            json.get("name").asString(),
+                            json.get("description").asString(),
+                            json.get("author").asString(),
+                            json.get("version").asString(),
+                            json.get("download_url").asString(),
+                            json.get("last_updated").asString(),
+                            json.get("download_count").asInt()
+                    );
+
+                    addons.add(data);
+                    registeredAddons.add(data.getName());
+                } catch (Exception e) {
+                    // Failed to fetch addon data
+                    SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Failed to fetch data for addon: "+json.getString("name", "UNKNOWN NAME")+" (v"+json.getString("version", "UNKNOWN VERSION")+")");
+                }
             });
             consumer.accept(addons);
         });
@@ -464,6 +480,12 @@ public class AddonManager {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private class AddonParsingException extends RuntimeException {
+        public AddonParsingException(String message) {
+            super(message);
         }
     }
 }

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +22,14 @@ public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
 
     public EntityGoatPet(PetType type, PetUser user) {
         super(EntityType.GOAT, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("screaming", isScreaming());
+        data.add("left-horn", hasLeftHorn());
+        data.add("right-horn", hasRightHorn());
     }
 
     @Override

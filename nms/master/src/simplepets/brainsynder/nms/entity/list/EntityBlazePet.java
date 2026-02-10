@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,6 +20,11 @@ public class EntityBlazePet extends EntityFlyablePet implements IEntityBlazePet 
 
     public EntityBlazePet(PetType type, PetUser user) {
         super(EntityType.BLAZE, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("burning", isBurning());
     }
 
     @Override

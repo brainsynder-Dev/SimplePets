@@ -46,10 +46,6 @@ public class PetsCommand extends ParentCommand<PetSubCommand> {
 
         if (Premium.isPremium())
             registerSub(new PremiumCommand(plugin));
-
-        ReportCommand reportCommand = new ReportCommand(plugin);
-        plugin.getServer().getPluginManager().registerEvents(reportCommand, plugin);
-        registerSub(reportCommand);
     }
 
     @Override

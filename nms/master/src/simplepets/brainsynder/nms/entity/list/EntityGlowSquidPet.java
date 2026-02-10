@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -18,6 +19,11 @@ public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSqu
 
     public EntityGlowSquidPet(PetType type, PetUser user) {
         super(EntityType.GLOW_SQUID, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("glowing", isSquidGlowing());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -37,6 +38,13 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     public EntityLlamaPet(EntityType<? extends Mob> llama, PetType type, PetUser user) {
         super(llama, type, user);
         doIndirectAttach = false;
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("skin", getSkinColor().name());
+        data.add("color", getColorWrapper().name());
     }
 
     @Override

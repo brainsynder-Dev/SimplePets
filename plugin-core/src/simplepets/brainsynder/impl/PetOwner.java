@@ -625,6 +625,14 @@ public class PetOwner implements PetUser {
             return false;
         }
         Player player = getPlayer();
+        if (type ==PetType.CREAKING) {
+            player.sendMessage("""
+                    §cRiding the Creaking Pet is disabled due to Mojang -.-
+                    §cPlease see:
+                    §7https://tiny.bsdevelopment.org/creaking-ride-issue
+                    """);
+            return false;
+        }
 
         if (hasPetVehicle() && (player.getVehicle() != null)) {
             // Remove previous vehicle

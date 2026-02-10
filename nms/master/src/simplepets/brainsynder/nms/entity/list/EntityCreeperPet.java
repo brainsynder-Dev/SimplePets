@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +22,12 @@ public class EntityCreeperPet extends EntityPetOverride implements IEntityCreepe
 
     public EntityCreeperPet(PetType type, PetUser user) {
         super(EntityType.CREEPER, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("powered", isPowered());
+        data.add("ignited", isIgnited());
     }
 
     @Override

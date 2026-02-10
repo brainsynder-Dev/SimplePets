@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -21,6 +22,14 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
 
     public EntityTropicalFishPet(PetType type, PetUser user) {
         super(EntityType.TROPICAL_FISH, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("body", getBodyColor().name());
+        data.add("pattern", getPattern().name());
+        data.add("color", getPatternColor().name());
     }
 
     @Override

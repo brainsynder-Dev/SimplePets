@@ -64,26 +64,4 @@ public class ConfigEntry<T> {
         if (className.equalsIgnoreCase("String")) return "\"im a string\"";
         return null;
     }
-
-    // This is just used for testing the ConfigOptions
-    public static void main(String[] args) {
-        System.out.println("----------------------------------");
-        List<String> paths = new ArrayList<>();
-        ConfigOption.INSTANCE.getOptions().forEach((s, configEntry) -> {
-            if (paths.contains(s)) {
-                System.out.println("*** Duplicate Key: " + s);
-                return;
-            }
-            System.out.println("Key:   " + s);
-            if (!configEntry.PAST_PATHS.isEmpty()) {
-                System.out.println("Past Keys:   ");
-                for (Object path : configEntry.PAST_PATHS) {
-                    System.out.println("  - " + path);
-                }
-            }
-            paths.add(s);
-            System.out.println("Value: " + configEntry.getValue() + " (" + configEntry.getValue().getClass().getSimpleName() + ")");
-            System.out.println("----------------------------------");
-        });
-    }
 }

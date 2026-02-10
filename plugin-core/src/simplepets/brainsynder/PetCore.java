@@ -5,12 +5,13 @@ import io.papermc.lib.PaperLib;
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.commands.CommandRegistry;
 import lib.brainsynder.json.WriterConfig;
-import lib.brainsynder.metric.bukkit.Metrics;
 import lib.brainsynder.reflection.Reflection;
-import lib.brainsynder.update.UpdateResult;
-import lib.brainsynder.update.UpdateUtils;
 import lib.brainsynder.utils.AdvString;
 import lib.brainsynder.utils.Utilities;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
+import org.bstats.charts.DrilldownPie;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -38,10 +39,27 @@ import simplepets.brainsynder.files.MessageFile;
 import simplepets.brainsynder.impl.PetConfiguration;
 import simplepets.brainsynder.impl.PetOwner;
 import simplepets.brainsynder.impl.PetUtility;
-import simplepets.brainsynder.listeners.*;
+import simplepets.brainsynder.listeners.AddonGUIListener;
+import simplepets.brainsynder.listeners.BrokenVersionListener;
+import simplepets.brainsynder.listeners.ChunkUnloadListener;
+import simplepets.brainsynder.listeners.DamageListener;
+import simplepets.brainsynder.listeners.DataGUIListener;
+import simplepets.brainsynder.listeners.InteractListener;
+import simplepets.brainsynder.listeners.JoinLeaveListeners;
+import simplepets.brainsynder.listeners.LocationChangeListener;
+import simplepets.brainsynder.listeners.PetEventListener;
+import simplepets.brainsynder.listeners.PetSelectorGUIListener;
+import simplepets.brainsynder.listeners.PetSpawnListener;
+import simplepets.brainsynder.listeners.SavesGUIListener;
+import simplepets.brainsynder.listeners.SelectionGUIListener;
 import simplepets.brainsynder.listeners.breaking.DismountListener;
 import simplepets.brainsynder.listeners.claim.ClaimListener;
-import simplepets.brainsynder.managers.*;
+import simplepets.brainsynder.managers.AddonManager;
+import simplepets.brainsynder.managers.InventoryManager;
+import simplepets.brainsynder.managers.ItemManager;
+import simplepets.brainsynder.managers.ParticleManager;
+import simplepets.brainsynder.managers.RenameManager;
+import simplepets.brainsynder.managers.UserManager;
 import simplepets.brainsynder.sql.SQLData;
 import simplepets.brainsynder.sql.SQLHandler;
 import simplepets.brainsynder.sql.handlers.MySQLHandler;
@@ -85,9 +103,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     private ParticleManager particleManager;
     private AddonManager addonManager;
 
-    private UpdateUtils updateUtils;
-    private UpdateResult updateResult;
-
     private Class<?> spawnutilClass = null;
 
     private Debug debug;
@@ -106,7 +121,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         debug = new Debug(this);
         SERVER_INFORMATION = new ServerInformation();
 
-        if (ServerVersion.isEqualNew(ServerVersion.v1_21_3)) {
+        if (ServerVersion.isEqualNew(ServerVersion.v1_21_11)) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build()
                 .setLevel(DebugLevel.WARNING).setBroadcast(true)
                 .setMessages(
@@ -128,7 +143,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 .setBroadcast(true)
                 .setMessages(
                     "OH NO! We could not find any support for your servers version " + ServerVersion.getVersion().name().replace("v", "").replace("_", "."),
-                    "Please check the Jenkins for an updated build: https://ci.pluginwiki.us/job/SimplePets_v5/",
+                    "Please check the Jenkins for an updated build: https://ci.bsdevelopment.org/job/SimplePets_v5/",
                     "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)",
                     "Current SimplePets jar name: " + getJarName()
                 )
@@ -327,23 +342,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
         }
 
         debug.debug(DebugLevel.HIDDEN, "Initializing update checker");
-        if ((!Premium.getDownloadType().fromDownloadSite()) || ConfigOption.INSTANCE.UPDATE_CHECK_DEV_BUILDS.getValue()) {
-            updateResult = new UpdateResult().setPreStart(() -> debug.debug(DebugLevel.UPDATE, "Checking for new builds..."))
-                .setFailParse(members -> debug.debug(DebugLevel.UPDATE, "Data collected: " + members.toString(WriterConfig.PRETTY_PRINT)))
-                .setNoNewBuilds(() -> debug.debug(DebugLevel.UPDATE, "No new builds were found"))
-                .setOnError(() -> debug.debug(DebugLevel.UPDATE, "An error occurred when checking for an update"))
-                .setNewBuild(members -> {
-                    int latestBuild = members.getInt("build", -1);
-
-                    // New build found
-                    if (latestBuild > updateResult.getCurrentBuild()) {
-                        debug.debug(DebugLevel.UPDATE, "You are " + (latestBuild - updateResult.getCurrentBuild()) + " build(s) behind the latest.");
-                        debug.debug(DebugLevel.UPDATE, "https://ci.bsdevelopment.org/job/" + updateResult.getRepo() + "/" + latestBuild + "/");
-                    }
-                });
-            updateUtils = new UpdateUtils(this, updateResult);
-            updateUtils.startUpdateTask(time, unit); // Runs the update check every 12 hours
-        }
         if (Premium.getDownloadType().fromDownloadSite()) {
             try {
                 int resourceID = Integer.parseInt(Premium.RESOURCE_ID);
@@ -523,11 +521,12 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
     private void handleMetrics() {
         SimplePets.getDebugLogger().debug(DebugLevel.HIDDEN, "Loading Metrics");
-        Metrics metrics = new Metrics(this);
-        metrics.addCustomChart(new Metrics.SimplePie("stupid_config_option_for_gui_command", () -> String.valueOf(ConfigOption.INSTANCE.SIMPLER_GUI.getValue())));
-        metrics.addCustomChart(new Metrics.AdvancedPie("spawned_pet_counter", this::getSpawnedPetCounts));
-        metrics.addCustomChart(new Metrics.AdvancedPie("active_pets", this::getActivePets));
-        metrics.addCustomChart(new Metrics.DrilldownPie("loaded_addons", () -> {
+        Metrics metrics = new Metrics(this, 244);
+        metrics.addCustomChart(new SimplePie("server_type", () -> String.valueOf(SERVER_INFORMATION.serverType)));
+        metrics.addCustomChart(new SimplePie("stupid_config_option_for_gui_command", () -> String.valueOf(ConfigOption.INSTANCE.SIMPLER_GUI.getValue())));
+        metrics.addCustomChart(new AdvancedPie("spawned_pet_counter", this::getSpawnedPetCounts));
+        metrics.addCustomChart(new AdvancedPie("active_pets", this::getActivePets));
+        metrics.addCustomChart(new DrilldownPie("loaded_addons", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
 
             Map<String, Integer> entry = new HashMap<>();
@@ -538,14 +537,14 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
             });
             return map;
         }));
-        metrics.addCustomChart(new Metrics.DrilldownPie("download_type", () -> {
+        metrics.addCustomChart(new DrilldownPie("download_type", () -> {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             Map<String, Integer> entry = new HashMap<>();
             entry.put("download_type", 1);
             map.put(Premium.getDownloadType().name(), entry);
             return map;
         }));
-        metrics.addCustomChart(new Metrics.AdvancedPie("addon_tracker", () -> {
+        metrics.addCustomChart(new AdvancedPie("addon_tracker", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
 
             int custom = 0;
@@ -608,11 +607,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
     public static PetCore getInstance() {
         return instance;
     }
-
-    public UpdateUtils getUpdateUtils() {
-        return updateUtils;
-    }
-
 
     private boolean fetchSupportedVersions() {
         if (!supportedVersions.isEmpty()) return supportedVersions.contains(ServerVersion.getVersion().name());

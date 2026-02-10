@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public interface ISpawnUtil {
-
     /**
      * Will spawn the selected pet
      *

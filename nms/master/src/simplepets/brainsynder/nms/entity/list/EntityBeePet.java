@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -31,11 +32,18 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     }
 
     @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("angry", isAngry());
+        data.add("missing-stinger", hasStung());
+        data.add("flipped", isFlipped());
+        data.add("nectar", hasNectar());
+    }
+
+    @Override
     protected PathNavigation createNavigation(Level level) {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
-        navigation.setCanOpenDoors(false);
-        navigation.setCanFloat(false);
-        navigation.setCanPassDoors(true);
+        VersionTranslator.setupFlyingNavigation(this, level, navigation);
         return navigation;
     }
 

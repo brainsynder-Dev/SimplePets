@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.reflection.Reflection;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -36,6 +37,12 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
         super(EntityType.RABBIT, type, user);
         jumpControl = new ControllerJumpRabbit(this);
         moveControl = new ControllerMoveRabbit(this);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("variant", getRabbitType().name());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -23,6 +24,14 @@ public class EntitySheepPet extends EntityAgeablePet implements IEntitySheepPet 
 
     public EntitySheepPet(PetType type, PetUser user) {
         super(EntityType.SHEEP, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        if (!isRainbow()) data.add("color", getColor().name());
+        data.add("sheared", isSheared());
+        data.add("rainbow", isRainbow());
     }
 
     @Override

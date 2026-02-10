@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -18,6 +19,12 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
 
     public EntityVindicatorPet(PetType type, PetUser user) {
         super(EntityType.VINDICATOR, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("johnny", isJohnny());
     }
 
     @Override

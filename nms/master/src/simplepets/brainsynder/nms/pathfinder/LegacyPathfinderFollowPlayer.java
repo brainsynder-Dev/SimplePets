@@ -171,7 +171,7 @@ public class LegacyPathfinderFollowPlayer extends Goal {
         if (event.isCancelled()) return false;
 
         if (!this.canTeleportTo(new BlockPos(x, y, z))) return false;
-        this.entity.moveTo((double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
+        VersionTranslator.moveTo(entity, (double) x + 0.5D, y, (double) z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
         SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, entity.getPetType());
         SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), entity.getEntity().getLocation());
         this.navigation.stop();// Translation: navigation.stop()

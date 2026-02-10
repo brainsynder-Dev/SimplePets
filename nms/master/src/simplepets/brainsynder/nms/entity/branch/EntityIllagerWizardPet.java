@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.branch;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -19,6 +20,12 @@ public class EntityIllagerWizardPet extends EntityIllagerAbstractPet implements 
 
     public EntityIllagerWizardPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("spell", getSpell().name());
     }
 
     @Override

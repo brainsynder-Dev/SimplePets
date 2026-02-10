@@ -1,13 +1,17 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import org.bukkit.craftbukkit.v1_21_R7.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityHorsePet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -27,6 +31,14 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     public EntityHorsePet(PetType type, PetUser user) {
         super(EntityType.HORSE, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("armor", getArmor().name());
+        data.add("color", getColor().name());
+        data.add("style", getStyle().name());
     }
 
     @Override
@@ -60,17 +72,16 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
 
     @Override
     public void setArmor(HorseArmorType armor) {
+        if (!armor.isSupported()) return;
         this.armor = armor;
-        Material material = switch (armor) {
-            case LEATHER -> Material.LEATHER_HORSE_ARMOR;
-            case IRON -> Material.IRON_HORSE_ARMOR;
-            case GOLD -> Material.GOLDEN_HORSE_ARMOR;
-            case DIAMOND -> Material.DIAMOND_HORSE_ARMOR;
-            default -> Material.AIR;
-        };
-        ItemStack stack = new ItemStack(material);
-        this.setItemSlot(EquipmentSlot.CHEST, VersionTranslator.toNMSStack(stack));
-        this.setDropChance(EquipmentSlot.CHEST, 0.0F);
+
+        if (armor == null) {
+            setItemSlot(EquipmentSlot.BODY, Items.AIR.getDefaultInstance());
+            return;
+        }
+
+        Registry<Item> registry = CraftRegistry.getMinecraftRegistry(Registries.ITEM);
+        setItemSlot(EquipmentSlot.BODY, VersionTranslator.getRegistryValue(registry, armor.getKey()).getDefaultInstance());
     }
 
     @Override

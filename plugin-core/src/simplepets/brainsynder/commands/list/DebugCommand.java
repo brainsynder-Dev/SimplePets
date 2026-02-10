@@ -6,13 +6,15 @@ import lib.brainsynder.json.Json;
 import lib.brainsynder.json.JsonArray;
 import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.json.WriterConfig;
-import lib.brainsynder.update.UpdateResult;
 import lib.brainsynder.web.WebConnector;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
+import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.commands.Permission;
 import simplepets.brainsynder.commands.PetSubCommand;
 import simplepets.brainsynder.commands.PetsCommand;
@@ -34,7 +36,7 @@ import java.util.function.Consumer;
 
 @ICommand(
     name = "debug",
-    usage = "[skip-jenkins]",
+    usage = "[skip-jenkins|pet]",
     description = "Generates debug information"
 )
 @Permission(permission = "debug", adminCommand = true)
@@ -51,7 +53,32 @@ public class DebugCommand extends PetSubCommand {
         sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + " §7Fetching Debug Information...");
         boolean skipJenkins = false;
 
-        if (args.length > 0) skipJenkins = Boolean.parseBoolean(args[0]);
+        if (args.length >= 1) {
+            if (args[0].equalsIgnoreCase("pet")) {
+                if (!(sender instanceof Player player)) {
+                    sender.sendMessage(ChatColor.RED + "You must be a player to run this command for yourself.");
+                    return;
+                }
+                PetUser user = SimplePets.getUserManager().getPetUser(player).get();
+                JsonObject json = new JsonObject();
+                json.set("uuid", player.getUniqueId().toString());
+                json.set("username", player.getName());
+                json.set("number-of-pets-spawned", user.getPetEntities().size());
+
+                JsonArray petArray = new JsonArray();
+                user.getPetEntities().forEach(entityPet -> {
+                    JsonObject object = new JsonObject();
+                    entityPet.fetchPetDebugInformation(object);
+                    petArray.add(object);
+                });
+                json.set("pets", petArray);
+
+                log(new File(getPlugin().getDataFolder() + File.separator + "PlayerDebug"), player.getUniqueId()+".json", json.toString(WriterConfig.PRETTY_PRINT));
+                sender.sendMessage(MessageFile.getTranslation(MessageOption.PREFIX) + " §7Generated §e'plugins/SimplePets/PlayerDebug/"+player.getUniqueId()+".json'");
+                return;
+            }
+            skipJenkins = Boolean.parseBoolean(args[0]);
+        }
 
         fetchDebug(json -> {
             log(getPlugin().getDataFolder(), "debug.json", json.toString(WriterConfig.PRETTY_PRINT));
@@ -123,11 +150,15 @@ public class DebugCommand extends PetSubCommand {
             return;
         }
 
-        UpdateResult result = PetCore.getInstance().getUpdateUtils().getResult();
-        int build = result.getCurrentBuild();
-        WebConnector.getInputStreamString("https://bsdevelopment.org/api/jenkins/build-number/" + result.getRepo(), PetCore.getInstance(), string -> {
+        Properties prop = new Properties();
+        try {
+            prop.load(PetCore.getInstance().getClass().getResourceAsStream("/jenkins.properties"));
+        } catch (IOException ignored) {} // If it fails, it means there is no 'jenkins.properties' file
+        int build = Integer.parseInt(String.valueOf(prop.getOrDefault("buildnumber", -1)));
+
+        WebConnector.getInputStreamString("https://bsdevelopment.org/api/jenkins/build-number/SimplePets_v5", PetCore.getInstance(), string -> {
             JsonObject jenkins = new JsonObject();
-            jenkins.add("repo", result.getRepo());
+            jenkins.add("repo", "SimplePets_v5");
             jenkins.add("plugin_build_number", build);
 
             try {
@@ -145,7 +176,7 @@ public class DebugCommand extends PetSubCommand {
 
                         jenkins.add("jenkins_build_number", latestBuild);
                     } else {
-                        jenkins.add("reason", "Missing repo: " + result.getRepo());
+                        jenkins.add("reason", "Missing repo: SimplePets_v5");
                         jenkins.add("parsed_string", string);
                     }
                 } else {

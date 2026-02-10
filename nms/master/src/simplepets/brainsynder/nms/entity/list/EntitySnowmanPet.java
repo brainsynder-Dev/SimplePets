@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,6 +20,11 @@ public class EntitySnowmanPet extends EntityPetOverride implements IEntitySnowma
 
     public EntitySnowmanPet(PetType type, PetUser user) {
         super(EntityType.SNOW_GOLEM, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("pumpkin", hasPumpkin());
     }
 
     @Override

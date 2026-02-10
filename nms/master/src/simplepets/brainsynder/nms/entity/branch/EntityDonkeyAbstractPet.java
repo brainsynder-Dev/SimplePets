@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.branch;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -16,6 +17,12 @@ public class EntityDonkeyAbstractPet extends EntityHorseAbstractPet implements I
 
     public EntityDonkeyAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("chest", isChested());
     }
 
     @Override

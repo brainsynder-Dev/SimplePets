@@ -30,10 +30,10 @@ public class ParticleManager implements ParticleHandler {
         folder = new File(plugin.getDataFolder() + File.separator + "Particles");
         if (!folder.exists()) folder.mkdirs();
 
-        spawnParticle = getCustomizedParticle(new ParticleMaker(Particle.SPELL_INSTANT, 15, 1.3), "SpawnParticle");
+        spawnParticle = getCustomizedParticle(new ParticleMaker(Particle.INSTANT_EFFECT, 15, 1.3), "SpawnParticle");
         failSpawnParticle = getCustomizedParticle(new ParticleMaker(Particle.ASH, 10, 1.3), "FailedSpawnParticle");
-        taskFailParticle = getCustomizedParticle(new ParticleMaker(Particle.SMOKE_NORMAL, 10, 1.3), "FailedTaskParticle");
-        renameParticle = getCustomizedParticle(new ParticleMaker(Particle.VILLAGER_HAPPY, 10, 1.3), "RenameParticle");
+        taskFailParticle = getCustomizedParticle(new ParticleMaker(Particle.SMOKE, 10, 1.3), "FailedTaskParticle");
+        renameParticle = getCustomizedParticle(new ParticleMaker(Particle.HAPPY_VILLAGER, 10, 1.3), "RenameParticle");
         removeParticle = getCustomizedParticle(new ParticleMaker(Particle.LAVA, 20, 1), "RemoveParticle");
         teleportParticle = getCustomizedParticle(new ParticleMaker(Particle.PORTAL, 20, 1, 0.3, 1), "TeleportParticle");
     }

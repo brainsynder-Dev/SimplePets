@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.core.Holder;
@@ -9,10 +10,10 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.WolfVariant;
-import org.bukkit.craftbukkit.v1_21_R2.CraftRegistry;
-import org.bukkit.craftbukkit.v1_21_R2.util.CraftNamespacedKey;
-import org.bukkit.entity.Wolf;
+import net.minecraft.world.entity.animal.wolf.WolfVariant;
+import net.minecraft.world.entity.animal.wolf.WolfVariants;
+import org.bukkit.craftbukkit.v1_21_R7.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R7.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityWolfPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -20,6 +21,7 @@ import simplepets.brainsynder.api.wrappers.WolfType;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
+import simplepets.brainsynder.nms.utils.VariantUtils;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Wolf}
@@ -40,9 +42,19 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
     }
 
     @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("anger", isAngry());
+        data.add("shaking", isShaking());
+        data.add("head-tilted", isHeadTilted());
+        data.add("collar-color", getColor().name());
+        data.add("type", getWolfType().name());
+    }
+
+    @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(DATA_VARIANT_ID, VersionTranslator.getRegistryValue(CraftRegistry.getMinecraftRegistry(Registries.WOLF_VARIANT), Wolf.Variant.PALE.getKey()));
+        dataAccess.define(DATA_VARIANT_ID, VariantUtils.getDefaultOrAny(registryAccess(), WolfVariants.PALE));
         dataAccess.define(BEGGING, false);
         dataAccess.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
         dataAccess.define(ANGER_TIME, 0);

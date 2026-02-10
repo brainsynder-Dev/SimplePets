@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -29,6 +30,11 @@ public class EntitySlimePet extends EntityPetOverride implements IEntitySlimePet
     public EntitySlimePet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
         this.moveControl = new ControllerSlime(this);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("size", getSize());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -33,12 +34,17 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
     }
 
     @Override
-    protected PathNavigation createNavigation(Level var1) {
-        FlyingPathNavigation navigationflying = new FlyingPathNavigation(this, var1);
-        navigationflying.setCanOpenDoors(false);
-        navigationflying.setCanFloat(true);
-        navigationflying.setCanPassDoors(true);
-        return navigationflying;
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("variant", getVariant().name());
+        data.add("rainbow", isRainbow());
+    }
+
+    @Override
+    protected PathNavigation createNavigation(Level level) {
+        FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
+        VersionTranslator.setupFlyingNavigation(this, level, navigation);
+        return navigation;
     }
 
     @Override

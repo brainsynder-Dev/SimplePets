@@ -4,6 +4,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.IEntityPet;
@@ -39,5 +40,12 @@ public class DamageListener implements Listener {
                 event.setCancelled(true);
             });
         });
+    }
+
+    @EventHandler
+    public void onCombust(EntityCombustEvent event) {
+        if (!SimplePets.isPetEntity(event.getEntity())) return;
+
+        event.setCancelled(true);
     }
 }

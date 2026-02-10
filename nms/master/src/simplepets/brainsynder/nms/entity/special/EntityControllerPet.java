@@ -64,6 +64,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             }
             default -> throw new IllegalStateException("This pet does not use controller pets!");
         }
+        ENTITIES.forEach(entity -> entity.setInvulnerable(true));
         collides = false;
     }
 
@@ -129,7 +130,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 }
                 updateName(entity);
                 if (!canIgnoreVanish()) {
-                    if (VersionTranslator.getEntityHandle(p).isInvisible() != entity.isInvisible()) entity.setInvisible(!entity.isInvisible());
+                    // if (VersionTranslator.getEntityHandle(p).isInvisible() != entity.isInvisible()) entity.setInvisible(!entity.isInvisible());
                 }
             }else{
                 displayEntity = null;
@@ -217,7 +218,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
                 loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
             }
 
-            displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+            VersionTranslator.moveTo(displayEntity, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
             loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
                 if (entity instanceof Player player) {
                     ClientboundTeleportEntityPacket packet = VersionTranslator.getTeleportPacket(displayEntity);
@@ -240,7 +241,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             loc = VersionTranslator.getBukkitEntity(this).getLocation().clone();
         }
 
-        displayEntity.moveTo(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        VersionTranslator.moveTo(displayEntity, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         loc.getWorld().getNearbyEntities(loc, 100, 100, 100).forEach(entity -> {
             if (entity instanceof Player player) {
                 ClientboundTeleportEntityPacket packet = VersionTranslator.getTeleportPacket(displayEntity);

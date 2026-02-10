@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,6 +28,12 @@ public class EntityWitchPet extends EntityRaiderPet implements IEntityWitchPet {
 
     public EntityWitchPet(PetType type, PetUser user) {
         super(EntityType.WITCH, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("drinking-potion", isDrinkingPotion());
     }
 
     @Override

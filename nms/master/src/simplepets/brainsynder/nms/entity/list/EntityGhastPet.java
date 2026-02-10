@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,6 +21,11 @@ public class EntityGhastPet extends EntityPetOverride implements IEntityGhastPet
     // TODO: Need to figure out why the Ghast pet wont work properly if given the Flight MoveController
     public EntityGhastPet(PetType type, PetUser user) {
         super(EntityType.GHAST, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("screaming", isScreaming());
     }
 
     @Override

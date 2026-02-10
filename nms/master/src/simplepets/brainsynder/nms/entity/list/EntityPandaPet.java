@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -32,6 +33,15 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
 
     public EntityPandaPet(PetType type, PetUser user) {
         super(EntityType.PANDA, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("type", getGene().name());
+        data.add("sitting", isSitting());
+        data.add("sleeping", isLyingOnBack());
+        data.add("sneeze", isSneezing());
     }
 
     @Override

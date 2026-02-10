@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -32,6 +33,12 @@ public class EntityCamelPet extends EntityHorseAbstractPet implements IEntityCam
     public EntityCamelPet(EntityType<? extends Mob> entityType, PetType type, PetUser user) {
         super(entityType, type, user);
         doIndirectAttach = false;
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("sitting", isSitting());
     }
 
     @Override

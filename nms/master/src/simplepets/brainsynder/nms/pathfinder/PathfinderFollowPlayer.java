@@ -124,7 +124,7 @@ public class PathfinderFollowPlayer extends Goal {
         if (event.isCancelled()) return false;
 
         if (!this.canTeleportTo(new BlockPos((int) x, (int) y, (int) z))) return false;
-        this.entity.moveTo(x + 0.5D, y, z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
+        VersionTranslator.moveTo(entity, x + 0.5D, y, z + 0.5D, this.entity.getYRot(), this.entity.getXRot());
         SimplePets.getPetUtilities().runPetCommands(CommandReason.TELEPORT, user, entity.getPetType());
         SimplePets.getParticleHandler().sendParticle(ParticleHandler.Reason.TELEPORT, user.getPlayer(), entity.getEntity().getLocation());
         this.navigation.stop();

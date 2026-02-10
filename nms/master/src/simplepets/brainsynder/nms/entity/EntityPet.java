@@ -1,11 +1,12 @@
 package simplepets.brainsynder.nms.entity;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.sounds.SoundMaker;
 import lib.brainsynder.utils.Colorize;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
@@ -123,6 +124,59 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         maxHeight = getEntity().getWorld().getMaxHeight();
         minHeight = getEntity().getWorld().getMinHeight();
     }
+
+    @Override
+    public void fetchPetDebugInformation(JsonObject debugInfo) {
+        ServerPlayer player = VersionTranslator.getEntityHandle(getPetUser().getPlayer());
+
+        debugInfo.set("display-name", new JsonObject()
+                .add("name", petName)
+                .add("display-name-visibility (config)", displayNameVisibility)
+                .add("hide-name-while-shifting (config)", hideNameShifting)
+                .add("actually-visible", isCustomNameVisible())
+        );
+        debugInfo.set("data", new JsonObject()
+                .add("jump-height", jumpHeight)
+                .add("frozen", frozen)
+                .add("on-fire", onFire)
+                .add("silent", silent)
+                .add("visible", visible)
+                .add("auto-remove", new JsonObject()
+                        .add("auto-remove-enabled", autoRemoveToggle)
+                        .add("stand-still-ticks", standStillTicks)
+                        .add("auto-remove-tick", autoRemoveTick)
+                )
+                .add("hover-remove", new JsonObject()
+                        .add("hover-ticks", hoverTickCount)
+                        .add("hover-ticks-target", hoverRemoveTick)
+                )
+        );
+
+        int maxRange = ConfigOption.INSTANCE.PATHFINDING_MAX_DISTANCE.getValue();
+        debugInfo.set("follow-player", new JsonObject()
+                .add("distance", distanceToSqr(player))
+                .add("max-follow-distance (config)", maxRange)
+                .add("should-follow", (distanceToSqr(player) < (double) (maxRange * maxRange)) )
+        );
+
+        int teleportDistance = ConfigOption.INSTANCE.PATHFINDING_TELEPORT_DISTANCE.getValue();
+        debugInfo.set("teleport-pet", new JsonObject()
+                .add("distance", distanceTo(player))
+                .add("teleport-distance (config)", teleportDistance)
+                .add("should-teleport", (distanceToSqr(player) >= teleportDistance) )
+                .add("should-force-teleport", (distanceTo(player) >= 80) )
+        );
+
+        JsonObject petData = new JsonObject();
+        if (this instanceof IEntityControllerPet controllerPet) {
+            controllerPet.getVisibleEntity().fetchPetDebugInformation(petData);
+        }else{
+            fetchPetData(petData);
+        }
+        debugInfo.set("pet-"+getPetType().getName()+"-data", petData);
+    }
+
+    public void fetchPetData(JsonObject data) {}
 
     public void setDisplayName(boolean displayName) {
         this.displayNameVisibility = displayName;
@@ -523,6 +577,20 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         });
     }
 
+    @Override
+    public void playSound(SoundEvent soundeffect, float f, float f1) {
+        if (silent || isInvisible()) return;
+        SimplePets.getPetConfigManager().getPetConfig(getPetType()).ifPresent(config -> {
+            SoundMaker sound = config.getSound();
+            if (sound != null) sound.playSound(getEntity());
+        });
+    }
+
+    @Override
+    public EntityType<?> getType() {
+        return rawEntityType;
+    }
+
     private void glowHandler(Player player, boolean glow) {
         try {
             Entity entity = getEntity();
@@ -563,29 +631,15 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 //        super.push(x, y, z);
 //    }
 
-
-    /**
-     * These methods prevent pets from being saved in the worlds
-     */
-    @Override
-    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
-        return false;
-    }
-
-    @Override
-    public boolean save(CompoundTag nbttagcompound) {// Calls e
-        return false;
-    }
-
-    @Override
-    public void load(CompoundTag nbttagcompound) {
-    }
-
     @Override
     public boolean isOnPortalCooldown() {
         return true; // Prevents pets from teleporting from a portal
     }
 
+    @Override
+    protected void handlePortal() {
+        // Prevents pets from teleporting from a portal
+    }
 
     // Added in 1.20
     public boolean isOnGround() {

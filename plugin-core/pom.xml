@@ -53,7 +53,7 @@
                                     <shadedPattern>${project.groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>anvil.brainsynder</pattern>
+                                    <pattern>net.wesjd</pattern>
                                     <shadedPattern>${project.groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -63,6 +63,10 @@
                                 <relocation>
                                     <pattern>com.jeff_media.updatechecker</pattern>
                                     <shadedPattern>${project.groupId}.internal.updatechecker</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>${project.groupId}.internal.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
                         </configuration>
@@ -74,7 +78,7 @@
 
     <properties>
         <module.info>-IGNORE</module.info>
-        <minecraft.version>1.20.6</minecraft.version>
+        <minecraft.version>1.21.6</minecraft.version>
     </properties>
 
     <dependencies>
@@ -100,10 +104,10 @@
         </dependency>
 
         <dependency>
-            <groupId>anvil.brainsynder</groupId>
-            <artifactId>anvilgui</artifactId>
-            <version>${anvilgui.version}</version>
-            <scope>provided</scope>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
         </dependency>
 
         <dependency>

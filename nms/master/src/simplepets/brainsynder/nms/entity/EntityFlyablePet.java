@@ -22,9 +22,7 @@ public abstract class EntityFlyablePet extends EntityPetOverride implements IFly
     @Override
     protected PathNavigation createNavigation(Level level) {
         FlyingPathNavigation navigation = new FlyingPathNavigation(this, level);
-        navigation.setCanOpenDoors(false);
-        navigation.setCanFloat(true);
-        navigation.setCanPassDoors(true);
+        VersionTranslator.setupFlyingNavigation(this, level, navigation);
         return navigation;
     }
 

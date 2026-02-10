@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -16,10 +17,16 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
  * NMS: {@link net.minecraft.world.entity.animal.MushroomCow}
  */
 public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMooshroomPet {
-    private static final EntityDataAccessor<String> TYPE = SynchedEntityData.defineId(EntityMooshroomPet.class, EntityDataSerializers.STRING);
+    private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(EntityMooshroomPet.class, EntityDataSerializers.INT);
 
     public EntityMooshroomPet(PetType type, PetUser user) {
         super(EntityType.MOOSHROOM, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("type", getMooshroomType().name());
     }
 
     @Override
@@ -44,11 +51,18 @@ public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMoosh
 
     @Override
     public void setMooshroomType(MooshroomType type) {
-        entityData.set(TYPE, type.name().toLowerCase());
+        entityData.set(TYPE, type.ordinal());
     }
 
     @Override
     public MooshroomType getMooshroomType() {
-        return MooshroomType.valueOf(entityData.get(TYPE).toUpperCase());
+        try {
+            int ordinal = entityData.get(TYPE);
+            if (ordinal == 1) return MooshroomType.BROWN;
+        } catch (Exception ignored) {
+            // Randomly the entityData thinks the type is not an Integer...
+            // So lets just ignore this as it mostly happens when removing the pet
+        }
+        return MooshroomType.RED;
     }
 }

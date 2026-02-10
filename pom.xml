@@ -18,17 +18,17 @@
         <revision>5.1-BUILD-0</revision>
 
         <java.version>17</java.version>
-        <bslib.version>B132</bslib.version>
-        <anvilgui.version>1.6.22-CUSTOM</anvilgui.version>
+        <bslib.version>B144</bslib.version>
+        <anvilgui.version>1.10.4-SNAPSHOT</anvilgui.version>
         <spigotupdatechecker.version>3.0.3</spigotupdatechecker.version>
         <protocol-lib.version>5.0.0</protocol-lib.version>
         <commons-io.version>2.11.0</commons-io.version>
-        <specialsource.version>2.0.3</specialsource.version>
+        <specialsource.version>2.0.4</specialsource.version>
         <shade.version>3.5.0</shade.version>
 
-        <minecraft.version>1.21.3</minecraft.version>
+        <minecraft.version>1.21.11</minecraft.version>
         <spigot.version>${minecraft.version}-R0.1-SNAPSHOT</spigot.version>
-        <spigot.nms>v1_21_R2</spigot.nms>
+        <spigot.nms>v1_21_R7</spigot.nms>
 
         <!-- Used to compile specific versions -->
         <target-mc>${minecraft.version}</target-mc>
@@ -115,6 +115,30 @@
             </modules>
         </profile>
 
+
+        <!-- Used to compile for the 1.21 mc versions Example: mvn clean install -P1.21 -->
+        <profile>
+            <id>1.21</id>
+
+            <modules>
+                <module>plugin-api</module>
+                <module>plugin-core</module>
+                <module>plugin-distribution</module>
+
+                <module>nms/version-1.21</module>
+                <module>nms/version-1.21.1</module>
+                <module>nms/version-1.21.3</module>
+                <module>nms/version-1.21.4</module>
+                <module>nms/version-1.21.5</module>
+                <module>nms/version-1.21.6</module>
+                <module>nms/version-1.21.7</module>
+                <module>nms/version-1.21.8</module>
+                <module>nms/version-1.21.9</module>
+                <module>nms/version-1.21.10</module>
+                <module>nms/version-1.21.11</module>
+            </modules>
+        </profile>
+
         <!-- This profile is automatically run when running the 'mvn clean install' command -->
         <profile>
             <id>default</id>
@@ -129,9 +153,11 @@
 
                 <module>nms/master</module>
 
-                <module>nms/version-1.21</module>
-                <module>nms/version-1.21.1</module>
-                <module>nms/version-1.21.3</module>
+                <module>nms/version-1.21.6</module>
+                <module>nms/version-1.21.7</module>
+                <module>nms/version-1.21.8</module>
+                <module>nms/version-1.21.10</module>
+                <module>nms/version-1.21.11</module>
                 <!-- AUTOMATION: INSERTION POINT -->
             </modules>
 
@@ -297,11 +323,11 @@
                             </relocation>
 
                             <relocation>
-                                <pattern>org.apache.commons</pattern>
+                                <pattern>org.apache.commons.io</pattern>
                                 <shadedPattern>${project.groupId}.internal.apache</shadedPattern>
                             </relocation>
                             <relocation>
-                                <pattern>anvil.brainsynder</pattern>
+                                <pattern>net.wesjd</pattern>
                                 <shadedPattern>${project.groupId}.internal.anvil</shadedPattern>
                             </relocation>
                             <relocation>

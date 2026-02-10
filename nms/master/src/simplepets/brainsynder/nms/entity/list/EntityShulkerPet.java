@@ -1,7 +1,7 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -58,6 +60,13 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         pet.setBabySafe(true);
         this.user = user;
         this.additional = new HashMap<>();
+    }
+
+    @Override
+    public void fetchPetDebugInformation(JsonObject debugInfo) {
+        if (!isRainbow()) debugInfo.add("color", getColorWrapper().name());
+        debugInfo.add("rainbow", isRainbow());
+        debugInfo.add("closed", isShulkerClosed());
     }
 
     @Override
@@ -331,9 +340,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         pet.setPetName(name);
     }
 
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return VersionTranslator.getAddEntityPacket(this, EntityType.SHULKER, VersionTranslator.getPosition(this));
-    }
+    @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket(ServerEntity entitytrackerentry) {
         return VersionTranslator.getAddEntityPacket(this, entitytrackerentry, EntityType.SHULKER, VersionTranslator.getPosition(this));
     }
@@ -353,17 +360,17 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
      * These methods prevent pets from being saved in the worlds
      */
     @Override
-    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
+    public boolean saveAsPassenger(ValueOutput output) {
         return false;
     }
 
     @Override
-    public boolean save(CompoundTag nbttagcompound) {// Calls e
+    public boolean save(ValueOutput output) {// Calls e
         return false;
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound) {
+    public void load(ValueInput input) {
     }
 
     protected boolean damageEntity0(DamageSource damagesource, float f) {

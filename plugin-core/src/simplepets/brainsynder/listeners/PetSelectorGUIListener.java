@@ -14,10 +14,12 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.PetSelectorMenu;
 import simplepets.brainsynder.menu.inventory.holders.SelectorHolder;
 import simplepets.brainsynder.utils.Keys;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 
@@ -47,7 +49,11 @@ public class PetSelectorGUIListener implements Listener {
                 ItemMeta meta = stack.getItemMeta();
                 if (!meta.getPersistentDataContainer().has(Keys.PET_TYPE_ITEM, PersistentDataType.STRING)) return;
                 String rawType = meta.getPersistentDataContainer().get(Keys.PET_TYPE_ITEM, PersistentDataType.STRING);
-                PetType.getPetType(rawType).ifPresent(type -> menu.getTask(player.getName()).run(user, type));
+                PetType.getPetType(rawType).ifPresent(type -> {
+                    if (Utilities.hasPermission(player, type.getPermission())
+                            || (user.getOwnedPets().contains(type) && ConfigOption.INSTANCE.UTILIZE_PURCHASED_PETS.getValue()))
+                        menu.getTask(player.getName()).run(user, type);
+                });
             });
         }
     }

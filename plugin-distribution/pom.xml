@@ -58,11 +58,11 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.apache.commons</pattern>
+                                    <pattern>org.apache.commons.io</pattern>
                                     <shadedPattern>${project.groupId}.internal.apache</shadedPattern>
                                 </relocation>
                                 <relocation>
-                                    <pattern>anvil.brainsynder</pattern>
+                                    <pattern>net.wesjd</pattern>
                                     <shadedPattern>${project.groupId}.internal.anvil</shadedPattern>
                                 </relocation>
                                 <relocation>
@@ -106,7 +106,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>anvil.brainsynder</groupId>
+            <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
             <version>${anvilgui.version}</version>
         </dependency>
@@ -125,8 +125,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -137,8 +141,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -149,8 +157,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -161,8 +173,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -173,8 +189,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -192,8 +212,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -204,8 +228,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -216,8 +244,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -228,8 +260,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -240,8 +276,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -252,8 +292,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -264,8 +308,12 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -283,8 +331,16 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -295,8 +351,16 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -307,8 +371,136 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.4</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.5</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.6</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.7</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.8</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.11</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -327,8 +519,16 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -352,8 +552,16 @@
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
@@ -370,37 +578,101 @@
             <dependencies>
                 <dependency>
                     <groupId>simplepets.brainsynder</groupId>
-                    <artifactId>Version_1.21</artifactId>
+                    <artifactId>Version_1.21.6</artifactId>
                     <version>${revision}</version>
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>simplepets.brainsynder</groupId>
-                    <artifactId>Version_1.21.1</artifactId>
+                    <artifactId>Version_1.21.7</artifactId>
                     <version>${revision}</version>
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>
                 <dependency>
                     <groupId>simplepets.brainsynder</groupId>
-                    <artifactId>Version_1.21.3</artifactId>
+                    <artifactId>Version_1.21.8</artifactId>
                     <version>${revision}</version>
                     <scope>compile</scope>
                     <exclusions>
                         <exclusion>
-                            <groupId>anvil.brainsynder</groupId>
+                            <groupId>net.wesjd</groupId>
                             <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.10</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
+                        </exclusion>
+                    </exclusions>
+                </dependency>
+                <dependency>
+                    <groupId>simplepets.brainsynder</groupId>
+                    <artifactId>Version_1.21.11</artifactId>
+                    <version>${revision}</version>
+                    <scope>compile</scope>
+                    <exclusions>
+                        <exclusion>
+                            <groupId>net.wesjd</groupId>
+                            <artifactId>anvilgui</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>org.bstats</groupId>
+                            <artifactId>bstats-bukkit</artifactId>
+                        </exclusion>
+                        <exclusion>
+                            <groupId>simplepets.brainsynder</groupId>
+                            <artifactId>NMS_Master</artifactId>
                         </exclusion>
                     </exclusions>
                 </dependency>

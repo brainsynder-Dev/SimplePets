@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -30,6 +31,12 @@ public class EntityEndermanPet extends EntityPetOverride implements IEntityEnder
 
     public EntityEndermanPet(PetType type, PetUser user) {
         super(EntityType.ENDERMAN, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("screaming", isScreaming());
+        data.add("carried-block", getCarriedBlock().getAsString());
     }
 
     @Override

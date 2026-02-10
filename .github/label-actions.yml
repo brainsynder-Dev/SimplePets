@@ -1,29 +1,28 @@
-"Status: Fixed":
-  comment: |-
-    :wave: @{issue-author},
-
-    This issue has been fixed in the [latest build](https://ci.pluginwiki.us/job/SimplePets_v5/) or in a future build that will be released soon!
-  issues:
-    close: true
-
-fixed in v5:
-  comment: |-
-    :wave: @{issue-author},
-
-    This has already been fixed in v5! Please update to the latest version to get the fix.
-    Downloads:
-    - [Spigot](https://www.spigotmc.org/resources/100106/)
-    - [Polymart](https://polymart.org/resource/1952/)
-    - [Jenkins](https://ci.bsdevelopment.org/job/SimplePets_v5/)
-  issues:
-    close: true
-
 "Type: Bug":
   comment: |-
     @{issue-author},
 
     Thank you for reporting this bug, we will try and respond as soon as we can to your issue.
-    In the meantime have a look at the [WIKI](https://brainsynder.gitbook.io/simplepets/) to see if we made any mention to it on there.
+    In the meantime have a look at the [WIKI](https://wiki.bsdevelopment.org/) to see if we made any mention to it on there.
+
+"Status: Fixed":
+  comment: |-
+    :wave: @{issue-author},
+
+    This issue has been fixed in the [latest build](https://ci.bsdevelopment.org/job/SimplePets_v5/) or in a future build that will be released soon!
+  issues:
+    close: true
+
+"Status: Not Valid":
+  comment: |-
+    @{issue-author},
+
+    It seems you have filled out the template incorrectly.
+    Please re-open a new template with the correct data.
+    
+    If Applicable: try not to paste file contents into the fields, use a paste service
+  issues:
+    close: true
 
 "Status: Missing Debug Log":
   comment: |-
@@ -41,15 +40,17 @@ fixed in v5:
     Your issue is based on an unsupported version of either Minecraft or SimplePets.
     Please use up-to-date version and get back to us once you have tried it out on the latest versions.
 
-Added in Latest Build:
+"Status: Bedrock/Geyser Issue":
   comment: >
-    @{issue-author}, This was added in the latest build of SimplePets you can download the jar from the [Jenkins Server](https://ci.bsdevelopment.org/job/SimplePets_v5/)
+    @{issue-author}, 
+    
+    The plugin was not designed with support for Bedrock players in mind, So currently this will not be worked on/fixed
   issues:
     close: true
 
 "Status: Blame Mojang":
   comment: >
-    @{issue-author}, This is regarded as a Mojang issue we have no control over this.
+    @{issue-author}, This is regarded as a Mojang issue/feature we have no control over this.
   issues:
     close: true
 
@@ -71,6 +72,16 @@ Added in Latest Build:
     - Spigot/Paper Version
     - Video Evidence?
     - Images?
+
+"Status: On The Back Burner":
+  comment: |-
+    @{issue-author}, Sadly this is 'on the back burner' as such it is not a high priority for us and might be worked on a later date.
+
+"Status: Unsupported Server Type":
+  comment: |-
+    @{issue-author}, 
+    
+    The type of server you are using is not supported, Please use a version of Spigot (or its forks, unless they break core features)
 
 "Status: Answered":
   issues:

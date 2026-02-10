@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,6 +20,12 @@ public class EntityPolarBearPet extends EntityAgeablePet implements IEntityPolar
 
     public EntityPolarBearPet(PetType type, PetUser user) {
         super(EntityType.POLAR_BEAR, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("standing", isStanding());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -20,6 +21,11 @@ public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferF
 
     public EntityPufferFishPet(PetType type, PetUser user) {
         super(EntityType.PUFFERFISH, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("state", getPuffState().name());
     }
 
     @Override

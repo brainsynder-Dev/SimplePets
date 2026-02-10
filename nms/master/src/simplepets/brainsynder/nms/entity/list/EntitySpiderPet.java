@@ -38,7 +38,7 @@ public class EntitySpiderPet extends EntityPetOverride implements IEntitySpiderP
     @Override
     public void tick() {
         super.tick();
-        if ((!VersionTranslator.getEntityLevel(this).isClientSide) && wallClimbing) this.setWallClimb(this.horizontalCollision);
+        if ((!VersionTranslator.getEntityLevel(this).isClientSide()) && wallClimbing) this.setWallClimb(this.horizontalCollision);
     }
 
     public boolean canWallClimb() {

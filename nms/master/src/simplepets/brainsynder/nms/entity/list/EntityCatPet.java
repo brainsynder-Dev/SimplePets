@@ -1,17 +1,18 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.utils.DyeColorWrapper;
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.animal.CatVariant;
-import org.bukkit.craftbukkit.v1_21_R2.CraftRegistry;
+import net.minecraft.world.entity.animal.feline.CatVariant;
+import net.minecraft.world.entity.animal.feline.CatVariants;
+import org.bukkit.craftbukkit.v1_21_R7.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -19,9 +20,10 @@ import simplepets.brainsynder.api.wrappers.CatType;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
+import simplepets.brainsynder.nms.utils.VariantUtils;
 
 /**
- * NMS: {@link net.minecraft.world.entity.animal.Cat}
+ * NMS: {@link net.minecraft.world.entity.animal.feline.Cat}
  */
 public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     private static final EntityDataAccessor<Holder<CatVariant>> TYPE = SynchedEntityData.defineId(EntityCatPet.class, EntityDataSerializers.CAT_VARIANT);
@@ -35,9 +37,20 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     }
 
     @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("type", getCatType().name());
+        data.add("collar", getCollarColor().name());
+        data.add("sleeping", isPetSleeping());
+        data.add("head-up", isHeadUp());
+        data.add("tamed", isTamed());
+        data.add("sitting", isSitting());
+    }
+
+    @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(TYPE, BuiltInRegistries.CAT_VARIANT.getOrThrow(CatVariant.TABBY));
+        dataAccess.define(TYPE, VariantUtils.getDefaultOrAny(this.registryAccess(), CatVariants.TABBY));
         dataAccess.define(SLEEPING_WITH_OWNER, false);
         dataAccess.define(HEAD_UP, false);
         dataAccess.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());

@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -17,6 +18,12 @@ public abstract class EntityAgeablePet extends EntityPetOverride implements IAge
 
     public EntityAgeablePet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        if (!(this instanceof IEntityControllerPet))
+            data.add("baby", isBaby());
     }
 
     @Override

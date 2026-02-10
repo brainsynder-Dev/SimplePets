@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.core.Holder;
@@ -14,16 +15,18 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.Pose;
-import net.minecraft.world.entity.animal.FrogVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariant;
+import net.minecraft.world.entity.animal.frog.FrogVariants;
 import net.minecraft.world.phys.Vec3;
-import org.bukkit.craftbukkit.v1_21_R2.CraftRegistry;
+import org.bukkit.craftbukkit.v1_21_R7.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
-import simplepets.brainsynder.api.wrappers.FrogType;
+import simplepets.brainsynder.api.wrappers.TemperatureVariant;
 import simplepets.brainsynder.nms.VersionTranslator;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
+import simplepets.brainsynder.nms.utils.VariantUtils;
 
 import java.util.OptionalInt;
 
@@ -34,7 +37,7 @@ import java.util.OptionalInt;
 public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private static final EntityDataAccessor<Holder<FrogVariant>> DATA_VARIANT = SynchedEntityData.defineId(EntityFrogPet.class, EntityDataSerializers.FROG_VARIANT);
     private static final EntityDataAccessor<OptionalInt> TONGUE_TARGET_ID = SynchedEntityData.defineId(EntityFrogPet.class, EntityDataSerializers.OPTIONAL_UNSIGNED_INT);
-    private FrogType type = FrogType.TEMPERATE;
+    private TemperatureVariant variant = TemperatureVariant.TEMPERATE;
 
     private boolean croaking = false;
     private int croakingTick = 0;
@@ -48,9 +51,17 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     }
 
     @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("variant", getVariant().name());
+        data.add("croaking", isCroaking());
+        data.add("tongue", isUsingTongue());
+    }
+
+    @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(DATA_VARIANT, net.minecraft.world.entity.animal.FrogVariant.TEMPERATE);
+        dataAccess.define(DATA_VARIANT, VariantUtils.getDefaultOrAny(registryAccess(), FrogVariants.TEMPERATE));
         dataAccess.define(TONGUE_TARGET_ID, OptionalInt.empty());
     }
 
@@ -109,23 +120,23 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", FrogType.class, FrogType.TEMPERATE));
+        if (object.hasKey("variant")) setVariant(object.getEnum("variant", TemperatureVariant.class, TemperatureVariant.TEMPERATE));
         if (object.hasKey("croaking")) setCroaking(object.getBoolean("croaking"));
         if (object.hasKey("tongue")) setUsingTongue(object.getBoolean("tongue"));
         super.applyCompound(object);
     }
 
     @Override
-    public void setVariant(FrogType type) {
-        this.type = type;
+    public void setVariant(TemperatureVariant variant) {
+        this.variant = variant;
 
         Registry<FrogVariant> registry = CraftRegistry.getMinecraftRegistry(Registries.FROG_VARIANT);
-        entityData.set(DATA_VARIANT, registry.wrapAsHolder(VersionTranslator.getRegistryValue(registry, type.getKey())));
+        entityData.set(DATA_VARIANT, registry.wrapAsHolder(VersionTranslator.getRegistryValue(registry, variant.getKey())));
     }
 
     @Override
-    public FrogType getVariant() {
-        return type;
+    public TemperatureVariant getVariant() {
+        return variant;
     }
 
     @Override

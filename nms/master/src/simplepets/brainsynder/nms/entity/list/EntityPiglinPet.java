@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -21,6 +22,14 @@ public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityP
 
     public EntityPiglinPet(PetType type, PetUser user) {
         super(EntityType.PIGLIN, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("baby", isBaby());
+        data.add("charging", isCharging());
+        data.add("dancing", isDancing());
     }
 
     @Override

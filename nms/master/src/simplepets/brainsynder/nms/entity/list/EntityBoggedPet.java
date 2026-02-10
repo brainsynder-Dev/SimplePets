@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.json.JsonObject;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -21,6 +22,11 @@ public class EntityBoggedPet extends EntityPetOverride implements IEntityBoggedP
 
     public EntityBoggedPet(PetType type, PetUser user) {
         super(EntityType.BOGGED, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("sheared", isSheared());
     }
     
     @Override

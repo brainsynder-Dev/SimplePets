@@ -6,7 +6,6 @@
 package simplepets.brainsynder.nms.entity.special;
 
 import lib.brainsynder.reflection.Reflection;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -15,6 +14,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.Location;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -92,17 +93,17 @@ public class EntityGhostStand extends ArmorStand {
      * These methods prevent pets from being saved in the worlds
      */
     @Override
-    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
+    public boolean saveAsPassenger(ValueOutput output) {
         return false;
     }
 
     @Override
-    public boolean save(CompoundTag nbttagcompound) {// Calls e
+    public boolean save(ValueOutput output) {// Calls e
         return false;
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound) {
+    public void load(ValueInput input) {
     }
 
 

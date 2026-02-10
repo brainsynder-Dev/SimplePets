@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -25,6 +26,11 @@ public class EntityBatPet extends EntityFlyablePet implements IEntityBatPet {
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
         dataAccess.define(HANGING, (byte) 0);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("hanging", isHanging());
     }
 
     @Override

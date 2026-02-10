@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -26,6 +27,12 @@ public class EntitySnifferPet extends EntityAgeablePet implements IEntitySniffer
 
     public EntitySnifferPet(PetType type, PetUser user) {
         super(EntityType.SNIFFER, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("state", getSnifferState().name());
     }
 
     @Override

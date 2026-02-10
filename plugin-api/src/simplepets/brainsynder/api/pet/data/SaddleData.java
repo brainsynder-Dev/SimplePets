@@ -22,11 +22,11 @@ public class SaddleData extends PetData<ISaddle> {
 
     @Override
     public void onLeftClick(ISaddle entity) {
-        entity.setSaddled(!entity.isSaddled());
+        entity.setPetSaddled(!entity.isPetSaddled());
     }
 
     @Override
     public Object value(ISaddle entity) {
-        return entity.isSaddled();
+        return entity.isPetSaddled();
     }
 }

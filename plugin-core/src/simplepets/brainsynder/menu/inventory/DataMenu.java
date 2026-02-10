@@ -119,6 +119,7 @@ public class DataMenu extends CustomInventory {
         if (!isEnabled()) return;
         if (user == null) return;
         Player player = user.getPlayer();
+        if(player == null)  return;
         if (!user.hasPets()) {
             player.closeInventory();
             return;

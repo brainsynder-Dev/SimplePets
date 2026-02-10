@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -22,6 +23,12 @@ public class EntityWitherPet extends EntityPetOverride implements IEntityWitherP
 
     public EntityWitherPet(PetType type, PetUser user) {
         super(EntityType.WITHER, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("shielded", isShielded());
+        data.add("small", isSmall());
     }
 
     @Override

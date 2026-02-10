@@ -2,6 +2,7 @@ package simplepets.brainsynder.nms.entity.list;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.SupportedVersion;
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.math.MathUtils;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,6 +39,13 @@ public class EntityWardenPet extends EntityPetOverride implements IEntityWardenP
             this.setPose(Pose.EMERGING);
             Bukkit.getScheduler().runTaskLater(PetCore.getInstance(), () -> this.setPose(Pose.STANDING), 135);
         }
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        data.add("anger", getAngerLevel().name());
+        data.add("raw-anger", entityData.get(ANGER_LEVEL));
+        data.add("vibration-effect", getVibrationEffect());
     }
 
     @Override

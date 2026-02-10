@@ -1,10 +1,13 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.entity.EntityReference;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
@@ -13,7 +16,6 @@ import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Fox}
@@ -21,12 +23,22 @@ import java.util.UUID;
 public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     private static final EntityDataAccessor<Integer> TYPE = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Byte> FOX_FLAGS = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.BYTE);
-    private static final EntityDataAccessor<Optional<UUID>> OWNER = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_UUID);
-    private static final EntityDataAccessor<Optional<UUID>> OTHER_TRUSTED = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_UUID);
+    private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
+    private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OTHER_TRUSTED = SynchedEntityData.defineId(EntityFoxPet.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
 
     public EntityFoxPet(PetType type, PetUser user) {
         super(EntityType.FOX, type, user);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("type", getFoxType().name());
+        data.add("interested", isInterested());
+        data.add("crouching", isCrouching());
+        data.add("sitting", isSitting());
+        data.add("sleep", isPetSleeping());
     }
 
     @Override

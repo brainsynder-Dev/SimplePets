@@ -2,8 +2,9 @@ package simplepets.brainsynder.nms.utils;
 
 import lib.brainsynder.ServerVersion;
 import lib.brainsynder.reflection.Reflection;
-import net.minecraft.world.entity.npc.VillagerProfession;
-import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.entity.npc.villager.VillagerProfession;
+import net.minecraft.world.entity.npc.villager.VillagerType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -20,8 +21,8 @@ import java.util.Map;
 import java.util.Random;
 
 public class EntityUtils {
-    private static final Map<BiomeType, VillagerType> stored = new HashMap<>();
-    private static final Map<VillagerType, BiomeType> storedInverted = new HashMap<>();
+    private static final Map<BiomeType, ResourceKey<VillagerType>> stored = new HashMap<>();
+    private static final Map<ResourceKey<VillagerType>, BiomeType> storedInverted = new HashMap<>();
     private static final Random RANDOM;
     private static GlowingEntities GLOWING_ENTITIES = null;
     private static Scoreboard scoreboard;
@@ -67,7 +68,7 @@ public class EntityUtils {
         return GLOWING_ENTITIES;
     }
 
-    public static VillagerType getTypeFromBiome(BiomeType type) {
+    public static ResourceKey<VillagerType> getTypeFromBiome(BiomeType type) {
         if (stored.isEmpty()) initStores();
         return stored.get(type);
     }
@@ -95,7 +96,7 @@ public class EntityUtils {
     }
 
     private static void initStores () {
-        VillagerType DESERT = VillagerType.DESERT,
+        ResourceKey<VillagerType> DESERT = VillagerType.DESERT,
                 JUNGLE = VillagerType.JUNGLE,
                 PLAINS = VillagerType.PLAINS,
                 SAVANNA = VillagerType.SAVANNA,
@@ -126,9 +127,9 @@ public class EntityUtils {
 
 
 
-    public static VillagerProfession getProfession(simplepets.brainsynder.api.wrappers.villager.VillagerType type) {
+    public static ResourceKey<VillagerProfession> getProfession(simplepets.brainsynder.api.wrappers.villager.VillagerType type) {
 
-        VillagerProfession profession = VillagerProfession.NONE;
+        ResourceKey<VillagerProfession> profession = VillagerProfession.NONE;
         switch (type) {
             case ARMORER:
                 profession = VillagerProfession.ARMORER;

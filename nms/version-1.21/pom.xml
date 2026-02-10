@@ -90,8 +90,12 @@
             <scope>compile</scope>
             <exclusions>
                 <exclusion>
-                    <groupId>anvil.brainsynder</groupId>
+                    <groupId>net.wesjd</groupId>
                     <artifactId>anvilgui</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bstats</groupId>
+                    <artifactId>bstats-bukkit</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>com.jeff_media</groupId>
@@ -107,7 +111,7 @@
         </dependency>
 
         <dependency>
-            <groupId>anvil.brainsynder</groupId>
+            <groupId>net.wesjd</groupId>
             <artifactId>anvilgui</artifactId>
             <version>${anvilgui.version}</version>
         </dependency>

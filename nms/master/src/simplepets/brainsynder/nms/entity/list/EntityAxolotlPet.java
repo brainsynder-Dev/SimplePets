@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageTagCompound;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -38,6 +39,13 @@ public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotl
         dataAccess.define(DATA_VARIANT, 0);
         dataAccess.define(DATA_PLAYING_DEAD, false);
         dataAccess.define(FROM_BUCKET, false);
+    }
+
+    @Override
+    public void fetchPetData(JsonObject data) {
+        super.fetchPetData(data);
+        data.add("variant", getVariant().name());
+        data.add("playing-dead", isPlayingDead());
     }
 
     @Override

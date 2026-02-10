@@ -2,12 +2,11 @@ package simplepets.brainsynder.nms.entity.list;
 
 import com.mojang.authlib.GameProfile;
 import lib.brainsynder.item.ItemBuilder;
+import lib.brainsynder.json.JsonObject;
 import lib.brainsynder.nbt.StorageBase;
 import lib.brainsynder.nbt.StorageTagCompound;
 import lib.brainsynder.nbt.StorageTagString;
 import lib.brainsynder.utils.Base64Wrapper;
-import net.minecraft.core.Rotations;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerEntity;
@@ -17,6 +16,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.MoverType;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.level.storage.ValueInput;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.Vec3;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -29,7 +30,9 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.EulerAngle;
+import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.other.ParticleHandler;
@@ -76,6 +79,13 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     @Override
+    public void fetchPetDebugInformation(JsonObject debugInfo) {
+        debugInfo.set("small", isSmallStand());
+        debugInfo.set("clone", isOwner());
+        debugInfo.set("restricted", isRestricted());
+    }
+
+    @Override
     public EntityType<?> getType() {
         return EntityType.ARMOR_STAND;
     }
@@ -88,8 +98,15 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.setInvulnerable(true);
         stand.persist = true;
         stand.setSpecial(true);
+        stand.setInvisible(false);
         VersionTranslator.addEntity(VersionTranslator.getWorldHandle(location.getWorld()), stand, CreatureSpawnEvent.SpawnReason.CUSTOM);
         pet.setIgnoreVanish(true);
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                stand.getBukkitEntity().setGravity(true);
+            }
+        }.runTaskLater(PetCore.getInstance(), 60);
         return stand;
     }
 
@@ -519,14 +536,6 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         ((org.bukkit.entity.ArmorStand)VersionTranslator.getBukkitEntity(this)).setArms(flag);
     }
 
-    // CONVERSIONS
-    private EulerAngle toBukkit(Rotations vector3f) {
-        return new EulerAngle(vector3f.getX(), vector3f.getY(), vector3f.getZ());
-    }
-    private Rotations toNMS(EulerAngle angle) {
-        return new Rotations((float)angle.getX(), (float)angle.getY(), (float)angle.getZ());
-    }
-
     public ItemStack getItems(EquipmentSlot enumitemslot) {
         return toBukkit(super.getItemBySlot(enumitemslot));
     }
@@ -678,16 +687,16 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
      * These methods prevent pets from being saved in the worlds
      */
     @Override
-    public boolean saveAsPassenger(CompoundTag nbttagcompound) {// Calls e
+    public boolean saveAsPassenger(ValueOutput output) {
         return false;
     }
 
     @Override
-    public boolean save(CompoundTag nbttagcompound) {// Calls e
+    public boolean save(ValueOutput output) {// Calls e
         return false;
     }
 
     @Override
-    public void load(CompoundTag nbttagcompound) {
+    public void load(ValueInput input) {
     }
 }
