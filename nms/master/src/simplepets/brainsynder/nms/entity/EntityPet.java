@@ -39,6 +39,7 @@ import simplepets.brainsynder.nms.pathfinder.PathfinderFollowPlayer;
 import simplepets.brainsynder.nms.pathfinder.PathfinderGoalLookAtOwner;
 import simplepets.brainsynder.nms.utils.EntityUtils;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -46,9 +47,28 @@ import java.util.UUID;
 import java.util.function.Function;
 
 public abstract class EntityPet extends EntityBase implements IEntityPet {
+    // Entity.getType() is final in 1.21.11+, so we set the backing field directly via reflection
+    private static final Field ENTITY_TYPE_FIELD;
+    static {
+        Field found = null;
+        try {
+            found = net.minecraft.world.entity.Entity.class.getDeclaredField("type");
+        } catch (NoSuchFieldException e) {
+            // Fallback: search by type for Spigot servers with obfuscated field names
+            for (Field f : net.minecraft.world.entity.Entity.class.getDeclaredFields()) {
+                if (f.getType() == EntityType.class) {
+                    found = f;
+                    break;
+                }
+            }
+        }
+        if (found == null) throw new RuntimeException("Failed to find Entity type field");
+        found.setAccessible(true);
+        ENTITY_TYPE_FIELD = found;
+    }
+
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
-    private final EntityType<? extends Mob> rawEntityType;
 
 
     private final double jumpHeight = 0.5D;
@@ -90,12 +110,19 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     public EntityPet(EntityType<? extends Mob> entitytypes, Level world) {
         super(entitytypes, world);
-        rawEntityType = EntityType.PIG;
+        setEntityType(EntityType.PIG);
+    }
+
+    private void setEntityType(EntityType<?> type) {
+        try {
+            ENTITY_TYPE_FIELD.set(this, type);
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException("Failed to set entity type for pet", e);
+        }
     }
 
     public EntityPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
-        rawEntityType = entitytypes;
         this.additional = new HashMap<>();
 
         VersionTranslator.setMapUpStep(this, 1);
@@ -584,11 +611,6 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
             SoundMaker sound = config.getSound();
             if (sound != null) sound.playSound(getEntity());
         });
-    }
-
-    @Override
-    public EntityType<?> getType() {
-        return rawEntityType;
     }
 
     private void glowHandler(Player player, boolean glow) {
