@@ -572,6 +572,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 debug.debug(DebugLevel.HIDDEN, "Successfully Linked to " + version.name() + " SpawnUtil Class");
             }
         } catch (Exception e) {
+            Throwable cause = e.getCause() != null ? e.getCause() : e;
             debug.debug(DebugBuilder.build(getClass())
                 .setLevel(DebugLevel.CRITICAL)
                 .setBroadcast(true)
@@ -580,9 +581,10 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                     "Please check the Jenkins for an updated build: https://ci.bsdevelopment.org/job/SimplePets_v5/",
                     "Check if there is a SimplePets-" + ServerVersion.getVersion().name().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)",
                     " ",
-                    "Error: " + e.getMessage()
+                    "Error: " + cause.getClass().getName() + ": " + cause.getMessage()
                 )
             );
+            cause.printStackTrace();
         }
     }
 

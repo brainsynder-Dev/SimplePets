@@ -69,11 +69,6 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
         debugInfo.add("closed", isShulkerClosed());
     }
 
-    @Override
-    public EntityType<?> getType() {
-        return EntityType.SHULKER;
-    }
-
     public static EntityShulkerPet spawn(Location location, EntityControllerPet pet, EntityGhostStand ghostStand) {
         EntityShulkerPet shulker = new EntityShulkerPet(pet, ghostStand, pet.getPetUser());
         shulker.setPos(location.getX(), location.getY(), location.getZ());
