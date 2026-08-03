@@ -4,6 +4,7 @@ import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.command.CommandClass;
 import org.bsdevelopment.pluginutils.command.arguments.Argument;
 import org.bsdevelopment.pluginutils.command.arguments.CustomArgument;
+import org.bsdevelopment.pluginutils.command.arguments.CustomArgument.CustomArgumentParser;
 import org.bsdevelopment.pluginutils.command.arguments.StorageTagArgument;
 import org.bsdevelopment.pluginutils.command.arguments.StringArgument;
 import org.bsdevelopment.pluginutils.command.arguments.suggestions.ArgumentSuggestions;
@@ -22,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PetCommandClass extends CommandClass {
-    Argument<PetType> ALL_PET_TYPES = new CustomArgument<>(new StringArgument("type"), info -> {
+    CustomArgumentParser<PetType> ALL_PET_TYPES_PARSER = info -> {
         try {
             PetType type = PetType.getPetType(info.input().toUpperCase()).orElse(PetType.UNKNOWN);
             if (type == PetType.UNKNOWN)
@@ -40,7 +41,9 @@ public interface PetCommandClass extends CommandClass {
         } catch (IllegalArgumentException e) {
             throw ArgumentParseException.fromString("Invalid pet type: " + info.input());
         }
-    }).replaceSuggestions(ArgumentSuggestions.of(info -> {
+    };
+
+    ArgumentSuggestions ALL_PET_TYPES_SUGGESTIONS = ArgumentSuggestions.of(info -> {
         List<String> suggestions = new ArrayList<>();
         for (PetType type : PetType.values()) {
             if (type == PetType.UNKNOWN) continue;
@@ -52,7 +55,14 @@ public interface PetCommandClass extends CommandClass {
             suggestions.add(type.getName());
         }
         return suggestions;
-    }));
+    });
+
+    Argument<PetType> ALL_PET_TYPES = new CustomArgument<>(new StringArgument("type"), ALL_PET_TYPES_PARSER)
+            .replaceSuggestions(ALL_PET_TYPES_SUGGESTIONS);
+
+    Argument<PetType> OPTIONAL_PET_TYPES = new CustomArgument<>(new StringArgument("type"), ALL_PET_TYPES_PARSER)
+            .replaceSuggestions(ALL_PET_TYPES_SUGGESTIONS)
+            .setOptional(true);
 
     Argument<PetType> ACCESSIBLE_PET_TYPES = new CustomArgument<>(new StringArgument("type"), info -> {
         try {
