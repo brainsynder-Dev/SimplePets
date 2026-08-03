@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
+import net.minecraft.world.entity.player.Player;
 import org.bsdevelopment.pluginutils.utilities.MathUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -24,7 +25,7 @@ import java.util.EnumSet;
 public class LegacyPathfinderFollowPlayer extends Goal {
     private final EntityPet entity;
     private PetUser user;
-    private net.minecraft.world.entity.player.Player player;
+    private Player player;
     private final PathNavigation navigation;
 
     private int updateCountdownTicks;

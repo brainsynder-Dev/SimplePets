@@ -91,7 +91,7 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
 
     @Override
     public VillagerInfo getVillagerData() {
-        net.minecraft.world.entity.npc.VillagerData raw = getRawData();
+        VillagerData raw = getRawData();
         return  new VillagerInfo(
                 BiomeType.valueOf(CraftVillager.CraftType.minecraftHolderToBukkit(raw.type()).getKey().value().toUpperCase(Locale.ROOT)),
                 VillagerType.valueOf(CraftVillager.CraftProfession.minecraftHolderToBukkit(raw.profession()).getKey().value().toUpperCase(Locale.ROOT)),

@@ -7,6 +7,7 @@ import org.bsdevelopment.pluginutils.command.CommandPermission;
 import org.bsdevelopment.pluginutils.command.arguments.PlayerArgument;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
+import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.MessageOption;
 import simplepets.brainsynder.commands.PetCommandClass;
@@ -35,7 +36,7 @@ public class PurchasedCommand implements PetCommandClass {
                 .withArguments(ALL_PET_TYPES)
                 .executes((sender, args) -> {
                     Player target = args.get("player");
-                    simplepets.brainsynder.api.pet.PetType type = args.get("type");
+                    PetType type = args.get("type");
 
                     SimplePets.getUserManager().getPetUser(target).ifPresent(user -> {
                         user.addOwnedPet(type);
@@ -54,7 +55,7 @@ public class PurchasedCommand implements PetCommandClass {
                 .withArguments(ALL_PET_TYPES)
                 .executes((sender, args) -> {
                     Player target = args.get("player");
-                    simplepets.brainsynder.api.pet.PetType type = args.get("type");
+                    PetType type = args.get("type");
 
                     SimplePets.getUserManager().getPetUser(target).ifPresent(user -> {
                         user.removeOwnedPet(type);

@@ -32,6 +32,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.EulerAngle;
 import simplepets.brainsynder.api.entity.ambient.IEntityArmorStandPet;
@@ -585,7 +586,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
     }
 
     private void handleCloning() {
-        org.bukkit.inventory.PlayerInventory inventory = getPetUser().getPlayer().getInventory();
+        PlayerInventory inventory = getPetUser().getPlayer().getInventory();
         ItemStack head = checkItem(inventory.getHelmet());
         ItemStack chest = checkItem(inventory.getChestplate());
         ItemStack legs = checkItem(inventory.getLeggings());

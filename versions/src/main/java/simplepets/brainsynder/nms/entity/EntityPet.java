@@ -20,6 +20,7 @@ import org.bsdevelopment.pluginutils.text.Colorize;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -477,7 +478,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     }
 
     private boolean isOnGround(net.minecraft.world.entity.Entity entity) {
-        org.bukkit.block.Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        Block block = entity.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid() || block.isLiquid();
     }
 
@@ -671,7 +672,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
     // Added in 1.20
     public boolean isOnGround() {
-        org.bukkit.block.Block block = this.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
+        Block block = this.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid() || block.isLiquid();
     }
 

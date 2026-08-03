@@ -3,6 +3,7 @@ package simplepets.brainsynder.impl;
 import com.google.common.collect.Lists;
 import org.bsdevelopment.pluginutils.text.Colorize;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.pet.CommandReason;
@@ -42,7 +43,7 @@ public class PetUtility implements IPetUtilities {
     private String safePetName(IEntityPet entity) {
         if (entity == null || entity.getPetName().isEmpty()) return "Pet";
 
-        String name = org.bukkit.ChatColor.stripColor(entity.getPetName().get());
+        String name = ChatColor.stripColor(entity.getPetName().get());
         name = name.replace("\r", "").replace("\n", "").replace("\t", "");
         name = name.replaceAll("[;&|`$<>\\\\]", "").replaceAll("\\s+", "_");
         name = name.replaceAll("[^A-Za-z0-9_\\-]", "_").replaceAll("_+", "_");
