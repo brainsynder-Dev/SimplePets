@@ -88,7 +88,7 @@ public class EntityVillagerPet extends EntityAgeablePet implements IEntityVillag
 
     @Override
     public VillagerInfo getVillagerData() {
-        net.minecraft.world.entity.npc.villager.VillagerData raw = getRawData();
+        VillagerData raw = getRawData();
         return  new VillagerInfo(
                 BiomeType.valueOf(CraftVillager.CraftType.minecraftHolderToBukkit(raw.type()).getKey().getKey().toUpperCase(Locale.ROOT)),
                 VillagerType.valueOf(CraftVillager.CraftProfession.minecraftHolderToBukkit(raw.profession()).getKey().getKey().toUpperCase(Locale.ROOT)),
