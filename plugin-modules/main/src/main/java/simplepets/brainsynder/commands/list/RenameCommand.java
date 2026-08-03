@@ -20,7 +20,6 @@ public class RenameCommand implements PetCommandClass {
         return CommandBuilder.create("rename")
                 .withPermission("pet.commands.rename")
                 .withDescription("Renames the selected pet type")
-                .withRequirement(sender -> sender instanceof Player)
                 .withArguments(ACCESSIBLE_PET_TYPES)
                 .withArguments(new StringArgument("name").setOptional(true))
                 .executesPlayer((player, args) -> {
@@ -42,11 +41,10 @@ public class RenameCommand implements PetCommandClass {
                 })
                 .withSubcommand(CommandBuilder.create("target")
                         .withPermission("pet.commands.rename.other")
-                        .withRequirement(sender -> sender instanceof Player)
                         .withArguments(new PlayerArgument("player"))
                         .withArguments(ALL_PET_TYPES)
                         .withArguments(new StringArgument("name").setOptional(true))
-                        .executesPlayer((player, args) -> {
+                        .executes((sender, args) -> {
                             Player target = args.get("player");
                             PetType type = args.get("type");
                             RenameType rename = RenameType.getType(ConfigOption.RENAME_TYPE.get(), RenameType.ANVIL);
@@ -57,8 +55,8 @@ public class RenameCommand implements PetCommandClass {
                                     return;
                                 }
 
-                                if ((rename == RenameType.COMMAND) && (!args.has("name"))) {
-                                    player.sendMessage(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.PREFIX) + " §cUsage: /pet rename target <player> <type> <name>");
+                                if ((!args.has("name")) && ((rename == RenameType.COMMAND) || !(sender instanceof Player))) {
+                                    sender.sendMessage(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.PREFIX) + " §cUsage: /pet rename target <player> <type> <name>");
                                 } else {
                                     dispatch(rename, user, type);
                                 }

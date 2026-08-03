@@ -37,7 +37,6 @@ public class SummonCommand implements PetCommandClass {
                 .withAliases("spawn")
                 .withPermission("pet.commands.summon")
                 .withDescription("Spawns a pet for yourself")
-                .withRequirement(sender -> sender instanceof Player)
                 .withSubcommand(buildAllCommand())
                 .withSubcommand(buildTargetCommand())
                 .withArguments(ACCESSIBLE_PET_TYPES)
@@ -189,7 +188,7 @@ public class SummonCommand implements PetCommandClass {
         }
     }
 
-    private void handleSpawnResult(org.bukkit.command.CommandSender sender, SpawnResult<IEntityPet> result, PetType type, StorageTagCompound compound) {
+    private void handleSpawnResult(CommandSender sender, SpawnResult<IEntityPet> result, PetType type, StorageTagCompound compound) {
         if (!result.isSuccess()) {
             if (result.isFailure()) {
                 TellrawMessage.of(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.FAILED_SUMMON, false).replace("{type}", type.getName())).tooltip(result.failMessage()).send(sender);

@@ -19,7 +19,6 @@ public class RemoveCommand implements PetCommandClass {
         return CommandBuilder.create("remove")
                 .withPermission("pet.commands.remove")
                 .withDescription("Remove your pet")
-                .withRequirement(sender -> sender instanceof Player)
                 .withSubcommand(buildTargetCommand())
                 .withArguments(ALL_PET_TYPES.setOptional(true))
                 .executesPlayer((player, args) -> {
