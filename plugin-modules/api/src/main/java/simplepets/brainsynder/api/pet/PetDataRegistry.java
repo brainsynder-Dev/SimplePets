@@ -475,6 +475,13 @@ public interface PetDataRegistry {
                 .item(false, ItemBuilder.playerSkull("http://textures.minecraft.net/texture/dca096eea506301bea6d4b17ee1605625a6f5082c71f74a639cc940439f47166").withName("&#c8c8c8{name}: &cfalse"))
                 .onToggle(entityPet -> entityPet.setSneezing(!entityPet.isSneezing()))
                 .value(IEntityPandaPet::isSneezing).build();
+
+        PetData<IEntityPandaPet> EATING = PetData.of("eating", IEntityPandaPet.class)
+                .defaultValue(false)
+                .item(true, ItemBuilder.of(Material.BAMBOO).withName("&#c8c8c8{name}: &atrue"))
+                .item(false, ItemBuilder.of(Material.BAMBOO).withName("&#c8c8c8{name}: &cfalse"))
+                .onToggle(entityPet -> entityPet.setEating(!entityPet.isEating()))
+                .value(IEntityPandaPet::isEating).build();
     }
 
     interface Parrot {

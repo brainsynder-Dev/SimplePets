@@ -182,7 +182,7 @@ public enum PetType {
 
     @PetCustomization(ambient = "ENTITY_PANDA_AMBIENT", weight = PetWeight.HEAVY)
     PANDA(IEntityPandaPet.class, "dca096eea506301bea6d4b17ee1605625a6f5082c71f74a639cc940439f47166",
-        PetDataRegistry.BABY, PetDataRegistry.Panda.GENE, PetDataRegistry.SITTING, PetDataRegistry.SLEEP, PetDataRegistry.Panda.SNEEZE),
+        PetDataRegistry.BABY, PetDataRegistry.Panda.GENE, PetDataRegistry.Panda.EATING, PetDataRegistry.SLEEP, PetDataRegistry.Panda.SNEEZE),
 
     @PetCustomization(ambient = "ENTITY_PARCHED_AMBIENT", weight = PetWeight.SLIGHTLY_HEAVY)
     PARCHED(IEntityParchedPet.class, "24aeceff5f26dd8413c5c03547c234ac03108d187af0b9cd834a8ce12598591c"),

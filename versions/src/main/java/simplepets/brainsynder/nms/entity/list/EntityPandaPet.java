@@ -5,6 +5,9 @@ import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.phys.Vec3;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
@@ -37,7 +40,7 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     public void fetchPetData(JsonObject data) {
         super.fetchPetData(data);
         data.add("type", getGene().name());
-        data.add("sitting", isSitting());
+        data.add("eating", isEating());
         data.add("sleeping", isPetSleeping());
         data.add("sneeze", isSneezing());
     }
@@ -57,7 +60,7 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setEnum("type", getGene());
-        object.setBoolean("sitting", isSitting());
+        object.setBoolean("eating", isEating());
         object.setBoolean("sleeping", isPetSleeping());
         object.setBoolean("sneeze", isSneezing());
         return object;
@@ -66,7 +69,8 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("type")) setGene(object.getEnum("type", PandaVariant.class, PandaVariant.NORMAL));
-        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting", false));
+        if (object.hasKey("sitting")) setEating(object.getBoolean("sitting", false));
+        if (object.hasKey("eating")) setEating(object.getBoolean("eating", false));
         if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping", false));
         if (object.hasKey("sleep")) setPetSleeping(object.getBoolean("sleep", false));
         if (object.hasKey("sneeze")) setSneezing(object.getBoolean("sneeze", false));
@@ -89,6 +93,18 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
         }else if ((hidden != PandaVariant.BROWN) && (hidden != PandaVariant.WEAK)) {
             if (hidden != PandaVariant.NORMAL) entityData.set(HIDDEN_GENE, (byte)0);
         }
+    }
+
+    @Override
+    public boolean isEating() {
+        return entityData.get(EATING_TICKS) > 0;
+    }
+
+    @Override
+    public void setEating(boolean value) {
+        setSpecialFlag(8, value);
+        entityData.set(EATING_TICKS, value ? 1 : 0);
+        setItemSlot(EquipmentSlot.MAINHAND, value ? Items.BAMBOO.getDefaultInstance() : ItemStack.EMPTY, true);
     }
 
     @Override

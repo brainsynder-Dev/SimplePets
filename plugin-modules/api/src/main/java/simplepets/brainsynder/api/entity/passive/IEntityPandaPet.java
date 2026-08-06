@@ -15,6 +15,10 @@ public interface IEntityPandaPet extends IAgeablePet, ISpecialFlag, ISleeper, IS
 
     int getSneezeProgress();
 
+    boolean isEating();
+
+    void setEating(boolean value);
+
     default void setSneezing(boolean value) {
         setSpecialFlag(2, value);
         if (!value) {
