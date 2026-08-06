@@ -56,9 +56,9 @@ public class EntityZombiePet extends EntityPetOverride implements IEntityZombieP
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        setArmsRaised(object.getBoolean("raised_arms", false));
-        setBabySafe(object.getBoolean("baby", false));
-        setShaking(object.getBoolean("shaking", false));
+        if (object.hasKey("raised_arms")) setArmsRaised(object.getBoolean("raised_arms", false));
+        if (object.hasKey("baby")) setBabySafe(object.getBoolean("baby", false));
+        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking", false));
         super.applyCompound(object);
     }
 

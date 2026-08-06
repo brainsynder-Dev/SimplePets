@@ -68,7 +68,7 @@ public class EntityVillagerPet extends EntityAgeablePet implements IEntityVillag
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        setShaking(object.getBoolean("shaking", false));
+        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking", false));
         if (object.hasKey("data"))
             setVillagerData(VillagerInfo.fromCompound(object.getCompoundTag("data")));
         if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
