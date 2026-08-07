@@ -13,6 +13,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Mooshroom.COLOR;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.MushroomCow}
  */
@@ -38,14 +40,14 @@ public class EntityMooshroomPet extends EntityAgeablePet implements IEntityMoosh
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setString("type", getMooshroomType().name());
+        compound.setString(COLOR.namespace(), getMooshroomType().name());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type"))
-            setMooshroomType(MooshroomVariant.valueOf(object.getString("type")));
+        if (object.hasKey(COLOR.namespace()))
+            setMooshroomType(MooshroomVariant.valueOf(object.getString(COLOR.namespace())));
         super.applyCompound(object);
     }
 

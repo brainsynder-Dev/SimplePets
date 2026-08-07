@@ -14,6 +14,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFishPet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.TropicalFish.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.TropicalFish}
  */
@@ -84,9 +86,9 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setString("body", getBodyColor().name());
-        compound.setString("pattern", getPattern().name());
-        compound.setString("color", getPatternColor().name());
+        compound.setString(BODY_COLOR.namespace(), getBodyColor().name());
+        compound.setString(PATTERN.namespace(), getPattern().name());
+        compound.setString(PATTERN_COLOR.namespace(), getPatternColor().name());
         return compound;
     }
 
@@ -95,9 +97,13 @@ public class EntityTropicalFishPet extends EntityFishPet implements IEntityTropi
         super.applyCompound(compound);
         if (compound.hasKey("body"))
             setBodyColor(DyeColorWrapper.getByName(compound.getString("body")));
-        if (compound.hasKey("pattern"))
-            setPattern(TropicalFishPattern.getByName(compound.getString("pattern")));
+        if (compound.hasKey(BODY_COLOR.namespace()))
+            setBodyColor(DyeColorWrapper.getByName(compound.getString(BODY_COLOR.namespace())));
+        if (compound.hasKey(PATTERN.namespace()))
+            setPattern(TropicalFishPattern.getByName(compound.getString(PATTERN.namespace())));
         if (compound.hasKey("color"))
             setPatternColor(DyeColorWrapper.getByName(compound.getString("color")));
+        if (compound.hasKey(PATTERN_COLOR.namespace()))
+            setPatternColor(DyeColorWrapper.getByName(compound.getString(PATTERN_COLOR.namespace())));
     }
 }

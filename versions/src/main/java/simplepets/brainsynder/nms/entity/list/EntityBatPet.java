@@ -12,6 +12,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFlyablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Bat.HANG;
+
 /**
  * NMS: {@link net.minecraft.world.entity.ambient.Bat}
  */
@@ -51,13 +53,13 @@ public class EntityBatPet extends EntityFlyablePet implements IEntityBatPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("hanging", isHanging());
+        object.setBoolean(HANG.namespace(), isHanging());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("hanging")) setHanging(object.getBoolean("hanging"));
+        if (object.hasKey(HANG.namespace())) setHanging(object.getBoolean(HANG.namespace()));
         super.applyCompound(object);
     }
 }

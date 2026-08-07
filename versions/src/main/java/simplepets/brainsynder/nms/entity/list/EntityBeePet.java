@@ -18,6 +18,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Bee.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.bee.Bee}
  */
@@ -57,19 +59,19 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("angry", isAngry());
-        object.setBoolean("nectar", hasNectar());
-        object.setBoolean("stinger", hasStung());
-        object.setBoolean("flipped", isFlipped());
+        object.setBoolean(ANGRY.namespace(), isAngry());
+        object.setBoolean(NECTAR.namespace(), hasNectar());
+        object.setBoolean(STINGER.namespace(), hasStung());
+        object.setBoolean(FLIPPED.namespace(), isFlipped());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("angry")) setAngry(object.getBoolean("angry"));
-        if (object.hasKey("nectar")) setHasNectar(object.getBoolean("nectar"));
-        if (object.hasKey("stinger")) setHasStung(object.getBoolean("stinger"));
-        if (object.hasKey("flipped")) setFlipped(object.getBoolean("flipped"));
+        if (object.hasKey(ANGRY.namespace())) setAngry(object.getBoolean(ANGRY.namespace()));
+        if (object.hasKey(NECTAR.namespace())) setHasNectar(object.getBoolean(NECTAR.namespace()));
+        if (object.hasKey(STINGER.namespace())) setHasStung(object.getBoolean(STINGER.namespace()));
+        if (object.hasKey(FLIPPED.namespace())) setFlipped(object.getBoolean(FLIPPED.namespace()));
         super.applyCompound(object);
     }
 

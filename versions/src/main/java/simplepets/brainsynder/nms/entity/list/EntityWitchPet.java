@@ -20,6 +20,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.branch.EntityRaiderPet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Witch.POTION;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Witch}
  */
@@ -45,14 +47,14 @@ public class EntityWitchPet extends EntityRaiderPet implements IEntityWitchPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("potion", isDrinkingPotion());
+        object.setBoolean(POTION.namespace(), isDrinkingPotion());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("potion"))
-            setDrinkingPotion(object.getBoolean("potion"));
+        if (object.hasKey(POTION.namespace()))
+            setDrinkingPotion(object.getBoolean(POTION.namespace()));
         super.applyCompound(object);
     }
 

@@ -12,6 +12,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.PolarBear.STANDING;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.polarbear.PolarBear}
  */
@@ -37,13 +39,13 @@ public class EntityPolarBearPet extends EntityAgeablePet implements IEntityPolar
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("standing", isStanding());
+        object.setBoolean(STANDING.namespace(), isStanding());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("standing")) setStandingUp(object.getBoolean("standing", false));
+        if (object.hasKey(STANDING.namespace())) setStandingUp(object.getBoolean(STANDING.namespace(), false));
         super.applyCompound(object);
     }
 

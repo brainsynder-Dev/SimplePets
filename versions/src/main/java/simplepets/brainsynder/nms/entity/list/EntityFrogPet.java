@@ -29,6 +29,8 @@ import simplepets.brainsynder.nms.utils.VariantUtils;
 
 import java.util.OptionalInt;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Frog.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.frog.Frog}
  */
@@ -111,17 +113,17 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setEnum("variant", getVariant());
-        compound.setBoolean("croaking", isCroaking());
-        compound.setBoolean("tongue", isCroaking());
+        compound.setEnum(VARIANT.namespace(), getVariant());
+        compound.setBoolean(CROAKING.namespace(), isCroaking());
+        compound.setBoolean(TONGUE.namespace(), isCroaking());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", TemperatureVariant.class, TemperatureVariant.TEMPERATE));
-        if (object.hasKey("croaking")) setCroaking(object.getBoolean("croaking"));
-        if (object.hasKey("tongue")) setUsingTongue(object.getBoolean("tongue"));
+        if (object.hasKey(VARIANT.namespace())) setVariant(object.getEnum(VARIANT.namespace(), TemperatureVariant.class, TemperatureVariant.TEMPERATE));
+        if (object.hasKey(CROAKING.namespace())) setCroaking(object.getBoolean(CROAKING.namespace()));
+        if (object.hasKey(TONGUE.namespace())) setUsingTongue(object.getBoolean(TONGUE.namespace()));
         super.applyCompound(object);
     }
 

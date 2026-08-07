@@ -16,6 +16,9 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Optional;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SITTING;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.TAMED;
+
 public class EntityTameablePet extends EntityAgeablePet implements ITameable {
     private static final EntityDataAccessor<Byte> TAMEABLE_FLAGS = SynchedEntityData.defineId(EntityTameablePet.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Optional<EntityReference<LivingEntity>>> OWNER_UUID = SynchedEntityData.defineId(EntityTameablePet.class, EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
@@ -41,15 +44,15 @@ public class EntityTameablePet extends EntityAgeablePet implements ITameable {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("tamed", isTamed());
-        object.setBoolean("sitting", isSitting());
+        object.setBoolean(TAMED.namespace(), isTamed());
+        object.setBoolean(SITTING.namespace(), isSitting());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("tamed")) setTamed(object.getBoolean("tamed"));
-        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
+        if (object.hasKey(TAMED.namespace())) setTamed(object.getBoolean(TAMED.namespace()));
+        if (object.hasKey(SITTING.namespace())) setSitting(object.getBoolean(SITTING.namespace()));
         super.applyCompound(object);
     }
 

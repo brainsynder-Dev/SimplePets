@@ -11,6 +11,8 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.branch.EntityIllagerAbstractPet;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Vindicator.JOHNNY;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Vindicator}
  */
@@ -30,13 +32,13 @@ public class EntityVindicatorPet extends EntityIllagerAbstractPet implements IEn
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("johnny", johnny);
+        object.setBoolean(JOHNNY.namespace(), johnny);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("johnny")) setJohnny(object.getBoolean("johnny"));
+        if (object.hasKey(JOHNNY.namespace())) setJohnny(object.getBoolean(JOHNNY.namespace()));
         super.applyCompound(object);
     }
 

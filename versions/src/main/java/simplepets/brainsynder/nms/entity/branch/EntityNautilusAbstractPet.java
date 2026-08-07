@@ -10,6 +10,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bukkit.craftbukkit.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityNautilusPet;
 import simplepets.brainsynder.api.pet.PetType;
@@ -18,6 +19,9 @@ import simplepets.brainsynder.api.wrappers.NautilusArmorType;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
+
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Nautilus.ARMOR;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SADDLE;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.nautilus.AbstractNautilus}
@@ -66,5 +70,20 @@ public class EntityNautilusAbstractPet extends EntityTameablePet implements IEnt
     @Override
     public boolean isPetSaddled() {
         return isSaddled;
+    }
+
+    @Override
+    public StorageTagCompound asCompound() {
+        StorageTagCompound object = super.asCompound();
+        object.setBoolean(SADDLE.namespace(), isPetSaddled());
+        object.setEnum(ARMOR.namespace(), getArmor());
+        return object;
+    }
+
+    @Override
+    public void applyCompound(StorageTagCompound object) {
+        if (object.hasKey(SADDLE.namespace())) setPetSaddled(object.getBoolean(SADDLE.namespace(), false));
+        if (object.hasKey(ARMOR.namespace())) setArmor(object.getEnum(ARMOR.namespace(), NautilusArmorType.class, NautilusArmorType.NONE));
+        super.applyCompound(object);
     }
 }

@@ -16,6 +16,8 @@ import simplepets.brainsynder.api.wrappers.CopperGolemOxidation;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.CopperGolem.OXIDATION;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.coppergolem.CopperGolem}
  */
@@ -55,13 +57,13 @@ public class EntityCopperGolemPet extends EntityPetOverride implements IEntityCo
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setEnum("oxidation", getOxidation());
+        compound.setEnum(OXIDATION.namespace(), getOxidation());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("oxidation")) setOxidation(object.getEnum("oxidation", CopperGolemOxidation.class, CopperGolemOxidation.UNAFFECTED));
+        if (object.hasKey(OXIDATION.namespace())) setOxidation(object.getEnum(OXIDATION.namespace(), CopperGolemOxidation.class, CopperGolemOxidation.UNAFFECTED));
         if (object.hasKey("golem_state")) {
             // TODO: This is just for testing, remove later
             CopperGolemState state = CopperGolemState.valueOf(object.getString("golem_state").toUpperCase());

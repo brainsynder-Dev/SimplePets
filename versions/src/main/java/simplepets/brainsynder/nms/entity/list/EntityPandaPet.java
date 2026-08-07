@@ -21,6 +21,9 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.List;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Panda.*;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SLEEP;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Panda}
  */
@@ -59,21 +62,21 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("type", getGene());
-        object.setBoolean("eating", isEating());
+        object.setEnum(GENE.namespace(), getGene());
+        object.setBoolean(EATING.namespace(), isEating());
         object.setBoolean("sleeping", isPetSleeping());
-        object.setBoolean("sneeze", isSneezing());
+        object.setBoolean(SNEEZE.namespace(), isSneezing());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type")) setGene(object.getEnum("type", PandaVariant.class, PandaVariant.NORMAL));
+        if (object.hasKey(GENE.namespace())) setGene(object.getEnum(GENE.namespace(), PandaVariant.class, PandaVariant.NORMAL));
         if (object.hasKey("sitting")) setEating(object.getBoolean("sitting", false));
-        if (object.hasKey("eating")) setEating(object.getBoolean("eating", false));
+        if (object.hasKey(EATING.namespace())) setEating(object.getBoolean(EATING.namespace(), false));
         if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping", false));
-        if (object.hasKey("sleep")) setPetSleeping(object.getBoolean("sleep", false));
-        if (object.hasKey("sneeze")) setSneezing(object.getBoolean("sneeze", false));
+        if (object.hasKey(SLEEP.namespace())) setPetSleeping(object.getBoolean(SLEEP.namespace(), false));
+        if (object.hasKey(SNEEZE.namespace())) setSneezing(object.getBoolean(SNEEZE.namespace(), false));
         super.applyCompound(object);
     }
 

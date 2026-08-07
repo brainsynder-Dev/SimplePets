@@ -8,11 +8,15 @@ import net.minecraft.world.entity.Mob;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.hostile.IEntityZombiePet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
+
+import static simplepets.brainsynder.api.pet.PetDataRegistry.ARMS;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SHAKE;
 
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Zombie}
@@ -48,17 +52,17 @@ public class EntityZombiePet extends EntityPetOverride implements IEntityZombieP
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("raised_arms", isArmsRaised());
-        object.setBoolean("baby", isBabySafe());
-        object.setBoolean("shaking", isShaking());
+        object.setBoolean(ARMS.namespace(), isArmsRaised());
+        object.setBoolean(PetDataRegistry.BABY.namespace(), isBabySafe());
+        object.setBoolean(SHAKE.namespace(), isShaking());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("raised_arms")) setArmsRaised(object.getBoolean("raised_arms", false));
-        if (object.hasKey("baby")) setBabySafe(object.getBoolean("baby", false));
-        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking", false));
+        if (object.hasKey(ARMS.namespace())) setArmsRaised(object.getBoolean(ARMS.namespace(), false));
+        if (object.hasKey(PetDataRegistry.BABY.namespace())) setBabySafe(object.getBoolean(PetDataRegistry.BABY.namespace(), false));
+        if (object.hasKey(SHAKE.namespace())) setShaking(object.getBoolean(SHAKE.namespace(), false));
         super.applyCompound(object);
     }
 

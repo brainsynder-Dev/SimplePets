@@ -9,6 +9,7 @@ import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.misc.IAgeablePet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
@@ -38,14 +39,14 @@ public abstract class EntityAgeablePet extends EntityPetOverride implements IAge
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         if (!(this instanceof IEntityControllerPet))
-            object.setBoolean("baby", isBaby());
+            object.setBoolean(PetDataRegistry.BABY.namespace(), isBaby());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (!(this instanceof IEntityControllerPet))
-            if (object.hasKey("baby")) setBaby(object.getBoolean("baby"));
+            if (object.hasKey(PetDataRegistry.BABY.namespace())) setBaby(object.getBoolean(PetDataRegistry.BABY.namespace()));
         super.applyCompound(object);
     }
 

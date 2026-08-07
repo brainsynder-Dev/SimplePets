@@ -22,6 +22,8 @@ import simplepets.brainsynder.nms.entity.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Horse.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.horse.Horse}
  */
@@ -50,17 +52,17 @@ public class EntityHorsePet extends EntityHorseAbstractPet implements IEntityHor
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("armor", getArmor().name());
-        object.setString("color", getColor().name());
-        object.setString("style", getStyle().name());
+        object.setString(ARMOR.namespace(), getArmor().name());
+        object.setString(COLOR.namespace(), getColor().name());
+        object.setString(STYLE.namespace(), getStyle().name());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("armor")) setArmor(HorseArmorType.getByName(object.getString("armor")));
-        if (object.hasKey("color")) setColor(HorseColorType.getByName(object.getString("color")));
-        if (object.hasKey("style")) setStyle(HorseStyleType.getByName(object.getString("style")));
+        if (object.hasKey(ARMOR.namespace())) setArmor(HorseArmorType.getByName(object.getString(ARMOR.namespace())));
+        if (object.hasKey(COLOR.namespace())) setColor(HorseColorType.getByName(object.getString(COLOR.namespace())));
+        if (object.hasKey(STYLE.namespace())) setStyle(HorseStyleType.getByName(object.getString(STYLE.namespace())));
         super.applyCompound(object);
     }
 

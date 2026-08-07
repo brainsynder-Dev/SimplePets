@@ -20,6 +20,9 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Axolotl.PLAY_DEAD;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Axolotl.VARIANT;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.axolotl.Axolotl}
  */
@@ -52,15 +55,15 @@ public class EntityAxolotlPet extends EntityAgeablePet implements IEntityAxolotl
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("variant", getVariant());
-        object.setBoolean("playing_dead", isPlayingDead());
+        object.setEnum(VARIANT.namespace(), getVariant());
+        object.setBoolean(PLAY_DEAD.namespace(), isPlayingDead());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", AxolotlVariant.class, AxolotlVariant.LUCY));
-        if (object.hasKey("playing_dead")) setPlayingDead(object.getBoolean("playing_dead", false));
+        if (object.hasKey(VARIANT.namespace())) setVariant(object.getEnum(VARIANT.namespace(), AxolotlVariant.class, AxolotlVariant.LUCY));
+        if (object.hasKey(PLAY_DEAD.namespace())) setPlayingDead(object.getBoolean(PLAY_DEAD.namespace(), false));
         super.applyCompound(object);
     }
 

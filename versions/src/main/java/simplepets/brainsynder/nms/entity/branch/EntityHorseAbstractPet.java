@@ -16,6 +16,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Horse.EATING;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SADDLE;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.horse.AbstractHorse}
  */
@@ -86,8 +89,8 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("saddled", this.isPetSaddled());
-        object.setBoolean("eating", isEating());
+        object.setBoolean(SADDLE.namespace(), this.isPetSaddled());
+        object.setBoolean(EATING.namespace(), isEating());
         object.setBoolean("angry", isAngry());
         object.setBoolean("rearing", isRearing());
         return object;
@@ -95,8 +98,8 @@ public class EntityHorseAbstractPet extends EntityAgeablePet implements IHorseAb
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("saddled")) this.setPetSaddled(object.getBoolean("saddled"));
-        if (object.hasKey("eating")) setEating(object.getBoolean("eating"));
+        if (object.hasKey(SADDLE.namespace())) this.setPetSaddled(object.getBoolean(SADDLE.namespace()));
+        if (object.hasKey(EATING.namespace())) setEating(object.getBoolean(EATING.namespace()));
         if (object.hasKey("angry")) setAngry(object.getBoolean("angry"));
         if (object.hasKey("rearing")) setRearing(object.getBoolean("rearing"));
         super.applyCompound(object);

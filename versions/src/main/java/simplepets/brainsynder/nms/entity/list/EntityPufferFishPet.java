@@ -13,6 +13,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFishPet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Pufferfish.SIZE;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Pufferfish}
  */
@@ -37,13 +39,13 @@ public class EntityPufferFishPet extends EntityFishPet implements IEntityPufferF
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("size", getPuffState());
+        object.setEnum(SIZE.namespace(), getPuffState());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("size")) setPuffState(object.getEnum("size", PufferState.class, PufferState.SMALL));
+        if (object.hasKey(SIZE.namespace())) setPuffState(object.getEnum(SIZE.namespace(), PufferState.class, PufferState.SMALL));
         super.applyCompound(object);
     }
 

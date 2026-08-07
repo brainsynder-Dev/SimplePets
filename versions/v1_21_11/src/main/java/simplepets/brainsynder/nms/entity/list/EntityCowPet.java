@@ -14,6 +14,7 @@ import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityCowPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.TemperatureVariant;
@@ -60,13 +61,13 @@ public class EntityCowPet extends EntityAgeablePet implements IEntityCowPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setEnum("variant", getVariant());
+        compound.setEnum(PetDataRegistry.Cow.VARIANT.namespace(), getVariant());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", TemperatureVariant.class, TemperatureVariant.TEMPERATE));
+        if (object.hasKey(PetDataRegistry.Cow.VARIANT.namespace())) setVariant(object.getEnum(PetDataRegistry.Cow.VARIANT.namespace(), TemperatureVariant.class, TemperatureVariant.TEMPERATE));
         super.applyCompound(object);
     }
 }

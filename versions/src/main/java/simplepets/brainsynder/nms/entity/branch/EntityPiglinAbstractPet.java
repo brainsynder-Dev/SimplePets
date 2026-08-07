@@ -13,6 +13,8 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SHAKE;
+
 public abstract class EntityPiglinAbstractPet extends EntityPetOverride implements IShaking {
     private static final EntityDataAccessor<Boolean> IMMUNE_TO_ZOMBIFICATION = SynchedEntityData.defineId(EntityPiglinAbstractPet.class, EntityDataSerializers.BOOLEAN);
 
@@ -35,13 +37,13 @@ public abstract class EntityPiglinAbstractPet extends EntityPetOverride implemen
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("shaking", isShaking());
+        object.setBoolean(SHAKE.namespace(), isShaking());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking"));
+        if (object.hasKey(SHAKE.namespace())) setShaking(object.getBoolean(SHAKE.namespace()));
         super.applyCompound(object);
     }
 

@@ -12,6 +12,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFlyablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Ghast.SCREAM;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Ghast}
  */
@@ -36,13 +38,13 @@ public class EntityGhastPet extends EntityFlyablePet implements IEntityGhastPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("screaming", isScreaming());
+        object.setBoolean(SCREAM.namespace(), isScreaming());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("screaming")) setScreaming(object.getBoolean("screaming"));
+        if (object.hasKey(SCREAM.namespace())) setScreaming(object.getBoolean(SCREAM.namespace()));
         super.applyCompound(object);
     }
 

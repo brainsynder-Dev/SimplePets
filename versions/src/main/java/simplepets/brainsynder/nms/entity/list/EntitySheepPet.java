@@ -13,6 +13,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Sheep}
  */
@@ -43,17 +45,17 @@ public class EntitySheepPet extends EntityAgeablePet implements IEntitySheepPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        if (!rainbow) object.setString("color", getColor().name());
-        object.setBoolean("sheared", isSheared());
-        object.setBoolean("rainbow", rainbow);
+        if (!rainbow) object.setString(COLOR.namespace(), getColor().name());
+        object.setBoolean(SHEAR.namespace(), isSheared());
+        object.setBoolean(RAINBOW.namespace(), rainbow);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("rainbow")) rainbow = object.getBoolean("rainbow", false);
-        if (object.hasKey("color")) setColor(DyeColorWrapper.getByName(object.getString("color")));
-        if (object.hasKey("sheared")) setSheared(object.getBoolean("sheared", false));
+        if (object.hasKey(RAINBOW.namespace())) rainbow = object.getBoolean(RAINBOW.namespace(), false);
+        if (object.hasKey(COLOR.namespace())) setColor(DyeColorWrapper.getByName(object.getString(COLOR.namespace())));
+        if (object.hasKey(SHEAR.namespace())) setSheared(object.getBoolean(SHEAR.namespace(), false));
         super.applyCompound(object);
     }
 

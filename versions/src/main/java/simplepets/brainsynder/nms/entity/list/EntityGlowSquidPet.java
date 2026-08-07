@@ -11,6 +11,8 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.GlowSquid.GLOWING;
+
 /**
  * NMS: {@link net.minecraft.world.entity.GlowSquid}
  */
@@ -35,13 +37,13 @@ public class EntityGlowSquidPet extends EntitySquidPet implements IEntityGlowSqu
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setBoolean("glowing", isSquidGlowing());
+        compound.setBoolean(GLOWING.namespace(), isSquidGlowing());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("glowing")) setSquidGlowing(object.getBoolean("glowing"));
+        if (object.hasKey(GLOWING.namespace())) setSquidGlowing(object.getBoolean(GLOWING.namespace()));
         super.applyCompound(object);
     }
 

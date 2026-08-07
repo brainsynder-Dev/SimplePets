@@ -24,6 +24,9 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Locale;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SHAKE;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Villager.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.npc.Villager}
  */
@@ -59,19 +62,19 @@ public class EntityVillagerPet extends EntityAgeablePet implements IEntityVillag
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("shaking", isShaking());
+        object.setBoolean(SHAKE.namespace(), isShaking());
         object.setTag("data", getVillagerData().toCompound());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("shaking")) setShaking(object.getBoolean("shaking", false));
+        if (object.hasKey(SHAKE.namespace())) setShaking(object.getBoolean(SHAKE.namespace(), false));
         if (object.hasKey("data"))
             setVillagerData(VillagerInfo.fromCompound(object.getCompoundTag("data")));
-        if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
-        if (object.hasKey("biome")) setBiome(object.getEnum("biome", BiomeType.class, BiomeType.PLAINS));
-        if (object.hasKey("level")) setMasteryLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
+        if (object.hasKey(PROFESSION.namespace())) setVillagerType(object.getEnum(PROFESSION.namespace(), VillagerType.class, VillagerType.NONE));
+        if (object.hasKey(BIOME.namespace())) setBiome(object.getEnum(BIOME.namespace(), BiomeType.class, BiomeType.PLAINS));
+        if (object.hasKey(LEVEL.namespace())) setMasteryLevel(object.getEnum(LEVEL.namespace(), VillagerLevel.class, VillagerLevel.NOVICE));
         super.applyCompound(object);
     }
 

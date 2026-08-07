@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.passive.IEntitySnowmanPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
@@ -36,13 +37,13 @@ public class EntitySnowmanPet extends EntityPetOverride implements IEntitySnowma
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("pumpkin", hasPumpkin());
+        object.setBoolean(PetDataRegistry.Snowman.PUMPKIN.namespace(), hasPumpkin());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("pumpkin")) setHasPumpkin(object.getBoolean("pumpkin"));
+        if (object.hasKey(PetDataRegistry.Snowman.PUMPKIN.namespace())) setHasPumpkin(object.getBoolean(PetDataRegistry.Snowman.PUMPKIN.namespace()));
         super.applyCompound(object);
     }
 

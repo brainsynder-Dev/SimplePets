@@ -12,6 +12,7 @@ import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import org.bukkit.craftbukkit.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityCatPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.CatVariant;
@@ -20,6 +21,10 @@ import simplepets.brainsynder.nms.entity.EntityTameablePet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 import simplepets.brainsynder.nms.utils.VariantUtils;
+
+import static simplepets.brainsynder.api.pet.PetDataRegistry.COLOR;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Cat.LOOK_UP;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SLEEP;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Cat}
@@ -58,20 +63,21 @@ public class EntityCatPet extends EntityTameablePet implements IEntityCatPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setEnum("type", getCatType());
-        compound.setEnum("color", getColor());
-        compound.setBoolean("sleeping", isPetSleeping());
-        compound.setBoolean("head_up", isHeadUp());
+        compound.setEnum(PetDataRegistry.Cat.TYPE.namespace(), getCatType());
+        compound.setEnum(COLOR.namespace(), getColor());
+        compound.setBoolean(SLEEP.namespace(), isPetSleeping());
+        compound.setBoolean(LOOK_UP.namespace(), isHeadUp());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type")) setCatType(object.getEnum("type", CatVariant.class, CatVariant.TABBY));
-        if (object.hasKey("color")) setColor(object.getEnum("color", DyeColorWrapper.class, DyeColorWrapper.WHITE));
+        if (object.hasKey(PetDataRegistry.Cat.TYPE.namespace())) setCatType(object.getEnum(PetDataRegistry.Cat.TYPE.namespace(), CatVariant.class, CatVariant.TABBY));
+        if (object.hasKey(COLOR.namespace())) setColor(object.getEnum(COLOR.namespace(), DyeColorWrapper.class, DyeColorWrapper.WHITE));
         if (object.hasKey("collar")) setColor(object.getEnum("collar", DyeColorWrapper.class, DyeColorWrapper.WHITE));
         if (object.hasKey("sleeping")) setPetSleeping(object.getBoolean("sleeping", false));
-        if (object.hasKey("head_up")) setHeadUp(object.getBoolean("head_up", false));
+        if (object.hasKey(SLEEP.namespace())) setPetSleeping(object.getBoolean(SLEEP.namespace(), false));
+        if (object.hasKey(LOOK_UP.namespace())) setHeadUp(object.getBoolean(LOOK_UP.namespace(), false));
         super.applyCompound(object);
     }
 

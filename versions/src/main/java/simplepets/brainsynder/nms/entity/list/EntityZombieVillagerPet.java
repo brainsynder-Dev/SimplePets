@@ -23,6 +23,10 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Locale;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.ARMS;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SHAKE;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Villager.*;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.zombie.ZombieVillager}
  */
@@ -60,8 +64,8 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("raised_arms", isArmsRaised());
-        object.setBoolean("shaking", isShaking());
+        object.setBoolean(ARMS.namespace(), isArmsRaised());
+        object.setBoolean(SHAKE.namespace(), isShaking());
         object.setTag("data", getVillagerData().toCompound());
         return object;
     }
@@ -70,10 +74,10 @@ public class EntityZombieVillagerPet extends EntityZombiePet implements IEntityZ
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("data"))
             setVillagerData(VillagerInfo.fromCompound(object.getCompoundTag("data")));
-        if (object.hasKey("raised_arms")) setArmsRaised(object.getBoolean("raised_arms"));
-        if (object.hasKey("profession")) setVillagerType(object.getEnum("profession", VillagerType.class, VillagerType.NONE));
-        if (object.hasKey("biome")) setBiome(object.getEnum("biome", BiomeType.class, BiomeType.PLAINS));
-        if (object.hasKey("level")) setMasteryLevel(object.getEnum("level", VillagerLevel.class, VillagerLevel.NOVICE));
+        if (object.hasKey(ARMS.namespace())) setArmsRaised(object.getBoolean(ARMS.namespace()));
+        if (object.hasKey(PROFESSION.namespace())) setVillagerType(object.getEnum(PROFESSION.namespace(), VillagerType.class, VillagerType.NONE));
+        if (object.hasKey(BIOME.namespace())) setBiome(object.getEnum(BIOME.namespace(), BiomeType.class, BiomeType.PLAINS));
+        if (object.hasKey(LEVEL.namespace())) setMasteryLevel(object.getEnum(LEVEL.namespace(), VillagerLevel.class, VillagerLevel.NOVICE));
         super.applyCompound(object);
     }
 

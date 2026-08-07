@@ -9,6 +9,8 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.branch.EntityRaiderPet;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Ravager.CHOMP;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Ravager}
  */
@@ -30,13 +32,13 @@ public class EntityRavagerPet extends EntityRaiderPet implements IEntityRavagerP
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("chomping", chomping);
+        object.setBoolean(CHOMP.namespace(), chomping);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("chomping")) setChomping(object.getBoolean("chomping", false));
+        if (object.hasKey(CHOMP.namespace())) setChomping(object.getBoolean(CHOMP.namespace(), false));
         super.applyCompound(object);
     }
 

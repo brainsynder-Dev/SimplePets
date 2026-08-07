@@ -13,6 +13,7 @@ import org.bsdevelopment.pluginutils.version.VersionLimit;
 import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityZombieNautilusPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.ZombieNautilusVariant;
@@ -62,13 +63,13 @@ public class EntityZombieNautilusPet extends EntityNautilusAbstractPet implement
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("variant", getVariant());
+        object.setEnum(PetDataRegistry.ZombieNautilus.VARIANT.namespace(), getVariant());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", ZombieNautilusVariant.class, ZombieNautilusVariant.TEMPERATE));
+        if (object.hasKey(PetDataRegistry.ZombieNautilus.VARIANT.namespace())) setVariant(object.getEnum(PetDataRegistry.ZombieNautilus.VARIANT.namespace(), ZombieNautilusVariant.class, ZombieNautilusVariant.TEMPERATE));
         super.applyCompound(object);
     }
 }

@@ -15,6 +15,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SADDLE;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Strider}
  */
@@ -45,14 +47,14 @@ public class EntityStriderPet extends EntityAgeablePet implements IEntityStrider
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setBoolean("cold", isCold());
-        object.setBoolean("saddled", isPetSaddled());
+        object.setBoolean(SADDLE.namespace(), isPetSaddled());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("cold")) setCold(object.getBoolean("cold"));
-        if (object.hasKey("saddled")) setPetSaddled(object.getBoolean("saddled"));
+        if (object.hasKey(SADDLE.namespace())) setPetSaddled(object.getBoolean(SADDLE.namespace()));
         super.applyCompound(object);
     }
 

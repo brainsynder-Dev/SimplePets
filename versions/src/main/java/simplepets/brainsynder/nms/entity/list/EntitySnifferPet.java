@@ -15,6 +15,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Sniffer.STATE;
+
 // TODO: Implement a state reset task, it will reset the state after a bit and reset it to do the animations
 /**
  * NMS: {@link Sniffer}
@@ -44,13 +46,13 @@ public class EntitySnifferPet extends EntityAgeablePet implements IEntitySniffer
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("state", getSnifferState());
+        object.setEnum(STATE.namespace(), getSnifferState());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("state")) setSnifferState(object.getEnum("state", SnifferState.class, SnifferState.IDLING));
+        if (object.hasKey(STATE.namespace())) setSnifferState(object.getEnum(STATE.namespace(), SnifferState.class, SnifferState.IDLING));
         super.applyCompound(object);
     }
 

@@ -12,6 +12,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFlyablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.POWERED;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Vex}
  */
@@ -36,13 +38,13 @@ public class EntityVexPet extends EntityFlyablePet implements IEntityVexPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("powered", isPowered());
+        object.setBoolean(POWERED.namespace(), isPowered());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("powered")) setPowered(object.getBoolean("powered"));
+        if (object.hasKey(POWERED.namespace())) setPowered(object.getBoolean(POWERED.namespace()));
         super.applyCompound(object);
     }
 

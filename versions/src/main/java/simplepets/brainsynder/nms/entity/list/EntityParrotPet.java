@@ -19,6 +19,9 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityTameablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Parrot.VARIANT;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.RAINBOW;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Parrot}
  */
@@ -68,16 +71,16 @@ public class EntityParrotPet extends EntityTameablePet implements IEntityParrotP
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setVariant(ParrotVariant.getByName(object.getString("variant")));
-        if (object.hasKey("rainbow")) rainbow = object.getBoolean("rainbow");
+        if (object.hasKey(VARIANT.namespace())) setVariant(ParrotVariant.getByName(object.getString(VARIANT.namespace())));
+        if (object.hasKey(RAINBOW.namespace())) rainbow = object.getBoolean(RAINBOW.namespace());
         super.applyCompound(object);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        if (!rainbow) object.setString("variant", getVariant().name());
-        object.setBoolean("rainbow", rainbow);
+        if (!rainbow) object.setString(VARIANT.namespace(), getVariant().name());
+        object.setBoolean(RAINBOW.namespace(), rainbow);
         return object;
     }
 

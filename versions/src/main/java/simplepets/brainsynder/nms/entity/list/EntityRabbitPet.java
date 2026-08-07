@@ -23,6 +23,8 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.lang.reflect.InvocationTargetException;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Rabbit.VARIANT;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.Rabbit}
  */
@@ -53,14 +55,14 @@ public class EntityRabbitPet extends EntityAgeablePet implements IEntityRabbitPe
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("variant")) setRabbitType(object.getEnum("variant", RabbitVariant.class, RabbitVariant.BROWN));
+        if (object.hasKey(VARIANT.namespace())) setRabbitType(object.getEnum(VARIANT.namespace(), RabbitVariant.class, RabbitVariant.BROWN));
         super.applyCompound(object);
     }
 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("variant", getRabbitType());
+        object.setEnum(VARIANT.namespace(), getRabbitType());
         return object;
     }
 

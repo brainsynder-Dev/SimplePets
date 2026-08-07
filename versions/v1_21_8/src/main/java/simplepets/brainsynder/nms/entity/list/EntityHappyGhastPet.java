@@ -22,6 +22,8 @@ import simplepets.brainsynder.api.wrappers.ColorWrapper;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.RESET_COLOR;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.HappyGhast}
  */
@@ -91,13 +93,13 @@ public class EntityHappyGhastPet extends EntityAgeablePet implements IEntityHapp
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setEnum("color", getColorWrapper());
+        compound.setEnum(RESET_COLOR.namespace(), getColorWrapper());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("color")) setColorWrapper(object.getEnum("color", ColorWrapper.class, ColorWrapper.NONE));
+        if (object.hasKey(RESET_COLOR.namespace())) setColorWrapper(object.getEnum(RESET_COLOR.namespace(), ColorWrapper.class, ColorWrapper.NONE));
         super.applyCompound(object);
     }
 

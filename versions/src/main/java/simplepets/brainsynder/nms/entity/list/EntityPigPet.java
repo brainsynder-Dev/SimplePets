@@ -18,6 +18,7 @@ import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import org.bukkit.craftbukkit.CraftRegistry;
 import org.bukkit.craftbukkit.util.CraftNamespacedKey;
 import simplepets.brainsynder.api.entity.passive.IEntityPigPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.TemperatureVariant;
@@ -25,6 +26,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 import simplepets.brainsynder.nms.utils.VariantUtils;
+
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SADDLE;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.pig.Pig}
@@ -87,15 +90,15 @@ public class EntityPigPet extends EntityAgeablePet implements IEntityPigPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("saddled", isPetSaddled());
-        object.setEnum("variant", getVariant());
+        object.setBoolean(SADDLE.namespace(), isPetSaddled());
+        object.setEnum(PetDataRegistry.Pig.VARIANT.namespace(), getVariant());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("saddled")) setPetSaddled(object.getBoolean("saddled"));
-        if (object.hasKey("variant")) setVariant(object.getEnum("variant", TemperatureVariant.class, TemperatureVariant.TEMPERATE));
+        if (object.hasKey(SADDLE.namespace())) setPetSaddled(object.getBoolean(SADDLE.namespace()));
+        if (object.hasKey(PetDataRegistry.Pig.VARIANT.namespace())) setVariant(object.getEnum(PetDataRegistry.Pig.VARIANT.namespace(), TemperatureVariant.class, TemperatureVariant.TEMPERATE));
         super.applyCompound(object);
     }
 }

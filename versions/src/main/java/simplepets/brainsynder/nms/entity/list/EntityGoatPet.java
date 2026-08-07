@@ -12,6 +12,9 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Goat.LEFT_HORN;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Goat.RIGHT_HORN;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.goat.Goat}
  */
@@ -44,16 +47,16 @@ public class EntityGoatPet extends EntityAgeablePet implements IEntityGoatPet {
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
         compound.setBoolean("screaming", isScreaming());
-        compound.setBoolean("left-horn", hasLeftHorn());
-        compound.setBoolean("right-horn", hasRightHorn());
+        compound.setBoolean(LEFT_HORN.namespace(), hasLeftHorn());
+        compound.setBoolean(RIGHT_HORN.namespace(), hasRightHorn());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("screaming")) setScreaming(object.getBoolean("screaming"));
-        if (object.hasKey("left-horn")) setLeftHorn(object.getBoolean("left-horn"));
-        if (object.hasKey("right-horn")) setRightHorn(object.getBoolean("right-horn"));
+        if (object.hasKey(LEFT_HORN.namespace())) setLeftHorn(object.getBoolean(LEFT_HORN.namespace()));
+        if (object.hasKey(RIGHT_HORN.namespace())) setRightHorn(object.getBoolean(RIGHT_HORN.namespace()));
         super.applyCompound(object);
     }
 

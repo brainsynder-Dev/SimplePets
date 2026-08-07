@@ -20,6 +20,9 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Warden.ANGER;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Warden.VIBRATION;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.warden.Warden}
  */
@@ -95,17 +98,17 @@ public class EntityWardenPet extends EntityPetOverride implements IEntityWardenP
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
         object.setInteger("raw-anger", entityData.get(ANGER_LEVEL));
-        object.setEnum("anger-level", getAngerLevel());
-        object.setBoolean("vibration", vibrationEffect);
+        object.setEnum(ANGER.namespace(), getAngerLevel());
+        object.setBoolean(VIBRATION.namespace(), vibrationEffect);
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
         if (object.hasKey("raw-anger")) entityData.set(ANGER_LEVEL, object.getInteger("raw-anger"));
-        if (object.hasKey("anger-level"))
-            setAngerLevel(object.getEnum("anger-level", WardenAnger.class, WardenAnger.CALM));
-        if (object.hasKey("vibration")) setVibrationEffect(object.getBoolean("vibration"));
+        if (object.hasKey(ANGER.namespace()))
+            setAngerLevel(object.getEnum(ANGER.namespace(), WardenAnger.class, WardenAnger.CALM));
+        if (object.hasKey(VIBRATION.namespace())) setVibrationEffect(object.getBoolean(VIBRATION.namespace()));
         super.applyCompound(object);
     }
 

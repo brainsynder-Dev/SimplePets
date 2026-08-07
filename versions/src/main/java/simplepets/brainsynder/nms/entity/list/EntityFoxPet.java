@@ -8,6 +8,7 @@ import net.minecraft.world.entity.LivingEntity;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.passive.IEntityFoxPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.FoxVariant;
@@ -16,6 +17,9 @@ import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Optional;
+
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Fox.*;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SLEEP;
 
 /**
  * NMS: {@link net.minecraft.world.entity.animal.fox.Fox}
@@ -53,21 +57,21 @@ public class EntityFoxPet extends EntityAgeablePet implements IEntityFoxPet {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setString("type", getFoxType().name());
-        compound.setBoolean("interested", isInterested());
-        compound.setBoolean("crouching", isCrouching());
-        compound.setBoolean("sitting", isSitting());
-        compound.setBoolean("sleep", isPetSleeping());
+        compound.setString(PetDataRegistry.Fox.TYPE.namespace(), getFoxType().name());
+        compound.setBoolean(INTEREST.namespace(), isInterested());
+        compound.setBoolean(CROUCHING.namespace(), isCrouching());
+        compound.setBoolean(SITTING.namespace(), isSitting());
+        compound.setBoolean(SLEEP.namespace(), isPetSleeping());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("type")) setFoxType(object.getEnum("type", FoxVariant.class, FoxVariant.RED));
-        if (object.hasKey("interested")) setInterested(object.getBoolean("interested"));
-        if (object.hasKey("crouching")) setCrouching(object.getBoolean("crouching"));
-        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
-        if (object.hasKey("sleep")) setPetSleeping(object.getBoolean("sleep"));
+        if (object.hasKey(PetDataRegistry.Fox.TYPE.namespace())) setFoxType(object.getEnum(PetDataRegistry.Fox.TYPE.namespace(), FoxVariant.class, FoxVariant.RED));
+        if (object.hasKey(INTEREST.namespace())) setInterested(object.getBoolean(INTEREST.namespace()));
+        if (object.hasKey(CROUCHING.namespace())) setCrouching(object.getBoolean(CROUCHING.namespace()));
+        if (object.hasKey(SITTING.namespace())) setSitting(object.getBoolean(SITTING.namespace()));
+        if (object.hasKey(SLEEP.namespace())) setPetSleeping(object.getBoolean(SLEEP.namespace()));
         super.applyCompound(object);
     }
 

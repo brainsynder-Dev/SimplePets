@@ -13,6 +13,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFlyablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Allay.DANCING;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.allay.Allay }
  */
@@ -51,13 +53,13 @@ public class EntityAllayPet extends EntityFlyablePet implements IEntityAllayPet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound compound = super.asCompound();
-        compound.setBoolean("dancing", isDancing());
+        compound.setBoolean(DANCING.namespace(), isDancing());
         return compound;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("dancing")) setDancing(object.getBoolean("dancing", false));
+        if (object.hasKey(DANCING.namespace())) setDancing(object.getBoolean(DANCING.namespace(), false));
         super.applyCompound(object);
     }
 }

@@ -17,6 +17,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityAgeablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Armadillo.PHASE;
+
 /**
  * NMS: {@link Armadillo}
  */
@@ -43,13 +45,13 @@ public class EntityArmadilloPet extends EntityAgeablePet implements IEntityArmad
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setEnum("phase", getPhase());
+        object.setEnum(PHASE.namespace(), getPhase());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("phase")) setPhase(object.getEnum("phase", ArmadilloPhase.class));
+        if (object.hasKey(PHASE.namespace())) setPhase(object.getEnum(PHASE.namespace(), ArmadilloPhase.class));
         super.applyCompound(object);
     }
 

@@ -8,6 +8,7 @@ import net.minecraft.world.entity.Mob;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import org.bsdevelopment.pluginutils.sound.SafeSound;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.user.PetUser;
@@ -38,13 +39,13 @@ public class EntityCubeAbstractPet extends EntityPetOverride {
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setInteger("size", getSize());
+        object.setInteger(PetDataRegistry.SIZE.namespace(), getSize());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("size")) setSize(object.getInteger("size"));
+        if (object.hasKey(PetDataRegistry.SIZE.namespace())) setSize(object.getInteger(PetDataRegistry.SIZE.namespace()));
         super.applyCompound(object);
     }
 

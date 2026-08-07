@@ -12,6 +12,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityFlyablePet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.BURNING;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Blaze}
  */
@@ -36,13 +38,13 @@ public class EntityBlazePet extends EntityFlyablePet implements IEntityBlazePet 
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("burning", isBurning());
+        object.setBoolean(BURNING.namespace(), isBurning());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("burning")) setBurning(object.getBoolean("burning"));
+        if (object.hasKey(BURNING.namespace())) setBurning(object.getBoolean(BURNING.namespace()));
         super.applyCompound(object);
     }
 

@@ -12,6 +12,9 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Wither.SHIELD;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Wither.SMALL;
+
 /**
  * NMS: {@link net.minecraft.world.entity.boss.wither.WitherBoss}
  */
@@ -43,15 +46,15 @@ public class EntityWitherPet extends EntityPetOverride implements IEntityWitherP
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("shielded", isShielded());
-        object.setBoolean("small", isSmall());
+        object.setBoolean(SHIELD.namespace(), isShielded());
+        object.setBoolean(SMALL.namespace(), isSmall());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("shielded")) setShielded(object.getBoolean("shielded"));
-        if (object.hasKey("small")) setSmall(object.getBoolean("small"));
+        if (object.hasKey(SHIELD.namespace())) setShielded(object.getBoolean(SHIELD.namespace()));
+        if (object.hasKey(SMALL.namespace())) setSmall(object.getBoolean(SMALL.namespace()));
         super.applyCompound(object);
     }
 

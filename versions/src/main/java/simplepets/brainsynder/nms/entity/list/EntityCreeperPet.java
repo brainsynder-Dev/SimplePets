@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.hostile.IEntityCreeperPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
@@ -41,13 +42,13 @@ public class EntityCreeperPet extends EntityPetOverride implements IEntityCreepe
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("powered", isPowered());
+        object.setBoolean(PetDataRegistry.POWERED.namespace(), isPowered());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("powered")) setPowered(object.getBoolean("powered"));
+        if (object.hasKey(PetDataRegistry.POWERED.namespace())) setPowered(object.getBoolean(PetDataRegistry.POWERED.namespace()));
         super.applyCompound(object);
     }
 

@@ -6,6 +6,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import simplepets.brainsynder.api.entity.hostile.IEntityPhantomPet;
+import simplepets.brainsynder.api.pet.PetDataRegistry;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
@@ -36,13 +37,13 @@ public class EntityPhantomPet extends EntityFlyablePet implements IEntityPhantom
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setInteger("size", getSize());
+        object.setInteger(PetDataRegistry.SIZE.namespace(), getSize());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("size")) setSize(object.getInteger("size", 1));
+        if (object.hasKey(PetDataRegistry.SIZE.namespace())) setSize(object.getInteger(PetDataRegistry.SIZE.namespace(), 1));
         super.applyCompound(object);
     }
 

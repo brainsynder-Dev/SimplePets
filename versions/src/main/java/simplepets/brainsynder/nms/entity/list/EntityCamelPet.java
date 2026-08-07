@@ -17,6 +17,8 @@ import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.branch.EntityHorseAbstractPet;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.SITTING;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.camel.Camel}
  */
@@ -50,13 +52,13 @@ public class EntityCamelPet extends EntityHorseAbstractPet implements IEntityCam
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("sitting", isSitting());
+        object.setBoolean(SITTING.namespace(), isSitting());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("sitting")) setSitting(object.getBoolean("sitting"));
+        if (object.hasKey(SITTING.namespace())) setSitting(object.getBoolean(SITTING.namespace()));
         super.applyCompound(object);
     }
 

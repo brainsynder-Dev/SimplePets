@@ -22,6 +22,8 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import java.util.Optional;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Enderman.SCREAM;
+
 /**
  * NMS: {@link net.minecraft.world.entity.monster.Enderman}
  */
@@ -49,7 +51,7 @@ public class EntityEndermanPet extends EntityPetOverride implements IEntityEnder
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setBoolean("screaming", isScreaming());
+        object.setBoolean(SCREAM.namespace(), isScreaming());
         Optional<BlockState> data = entityData.get(CARRIED_BLOCK);
         data.ifPresent(iBlockData -> object.setString("carried_block", CraftBlockData.fromData(iBlockData).getAsString()));
         return object;
@@ -57,7 +59,7 @@ public class EntityEndermanPet extends EntityPetOverride implements IEntityEnder
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("screaming")) setScreaming(object.getBoolean("screaming"));
+        if (object.hasKey(SCREAM.namespace())) setScreaming(object.getBoolean(SCREAM.namespace()));
         if (object.hasKey("carried_block")) {
             String raw = object.getString("carried_block", Material.STONE.createBlockData().getAsString());
             try {

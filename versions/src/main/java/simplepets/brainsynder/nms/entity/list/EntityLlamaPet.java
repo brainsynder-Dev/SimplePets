@@ -25,6 +25,9 @@ import simplepets.brainsynder.nms.entity.branch.EntityDonkeyAbstractPet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+import static simplepets.brainsynder.api.pet.PetDataRegistry.Llama.SKIN;
+import static simplepets.brainsynder.api.pet.PetDataRegistry.RESET_COLOR;
+
 /**
  * NMS: {@link net.minecraft.world.entity.animal.horse.Llama}
  */
@@ -58,16 +61,16 @@ public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLl
     @Override
     public StorageTagCompound asCompound() {
         StorageTagCompound object = super.asCompound();
-        object.setString("skin", getSkinColor().name());
-        object.setString("color", getColorWrapper().name());
+        object.setString(SKIN.namespace(), getSkinColor().name());
+        object.setString(RESET_COLOR.namespace(), getColorWrapper().name());
         return object;
     }
 
     @Override
     public void applyCompound(StorageTagCompound object) {
-        if (object.hasKey("skin")) setSkinColor(LlamaColor.getByName(object.getString("skin")));
-        if (object.hasKey("color"))
-            setColorWrapper(ColorWrapper.getByName(object.getString("color")));
+        if (object.hasKey(SKIN.namespace())) setSkinColor(LlamaColor.getByName(object.getString(SKIN.namespace())));
+        if (object.hasKey(RESET_COLOR.namespace()))
+            setColorWrapper(ColorWrapper.getByName(object.getString(RESET_COLOR.namespace())));
         super.applyCompound(object);
     }
 
