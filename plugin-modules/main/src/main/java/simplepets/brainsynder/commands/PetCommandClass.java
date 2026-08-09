@@ -12,15 +12,14 @@ import org.bsdevelopment.pluginutils.command.exception.ArgumentParseException;
 import org.bukkit.entity.Player;
 import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.pet.IPetConfig;
+import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
 import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.utils.Utilities;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public interface PetCommandClass extends CommandClass {
     CustomArgumentParser<PetType> ALL_PET_TYPES_PARSER = info -> {
@@ -131,33 +130,115 @@ public interface PetCommandClass extends CommandClass {
         return localSuggestions;
     }));
 
+    ArgumentSuggestions PET_NBT_SUGGESTIONS = ArgumentSuggestions.of(info -> {
+        PetType type = info.previousArgs() != null ? info.previousArgs().get("type") : null;
+        if (type == null || type == PetType.UNKNOWN) return List.of("{}");
+        return petDataSuggestions(type, info.currentInput());
+    });
+
     Argument<StorageTagCompound> PET_NBT = new StorageTagArgument("nbt")
-            .replaceSuggestions(ArgumentSuggestions.of(info -> {
-                List<String> suggestions = new ArrayList<>();
-                suggestions.add("{}");
+            .replaceSuggestions(PET_NBT_SUGGESTIONS);
 
-                // Determine target player: prefer "player" from previous args, fallback to sender
-                Player player = null;
-                if (info.previousArgs() != null && info.previousArgs().has("player")) {
-                    player = info.previousArgs().get("player");
-                } else if (info.sender() instanceof Player p) {
-                    player = p;
-                }
-                if (player == null) return suggestions;
+    static List<String> petDataSuggestions(PetType type, String current) {
+        List<String> suggestions = new ArrayList<>();
+        String input = (current == null) ? "" : current;
 
-                // Determine pet type from previous args
-                PetType type = info.previousArgs() != null ? info.previousArgs().get("type") : null;
-                if (type == null || type == PetType.UNKNOWN) return suggestions;
+        if (!input.startsWith("{")) {
+            suggestions.add("{}");
+            for (PetData data : type.getPetData()) {
+                if (data.isVersionSupported()) suggestions.add("{" + data.namespace());
+            }
+            return suggestions;
+        }
 
-                // Find the spawned pet and use its compound as the template suggestion
-                Optional<PetUser> user = SimplePets.getUserManager().getPetUser(player);
-                if (user.isEmpty()) return suggestions;
+        int separator = lastTopLevelSeparator(input);
+        String existing = input.substring(0, separator + 1);
+        String typing = input.substring(separator + 1);
+        int colon = typing.indexOf(':');
 
-                user.get().getPetEntity(type).ifPresent(entityPet -> {
-                    String compoundStr = entityPet.asCompound().toString();
-                    if (!compoundStr.equals("{}")) suggestions.add(compoundStr);
-                });
+        if (colon < 0) {
+            Set<String> usedKeys = topLevelKeys(input);
+            for (PetData data : type.getPetData()) {
+                if (!data.isVersionSupported()) continue;
+                String key = data.namespace();
+                if (usedKeys.contains(key)) continue;
+                if (!key.toLowerCase().startsWith(typing.toLowerCase())) continue;
+                suggestions.add(existing + key);
+            }
+            return suggestions;
+        }
 
-                return suggestions;
-            }));
+        String key = typing.substring(0, colon);
+        String typedValue = typing.substring(colon + 1).toLowerCase();
+        for (PetData data : type.getPetData()) {
+            if (!data.isVersionSupported() || !data.namespace().equals(key)) continue;
+            for (Object entry : data.getDefaultItems().keySet()) {
+                String value = String.valueOf(entry);
+                if (!value.toLowerCase().startsWith(typedValue)) continue;
+                suggestions.add(existing + key + ":" + value);
+            }
+        }
+        return suggestions;
+    }
+
+    private static int lastTopLevelSeparator(String input) {
+        int depth = 0;
+        int separator = 0;
+        boolean quoted = false;
+        char quote = 0;
+
+        for (int index = 0; index < input.length(); index++) {
+            char character = input.charAt(index);
+            if (quoted) {
+                if (character == '\\') index++;
+                else if (character == quote) quoted = false;
+                continue;
+            }
+            if (character == '"' || character == '\'') {
+                quoted = true;
+                quote = character;
+            } else if (character == '{' || character == '[') {
+                if (character == '{' && depth == 0) separator = index;
+                depth++;
+            } else if (character == '}' || character == ']') {
+                depth--;
+            } else if (character == ',' && depth == 1) {
+                separator = index;
+            }
+        }
+        return separator;
+    }
+
+    private static Set<String> topLevelKeys(String input) {
+        Set<String> keys = new LinkedHashSet<>();
+        int depth = 0;
+        int keyStart = -1;
+        boolean quoted = false;
+        char quote = 0;
+
+        for (int index = 0; index < input.length(); index++) {
+            char character = input.charAt(index);
+            if (quoted) {
+                if (character == '\\') index++;
+                else if (character == quote) quoted = false;
+                continue;
+            }
+            if (character == '"' || character == '\'') {
+                quoted = true;
+                quote = character;
+            } else if (character == '{' || character == '[') {
+                if (character == '{' && depth == 0) keyStart = index + 1;
+                depth++;
+            } else if (character == '}' || character == ']') {
+                depth--;
+            } else if (character == ':' && depth == 1 && keyStart >= 0) {
+                String key = input.substring(keyStart, index).trim();
+                if (!key.isEmpty()) keys.add(key);
+                keyStart = -1;
+            } else if (character == ',' && depth == 1) {
+                keyStart = index + 1;
+            }
+        }
+        return keys;
+    }
 }
