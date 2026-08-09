@@ -369,7 +369,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         }
 
         if (object.hasKey("glow-color")) setGlowColor(object.getEnum("glow-color", ChatColor.class, ChatColor.WHITE));
-        if (object.hasKey(SILENT.namespace())) silent = object.getBoolean(SILENT.namespace());
+        if (object.hasKey(SILENT.namespace())) setPetSilent(object.getBoolean(SILENT.namespace()));
         if (object.hasKey(VISIBLE.namespace())) setPetVisible(object.getBoolean(VISIBLE.namespace()));
 
         if (object.hasKey("additional")) {
@@ -423,6 +423,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     @Override
     public void setPetSilent(boolean silent) {
         this.silent = silent;
+        setSilent(silent);
     }
 
     @Override
