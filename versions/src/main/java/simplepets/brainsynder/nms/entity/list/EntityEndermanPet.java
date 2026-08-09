@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms.entity.list;
 
+import net.minecraft.commands.arguments.blocks.BlockStateParser;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -53,7 +54,7 @@ public class EntityEndermanPet extends EntityPetOverride implements IEntityEnder
         StorageTagCompound object = super.asCompound();
         object.setBoolean(SCREAM.namespace(), isScreaming());
         Optional<BlockState> data = entityData.get(CARRIED_BLOCK);
-        data.ifPresent(iBlockData -> object.setString("carried_block", CraftBlockData.fromData(iBlockData).getAsString()));
+        data.ifPresent(iBlockData -> object.setString("carried_block", BlockStateParser.serialize(iBlockData)));
         return object;
     }
 
@@ -95,8 +96,9 @@ public class EntityEndermanPet extends EntityPetOverride implements IEntityEnder
 
     @Override
     public BlockData getCarriedBlock() {
-        BlockState blockData = (BlockState)((Optional)this.entityData.get(CARRIED_BLOCK)).orElse(null);
-        return CraftBlockData.fromData(blockData);
+        BlockState blockData = this.entityData.get(CARRIED_BLOCK).orElse(null);
+        if (blockData == null) return Material.AIR.createBlockData();
+        return Bukkit.createBlockData(BlockStateParser.serialize(blockData));
     }
 
     @Override
