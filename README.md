@@ -28,7 +28,7 @@ Maven Dependency:
 <dependency>
     <groupId>org.bsdevelopment.simplepets</groupId>
     <artifactId>api</artifactId>
-    <version>R5-B308</version>  <!-- This version is automatically updated -->
+    <version>R5-B309</version>  <!-- This version is automatically updated -->
 </dependency>
 ```
 
@@ -41,7 +41,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.bsdevelopment.simplepets:api:R5-B308' // This version is automatically updated
+    implementation 'org.bsdevelopment.simplepets:api:R5-B309' // This version is automatically updated
 }
 ```
 
@@ -52,7 +52,7 @@ repositories {
 }
 
 dependencies {
-    implementation("org.bsdevelopment.simplepets:api:R5-B308") // This version is automatically updated
+    implementation("org.bsdevelopment.simplepets:api:R5-B309") // This version is automatically updated
 }
 ```
 
