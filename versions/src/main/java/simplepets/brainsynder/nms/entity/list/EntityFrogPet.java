@@ -14,7 +14,6 @@ import net.minecraft.world.entity.animal.frog.FrogVariants;
 import net.minecraft.world.phys.Vec3;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
-import org.bsdevelopment.pluginutils.utilities.MathUtil;
 import org.bsdevelopment.pluginutils.version.VersionLimit;
 import org.bukkit.craftbukkit.CraftRegistry;
 import simplepets.brainsynder.api.entity.passive.IEntityFrogPet;
@@ -41,10 +40,10 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     private TemperatureVariant variant = TemperatureVariant.TEMPERATE;
 
     private boolean croaking = false;
-    private int croakingTick = 0;
-
     private boolean tongue = false;
-    private int tongueTick = 0;
+    private boolean tongueNext = true;
+    private boolean posing = false;
+    private int animationTick = 0;
 
     public EntityFrogPet(PetType type, PetUser user) {
         super(EntitySelector.FROG, type, user);
@@ -70,22 +69,9 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     public void tick() {
         super.tick();
 
-        if (croaking) {
-            if (croakingTick <= 0) {
-                setPose(Pose.STANDING);
-                setPose(Pose.CROAKING);
-                croakingTick = MathUtil.randomInt(120, 150);
-            }
-            croakingTick--;
-        }
-
-        if (tongue) {
-            if (tongueTick <= 0) {
-                setPose(Pose.STANDING);
-                setPose(Pose.USING_TONGUE);
-                tongueTick = MathUtil.randomInt(100, 150);
-            }
-            tongueTick--;
+        if (croaking || tongue) {
+            if (animationTick <= 0) playNextAnimation();
+            animationTick--;
         }
 
         if (!isOnGround()) {
@@ -148,11 +134,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     @Override
     public void setCroaking(boolean value) {
         croaking = value;
-        if (croaking) setPose(Pose.CROAKING);
-        if (!croaking) {
-            setPose(Pose.STANDING);
-            croakingTick = 0;
-        }
+        resetAnimations();
     }
 
     @Override
@@ -163,10 +145,33 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
     @Override
     public void setUsingTongue(boolean value) {
         tongue = value;
-        if (tongue) setPose(Pose.USING_TONGUE);
-        if (!tongue) {
-            setPose(Pose.STANDING);
-            tongueTick = 0;
+        resetAnimations();
+    }
+
+    private void resetAnimations() {
+        animationTick = 0;
+        posing = false;
+        tongueNext = true;
+        if (!croaking && !tongue) setPose(Pose.STANDING);
+    }
+
+    private void playNextAnimation() {
+        setPose(Pose.STANDING);
+        posing = !posing;
+
+        if (!posing) {
+            animationTick = 10;
+            return;
         }
+
+        if (tongue && (tongueNext || !croaking)) {
+            setPose(Pose.USING_TONGUE);
+            animationTick = 10;
+        } else {
+            setPose(Pose.CROAKING);
+            animationTick = 60;
+        }
+
+        tongueNext = !tongueNext;
     }
 }
