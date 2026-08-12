@@ -90,7 +90,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
 
         if (!isOnGround()) {
             setPose(Pose.LONG_JUMPING);
-        } else {
+        } else if (!croaking && !tongue) {
             setPose(Pose.STANDING);
         }
     }
