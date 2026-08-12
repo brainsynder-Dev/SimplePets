@@ -369,7 +369,7 @@ public enum PetType {
         this.entityClass = entityClass;
         LinkedList<PetData<?>> list = Lists.newLinkedList();
         list.addFirst(PetDataRegistry.SILENT);
-        if (!(IEntityWardenPet.class.isInstance(entityClass))) list.addFirst(PetDataRegistry.BURNING);
+        if (entityClass != IEntityWardenPet.class) list.addFirst(PetDataRegistry.BURNING);
         list.addFirst(PetDataRegistry.FROZEN);
         list.addFirst(PetDataRegistry.VISIBLE);
         if ((!IEntityArmorStandPet.class.isInstance(entityClass)) && (!IEntityShulkerPet.class.isInstance(entityClass)))
