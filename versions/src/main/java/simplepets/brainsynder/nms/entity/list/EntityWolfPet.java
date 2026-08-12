@@ -68,7 +68,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
         dataAccess.define(DATA_SOUND_VARIANT_ID, soundReference.or(registry::getAny).orElseThrow());
         dataAccess.define(BEGGING, false);
         dataAccess.define(COLLAR_COLOR, DyeColorWrapper.WHITE.getWoolData());
-        dataAccess.define(ANGER_TIME, 0L);
+        dataAccess.define(ANGER_TIME, -1L);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
                 level().broadcastEntityEvent(this, (byte)8); // Wolf shaking
             }
         }
-        if (this.angry && (entityData.get(ANGER_TIME) < 50)) entityData.set(ANGER_TIME, 500L);
+        if (this.angry && ((entityData.get(ANGER_TIME) - level().getGameTime()) < 50)) setAngry(true);
     }
 
     @Override
@@ -122,13 +122,13 @@ public class EntityWolfPet extends EntityTameablePet implements IEntityWolfPet {
 
     @Override
     public boolean isAngry() {
-        return entityData.get(ANGER_TIME) > 0L;
+        return entityData.get(ANGER_TIME) > level().getGameTime();
     }
 
     @Override
     public void setAngry(boolean angry) {
         this.angry = angry;
-        entityData.set(ANGER_TIME, angry ? 500L : 0L);
+        entityData.set(ANGER_TIME, angry ? (level().getGameTime() + 500L) : -1L);
     }
 
     @Override
