@@ -115,7 +115,7 @@ public class EntityFrogPet extends EntityAgeablePet implements IEntityFrogPet {
         StorageTagCompound compound = super.asCompound();
         compound.setEnum(VARIANT.namespace(), getVariant());
         compound.setBoolean(CROAKING.namespace(), isCroaking());
-        compound.setBoolean(TONGUE.namespace(), isCroaking());
+        compound.setBoolean(TONGUE.namespace(), isUsingTongue());
         return compound;
     }
 
