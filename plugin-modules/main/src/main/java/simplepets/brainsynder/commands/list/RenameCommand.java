@@ -20,7 +20,7 @@ public class RenameCommand implements PetCommandClass {
         return CommandBuilder.create("rename")
                 .withPermission("pet.commands.rename")
                 .withDescription("Renames the selected pet type")
-                .withArguments(ACCESSIBLE_PET_TYPES)
+                .withArguments(ALL_PET_TYPES)
                 .withArguments(new StringArgument("name").setOptional(true))
                 .executesPlayer((player, args) -> {
                     PetType type = args.get("type");
