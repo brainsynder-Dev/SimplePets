@@ -34,6 +34,9 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     private static final EntityDataAccessor<Byte> MAIN_GENE = SynchedEntityData.defineId(EntityPandaPet.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> HIDDEN_GENE = SynchedEntityData.defineId(EntityPandaPet.class, EntityDataSerializers.BYTE);
     private static final EntityDataAccessor<Byte> PANDA_FLAGS = SynchedEntityData.defineId(EntityPandaPet.class, EntityDataSerializers.BYTE);
+    private static final int SNEEZE_REST_TICKS = 40;
+
+    private int sneezeRestTicks = 0;
 
     public EntityPandaPet(PetType type, PetUser user) {
         super(EntitySelector.PANDA, type, user);
@@ -161,15 +164,21 @@ public class EntityPandaPet extends EntityAgeablePet implements IEntityPandaPet 
     @Override
     public void tick() {
         super.tick();
-        if (isSneezing()) {
-            int progress = getSneezeProgress();
-            setSneezeProgress(progress+1);
-            if (progress > 20) {
-                setSneezing(false);
-                handleSneeze();
-            }else if (progress == 1) {
-                this.playSound(SoundEvents.PANDA_PRE_SNEEZE, 1.0F, 1.0F);
-            }
+        if (!isSneezing()) return;
+
+        if (sneezeRestTicks > 0) {
+            sneezeRestTicks--;
+            if (sneezeRestTicks == 0) setSneezeProgress(0);
+            return;
+        }
+
+        int progress = getSneezeProgress();
+        setSneezeProgress(progress + 1);
+        if (progress > 20) {
+            sneezeRestTicks = SNEEZE_REST_TICKS;
+            handleSneeze();
+        } else if (progress == 1) {
+            this.playSound(SoundEvents.PANDA_PRE_SNEEZE, 1.0F, 1.0F);
         }
     }
 
