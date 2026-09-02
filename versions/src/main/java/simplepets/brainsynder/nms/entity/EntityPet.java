@@ -532,7 +532,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
 
         // Ensures that pets that hover for too long are either removed
         // by the player or automatically deleted if they are not associated with any player
-        if (isOnGround()) {
+        if (isOnGround() || (this instanceof IFlyableEntity)) {
             if (hoverTickCount != 0) hoverTickCount = 0;
         } else {
             if (hoverTickCount == hoverRemoveTick) {
