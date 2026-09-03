@@ -1,8 +1,8 @@
 <div align="center">
   <img src="https://i.imgur.com/hXGO1g0.png" alt="SimplePets" width="720"/><br>
-  <a href="https://repo.bsdevelopment.org/#/releases/org/bsdevelopment/simplepets/api"><img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo.bsdevelopment.org%2Freleases%2Forg%2Fbsdevelopment%2Fsimplepets%2Fapi%2Fmaven-metadata.xml&style=for-the-badge&label=Current%20API%20Version&color=red"></a> 
+  <a href="https://repo.bsdevelopment.org/#/releases/org/bsdevelopment/simplepets/api"><img src="https://builds.bsdevelopment.org/api/jobs/SimplePets/badge.svg?type=version&label=current%20version&style=for-the-badge"></a> 
   <a href="https://www.codefactor.io/repository/github/brainsynder-dev/simplepets"><img src="https://img.shields.io/codefactor/grade/github/brainsynder-dev/simplepets?style=for-the-badge&label=Codefactor%20Grade" alt="CodeFactor" /></a> 
-  <a href="https://jenkins.bsdevelopment.org/job/SimplePets/"><img src="https://img.shields.io/jenkins/build?jobUrl=https%3A%2F%2Fjenkins.bsdevelopment.org%2Fjob%2FSimplePets%2F&style=for-the-badge&label=Jenkins%20Status"></a></br>
+  <a href="https://jenkins.bsdevelopment.org/job/SimplePets/"><img src="https://builds.bsdevelopment.org/api/jobs/SimplePets/badge.svg?type=status&label=build%20status&style=for-the-badge"></a></br>
 </div>
 
 ---
@@ -51,7 +51,7 @@ Spigot or any of its forks will work.
 
 # API
 <div align="center">
-    <img src="https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Frepo.bsdevelopment.org%2Freleases%2Forg%2Fbsdevelopment%2Fsimplepets%2Fapi%2Fmaven-metadata.xml&style=for-the-badge&label=Current%20API%20Version&color=red"><br>
+    <img src="https://builds.bsdevelopment.org/api/jobs/SimplePets/badge.svg?type=version&label=current%20version&style=for-the-badge"><br>
 </div>
 
 Maven Dependency:
