@@ -167,7 +167,7 @@ public class SummonCommand implements PetCommandClass {
     private void handleSpawnResult(CommandSender sender, SpawnResult<IEntityPet> result, PetType type, StorageTagCompound compound) {
         if (!result.isSuccess()) {
             if (result.isFailure()) {
-                TellrawMessage.of(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.FAILED_SUMMON, false).replace("{type}", type.getName())).tooltip(result.failMessage()).send(sender);
+                TellrawMessage.of(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.FAILED_SUMMON, false).replace("{type}", type.getName())).tooltip(result.failMessage().split("\n")).send(sender);
                 return;
             }
             sender.sendMessage(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.FAILED_SUMMON).replace("{type}", type.getName()));

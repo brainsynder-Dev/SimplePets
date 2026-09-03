@@ -362,6 +362,13 @@ public interface ConfigOption {
                     Note: This MIGHT be removed in the future when a permanent fix is implemented
 
                     Default: {default}""");
+    ConfigEntry<Boolean> MISC_TOGGLES_SPAWN_FAILURE_DIAGNOSTICS = REGISTRY.register("misc-toggles.spawn-failure-diagnostics", true,
+            """
+                    When a pet fails to spawn, should SimplePets try to work out which plugin blocked it?
+
+                    Note: Disable this if another plugin misbehaves when it sees the same spawn event twice
+
+                    Default: {default}""");
 
 
     // Pet Toggles

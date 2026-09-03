@@ -10,6 +10,9 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.craftbukkit.CraftWorld;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.SpawnResult;
@@ -25,6 +28,7 @@ import simplepets.brainsynder.debug.DebugLevel;
 import simplepets.brainsynder.nms.entity.EntityPet;
 import simplepets.brainsynder.nms.entity.special.EntityControllerPet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
+import simplepets.brainsynder.utils.SpawnBlockDiagnostics;
 
 import java.util.*;
 
@@ -119,10 +123,11 @@ public class SpawnerUtil implements ISpawnUtil {
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type);
-                String reason = "";
-                if (event.getReason() != null) reason = event.getReason();
-                if (!reason.isEmpty()) return SpawnResult.fail(reason);
-                return SpawnResult.fail("The spawning of this pet was cancelled by another plugin.");
+
+                String reason = event.getReason();
+                if ((reason != null) && (!reason.isEmpty())) return SpawnResult.fail(reason);
+
+                return reportBlockedSpawn(type, user, location, "PetEntitySpawnEvent", new PetEntitySpawnEvent(user, customEntity));
             }
 
             if (!location.getChunk().isLoaded()) location.getChunk().load();
@@ -139,13 +144,14 @@ public class SpawnerUtil implements ISpawnUtil {
                 spawnCount.put(type, (count+1));
                 return SpawnResult.success(customEntity);
             }
+
+            SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type, location);
+            return reportBlockedSpawn(type, user, location, "CreatureSpawnEvent", buildSpawnProbeEvent(customEntity));
         }catch (Exception e) {
             e.printStackTrace();
             SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type, location);
             return SpawnResult.fail("An error occurred while trying to spawn the pet: " + e.getMessage());
         }
-
-        return SpawnResult.fail("An unknown error occurred while trying to spawn the pet.");
     }
 
     @Override
@@ -166,6 +172,51 @@ public class SpawnerUtil implements ISpawnUtil {
     @Override
     public Map<PetType, Integer> getSpawnCount() {
         return spawnCount;
+    }
+
+    private Event buildSpawnProbeEvent(EntityPet customEntity) {
+        Entity bukkitEntity = customEntity.getBukkitEntity();
+        if (!(bukkitEntity instanceof LivingEntity livingEntity)) return null;
+        return new CreatureSpawnEvent(livingEntity, CreatureSpawnEvent.SpawnReason.CUSTOM);
+    }
+
+    private SpawnResult<IEntityPet> reportBlockedSpawn(PetType type, PetUser user, Location location, String eventName, Event probeEvent) {
+        List<String> details = new ArrayList<>();
+        String blockingPlugin = findBlockingPlugin(probeEvent);
+
+        if (blockingPlugin != null) {
+            details.add("The spawn was cancelled by '" + blockingPlugin + "' (via " + eventName + ")");
+        } else {
+            details.add("The spawn was cancelled by another plugin (via " + eventName + ")");
+
+            List<String> listeningPlugins = (probeEvent == null) ? List.of() : SpawnBlockDiagnostics.getListeningPlugins(probeEvent);
+            if (listeningPlugins.isEmpty()) {
+                details.add("No other plugin is listening to that event, so the server itself rejected the pet");
+            } else {
+                details.add("Plugins listening to that event: " + String.join(", ", listeningPlugins));
+            }
+        }
+
+        if (ConfigOption.PET_TOGGLES_SPAWN_BYPASS.get()) details.add("'pet-toggles.mob-spawn-bypass' is enabled but did not override the cancellation");
+
+        List<String> report = new ArrayList<>();
+        report.add("Failed to spawn the '" + type.getName() + "' pet for " + getUserName(user));
+        report.add("Location: " + location.getWorld().getName() + " @ " + location.getBlockX() + ", " + location.getBlockY() + ", " + location.getBlockZ());
+        report.addAll(details);
+
+        SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.ERROR).setMessages(report.toArray(String[]::new)));
+        return SpawnResult.fail(ChatColor.RED + String.join("\n" + ChatColor.RED, details));
+    }
+
+    private String findBlockingPlugin(Event probeEvent) {
+        if (probeEvent == null) return null;
+        if (!ConfigOption.MISC_TOGGLES_SPAWN_FAILURE_DIAGNOSTICS.get()) return null;
+        return SpawnBlockDiagnostics.findCancellingPlugin(probeEvent).orElse(null);
+    }
+
+    private String getUserName(PetUser user) {
+        Player player = user.getPlayer();
+        return (player == null) ? String.valueOf(user.getOwnerUUID()) : player.getName();
     }
 
     private Location getRandomLocation (PetType type, Location center) {

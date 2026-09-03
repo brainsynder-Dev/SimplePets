@@ -108,7 +108,7 @@ public class Utilities {
             case FAILURE -> {
                 SimplePets.getParticleHandler().sendParticle(ParticleManager.Reason.FAILED, player, player.getLocation());
                 TellrawMessage.of(PetCore.getInstance().getMessageFile().getTranslation(MessageOption.FAILED_SUMMON, false).replace("{type}", type.getName()))
-                        .tooltip(result.failMessage())
+                        .tooltip(result.failMessage().split("\n"))
                         .send(player);
 
                 yield false;
