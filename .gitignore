@@ -180,6 +180,6 @@ gradle-app.setting
 /**/**/.gradle/
 gradle/download-variants.gradle.kts
 gradle/readme-versioning.gradle.kts
-gradle/jenkins-versioning.gradle.kts
+gradle/build-server-versioning.gradle.kts
 gradle/add-minecraft-version.gradle.kts
 
