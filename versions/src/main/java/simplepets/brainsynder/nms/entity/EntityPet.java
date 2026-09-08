@@ -54,6 +54,7 @@ import static simplepets.brainsynder.api.pet.PetDataRegistry.*;
 public abstract class EntityPet extends EntityBase implements IEntityPet {
     private Map<String, StorageTagCompound> additional;
     private String petName = null;
+    private String rawPetName = null;
     private final EntityType<? extends Mob> rawEntityType;
 
 
@@ -282,6 +283,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
                 name = config.get().getDisplayName();
             }
         }
+        rawPetName = name;
         String newName = name.replace("%player%", getPetUser().getPlayer().getName());
 
         EntityNameChangeEvent event = new EntityNameChangeEvent(this, newName);
@@ -335,7 +337,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         object.setString("PetType", getPetType().getName());
         object.setFloat("health", getHealth());
         object.setString("ownerName", getPetUser().getOwnerName());
-        getPetUser().getPetName(getPetType()).ifPresent(name -> {
+        storedPetName().ifPresent(name -> {
             object.setString("name", name.replace('§', '&'));
         });
         object.setBoolean(SILENT.namespace(), silent);
@@ -677,6 +679,11 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
     public boolean isOnGround() {
         Block block = this.getBukkitEntity().getLocation().subtract(0, 0.5, 0).getBlock();
         return block.getType().isSolid() || block.isLiquid();
+    }
+
+    private Optional<String> storedPetName() {
+        if (rawPetName != null) return Optional.of(rawPetName);
+        return getPetUser().getPetName(getPetType());
     }
 
     private static AttributeSupplier.Builder createAttributes (EntityPet entityPet) {
