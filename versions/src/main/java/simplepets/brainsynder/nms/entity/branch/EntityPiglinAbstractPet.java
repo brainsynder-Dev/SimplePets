@@ -20,6 +20,7 @@ public abstract class EntityPiglinAbstractPet extends EntityPetOverride implemen
 
     public EntityPiglinAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
+        setShaking(false);
     }
 
     @Override
@@ -31,7 +32,7 @@ public abstract class EntityPiglinAbstractPet extends EntityPetOverride implemen
     @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(IMMUNE_TO_ZOMBIFICATION, true);
+        dataAccess.define(IMMUNE_TO_ZOMBIFICATION, false);
     }
 
     @Override
@@ -49,7 +50,7 @@ public abstract class EntityPiglinAbstractPet extends EntityPetOverride implemen
 
     @Override
     public boolean isShaking() {
-        return entityData.get(IMMUNE_TO_ZOMBIFICATION);
+        return !entityData.get(IMMUNE_TO_ZOMBIFICATION);
     }
 
     @Override
