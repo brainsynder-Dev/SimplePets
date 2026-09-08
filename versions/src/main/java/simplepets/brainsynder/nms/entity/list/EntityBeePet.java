@@ -52,7 +52,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(FLAGS, (byte) 4);
+        dataAccess.define(FLAGS, (byte) 0);
         dataAccess.define(ANGER, 0L);
     }
 
