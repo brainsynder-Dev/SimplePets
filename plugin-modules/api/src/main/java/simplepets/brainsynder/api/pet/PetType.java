@@ -263,7 +263,7 @@ public enum PetType {
     STRAY(IEntityStrayPet.class, "2c5097916bc0565d30601c0eebfeb287277a34e867b4ea43c63819d53e89ede7"),
 
     @PetCustomization(ambient = "ENTITY_STRIDER_AMBIENT", weight = PetWeight.HEAVY)
-    STRIDER(IEntityStriderPet.class, "cb7ffdda656c68d88851a8e05b48cd2493773ffc4ab7d64e9302229fe3571059", PetDataRegistry.BABY, PetDataRegistry.SADDLE),
+    STRIDER(IEntityStriderPet.class, "cb7ffdda656c68d88851a8e05b48cd2493773ffc4ab7d64e9302229fe3571059", PetDataRegistry.BABY, PetDataRegistry.SADDLE, PetDataRegistry.Strider.COLD),
 
     @PetCustomization(ambient = "ENTITY_SULFUR_CUBE_SQUISH", weight = PetWeight.SLIGHTLY_HEAVY)
     SULFUR_CUBE(IEntitySulfurCubePet.class, "f0d9056ec6db388af12304ef96ffdc8228dcf368ab255323258b716f990b4ab", PetDataRegistry.SIZE),
@@ -370,7 +370,7 @@ public enum PetType {
         LinkedList<PetData<?>> list = Lists.newLinkedList();
         list.addFirst(PetDataRegistry.SILENT);
         if (entityClass != IEntityWardenPet.class) list.addFirst(PetDataRegistry.BURNING);
-        list.addFirst(PetDataRegistry.FROZEN);
+        if (entityClass != IEntityStriderPet.class) list.addFirst(PetDataRegistry.FROZEN);
         list.addFirst(PetDataRegistry.VISIBLE);
         if ((!IEntityArmorStandPet.class.isInstance(entityClass)) && (!IEntityShulkerPet.class.isInstance(entityClass)))
             list.addFirst(PetDataRegistry.HALF_SCALE);

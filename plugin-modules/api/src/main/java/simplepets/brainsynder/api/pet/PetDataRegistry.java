@@ -578,6 +578,15 @@ public interface PetDataRegistry {
                 .value(IEntitySnowmanPet::hasPumpkin).build();
     }
 
+    interface Strider {
+        PetData<IEntityStriderPet> COLD = PetData.of("cold", IEntityStriderPet.class)
+                .defaultValue(false)
+                .item(true, ItemBuilder.of(Material.BLUE_ICE).withName("&#c8c8c8{name}: &atrue"))
+                .item(false, ItemBuilder.of(Material.LAVA_BUCKET).withName("&#c8c8c8{name}: &cfalse"))
+                .onToggle(entityPet -> entityPet.setCold(!entityPet.isCold()))
+                .value(IEntityStriderPet::isCold).build();
+    }
+
     interface TropicalFish {
         PetData<IEntityTropicalFishPet> BODY_COLOR = new BodyColorData();
         PetData<IEntityTropicalFishPet> PATTERN = new PatternData();
