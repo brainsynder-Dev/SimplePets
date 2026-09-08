@@ -22,6 +22,7 @@ public class EntityHoglinPet extends EntityAgeablePet implements IEntityHoglinPe
 
     public EntityHoglinPet(PetType type, PetUser user) {
         super(EntitySelector.HOGLIN, type, user);
+        setShaking(false);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class EntityHoglinPet extends EntityAgeablePet implements IEntityHoglinPe
     @Override
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
-        dataAccess.define(IMMUNE_TO_ZOMBIFICATION, true);
+        dataAccess.define(IMMUNE_TO_ZOMBIFICATION, false);
     }
 
     @Override
