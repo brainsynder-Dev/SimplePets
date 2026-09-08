@@ -38,7 +38,7 @@ public class EntityPiglinPet extends EntityPiglinAbstractPet implements IEntityP
         super.populateDataAccess(dataAccess);
         dataAccess.define(BABY, false);
         dataAccess.define(CHARGING, false);
-        dataAccess.define(DANCING, false); // Makes them not shake by default - Why is it named dancing then...
+        dataAccess.define(DANCING, false);
     }
 
     @Override
