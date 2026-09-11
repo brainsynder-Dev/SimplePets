@@ -19,8 +19,9 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import static simplepets.brainsynder.api.pet.PetDataRegistry.Armadillo.PHASE;
 
+
 /**
- * NMS: {@link Armadillo}
+ * NMS: {@link net.minecraft.world.entity.animal.armadillo.Armadillo}
  */
 @VersionLimit(min = {1, 20, 5})
 public class EntityArmadilloPet extends EntityAgeablePet implements IEntityArmadilloPet {

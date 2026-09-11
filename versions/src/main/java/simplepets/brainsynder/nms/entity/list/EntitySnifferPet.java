@@ -19,7 +19,7 @@ import static simplepets.brainsynder.api.pet.PetDataRegistry.Sniffer.STATE;
 
 // TODO: Implement a state reset task, it will reset the state after a bit and reset it to do the animations
 /**
- * NMS: {@link Sniffer}
+ * NMS: {@link net.minecraft.world.entity.animal.sniffer.Sniffer}
  */
 public class EntitySnifferPet extends EntityAgeablePet implements IEntitySnifferPet {
     private static final EntityDataAccessor<Sniffer.State> DATA_STATE = SynchedEntityData.defineId(EntitySnifferPet.class, EntityDataSerializers.SNIFFER_STATE);

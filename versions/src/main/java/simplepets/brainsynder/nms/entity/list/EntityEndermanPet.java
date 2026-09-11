@@ -26,7 +26,8 @@ import java.util.Optional;
 import static simplepets.brainsynder.api.pet.PetDataRegistry.Enderman.SCREAM;
 
 /**
- * NMS: {@link net.minecraft.world.entity.monster.Enderman}
+ * NMS: {@link net.minecraft.world.entity.monster.Enderman} // 26.3+
+ * NMS: {@link net.minecraft.world.entity.monster.EnderMan} // 26.2 and below
  */
 public class EntityEndermanPet extends EntityPetOverride implements IEntityEndermanPet {
     private static final EntityDataAccessor<Optional<BlockState>> CARRIED_BLOCK = SynchedEntityData.defineId(EntityEndermanPet.class, EntityDataSerializers.OPTIONAL_BLOCK_STATE);
