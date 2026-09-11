@@ -432,6 +432,15 @@ public interface PetDataRegistry {
                 .value(IEntityHorsePet::getStyle).build();
     }
 
+    interface IronGolem {
+        PetData<IEntityIronGolemPet> CRACKS = PetData.of("cracks", IEntityIronGolemPet.class)
+                .defaultValue(GolemCrackLevel.NONE)
+                .items(GolemCrackLevel.values(), value -> value.getIcon().withName("&#c8c8c8{name}: &a" + value.name()))
+                .onLeftClick(entityPet -> entityPet.setCrackLevel(PetData.cycleForward(entityPet.getCrackLevel(), GolemCrackLevel.values())))
+                .onRightClick(entityPet -> entityPet.setCrackLevel(PetData.cycleBackward(entityPet.getCrackLevel(), GolemCrackLevel.values())))
+                .value(IEntityIronGolemPet::getCrackLevel).build();
+    }
+
     interface Llama {
         PetData<IEntityLlamaPet> SKIN = PetData.of("skin", IEntityLlamaPet.class)
                 .defaultValue(LlamaColor.CREAMY)

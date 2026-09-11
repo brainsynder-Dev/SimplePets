@@ -157,7 +157,7 @@ public enum PetType {
     ILLUSIONER(IEntityIllusionerPet.class, "512512e7d016a2343a7bff1a4cd15357ab851579f1389bd4e3a24cbeb88b", PetDataRegistry.SPELL),
 
     @PetCustomization(ambient = "ENTITY_IRON_GOLEM_STEP", weight = PetWeight.HEAVY)
-    IRON_GOLEM(IEntityIronGolemPet.class, "89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714"),
+    IRON_GOLEM(IEntityIronGolemPet.class, "89091d79ea0f59ef7ef94d7bba6e5f17f2f7d4572c44f90f76c4819a714", PetDataRegistry.IronGolem.CRACKS),
 
     @PetCustomization(ambient = "ENTITY_LLAMA_AMBIENT", weight = PetWeight.HEAVY)
     LLAMA(IEntityLlamaPet.class, "818cd457fbaf327fa39f10b5b36166fd018264036865164c02d9e5ff53f45",
