@@ -17,6 +17,9 @@ import simplepets.brainsynder.nms.entity.controller.ControllerCubeEntity;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+/**
+ * NMS: {@link net.minecraft.world.entity.monster.cubemob.AbstractCubeMob}
+ */
 public class EntityCubeAbstractPet extends EntityAgeablePet {
     private static final EntityDataAccessor<Integer> SIZE = SynchedEntityData.defineId(EntityCubeAbstractPet.class, EntityDataSerializers.INT);
 

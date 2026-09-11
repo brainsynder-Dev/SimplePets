@@ -17,6 +17,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.WizardSpell;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+/**
+ * NMS: {@link net.minecraft.world.entity.monster.illager.SpellcasterIllager}
+ */
 public class EntityIllagerWizardPet extends EntityIllagerAbstractPet implements IEntityWizard {
     private static final EntityDataAccessor<Byte> SPELL = SynchedEntityData.defineId(EntityIllagerWizardPet.class, EntityDataSerializers.BYTE);
 

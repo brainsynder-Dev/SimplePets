@@ -13,6 +13,9 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.entity.EntityPetOverride;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
+/**
+ * NMS: {@link net.minecraft.world.entity.raid.Raider}
+ */
 public abstract class EntityRaiderPet extends EntityPetOverride implements IRaider {
     private static final EntityDataAccessor<Boolean> CELEBRATING = SynchedEntityData.defineId(EntityRaiderPet.class, EntityDataSerializers.BOOLEAN);
 

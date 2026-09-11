@@ -15,6 +15,9 @@ import simplepets.brainsynder.nms.utils.PetDataAccess;
 
 import static simplepets.brainsynder.api.pet.PetDataRegistry.SHAKE;
 
+/**
+ * NMS: {@link net.minecraft.world.entity.monster.piglin.AbstractPiglin}
+ */
 public abstract class EntityPiglinAbstractPet extends EntityPetOverride implements IShaking {
     private static final EntityDataAccessor<Boolean> IMMUNE_TO_ZOMBIFICATION = SynchedEntityData.defineId(EntityPiglinAbstractPet.class, EntityDataSerializers.BOOLEAN);
 
