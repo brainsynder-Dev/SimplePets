@@ -21,7 +21,7 @@ import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.api.wrappers.ColorWrapper;
 import simplepets.brainsynder.api.wrappers.LlamaColor;
 import simplepets.brainsynder.nms.EntitySelector;
-import simplepets.brainsynder.nms.entity.branch.EntityDonkeyAbstractPet;
+import simplepets.brainsynder.nms.entity.branch.EntityAbstractChestedPet;
 import simplepets.brainsynder.nms.helper.VersionHelper;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
@@ -31,7 +31,7 @@ import static simplepets.brainsynder.api.pet.PetDataRegistry.RESET_COLOR;
 /**
  * NMS: {@link net.minecraft.world.entity.animal.horse.Llama}
  */
-public class EntityLlamaPet extends EntityDonkeyAbstractPet implements IEntityLlamaPet {
+public class EntityLlamaPet extends EntityAbstractChestedPet implements IEntityLlamaPet {
     private static final EntityDataAccessor<Integer> STRENGTH = SynchedEntityData.defineId(EntityLlamaPet.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(EntityLlamaPet.class, EntityDataSerializers.INT);
 

@@ -13,10 +13,13 @@ import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.utils.PetDataAccess;
 
-public class EntityDonkeyAbstractPet extends EntityHorseAbstractPet implements IChestedAbstractPet {
-    private static final EntityDataAccessor<Boolean> CHEST = SynchedEntityData.defineId(EntityDonkeyAbstractPet.class, EntityDataSerializers.BOOLEAN);
+/**
+ * NMS: {@link net.minecraft.world.entity.animal.horse.AbstractChestedHorse}
+ */
+public class EntityAbstractChestedPet extends EntityHorseAbstractPet implements IChestedAbstractPet {
+    private static final EntityDataAccessor<Boolean> CHEST = SynchedEntityData.defineId(EntityAbstractChestedPet.class, EntityDataSerializers.BOOLEAN);
 
-    public EntityDonkeyAbstractPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
+    public EntityAbstractChestedPet(EntityType<? extends Mob> entitytypes, PetType type, PetUser user) {
         super(entitytypes, type, user);
     }
 
