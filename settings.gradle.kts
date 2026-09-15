@@ -17,6 +17,7 @@ include(":versions:v1_21_10")
 include(":versions:v1_21_11")
 include(":versions:v26_1")
 include(":versions:v26_2")
+include(":versions:v26_3")
 // AUTOMATION END
 
 project(":api").projectDir  = file("plugin-modules/api")
