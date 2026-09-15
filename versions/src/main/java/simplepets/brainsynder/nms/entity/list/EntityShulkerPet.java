@@ -82,7 +82,7 @@ public class EntityShulkerPet extends Shulker implements IEntityShulkerPet {
     public static EntityShulkerPet spawn(Location location, EntityControllerPet pet, EntityGhostStand ghostStand) {
         EntityShulkerPet shulker = new EntityShulkerPet(pet, ghostStand, pet.getPetUser());
         shulker.setPos(location.getX(), location.getY(), location.getZ());
-        shulker.setInvulnerable(true);
+        VersionHelper.VERSION_TRANSLATOR.setInvulnerable(shulker, true);
         shulker.setNoAi(true);
         shulker.persist = true;
         VersionHelper.addEntity(((CraftWorld) location.getWorld()).getHandle(), shulker, CreatureSpawnEvent.SpawnReason.CUSTOM);

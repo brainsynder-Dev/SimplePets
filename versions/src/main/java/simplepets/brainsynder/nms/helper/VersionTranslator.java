@@ -7,6 +7,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import org.bukkit.NamespacedKey;
@@ -19,6 +20,10 @@ public interface VersionTranslator {
 
     default <T> T getRegistryValue (Registry<T> registry, NamespacedKey key) {
         return registry.getValue(Identifier.fromNamespaceAndPath(key.getNamespace(), key.getKey()));
+    }
+
+    default void setInvulnerable (Entity entity, boolean invulnerable) {
+        entity.setPermanentlyInvulnerable(invulnerable);
     }
 
     default Packet<ClientGamePacketListener> getAddEntityPacket(LivingEntity livingEntity, ServerEntity serverEntity, EntityType<?> originalEntityType, BlockPos pos) {

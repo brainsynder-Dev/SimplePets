@@ -46,7 +46,7 @@ public class EntityGhostStand extends ArmorStand {
         EntityGhostStand stand = new EntityGhostStand(EntitySelector.ARMOR_STAND, Reflection.fetchWorldHandle(location.getWorld()), pet);
         stand.setPos(location.getX(), location.getY(), location.getZ());
         stand.setNoBasePlate(true);
-        stand.setInvulnerable(true);
+        VersionHelper.VERSION_TRANSLATOR.setInvulnerable(stand, true);
         stand.setInvisible(true);
         stand.persist = true;
         VersionHelper.addEntity(((CraftWorld) location.getWorld()).getHandle(), stand, CreatureSpawnEvent.SpawnReason.CUSTOM);

@@ -114,7 +114,7 @@ public class SpawnerUtil implements ISpawnUtil {
             }
 
             customEntity.setInvisible(false);
-            customEntity.setInvulnerable(true);
+            VersionHelper.VERSION_TRANSLATOR.setInvulnerable(customEntity, true);
             customEntity.snapTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
             customEntity.setPersistenceRequired();
 

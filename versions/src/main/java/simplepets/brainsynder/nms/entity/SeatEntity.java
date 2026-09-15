@@ -14,11 +14,11 @@ public class SeatEntity extends ArmorStand {
         setSilent(true);
         setNoGravity(true);
         setSmall(true);
-        // Marker armour stands have a size 0 hitbox, which means the rider
+        // Marker armor stands have a size 0 hitbox, which means the rider
         // isn't raised while mounted
         setMarker(true);
         setInvisible(true);
-        setInvulnerable(true);
+        VersionHelper.VERSION_TRANSLATOR.setInvulnerable(this, true);
         // don't save to disk
         persist = false;
     }

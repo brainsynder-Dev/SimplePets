@@ -101,7 +101,7 @@ public class EntityArmorStandPet extends ArmorStand implements IEntityArmorStand
         stand.setPos(location.getX(), location.getY(), location.getZ());
         stand.setBasePlateVisibility(false);
         stand.setArmsVisibile(true);
-        stand.setInvulnerable(true);
+        VersionHelper.VERSION_TRANSLATOR.setInvulnerable(stand, true);
         stand.persist = true;
         stand.setSpecial(true);
         stand.setInvisible(false);
