@@ -104,10 +104,6 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
 
         debug = new Debug(this);
 
-        SimplePets.getDebugLogger().debug(DebugBuilder.build()
-                .setLevel(DebugLevel.WARNING).setBroadcast(true)
-                .setMessages(" *** As of version R5-B296 includes some major changes, If any issues are found please create a bug report"));
-
         if (ServerVersion.getVersion().isEqualOrNewer(ServerVersion.v26_3)) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build()
                 .setLevel(DebugLevel.WARNING).setBroadcast(true)
@@ -130,9 +126,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 .setBroadcast(true)
                 .setMessages(
                     "OH NO! We could not find any support for your servers version " + ServerVersion.getVersion().getVersionName().replace("v", "").replace("_", "."),
-                    "Please check the Jenkins for an updated build: https://ci.bsdevelopment.org/job/SimplePets_v5/",
-                    "Check if there is a SimplePets-" + ServerVersion.getVersion().getVersionName().replace("v", "").replace("_", ".") + ".jar (IF AVAILABLE)",
-                    "Current SimplePets jar name: " + getJarName()
+                    "Please check the BuildServer for an updated build: https://builds.bsdevelopment.org/jobs/SimplePets"
                 )
             );
             isStarting = false;
@@ -579,7 +573,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 .setBroadcast(true)
                 .setMessages(
                     "OH NO! We could not find any support for your servers version " + ServerVersion.getVersion().getVersionName().replace("v", "").replace("_", "."),
-                    "Please check the Jenkins for an updated build: https://jenkins.bsdevelopment.org/job/SimplePets/",
+                    "Please check the Jenkins for an updated build: https://builds.bsdevelopment.org/jobs/SimplePets",
                     "Check the 'Supported Minecraft Versions' section for version support",
                     " ",
                     "Error: " + e.getMessage()
