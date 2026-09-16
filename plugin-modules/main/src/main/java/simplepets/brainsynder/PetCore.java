@@ -108,7 +108,7 @@ public class PetCore extends JavaPlugin implements IPetsPlugin {
                 .setLevel(DebugLevel.WARNING).setBroadcast(true)
                 .setMessages(" *** As of version R5-B296 includes some major changes, If any issues are found please create a bug report"));
 
-        if (ServerVersion.getVersion().isEqualOrNewer(ServerVersion.v1_21_11)) {
+        if (ServerVersion.getVersion().isEqualOrNewer(ServerVersion.v26_3)) {
             SimplePets.getDebugLogger().debug(DebugBuilder.build()
                 .setLevel(DebugLevel.WARNING).setBroadcast(true)
                 .setMessages(
