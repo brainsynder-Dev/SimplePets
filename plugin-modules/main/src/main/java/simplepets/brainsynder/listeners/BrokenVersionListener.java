@@ -22,9 +22,9 @@ public class BrokenVersionListener implements Listener {
             player.sendMessage("§4[§cSimplePets§4] §7SimplePets has encountered an error, " +
                 "We seems to be missing support for your version §4(§c" + version + "§4)");
             TellrawMessage.of("&4[&cSimplePets&4] &7Please download the version for your server from the ")
-                .then("JENKINS (Click Me)").color(NamedTextColor.RED).link("https://jenkins.bsdevelopment.org/job/SimplePets/")
+                .then("BUILD SERVER (Click Me)").color(NamedTextColor.RED).link("https://builds.bsdevelopment.org/jobs/SimplePets")
                 .send(player);
-            player.sendMessage("§4[§cSimplePets§4] §7Check if there is a §cSimplePets-" + version + ".jar §7download (IF AVAILABLE)");
+            player.sendMessage("§4[§cSimplePets§4] §7Check if there is a §cSimplePets.jar §7download");
         }, 20);
     }
 }

@@ -2,7 +2,6 @@ package simplepets.brainsynder.commands.list;
 
 import org.bsdevelopment.pluginutils.PluginUtilities;
 import org.bsdevelopment.pluginutils.command.CommandBuilder;
-import org.bsdevelopment.pluginutils.libs.json.Json;
 import org.bsdevelopment.pluginutils.libs.json.JsonArray;
 import org.bsdevelopment.pluginutils.libs.json.JsonObject;
 import org.bsdevelopment.pluginutils.libs.json.WriterConfig;
@@ -260,7 +259,7 @@ public class DebugCommand implements PetCommandClass {
         }
         int build = Integer.parseInt(String.valueOf(prop.getOrDefault("build", -1)));
 
-        WebConnector.getInputStreamString("https://jenkins.bsdevelopment.org/job/SimplePets/api/json?tree=lastBuild[number]",
+        WebConnector.getInputStreamString("https://builds.bsdevelopment.org/job/SimplePets/lastSuccessfulBuild/buildNumber",
                 string -> consumer.accept(parseJenkinsResponse(build, string)));
     }
 
@@ -268,12 +267,12 @@ public class DebugCommand implements PetCommandClass {
         JsonObject jenkins = new JsonObject();
         jenkins.add("plugin_build_number", build);
         try {
-            int latestBuild = ((JsonObject) Json.parse(string)).get("lastBuild").asObject().getInt("number", -1);
+            int latestBuild = Integer.parseInt(string);
             jenkins.add("jenkins_build_number", latestBuild);
             if (latestBuild > build) jenkins.add("number_of_builds_behind", latestBuild - build);
             if (build > latestBuild) jenkins.add("number_of_builds_behind", "From The Future :O");
         } catch (Exception e) {
-            jenkins.add("error_parsing_json", e.getMessage());
+            jenkins.add("error_parsing_buildnumber", e.getMessage());
             jenkins.add("raw_response", string);
         }
         return jenkins;
