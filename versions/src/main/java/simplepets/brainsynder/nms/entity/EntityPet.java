@@ -106,7 +106,7 @@ public abstract class EntityPet extends EntityBase implements IEntityPet {
         rawEntityType = entitytypes;
         this.additional = new HashMap<>();
 
-        this.collides = false;
+        this.collides = ConfigOption.PET_TOGGLES_MOB_PUSHER.get();
         this.noPhysics = false;
 
         VersionHelper.overrideAttributeMap(this);

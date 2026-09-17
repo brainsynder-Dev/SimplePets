@@ -18,6 +18,7 @@ import simplepets.brainsynder.api.entity.IEntityPet;
 import simplepets.brainsynder.api.entity.misc.IEntityControllerPet;
 import simplepets.brainsynder.api.pet.PetType;
 import simplepets.brainsynder.api.plugin.SimplePets;
+import simplepets.brainsynder.api.plugin.config.ConfigOption;
 import simplepets.brainsynder.api.user.PetUser;
 import simplepets.brainsynder.nms.EntitySelector;
 import simplepets.brainsynder.nms.entity.list.EntityArmorStandPet;
@@ -65,7 +66,7 @@ public class EntityControllerPet extends EntityZombiePet implements IEntityContr
             default -> throw new IllegalStateException("This pet does not use controller pets!");
         }
         ENTITIES.forEach(entity -> entity.setInvulnerable(true));
-        collides = false;
+        collides = ConfigOption.PET_TOGGLES_MOB_PUSHER.get();
     }
 
     @Override
