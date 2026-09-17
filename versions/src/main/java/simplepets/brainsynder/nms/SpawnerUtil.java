@@ -1,5 +1,6 @@
 package simplepets.brainsynder.nms;
 
+import net.minecraft.world.phys.AABB;
 import org.bsdevelopment.nbt.StorageTagCompound;
 import org.bsdevelopment.pluginutils.storage.RandomCollection;
 import org.bsdevelopment.pluginutils.text.Colorize;
@@ -36,7 +37,7 @@ public class SpawnerUtil implements ISpawnUtil {
     private final Map<PetType, Class<?>> petMap;
     private final Map<PetType, Integer> spawnCount;
 
-    public SpawnerUtil (ClassLoader classLoader, String targetVersionName) {
+    public SpawnerUtil(ClassLoader classLoader, String targetVersionName) {
         petMap = new HashMap<>();
         spawnCount = new HashMap<>();
 
@@ -47,17 +48,17 @@ public class SpawnerUtil implements ISpawnUtil {
 
             String name = type.getEntityClass().getSimpleName().replaceFirst("I", "");
             try {
-                Class<?> clazz = Class.forName("simplepets.brainsynder.versions."+ targetVersionName +".entity.list."+name, false, classLoader);
+                Class<?> clazz = Class.forName("simplepets.brainsynder.versions." + targetVersionName + ".entity.list." + name, false, classLoader);
                 if (!VersionCompatibility.isCompatible(clazz)) {
                     SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
-                            "The '"+type.getName()+"' pet is not supported for your server version [will NOT affect your server]"
+                            "The '" + type.getName() + "' pet is not supported for your server version [will NOT affect your server]"
                     ));
                     continue;
                 }
                 petMap.put(type, clazz);
-            }catch (Exception ignored) {
+            } catch (Exception ignored) {
                 SimplePets.getDebugLogger().debug(DebugBuilder.build(getClass()).setLevel(DebugLevel.WARNING).setMessages(
-                        "The '"+type.getName()+" ("+name+")' pet is not available for your server version [will NOT affect your server]"
+                        "The '" + type.getName() + " (" + name + ")' pet is not available for your server version [will NOT affect your server]"
                 ));
             }
         }
@@ -92,8 +93,7 @@ public class SpawnerUtil implements ISpawnUtil {
             int minHeight = location.getWorld().getMinHeight();
             int y = location.getBlockY();
 
-            if ( (y > maxHeight) || (minHeight > y) )
-                return SpawnResult.fail(Colorize.translateBungeeHex(ConfigOption.MISC_TOGGLES_EXCEEDS_WORLD_CONFINES.get()));
+            if ((y > maxHeight) || (minHeight > y)) return SpawnResult.fail(Colorize.translateBungeeHex(ConfigOption.MISC_TOGGLES_EXCEEDS_WORLD_CONFINES.get()));
         }
 
         try {
@@ -101,7 +101,7 @@ public class SpawnerUtil implements ISpawnUtil {
 
             if ((type == PetType.ARMOR_STAND) || (type == PetType.SHULKER)) {
                 customEntity = new EntityControllerPet(type, user, location);
-            }else{
+            } else {
                 customEntity = (EntityPet) petMap.get(type).getDeclaredConstructor(PetType.class, PetUser.class).newInstance(type, user);
             }
 
@@ -109,14 +109,17 @@ public class SpawnerUtil implements ISpawnUtil {
                 try {
                     customEntity.applyCompound(compound);
                 } catch (Exception e) {
-                    return SpawnResult.fail(ChatColor.RED+"An error occurred while applying NBT data to the pet: " + e.getMessage());
+                    return SpawnResult.fail(ChatColor.RED + "An error occurred while applying NBT data to the pet: " + e.getMessage());
                 }
             }
 
             customEntity.setInvisible(false);
             VersionHelper.VERSION_TRANSLATOR.setInvulnerable(customEntity, true);
-            customEntity.snapTo(location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+
+            Location spawnLocation = getSafeLocation(customEntity, location);
+            customEntity.snapTo(spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ(), spawnLocation.getYaw(), spawnLocation.getPitch());
             customEntity.setPersistenceRequired();
+            if (customEntity instanceof EntityControllerPet controllerPet) controllerPet.reloadLocation();
 
             // Call the spawn event
             PetEntitySpawnEvent event = new PetEntitySpawnEvent(user, customEntity);
@@ -127,12 +130,12 @@ public class SpawnerUtil implements ISpawnUtil {
                 String reason = event.getReason();
                 if ((reason != null) && (!reason.isEmpty())) return SpawnResult.fail(reason);
 
-                return reportBlockedSpawn(type, user, location, "PetEntitySpawnEvent", new PetEntitySpawnEvent(user, customEntity));
+                return reportBlockedSpawn(type, user, spawnLocation, "PetEntitySpawnEvent", new PetEntitySpawnEvent(user, customEntity));
             }
 
-            if (!location.getChunk().isLoaded()) location.getChunk().load();
+            if (!spawnLocation.getChunk().isLoaded()) spawnLocation.getChunk().load();
 
-            if (VersionHelper.addEntity(((CraftWorld) location.getWorld()).getHandle(), customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
+            if (VersionHelper.addEntity(((CraftWorld) spawnLocation.getWorld()).getHandle(), customEntity, CreatureSpawnEvent.SpawnReason.CUSTOM)) {
                 user.setPet(customEntity);
                 if (compound.hasKey("name")) {
                     String name = compound.getString("name");
@@ -141,13 +144,13 @@ public class SpawnerUtil implements ISpawnUtil {
                 }
                 SimplePets.getPetUtilities().runPetCommands(CommandReason.SPAWN, user, type);
                 int count = spawnCount.getOrDefault(type, 0);
-                spawnCount.put(type, (count+1));
+                spawnCount.put(type, (count + 1));
                 return SpawnResult.success(customEntity);
             }
 
-            SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type, location);
-            return reportBlockedSpawn(type, user, location, "CreatureSpawnEvent", buildSpawnProbeEvent(customEntity));
-        }catch (Exception e) {
+            SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type, spawnLocation);
+            return reportBlockedSpawn(type, user, spawnLocation, "CreatureSpawnEvent", buildSpawnProbeEvent(customEntity));
+        } catch (Exception e) {
             e.printStackTrace();
             SimplePets.getPetUtilities().runPetCommands(CommandReason.FAILED, user, type, location);
             return SpawnResult.fail("An error occurred while trying to spawn the pet: " + e.getMessage());
@@ -219,9 +222,29 @@ public class SpawnerUtil implements ISpawnUtil {
         return (player == null) ? String.valueOf(user.getOwnerUUID()) : player.getName();
     }
 
-    private Location getRandomLocation (PetType type, Location center) {
+    private Location getRandomLocation(PetType type, Location center) {
         List<Location> locationList = circle(center, modifyInt(type, 4), 3, false, false, true);
         return RandomCollection.fromCollection(locationList).next();
+    }
+
+    private Location getSafeLocation(EntityPet entity, Location location) {
+        if (canFit(entity, location)) return location;
+
+        List<Location> locations = circle(location, modifyInt(entity.getPetType(), 4), 3, false, true, true);
+        locations.sort(Comparator.comparingDouble(location::distanceSquared));
+
+        for (Location candidate : locations) {
+            if (canFit(entity, candidate)) return candidate;
+        }
+
+        return entity.getPetUser().getUserLocation().orElse(location);
+    }
+
+    private boolean canFit(EntityPet entity, Location location) {
+        double halfWidth = entity.getBbWidth() / 2D;
+        return VersionHelper.getEntityLevel(entity).noBlockCollision(entity, new AABB(
+                location.getX() - halfWidth, location.getY(), location.getZ() - halfWidth,
+                location.getX() + halfWidth, location.getY() + entity.getBbHeight(), location.getZ() + halfWidth));
     }
 
     private int modifyInt(PetType type, int number) {
