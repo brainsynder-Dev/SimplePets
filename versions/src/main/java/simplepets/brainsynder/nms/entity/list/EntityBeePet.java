@@ -53,7 +53,7 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
     public void populateDataAccess(PetDataAccess dataAccess) {
         super.populateDataAccess(dataAccess);
         dataAccess.define(FLAGS, (byte) 0);
-        dataAccess.define(ANGER, 0L);
+        dataAccess.define(ANGER, -1L);
     }
 
     @Override
@@ -77,12 +77,12 @@ public class EntityBeePet extends EntityAgeablePet implements IEntityBeePet {
 
     @Override
     public boolean isAngry() {
-        return entityData.get(ANGER) > 0;
+        return entityData.get(ANGER) > level().getGameTime();
     }
 
     @Override
     public void setAngry(boolean angry) {
-        entityData.set(ANGER, (angry) ? 25562256L : 0L);
+        entityData.set(ANGER, angry ? Long.MAX_VALUE : -1L);
     }
 
     @Override
