@@ -9,9 +9,11 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerEntity;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.vehicle.VehicleEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
@@ -80,6 +82,12 @@ public class EntityBase extends Mob {
     @Override
     protected void handlePortal() {
         // fuck around and find out
+    }
+
+    @Override
+    public boolean startRiding(Entity vehicle, boolean force, boolean callEvent) {
+        if (vehicle instanceof VehicleEntity) return false;
+        return super.startRiding(vehicle, force, callEvent);
     }
 
     public void populateDataAccess(PetDataAccess dataAccess) {}
