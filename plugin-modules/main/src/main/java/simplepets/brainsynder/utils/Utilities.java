@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.permissions.PermissionAttachmentInfo;
@@ -21,6 +22,8 @@ import simplepets.brainsynder.PetCore;
 import simplepets.brainsynder.api.ISpawnUtil;
 import simplepets.brainsynder.api.SpawnResult;
 import simplepets.brainsynder.api.entity.IEntityPet;
+import simplepets.brainsynder.api.inventory.CustomInventory;
+import simplepets.brainsynder.api.inventory.Item;
 import simplepets.brainsynder.api.pet.CommandReason;
 import simplepets.brainsynder.api.pet.PetData;
 import simplepets.brainsynder.api.pet.PetType;
@@ -41,6 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
@@ -294,6 +298,18 @@ public class Utilities {
         }
 
         return main.isSimilar(check);
+    }
+
+    public static Optional<Item> getClickedItem(CustomInventory menu, InventoryClickEvent event) {
+        ItemStack stack = event.getCurrentItem();
+        if (stack == null) return Optional.empty();
+
+        if (event.getRawSlot() < event.getView().getTopInventory().getSize()) {
+            Item slotItem = menu.getSlots().get(event.getSlot());
+            if ((slotItem != null) && isSimilar(slotItem.getItemBuilder().build(), stack)) return Optional.of(slotItem);
+        }
+
+        return SimplePets.getItemHandler().getItem(stack);
     }
 
     public static void makeBackup(YamlFile yamlFile, File backup) {

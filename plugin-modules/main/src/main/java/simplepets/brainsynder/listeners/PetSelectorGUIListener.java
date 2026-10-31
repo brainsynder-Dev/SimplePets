@@ -35,7 +35,7 @@ public class PetSelectorGUIListener implements Listener {
             if (stack == null) return;
 
             SimplePets.getUserManager().getPetUser(player).ifPresent(user -> {
-                Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(stack);
+                Optional<Item> optionalItem = Utilities.getClickedItem(menu, e);
                 if (optionalItem.isPresent()) {
                     if (e.getClick().isShiftClick()) {
                         optionalItem.get().onShiftClick(user, menu);

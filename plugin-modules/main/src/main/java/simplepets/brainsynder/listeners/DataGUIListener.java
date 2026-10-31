@@ -35,7 +35,7 @@ public class DataGUIListener implements Listener {
 
                 user.getPetEntity(type).ifPresent(entityPet -> {
 
-                    Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(e.getCurrentItem());
+                    Optional<Item> optionalItem = Utilities.getClickedItem(menu, e);
                     if (optionalItem.isPresent()) {
                         if (e.getClick().isShiftClick()) {
                             optionalItem.get().onShiftClick(user, menu, entityPet);

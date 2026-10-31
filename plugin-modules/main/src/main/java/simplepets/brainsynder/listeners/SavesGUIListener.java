@@ -37,7 +37,7 @@ public class SavesGUIListener implements Listener {
                 return;
             }
 
-            Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(e.getCurrentItem());
+            Optional<Item> optionalItem = Utilities.getClickedItem(menu, e);
             if (optionalItem.isPresent()) {
                 optionalItem.get().onClick(user, menu);
                 return;

@@ -19,6 +19,7 @@ import simplepets.brainsynder.managers.InventoryManager;
 import simplepets.brainsynder.menu.inventory.AddonMenu;
 import simplepets.brainsynder.menu.inventory.holders.AddonHolder;
 import simplepets.brainsynder.utils.Keys;
+import simplepets.brainsynder.utils.Utilities;
 
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class AddonGUIListener implements Listener {
             if (e.getCurrentItem() == null) return;
 
             SimplePets.getUserManager().getPetUser(player).ifPresent(user -> {
-                Optional<Item> optionalItem = SimplePets.getItemHandler().getItem(e.getCurrentItem());
+                Optional<Item> optionalItem = Utilities.getClickedItem(menu, e);
                 if (optionalItem.isPresent()) {
                     if (e.getClick().isShiftClick()) {
                         optionalItem.get().onShiftClick(user, menu);
