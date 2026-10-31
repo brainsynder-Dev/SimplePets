@@ -601,7 +601,7 @@ public class PetOwner implements PetUser {
         if (!getPlayer().isOnline()) return false;
         if (getPlayer().isOp()) return true;
         if (getPlayer().hasPermission("pet.amount.bypass")) return true;
-        return petMap.size() < Utilities.getPermissionAmount(getPlayer(), maxAmount, "pet.amount.");
+        return Math.max(petMap.size(), respawnPets.size()) < Utilities.getPermissionAmount(getPlayer(), maxAmount, "pet.amount.");
     }
 
     @Override
