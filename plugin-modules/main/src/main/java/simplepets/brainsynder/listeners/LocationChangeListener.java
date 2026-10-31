@@ -23,6 +23,7 @@ public class LocationChangeListener implements Listener {
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
         if (event.getCause() == PlayerTeleportEvent.TeleportCause.UNKNOWN) return;
+        if (event.getCause() == PlayerTeleportEvent.TeleportCause.DISMOUNT) return;
 
         SimplePets.getUserManager().getPetUser(event.getPlayer()).ifPresent(user -> {
             user.cacheAndRemove();
